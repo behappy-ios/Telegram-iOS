@@ -67,7 +67,7 @@ config_setting(
 
 bool_flag(
     name = "disableExtensions",
-    build_setting_default = False,
+    build_setting_default = True,
     visibility = ["//visibility:public"],
 )
 
@@ -314,7 +314,7 @@ alternate_icon_folders = [
     "PremiumTurbo",
 ]
 
-composer_icon_folders = ["Telegram"]
+composer_icon_folders = []
 
 [
     filegroup(
@@ -612,7 +612,7 @@ plist_fragment(
     template =
     """
     <key>CFBundleDisplayName</key>
-    <string>Telegram</string>
+    <string>BeHappy</string>
     """
 )
 
@@ -1551,7 +1551,7 @@ plist_fragment(
     <key>CFBundleDevelopmentRegion</key>
     <string>en</string>
     <key>CFBundleDisplayName</key>
-    <string>Telegram</string>
+    <string>BeHappy</string>
     <key>CFBundleIdentifier</key>
     <string>{telegram_bundle_id}</string>
     <key>CFBundleName</key>
@@ -1750,7 +1750,7 @@ ios_application(
     ],
     resources = [
         ":LaunchScreen",
-        #":DefaultAppIcon",
+        ":DefaultAppIcon",
     ],
     frameworks = [
         ":MtProtoKitFramework",

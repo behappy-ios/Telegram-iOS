@@ -312,6 +312,15 @@ alternate_icon_folders = [
     "Premium",
     "PremiumBlack",
     "PremiumTurbo",
+    "BH01",
+    "BH02",
+    "BH03",
+    "BH04",
+    "BH05",
+    "BH06",
+    "BH07",
+    "BH08",
+    "BH09",
 ]
 
 composer_icon_folders = []

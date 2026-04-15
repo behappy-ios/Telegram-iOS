@@ -528,19 +528,22 @@ func initializedNetwork(accountId: AccountRecordId, arguments: NetworkInitializa
             
             let seedAddressList: [Int: [String]]
             
+            // BeHappy multi-DC seed list. Kept in sync with the `dcs` PG
+            // table on srv1 and the server's help.getConfig response.
+            // DC1 = srv1 (St. Petersburg), DC2 = srv3-dev (Moscow test env,
+            // 2026-04-16). Clients learn the full vector dynamically via
+            // dcOptions but need the seed to honour FILE_MIGRATE_2 /
+            // PHONE_MIGRATE_2 redirects and to reach DC2 before any
+            // help.getConfig round-trip.
             if testingEnvironment {
                 seedAddressList = [
-                    1: ["149.154.175.10"],
-                    2: ["149.154.167.40"],
-                    3: ["149.154.175.117"]
+                    1: ["144.31.238.115"],
+                    2: ["144.31.221.5"]
                 ]
             } else {
                 seedAddressList = [
-                    1: ["149.154.175.50", "2001:b28:f23d:f001::a"],
-                    2: ["149.154.167.50", "95.161.76.100", "2001:67c:4e8:f002::a"],
-                    3: ["149.154.175.100", "2001:b28:f23d:f003::a"],
-                    4: ["149.154.167.91", "2001:67c:4e8:f004::a"],
-                    5: ["149.154.171.5", "2001:b28:f23f:f005::a"]
+                    1: ["144.31.238.115"],
+                    2: ["144.31.221.5"]
                 ]
             }
             

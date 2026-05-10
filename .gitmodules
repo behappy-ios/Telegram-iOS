@@ -4,16 +4,16 @@
 	url = https://github.com/behappy-ios/rlottie.git
 [submodule "build-system/bazel-rules/rules_apple"]
 	path = build-system/bazel-rules/rules_apple
-url=https://github.com/behappy-ios/rules_apple.git
+	url = https://github.com/behappy-ios/rules_apple.git
 [submodule "build-system/bazel-rules/rules_swift"]
 	path = build-system/bazel-rules/rules_swift
-url=https://github.com/behappy-ios/rules_swift.git
+	url = https://github.com/behappy-ios/rules_swift.git
 [submodule "build-system/bazel-rules/apple_support"]
 	path = build-system/bazel-rules/apple_support
 	url = https://github.com/behappy-ios/apple_support.git
 [submodule "submodules/TgVoipWebrtc/tgcalls"]
 	path = submodules/TgVoipWebrtc/tgcalls
-url = https://github.com/behappy-ios/tgcalls.git
+	url = https://github.com/behappy-ios/tgcalls.git
 [submodule "third-party/libvpx/libvpx"]
 	path = third-party/libvpx/libvpx
 	url = https://github.com/behappy-ios/libvpx.git
@@ -31,7 +31,7 @@ url = https://github.com/behappy-ios/tgcalls.git
 	url = https://github.com/behappy-ios/dav1d.git
 [submodule "third-party/td/td"]
 	path = third-party/td/td
-	url = https://github.com/bdlib/bhlib
+	url = https://github.com/behappy-app/bhlib.git
 [submodule "third-party/XcodeGen"]
 	path = third-party/XcodeGen
 	url = https://github.com/behappy-ios/XcodeGen.git

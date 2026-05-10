@@ -376,13 +376,13 @@ swift_library(
         "//submodules/PasswordSetupUI:PasswordSetupUIAssets",
         "//submodules/PremiumUI:PremiumUIResources",
         "//submodules/DrawingUI:DrawingUIResources",
-        "//submodules/TelegramUI:TelegramUIResources",
-        "//submodules/TelegramUI:TelegramUIAssets",
-        "//submodules/TelegramUI/Components/Calls/CallScreen:Assets",
+        "//submodules/IosappUI:TelegramUIResources",
+        "//submodules/IosappUI:TelegramUIAssets",
+        "//submodules/IosappUI/Components/Calls/CallScreen:Assets",
         ":GeneratedPresentationStrings/Resources/PresentationStrings.data",
     ],
     deps = [
-        "//submodules/TelegramUI:TelegramUI",
+        "//submodules/IosappUI:TelegramUI",
         "//third-party/boringssl:crypto",
     ],
 )
@@ -811,7 +811,7 @@ ios_framework(
     extension_safe = True,
     ipa_post_processor = strip_framework,
     deps = [
-        "//submodules/TelegramCore:TelegramCore",
+        "//submodules/IosappCore:TelegramCore",
     ],
     visibility = [
         "//visibility:public",
@@ -940,7 +940,7 @@ ios_framework(
     extension_safe = True,
     ipa_post_processor = strip_framework,
     deps = [
-        "//submodules/TelegramUI:TelegramUI",
+        "//submodules/IosappUI:TelegramUI",
     ] + debug_deps,
 )
 
@@ -1004,8 +1004,8 @@ swift_library(
         "-warnings-as-errors",
     ],
     deps = [
-        "//submodules/TelegramUI",
-        "//submodules/TelegramUI/Components/ShareExtensionContext"
+        "//submodules/IosappUI",
+        "//submodules/IosappUI/Components/ShareExtensionContext"
     ],
 )
 
@@ -1091,7 +1091,7 @@ swift_library(
         "-warnings-as-errors",
     ],
     deps = [
-        "//submodules/TelegramUI:TelegramUI",
+        "//submodules/IosappUI:TelegramUI",
         ":NotificationContentExtensionLink",
     ],
 )
@@ -1195,7 +1195,7 @@ swift_library(
         "//submodules/AppLockState:AppLockState",
         "//submodules/SSignalKit/SwiftSignalKit:SwiftSignalKit",
         "//submodules/Postbox:Postbox",
-        "//submodules/TelegramCore:TelegramCore",
+        "//submodules/IosappCore:TelegramCore",
         "//submodules/OpenSSLEncryptionProvider:OpenSSLEncryptionProvider",
         "//Telegram:GeneratedSources",
     ],
@@ -1328,8 +1328,8 @@ swift_library(
     deps = [
         "//submodules/SSignalKit/SwiftSignalKit:SwiftSignalKit",
         "//submodules/Postbox:Postbox",
-        "//submodules/TelegramApi:TelegramApi",
-        "//submodules/TelegramCore:TelegramCore",
+        "//submodules/IosappApi:TelegramApi",
+        "//submodules/IosappCore:TelegramCore",
         "//submodules/BuildConfig:BuildConfig",
         "//submodules/OpenSSLEncryptionProvider:OpenSSLEncryptionProvider",
         "//submodules/AppLockState:AppLockState",
@@ -1424,8 +1424,8 @@ swift_library(
         "-warnings-as-errors",
     ],
     deps = [
-        "//submodules/TelegramUI:TelegramUI",
-        "//submodules/TelegramVoip:TelegramVoip",
+        "//submodules/IosappUI:TelegramUI",
+        "//submodules/IosappVoip:TelegramVoip",
         "//submodules/SSignalKit/SwiftSignalKit:SwiftSignalKit",
         "//submodules/BuildConfig:BuildConfig",
         "//submodules/WidgetItems:WidgetItems",
@@ -1865,7 +1865,7 @@ ios_application(
     ],
     deps = [
         #"//submodules/Display",
-        #"//submodules/TelegramCore",
+        #"//submodules/IosappCore",
         #"//submodules/FFMpegBinding",
         #"//third-party/webrtc",
         #"//third-party/webrtc:webrtc_objc",
@@ -1874,9 +1874,9 @@ ios_application(
         #"//submodules/OpusBinding",
         #"//third-party/boringssl:ssl",
         #"//third-party/boringssl:crypto",
-        #"//submodules/TelegramVoip",
+        #"//submodules/IosappVoip",
         #"//third-party/recaptcha:RecaptchaEnterprise",
-        "//submodules/TelegramUI",
+        "//submodules/IosappUI",
     ],
 )
 

@@ -12,9 +12,9 @@ swift_library(
     deps = [
     	"//submodules/Display:Display",
         "//submodules/Postbox:Postbox",
-        "//submodules/TelegramCore:TelegramCore",
-        "//submodules/TelegramPresentationData:TelegramPresentationData",
-        "//submodules/TelegramStringFormatting:TelegramStringFormatting",
+        "//submodules/IosappCore:TelegramCore",
+        "//submodules/IosappPresentationData:TelegramPresentationData",
+        "//submodules/IosappStringFormatting:TelegramStringFormatting",
     ],
     visibility = [
         "//visibility:public",

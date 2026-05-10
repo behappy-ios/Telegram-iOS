@@ -10,7 +10,7 @@ swift_library(
         "-warnings-as-errors",
     ],
     deps = [
-        "//submodules/TelegramCore:TelegramCore",
+        "//submodules/IosappCore:TelegramCore",
         "//submodules/Postbox:Postbox",
     ],
     visibility = [

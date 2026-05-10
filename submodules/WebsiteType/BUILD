@@ -11,7 +11,7 @@ swift_library(
     ],
     deps = [
         "//submodules/Postbox",
-        "//submodules/TelegramCore",
+        "//submodules/IosappCore",
     ],
     visibility = [
         "//visibility:public",

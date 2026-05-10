@@ -43,8 +43,8 @@ swift_library(
     deps = [
         "//submodules/Display",
         "//submodules/MetalEngine",
-        "//submodules/TelegramPresentationData",
-        "//submodules/TelegramUI/Components/Calls/CallScreen",
+        "//submodules/IosappPresentationData",
+        "//submodules/IosappUI/Components/Calls/CallScreen",
     ],
 )
 

@@ -1795,7 +1795,7 @@ xcodeproj(
     project_name = "iosapp",
     tags = ["manual"],
     top_level_targets = [
-        top_level_target(":iosapp", target_environments = ["device", "simulator"]),
+        top_level_target(":iosapp", target_environments = ["simulator"]),
         ":iOSAppUITestSuite",
     ],
     xcode_configurations = {

@@ -947,24 +947,19 @@ private func extractAccountManagerState(records: AccountRecordsView<TelegramAcco
             self.window?.rootViewController?.dismiss(animated: true, completion: nil)
         }, getAvailableAlternateIcons: {
             if #available(iOS 10.3, *) {
-                var icons = [
-                    PresentationAppIcon(name: "BlueIcon", imageName: "BlueIcon", isDefault: buildConfig.isAppStoreBuild),
-                    PresentationAppIcon(name: "New2", imageName: "New2"),
-                    PresentationAppIcon(name: "New1", imageName: "New1"),
-                    PresentationAppIcon(name: "BlackIcon", imageName: "BlackIcon"),
-                    PresentationAppIcon(name: "BlueClassicIcon", imageName: "BlueClassicIcon"),
-                    PresentationAppIcon(name: "BlackClassicIcon", imageName: "BlackClassicIcon"),
-                    PresentationAppIcon(name: "BlueFilledIcon", imageName: "BlueFilledIcon"),
-                    PresentationAppIcon(name: "BlackFilledIcon", imageName: "BlackFilledIcon")
+                let icons = [
+                    PresentationAppIcon(name: "BlueIcon", imageName: "BlueIcon", isDefault: true),
+                    PresentationAppIcon(name: "BH01", imageName: "BH01", isDefault: false),
+                    PresentationAppIcon(name: "BH02", imageName: "BH02", isDefault: false),
+                    PresentationAppIcon(name: "BH03", imageName: "BH03", isDefault: false),
+                    PresentationAppIcon(name: "BH04", imageName: "BH04", isDefault: false),
+                    PresentationAppIcon(name: "BH05", imageName: "BH05", isDefault: false),
+                    PresentationAppIcon(name: "BH06", imageName: "BH06", isDefault: false),
+                    PresentationAppIcon(name: "BH07", imageName: "BH07", isDefault: false),
+                    PresentationAppIcon(name: "BH08", imageName: "BH08", isDefault: false),
+                    PresentationAppIcon(name: "BH09", imageName: "BH09", isDefault: false),
                 ]
-                if buildConfig.isInternalBuild {
-                    icons.append(PresentationAppIcon(name: "WhiteFilledIcon", imageName: "WhiteFilledIcon"))
-                }
-                
-                icons.append(PresentationAppIcon(name: "Premium", imageName: "Premium", isPremium: true))
-                icons.append(PresentationAppIcon(name: "PremiumTurbo", imageName: "PremiumTurbo", isPremium: true))
-                icons.append(PresentationAppIcon(name: "PremiumBlack", imageName: "PremiumBlack", isPremium: true))
-                
+
                 return icons
             } else {
                 return []

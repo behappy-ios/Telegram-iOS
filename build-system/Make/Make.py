@@ -274,7 +274,7 @@ class BazelCommandLine:
             combined_arguments += ['--spawn_strategy=sandboxed']
 
         if self.disable_provisioning_profiles:
-            combined_arguments += ['-"//iosapp:disableProvisioningProfiles']
+            combined_arguments += ['--//iosapp:disableProvisioningProfiles']
 
         combined_arguments += self.common_args
         combined_arguments += self.common_build_args
@@ -371,7 +371,7 @@ class BazelCommandLine:
         combined_arguments += ['build']
 
         # Build the generate_spm target directly to get the dependency tree JSON
-        combined_arguments += ["//iosapp:spm_build_root']
+        combined_arguments += ['//iosapp:spm_build_root']
 
         if self.continue_on_error:
             combined_arguments += ['--keep_going']
@@ -382,7 +382,7 @@ class BazelCommandLine:
             combined_arguments += ['--spawn_strategy=sandboxed']
 
         if self.disable_provisioning_profiles:
-            combined_arguments += ['-"//iosapp:disableProvisioningProfiles']
+            combined_arguments += ['--//iosapp:disableProvisioningProfiles']
 
         combined_arguments += self.common_args
         combined_arguments += self.common_build_args

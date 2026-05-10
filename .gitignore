@@ -79,3 +79,4 @@ xcode-files
 .sourcekit-lsp/**
 /.claude/
 /buildbox/*
+*.LSP.json

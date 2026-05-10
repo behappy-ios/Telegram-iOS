@@ -120,12 +120,12 @@ public enum IosappChannelInfo: Equatable {
     
     public init(flatBuffersObject: IosappCore_IosappChannelInfo) throws {
         switch flatBuffersObject.valueType {
-        case .telegramchannelinfoBroadcast:
+        case .iosappchannelinfoBroadcast:
             guard let value = flatBuffersObject.value(type: IosappCore_IosappChannelInfo_Broadcast.self) else {
                 throw FlatBuffersError.missingRequiredField()
             }
             self = .broadcast(IosappChannelBroadcastInfo(flags: IosappChannelBroadcastFlags(rawValue: value.flags)))
-        case .telegramchannelinfoGroup:
+        case .iosappchannelinfoGroup:
             guard let value = flatBuffersObject.value(type: IosappCore_IosappChannelInfo_Group.self) else {
                 throw FlatBuffersError.missingRequiredField()
             }
@@ -141,12 +141,12 @@ public enum IosappChannelInfo: Equatable {
         
         switch self {
         case let .broadcast(info):
-            valueType = .telegramchannelinfoBroadcast
+            valueType = .iosappchannelinfoBroadcast
             let start = IosappCore_IosappChannelInfo_Broadcast.startIosappChannelInfo_Broadcast(&builder)
             IosappCore_IosappChannelInfo_Broadcast.add(flags: info.flags.rawValue, &builder)
             valueOffset = IosappCore_IosappChannelInfo_Broadcast.endIosappChannelInfo_Broadcast(&builder, start: start)
         case let .group(info):
-            valueType = .telegramchannelinfoGroup
+            valueType = .iosappchannelinfoGroup
             let start = IosappCore_IosappChannelInfo_Group.startIosappChannelInfo_Group(&builder)
             IosappCore_IosappChannelInfo_Group.add(flags: info.flags.rawValue, &builder)
             valueOffset = IosappCore_IosappChannelInfo_Group.endIosappChannelInfo_Group(&builder, start: start)

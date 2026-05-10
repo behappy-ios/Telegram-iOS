@@ -968,7 +968,7 @@ public func IosappMediaResource_parse(flatBuffersData data: Data) throws -> Iosa
     
 public func IosappMediaResource_parse(flatBuffersObject: IosappCore_IosappMediaResource) throws -> IosappMediaResource {
     switch flatBuffersObject.valueType {
-    case .telegrammediaresourceCloudfilemediaresource:
+    case .iosappmediaresourceCloudfilemediaresource:
         guard let value = flatBuffersObject.value(type: IosappCore_IosappMediaResource_CloudFileMediaResource.self) else {
             throw FlatBuffersError.missingRequiredField()
         }
@@ -980,7 +980,7 @@ public func IosappMediaResource_parse(flatBuffersObject: IosappCore_IosappMediaR
             size: value.size == 0 ? nil : value.size,
             fileReference: value.fileReference.isEmpty ? nil : Data(value.fileReference)
         )
-    case .telegrammediaresourceClouddocumentsizemediaresource:
+    case .iosappmediaresourceClouddocumentsizemediaresource:
         guard let value = flatBuffersObject.value(type: IosappCore_IosappMediaResource_CloudDocumentSizeMediaResource.self) else {
             throw FlatBuffersError.missingRequiredField()
         }
@@ -991,7 +991,7 @@ public func IosappMediaResource_parse(flatBuffersObject: IosappCore_IosappMediaR
             sizeSpec: value.sizeSpec,
             fileReference: value.fileReference.isEmpty ? nil : Data(value.fileReference)
         )
-    case .telegrammediaresourceCloudphotosizemediaresource:
+    case .iosappmediaresourceCloudphotosizemediaresource:
         guard let value = flatBuffersObject.value(type: IosappCore_IosappMediaResource_CloudPhotoSizeMediaResource.self) else {
             throw FlatBuffersError.missingRequiredField()
         }
@@ -1003,7 +1003,7 @@ public func IosappMediaResource_parse(flatBuffersObject: IosappCore_IosappMediaR
             size: value.size == 0 ? nil : value.size,
             fileReference: value.fileReference.isEmpty ? nil : Data(value.fileReference)
         )
-    case .telegrammediaresourceCloudpeerphotosizemediaresource:
+    case .iosappmediaresourceCloudpeerphotosizemediaresource:
         guard let value = flatBuffersObject.value(type: IosappCore_IosappMediaResource_CloudPeerPhotoSizeMediaResource.self) else {
             throw FlatBuffersError.missingRequiredField()
         }
@@ -1021,7 +1021,7 @@ public func IosappMediaResource_parse(flatBuffersObject: IosappCore_IosappMediaR
             volumeId: value.volumeId == Int64.min ? nil : value.volumeId,
             localId: value.localId == Int32.min ? nil : value.localId
         )
-    case .telegrammediaresourceCloudstickerpackthumbnailmediaresource:
+    case .iosappmediaresourceCloudstickerpackthumbnailmediaresource:
         guard let value = flatBuffersObject.value(type: IosappCore_IosappMediaResource_CloudStickerPackThumbnailMediaResource.self) else {
             throw FlatBuffersError.missingRequiredField()
         }
@@ -1031,7 +1031,7 @@ public func IosappMediaResource_parse(flatBuffersObject: IosappCore_IosappMediaR
             volumeId: value.volumeId == Int64.min ? nil : value.volumeId,
             localId: value.localId == Int32.min ? nil : value.localId
         )
-    case .telegrammediaresourceClouddocumentmediaresource:
+    case .iosappmediaresourceClouddocumentmediaresource:
         guard let value = flatBuffersObject.value(type: IosappCore_IosappMediaResource_CloudDocumentMediaResource.self) else {
             throw FlatBuffersError.missingRequiredField()
         }
@@ -1043,7 +1043,7 @@ public func IosappMediaResource_parse(flatBuffersObject: IosappCore_IosappMediaR
             fileReference: value.fileReference.isEmpty ? nil : Data(value.fileReference),
             fileName: value.fileName
         )
-    case .telegrammediaresourceLocalfilemediaresource:
+    case .iosappmediaresourceLocalfilemediaresource:
         guard let value = flatBuffersObject.value(type: IosappCore_IosappMediaResource_LocalFileMediaResource.self) else {
             throw FlatBuffersError.missingRequiredField()
         }
@@ -1075,7 +1075,7 @@ public func IosappMediaResource_serialize(resource: IosappMediaResource, flatBuf
         }
         
         let offset = IosappCore_IosappMediaResource_CloudFileMediaResource.endIosappMediaResource_CloudFileMediaResource(&builder, start: start)
-        return IosappCore_IosappMediaResource.createIosappMediaResource(&builder, valueType: .telegrammediaresourceCloudfilemediaresource, valueOffset: offset)
+        return IosappCore_IosappMediaResource.createIosappMediaResource(&builder, valueType: .iosappmediaresourceCloudfilemediaresource, valueOffset: offset)
     case let resource as CloudDocumentSizeMediaResource:
         let sizeSpecOffset = builder.create(string: resource.sizeSpec)
         let fileReferenceOffset = resource.fileReference.flatMap { builder.createVector(bytes: $0) }
@@ -1091,7 +1091,7 @@ public func IosappMediaResource_serialize(resource: IosappMediaResource, flatBuf
         }
         
         let offset = IosappCore_IosappMediaResource_CloudDocumentSizeMediaResource.endIosappMediaResource_CloudDocumentSizeMediaResource(&builder, start: start)
-        return IosappCore_IosappMediaResource.createIosappMediaResource(&builder, valueType: .telegrammediaresourceClouddocumentsizemediaresource, valueOffset: offset)
+        return IosappCore_IosappMediaResource.createIosappMediaResource(&builder, valueType: .iosappmediaresourceClouddocumentsizemediaresource, valueOffset: offset)
     case let resource as CloudPhotoSizeMediaResource:
         let sizeSpecOffset = builder.create(string: resource.sizeSpec)
         let fileReferenceOffset = resource.fileReference.flatMap { builder.createVector(bytes: $0) }
@@ -1108,7 +1108,7 @@ public func IosappMediaResource_serialize(resource: IosappMediaResource, flatBuf
         }
         
         let offset = IosappCore_IosappMediaResource_CloudPhotoSizeMediaResource.endIosappMediaResource_CloudPhotoSizeMediaResource(&builder, start: start)
-        return IosappCore_IosappMediaResource.createIosappMediaResource(&builder, valueType: .telegrammediaresourceCloudphotosizemediaresource, valueOffset: offset)
+        return IosappCore_IosappMediaResource.createIosappMediaResource(&builder, valueType: .iosappmediaresourceCloudphotosizemediaresource, valueOffset: offset)
     case let resource as CloudPeerPhotoSizeMediaResource:
         let start = IosappCore_IosappMediaResource_CloudPeerPhotoSizeMediaResource.startIosappMediaResource_CloudPeerPhotoSizeMediaResource(&builder)
         
@@ -1127,7 +1127,7 @@ public func IosappMediaResource_serialize(resource: IosappMediaResource, flatBuf
         IosappCore_IosappMediaResource_CloudPeerPhotoSizeMediaResource.add(localId: resource.localId ?? Int32.min, &builder)
         
         let offset = IosappCore_IosappMediaResource_CloudPeerPhotoSizeMediaResource.endIosappMediaResource_CloudPeerPhotoSizeMediaResource(&builder, start: start)
-        return IosappCore_IosappMediaResource.createIosappMediaResource(&builder, valueType: .telegrammediaresourceCloudpeerphotosizemediaresource, valueOffset: offset)
+        return IosappCore_IosappMediaResource.createIosappMediaResource(&builder, valueType: .iosappmediaresourceCloudpeerphotosizemediaresource, valueOffset: offset)
     case let resource as CloudStickerPackThumbnailMediaResource:
         let start = IosappCore_IosappMediaResource_CloudStickerPackThumbnailMediaResource.startIosappMediaResource_CloudStickerPackThumbnailMediaResource(&builder)
         
@@ -1137,7 +1137,7 @@ public func IosappMediaResource_serialize(resource: IosappMediaResource, flatBuf
         IosappCore_IosappMediaResource_CloudStickerPackThumbnailMediaResource.add(localId: resource.localId ?? Int32.min, &builder)
         
         let offset = IosappCore_IosappMediaResource_CloudStickerPackThumbnailMediaResource.endIosappMediaResource_CloudStickerPackThumbnailMediaResource(&builder, start: start)
-        return IosappCore_IosappMediaResource.createIosappMediaResource(&builder, valueType: .telegrammediaresourceCloudstickerpackthumbnailmediaresource, valueOffset: offset)
+        return IosappCore_IosappMediaResource.createIosappMediaResource(&builder, valueType: .iosappmediaresourceCloudstickerpackthumbnailmediaresource, valueOffset: offset)
     case let resource as CloudDocumentMediaResource:
         let fileNameOffset = resource.fileName.flatMap { builder.create(string: $0) }
         let fileReferenceOffset = resource.fileReference.flatMap { builder.createVector(bytes: $0) }
@@ -1156,7 +1156,7 @@ public func IosappMediaResource_serialize(resource: IosappMediaResource, flatBuf
         }
         
         let offset = IosappCore_IosappMediaResource_CloudDocumentMediaResource.endIosappMediaResource_CloudDocumentMediaResource(&builder, start: start)
-        return IosappCore_IosappMediaResource.createIosappMediaResource(&builder, valueType: .telegrammediaresourceClouddocumentmediaresource, valueOffset: offset)
+        return IosappCore_IosappMediaResource.createIosappMediaResource(&builder, valueType: .iosappmediaresourceClouddocumentmediaresource, valueOffset: offset)
     case let resource as LocalFileMediaResource:
         let start = IosappCore_IosappMediaResource_LocalFileMediaResource.startIosappMediaResource_LocalFileMediaResource(&builder)
         
@@ -1165,7 +1165,7 @@ public func IosappMediaResource_serialize(resource: IosappMediaResource, flatBuf
         IosappCore_IosappMediaResource_LocalFileMediaResource.add(isSecretRelated: resource.isSecretRelated, &builder)
         
         let offset = IosappCore_IosappMediaResource_LocalFileMediaResource.endIosappMediaResource_LocalFileMediaResource(&builder, start: start)
-        return IosappCore_IosappMediaResource.createIosappMediaResource(&builder, valueType: .telegrammediaresourceLocalfilemediaresource, valueOffset: offset)
+        return IosappCore_IosappMediaResource.createIosappMediaResource(&builder, valueType: .iosappmediaresourceLocalfilemediaresource, valueOffset: offset)
     default:
         assertionFailure()
         return nil
@@ -1175,22 +1175,22 @@ public func IosappMediaResource_serialize(resource: IosappMediaResource, flatBuf
 public extension IosappCore_IosappMediaResource {
     var id: MediaResourceId {
         switch self.valueType {
-        case .telegrammediaresourceCloudfilemediaresource:
+        case .iosappmediaresourceCloudfilemediaresource:
             guard let value = self.value(type: IosappCore_IosappMediaResource_CloudFileMediaResource.self) else {
                 return MediaResourceId("")
             }
             return MediaResourceId(CloudFileMediaResourceId(datacenterId: Int(value.datacenterId), volumeId: value.volumeId, localId: value.localId, secret: value.secret).uniqueId)
-        case .telegrammediaresourceClouddocumentsizemediaresource:
+        case .iosappmediaresourceClouddocumentsizemediaresource:
             guard let value = self.value(type: IosappCore_IosappMediaResource_CloudDocumentSizeMediaResource.self) else {
                 return MediaResourceId("")
             }
             return MediaResourceId(CloudDocumentSizeMediaResourceId(datacenterId: Int32(value.datacenterId), documentId: value.documentId, sizeSpec: value.sizeSpec).uniqueId)
-        case .telegrammediaresourceCloudphotosizemediaresource:
+        case .iosappmediaresourceCloudphotosizemediaresource:
             guard let value = self.value(type: IosappCore_IosappMediaResource_CloudPhotoSizeMediaResource.self) else {
                 return MediaResourceId("")
             }
             return MediaResourceId(CloudPhotoSizeMediaResourceId(datacenterId: Int32(value.datacenterId), photoId: value.photoId, sizeSpec: value.sizeSpec).uniqueId)
-        case .telegrammediaresourceCloudpeerphotosizemediaresource:
+        case .iosappmediaresourceCloudpeerphotosizemediaresource:
             guard let value = self.value(type: IosappCore_IosappMediaResource_CloudPeerPhotoSizeMediaResource.self) else {
                 return MediaResourceId("")
             }
@@ -1202,17 +1202,17 @@ public extension IosappCore_IosappMediaResource {
                 sizeSpec = .fullSize
             }
             return MediaResourceId(CloudPeerPhotoSizeMediaResourceId(datacenterId: Int32(value.datacenterId), photoId: value.photoId, sizeSpec: sizeSpec, volumeId: value.volumeId, localId: value.localId).uniqueId)
-        case .telegrammediaresourceCloudstickerpackthumbnailmediaresource:
+        case .iosappmediaresourceCloudstickerpackthumbnailmediaresource:
             guard let value = self.value(type: IosappCore_IosappMediaResource_CloudStickerPackThumbnailMediaResource.self) else {
                 return MediaResourceId("")
             }
             return MediaResourceId(CloudStickerPackThumbnailMediaResourceId(datacenterId: Int32(value.datacenterId), thumbVersion: value.thumbVersion, volumeId: value.volumeId, localId: value.localId).uniqueId)
-        case .telegrammediaresourceClouddocumentmediaresource:
+        case .iosappmediaresourceClouddocumentmediaresource:
             guard let value = self.value(type: IosappCore_IosappMediaResource_CloudDocumentMediaResource.self) else {
                 return MediaResourceId("")
             }
             return MediaResourceId(CloudDocumentMediaResourceId(datacenterId: Int(value.datacenterId), fileId: value.fileId).uniqueId)
-        case .telegrammediaresourceLocalfilemediaresource:
+        case .iosappmediaresourceLocalfilemediaresource:
             guard let value = self.value(type: IosappCore_IosappMediaResource_LocalFileMediaResource.self) else {
                 return MediaResourceId("")
             }

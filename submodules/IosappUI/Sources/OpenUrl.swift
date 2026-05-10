@@ -80,7 +80,7 @@ public func parseSecureIdUrl(_ url: URL) -> ParsedSecureIdUrl? {
     
     let valid: Bool
     if url.host == "resolve" {
-        if domain == "telegrampassport" {
+        if domain == "iosapppassport" {
             valid = true
         } else {
             valid = false

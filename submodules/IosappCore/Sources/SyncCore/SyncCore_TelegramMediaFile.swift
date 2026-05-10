@@ -495,44 +495,44 @@ public enum IosappMediaFileAttribute: PostboxCoding, Equatable {
     
     init(flatBuffersObject: IosappCore_IosappMediaFileAttribute) throws {
         switch flatBuffersObject.valueType {
-        case .telegrammediafileattributeFilename:
+        case .iosappmediafileattributeFilename:
             guard let value = flatBuffersObject.value(type: IosappCore_IosappMediaFileAttribute_FileName.self) else {
                 throw FlatBuffersError.missingRequiredField()
             }
             self = .FileName(fileName: value.fileName)
-        case .telegrammediafileattributeSticker:
+        case .iosappmediafileattributeSticker:
             guard let value = flatBuffersObject.value(type: IosappCore_IosappMediaFileAttribute_Sticker.self) else {
                 throw FlatBuffersError.missingRequiredField()
             }
             self = .Sticker(displayText: value.displayText, packReference: try value.packReference.flatMap({ try StickerPackReference(flatBuffersObject: $0) }), maskData: value.maskData.flatMap({ StickerMaskCoords(flatBuffersObject: $0) }))
-        case .telegrammediafileattributeImagesize:
+        case .iosappmediafileattributeImagesize:
             guard let value = flatBuffersObject.value(type: IosappCore_IosappMediaFileAttribute_ImageSize.self) else {
                 throw FlatBuffersError.missingRequiredField()
             }
             self = .ImageSize(size: PixelDimensions(width: value.width, height: value.height))
-        case .telegrammediafileattributeAnimated:
+        case .iosappmediafileattributeAnimated:
             self = .Animated
-        case .telegrammediafileattributeVideo:
+        case .iosappmediafileattributeVideo:
             guard let value = flatBuffersObject.value(type: IosappCore_IosappMediaFileAttribute_Video.self) else {
                 throw FlatBuffersError.missingRequiredField()
             }
             self = .Video(duration: Double(value.duration), size: PixelDimensions(width: value.width, height: value.height), flags: IosappMediaVideoFlags(rawValue: value.flags), preloadSize: value.preloadSize == 0 ? nil : value.preloadSize, coverTime: value.coverTime == 0.0 ? nil : Double(value.coverTime), videoCodec: value.videoCodec)
-        case .telegrammediafileattributeAudio:
+        case .iosappmediafileattributeAudio:
             guard let value = flatBuffersObject.value(type: IosappCore_IosappMediaFileAttribute_Audio.self) else {
                 throw FlatBuffersError.missingRequiredField()
             }
             self = .Audio(isVoice: value.isVoice, duration: Int(value.duration), title: value.title, performer: value.performer, waveform: value.waveform.isEmpty ? nil : Data(value.waveform))
-        case .telegrammediafileattributeHaslinkedstickers:
+        case .iosappmediafileattributeHaslinkedstickers:
             self = .HasLinkedStickers
-        case .telegrammediafileattributeHintfileislarge:
+        case .iosappmediafileattributeHintfileislarge:
             self = .hintFileIsLarge
-        case .telegrammediafileattributeHintisvalidated:
+        case .iosappmediafileattributeHintisvalidated:
             self = .hintIsValidated
-        case .telegrammediafileattributeNopremium:
+        case .iosappmediafileattributeNopremium:
             self = .NoPremium
         case .none_:
             throw FlatBuffersError.missingRequiredField()
-        case .telegrammediafileattributeCustomemoji:
+        case .iosappmediafileattributeCustomemoji:
             guard let value = flatBuffersObject.value(type: IosappCore_IosappMediaFileAttribute_CustomEmoji.self) else {
                 throw FlatBuffersError.missingRequiredField()
             }
@@ -546,13 +546,13 @@ public enum IosappMediaFileAttribute: PostboxCoding, Equatable {
 
         switch self {
         case let .FileName(fileName):
-            valueType = .telegrammediafileattributeFilename
+            valueType = .iosappmediafileattributeFilename
             let fileNameOffset = builder.create(string: fileName)
             let start = IosappCore_IosappMediaFileAttribute_FileName.startIosappMediaFileAttribute_FileName(&builder)
             IosappCore_IosappMediaFileAttribute_FileName.add(fileName: fileNameOffset, &builder)
             offset = IosappCore_IosappMediaFileAttribute_FileName.endIosappMediaFileAttribute_FileName(&builder, start: start)
         case let .Sticker(displayText, packReference, maskData):
-            valueType = .telegrammediafileattributeSticker
+            valueType = .iosappmediafileattributeSticker
             let displayTextOffset = builder.create(string: displayText)
             
             let packReferenceOffset = packReference.flatMap {
@@ -576,17 +576,17 @@ public enum IosappMediaFileAttribute: PostboxCoding, Equatable {
             }
             offset = IosappCore_IosappMediaFileAttribute_Sticker.endIosappMediaFileAttribute_Sticker(&builder, start: start)
         case let .ImageSize(size):
-            valueType = .telegrammediafileattributeImagesize
+            valueType = .iosappmediafileattributeImagesize
             let start = IosappCore_IosappMediaFileAttribute_ImageSize.startIosappMediaFileAttribute_ImageSize(&builder)
             IosappCore_IosappMediaFileAttribute_ImageSize.add(width: size.width, &builder)
             IosappCore_IosappMediaFileAttribute_ImageSize.add(height: size.height, &builder)
             offset = IosappCore_IosappMediaFileAttribute_ImageSize.endIosappMediaFileAttribute_ImageSize(&builder, start: start)
         case .Animated:
-            valueType = .telegrammediafileattributeAnimated
+            valueType = .iosappmediafileattributeAnimated
             let start = IosappCore_IosappMediaFileAttribute_Animated.startIosappMediaFileAttribute_Animated(&builder)
             offset = IosappCore_IosappMediaFileAttribute_Animated.endIosappMediaFileAttribute_Animated(&builder, start: start)
         case let .Video(duration, size, flags, preloadSize, coverTime, videoCodec):
-            valueType = .telegrammediafileattributeVideo
+            valueType = .iosappmediafileattributeVideo
             let videoCodecOffset = videoCodec.flatMap { builder.create(string: $0) }
             let start = IosappCore_IosappMediaFileAttribute_Video.startIosappMediaFileAttribute_Video(&builder)
             
@@ -600,7 +600,7 @@ public enum IosappMediaFileAttribute: PostboxCoding, Equatable {
                 IosappCore_IosappMediaFileAttribute_Video.add(videoCodec: videoCodecOffset, &builder)}
             offset = IosappCore_IosappMediaFileAttribute_Video.endIosappMediaFileAttribute_Video(&builder, start: start)
         case let .Audio(isVoice, duration, title, performer, waveform):
-            valueType = .telegrammediafileattributeAudio
+            valueType = .iosappmediafileattributeAudio
             let titleOffset = title.flatMap { builder.create(string: $0) }
             let performerOffset = performer.flatMap { builder.create(string: $0) }
             let waveformOffset = waveform.flatMap { builder.createVector(bytes: $0) }
@@ -618,23 +618,23 @@ public enum IosappMediaFileAttribute: PostboxCoding, Equatable {
             }
             offset = IosappCore_IosappMediaFileAttribute_Audio.endIosappMediaFileAttribute_Audio(&builder, start: start)
         case .HasLinkedStickers:
-            valueType = .telegrammediafileattributeHaslinkedstickers
+            valueType = .iosappmediafileattributeHaslinkedstickers
             let start = IosappCore_IosappMediaFileAttribute_HasLinkedStickers.startIosappMediaFileAttribute_HasLinkedStickers(&builder)
             offset = IosappCore_IosappMediaFileAttribute_HasLinkedStickers.endIosappMediaFileAttribute_HasLinkedStickers(&builder, start: start)
         case .hintFileIsLarge:
-            valueType = .telegrammediafileattributeHintfileislarge
+            valueType = .iosappmediafileattributeHintfileislarge
             let start = IosappCore_IosappMediaFileAttribute_HintFileIsLarge.startIosappMediaFileAttribute_HintFileIsLarge(&builder)
             offset = IosappCore_IosappMediaFileAttribute_HintFileIsLarge.endIosappMediaFileAttribute_HintFileIsLarge(&builder, start: start)
         case .hintIsValidated:
-            valueType = .telegrammediafileattributeHintisvalidated
+            valueType = .iosappmediafileattributeHintisvalidated
             let start = IosappCore_IosappMediaFileAttribute_HintIsValidated.startIosappMediaFileAttribute_HintIsValidated(&builder)
             offset = IosappCore_IosappMediaFileAttribute_HintIsValidated.endIosappMediaFileAttribute_HintIsValidated(&builder, start: start)
         case .NoPremium:
-            valueType = .telegrammediafileattributeNopremium
+            valueType = .iosappmediafileattributeNopremium
             let start = IosappCore_IosappMediaFileAttribute_NoPremium.startIosappMediaFileAttribute_NoPremium(&builder)
             offset = IosappCore_IosappMediaFileAttribute_NoPremium.endIosappMediaFileAttribute_NoPremium(&builder, start: start)
         case let .CustomEmoji(isPremium, isSingleColor, alt, packReference):
-            valueType = .telegrammediafileattributeCustomemoji
+            valueType = .iosappmediafileattributeCustomemoji
             let altOffset = builder.create(string: alt)
             let packReferenceOffset = packReference.flatMap {
                 return $0.encodeToFlatBuffers(builder: &builder)
@@ -1372,7 +1372,7 @@ public extension IosappMediaFile.Accessor {
             }
             for i in 0 ..< self._wrapped!.attributesCount {
                 let attribute = self._wrapped!.attributes(at: i)!
-                if attribute.valueType == .telegrammediafileattributeFilename {
+                if attribute.valueType == .iosappmediafileattributeFilename {
                     if let value = attribute.value(type: IosappCore_IosappMediaFileAttribute_FileName.self) {
                         return value.fileName
                     }
@@ -1388,7 +1388,7 @@ public extension IosappMediaFile.Accessor {
         }
         for i in 0 ..< self._wrapped!.attributesCount {
             let attribute = self._wrapped!.attributes(at: i)!
-            if attribute.valueType == .telegrammediafileattributeSticker {
+            if attribute.valueType == .iosappmediafileattributeSticker {
                 return true
             }
         }
@@ -1401,7 +1401,7 @@ public extension IosappMediaFile.Accessor {
         }
         for i in 0 ..< self._wrapped!.attributesCount {
             let attribute = self._wrapped!.attributes(at: i)!
-            if attribute.valueType == .telegrammediafileattributeSticker {
+            if attribute.valueType == .iosappmediafileattributeSticker {
                 if self._wrapped!.size != Int64.min, self._wrapped!.size < 300 * 1024 {
                     return !isAnimatedSticker
                 } else if self._wrapped!.size == Int64.min {
@@ -1419,7 +1419,7 @@ public extension IosappMediaFile.Accessor {
         }
         for i in 0 ..< self._wrapped!.attributesCount {
             let attribute = self._wrapped!.attributes(at: i)!
-            if attribute.valueType == .telegrammediafileattributeCustomemoji {
+            if attribute.valueType == .iosappmediafileattributeCustomemoji {
                 return self._wrapped!.mimeType == "image/webp"
             }
         }
@@ -1432,7 +1432,7 @@ public extension IosappMediaFile.Accessor {
         }
         for i in 0 ..< self._wrapped!.attributesCount {
             let attribute = self._wrapped!.attributes(at: i)!
-            if attribute.valueType == .telegrammediafileattributeVideo {
+            if attribute.valueType == .iosappmediafileattributeVideo {
                 return true
             }
         }
@@ -1445,7 +1445,7 @@ public extension IosappMediaFile.Accessor {
         }
         for i in 0 ..< self._wrapped!.attributesCount {
             let attribute = self._wrapped!.attributes(at: i)!
-            if attribute.valueType == .telegrammediafileattributeVideo {
+            if attribute.valueType == .iosappmediafileattributeVideo {
                 if let value = attribute.value(type: IosappCore_IosappMediaFileAttribute_Video.self) {
                     return IosappMediaVideoFlags(rawValue: value.flags).contains(.instantRoundVideo)
                 }
@@ -1460,7 +1460,7 @@ public extension IosappMediaFile.Accessor {
         }
         for i in 0 ..< self._wrapped!.attributesCount {
             let attribute = self._wrapped!.attributes(at: i)!
-            if attribute.valueType == .telegrammediafileattributeVideo {
+            if attribute.valueType == .iosappmediafileattributeVideo {
                 if let value = attribute.value(type: IosappCore_IosappMediaFileAttribute_Video.self) {
                     return value.preloadSize == 0 ? nil : value.preloadSize
                 }
@@ -1475,7 +1475,7 @@ public extension IosappMediaFile.Accessor {
         }
         for i in 0 ..< self._wrapped!.attributesCount {
             let attribute = self._wrapped!.attributes(at: i)!
-            if attribute.valueType == .telegrammediafileattributeAnimated {
+            if attribute.valueType == .iosappmediafileattributeAnimated {
                 return true
             }
         }
@@ -1498,7 +1498,7 @@ public extension IosappMediaFile.Accessor {
         }
         for i in 0 ..< self._wrapped!.videoThumbnailsCount {
             let thumbnail = self._wrapped!.videoThumbnails(at: i)!
-            if thumbnail.resource.valueType == .telegrammediaresourceClouddocumentsizemediaresource {
+            if thumbnail.resource.valueType == .iosappmediaresourceClouddocumentsizemediaresource {
                 if let value = thumbnail.resource.value(type: IosappCore_IosappMediaResource_CloudDocumentSizeMediaResource.self) {
                     if value.sizeSpec == "f" {
                         return true
@@ -1515,7 +1515,7 @@ public extension IosappMediaFile.Accessor {
         }
         for i in 0 ..< self._wrapped!.attributesCount {
             let attribute = self._wrapped!.attributes(at: i)!
-            if attribute.valueType == .telegrammediafileattributeNopremium {
+            if attribute.valueType == .iosappmediafileattributeNopremium {
                 return true
             }
         }
@@ -1528,7 +1528,7 @@ public extension IosappMediaFile.Accessor {
         }
         for i in 0 ..< self._wrapped!.videoThumbnailsCount {
             let thumbnail = self._wrapped!.videoThumbnails(at: i)!
-            if thumbnail.resource.valueType == .telegrammediaresourceClouddocumentsizemediaresource {
+            if thumbnail.resource.valueType == .iosappmediaresourceClouddocumentsizemediaresource {
                 if let value = thumbnail.resource.value(type: IosappCore_IosappMediaResource_CloudDocumentSizeMediaResource.self) {
                     if value.sizeSpec == "f" {
                         return try! IosappMediaFile.VideoThumbnail(flatBuffersObject: thumbnail)
@@ -1547,10 +1547,10 @@ public extension IosappMediaFile.Accessor {
             var hasSticker = false
             for i in 0 ..< self._wrapped!.attributesCount {
                 let attribute = self._wrapped!.attributes(at: i)!
-                if attribute.valueType == .telegrammediafileattributeSticker {
+                if attribute.valueType == .iosappmediafileattributeSticker {
                     hasSticker = true
                     break
-                } else if attribute.valueType == .telegrammediafileattributeCustomemoji {
+                } else if attribute.valueType == .iosappmediafileattributeCustomemoji {
                     hasSticker = true
                     break
                 }
@@ -1567,7 +1567,7 @@ public extension IosappMediaFile.Accessor {
         var hasSticker = false
         for i in 0 ..< self._wrapped!.attributesCount {
             let attribute = self._wrapped!.attributes(at: i)!
-            if attribute.valueType == .telegrammediafileattributeCustomemoji {
+            if attribute.valueType == .iosappmediafileattributeCustomemoji {
                 hasSticker = true
                 break
             }
@@ -1586,7 +1586,7 @@ public extension IosappMediaFile.Accessor {
         }
         for i in 0 ..< self._wrapped!.attributesCount {
             let attribute = self._wrapped!.attributes(at: i)!
-            if attribute.valueType == .telegrammediafileattributeCustomemoji {
+            if attribute.valueType == .iosappmediafileattributeCustomemoji {
                 if let value = attribute.value(type: IosappCore_IosappMediaFileAttribute_CustomEmoji.self) {
                     return value.alt
                 }
@@ -1608,7 +1608,7 @@ public extension IosappMediaFile.Accessor {
         
         for i in 0 ..< self._wrapped!.attributesCount {
             let attribute = self._wrapped!.attributes(at: i)!
-            if attribute.valueType == .telegrammediafileattributeSticker {
+            if attribute.valueType == .iosappmediafileattributeSticker {
                 if let value = attribute.value(type: IosappCore_IosappMediaFileAttribute_Sticker.self) {
                     return value.displayText
                 }
@@ -1624,7 +1624,7 @@ public extension IosappMediaFile.Accessor {
         }
         for i in 0 ..< self._wrapped!.attributesCount {
             let attribute = self._wrapped!.attributes(at: i)!
-            if attribute.valueType == .telegrammediafileattributeCustomemoji {
+            if attribute.valueType == .iosappmediafileattributeCustomemoji {
                 if let value = attribute.value(type: IosappCore_IosappMediaFileAttribute_CustomEmoji.self) {
                     let isSingleColor = value.isSingleColor
                     if isSingleColor {
@@ -1664,7 +1664,7 @@ public extension IosappMediaFile.Accessor {
         }
         for i in 0 ..< self._wrapped!.attributesCount {
             let attribute = self._wrapped!.attributes(at: i)!
-            if attribute.valueType == .telegrammediafileattributeCustomemoji {
+            if attribute.valueType == .iosappmediafileattributeCustomemoji {
                 if let value = attribute.value(type: IosappCore_IosappMediaFileAttribute_CustomEmoji.self) {
                     if let packReference = value.packReference {
                         if packReference.valueType == .stickerpackreferenceId {
@@ -1687,7 +1687,7 @@ public extension IosappMediaFile.Accessor {
         }
         for i in 0 ..< self._wrapped!.attributesCount {
             let attribute = self._wrapped!.attributes(at: i)!
-            if attribute.valueType == .telegrammediafileattributeCustomemoji {
+            if attribute.valueType == .iosappmediafileattributeCustomemoji {
                 if let value = attribute.value(type: IosappCore_IosappMediaFileAttribute_CustomEmoji.self) {
                     return value.isPremium
                 }
@@ -1704,7 +1704,7 @@ public extension IosappMediaFile.Accessor {
             var hasSticker = false
             for i in 0 ..< self._wrapped!.attributesCount {
                 let attribute = self._wrapped!.attributes(at: i)!
-                if attribute.valueType == .telegrammediafileattributeCustomemoji {
+                if attribute.valueType == .iosappmediafileattributeCustomemoji {
                     hasSticker = true
                     break
                 }
@@ -1720,7 +1720,7 @@ public extension IosappMediaFile.Accessor {
         }
         for i in 0 ..< self._wrapped!.attributesCount {
             let attribute = self._wrapped!.attributes(at: i)!
-            if attribute.valueType == .telegrammediafileattributeHaslinkedstickers {
+            if attribute.valueType == .iosappmediafileattributeHaslinkedstickers {
                 return true
             }
         }
@@ -1737,13 +1737,13 @@ public extension IosappMediaFile.Accessor {
         
         for i in 0 ..< self._wrapped!.attributesCount {
             let attribute = self._wrapped!.attributes(at: i)!
-            if attribute.valueType == .telegrammediafileattributeAudio {
+            if attribute.valueType == .iosappmediafileattributeAudio {
                 if let value = attribute.value(type: IosappCore_IosappMediaFileAttribute_Audio.self) {
                     if !value.isVoice {
                         hasNonVoiceAudio = true
                     }
                 }
-            } else if attribute.valueType == .telegrammediafileattributeVideo {
+            } else if attribute.valueType == .iosappmediafileattributeVideo {
                 hasVideo = true
             }
         }
@@ -1756,7 +1756,7 @@ public extension IosappMediaFile.Accessor {
         }
         for i in 0 ..< self._wrapped!.attributesCount {
             let attribute = self._wrapped!.attributes(at: i)!
-            if attribute.valueType == .telegrammediafileattributeAudio {
+            if attribute.valueType == .iosappmediafileattributeAudio {
                 if let value = attribute.value(type: IosappCore_IosappMediaFileAttribute_Audio.self) {
                     return value.isVoice
                 }
@@ -1772,11 +1772,11 @@ public extension IosappMediaFile.Accessor {
         
         for i in 0 ..< self._wrapped!.attributesCount {
             let attribute = self._wrapped!.attributes(at: i)!
-            if attribute.valueType == .telegrammediafileattributeVideo {
+            if attribute.valueType == .iosappmediafileattributeVideo {
                 if let value = attribute.value(type: IosappCore_IosappMediaFileAttribute_Video.self) {
                     return PixelDimensions(width: value.width, height: value.height)
                 }
-            } else if attribute.valueType == .telegrammediafileattributeImagesize {
+            } else if attribute.valueType == .iosappmediafileattributeImagesize {
                 if let value = attribute.value(type: IosappCore_IosappMediaFileAttribute_ImageSize.self) {
                     return PixelDimensions(width: value.width, height: value.height)
                 }

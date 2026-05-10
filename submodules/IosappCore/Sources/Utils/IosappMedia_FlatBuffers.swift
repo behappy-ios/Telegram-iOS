@@ -6,12 +6,12 @@ import Postbox
 public func IosappMedia_parse(flatBuffersObject: IosappCore_Media) throws -> Media {
     //TODO:release support other media types
     switch flatBuffersObject.valueType {
-    case .mediaTelegrammediafile:
+    case .mediaIosappmediafile:
         guard let value = flatBuffersObject.value(type: IosappCore_Media_IosappMediaFile.self) else {
             throw FlatBuffersError.missingRequiredField()
         }
         return try IosappMediaFile(flatBuffersObject: value.file)
-    case .mediaTelegrammediaimage:
+    case .mediaIosappmediaimage:
         guard let value = flatBuffersObject.value(type: IosappCore_Media_IosappMediaImage.self) else {
             throw FlatBuffersError.missingRequiredField()
         }
@@ -29,13 +29,13 @@ public func IosappMedia_serialize(media: Media, flatBuffersBuilder builder: inou
         let start = IosappCore_Media_IosappMediaFile.startMedia_IosappMediaFile(&builder)
         IosappCore_Media_IosappMediaFile.add(file: fileOffset, &builder)
         let offset = IosappCore_Media_IosappMediaFile.endMedia_IosappMediaFile(&builder, start: start)
-        return IosappCore_Media.createMedia(&builder, valueType: .mediaTelegrammediafile, valueOffset: offset)
+        return IosappCore_Media.createMedia(&builder, valueType: .mediaIosappmediafile, valueOffset: offset)
     case let image as IosappMediaImage:
         let imageOffset = image.encodeToFlatBuffers(builder: &builder)
         let start = IosappCore_Media_IosappMediaImage.startMedia_IosappMediaImage(&builder)
         IosappCore_Media_IosappMediaImage.add(image: imageOffset, &builder)
         let offset = IosappCore_Media_IosappMediaImage.endMedia_IosappMediaImage(&builder, start: start)
-        return IosappCore_Media.createMedia(&builder, valueType: .mediaTelegrammediaimage, valueOffset: offset)
+        return IosappCore_Media.createMedia(&builder, valueType: .mediaIosappmediaimage, valueOffset: offset)
     default:
         assert(false)
         return nil
@@ -75,12 +75,12 @@ public extension IosappMedia.Accessor {
         }
         
         switch self._wrapped!.valueType {
-        case .mediaTelegrammediafile:
+        case .mediaIosappmediafile:
             guard let value = self._wrapped!.value(type: IosappCore_Media_IosappMediaFile.self) else {
                 return nil
             }
             return MediaId(value.file.fileId)
-        case .mediaTelegrammediaimage:
+        case .mediaIosappmediaimage:
             guard let value = self._wrapped!.value(type: IosappCore_Media_IosappMediaImage.self) else {
                 return nil
             }

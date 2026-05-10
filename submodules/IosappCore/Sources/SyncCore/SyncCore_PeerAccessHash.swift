@@ -17,12 +17,12 @@ public enum IosappPeerAccessHash: Hashable {
     
     public init(flatBuffersObject: IosappCore_IosappPeerAccessHash) throws {
         switch flatBuffersObject.valueType {
-        case .telegrampeeraccesshashPersonal:
+        case .iosapppeeraccesshashPersonal:
             guard let personal = flatBuffersObject.value(type: IosappCore_IosappPeerAccessHash_Personal.self) else {
                 throw FlatBuffersError.missingRequiredField()
             }
             self = .personal(personal.accessHash)
-        case .telegrampeeraccesshashGenericpublic:
+        case .iosapppeeraccesshashGenericpublic:
             guard let genericPublic = flatBuffersObject.value(type: IosappCore_IosappPeerAccessHash_GenericPublic.self) else {
                 throw FlatBuffersError.missingRequiredField()
             }
@@ -38,12 +38,12 @@ public enum IosappPeerAccessHash: Hashable {
         
         switch self {
         case let .personal(accessHash):
-            valueType = .telegrampeeraccesshashPersonal
+            valueType = .iosapppeeraccesshashPersonal
             let start = IosappCore_IosappPeerAccessHash_Personal.startIosappPeerAccessHash_Personal(&builder)
             IosappCore_IosappPeerAccessHash_Personal.add(accessHash: accessHash, &builder)
             valueOffset = IosappCore_IosappPeerAccessHash_Personal.endIosappPeerAccessHash_Personal(&builder, start: start)
         case let .genericPublic(accessHash):
-            valueType = .telegrampeeraccesshashGenericpublic
+            valueType = .iosapppeeraccesshashGenericpublic
             let start = IosappCore_IosappPeerAccessHash_GenericPublic.startIosappPeerAccessHash_GenericPublic(&builder)
             IosappCore_IosappPeerAccessHash_GenericPublic.add(accessHash: accessHash, &builder)
             valueOffset = IosappCore_IosappPeerAccessHash_GenericPublic.endIosappPeerAccessHash_GenericPublic(&builder, start: start)

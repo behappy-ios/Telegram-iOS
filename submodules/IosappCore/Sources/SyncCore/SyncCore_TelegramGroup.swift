@@ -45,17 +45,17 @@ public enum IosappGroupRole: Equatable, PostboxCoding {
     
     public init(flatBuffersObject: IosappCore_IosappGroupRole) throws {
         switch flatBuffersObject.valueType {
-        case .telegramgrouproleCreator:
+        case .iosappgrouproleCreator:
             guard let creator = flatBuffersObject.value(type: IosappCore_IosappGroupRole_Creator.self) else {
                 throw FlatBuffersError.missingRequiredField()
             }
             self = .creator(rank: creator.rank)
-        case .telegramgrouproleAdmin:
+        case .iosappgrouproleAdmin:
             guard let admin = flatBuffersObject.value(type: IosappCore_IosappGroupRole_Admin.self) else {
                 throw FlatBuffersError.missingRequiredField()
             }
             self = .admin(try IosappChatAdminRights(flatBuffersObject: admin.rights), rank: admin.rank)
-        case .telegramgrouproleMember:
+        case .iosappgrouproleMember:
             self = .member
         case .none_:
             throw FlatBuffersError.missingRequiredField()
@@ -74,7 +74,7 @@ public enum IosappGroupRole: Equatable, PostboxCoding {
                 IosappCore_IosappGroupRole_Creator.add(rank: rankOffset, &builder)
             }
             valueOffset = IosappCore_IosappGroupRole_Creator.endIosappGroupRole_Creator(&builder, start: start)
-            valueType = .telegramgrouproleCreator
+            valueType = .iosappgrouproleCreator
         case let .admin(rights, rank):
             let rankOffset = rank.map { builder.create(string: $0) }
             let rightsOffset = rights.encodeToFlatBuffers(builder: &builder)
@@ -85,11 +85,11 @@ public enum IosappGroupRole: Equatable, PostboxCoding {
                 IosappCore_IosappGroupRole_Admin.add(rank: rankOffset, &builder)
             }
             valueOffset = IosappCore_IosappGroupRole_Admin.endIosappGroupRole_Admin(&builder, start: start)
-            valueType = .telegramgrouproleAdmin
+            valueType = .iosappgrouproleAdmin
         case .member:
             let start = IosappCore_IosappGroupRole_Member.startIosappGroupRole_Member(&builder)
             valueOffset = IosappCore_IosappGroupRole_Member.endIosappGroupRole_Member(&builder, start: start)
-            valueType = .telegramgrouproleMember
+            valueType = .iosappgrouproleMember
         }
         
         let start = IosappCore_IosappGroupRole.startIosappGroupRole(&builder)

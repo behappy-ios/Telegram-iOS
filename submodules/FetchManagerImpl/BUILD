@@ -12,8 +12,8 @@ swift_library(
     deps = [
         "//submodules/SSignalKit/SwiftSignalKit:SwiftSignalKit",
         "//submodules/Postbox:Postbox",
-        "//submodules/IosappCore:TelegramCore",
-        "//submodules/IosappUIPreferences:TelegramUIPreferences",
+        "//submodules/IosappCore:IosappCore",
+        "//submodules/IosappUIPreferences:IosappUIPreferences",
         "//submodules/AccountContext:AccountContext",
         "//submodules/MediaPlayer:UniversalMediaPlayer",
         "//submodules/Utils/RangeSet:RangeSet",

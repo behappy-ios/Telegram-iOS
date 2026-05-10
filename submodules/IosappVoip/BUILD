@@ -1,8 +1,8 @@
 load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
 
 swift_library(
-    name = "TelegramVoip",
-    module_name = "TelegramVoip",
+    name = "IosappVoip",
+    module_name = "IosappVoip",
     srcs = glob([
         "Sources/**/*.swift",
     ], exclude = [
@@ -13,8 +13,8 @@ swift_library(
     ],
     deps = [
         "//submodules/SSignalKit/SwiftSignalKit:SwiftSignalKit",
-        "//submodules/IosappCore:TelegramCore",
-        "//submodules/IosappUIPreferences:TelegramUIPreferences",
+        "//submodules/IosappCore:IosappCore",
+        "//submodules/IosappUIPreferences:IosappUIPreferences",
         "//submodules/TgVoipWebrtc:TgVoipWebrtc",
         "//submodules/FFMpegBinding",
         "//submodules/ManagedFile",

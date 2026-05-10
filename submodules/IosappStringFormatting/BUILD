@@ -1,8 +1,8 @@
 load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
 
 swift_library(
-    name = "TelegramStringFormatting",
-    module_name = "TelegramStringFormatting",
+    name = "IosappStringFormatting",
+    module_name = "IosappStringFormatting",
     srcs = glob([
         "Sources/**/*.swift",
     ]),
@@ -10,14 +10,14 @@ swift_library(
         "-warnings-as-errors",
     ],
     deps = [
-        "//submodules/IosappCore:TelegramCore",
+        "//submodules/IosappCore:IosappCore",
         "//submodules/Display:Display",
         "//submodules/PlatformRestrictionMatching:PlatformRestrictionMatching",
         "//submodules/LocalizedPeerData:LocalizedPeerData",
         "//submodules/TextFormat:TextFormat",
         "//submodules/Markdown:Markdown",
-        "//submodules/IosappUIPreferences:TelegramUIPreferences",
-        "//submodules/IosappPresentationData:TelegramPresentationData",
+        "//submodules/IosappUIPreferences:IosappUIPreferences",
+        "//submodules/IosappPresentationData:IosappPresentationData",
         "//submodules/AppBundle:AppBundle",
     ],
     visibility = [

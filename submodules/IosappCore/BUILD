@@ -1,8 +1,8 @@
 load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
 
 swift_library(
-    name = "TelegramCore",
-    module_name = "TelegramCore",
+    name = "IosappCore",
+    module_name = "IosappCore",
     srcs = glob([
         "Sources/**/*.swift",
     ]),
@@ -10,7 +10,7 @@ swift_library(
         "-warnings-as-errors",
     ],
     deps = [
-        "//submodules/IosappApi:TelegramApi",
+        "//submodules/IosappApi:IosappApi",
         "//submodules/MtProtoKit:MtProtoKit",
         "//submodules/SSignalKit/SwiftSignalKit:SwiftSignalKit",
         "//submodules/Postbox:Postbox",

@@ -41,8 +41,8 @@ apple_resource_bundle(
 )
 
 swift_library(
-    name = "TelegramUniversalVideoContent",
-    module_name = "TelegramUniversalVideoContent",
+    name = "IosappUniversalVideoContent",
+    module_name = "IosappUniversalVideoContent",
     srcs = glob([
         "Sources/**/*.swift",
     ]),
@@ -56,11 +56,11 @@ swift_library(
         "//submodules/AsyncDisplayKit:AsyncDisplayKit",
         "//submodules/Display:Display",
         "//submodules/Postbox:Postbox",
-        "//submodules/IosappCore:TelegramCore",
+        "//submodules/IosappCore:IosappCore",
         "//submodules/SSignalKit/SwiftSignalKit:SwiftSignalKit",
         "//submodules/MediaPlayer:UniversalMediaPlayer",
         "//submodules/AccountContext:AccountContext",
-        "//submodules/IosappPresentationData:TelegramPresentationData",
+        "//submodules/IosappPresentationData:IosappPresentationData",
         "//submodules/PhotoResources:PhotoResources",
         "//submodules/LegacyComponents:LegacyComponents",
         "//submodules/RadialStatusNode:RadialStatusNode",

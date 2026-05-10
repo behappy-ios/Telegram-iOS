@@ -1,8 +1,8 @@
 load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
 
 swift_library(
-    name = "TelegramUIDeclareEncodables",
-    module_name = "TelegramUIDeclareEncodables",
+    name = "IosappUIDeclareEncodables",
+    module_name = "IosappUIDeclareEncodables",
     srcs = glob([
         "Sources/**/*.swift",
     ]),

@@ -18,10 +18,10 @@ swift_library(
         "//submodules/IosappUI/Components/EmojiTextAttachmentView:EmojiTextAttachmentView",
         "//submodules/AccountContext:AccountContext",
         "//submodules/Postbox:Postbox",
-        "//submodules/IosappCore:TelegramCore",
-        "//submodules/IosappPresentationData:TelegramPresentationData",
+        "//submodules/IosappCore:IosappCore",
+        "//submodules/IosappPresentationData:IosappPresentationData",
         "//submodules/TextFormat:TextFormat",
-        "//submodules/IosappUIPreferences:TelegramUIPreferences",
+        "//submodules/IosappUIPreferences:IosappUIPreferences",
     ],
     visibility = [
         "//visibility:public",

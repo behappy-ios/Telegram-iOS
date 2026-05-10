@@ -9,7 +9,7 @@ load("//build-system/bazel-utils:plist_fragment.bzl",
 )
 
 filegroup(
-    name = "TelegramCallsUIMetalResources",
+    name = "IosappCallsUIMetalResources",
     srcs = glob([
         "Resources/**/*.metal",
     ]),
@@ -17,7 +17,7 @@ filegroup(
 )
 
 plist_fragment(
-    name = "TelegramCallsUIBundleInfoPlist",
+    name = "IosappCallsUIBundleInfoPlist",
     extension = "plist",
     template =
     """
@@ -31,18 +31,18 @@ plist_fragment(
 )
 
 apple_resource_bundle(
-    name = "TelegramCallsUIBundle",
+    name = "IosappCallsUIBundle",
     infoplists = [
-        ":TelegramCallsUIBundleInfoPlist",
+        ":IosappCallsUIBundleInfoPlist",
     ],
     resources = [
-        ":TelegramCallsUIMetalResources",
+        ":IosappCallsUIMetalResources",
     ],
 )
 
 swift_library(
-    name = "TelegramCallsUI",
-    module_name = "TelegramCallsUI",
+    name = "IosappCallsUI",
+    module_name = "IosappCallsUI",
     srcs = glob([
         "Sources/**/*.swift",
     ]),
@@ -50,20 +50,20 @@ swift_library(
         "-warnings-as-errors",
     ],
     data = [
-        ":TelegramCallsUIBundle",
+        ":IosappCallsUIBundle",
     ],
     deps = [
         "//submodules/SSignalKit/SSignalKit",
     	"//submodules/SSignalKit/SwiftSignalKit:SwiftSignalKit",
         "//submodules/Display:Display",
-        "//submodules/IosappPresentationData:TelegramPresentationData",
-        "//submodules/IosappUIPreferences:TelegramUIPreferences",
+        "//submodules/IosappPresentationData:IosappPresentationData",
+        "//submodules/IosappUIPreferences:IosappUIPreferences",
         "//submodules/PhotoResources:PhotoResources",
-        "//submodules/IosappNotices:TelegramNotices",
+        "//submodules/IosappNotices:IosappNotices",
         "//submodules/MediaPlayer:UniversalMediaPlayer",
         "//submodules/DeviceAccess:DeviceAccess",
-        "//submodules/IosappAudio:TelegramAudio",
-        "//submodules/IosappVoip:TelegramVoip",
+        "//submodules/IosappAudio:IosappAudio",
+        "//submodules/IosappVoip:IosappVoip",
         "//submodules/ItemListUI:ItemListUI",
         "//submodules/OverlayStatusController:OverlayStatusController",
         "//submodules/AppBundle:AppBundle",

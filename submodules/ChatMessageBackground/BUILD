@@ -13,7 +13,7 @@ swift_library(
         "//submodules/AsyncDisplayKit:AsyncDisplayKit",
     	"//submodules/Display:Display",
         "//submodules/Postbox:Postbox",
-    	"//submodules/IosappPresentationData:TelegramPresentationData",
+    	"//submodules/IosappPresentationData:IosappPresentationData",
     	"//submodules/WallpaperBackgroundNode:WallpaperBackgroundNode",
     ],
     visibility = [

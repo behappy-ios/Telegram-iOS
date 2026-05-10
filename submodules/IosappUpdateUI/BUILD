@@ -1,8 +1,8 @@
 load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
 
 swift_library(
-    name = "TelegramUpdateUI",
-    module_name = "TelegramUpdateUI",
+    name = "IosappUpdateUI",
+    module_name = "IosappUpdateUI",
     srcs = glob([
         "Sources/**/*.swift",
     ]),
@@ -13,8 +13,8 @@ swift_library(
         "//submodules/SSignalKit/SwiftSignalKit:SwiftSignalKit",
         "//submodules/AsyncDisplayKit:AsyncDisplayKit",
         "//submodules/Display:Display",
-        "//submodules/IosappCore:TelegramCore",
-        "//submodules/IosappPresentationData:TelegramPresentationData",
+        "//submodules/IosappCore:IosappCore",
+        "//submodules/IosappPresentationData:IosappPresentationData",
         "//submodules/ItemListUI:ItemListUI",
         "//submodules/PresentationDataUtils:PresentationDataUtils",
     ],

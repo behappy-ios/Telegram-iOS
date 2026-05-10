@@ -13,7 +13,7 @@ swift_library(
         "//submodules/Display:Display",
         "//submodules/SSignalKit/SwiftSignalKit:SwiftSignalKit",
         "//submodules/AccountContext:AccountContext",
-        "//submodules/IosappPresentationData:TelegramPresentationData",
+        "//submodules/IosappPresentationData:IosappPresentationData",
         "//submodules/AlertUI:AlertUI",
         "//submodules/ItemListUI:ItemListUI",
         "//submodules/SolidRoundedButtonNode:SolidRoundedButtonNode",

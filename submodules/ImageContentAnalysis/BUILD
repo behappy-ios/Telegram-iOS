@@ -13,8 +13,8 @@ swift_library(
     	"//submodules/Display:Display",
         "//submodules/SSignalKit/SwiftSignalKit:SwiftSignalKit",
         "//submodules/Postbox:Postbox",
-        "//submodules/IosappCore:TelegramCore",
-        "//submodules/IosappUIPreferences:TelegramUIPreferences",
+        "//submodules/IosappCore:IosappCore",
+        "//submodules/IosappUIPreferences:IosappUIPreferences",
         "//submodules/AccountContext:AccountContext",
     ],
     visibility = [

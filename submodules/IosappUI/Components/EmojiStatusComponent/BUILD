@@ -19,7 +19,7 @@ swift_library(
         "//submodules/IosappUI/Components/EmojiTextAttachmentView:EmojiTextAttachmentView",
         "//submodules/AccountContext:AccountContext",
         "//submodules/Postbox:Postbox",
-        "//submodules/IosappCore:TelegramCore",
+        "//submodules/IosappCore:IosappCore",
         "//submodules/AppBundle:AppBundle",
         "//submodules/TextFormat:TextFormat",
         "//submodules/lottie-ios:Lottie",

@@ -1,8 +1,8 @@
 load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
 
 swift_library(
-    name = "TelegramIntents",
-    module_name = "TelegramIntents",
+    name = "IosappIntents",
+    module_name = "IosappIntents",
     srcs = glob([
         "Sources/**/*.swift",
     ]),
@@ -10,11 +10,11 @@ swift_library(
         "-warnings-as-errors",
     ],
     deps = [
-    	"//submodules/IosappCore:TelegramCore",
+    	"//submodules/IosappCore:IosappCore",
         "//submodules/SSignalKit/SwiftSignalKit:SwiftSignalKit",
         "//submodules/Display:Display",
         "//submodules/AccountContext:AccountContext",
-        "//submodules/IosappPresentationData:TelegramPresentationData",
+        "//submodules/IosappPresentationData:IosappPresentationData",
         "//submodules/AvatarNode:AvatarNode",
     ],
     visibility = [

@@ -14,8 +14,8 @@ swift_library(
         "//submodules/AsyncDisplayKit:AsyncDisplayKit",
         "//submodules/Display:Display",
         "//submodules/AccountContext:AccountContext",
-        "//submodules/IosappStringFormatting:TelegramStringFormatting",
-        "//submodules/IosappPresentationData:TelegramPresentationData",
+        "//submodules/IosappStringFormatting:IosappStringFormatting",
+        "//submodules/IosappPresentationData:IosappPresentationData",
         "//submodules/UIKitRuntimeUtils:UIKitRuntimeUtils",
     ],
     visibility = [

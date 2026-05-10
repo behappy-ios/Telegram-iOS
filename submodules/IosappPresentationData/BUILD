@@ -1,8 +1,8 @@
 load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
 
 swift_library(
-    name = "TelegramPresentationData",
-    module_name = "TelegramPresentationData",
+    name = "IosappPresentationData",
+    module_name = "IosappPresentationData",
     srcs = glob([
         "Sources/**/*.swift",
     ]),
@@ -10,11 +10,11 @@ swift_library(
         "-warnings-as-errors",
     ],
     deps = [
-        "//submodules/IosappCore:TelegramCore",
+        "//submodules/IosappCore:IosappCore",
         "//submodules/Postbox:Postbox",
         "//submodules/Display:Display",
         "//submodules/SSignalKit/SwiftSignalKit:SwiftSignalKit",
-        "//submodules/IosappUIPreferences:TelegramUIPreferences",
+        "//submodules/IosappUIPreferences:IosappUIPreferences",
         "//submodules/MediaResources:MediaResources",
         "//submodules/AppBundle:AppBundle",
         "//submodules/StringPluralization:StringPluralization",

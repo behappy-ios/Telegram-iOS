@@ -1,8 +1,8 @@
 load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
 
 swift_library(
-    name = "TelegramUIPreferences",
-    module_name = "TelegramUIPreferences",
+    name = "IosappUIPreferences",
+    module_name = "IosappUIPreferences",
     srcs = glob([
         "Sources/**/*.swift",
     ]),
@@ -10,7 +10,7 @@ swift_library(
         "-warnings-as-errors",
     ],
     deps = [
-        "//submodules/IosappCore:TelegramCore",
+        "//submodules/IosappCore:IosappCore",
         "//submodules/Postbox:Postbox",
         "//submodules/SSignalKit/SwiftSignalKit:SwiftSignalKit",
     ],

@@ -13,7 +13,7 @@ swift_library(
         "//submodules/ComponentFlow:ComponentFlow",
         "//submodules/AppBundle:AppBundle",
         "//submodules/Display:Display",
-        "//submodules/IosappPresentationData:TelegramPresentationData",
+        "//submodules/IosappPresentationData:IosappPresentationData",
         "//submodules/Components/LottieAnimationComponent:LottieAnimationComponent",
         "//submodules/Components/BundleIconComponent:BundleIconComponent",
     ],

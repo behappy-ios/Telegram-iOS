@@ -10,9 +10,9 @@ swift_library(
         "-warnings-as-errors",
     ],
     deps = [
-        "//submodules/IosappCore:TelegramCore",
-        "//submodules/IosappPresentationData:TelegramPresentationData",
-        "//submodules/IosappUIPreferences:TelegramUIPreferences",
+        "//submodules/IosappCore:IosappCore",
+        "//submodules/IosappPresentationData:IosappPresentationData",
+        "//submodules/IosappUIPreferences:IosappUIPreferences",
     ],
     visibility = [
         "//visibility:public",

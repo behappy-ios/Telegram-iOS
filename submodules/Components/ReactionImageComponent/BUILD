@@ -13,7 +13,7 @@ swift_library(
         "//submodules/Display:Display",
         "//submodules/ComponentFlow:ComponentFlow",
         "//submodules/SSignalKit/SwiftSignalKit:SwiftSignalKit",
-        "//submodules/IosappCore:TelegramCore",
+        "//submodules/IosappCore:IosappCore",
         "//submodules/AccountContext:AccountContext",
         "//submodules/WebPBinding:WebPBinding",
         "//submodules/rlottie:RLottieBinding",

@@ -1,8 +1,8 @@
 load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
 
 swift_library(
-    name = "TelegramAnimatedStickerNode",
-    module_name = "TelegramAnimatedStickerNode",
+    name = "IosappAnimatedStickerNode",
+    module_name = "IosappAnimatedStickerNode",
     srcs = glob([
         "Sources/**/*.swift",
     ]),
@@ -11,7 +11,7 @@ swift_library(
     ],
     deps = [
     	"//submodules/Postbox:Postbox",
-        "//submodules/IosappCore:TelegramCore",
+        "//submodules/IosappCore:IosappCore",
         "//submodules/StickerResources:StickerResources",
         "//submodules/MediaResources:MediaResources",
         "//submodules/LocalMediaResources:LocalMediaResources",

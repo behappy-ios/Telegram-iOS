@@ -20,7 +20,7 @@ load(
     "telegram_enable_watch",
 )
 
-module_name = "TelegramCoreBuildTest"
+module_name = "IosappCoreBuildTest"
 
 swift_library(
     name = "Lib",

@@ -11,7 +11,7 @@ swift_library(
     ],
     deps = [
         "//submodules/Display:Display",
-        "//submodules/IosappPresentationData:TelegramPresentationData",
+        "//submodules/IosappPresentationData:IosappPresentationData",
         "//submodules/ComponentFlow",
         "//submodules/Components/ComponentDisplayAdapters",
         "//submodules/AppBundle",

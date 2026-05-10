@@ -1,8 +1,8 @@
 load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
 
 swift_library(
-    name = "TelegramNotices",
-    module_name = "TelegramNotices",
+    name = "IosappNotices",
+    module_name = "IosappNotices",
     srcs = glob([
         "Sources/**/*.swift",
     ]),
@@ -11,9 +11,9 @@ swift_library(
     ],
     deps = [
     	"//submodules/Postbox:Postbox",
-        "//submodules/IosappCore:TelegramCore",
+        "//submodules/IosappCore:IosappCore",
         "//submodules/SSignalKit/SwiftSignalKit:SwiftSignalKit",
-        "//submodules/IosappPermissions:TelegramPermissions",
+        "//submodules/IosappPermissions:IosappPermissions",
     ],
     visibility = [
         "//visibility:public",

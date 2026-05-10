@@ -376,13 +376,13 @@ swift_library(
         "//submodules/PasswordSetupUI:PasswordSetupUIAssets",
         "//submodules/PremiumUI:PremiumUIResources",
         "//submodules/DrawingUI:DrawingUIResources",
-        "//submodules/IosappUI:TelegramUIResources",
-        "//submodules/IosappUI:TelegramUIAssets",
+        "//submodules/IosappUI:IosappUIResources",
+        "//submodules/IosappUI:IosappUIAssets",
         "//submodules/IosappUI/Components/Calls/CallScreen:Assets",
         ":GeneratedPresentationStrings/Resources/PresentationStrings.data",
     ],
     deps = [
-        "//submodules/IosappUI:TelegramUI",
+        "//submodules/IosappUI:IosappUI",
         "//third-party/boringssl:crypto",
     ],
 )
@@ -752,7 +752,7 @@ ios_framework(
 )
 
 plist_fragment(
-    name = "TelegramApiInfoPlist",
+    name = "IosappApiInfoPlist",
     extension = "plist",
     template =
     """
@@ -770,7 +770,7 @@ plist_fragment(
 )
 
 plist_fragment(
-    name = "TelegramCoreInfoPlist",
+    name = "IosappCoreInfoPlist",
     extension = "plist",
     template =
     """
@@ -788,7 +788,7 @@ plist_fragment(
 )
 
 ios_framework(
-    name = "TelegramCoreFramework",
+    name = "IosappCoreFramework",
     bundle_id = "{telegram_bundle_id}.TelegramCore".format(
         telegram_bundle_id = telegram_bundle_id,
     ),
@@ -797,7 +797,7 @@ ios_framework(
         "ipad",
     ],
     infoplists = [
-        ":TelegramCoreInfoPlist",
+        ":IosappCoreInfoPlist",
         ":BuildNumberInfoPlist",
         ":VersionInfoPlist",
         ":RequiredDeviceCapabilitiesPlist",
@@ -811,7 +811,7 @@ ios_framework(
     extension_safe = True,
     ipa_post_processor = strip_framework,
     deps = [
-        "//submodules/IosappCore:TelegramCore",
+        "//submodules/IosappCore:IosappCore",
     ],
     visibility = [
         "//visibility:public",
@@ -898,7 +898,7 @@ sh_binary(
 )
 
 plist_fragment(
-    name = "TelegramUIInfoPlist",
+    name = "IosappUIInfoPlist",
     extension = "plist",
     template =
     """
@@ -916,7 +916,7 @@ plist_fragment(
 )
 
 ios_framework(
-    name = "TelegramUIFramework",
+    name = "IosappUIFramework",
     bundle_id = "{telegram_bundle_id}.TelegramUI".format(
         telegram_bundle_id = telegram_bundle_id,
     ),
@@ -925,7 +925,7 @@ ios_framework(
         "ipad",
     ],
     infoplists = [
-        ":TelegramUIInfoPlist",
+        ":IosappUIInfoPlist",
         ":BuildNumberInfoPlist",
         ":VersionInfoPlist",
         ":RequiredDeviceCapabilitiesPlist",
@@ -934,13 +934,13 @@ ios_framework(
         ":MtProtoKitFramework",
         ":SwiftSignalKitFramework",
         ":PostboxFramework",
-        ":TelegramCoreFramework",
+        ":IosappCoreFramework",
     ],
     minimum_os_version = minimum_os_version,
     extension_safe = True,
     ipa_post_processor = strip_framework,
     deps = [
-        "//submodules/IosappUI:TelegramUI",
+        "//submodules/IosappUI:IosappUI",
     ] + debug_deps,
 )
 
@@ -1032,7 +1032,7 @@ ios_extension(
     }),
     deps = [":ShareExtensionLib"],
     frameworks = [
-        ":TelegramUIFramework"
+        ":IosappUIFramework"
     ],
 )
 
@@ -1091,7 +1091,7 @@ swift_library(
         "-warnings-as-errors",
     ],
     deps = [
-        "//submodules/IosappUI:TelegramUI",
+        "//submodules/IosappUI:IosappUI",
         ":NotificationContentExtensionLink",
     ],
 )
@@ -1139,7 +1139,7 @@ ios_extension(
     }),
     deps = [":NotificationContentExtensionLib"],
     frameworks = [
-        ":TelegramUIFramework"
+        ":IosappUIFramework"
     ],
 )
 
@@ -1195,7 +1195,7 @@ swift_library(
         "//submodules/AppLockState:AppLockState",
         "//submodules/SSignalKit/SwiftSignalKit:SwiftSignalKit",
         "//submodules/Postbox:Postbox",
-        "//submodules/IosappCore:TelegramCore",
+        "//submodules/IosappCore:IosappCore",
         "//submodules/OpenSSLEncryptionProvider:OpenSSLEncryptionProvider",
         "//Telegram:GeneratedSources",
     ],
@@ -1249,7 +1249,7 @@ ios_extension(
     frameworks = [
         ":SwiftSignalKitFramework",
         ":PostboxFramework",
-        ":TelegramCoreFramework",
+        ":IosappCoreFramework",
     ],
     visibility = [
         "//visibility:public",
@@ -1328,8 +1328,8 @@ swift_library(
     deps = [
         "//submodules/SSignalKit/SwiftSignalKit:SwiftSignalKit",
         "//submodules/Postbox:Postbox",
-        "//submodules/IosappApi:TelegramApi",
-        "//submodules/IosappCore:TelegramCore",
+        "//submodules/IosappApi:IosappApi",
+        "//submodules/IosappCore:IosappCore",
         "//submodules/BuildConfig:BuildConfig",
         "//submodules/OpenSSLEncryptionProvider:OpenSSLEncryptionProvider",
         "//submodules/AppLockState:AppLockState",
@@ -1383,7 +1383,7 @@ ios_extension(
     frameworks = [
         ":SwiftSignalKitFramework",
         ":PostboxFramework",
-        ":TelegramCoreFramework",
+        ":IosappCoreFramework",
     ],
 )
 
@@ -1424,8 +1424,8 @@ swift_library(
         "-warnings-as-errors",
     ],
     deps = [
-        "//submodules/IosappUI:TelegramUI",
-        "//submodules/IosappVoip:TelegramVoip",
+        "//submodules/IosappUI:IosappUI",
+        "//submodules/IosappVoip:IosappVoip",
         "//submodules/SSignalKit/SwiftSignalKit:SwiftSignalKit",
         "//submodules/BuildConfig:BuildConfig",
         "//submodules/WidgetItems:WidgetItems",
@@ -1476,7 +1476,7 @@ ios_extension(
     }),
     deps = [":BroadcastUploadExtensionLib"],
     frameworks = [
-        ":TelegramUIFramework",
+        ":IosappUIFramework",
         ":SwiftSignalKitFramework",
     ],
 )
@@ -1539,8 +1539,8 @@ ios_extension(
         ":MtProtoKitFramework",
         ":SwiftSignalKitFramework",
         ":PostboxFramework",
-        ":TelegramCoreFramework",
-        ":TelegramUIFramework",
+        ":IosappCoreFramework",
+        ":IosappUIFramework",
     ],
 )
 
@@ -1765,8 +1765,8 @@ ios_application(
         ":MtProtoKitFramework",
         ":SwiftSignalKitFramework",
         ":PostboxFramework",
-        ":TelegramCoreFramework",
-        ":TelegramUIFramework",
+        ":IosappCoreFramework",
+        ":IosappUIFramework",
     ],
     strings = [
         ":AppStringResources",

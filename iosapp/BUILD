@@ -1197,7 +1197,7 @@ swift_library(
         "//submodules/Postbox:Postbox",
         "//submodules/IosappCore:IosappCore",
         "//submodules/OpenSSLEncryptionProvider:OpenSSLEncryptionProvider",
-        "//Telegram:GeneratedSources",
+        "//iosapp:GeneratedSources",
     ],
 )
 
@@ -1333,7 +1333,7 @@ swift_library(
         "//submodules/BuildConfig:BuildConfig",
         "//submodules/OpenSSLEncryptionProvider:OpenSSLEncryptionProvider",
         "//submodules/AppLockState:AppLockState",
-        "//Telegram:GeneratedSources",
+        "//iosapp:GeneratedSources",
         "//submodules/WidgetItems:WidgetItems",
     ],
 )
@@ -1534,7 +1534,7 @@ ios_extension(
         ":disableProvisioningProfilesSetting": None,
         "//conditions:default": "@build_configuration//provisioning:NotificationService.mobileprovision",
     }),
-    deps = ["//Telegram/NotificationService:NotificationServiceExtensionLib"],
+    deps = ["//iosapp/NotificationService:NotificationServiceExtensionLib"],
     frameworks = [
         ":MtProtoKitFramework",
         ":SwiftSignalKitFramework",
@@ -1790,7 +1790,7 @@ ios_application(
 )
 
 xcodeproj(
-    name = "Telegram_xcodeproj",
+    name = "iosapp_xcodeproj",
     bazel_path = telegram_bazel_path,
     project_name = "iosapp",
     tags = ["manual"],
@@ -1837,7 +1837,7 @@ ios_ui_test_suite(
         ":iPhone-17__26.2",
     ],
     tags = ["manual"],
-    test_host = "//Telegram:iosapp",
+    test_host = "//iosapp:iosapp",
     visibility = ["@rules_xcodeproj//xcodeproj:generated"],
     deps = [":iOSAppUITestSuite.library"],
 )

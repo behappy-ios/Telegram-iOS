@@ -154,7 +154,7 @@ ios_application(
         "//Tests/Common:LaunchScreen",
     ],
     extensions = [
-        "//Telegram:WidgetExtension",
+        "//iosapp:WidgetExtension",
     ],
     deps = [
         "//Tests/Common:Main",

@@ -23,7 +23,7 @@ def generate_xcodeproj(build_environment: BuildEnvironment, disable_extensions, 
 
     bazel_generate_arguments += ['run', '//{}_xcodeproj'.format(app_target_spec)]
 
-    if target_name == 'Telegram':
+    if target_name == "iosapp":
         if disable_extensions:
             bazel_generate_arguments += ['--//{}:disableExtensions'.format(app_target)]
         bazel_generate_arguments += ['--//{}:disableStripping'.format(app_target)]
@@ -32,7 +32,7 @@ def generate_xcodeproj(build_environment: BuildEnvironment, disable_extensions, 
     for argument in bazel_app_arguments:
         project_bazel_arguments.append(argument)
 
-    if target_name == 'Telegram':
+    if target_name == "iosapp":
         if disable_extensions:
             project_bazel_arguments += ['--//{}:disableExtensions'.format(app_target)]
         project_bazel_arguments += ['--//{}:disableStripping'.format(app_target)]

@@ -1735,7 +1735,7 @@ xcode_provisioning_profile(
 )
 
 ios_application(
-    name = "Telegram",
+    name = "iosapp",
     bundle_id = "{telegram_bundle_id}".format(
         telegram_bundle_id = telegram_bundle_id,
     ),
@@ -1792,10 +1792,10 @@ ios_application(
 xcodeproj(
     name = "Telegram_xcodeproj",
     bazel_path = telegram_bazel_path,
-    project_name = "Telegram",
+    project_name = "iosapp",
     tags = ["manual"],
     top_level_targets = [
-        top_level_target(":Telegram", target_environments = ["device", "simulator"]),
+        top_level_target(":iosapp", target_environments = ["device", "simulator"]),
         ":iOSAppUITestSuite",
     ],
     xcode_configurations = {
@@ -1837,7 +1837,7 @@ ios_ui_test_suite(
         ":iPhone-17__26.2",
     ],
     tags = ["manual"],
-    test_host = "//Telegram",
+    test_host = "//Telegram:iosapp",
     visibility = ["@rules_xcodeproj//xcodeproj:generated"],
     deps = [":iOSAppUITestSuite.library"],
 )

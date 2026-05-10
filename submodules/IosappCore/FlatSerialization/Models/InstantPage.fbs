@@ -2,7 +2,7 @@ include "InstantPageBlock.fbs";
 include "MediaId.fbs";
 include "Media.fbs";
 
-namespace TelegramCore;
+namespace IosappCore;
 
 table InstantPage {
     blocks:[InstantPageBlock] (id: 0, required);

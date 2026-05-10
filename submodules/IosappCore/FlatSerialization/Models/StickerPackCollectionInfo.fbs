@@ -1,7 +1,7 @@
 include "ItemCollectionId.fbs";
-include "TelegramMediaImageRepresentation.fbs";
+include "IosappMediaImageRepresentation.fbs";
 
-namespace TelegramCore;
+namespace IosappCore;
 
 table StickerPackCollectionInfo {
     id:ItemCollectionId (id: 0, required);
@@ -9,7 +9,7 @@ table StickerPackCollectionInfo {
     accessHash:int64 (id: 2);
     title:string (id: 3, required);
     shortName:string (id: 4, required);
-    thumbnail:TelegramMediaImageRepresentation (id: 5);
+    thumbnail:IosappMediaImageRepresentation (id: 5);
     thumbnailFileId:int64 (id: 6);
     immediateThumbnailData:[ubyte] (id: 7);
     hash:int32 (id: 8);

@@ -1,7 +1,7 @@
 include "MediaId.fbs";
 include "PixelDimensions.fbs";
 
-namespace TelegramCore;
+namespace IosappCore;
 
 union RichText_Value {
     RichText_Empty,

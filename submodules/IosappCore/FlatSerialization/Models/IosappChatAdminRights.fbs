@@ -1,7 +1,7 @@
-namespace TelegramCore;
+namespace IosappCore;
 
-table TelegramChatAdminRights {
+table IosappChatAdminRights {
     rights:int32 (id: 0);
 }
 
-root_type TelegramChatAdminRights;
+root_type IosappChatAdminRights;

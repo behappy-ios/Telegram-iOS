@@ -1,4 +1,4 @@
-namespace TelegramCore;
+namespace IosappCore;
 
 table StarsAmount {
     value:int64 (id: 0);

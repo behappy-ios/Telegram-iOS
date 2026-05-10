@@ -1,6 +1,6 @@
-namespace TelegramCore;
+namespace IosappCore;
 
-table TelegramMediaResource_CloudFileMediaResource {
+table IosappMediaResource_CloudFileMediaResource {
     datacenterId:int32 (id: 0);
     volumeId:int64 (id: 1);
     localId:int32 (id: 2);
@@ -9,7 +9,7 @@ table TelegramMediaResource_CloudFileMediaResource {
     fileReference:[ubyte] (id: 5);
 }
 
-table TelegramMediaResource_CloudDocumentSizeMediaResource {
+table IosappMediaResource_CloudDocumentSizeMediaResource {
     datacenterId:int32 (id: 0);
     documentId:int64 (id: 1);
     accessHash:int64 (id: 2);
@@ -17,7 +17,7 @@ table TelegramMediaResource_CloudDocumentSizeMediaResource {
     fileReference:[ubyte] (id: 4);
 }
 
-table TelegramMediaResource_CloudPhotoSizeMediaResource {
+table IosappMediaResource_CloudPhotoSizeMediaResource {
     datacenterId:int32 (id: 0);
     photoId:int64 (id: 1);
     accessHash:int64 (id: 2);
@@ -31,7 +31,7 @@ enum CloudPeerPhotoSizeSpec:int32 {
     fullSize = 1
 }
 
-table TelegramMediaResource_CloudPeerPhotoSizeMediaResource {
+table IosappMediaResource_CloudPeerPhotoSizeMediaResource {
     datacenterId:int32 (id: 0);
     photoId:int64 (id: 1);
     sizeSpec:CloudPeerPhotoSizeSpec (id: 2);
@@ -39,14 +39,14 @@ table TelegramMediaResource_CloudPeerPhotoSizeMediaResource {
     localId:int32 (id: 4);
 }
 
-table TelegramMediaResource_CloudStickerPackThumbnailMediaResource {
+table IosappMediaResource_CloudStickerPackThumbnailMediaResource {
     datacenterId:int32 (id: 0);
     thumbVersion:int32 (id: 1);
     volumeId:int64 (id: 2);
     localId:int32 (id: 3);
 }
 
-table TelegramMediaResource_CloudDocumentMediaResource {
+table IosappMediaResource_CloudDocumentMediaResource {
     datacenterId:int32 (id: 0);
     fileId:int64 (id: 1);
     accessHash:int64 (id: 2);
@@ -55,24 +55,24 @@ table TelegramMediaResource_CloudDocumentMediaResource {
     fileName:string (id: 5);
 }
 
-table TelegramMediaResource_LocalFileMediaResource {
+table IosappMediaResource_LocalFileMediaResource {
     fileId:int64 (id: 0);
     size:int64 (id: 1);
     isSecretRelated:bool (id: 2);
 }
 
-union TelegramMediaResource_Value {
-    TelegramMediaResource_CloudFileMediaResource,
-    TelegramMediaResource_CloudDocumentSizeMediaResource,
-    TelegramMediaResource_CloudPhotoSizeMediaResource,
-    TelegramMediaResource_CloudPeerPhotoSizeMediaResource,
-    TelegramMediaResource_CloudStickerPackThumbnailMediaResource,
-    TelegramMediaResource_CloudDocumentMediaResource,
-    TelegramMediaResource_LocalFileMediaResource
+union IosappMediaResource_Value {
+    IosappMediaResource_CloudFileMediaResource,
+    IosappMediaResource_CloudDocumentSizeMediaResource,
+    IosappMediaResource_CloudPhotoSizeMediaResource,
+    IosappMediaResource_CloudPeerPhotoSizeMediaResource,
+    IosappMediaResource_CloudStickerPackThumbnailMediaResource,
+    IosappMediaResource_CloudDocumentMediaResource,
+    IosappMediaResource_LocalFileMediaResource
 }
 
-table TelegramMediaResource {
-    value:TelegramMediaResource_Value (id: 1, required);
+table IosappMediaResource {
+    value:IosappMediaResource_Value (id: 1, required);
 }
 
-root_type TelegramMediaResource;
+root_type IosappMediaResource;

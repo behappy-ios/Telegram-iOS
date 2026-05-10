@@ -1,4 +1,4 @@
-namespace TelegramCore;
+namespace IosappCore;
 
 struct ItemCollectionId {
     namespace: int;

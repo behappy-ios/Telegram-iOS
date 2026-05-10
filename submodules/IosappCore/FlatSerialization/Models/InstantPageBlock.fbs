@@ -1,10 +1,10 @@
 include "RichText.fbs";
 include "MediaId.fbs";
-include "TelegramChannel.fbs";
+include "IosappChannel.fbs";
 include "PixelDimensions.fbs";
 include "RichText.fbs";
 
-namespace TelegramCore;
+namespace IosappCore;
 
 union InstantPageBlock_Value {
     InstantPageBlock_Unsupported,
@@ -151,7 +151,7 @@ table InstantPageBlock_Slideshow {
 }
 
 table InstantPageBlock_ChannelBanner {
-    channel:TelegramChannel (id: 0);
+    channel:IosappChannel (id: 0);
 }
 
 table InstantPageBlock_Kicker {

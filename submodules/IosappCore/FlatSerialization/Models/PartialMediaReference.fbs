@@ -3,7 +3,7 @@ include "PeerId.fbs";
 include "PeerReference.fbs";
 include "StickerPackReference.fbs";
 
-namespace TelegramCore;
+namespace IosappCore;
 
 table MessageReference {
     peer:PeerReference (id: 0, required);

@@ -1,4 +1,4 @@
-namespace TelegramCore;
+namespace IosappCore;
 
 table PeerCollectibleColor {
   collectibleId:long (id: 0);

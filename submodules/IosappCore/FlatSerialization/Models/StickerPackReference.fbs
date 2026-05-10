@@ -1,4 +1,4 @@
-namespace TelegramCore;
+namespace IosappCore;
 
 table StickerPackReference_Id {
     id:int64 (id: 0);

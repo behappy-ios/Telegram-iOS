@@ -1,23 +1,23 @@
 include "MediaId.fbs";
-include "TelegramMediaFile.fbs";
-include "TelegramMediaImage.fbs";
-namespace TelegramCore;
+include "IosappMediaFile.fbs";
+include "IosappMediaImage.fbs";
+namespace IosappCore;
 
 union Media_Value {
-    Media_TelegramMediaFile,
-    Media_TelegramMediaImage
+    Media_IosappMediaFile,
+    Media_IosappMediaImage
 }
 
 table Media {
     value:Media_Value (id: 1, required);
 }
 
-table Media_TelegramMediaFile {
-    file:TelegramMediaFile (id: 0, required);
+table Media_IosappMediaFile {
+    file:IosappMediaFile (id: 0, required);
 }
 
-table Media_TelegramMediaImage {
-    image:TelegramMediaImage (id: 0, required);
+table Media_IosappMediaImage {
+    image:IosappMediaImage (id: 0, required);
 }
 
 root_type Media;

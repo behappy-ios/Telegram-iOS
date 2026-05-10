@@ -1,4 +1,4 @@
-namespace TelegramCore;
+namespace IosappCore;
 
 table DeviceContactPhoneNumberData {
     label:string (id: 0, required);

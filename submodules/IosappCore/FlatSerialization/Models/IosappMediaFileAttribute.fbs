@@ -1,8 +1,8 @@
 include "StickerPackReference.fbs";
 
-namespace TelegramCore;
+namespace IosappCore;
 
-table TelegramMediaFileAttribute_FileName {
+table IosappMediaFileAttribute_FileName {
     fileName:string (id: 0, required);
 }
 
@@ -13,21 +13,21 @@ table StickerMaskCoords {
     zoom:float32 (id: 3);
 }
 
-table TelegramMediaFileAttribute_Sticker {
+table IosappMediaFileAttribute_Sticker {
     displayText:string (id: 0, required);
     packReference:StickerPackReference (id: 1);
     maskData:StickerMaskCoords (id: 2);
 }
 
-table TelegramMediaFileAttribute_ImageSize {
+table IosappMediaFileAttribute_ImageSize {
     width:int32 (id: 0);
     height:int32 (id: 1);
 }
 
-table TelegramMediaFileAttribute_Animated {
+table IosappMediaFileAttribute_Animated {
 }
 
-table TelegramMediaFileAttribute_Video {
+table IosappMediaFileAttribute_Video {
     duration:float32 (id: 0);
     width:int32 (id: 1);
     height:int32 (id: 2);
@@ -37,7 +37,7 @@ table TelegramMediaFileAttribute_Video {
     videoCodec:string (id: 6);
 }
 
-table TelegramMediaFileAttribute_Audio {
+table IosappMediaFileAttribute_Audio {
     isVoice:bool (id: 0);
     duration:int32 (id: 1);
     title:string (id: 2);
@@ -45,41 +45,41 @@ table TelegramMediaFileAttribute_Audio {
     waveform:[ubyte] (id: 4);
 }
 
-table TelegramMediaFileAttribute_HasLinkedStickers {
+table IosappMediaFileAttribute_HasLinkedStickers {
 }
 
-table TelegramMediaFileAttribute_HintFileIsLarge {
+table IosappMediaFileAttribute_HintFileIsLarge {
 }
 
-table TelegramMediaFileAttribute_HintIsValidated {
+table IosappMediaFileAttribute_HintIsValidated {
 }
 
-table TelegramMediaFileAttribute_NoPremium {
+table IosappMediaFileAttribute_NoPremium {
 }
 
-table TelegramMediaFileAttribute_CustomEmoji {
+table IosappMediaFileAttribute_CustomEmoji {
     isPremium:bool (id: 0);
     isSingleColor:bool (id: 1);
     alt:string (id: 2, required);
     packReference:StickerPackReference (id: 3);
 }
 
-union TelegramMediaFileAttribute_Value {
-    TelegramMediaFileAttribute_FileName,
-    TelegramMediaFileAttribute_Sticker,
-    TelegramMediaFileAttribute_ImageSize,
-    TelegramMediaFileAttribute_Animated,
-    TelegramMediaFileAttribute_Video,
-    TelegramMediaFileAttribute_Audio,
-    TelegramMediaFileAttribute_HasLinkedStickers,
-    TelegramMediaFileAttribute_HintFileIsLarge,
-    TelegramMediaFileAttribute_HintIsValidated,
-    TelegramMediaFileAttribute_NoPremium,
-    TelegramMediaFileAttribute_CustomEmoji
+union IosappMediaFileAttribute_Value {
+    IosappMediaFileAttribute_FileName,
+    IosappMediaFileAttribute_Sticker,
+    IosappMediaFileAttribute_ImageSize,
+    IosappMediaFileAttribute_Animated,
+    IosappMediaFileAttribute_Video,
+    IosappMediaFileAttribute_Audio,
+    IosappMediaFileAttribute_HasLinkedStickers,
+    IosappMediaFileAttribute_HintFileIsLarge,
+    IosappMediaFileAttribute_HintIsValidated,
+    IosappMediaFileAttribute_NoPremium,
+    IosappMediaFileAttribute_CustomEmoji
 }
 
-table TelegramMediaFileAttribute {
-    value:TelegramMediaFileAttribute_Value (id: 1, required);
+table IosappMediaFileAttribute {
+    value:IosappMediaFileAttribute_Value (id: 1, required);
 }
 
-root_type TelegramMediaFileAttribute;
+root_type IosappMediaFileAttribute;

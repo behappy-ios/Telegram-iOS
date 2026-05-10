@@ -1,6 +1,6 @@
-namespace TelegramCore;
+namespace IosappCore;
 
-table TelegramChatBannedRights {
+table IosappChatBannedRights {
     flags:int32 (id: 0);
     untilDate:int32 (id: 1);
 }

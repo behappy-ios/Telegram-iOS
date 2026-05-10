@@ -1,12 +1,12 @@
 include "MediaId.fbs";
-include "TelegramMediaImageRepresentation.fbs";
+include "IosappMediaImageRepresentation.fbs";
 include "StickerPackReference.fbs";
 include "PartialMediaReference.fbs";
-include "TelegramMediaFile.fbs";
+include "IosappMediaFile.fbs";
 
-namespace TelegramCore;
+namespace IosappCore;
 
-table TelegramMediaImageReference {
+table IosappMediaImageReference {
     imageId:int64 (id: 0);
     accessHash:int64 (id: 1);
     fileReference:[ubyte] (id: 2);
@@ -15,7 +15,7 @@ table TelegramMediaImageReference {
 table VideoRepresentation {
     width:int32 (id: 0);
     height:int32 (id: 1);
-    resource:TelegramMediaResource (id: 2, required);
+    resource:IosappMediaResource (id: 2, required);
     startTimestamp:float32 (id: 3);
 }
 
@@ -38,16 +38,16 @@ table EmojiMarkup {
     backgroundColors:[int32] (id: 2);
 }
 
-table TelegramMediaImage {
+table IosappMediaImage {
     imageId:MediaId (id: 0, required);
-    representations:[TelegramMediaImageRepresentation] (id: 1);
+    representations:[IosappMediaImageRepresentation] (id: 1);
     videoRepresentations:[VideoRepresentation] (id: 2);
     immediateThumbnailData:[ubyte] (id: 3);
     emojiMarkup:EmojiMarkup (id: 4);
-    reference:TelegramMediaImageReference (id: 5);
+    reference:IosappMediaImageReference (id: 5);
     partialReference:PartialMediaReference (id: 6);
     flags:int32 (id: 7);
-    video:TelegramMediaFile (id: 8);
+    video:IosappMediaFile (id: 8);
 }
 
-root_type TelegramMediaImage;
+root_type IosappMediaImage;

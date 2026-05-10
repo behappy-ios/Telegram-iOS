@@ -1,4 +1,4 @@
-namespace TelegramCore;
+namespace IosappCore;
 
 table RestrictionRule {
     platform:string (id: 0, required);

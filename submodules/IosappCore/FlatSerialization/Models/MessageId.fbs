@@ -1,6 +1,6 @@
 include "PeerId.fbs";
 
-namespace TelegramCore;
+namespace IosappCore;
 
 struct MessageId {
     peerId: PeerId (id: 0);

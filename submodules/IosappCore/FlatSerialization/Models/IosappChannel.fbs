@@ -1,50 +1,50 @@
 include "PeerId.fbs";
-include "TelegramPeerAccessHash.fbs";
-include "TelegramMediaImageRepresentation.fbs";
+include "IosappPeerAccessHash.fbs";
+include "IosappMediaImageRepresentation.fbs";
 include "PeerAccessRestrictionInfo.fbs";
-include "TelegramChatAdminRights.fbs";
-include "TelegramChatBannedRights.fbs";
-include "TelegramPeerUsername.fbs";
+include "IosappChatAdminRights.fbs";
+include "IosappChatBannedRights.fbs";
+include "IosappPeerUsername.fbs";
 include "Optional.fbs";
 include "PeerNameColor.fbs";
 include "PeerEmojiStatus.fbs";
 include "StarsAmount.fbs";
 
-namespace TelegramCore;
+namespace IosappCore;
 
-table TelegramChannelInfo_Broadcast {
+table IosappChannelInfo_Broadcast {
     flags:int32 (id: 0);
 }
 
-table TelegramChannelInfo_Group {
+table IosappChannelInfo_Group {
     flags:int32 (id: 0);
 }
 
-union TelegramChannelInfo_Value {
-    TelegramChannelInfo_Broadcast,
-    TelegramChannelInfo_Group
+union IosappChannelInfo_Value {
+    IosappChannelInfo_Broadcast,
+    IosappChannelInfo_Group
 }
 
-table TelegramChannelInfo {
-    value:TelegramChannelInfo_Value (id: 1, required);
+table IosappChannelInfo {
+    value:IosappChannelInfo_Value (id: 1, required);
 }
 
-table TelegramChannel {
+table IosappChannel {
     id:PeerId (id: 0, required);
-    accessHash:TelegramPeerAccessHash (id: 1);
+    accessHash:IosappPeerAccessHash (id: 1);
     title:string (id: 2, required);
     username:string (id: 3);
-    photo:[TelegramMediaImageRepresentation] (id: 4);
+    photo:[IosappMediaImageRepresentation] (id: 4);
     creationDate:int32 (id: 5);
     version:int32 (id: 6);
     participationStatus:int32 (id: 7);
-    info:TelegramChannelInfo (id: 8, required);
+    info:IosappChannelInfo (id: 8, required);
     flags:int32 (id: 9);
     restrictionInfo:PeerAccessRestrictionInfo (id: 10);
-    adminRights:TelegramChatAdminRights (id: 11);
-    bannedRights:TelegramChatBannedRights (id: 12);
-    defaultBannedRights:TelegramChatBannedRights (id: 13);
-    usernames:[TelegramPeerUsername] (id: 14);
+    adminRights:IosappChatAdminRights (id: 11);
+    bannedRights:IosappChatBannedRights (id: 12);
+    defaultBannedRights:IosappChatBannedRights (id: 13);
+    usernames:[IosappPeerUsername] (id: 14);
     storiesHidden:OptionalBool (id: 15);
     nameColor:PeerNameColor (id: 16);
     backgroundEmojiId:int64 (id: 17);
@@ -59,4 +59,4 @@ table TelegramChannel {
     linkedBotId:PeerId (id: 26, deprecated);
 }
 
-root_type TelegramChannel;
+root_type IosappChannel;

@@ -1,4 +1,4 @@
-namespace TelegramCore;
+namespace IosappCore;
 
 struct PeerId {
     namespace: int32 (id: 0);

@@ -1,48 +1,48 @@
 include "PeerId.fbs";
-include "TelegramMediaImageRepresentation.fbs";
-include "TelegramChatAdminRights.fbs";
-include "TelegramChatBannedRights.fbs";
+include "IosappMediaImageRepresentation.fbs";
+include "IosappChatAdminRights.fbs";
+include "IosappChatBannedRights.fbs";
 
-namespace TelegramCore;
+namespace IosappCore;
 
-table TelegramGroupRole_Creator {
+table IosappGroupRole_Creator {
     rank:string (id: 0);
 }
 
-table TelegramGroupRole_Admin {
-    rights:TelegramChatAdminRights (id: 0, required);
+table IosappGroupRole_Admin {
+    rights:IosappChatAdminRights (id: 0, required);
     rank:string (id: 1);
 }
 
-table TelegramGroupRole_Member {}
+table IosappGroupRole_Member {}
 
-union TelegramGroupRole_Value {
-    TelegramGroupRole_Creator,
-    TelegramGroupRole_Admin,
-    TelegramGroupRole_Member
+union IosappGroupRole_Value {
+    IosappGroupRole_Creator,
+    IosappGroupRole_Admin,
+    IosappGroupRole_Member
 }
 
-table TelegramGroupRole {
-    value:TelegramGroupRole_Value (id: 1, required);
+table IosappGroupRole {
+    value:IosappGroupRole_Value (id: 1, required);
 }
 
-table TelegramGroupToChannelMigrationReference {
+table IosappGroupToChannelMigrationReference {
     peerId:int64 (id: 0);
     accessHash:int64 (id: 1);
 }
 
-table TelegramGroup {
+table IosappGroup {
     id:PeerId (id: 0, required);
     title:string (id: 1, required);
-    photo:[TelegramMediaImageRepresentation] (id: 2, required);
+    photo:[IosappMediaImageRepresentation] (id: 2, required);
     participantCount:int32 (id: 3);
-    role:TelegramGroupRole (id: 4, required);
+    role:IosappGroupRole (id: 4, required);
     membership:int32 (id: 5);
     flags:int32 (id: 6);
-    defaultBannedRights:TelegramChatBannedRights (id: 7);
-    migrationReference:TelegramGroupToChannelMigrationReference (id: 8);
+    defaultBannedRights:IosappChatBannedRights (id: 7);
+    migrationReference:IosappGroupToChannelMigrationReference (id: 8);
     creationDate:int32 (id: 9);
     version:int32 (id: 10);
 }
 
-root_type TelegramGroup;
+root_type IosappGroup;

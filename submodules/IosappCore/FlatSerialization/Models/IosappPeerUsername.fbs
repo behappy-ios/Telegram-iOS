@@ -1,8 +1,8 @@
-namespace TelegramCore;
+namespace IosappCore;
 
-table TelegramPeerUsername {
+table IosappPeerUsername {
     flags:int32 (id: 0);
     username:string (id: 1, required);
 }
 
-root_type TelegramPeerUsername;
+root_type IosappPeerUsername;

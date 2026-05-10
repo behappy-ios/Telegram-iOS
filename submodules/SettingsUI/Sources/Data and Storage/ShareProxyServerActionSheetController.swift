@@ -1,11 +1,11 @@
 import Foundation
 import UIKit
 import Display
-import TelegramCore
+import IosappCore
 import AsyncDisplayKit
 import UIKit
 import SwiftSignalKit
-import TelegramPresentationData
+import IosappPresentationData
 import QrCode
 
 public final class ShareProxyServerActionSheetController: ActionSheetController {

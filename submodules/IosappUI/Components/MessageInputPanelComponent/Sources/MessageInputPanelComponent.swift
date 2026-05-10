@@ -3,12 +3,12 @@ import UIKit
 import Display
 import ComponentFlow
 import SwiftSignalKit
-import TelegramCore
+import IosappCore
 import AppBundle
 import TextFieldComponent
 import BundleIconComponent
 import AccountContext
-import TelegramPresentationData
+import IosappPresentationData
 import ChatPresentationInterfaceState
 import LottieComponent
 import ChatContextQuery

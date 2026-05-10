@@ -3,7 +3,7 @@ import UIKit
 import Display
 import AsyncDisplayKit
 import ComponentFlow
-import TelegramPresentationData
+import IosappPresentationData
 
 public final class SwitchComponent: Component {
     public typealias EnvironmentType = Empty

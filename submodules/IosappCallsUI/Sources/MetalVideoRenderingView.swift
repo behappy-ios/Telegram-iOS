@@ -7,7 +7,7 @@ import AsyncDisplayKit
 import Display
 import SwiftSignalKit
 import AccountContext
-import TelegramVoip
+import IosappVoip
 import AVFoundation
 import Metal
 import MetalPerformanceShaders

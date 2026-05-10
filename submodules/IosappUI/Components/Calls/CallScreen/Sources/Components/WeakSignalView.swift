@@ -1,7 +1,7 @@
 import Foundation
 import UIKit
 import Display
-import TelegramPresentationData
+import IosappPresentationData
 
 final class WeakSignalView: OverlayMaskContainerView {
     private struct Params: Equatable {

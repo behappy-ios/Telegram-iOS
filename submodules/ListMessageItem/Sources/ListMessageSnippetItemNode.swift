@@ -3,9 +3,9 @@ import UIKit
 import AsyncDisplayKit
 import Display
 import Postbox
-import TelegramCore
+import IosappCore
 import SwiftSignalKit
-import TelegramPresentationData
+import IosappPresentationData
 import ItemListUI
 import PresentationDataUtils
 import TextFormat
@@ -14,7 +14,7 @@ import WebsiteType
 import UrlHandling
 import UrlWhitelist
 import AccountContext
-import TelegramStringFormatting
+import IosappStringFormatting
 import WallpaperResources
 import UrlEscaping
 

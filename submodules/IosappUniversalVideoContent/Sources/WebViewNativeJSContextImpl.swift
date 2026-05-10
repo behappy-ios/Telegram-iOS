@@ -1,7 +1,7 @@
 import Foundation
 import UIKit
 import JavaScriptCore
-import TelegramCore
+import IosappCore
 import SwiftSignalKit
 
 private var ObjCKey_ContextReference: Int?

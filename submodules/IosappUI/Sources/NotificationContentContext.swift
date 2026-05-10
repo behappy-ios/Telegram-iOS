@@ -2,17 +2,17 @@ import UIKit
 import UserNotifications
 import UserNotificationsUI
 import Display
-import TelegramCore
+import IosappCore
 import SwiftSignalKit
 import Postbox
-import TelegramPresentationData
-import TelegramUIPreferences
+import IosappPresentationData
+import IosappUIPreferences
 import AccountContext
 import Tuples
 import StickerResources
 import PhotoResources
 import AnimatedStickerNode
-import TelegramAnimatedStickerNode
+import IosappAnimatedStickerNode
 import OpenSSLEncryptionProvider
 import AppLock
 

@@ -2,14 +2,14 @@ import Foundation
 import UIKit
 import AsyncDisplayKit
 import Display
-import TelegramCore
+import IosappCore
 import SwiftSignalKit
 import Postbox
-import TelegramPresentationData
+import IosappPresentationData
 import AccountContext
 import ContextUI
 import PhotoResources
-import TelegramUIPreferences
+import IosappUIPreferences
 import ItemListPeerItem
 import MergeLists
 import ItemListUI

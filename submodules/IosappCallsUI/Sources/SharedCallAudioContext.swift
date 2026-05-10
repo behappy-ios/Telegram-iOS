@@ -1,7 +1,7 @@
 import Foundation
 import SwiftSignalKit
-import TelegramVoip
-import TelegramAudio
+import IosappVoip
+import IosappAudio
 import DeviceProximity
 
 public final class SharedCallAudioContext {

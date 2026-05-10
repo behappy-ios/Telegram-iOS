@@ -1,7 +1,7 @@
 import Foundation
 import Postbox
 import SwiftSignalKit
-import TelegramApi
+import IosappApi
 import MtProtoKit
 
 func _internal_toggleAutoTranslation(account: Account, peerId: PeerId, enabled: Bool) -> Signal<Never, NoError> {

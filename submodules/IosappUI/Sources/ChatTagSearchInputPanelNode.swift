@@ -2,11 +2,11 @@ import Foundation
 import UIKit
 import AsyncDisplayKit
 import Display
-import TelegramCore
+import IosappCore
 import Postbox
 import SwiftSignalKit
-import TelegramNotices
-import TelegramPresentationData
+import IosappNotices
+import IosappPresentationData
 import ActivityIndicator
 import ChatPresentationInterfaceState
 import ChatInputPanelNode

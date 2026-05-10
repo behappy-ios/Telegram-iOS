@@ -4,11 +4,11 @@ import Postbox
 import AsyncDisplayKit
 import Display
 import SwiftSignalKit
-import TelegramCore
+import IosappCore
 import AccountContext
 import ChatHistoryEntry
 import ChatControllerInteraction
-import TelegramPresentationData
+import IosappPresentationData
 import ChatMessageItemCommon
 
 public enum ChatMessageItemContent: Sequence {

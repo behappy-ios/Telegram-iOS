@@ -3,11 +3,11 @@ import UIKit
 import Display
 import AsyncDisplayKit
 import ComponentFlow
-import TelegramPresentationData
+import IosappPresentationData
 import ComponentDisplayAdapters
 import SearchUI
 import AccountContext
-import TelegramCore
+import IosappCore
 import StoryPeerListComponent
 import EdgeEffect
 import GlassBackgroundComponent

@@ -4,12 +4,12 @@ import AVFAudio
 import UIKit
 import SwiftSignalKit
 import Postbox
-import TelegramCore
-import TelegramCallsUI
+import IosappCore
+import IosappCallsUI
 import AccountContext
 import UniversalMediaPlayer
-import TelegramAudio
-import TelegramPresentationData
+import IosappAudio
+import IosappPresentationData
 
 private struct AccountTasks {
     let stateSynchronization: Bool

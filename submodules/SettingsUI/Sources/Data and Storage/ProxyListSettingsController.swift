@@ -3,8 +3,8 @@ import UIKit
 import Display
 import SwiftSignalKit
 import Postbox
-import TelegramCore
-import TelegramPresentationData
+import IosappCore
+import IosappPresentationData
 import MtProtoKit
 import ItemListUI
 import PresentationDataUtils

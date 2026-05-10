@@ -4,13 +4,13 @@ import Display
 import AsyncDisplayKit
 import SwiftSignalKit
 import Postbox
-import TelegramCore
-import TelegramPresentationData
-import TelegramUIPreferences
+import IosappCore
+import IosappPresentationData
+import IosappUIPreferences
 import ItemListUI
 import PresentationDataUtils
 import AvatarNode
-import TelegramStringFormatting
+import IosappStringFormatting
 import LocalizedPeerData
 import AccountContext
 

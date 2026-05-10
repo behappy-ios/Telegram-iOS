@@ -2,8 +2,8 @@ import Foundation
 import UIKit
 import SwiftSignalKit
 import Postbox
-import TelegramCore
-import TelegramPermissions
+import IosappCore
+import IosappPermissions
 
 extension PermissionKind {
     fileprivate static var defaultOrder: [PermissionKind] {

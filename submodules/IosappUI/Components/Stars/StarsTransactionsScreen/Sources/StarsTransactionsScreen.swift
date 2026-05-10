@@ -6,9 +6,9 @@ import ComponentFlow
 import SwiftSignalKit
 import ViewControllerComponent
 import ComponentDisplayAdapters
-import TelegramPresentationData
+import IosappPresentationData
 import AccountContext
-import TelegramCore
+import IosappCore
 import Postbox
 import MultilineTextComponent
 import BalancedTextComponent
@@ -20,7 +20,7 @@ import TextFormat
 import UndoUI
 import ListActionItemComponent
 import StarsAvatarComponent
-import TelegramStringFormatting
+import IosappStringFormatting
 import ListItemComponentAdaptor
 import ItemListUI
 import StarsWithdrawalScreen

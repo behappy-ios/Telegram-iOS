@@ -1,6 +1,6 @@
 import Foundation
 import Postbox
-import TelegramApi
+import IosappApi
 import SwiftSignalKit
 
 func _internal_updateGlobalPrivacySettings(account: Account) -> Signal<Never, NoError> {

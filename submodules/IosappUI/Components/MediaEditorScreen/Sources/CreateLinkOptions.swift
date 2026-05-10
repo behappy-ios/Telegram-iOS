@@ -4,11 +4,11 @@ import AsyncDisplayKit
 import Display
 import SwiftSignalKit
 import Postbox
-import TelegramCore
+import IosappCore
 import ContextUI
 import ChatPresentationInterfaceState
 import AccountContext
-import TelegramPresentationData
+import IosappPresentationData
 import WebsiteType
 
 private enum OptionsId: Hashable {

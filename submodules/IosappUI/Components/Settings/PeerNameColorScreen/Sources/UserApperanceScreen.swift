@@ -5,9 +5,9 @@ import Display
 import AsyncDisplayKit
 import SwiftSignalKit
 import Postbox
-import TelegramCore
-import TelegramPresentationData
-import TelegramUIPreferences
+import IosappCore
+import IosappPresentationData
+import IosappUIPreferences
 import ItemListUI
 import PresentationDataUtils
 import AccountContext
@@ -35,7 +35,7 @@ import TabSelectorComponent
 import WallpaperResources
 import EdgeEffect
 import TextFormat
-import TelegramStringFormatting
+import IosappStringFormatting
 import GiftViewScreen
 import BalanceNeededScreen
 

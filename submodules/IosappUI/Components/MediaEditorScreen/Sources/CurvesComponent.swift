@@ -5,7 +5,7 @@ import ComponentFlow
 import LegacyComponents
 import MediaEditor
 import MultilineTextComponent
-import TelegramPresentationData
+import IosappPresentationData
 
 private class HistogramView: UIView {
     private var size: CGSize?

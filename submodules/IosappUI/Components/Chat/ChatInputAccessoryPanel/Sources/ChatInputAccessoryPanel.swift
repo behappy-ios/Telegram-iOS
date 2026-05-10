@@ -1,7 +1,7 @@
 import Foundation
 import UIKit
-import TelegramPresentationData
-import TelegramUIPreferences
+import IosappPresentationData
+import IosappUIPreferences
 import GlassBackgroundComponent
 
 public final class ChatInputAccessoryPanelEnvironment: Equatable {

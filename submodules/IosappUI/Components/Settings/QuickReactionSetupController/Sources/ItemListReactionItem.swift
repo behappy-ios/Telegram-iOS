@@ -3,9 +3,9 @@ import UIKit
 import Display
 import AsyncDisplayKit
 import SwiftSignalKit
-import TelegramPresentationData
+import IosappPresentationData
 import Postbox
-import TelegramCore
+import IosappCore
 import ItemListUI
 import EmojiStatusComponent
 import ComponentFlow

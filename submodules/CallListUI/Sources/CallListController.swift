@@ -2,9 +2,9 @@ import Foundation
 import UIKit
 import Display
 import AsyncDisplayKit
-import TelegramCore
+import IosappCore
 import SwiftSignalKit
-import TelegramPresentationData
+import IosappPresentationData
 import ItemListUI
 import PresentationDataUtils
 import AccountContext
@@ -12,11 +12,11 @@ import AlertUI
 import AppBundle
 import LocalizedPeerData
 import ContextUI
-import TelegramBaseController
+import IosappBaseController
 import InviteLinksUI
 import UndoUI
-import TelegramCallsUI
-import TelegramUIPreferences
+import IosappCallsUI
+import IosappUIPreferences
 
 public enum CallListControllerMode {
     case tab
@@ -85,7 +85,7 @@ private final class DeleteAllButtonNode: ASDisplayNode {
 
 
 
-public final class CallListController: TelegramBaseController {
+public final class CallListController: IosappBaseController {
     private var controllerNode: CallListControllerNode {
         return self.displayNode as! CallListControllerNode
     }

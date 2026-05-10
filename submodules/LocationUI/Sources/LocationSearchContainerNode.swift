@@ -3,10 +3,10 @@ import UIKit
 import AsyncDisplayKit
 import Display
 import SwiftSignalKit
-import TelegramCore
-import TelegramPresentationData
-import TelegramStringFormatting
-import TelegramUIPreferences
+import IosappCore
+import IosappPresentationData
+import IosappStringFormatting
+import IosappUIPreferences
 import MergeLists
 import AccountContext
 import ItemListVenueItem

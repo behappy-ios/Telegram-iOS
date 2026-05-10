@@ -2,8 +2,8 @@ import Foundation
 import UIKit
 import SwiftSignalKit
 import CoreLocation
-import TelegramCore
-import TelegramUIPreferences
+import IosappCore
+import IosappUIPreferences
 import PersistentStringHash
 import Postbox
 import AccountContext

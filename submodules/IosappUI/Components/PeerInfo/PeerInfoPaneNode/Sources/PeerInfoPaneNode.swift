@@ -1,10 +1,10 @@
 import SwiftSignalKit
 import Postbox
-import TelegramCore
+import IosappCore
 import AsyncDisplayKit
 import UIKit
 import Display
-import TelegramPresentationData
+import IosappPresentationData
 
 public enum PeerInfoPaneKey: Int32 {
     case botPreview

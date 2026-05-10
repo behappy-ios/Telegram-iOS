@@ -3,7 +3,7 @@ import Display
 import UIKit
 import ComponentFlow
 import SwiftSignalKit
-import TelegramCore
+import IosappCore
 import AccountContext
 import ReactionSelectionNode
 

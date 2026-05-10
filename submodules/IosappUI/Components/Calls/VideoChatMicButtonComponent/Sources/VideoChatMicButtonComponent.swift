@@ -3,7 +3,7 @@ import UIKit
 import Display
 import ComponentFlow
 import MultilineTextComponent
-import TelegramPresentationData
+import IosappPresentationData
 import LottieComponent
 import VoiceChatActionButton
 import CallScreen
@@ -12,7 +12,7 @@ import SwiftSignalKit
 import AccountContext
 import RadialStatusNode
 import GlassBackgroundComponent
-import TelegramCore
+import IosappCore
 
 private extension VideoChatCall {
     var myAudioLevelAndSpeaking: Signal<(Float, Bool), NoError> {

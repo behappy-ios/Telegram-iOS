@@ -4,10 +4,10 @@ import Display
 import ComponentFlow
 import MultilineTextComponent
 import AccountContext
-import TelegramCore
-import TelegramPresentationData
+import IosappCore
+import IosappPresentationData
 import SwiftSignalKit
-import TelegramCallsUI
+import IosappCallsUI
 import AsyncListComponent
 import AvatarNode
 import ContextUI

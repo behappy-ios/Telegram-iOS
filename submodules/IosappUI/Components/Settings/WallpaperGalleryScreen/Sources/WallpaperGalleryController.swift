@@ -5,10 +5,10 @@ import QuickLook
 import Postbox
 import SwiftSignalKit
 import AsyncDisplayKit
-import TelegramCore
+import IosappCore
 import Photos
-import TelegramPresentationData
-import TelegramUIPreferences
+import IosappPresentationData
+import IosappUIPreferences
 import MediaResources
 import AccountContext
 import GalleryUI

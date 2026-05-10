@@ -3,13 +3,13 @@ import UIKit
 import AsyncDisplayKit
 import Display
 import Postbox
-import TelegramCore
+import IosappCore
 import SwiftSignalKit
 import Photos
-import TelegramPresentationData
-import TelegramUIPreferences
+import IosappPresentationData
+import IosappUIPreferences
 import TextFormat
-import TelegramStringFormatting
+import IosappStringFormatting
 import AccountContext
 import RadialStatusNode
 import OpenInExternalAppUI
@@ -19,7 +19,7 @@ import TextSelectionNode
 import UrlEscaping
 import UndoUI
 import ManagedAnimationNode
-import TelegramUniversalVideoContent
+import IosappUniversalVideoContent
 import InvisibleInkDustNode
 import TextNodeWithEntities
 import AnimationCache
@@ -27,7 +27,7 @@ import MultiAnimationRenderer
 import Pasteboard
 import Speak
 import TranslateUI
-import TelegramNotices
+import IosappNotices
 import SolidRoundedButtonNode
 import UrlHandling
 import GlassControls

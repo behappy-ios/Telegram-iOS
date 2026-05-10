@@ -5,9 +5,9 @@ import AsyncDisplayKit
 import Display
 import ComponentFlow
 import Postbox
-import TelegramCore
-import TelegramPresentationData
-import TelegramVoip
+import IosappCore
+import IosappPresentationData
+import IosappVoip
 import AccountContext
 import AlertComponent
 

@@ -1,13 +1,13 @@
 import Foundation
 import UIKit
 import Postbox
-import TelegramCore
+import IosappCore
 import SwiftSignalKit
 import AsyncDisplayKit
 import Display
 import SafariServices
-import TelegramPresentationData
-import TelegramUIPreferences
+import IosappPresentationData
+import IosappUIPreferences
 import AccountContext
 import SaveToCameraRoll
 import GalleryUI

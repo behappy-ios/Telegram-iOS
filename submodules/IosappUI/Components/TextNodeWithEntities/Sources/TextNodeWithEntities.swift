@@ -7,7 +7,7 @@ import TextFormat
 import AccountContext
 import AnimationCache
 import MultiAnimationRenderer
-import TelegramCore
+import IosappCore
 import InvisibleInkDustNode
 
 private extension CGRect {

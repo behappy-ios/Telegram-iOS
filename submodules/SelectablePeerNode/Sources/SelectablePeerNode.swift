@@ -2,10 +2,10 @@ import Foundation
 import UIKit
 import AsyncDisplayKit
 import Display
-import TelegramCore
+import IosappCore
 import Postbox
 import SwiftSignalKit
-import TelegramPresentationData
+import IosappPresentationData
 import AvatarNode
 import PeerOnlineMarkerNode
 import LegacyComponents
@@ -17,7 +17,7 @@ import ComponentFlow
 import EmojiStatusComponent
 import AnimationCache
 import MultiAnimationRenderer
-import TelegramUIPreferences
+import IosappUIPreferences
 
 private let avatarFont = avatarPlaceholderFont(size: 24.0)
 private let textFont = Font.regular(11.0)

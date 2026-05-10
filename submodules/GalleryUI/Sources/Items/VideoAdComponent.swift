@@ -6,8 +6,8 @@ import ComponentFlow
 import MultilineTextComponent
 import MultilineTextWithEntitiesComponent
 import Postbox
-import TelegramCore
-import TelegramPresentationData
+import IosappCore
+import IosappPresentationData
 import ContextUI
 import PlainButtonComponent
 import AvatarNode

@@ -1,6 +1,6 @@
 import Foundation
 import SwiftSignalKit
-import TelegramCore
+import IosappCore
 import Display
 import DeviceAccess
 import AccountContext

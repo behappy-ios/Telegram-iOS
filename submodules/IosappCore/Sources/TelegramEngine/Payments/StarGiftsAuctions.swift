@@ -2,7 +2,7 @@ import Foundation
 import Postbox
 import MtProtoKit
 import SwiftSignalKit
-import TelegramApi
+import IosappApi
 
 public enum StarGiftAuctionReference: Equatable {
     case giftId(Int64)

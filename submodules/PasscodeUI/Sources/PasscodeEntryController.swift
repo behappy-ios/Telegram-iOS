@@ -3,12 +3,12 @@ import UIKit
 import Display
 import AsyncDisplayKit
 import SwiftSignalKit
-import TelegramCore
-import TelegramPresentationData
-import TelegramUIPreferences
+import IosappCore
+import IosappPresentationData
+import IosappUIPreferences
 import AccountContext
 import LocalAuth
-import TelegramStringFormatting
+import IosappStringFormatting
 
 public final class PasscodeEntryControllerPresentationArguments {
     let animated: Bool

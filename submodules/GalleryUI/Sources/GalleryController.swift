@@ -5,12 +5,12 @@ import QuickLook
 import Postbox
 import SwiftSignalKit
 import AsyncDisplayKit
-import TelegramCore
+import IosappCore
 import SafariServices
-import TelegramPresentationData
+import IosappPresentationData
 import TextFormat
 import AccountContext
-import TelegramUniversalVideoContent
+import IosappUniversalVideoContent
 import WebsiteType
 import OpenInExternalAppUI
 import ScreenCaptureDetection

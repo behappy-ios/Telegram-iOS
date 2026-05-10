@@ -2,10 +2,10 @@ import Foundation
 import UIKit
 import Display
 import SwiftSignalKit
-import TelegramCore
+import IosappCore
 import AccountContext
 import PresentationDataUtils
-import TelegramStringFormatting
+import IosappStringFormatting
 import BalanceNeededScreen
 
 public func buyStarGiftImpl(

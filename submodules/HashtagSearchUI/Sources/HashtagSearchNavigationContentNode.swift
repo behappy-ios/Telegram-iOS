@@ -3,8 +3,8 @@ import UIKit
 import AsyncDisplayKit
 import Display
 import Postbox
-import TelegramCore
-import TelegramPresentationData
+import IosappCore
+import IosappPresentationData
 import SearchBarNode
 import ComponentFlow
 import ComponentDisplayAdapters

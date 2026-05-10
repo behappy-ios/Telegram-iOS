@@ -4,9 +4,9 @@ import AsyncDisplayKit
 import UIKit
 import Display
 import Postbox
-import TelegramCore
-import TelegramPresentationData
-import TelegramUIPreferences
+import IosappCore
+import IosappPresentationData
+import IosappUIPreferences
 import AvatarNode
 import AccountContext
 

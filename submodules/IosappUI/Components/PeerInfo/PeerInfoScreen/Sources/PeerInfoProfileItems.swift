@@ -2,14 +2,14 @@ import Foundation
 import UIKit
 import Display
 import AccountContext
-import TelegramPresentationData
-import TelegramCore
+import IosappPresentationData
+import IosappCore
 import Postbox
 import PeerInfoUI
 import TextFormat
 import PhoneNumberFormat
 import SwiftSignalKit
-import TelegramStringFormatting
+import IosappStringFormatting
 import AsyncDisplayKit
 import LocationResources
 import AttachmentUI

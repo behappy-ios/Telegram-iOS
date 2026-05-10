@@ -1,8 +1,8 @@
 import Foundation
 import Postbox
-import TelegramCore
+import IosappCore
 import SwiftSignalKit
-import TelegramStringFormatting
+import IosappStringFormatting
 
 enum PeerChannelMemberContextKey: Equatable, Hashable {
     case recent

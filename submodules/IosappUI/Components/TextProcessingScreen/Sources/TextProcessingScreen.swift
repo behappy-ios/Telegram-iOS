@@ -2,7 +2,7 @@ import Foundation
 import UIKit
 import SwiftSignalKit
 import Display
-import TelegramPresentationData
+import IosappPresentationData
 import ComponentFlow
 import ComponentDisplayAdapters
 import AccountContext
@@ -10,7 +10,7 @@ import ViewControllerComponent
 import MultilineTextComponent
 import ButtonComponent
 import BundleIconComponent
-import TelegramCore
+import IosappCore
 import PresentationDataUtils
 import ResizableSheetComponent
 import GlassBarButtonComponent
@@ -20,9 +20,9 @@ import LottieComponent
 import ListSectionComponent
 import ListActionItemComponent
 import ToastComponent
-import TelegramNotices
+import IosappNotices
 import Markdown
-import TelegramUIPreferences
+import IosappUIPreferences
 import ChatSendMessageActionUI
 
 final class TextProcessingContentComponent: Component {

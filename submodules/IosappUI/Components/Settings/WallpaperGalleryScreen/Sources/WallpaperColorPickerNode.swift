@@ -3,7 +3,7 @@ import UIKit
 import AsyncDisplayKit
 import SwiftSignalKit
 import Display
-import TelegramPresentationData
+import IosappPresentationData
 
 private let knobBackgroundImage: UIImage? = {
     return generateImage(CGSize(width: 45.0, height: 45.0), contextGenerator: { size, context in

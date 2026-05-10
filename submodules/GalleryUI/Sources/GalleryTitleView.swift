@@ -3,10 +3,10 @@ import UIKit
 import AsyncDisplayKit
 import Display
 import Postbox
-import TelegramCore
+import IosappCore
 import AccountContext
-import TelegramPresentationData
-import TelegramStringFormatting
+import IosappPresentationData
+import IosappStringFormatting
 import GlassBackgroundComponent
 import ComponentFlow
 import ComponentDisplayAdapters

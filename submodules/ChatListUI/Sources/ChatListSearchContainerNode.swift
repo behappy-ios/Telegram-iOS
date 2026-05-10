@@ -3,9 +3,9 @@ import UIKit
 import AsyncDisplayKit
 import Display
 import SwiftSignalKit
-import TelegramCore
-import TelegramPresentationData
-import TelegramUIPreferences
+import IosappCore
+import IosappPresentationData
+import IosappUIPreferences
 import MergeLists
 import AccountContext
 import SearchUI
@@ -17,7 +17,7 @@ import PhoneNumberFormat
 import ItemListUI
 import SearchBarNode
 import ListMessageItem
-import TelegramBaseController
+import IosappBaseController
 import OverlayStatusController
 import UniversalMediaPlayer
 import PresentationDataUtils
@@ -29,7 +29,7 @@ import ChatInterfaceState
 import UndoUI
 import TextFormat
 import Postbox
-import TelegramAnimatedStickerNode
+import IosappAnimatedStickerNode
 import AnimationCache
 import MultiAnimationRenderer
 import PremiumUI

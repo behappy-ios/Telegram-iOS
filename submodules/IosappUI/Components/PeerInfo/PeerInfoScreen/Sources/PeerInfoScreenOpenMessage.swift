@@ -4,11 +4,11 @@ import Display
 import AccountContext
 import SwiftSignalKit
 import Postbox
-import TelegramCore
+import IosappCore
 import LegacyMediaPickerUI
 import ChatHistorySearchContainerNode
 import MediaResources
-import TelegramUIPreferences
+import IosappUIPreferences
 
 extension PeerInfoScreenNode {
     func openMessage(id: MessageId) -> Bool {

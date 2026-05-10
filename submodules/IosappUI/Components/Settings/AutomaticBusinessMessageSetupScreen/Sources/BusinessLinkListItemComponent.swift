@@ -3,11 +3,11 @@ import UIKit
 import Display
 import ComponentFlow
 import ListSectionComponent
-import TelegramPresentationData
+import IosappPresentationData
 import AppBundle
 import AccountContext
 import Postbox
-import TelegramCore
+import IosappCore
 import TextNodeWithEntities
 import MultilineTextComponent
 import TextFormat

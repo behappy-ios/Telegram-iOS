@@ -1,8 +1,8 @@
 import Foundation
 import Postbox
-import TelegramCore
+import IosappCore
 import SwiftSignalKit
-import TelegramUIPreferences
+import IosappUIPreferences
 
 private struct RecentlyVisitedLinkItemId {
     public let rawValue: MemoryBuffer

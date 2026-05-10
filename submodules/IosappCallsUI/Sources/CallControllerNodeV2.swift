@@ -2,11 +2,11 @@ import Foundation
 import UIKit
 import AsyncDisplayKit
 import Display
-import TelegramCore
+import IosappCore
 import Postbox
-import TelegramAudio
+import IosappAudio
 import AccountContext
-import TelegramPresentationData
+import IosappPresentationData
 import SwiftSignalKit
 import CallScreen
 import ComponentDisplayAdapters
@@ -15,7 +15,7 @@ import CallsEmoji
 import AvatarNode
 import TinyThumbnail
 import ImageBlur
-import TelegramVoip
+import IosappVoip
 import MetalEngine
 import DeviceAccess
 import LibYuvBinding

@@ -4,11 +4,11 @@ import Display
 import ComponentFlow
 import MultilineTextComponent
 import BalancedTextComponent
-import TelegramPresentationData
+import IosappPresentationData
 import AppBundle
 import BundleIconComponent
 import Markdown
-import TelegramCore
+import IosappCore
 import LottieComponent
 
 public final class NewSessionInfoContentComponent: Component {

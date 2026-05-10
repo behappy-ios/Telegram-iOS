@@ -6,7 +6,7 @@ import ComponentFlow
 import SwiftSignalKit
 import ViewControllerComponent
 import ComponentDisplayAdapters
-import TelegramPresentationData
+import IosappPresentationData
 import AccountContext
 import MultilineTextComponent
 import LottieAnimationComponent

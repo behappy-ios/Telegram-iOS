@@ -3,7 +3,7 @@ import UIKit
 import SwiftSignalKit
 import Display
 import ImageIO
-import TelegramCore
+import IosappCore
 import TinyThumbnail
 import FastBlur
 import Postbox

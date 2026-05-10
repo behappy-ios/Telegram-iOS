@@ -3,15 +3,15 @@ import UIKit
 import Display
 import SwiftSignalKit
 import Postbox
-import TelegramCore
-import TelegramPresentationData
-import TelegramUIPreferences
+import IosappCore
+import IosappPresentationData
+import IosappUIPreferences
 import ItemListUI
 import PresentationDataUtils
 import AccountContext
 import AlertUI
 import PresentationDataUtils
-import TelegramNotices
+import IosappNotices
 import UndoUI
 
 private final class DataPrivacyControllerArguments {

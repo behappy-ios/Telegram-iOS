@@ -1,13 +1,13 @@
 import Foundation
 import UIKit
 import Display
-import TelegramPresentationData
+import IosappPresentationData
 import ComponentFlow
 import ComponentDisplayAdapters
 import AppBundle
 import ViewControllerComponent
 import AccountContext
-import TelegramCore
+import IosappCore
 import Postbox
 import SwiftSignalKit
 import MultilineTextComponent
@@ -21,7 +21,7 @@ import Markdown
 import BlurredBackgroundComponent
 import PresentationDataUtils
 import PeerListItemComponent
-import TelegramStringFormatting
+import IosappStringFormatting
 import ContextUI
 import BalancedTextComponent
 import AlertComponent

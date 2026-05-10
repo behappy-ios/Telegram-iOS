@@ -3,13 +3,13 @@ import UIKit
 import AsyncDisplayKit
 import Display
 import LegacyComponents
-import TelegramCore
+import IosappCore
 import SwiftSignalKit
 import MergeLists
 import ItemListUI
 import ItemListVenueItem
-import TelegramPresentationData
-import TelegramStringFormatting
+import IosappPresentationData
+import IosappStringFormatting
 import AccountContext
 import AppBundle
 import CoreLocation

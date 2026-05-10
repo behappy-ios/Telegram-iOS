@@ -1,8 +1,8 @@
 import Foundation
 import Display
-import TelegramPresentationData
+import IosappPresentationData
 import SwiftSignalKit
-import TelegramStringFormatting
+import IosappStringFormatting
 import ChatPresentationInterfaceState
 
 private func timeoutValue(strings: PresentationStrings, slowmodeState: ChatSlowmodeState) -> String {

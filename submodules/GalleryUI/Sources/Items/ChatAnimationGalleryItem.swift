@@ -4,9 +4,9 @@ import Display
 import AsyncDisplayKit
 import SwiftSignalKit
 import Postbox
-import TelegramCore
+import IosappCore
 import Lottie
-import TelegramPresentationData
+import IosappPresentationData
 import AnimationUI
 import AccountContext
 import RadialStatusNode

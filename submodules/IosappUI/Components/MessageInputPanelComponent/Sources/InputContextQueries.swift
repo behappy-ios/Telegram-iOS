@@ -1,10 +1,10 @@
 import Foundation
 import SwiftSignalKit
-import TelegramCore
+import IosappCore
 import TextFieldComponent
 import ChatContextQuery
 import AccountContext
-import TelegramUIPreferences
+import IosappUIPreferences
 import SearchPeerMembers
 
 func textInputStateContextQueryRangeAndType(inputState: TextFieldComponent.InputState) -> [(NSRange, PossibleContextQueryTypes, NSRange?)] {

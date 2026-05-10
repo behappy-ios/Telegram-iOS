@@ -2,8 +2,8 @@ import Foundation
 import UIKit
 import Display
 import AsyncDisplayKit
-import TelegramPresentationData
-import TelegramCore
+import IosappPresentationData
+import IosappCore
 import CheckNode
 import ListSectionComponent
 import ComponentFlow

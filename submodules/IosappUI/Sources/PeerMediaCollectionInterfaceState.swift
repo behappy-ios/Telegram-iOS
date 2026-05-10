@@ -1,6 +1,6 @@
 import Foundation
 import Postbox
-import TelegramPresentationData
+import IosappPresentationData
 import ChatInterfaceState
 
 enum PeerMediaCollectionMode: Int32 {

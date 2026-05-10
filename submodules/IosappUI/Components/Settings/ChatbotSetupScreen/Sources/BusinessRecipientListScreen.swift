@@ -3,8 +3,8 @@ import UIKit
 import Display
 import ComponentFlow
 import MultilineTextComponent
-import TelegramPresentationData
-import TelegramCore
+import IosappPresentationData
+import IosappCore
 import AccountContext
 import ListSectionComponent
 import ListActionItemComponent

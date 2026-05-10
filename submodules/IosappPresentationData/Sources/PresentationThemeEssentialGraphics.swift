@@ -1,8 +1,8 @@
 import Foundation
 import UIKit
 import Display
-import TelegramCore
-import TelegramUIPreferences
+import IosappCore
+import IosappUIPreferences
 import AppBundle
 
 func generateCheckImage(partial: Bool, color: UIColor, width: CGFloat) -> UIImage? {

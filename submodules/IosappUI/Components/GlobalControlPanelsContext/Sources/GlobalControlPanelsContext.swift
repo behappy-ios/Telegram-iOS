@@ -1,10 +1,10 @@
 import Foundation
 import UIKit
 import SwiftSignalKit
-import TelegramCore
+import IosappCore
 import AccountContext
-import TelegramUIPreferences
-import TelegramCallsUI
+import IosappUIPreferences
+import IosappCallsUI
 import Display
 import UndoUI
 

@@ -2,16 +2,16 @@ import Foundation
 import UIKit
 import Display
 import AsyncDisplayKit
-import TelegramCore
-import TelegramPresentationData
+import IosappCore
+import IosappPresentationData
 import TextFormat
-import TelegramPermissions
+import IosappPermissions
 import PeersNearbyIconNode
 import SolidRoundedButtonNode
 import PresentationDataUtils
 import Markdown
 import AnimatedStickerNode
-import TelegramAnimatedStickerNode
+import IosappAnimatedStickerNode
 import AppBundle
 import AccountContext
 

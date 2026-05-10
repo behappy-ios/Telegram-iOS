@@ -4,10 +4,10 @@ import Display
 import SwiftSignalKit
 import AsyncDisplayKit
 import Postbox
-import TelegramCore
+import IosappCore
 import AVFoundation
 import ContextUI
-import TelegramPresentationData
+import IosappPresentationData
 import ShimmerEffect
 import SoftwareVideo
 import BatchVideoRendering

@@ -1,5 +1,5 @@
 import Foundation
-import TelegramCore
+import IosappCore
 import SwiftSignalKit
 
 public func effectiveDataSaving(for settings: VoiceCallSettings?, autodownloadSettings: AutodownloadSettings) -> VoiceCallDataSaving {

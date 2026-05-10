@@ -4,8 +4,8 @@ import Postbox
 import Display
 import AsyncDisplayKit
 import SwiftSignalKit
-import TelegramCore
-import TelegramPresentationData
+import IosappCore
+import IosappPresentationData
 import TextFormat
 import ChatMessageDateAndStatusNode
 import ChatMessageBubbleContentNode

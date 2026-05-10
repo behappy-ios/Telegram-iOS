@@ -3,7 +3,7 @@ import UIKit
 import Display
 import ComponentFlow
 import AccountContext
-import TelegramCore
+import IosappCore
 import AsyncDisplayKit
 import AvatarNode
 

@@ -5,12 +5,12 @@ import AsyncDisplayKit
 import ComponentFlow
 import AccountContext
 import MultilineTextComponent
-import TelegramPresentationData
+import IosappPresentationData
 import PresentationDataUtils
 import ButtonComponent
 import BundleIconComponent
-import TelegramStringFormatting
-import TelegramCore
+import IosappStringFormatting
+import IosappCore
 
 final class StarsBalanceComponent: Component {
     let theme: PresentationTheme

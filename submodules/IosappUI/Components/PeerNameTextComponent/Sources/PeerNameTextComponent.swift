@@ -1,13 +1,13 @@
 import Foundation
 import UIKit
 import Display
-import TelegramPresentationData
+import IosappPresentationData
 import ComponentFlow
 import ComponentDisplayAdapters
 import AppBundle
 import MultilineTextComponent
 import EmojiStatusComponent
-import TelegramCore
+import IosappCore
 import AccountContext
 
 public final class PeerNameTextComponent: Component {

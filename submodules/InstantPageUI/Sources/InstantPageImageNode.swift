@@ -2,9 +2,9 @@ import Foundation
 import UIKit
 import AsyncDisplayKit
 import Display
-import TelegramCore
+import IosappCore
 import SwiftSignalKit
-import TelegramPresentationData
+import IosappPresentationData
 import AccountContext
 import RadialStatusNode
 import PhotoResources
@@ -12,7 +12,7 @@ import MediaResources
 import LocationResources
 import LiveLocationPositionNode
 import AppBundle
-import TelegramUIPreferences
+import IosappUIPreferences
 import ContextUI
 import Tuples
 

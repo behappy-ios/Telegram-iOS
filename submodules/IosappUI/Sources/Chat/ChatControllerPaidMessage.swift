@@ -2,7 +2,7 @@ import Foundation
 import UIKit
 import SwiftSignalKit
 import Postbox
-import TelegramCore
+import IosappCore
 import AsyncDisplayKit
 import Display
 import ContextUI
@@ -11,8 +11,8 @@ import AccountContext
 import ChatControllerInteraction
 import AnimatedTextComponent
 import ChatMessagePaymentAlertController
-import TelegramPresentationData
-import TelegramNotices
+import IosappPresentationData
+import IosappNotices
 
 extension ChatControllerImpl {
     func presentPaidMessageAlertIfNeeded(count: Int32 = 1, forceDark: Bool = false, alwaysAsk: Bool = false, completion: @escaping (Bool) -> Void) {

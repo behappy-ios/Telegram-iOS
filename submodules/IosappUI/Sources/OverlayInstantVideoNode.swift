@@ -3,12 +3,12 @@ import UIKit
 import AsyncDisplayKit
 import SwiftSignalKit
 import Display
-import TelegramCore
+import IosappCore
 import Postbox
-import TelegramPresentationData
+import IosappPresentationData
 import UniversalMediaPlayer
-import TelegramUIPreferences
-import TelegramAudio
+import IosappUIPreferences
+import IosappAudio
 import AccountContext
 
 final class OverlayInstantVideoNode: OverlayMediaItemNode {

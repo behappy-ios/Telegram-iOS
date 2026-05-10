@@ -1,7 +1,7 @@
 import Foundation
 import UIKit
 import AsyncDisplayKit
-import TelegramCore
+import IosappCore
 import AccountContext
 import ChatPresentationInterfaceState
 import ChatControllerInteraction
@@ -12,12 +12,12 @@ import SuggestPostAccessoryPanelNode
 import ChatInputAccessoryPanel
 import ChatInputMessageAccessoryPanel
 import ComponentFlow
-import TelegramNotices
+import IosappNotices
 import PresentationDataUtils
 import Display
 import Markdown
 import TextFormat
-import TelegramPresentationData
+import IosappPresentationData
 import AlertComponent
 
 func textInputAccessoryPanel(

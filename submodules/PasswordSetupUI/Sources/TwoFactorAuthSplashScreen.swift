@@ -6,11 +6,11 @@ import SolidRoundedButtonNode
 import SwiftSignalKit
 import OverlayStatusController
 import AnimatedStickerNode
-import TelegramAnimatedStickerNode
+import IosappAnimatedStickerNode
 import AccountContext
-import TelegramPresentationData
+import IosappPresentationData
 import PresentationDataUtils
-import TelegramCore
+import IosappCore
 
 public enum TwoFactorAuthSplashMode {
     public struct Intro {

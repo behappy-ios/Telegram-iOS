@@ -3,9 +3,9 @@ import UIKit
 import AsyncDisplayKit
 import Display
 import Postbox
-import TelegramCore
+import IosappCore
 import SwiftSignalKit
-import TelegramPresentationData
+import IosappPresentationData
 import AccountContext
 import SearchBarNode
 import SearchUI
@@ -18,7 +18,7 @@ import ChatTextLinkEditUI
 import AnimationCache
 import MultiAnimationRenderer
 import AnimatedStickerNode
-import TelegramAnimatedStickerNode
+import IosappAnimatedStickerNode
 import SolidRoundedButtonNode
 import ContextUI
 import TextFormat

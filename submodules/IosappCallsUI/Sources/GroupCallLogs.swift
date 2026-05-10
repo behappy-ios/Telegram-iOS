@@ -1,5 +1,5 @@
 import Foundation
-import TelegramCore
+import IosappCore
 
 public func groupCallLogsPath(account: Account) -> String {
     return account.basePath + "/group-calls"

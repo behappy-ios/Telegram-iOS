@@ -5,8 +5,8 @@ import AsyncDisplayKit
 import ComponentFlow
 import AccountContext
 import MultilineTextComponent
-import TelegramPresentationData
-import TelegramCore
+import IosappPresentationData
+import IosappCore
 import MultilineTextWithEntitiesComponent
 
 final class BadgeComponent: Component {

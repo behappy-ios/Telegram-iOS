@@ -3,7 +3,7 @@ import UIKit
 import Display
 import ComponentFlow
 import AppBundle
-import TelegramPresentationData
+import IosappPresentationData
 
 final class ButtonGroupView: OverlayMaskContainerView {
     final class Button {

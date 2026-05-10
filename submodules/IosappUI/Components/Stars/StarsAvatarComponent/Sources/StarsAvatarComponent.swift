@@ -3,9 +3,9 @@ import UIKit
 import Display
 import SwiftSignalKit
 import Postbox
-import TelegramCore
+import IosappCore
 import ComponentFlow
-import TelegramPresentationData
+import IosappPresentationData
 import PhotoResources
 import AvatarNode
 import AccountContext

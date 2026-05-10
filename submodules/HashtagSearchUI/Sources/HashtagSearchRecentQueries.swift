@@ -1,8 +1,8 @@
 import Foundation
 import Postbox
-import TelegramCore
+import IosappCore
 import SwiftSignalKit
-import TelegramUIPreferences
+import IosappUIPreferences
 
 private struct HashtagSearchRecentQueryItemId {
     public let rawValue: MemoryBuffer

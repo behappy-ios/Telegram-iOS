@@ -1,9 +1,9 @@
 import Foundation
 import UIKit
 import AsyncDisplayKit
-import TelegramPresentationData
+import IosappPresentationData
 import CheckNode
-import TelegramCore
+import IosappCore
 
 public final class ChatMessageSelectionNode: ASDisplayNode {
     private let toggle: (Bool) -> Void

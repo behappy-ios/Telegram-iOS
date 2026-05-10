@@ -3,16 +3,16 @@ import UIKit
 import AsyncDisplayKit
 import Display
 import Postbox
-import TelegramCore
+import IosappCore
 import SwiftSignalKit
-import TelegramPresentationData
+import IosappPresentationData
 import AccountContext
 import RadialStatusNode
 import ScreenCaptureDetection
 import AppBundle
 import LocalizedPeerData
 import TooltipUI
-import TelegramNotices
+import IosappNotices
 
 private func galleryMediaForMedia(media: Media) -> Media? {
     if let media = media as? TelegramMediaImage {

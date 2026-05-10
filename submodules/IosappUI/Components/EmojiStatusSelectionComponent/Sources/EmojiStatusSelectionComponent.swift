@@ -8,10 +8,10 @@ import AnimationCache
 import MultiAnimationRenderer
 import EntityKeyboard
 import ComponentDisplayAdapters
-import TelegramPresentationData
+import IosappPresentationData
 import AccountContext
 import PagerComponent
-import TelegramCore
+import IosappCore
 import Lottie
 import EmojiTextAttachmentView
 import TextFormat
@@ -19,7 +19,7 @@ import AppBundle
 import GZip
 import EmojiStatusComponent
 import Postbox
-import TelegramNotices
+import IosappNotices
 
 private func randomGenericReactionEffect(context: AccountContext) -> Signal<String?, NoError> {
     return context.engine.stickers.loadedStickerPack(reference: .emojiGenericAnimations, forceActualized: false)

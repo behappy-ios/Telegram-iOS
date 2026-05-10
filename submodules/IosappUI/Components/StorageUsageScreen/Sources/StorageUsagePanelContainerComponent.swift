@@ -3,7 +3,7 @@ import UIKit
 import Display
 import ComponentFlow
 import ComponentDisplayAdapters
-import TelegramPresentationData
+import IosappPresentationData
 import HorizontalTabsComponent
 import GlassBackgroundComponent
 

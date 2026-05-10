@@ -2,7 +2,7 @@ import Foundation
 import UIKit
 import ComponentFlow
 import Display
-import TelegramPresentationData
+import IosappPresentationData
 import ViewControllerComponent
 import SheetComponent
 import AccountContext

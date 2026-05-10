@@ -3,10 +3,10 @@ import UIKit
 import Display
 import AsyncDisplayKit
 import Postbox
-import TelegramCore
+import IosappCore
 import SwiftSignalKit
-import TelegramPresentationData
-import TelegramUIPreferences
+import IosappPresentationData
+import IosappUIPreferences
 import TextFormat
 import AccountContext
 import ActionSheetPeerItem
@@ -14,9 +14,9 @@ import LocalizedPeerData
 import UrlEscaping
 import StickerResources
 import SaveToCameraRoll
-import TelegramStringFormatting
+import IosappStringFormatting
 import WallpaperBackgroundNode
-import TelegramIntents
+import IosappIntents
 import AnimationCache
 import MultiAnimationRenderer
 import ObjectiveC
@@ -290,7 +290,7 @@ public final class ShareControllerAppEnvironment: ShareControllerEnvironment {
     
     public func donateSendMessageIntent(account: ShareControllerAccountContext, peerIds: [EnginePeer.Id]) {
         if let account = account as? ShareControllerAppAccountContext {
-            TelegramIntents.donateSendMessageIntent(account: account.context.account, sharedContext: self.sharedContext, intentContext: .share, peerIds: peerIds)
+            IosappIntents.donateSendMessageIntent(account: account.context.account, sharedContext: self.sharedContext, intentContext: .share, peerIds: peerIds)
         } else {
             assertionFailure()
         }

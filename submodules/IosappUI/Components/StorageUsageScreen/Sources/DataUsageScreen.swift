@@ -6,9 +6,9 @@ import ComponentFlow
 import SwiftSignalKit
 import ViewControllerComponent
 import ComponentDisplayAdapters
-import TelegramPresentationData
+import IosappPresentationData
 import AccountContext
-import TelegramCore
+import IosappCore
 import MultilineTextComponent
 import EmojiStatusComponent
 import Markdown
@@ -18,11 +18,11 @@ import AvatarNode
 import RadialStatusNode
 import UndoUI
 import AnimatedStickerNode
-import TelegramAnimatedStickerNode
-import TelegramStringFormatting
+import IosappAnimatedStickerNode
+import IosappStringFormatting
 import GalleryData
 import AnimatedTextComponent
-import TelegramUIPreferences
+import IosappUIPreferences
 import SegmentControlComponent
 import GlassBackgroundComponent
 

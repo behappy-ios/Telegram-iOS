@@ -3,10 +3,10 @@ import UIKit
 import UserNotifications
 import SwiftSignalKit
 import Postbox
-import TelegramCore
-import TelegramPresentationData
-import TelegramUIPreferences
-import TelegramCallsUI
+import IosappCore
+import IosappPresentationData
+import IosappUIPreferences
+import IosappCallsUI
 import AccountContext
 
 private final class PollStateContext {

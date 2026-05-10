@@ -4,11 +4,11 @@ import Display
 import AsyncDisplayKit
 import SwiftSignalKit
 import Postbox
-import TelegramPresentationData
+import IosappPresentationData
 import AccountContext
 import AvatarNode
-import TelegramCore
-import TelegramUniversalVideoContent
+import IosappCore
+import IosappUniversalVideoContent
 import UniversalMediaPlayer
 import GalleryUI
 import HierarchyTrackingLayer

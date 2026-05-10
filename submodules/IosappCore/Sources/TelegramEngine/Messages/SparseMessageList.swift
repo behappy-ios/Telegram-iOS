@@ -1,6 +1,6 @@
 import SwiftSignalKit
 import Postbox
-import TelegramApi
+import IosappApi
 
 public final class SparseMessageList {
     private final class Impl {

@@ -1,6 +1,6 @@
 import Foundation
 import Postbox
-import TelegramApi
+import IosappApi
 import SwiftSignalKit
 
 func requestRecentAccountSessions(account: Account) -> Signal<([RecentAccountSession], Int32), NoError> {

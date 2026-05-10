@@ -1,6 +1,6 @@
 import Foundation
 import Postbox
-import TelegramApi
+import IosappApi
 
 extension ReplyMarkupButtonAction.PeerTypes {
     init(apiType: [Api.InlineQueryPeerType]) {

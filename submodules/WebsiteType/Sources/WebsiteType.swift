@@ -1,6 +1,6 @@
 import Foundation
 import Postbox
-import TelegramCore
+import IosappCore
 
 public enum WebsiteType {
     case generic

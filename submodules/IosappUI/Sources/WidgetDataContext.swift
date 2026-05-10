@@ -1,12 +1,12 @@
 import Foundation
 import SwiftSignalKit
 import Postbox
-import TelegramCore
+import IosappCore
 import WidgetItems
-import TelegramPresentationData
+import IosappPresentationData
 import NotificationsPresentationData
 import WidgetKit
-import TelegramUIPreferences
+import IosappUIPreferences
 import WidgetItemsUtils
 import AccountContext
 import AppLock

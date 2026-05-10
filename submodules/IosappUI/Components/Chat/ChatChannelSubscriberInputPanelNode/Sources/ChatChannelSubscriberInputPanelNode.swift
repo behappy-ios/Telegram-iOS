@@ -2,10 +2,10 @@ import Foundation
 import UIKit
 import AsyncDisplayKit
 import Display
-import TelegramCore
+import IosappCore
 import Postbox
 import SwiftSignalKit
-import TelegramPresentationData
+import IosappPresentationData
 import AlertUI
 import PresentationDataUtils
 import UndoUI
@@ -14,7 +14,7 @@ import ChatInputPanelNode
 import AccountContext
 import OldChannelsController
 import TooltipUI
-import TelegramNotices
+import IosappNotices
 import GlassBackgroundComponent
 import ComponentFlow
 import ComponentDisplayAdapters

@@ -3,13 +3,13 @@ import UIKit
 import Display
 import ComponentFlow
 import SwiftSignalKit
-import TelegramCore
-import TelegramPresentationData
+import IosappCore
+import IosappPresentationData
 import AccountContext
 import MultilineTextComponent
 import MultilineTextWithEntitiesComponent
 import TextFormat
-import TelegramStringFormatting
+import IosappStringFormatting
 import Markdown
 
 final class BalanceComponent: Component {

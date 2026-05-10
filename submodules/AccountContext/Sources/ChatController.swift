@@ -1,13 +1,13 @@
 import Foundation
 import UIKit
-import TelegramCore
+import IosappCore
 import Postbox
 import TextFormat
 import AsyncDisplayKit
 import Display
 import SwiftSignalKit
-import TelegramPresentationData
-import TelegramUIPreferences
+import IosappPresentationData
+import IosappUIPreferences
 
 public final class ChatMessageItemAssociatedData: Equatable {
     public enum ChannelDiscussionGroupStatus: Equatable {

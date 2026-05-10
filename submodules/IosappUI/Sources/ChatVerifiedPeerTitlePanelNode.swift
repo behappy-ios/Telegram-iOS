@@ -3,10 +3,10 @@ import UIKit
 import Display
 import AsyncDisplayKit
 import Postbox
-import TelegramCore
-import TelegramPresentationData
+import IosappCore
+import IosappPresentationData
 import LocalizedPeerData
-import TelegramStringFormatting
+import IosappStringFormatting
 import TextFormat
 import Markdown
 import ChatPresentationInterfaceState
@@ -14,7 +14,7 @@ import TextNodeWithEntities
 import AnimationCache
 import MultiAnimationRenderer
 import AccountContext
-import TelegramNotices
+import IosappNotices
 import LegacyChatHeaderPanelComponent
 
 final class ChatVerifiedPeerTitlePanelNode: ChatTitleAccessoryPanelNode {

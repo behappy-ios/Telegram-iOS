@@ -6,7 +6,7 @@ import ViewControllerComponent
 import AccountContext
 import SheetComponent
 import ButtonComponent
-import TelegramCore
+import IosappCore
 import AnimatedTextComponent
 
 private final class NewSessionInfoSheetContentComponent: Component {

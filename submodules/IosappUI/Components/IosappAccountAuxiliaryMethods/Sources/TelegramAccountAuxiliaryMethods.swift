@@ -1,5 +1,5 @@
 import Foundation
-import TelegramCore
+import IosappCore
 import Postbox
 import MediaResources
 import PassportUI
@@ -17,7 +17,7 @@ import FetchAudioMediaResource
 import Display
 import UIKit
 
-public func makeTelegramAccountAuxiliaryMethods(uploadInBackground: ((Postbox, MediaResource) -> Signal<String?, NoError>)?) -> AccountAuxiliaryMethods {
+public func makeIosappAccountAuxiliaryMethods(uploadInBackground: ((Postbox, MediaResource) -> Signal<String?, NoError>)?) -> AccountAuxiliaryMethods {
     return AccountAuxiliaryMethods(fetchResource: { postbox, resource, ranges, _ in
         if let resource = resource as? VideoLibraryMediaResource {
             return postbox.transaction { transaction -> Bool in

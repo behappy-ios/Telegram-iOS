@@ -2,14 +2,14 @@ import Foundation
 import UIKit
 import AsyncDisplayKit
 import SwiftSignalKit
-import TelegramCore
+import IosappCore
 import Postbox
 import Display
 import UniversalMediaPlayer
-import TelegramPresentationData
+import IosappPresentationData
 import RangeSet
 import ShimmerEffect
-import TelegramUniversalVideoContent
+import IosappUniversalVideoContent
 import ComponentFlow
 import ComponentDisplayAdapters
 import GlassBackgroundComponent

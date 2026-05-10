@@ -1,9 +1,9 @@
 import Foundation
 import Postbox
-import TelegramCore
+import IosappCore
 import SwiftSignalKit
 import Display
-import TelegramUIPreferences
+import IosappUIPreferences
 import AccountContext
 
 public enum ChatListNodeLocation: Equatable {

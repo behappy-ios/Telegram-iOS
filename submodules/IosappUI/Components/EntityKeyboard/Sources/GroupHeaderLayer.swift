@@ -3,8 +3,8 @@ import UIKit
 import Display
 import ComponentFlow
 import AccountContext
-import TelegramCore
-import TelegramPresentationData
+import IosappCore
+import IosappPresentationData
 import AnimationCache
 import MultiAnimationRenderer
 

@@ -4,7 +4,7 @@ import Display
 import ComponentFlow
 import SwiftSignalKit
 import AccountContext
-import TelegramPresentationData
+import IosappPresentationData
 import MultilineTextComponent
 import BalancedTextComponent
 import LottieComponent

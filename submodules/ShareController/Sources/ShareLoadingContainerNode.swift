@@ -3,14 +3,14 @@ import UIKit
 import AsyncDisplayKit
 import SwiftSignalKit
 import Display
-import TelegramPresentationData
+import IosappPresentationData
 import ActivityIndicator
 import RadialStatusNode
 import AnimatedStickerNode
-import TelegramAnimatedStickerNode
+import IosappAnimatedStickerNode
 import AppBundle
-import TelegramUniversalVideoContent
-import TelegramCore
+import IosappUniversalVideoContent
+import IosappCore
 import Postbox
 import AccountContext
 

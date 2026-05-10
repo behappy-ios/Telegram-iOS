@@ -3,16 +3,16 @@ import UIKit
 import Display
 import AsyncDisplayKit
 import Postbox
-import TelegramCore
+import IosappCore
 import SwiftSignalKit
-import TelegramPresentationData
+import IosappPresentationData
 import MergeLists
 import ItemListUI
 import PresentationDataUtils
 import AccountContext
 import SearchBarNode
 import SearchUI
-import TelegramUIPreferences
+import IosappUIPreferences
 import ComponentFlow
 import BalancedTextComponent
 

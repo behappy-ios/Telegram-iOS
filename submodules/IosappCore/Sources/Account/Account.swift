@@ -2,7 +2,7 @@ import Foundation
 import Postbox
 import SwiftSignalKit
 import MtProtoKit
-import TelegramApi
+import IosappApi
 import CryptoUtils
 import EncryptionProvider
 

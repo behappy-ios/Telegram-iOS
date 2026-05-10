@@ -2,10 +2,10 @@ import Foundation
 import UIKit
 import Display
 import AsyncDisplayKit
-import TelegramCore
+import IosappCore
 import SwiftSignalKit
 import AccountContext
-import TelegramPresentationData
+import IosappPresentationData
 import PresentationDataUtils
 import Speak
 import ComponentFlow
@@ -25,7 +25,7 @@ import TextFormat
 import Pasteboard
 import ContextUI
 import TranslationLanguagesContextMenuContent
-import TelegramUIPreferences
+import IosappUIPreferences
 import Markdown
 
 private let translateToTag = GenericComponentViewTag()

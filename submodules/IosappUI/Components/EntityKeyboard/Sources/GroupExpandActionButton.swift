@@ -2,7 +2,7 @@ import Foundation
 import UIKit
 import Display
 import ComponentFlow
-import TelegramPresentationData
+import IosappPresentationData
 
 final class GroupExpandActionButton: UIButton {
     override static var layerClass: AnyClass {

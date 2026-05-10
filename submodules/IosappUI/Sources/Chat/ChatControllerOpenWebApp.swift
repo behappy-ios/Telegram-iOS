@@ -2,17 +2,17 @@ import Foundation
 import UIKit
 import Display
 import SwiftSignalKit
-import TelegramCore
+import IosappCore
 import ChatPresentationInterfaceState
 import ChatControllerInteraction
 import WebUI
 import AttachmentUI
 import AccountContext
-import TelegramNotices
+import IosappNotices
 import PresentationDataUtils
 import UndoUI
 import UrlHandling
-import TelegramPresentationData
+import IosappPresentationData
 import ChatInterfaceState
 
 func openWebAppImpl(

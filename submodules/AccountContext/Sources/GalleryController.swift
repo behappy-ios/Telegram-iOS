@@ -3,7 +3,7 @@ import UIKit
 import Display
 import Postbox
 import SwiftSignalKit
-import TelegramCore
+import IosappCore
 
 public enum GalleryMediaSubject: Hashable {
     case paidMediaIndex(Int)

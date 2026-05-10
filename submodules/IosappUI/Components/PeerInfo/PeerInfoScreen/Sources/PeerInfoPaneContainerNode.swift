@@ -3,9 +3,9 @@ import UIKit
 import AsyncDisplayKit
 import Display
 import SwiftSignalKit
-import TelegramPresentationData
+import IosappPresentationData
 import Postbox
-import TelegramCore
+import IosappCore
 import AccountContext
 import ContextUI
 import ChatControllerInteraction

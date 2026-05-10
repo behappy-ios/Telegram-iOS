@@ -1,7 +1,7 @@
 import Foundation
 import SwiftSignalKit
 import Postbox
-import TelegramCore
+import IosappCore
 import Contacts
 import Intents
 

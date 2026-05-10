@@ -1,9 +1,9 @@
 import Foundation
 import UIKit
 import SwiftSignalKit
-import TelegramCore
+import IosappCore
 import Postbox
-import TelegramUIPreferences
+import IosappUIPreferences
 import PersistentStringHash
 
 public final class CachedInstantPage: Codable {

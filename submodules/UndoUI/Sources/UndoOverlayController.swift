@@ -1,8 +1,8 @@
 import Foundation
 import UIKit
 import Display
-import TelegramPresentationData
-import TelegramCore
+import IosappPresentationData
+import IosappCore
 import AccountContext
 import ComponentFlow
 import AnimatedTextComponent

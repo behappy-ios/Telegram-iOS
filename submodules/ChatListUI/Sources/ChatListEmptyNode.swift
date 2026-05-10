@@ -2,14 +2,14 @@ import Foundation
 import UIKit
 import AsyncDisplayKit
 import Display
-import TelegramPresentationData
+import IosappPresentationData
 import AnimatedStickerNode
-import TelegramAnimatedStickerNode
+import IosappAnimatedStickerNode
 import AppBundle
 import SolidRoundedButtonNode
 import ActivityIndicator
 import AccountContext
-import TelegramCore
+import IosappCore
 import ComponentFlow
 import ArchiveInfoScreen
 import ComponentDisplayAdapters

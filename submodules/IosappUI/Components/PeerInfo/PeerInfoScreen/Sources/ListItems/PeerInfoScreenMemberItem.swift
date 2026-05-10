@@ -2,12 +2,12 @@ import Foundation
 import UIKit
 import AsyncDisplayKit
 import Display
-import TelegramPresentationData
+import IosappPresentationData
 import ItemListPeerItem
 import SwiftSignalKit
 import AccountContext
 import Postbox
-import TelegramCore
+import IosappCore
 import ItemListUI
 
 enum PeerInfoScreenMemberItemAction {

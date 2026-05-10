@@ -4,7 +4,7 @@ import Display
 import CoreLocation
 import Photos
 import Postbox
-import TelegramCore
+import IosappCore
 import AccountContext
 import MediaEditor
 import DrawingUI

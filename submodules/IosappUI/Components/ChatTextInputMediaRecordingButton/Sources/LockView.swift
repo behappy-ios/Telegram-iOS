@@ -2,7 +2,7 @@ import UIKit
 import LegacyComponents
 import AppBundle
 import Lottie
-import TelegramPresentationData
+import IosappPresentationData
 
 final class LockView: UIButton, TGModernConversationInputMicButtonLock {
     private let useDarkTheme: Bool

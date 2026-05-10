@@ -1,8 +1,8 @@
 import Foundation
 import UIKit
 import Display
-import TelegramCore
-import TelegramUIPreferences
+import IosappCore
+import IosappUIPreferences
 import Postbox
 import SwiftSignalKit
 

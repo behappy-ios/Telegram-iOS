@@ -2,7 +2,7 @@ import Foundation
 import UIKit
 import Postbox
 import SwiftSignalKit
-import TelegramCore
+import IosappCore
 
 public enum MediaAutoDownloadNetworkType {
     case wifi

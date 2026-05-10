@@ -1,12 +1,12 @@
 import Foundation
 import UIKit
 import Display
-import TelegramCore
-import TelegramPresentationData
-import TelegramUIPreferences
+import IosappCore
+import IosappPresentationData
+import IosappUIPreferences
 import AccountContext
 import AnimatedStickerNode
-import TelegramAnimatedStickerNode
+import IosappAnimatedStickerNode
 
 public final class ReportPeerHeaderActionSheetItem: ActionSheetItem {
     let context: AccountContext

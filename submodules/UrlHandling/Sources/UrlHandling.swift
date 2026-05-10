@@ -2,11 +2,11 @@ import Foundation
 import UIKit
 import SwiftSignalKit
 import Postbox
-import TelegramCore
+import IosappCore
 import MtProtoKit
-import TelegramPresentationData
-import TelegramUIPreferences
-import TelegramNotices
+import IosappPresentationData
+import IosappUIPreferences
+import IosappNotices
 import AccountContext
 
 private let baseTelegramMePaths = ["telegram.me", "t.me", "telegram.dog"]

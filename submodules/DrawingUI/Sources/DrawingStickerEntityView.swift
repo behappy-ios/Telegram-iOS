@@ -4,15 +4,15 @@ import AsyncDisplayKit
 import AVFoundation
 import Display
 import SwiftSignalKit
-import TelegramCore
+import IosappCore
 import AnimatedStickerNode
-import TelegramAnimatedStickerNode
+import IosappAnimatedStickerNode
 import StickerResources
 import AccountContext
 import MediaEditor
 import UniversalMediaPlayer
-import TelegramPresentationData
-import TelegramUniversalVideoContent
+import IosappPresentationData
+import IosappUniversalVideoContent
 import DustEffect
 import DynamicCornerRadiusView
 

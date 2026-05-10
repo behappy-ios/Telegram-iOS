@@ -4,7 +4,7 @@ import Display
 import ComponentFlow
 import SwiftSignalKit
 import TextFormat
-import TelegramPresentationData
+import IosappPresentationData
 import InvisibleInkDustNode
 import EmojiTextAttachmentView
 import AccountContext

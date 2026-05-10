@@ -3,12 +3,12 @@ import UIKit
 import Display
 import ComponentFlow
 import ListSectionComponent
-import TelegramPresentationData
+import IosappPresentationData
 import AppBundle
 import ChatListUI
 import AccountContext
 import Postbox
-import TelegramCore
+import IosappCore
 
 final class GreetingMessageListItemComponent: Component {
     let context: AccountContext

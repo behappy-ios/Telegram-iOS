@@ -4,10 +4,10 @@ import UIKit
 import Display
 import AsyncDisplayKit
 import Postbox
-import TelegramCore
+import IosappCore
 import SwiftSignalKit
 import ComponentFlow
-import TelegramPresentationData
+import IosappPresentationData
 import AccountContext
 import AttachmentUI
 import ContextUI
@@ -30,7 +30,7 @@ import OpenInExternalAppUI
 import UndoUI
 import AvatarNode
 import OverlayStatusController
-import TelegramUIPreferences
+import IosappUIPreferences
 import CoreMotion
 import DeviceAccess
 import DeviceLocationManager

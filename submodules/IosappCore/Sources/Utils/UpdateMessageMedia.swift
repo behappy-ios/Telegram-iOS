@@ -1,6 +1,6 @@
 import Foundation
 import Postbox
-import TelegramApi
+import IosappApi
 
 
 func updateMessageMedia(transaction: Transaction, id: MediaId, media: Media?) {

@@ -1,7 +1,7 @@
 import Foundation
 import SwiftSignalKit
-import TelegramCore
-import TelegramPresentationData
+import IosappCore
+import IosappPresentationData
 
 public enum WallpaperUploadManagerStatus {
     case none

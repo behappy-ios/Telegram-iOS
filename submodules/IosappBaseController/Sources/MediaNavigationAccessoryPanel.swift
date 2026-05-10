@@ -2,10 +2,10 @@ import Foundation
 import UIKit
 import Display
 import AsyncDisplayKit
-import TelegramCore
+import IosappCore
 import AccountContext
-import TelegramUIPreferences
-import TelegramPresentationData
+import IosappUIPreferences
+import IosappPresentationData
 
 public final class MediaNavigationAccessoryPanel: ASDisplayNode {
     public let containerNode: MediaNavigationAccessoryContainerNode

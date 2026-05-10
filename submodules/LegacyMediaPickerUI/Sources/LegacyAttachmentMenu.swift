@@ -4,8 +4,8 @@ import LegacyComponents
 import Display
 import SwiftSignalKit
 import Postbox
-import TelegramCore
-import TelegramPresentationData
+import IosappCore
+import IosappPresentationData
 import DeviceAccess
 import AccountContext
 import LegacyUI

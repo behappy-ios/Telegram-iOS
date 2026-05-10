@@ -1,16 +1,16 @@
 import Foundation
 import UIKit
 import Display
-import TelegramCore
+import IosappCore
 import SwiftSignalKit
 import AsyncDisplayKit
 import Postbox
 import StickerResources
 import AccountContext
 import AnimatedStickerNode
-import TelegramAnimatedStickerNode
+import IosappAnimatedStickerNode
 import ShimmerEffect
-import TelegramPresentationData
+import IosappPresentationData
 import AccountContext
 
 final class HorizontalStickerGridItem: GridItem {

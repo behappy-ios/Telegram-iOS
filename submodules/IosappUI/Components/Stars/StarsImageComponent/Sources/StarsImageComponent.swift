@@ -4,15 +4,15 @@ import AsyncDisplayKit
 import Display
 import SwiftSignalKit
 import Postbox
-import TelegramCore
+import IosappCore
 import ComponentFlow
-import TelegramPresentationData
+import IosappPresentationData
 import PhotoResources
 import AvatarNode
 import AccountContext
 import InvisibleInkDustNode
 import AnimatedStickerNode
-import TelegramAnimatedStickerNode
+import IosappAnimatedStickerNode
 
 final class StarsParticlesView: UIView {
     private struct Particle {

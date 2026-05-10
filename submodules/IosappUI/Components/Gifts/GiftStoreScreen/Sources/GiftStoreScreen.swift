@@ -4,9 +4,9 @@ import Display
 import AsyncDisplayKit
 import SwiftSignalKit
 import Postbox
-import TelegramCore
-import TelegramPresentationData
-import TelegramUIPreferences
+import IosappCore
+import IosappPresentationData
+import IosappUIPreferences
 import PresentationDataUtils
 import AccountContext
 import ComponentFlow
@@ -15,7 +15,7 @@ import MultilineTextComponent
 import BalancedTextComponent
 import BundleIconComponent
 import Markdown
-import TelegramStringFormatting
+import IosappStringFormatting
 import PlainButtonComponent
 import BlurredBackgroundComponent
 import PremiumStarComponent

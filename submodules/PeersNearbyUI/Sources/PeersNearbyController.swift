@@ -3,10 +3,10 @@ import UIKit
 import AsyncDisplayKit
 import Display
 import SwiftSignalKit
-import TelegramCore
+import IosappCore
 import MapKit
-import TelegramPresentationData
-import TelegramUIPreferences
+import IosappPresentationData
+import IosappUIPreferences
 import ItemListUI
 import PresentationDataUtils
 import OverlayStatusController
@@ -15,13 +15,13 @@ import AccountContext
 import AlertUI
 import PresentationDataUtils
 import ItemListPeerItem
-import TelegramPermissionsUI
+import IosappPermissionsUI
 import ItemListPeerActionItem
 import Geocoding
 import AppBundle
 import ContextUI
-import TelegramNotices
-import TelegramStringFormatting
+import IosappNotices
+import IosappStringFormatting
 
 private let maxUsersDisplayedLimit: Int32 = 5
 

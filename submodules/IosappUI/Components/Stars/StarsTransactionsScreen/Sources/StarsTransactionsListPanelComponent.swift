@@ -6,18 +6,18 @@ import ComponentFlow
 import SwiftSignalKit
 import ViewControllerComponent
 import ComponentDisplayAdapters
-import TelegramPresentationData
+import IosappPresentationData
 import AccountContext
-import TelegramCore
+import IosappCore
 import MultilineTextComponent
 import ListActionItemComponent
-import TelegramStringFormatting
+import IosappStringFormatting
 import AvatarNode
 import BundleIconComponent
 import PhotoResources
 import StarsAvatarComponent
 import GiftAnimationComponent
-import TelegramStringFormatting
+import IosappStringFormatting
 
 private extension StarsContext.State.Transaction {
     var extendedId: String {

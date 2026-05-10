@@ -7,7 +7,7 @@ import AccountContext
 import MediaEditor
 import MediaAssetsContext
 import CheckNode
-import TelegramPresentationData
+import IosappPresentationData
 
 final class SelectionPanelComponent: Component {
     let previewContainerView: PortalSourceView

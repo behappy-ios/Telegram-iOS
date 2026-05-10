@@ -1,10 +1,10 @@
 import Foundation
-import TelegramPresentationData
+import IosappPresentationData
 import AccountContext
 import ChatPresentationInterfaceState
 import SwiftSignalKit
 import Postbox
-import TelegramCore
+import IosappCore
 
 extension ChatControllerImpl {    
     func updateSearch(_ interfaceState: ChatPresentationInterfaceState) -> ChatPresentationInterfaceState? {

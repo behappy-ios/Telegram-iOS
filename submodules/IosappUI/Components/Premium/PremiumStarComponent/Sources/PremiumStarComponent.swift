@@ -7,7 +7,7 @@ import SceneKit
 import GZip
 import AppBundle
 import LegacyComponents
-import TelegramPresentationData
+import IosappPresentationData
 
 private let sceneVersion: Int = 7
 

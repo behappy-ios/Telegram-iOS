@@ -5,11 +5,11 @@ import ComponentFlow
 import MultilineTextComponent
 import AccountContext
 import Postbox
-import TelegramCore
+import IosappCore
 import TextNodeWithEntities
 import TextFormat
 import UrlEscaping
-import TelegramPresentationData
+import IosappPresentationData
 import TextSelectionNode
 import SwiftSignalKit
 import ForwardInfoPanelComponent

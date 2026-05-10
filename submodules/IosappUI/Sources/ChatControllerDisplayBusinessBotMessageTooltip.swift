@@ -1,14 +1,14 @@
 import Foundation
-import TelegramPresentationData
+import IosappPresentationData
 import AccountContext
 import Postbox
-import TelegramCore
+import IosappCore
 import SwiftSignalKit
 import Display
-import TelegramPresentationData
+import IosappPresentationData
 import PresentationDataUtils
 import ChatMessageItemView
-import TelegramNotices
+import IosappNotices
 
 extension ChatControllerImpl {
     func displayBusinessBotMessageTooltip(itemNode: ChatMessageItemView) {

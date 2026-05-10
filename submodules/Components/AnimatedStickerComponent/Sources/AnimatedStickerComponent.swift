@@ -2,9 +2,9 @@ import Foundation
 import UIKit
 import ComponentFlow
 import AnimatedStickerNode
-import TelegramAnimatedStickerNode
+import IosappAnimatedStickerNode
 import HierarchyTrackingLayer
-import TelegramCore
+import IosappCore
 
 public final class AnimatedStickerComponent: Component {
     public struct Animation: Equatable {

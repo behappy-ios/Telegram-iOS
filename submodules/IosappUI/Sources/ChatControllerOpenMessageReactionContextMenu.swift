@@ -1,8 +1,8 @@
 import Foundation
-import TelegramPresentationData
+import IosappPresentationData
 import AccountContext
 import Postbox
-import TelegramCore
+import IosappCore
 import SwiftSignalKit
 import ContextUI
 import Display

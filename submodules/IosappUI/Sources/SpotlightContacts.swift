@@ -1,7 +1,7 @@
 import Foundation
 import UIKit
 import SwiftSignalKit
-import TelegramCore
+import IosappCore
 import Display
 import CoreSpotlight
 import MobileCoreServices

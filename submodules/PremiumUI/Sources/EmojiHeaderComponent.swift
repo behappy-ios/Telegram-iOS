@@ -8,7 +8,7 @@ import AppBundle
 import LegacyComponents
 import AvatarNode
 import AccountContext
-import TelegramCore
+import IosappCore
 import AnimationCache
 import MultiAnimationRenderer
 import EmojiStatusComponent

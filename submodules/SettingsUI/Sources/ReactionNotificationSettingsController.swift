@@ -3,18 +3,18 @@ import UIKit
 import Display
 import AsyncDisplayKit
 import SwiftSignalKit
-import TelegramCore
-import TelegramPresentationData
-import TelegramUIPreferences
+import IosappCore
+import IosappPresentationData
+import IosappUIPreferences
 import DeviceAccess
 import ItemListUI
 import PresentationDataUtils
 import AccountContext
 import AlertUI
 import PresentationDataUtils
-import TelegramNotices
+import IosappNotices
 import NotificationSoundSelectionUI
-import TelegramStringFormatting
+import IosappStringFormatting
 
 private final class ReactionNotificationSettingsControllerArguments {
     let context: AccountContext

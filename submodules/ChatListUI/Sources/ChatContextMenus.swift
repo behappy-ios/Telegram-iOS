@@ -4,16 +4,16 @@ import SwiftSignalKit
 import ContextUI
 import AccountContext
 import Postbox
-import TelegramCore
+import IosappCore
 import Display
-import TelegramUIPreferences
+import IosappUIPreferences
 import OverlayStatusController
 import AlertUI
 import PresentationDataUtils
 import UndoUI
 import PremiumUI
-import TelegramPresentationData
-import TelegramStringFormatting
+import IosappPresentationData
+import IosappStringFormatting
 import ChatTimerScreen
 import NotificationPeerExceptionController
 

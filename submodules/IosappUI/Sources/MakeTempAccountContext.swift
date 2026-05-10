@@ -1,10 +1,10 @@
 import Foundation
 import SwiftSignalKit
-import TelegramCore
+import IosappCore
 import Postbox
 import AccountContext
 import BuildConfig
-import TelegramPresentationData
+import IosappPresentationData
 
 private var sharedTempContext: SharedAccountContextImpl?
 

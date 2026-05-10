@@ -2,10 +2,10 @@ import Foundation
 import UIKit
 import AsyncDisplayKit
 import Display
-import TelegramPresentationData
+import IosappPresentationData
 import TextSelectionNode
 import ReactionSelectionNode
-import TelegramCore
+import IosappCore
 import SwiftSignalKit
 import AccountContext
 import TextNodeWithEntities

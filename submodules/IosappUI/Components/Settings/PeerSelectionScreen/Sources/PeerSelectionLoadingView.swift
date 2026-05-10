@@ -2,11 +2,11 @@ import Foundation
 import UIKit
 import Display
 import HierarchyTrackingLayer
-import TelegramPresentationData
+import IosappPresentationData
 import AccountContext
 import ContactsPeerItem
 import ItemListUI
-import TelegramCore
+import IosappCore
 
 final class ShimmerEffectView: UIView {
     private var currentBackgroundColor: UIColor?

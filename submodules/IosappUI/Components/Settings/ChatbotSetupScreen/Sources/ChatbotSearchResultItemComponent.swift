@@ -5,8 +5,8 @@ import ComponentFlow
 import MultilineTextComponent
 import AvatarNode
 import BundleIconComponent
-import TelegramPresentationData
-import TelegramCore
+import IosappPresentationData
+import IosappCore
 import AccountContext
 import ListSectionComponent
 import PlainButtonComponent

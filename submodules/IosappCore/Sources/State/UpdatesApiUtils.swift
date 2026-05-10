@@ -1,6 +1,6 @@
 import Foundation
 import Postbox
-import TelegramApi
+import IosappApi
 
 
 private func collectPreCachedResources(for photo: Api.Photo) -> [(MediaResource, Data)]? {

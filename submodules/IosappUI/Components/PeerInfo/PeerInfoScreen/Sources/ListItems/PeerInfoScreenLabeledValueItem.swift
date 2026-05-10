@@ -1,12 +1,12 @@
 import AsyncDisplayKit
 import Display
-import TelegramPresentationData
+import IosappPresentationData
 import AccountContext
-import TelegramCore
+import IosappCore
 import TextFormat
 import UIKit
 import AppBundle
-import TelegramStringFormatting
+import IosappStringFormatting
 import ContextUI
 import SwiftSignalKit
 import TextLoadingEffect

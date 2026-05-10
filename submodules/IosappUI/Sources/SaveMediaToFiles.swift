@@ -3,7 +3,7 @@ import AVFoundation
 import Display
 import SwiftSignalKit
 import Postbox
-import TelegramCore
+import IosappCore
 import AccountContext
 import OverlayStatusController
 import LegacyMediaPickerUI

@@ -1,7 +1,7 @@
 import Foundation
 import Security
 import SwiftSignalKit
-import TelegramCore
+import IosappCore
 import AccountContext
 
 final class WebAppSecureStorage {

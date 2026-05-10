@@ -3,7 +3,7 @@ import UIKit
 import SwiftSignalKit
 import AsyncDisplayKit
 import Display
-import TelegramPresentationData
+import IosappPresentationData
 import ActivityIndicator
 import AppBundle
 import FeaturedStickersScreen

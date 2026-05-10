@@ -6,7 +6,7 @@ import SwiftSignalKit
 import Camera
 import MetalEngine
 import MediaEditor
-import TelegramCore
+import IosappCore
 
 final class CameraVideoSource: VideoSource {
     private var device: MTLDevice

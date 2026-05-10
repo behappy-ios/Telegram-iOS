@@ -2,7 +2,7 @@ import Foundation
 import UIKit
 import Display
 import ComponentFlow
-import TelegramPresentationData
+import IosappPresentationData
 import AccountContext
 import LottieComponent
 import MultilineTextComponent
@@ -11,7 +11,7 @@ import ButtonComponent
 import BundleIconComponent
 import ListSectionComponent
 import ListActionItemComponent
-import TelegramCore
+import IosappCore
 import EmojiStatusComponent
 
 final class PasskeysScreenListComponent: Component {

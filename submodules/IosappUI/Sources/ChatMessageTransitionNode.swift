@@ -7,7 +7,7 @@ import AnimatedStickerNode
 import SwiftSignalKit
 import ContextUI
 import Postbox
-import TelegramCore
+import IosappCore
 import ReactionSelectionNode
 import ChatControllerInteraction
 import FeaturedStickersScreen

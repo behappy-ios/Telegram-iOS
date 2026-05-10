@@ -4,7 +4,7 @@ import AsyncDisplayKit
 import Display
 import ComponentFlow
 import ComponentDisplayAdapters
-import TelegramCore
+import IosappCore
 import AccountContext
 import SwiftSignalKit
 import ViewControllerComponent

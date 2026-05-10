@@ -1,5 +1,5 @@
 import Foundation
-import TelegramPresentationData
+import IosappPresentationData
 
 private let systemLocaleRegionSuffix: String = {
     let identifier = Locale.current.identifier

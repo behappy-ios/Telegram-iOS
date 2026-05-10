@@ -3,13 +3,13 @@ import UIKit
 import Display
 import AsyncDisplayKit
 import SwiftSignalKit
-import TelegramCore
-import TelegramPresentationData
+import IosappCore
+import IosappPresentationData
 import AccountContext
 import RadialStatusNode
 import PhotoResources
 import GalleryUI
-import TelegramUniversalVideoContent
+import IosappUniversalVideoContent
 import UndoUI
 
 private struct PeerAvatarImageGalleryThumbnailItem: GalleryThumbnailItem {

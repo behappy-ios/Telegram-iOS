@@ -3,9 +3,9 @@ import UIKit
 import Display
 import AsyncDisplayKit
 import WebKit
-import TelegramCore
+import IosappCore
 import SwiftSignalKit
-import TelegramPresentationData
+import IosappPresentationData
 import AccountContext
 import ShareController
 import UndoUI

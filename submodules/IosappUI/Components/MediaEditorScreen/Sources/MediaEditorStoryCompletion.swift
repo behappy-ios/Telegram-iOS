@@ -3,7 +3,7 @@ import UIKit
 import Display
 import AVFoundation
 import SwiftSignalKit
-import TelegramCore
+import IosappCore
 import TextFormat
 import Photos
 import MediaEditor

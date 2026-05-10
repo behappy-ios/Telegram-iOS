@@ -2,7 +2,7 @@ import Foundation
 import UIKit
 import SwiftSignalKit
 import Postbox
-import TelegramCore
+import IosappCore
 import AccountContext
 
 final class HashtagSearchGlobalChatContents: ChatCustomContentsProtocol {
@@ -191,7 +191,7 @@ final class HashtagSearchGlobalChatContents: ChatCustomContentsProtocol {
         
     }
     
-    func businessLinkUpdate(message: String, entities: [TelegramCore.MessageTextEntity], title: String?) {
+    func businessLinkUpdate(message: String, entities: [IosappCore.MessageTextEntity], title: String?) {
         
     }
     

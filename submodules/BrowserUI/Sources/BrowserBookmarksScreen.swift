@@ -5,11 +5,11 @@ import AsyncDisplayKit
 import Display
 import SwiftSignalKit
 import Postbox
-import TelegramCore
-import TelegramPresentationData
+import IosappCore
+import IosappPresentationData
 import PresentationDataUtils
 import ChatControllerInteraction
-import TelegramUIPreferences
+import IosappUIPreferences
 import ChatPresentationInterfaceState
 import TextFormat
 import UrlWhitelist

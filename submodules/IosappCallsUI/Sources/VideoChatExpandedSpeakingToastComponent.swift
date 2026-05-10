@@ -4,9 +4,9 @@ import Display
 import ComponentFlow
 import MultilineTextComponent
 import AvatarNode
-import TelegramPresentationData
+import IosappPresentationData
 import AccountContext
-import TelegramCore
+import IosappCore
 import Markdown
 import TextFormat
 

@@ -2,7 +2,7 @@ import UIKit
 import ComponentFlow
 import Display
 import AsyncDisplayKit
-import TelegramCore
+import IosappCore
 import Postbox
 import AccountContext
 import AvatarNode
@@ -10,7 +10,7 @@ import TextFormat
 import Markdown
 import WallpaperBackgroundNode
 import EmojiStatusComponent
-import TelegramPresentationData
+import IosappPresentationData
 import TextNodeWithEntities
 
 final class BlurredRoundedRectangle: Component {

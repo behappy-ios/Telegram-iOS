@@ -6,7 +6,7 @@ import ComponentFlow
 import ComponentDisplayAdapters
 import AnimationCache
 import MultiAnimationRenderer
-import TelegramCore
+import IosappCore
 import AccountContext
 import SwiftSignalKit
 import EmojiTextAttachmentView

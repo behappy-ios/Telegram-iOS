@@ -3,11 +3,11 @@ import UIKit
 import Display
 import SwiftSignalKit
 import AsyncDisplayKit
-import TelegramPresentationData
+import IosappPresentationData
 import AccountContext
 import Postbox
-import TelegramUIPreferences
-import TelegramCore
+import IosappUIPreferences
+import IosappCore
 
 public func chatListFilterItems(context: AccountContext) -> Signal<(Int, [(ChatListFilter, Int, Bool)]), NoError> {
     return context.engine.peers.updatedChatListFilters()

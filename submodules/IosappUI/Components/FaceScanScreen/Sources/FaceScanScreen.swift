@@ -6,8 +6,8 @@ import Display
 import SwiftSignalKit
 import Camera
 import CoreImage
-import TelegramPresentationData
-import TelegramCore
+import IosappPresentationData
+import IosappCore
 import Markdown
 import TextFormat
 import PresentationDataUtils

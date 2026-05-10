@@ -3,13 +3,13 @@ import UIKit
 import AsyncDisplayKit
 import Display
 import SwiftSignalKit
-import TelegramCore
-import TelegramPresentationData
+import IosappCore
+import IosappPresentationData
 import ItemListUI
 import LocationResources
 import AppBundle
 import LiveLocationTimerNode
-import TelegramStringFormatting
+import IosappStringFormatting
 
 public enum LocationActionListItemIcon: Equatable {
     case location

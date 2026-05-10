@@ -3,12 +3,12 @@ import UIKit
 import AsyncDisplayKit
 import Display
 import Postbox
-import TelegramCore
+import IosappCore
 import SwiftSignalKit
 import MtProtoKit
 import MessageUI
 import CoreTelephony
-import TelegramPresentationData
+import IosappPresentationData
 import PresentationDataUtils
 import TextFormat
 import AccountContext
@@ -17,7 +17,7 @@ import PhoneNumberFormat
 import LegacyComponents
 import LegacyMediaPickerUI
 import PasswordSetupUI
-import TelegramNotices
+import IosappNotices
 import AuthenticationServices
 import Markdown
 import AlertUI

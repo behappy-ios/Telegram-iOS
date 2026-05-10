@@ -4,7 +4,7 @@ import Display
 import ComponentFlow
 import ListSectionComponent
 import MapKit
-import TelegramPresentationData
+import IosappPresentationData
 import AppBundle
 
 final class MapPreviewComponent: Component {

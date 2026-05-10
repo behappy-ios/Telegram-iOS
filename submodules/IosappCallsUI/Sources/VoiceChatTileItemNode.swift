@@ -3,10 +3,10 @@ import UIKit
 import AsyncDisplayKit
 import Display
 import SwiftSignalKit
-import TelegramCore
+import IosappCore
 import AccountContext
-import TelegramUIPreferences
-import TelegramPresentationData
+import IosappUIPreferences
+import IosappPresentationData
 import AvatarNode
 
 private let backgroundCornerRadius: CGFloat = 11.0

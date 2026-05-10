@@ -6,7 +6,7 @@ import AppBundle
 import TextFieldComponent
 import BundleIconComponent
 import AccountContext
-import TelegramPresentationData
+import IosappPresentationData
 import ChatPresentationInterfaceState
 import SwiftSignalKit
 import LottieComponent

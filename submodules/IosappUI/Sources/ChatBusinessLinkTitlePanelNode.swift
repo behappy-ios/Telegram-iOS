@@ -2,7 +2,7 @@ import Foundation
 import UIKit
 import Display
 import AsyncDisplayKit
-import TelegramPresentationData
+import IosappPresentationData
 import ChatPresentationInterfaceState
 import ComponentFlow
 import AvatarNode
@@ -10,7 +10,7 @@ import MultilineTextComponent
 import PlainButtonComponent
 import ComponentDisplayAdapters
 import AccountContext
-import TelegramCore
+import IosappCore
 import SwiftSignalKit
 import UndoUI
 import LegacyChatHeaderPanelComponent

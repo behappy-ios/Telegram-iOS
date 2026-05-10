@@ -4,18 +4,18 @@ import Postbox
 import SwiftSignalKit
 import Display
 import AsyncDisplayKit
-import TelegramCore
+import IosappCore
 import SafariServices
 import MobileCoreServices
 import Intents
 import LegacyComponents
-import TelegramPresentationData
-import TelegramUIPreferences
+import IosappPresentationData
+import IosappUIPreferences
 import DeviceAccess
 import TextFormat
-import TelegramBaseController
+import IosappBaseController
 import AccountContext
-import TelegramStringFormatting
+import IosappStringFormatting
 import OverlayStatusController
 import DeviceLocationManager
 import UrlEscaping
@@ -23,8 +23,8 @@ import ContextUI
 import AlertUI
 import PresentationDataUtils
 import UndoUI
-import TelegramCallsUI
-import TelegramNotices
+import IosappCallsUI
+import IosappNotices
 import GameUI
 import ScreenCaptureDetection
 import GalleryUI
@@ -47,7 +47,7 @@ import LocalizedPeerData
 import PhoneNumberFormat
 import SettingsUI
 import UrlWhitelist
-import TelegramIntents
+import IosappIntents
 import TooltipUI
 import StatisticsUI
 import MediaResources
@@ -55,7 +55,7 @@ import GalleryData
 import ChatInterfaceState
 import InviteLinksUI
 import Markdown
-import TelegramPermissionsUI
+import IosappPermissionsUI
 import Speak
 import TranslateUI
 import UniversalMediaPlayer
@@ -130,7 +130,7 @@ import NotificationPeerExceptionController
 import AdsReportScreen
 import AdUI
 import ChatMessagePaymentAlertController
-import TelegramCallsUI
+import IosappCallsUI
 import QuickShareScreen
 import PostSuggestionsSettingsScreen
 import PromptUI
@@ -237,7 +237,7 @@ struct ScrolledToMessageId: Equatable {
     var allowedReplacementDirection: AllowedReplacementDirections
 }
 
-public final class ChatControllerImpl: TelegramBaseController, ChatController, GalleryHiddenMediaTarget, UIDropInteractionDelegate {    
+public final class ChatControllerImpl: IosappBaseController, ChatController, GalleryHiddenMediaTarget, UIDropInteractionDelegate {    
     var validLayout: ContainerViewLayout?
     
     public weak var parentController: ViewController?

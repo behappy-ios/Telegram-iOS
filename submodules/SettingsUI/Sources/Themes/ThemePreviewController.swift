@@ -4,9 +4,9 @@ import Display
 import Postbox
 import SwiftSignalKit
 import AsyncDisplayKit
-import TelegramCore
-import TelegramPresentationData
-import TelegramUIPreferences
+import IosappCore
+import IosappPresentationData
+import IosappUIPreferences
 import AccountContext
 import CounterControllerTitleView
 import WallpaperResources
@@ -14,7 +14,7 @@ import OverlayStatusController
 import AppBundle
 import PresentationDataUtils
 import UndoUI
-import TelegramNotices
+import IosappNotices
 
 public enum ThemePreviewSource {
     case settings(PresentationThemeReference, TelegramWallpaper?, Bool)

@@ -1,7 +1,7 @@
 import Foundation
 import UIKit
 import Display
-import TelegramPresentationData
+import IosappPresentationData
 import ChatMessageItemCommon
 
 public func chatMessageBubbleImageContentCorners(relativeContentPosition position: ChatMessageBubbleContentPosition, normalRadius: CGFloat, mergedRadius: CGFloat, mergedWithAnotherContentRadius: CGFloat, layoutConstants: ChatMessageItemLayoutConstants, chatPresentationData: ChatPresentationData) -> ImageCorners {

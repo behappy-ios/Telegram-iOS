@@ -3,14 +3,14 @@ import UIKit
 import Display
 import AsyncDisplayKit
 import SwiftSignalKit
-import TelegramCore
+import IosappCore
 import AccountContext
-import TelegramPresentationData
+import IosappPresentationData
 import ItemListUI
 import ComponentFlow
 import ListActionItemComponent
 import MultilineTextComponent
-import TelegramStringFormatting
+import IosappStringFormatting
 import StarsAvatarComponent
 
 final class StarsTransactionItem: ListViewItem, ItemListItem {

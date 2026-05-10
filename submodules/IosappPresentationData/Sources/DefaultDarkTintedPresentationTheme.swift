@@ -1,7 +1,7 @@
 import Foundation
 import UIKit
-import TelegramCore
-import TelegramUIPreferences
+import IosappCore
+import IosappUIPreferences
 import Postbox
 
 private let defaultDarkTintedAccentColor = UIColor(rgb: 0x2ea6ff)

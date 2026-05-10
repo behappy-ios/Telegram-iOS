@@ -3,11 +3,11 @@ import UIKit
 import Display
 import AsyncDisplayKit
 import AnimatedStickerNode
-import TelegramAnimatedStickerNode
+import IosappAnimatedStickerNode
 import SwiftSignalKit
 import AccountContext
 import YuvConversion
-import TelegramCore
+import IosappCore
 import Postbox
 import AnimationCache
 import LottieAnimationCache
@@ -16,7 +16,7 @@ import MultiAnimationRenderer
 import DCTMultiAnimationRendererImpl
 import ShimmerEffect
 import TextFormat
-import TelegramUIPreferences
+import IosappUIPreferences
 import GenerateStickerPlaceholderImage
 import UIKitRuntimeUtils
 import ComponentFlow

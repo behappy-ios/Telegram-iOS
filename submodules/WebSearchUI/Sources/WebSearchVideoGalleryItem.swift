@@ -2,13 +2,13 @@ import Foundation
 import UIKit
 import AsyncDisplayKit
 import SwiftSignalKit
-import TelegramCore
+import IosappCore
 import Display
-import TelegramPresentationData
+import IosappPresentationData
 import AccountContext
 import RadialStatusNode
 import GalleryUI
-import TelegramUniversalVideoContent
+import IosappUniversalVideoContent
 import GalleryUI
 
 class WebSearchVideoGalleryItem: GalleryItem {

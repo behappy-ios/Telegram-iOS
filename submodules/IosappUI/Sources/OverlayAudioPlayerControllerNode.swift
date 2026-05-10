@@ -5,9 +5,9 @@ import AsyncDisplayKit
 import ComponentFlow
 import SwiftSignalKit
 import Postbox
-import TelegramCore
-import TelegramPresentationData
-import TelegramUIPreferences
+import IosappCore
+import IosappPresentationData
+import IosappUIPreferences
 import AccountContext
 import DirectionalPanGesture
 import ChatPresentationInterfaceState

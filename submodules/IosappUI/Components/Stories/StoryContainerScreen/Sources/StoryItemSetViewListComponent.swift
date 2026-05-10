@@ -3,13 +3,13 @@ import UIKit
 import Display
 import ComponentFlow
 import MultilineTextComponent
-import TelegramCore
+import IosappCore
 import Postbox
-import TelegramPresentationData
+import IosappPresentationData
 import ComponentDisplayAdapters
 import AccountContext
 import SwiftSignalKit
-import TelegramStringFormatting
+import IosappStringFormatting
 import ShimmerEffect
 import PeerListItemComponent
 import AnimatedStickerComponent

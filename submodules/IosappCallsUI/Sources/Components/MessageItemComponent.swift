@@ -4,14 +4,14 @@ import UIKit
 import ComponentFlow
 import SwiftSignalKit
 import Postbox
-import TelegramCore
+import IosappCore
 import AvatarNode
 import GlassBackgroundComponent
 import MultilineTextComponent
 import MultilineTextWithEntitiesComponent
 import AccountContext
 import TextFormat
-import TelegramPresentationData
+import IosappPresentationData
 import ReactionSelectionNode
 import BundleIconComponent
 import LottieComponent

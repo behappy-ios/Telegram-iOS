@@ -1,9 +1,9 @@
 import Foundation
 import SwiftSignalKit
 import Postbox
-import TelegramCore
+import IosappCore
 import Contacts
-import TelegramUIPreferences
+import IosappUIPreferences
 import DeviceAccess
 import AccountContext
 import PhoneNumberFormat

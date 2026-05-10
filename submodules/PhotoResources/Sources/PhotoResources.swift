@@ -5,9 +5,9 @@ import SwiftSignalKit
 import Display
 import AVFoundation
 import ImageIO
-import TelegramCore
+import IosappCore
 import WebPBinding
-import TelegramUIPreferences
+import IosappUIPreferences
 import MediaResources
 import AccountContext
 import Tuples

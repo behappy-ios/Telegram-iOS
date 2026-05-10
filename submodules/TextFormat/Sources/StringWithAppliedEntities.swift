@@ -1,11 +1,11 @@
 import Foundation
 import UIKit
 import Postbox
-import TelegramCore
+import IosappCore
 import Display
 import libprisma
 import SwiftSignalKit
-import TelegramPresentationData
+import IosappPresentationData
 
 public func chatInputStateStringWithAppliedEntities(_ text: String, entities: [MessageTextEntity]) -> NSAttributedString {
     var nsString: NSString?

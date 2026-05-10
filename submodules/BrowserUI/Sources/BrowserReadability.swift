@@ -2,7 +2,7 @@ import Foundation
 import WebKit
 import AppBundle
 import Postbox
-import TelegramCore
+import IosappCore
 import InstantPageUI
 
 public class Readability: NSObject, WKNavigationDelegate {

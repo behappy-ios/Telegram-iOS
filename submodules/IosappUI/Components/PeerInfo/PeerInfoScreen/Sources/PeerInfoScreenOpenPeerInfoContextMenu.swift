@@ -4,12 +4,12 @@ import Display
 import AccountContext
 import SwiftSignalKit
 import Postbox
-import TelegramCore
+import IosappCore
 import AsyncDisplayKit
 import UndoUI
 import TranslateUI
-import TelegramStringFormatting
-import TelegramUIPreferences
+import IosappStringFormatting
+import IosappUIPreferences
 
 extension PeerInfoScreenNode {
     func openPeerInfoContextMenu(subject: PeerInfoContextSubject, sourceNode: ASDisplayNode, sourceRect: CGRect?) {

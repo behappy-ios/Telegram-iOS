@@ -4,8 +4,8 @@ import AsyncDisplayKit
 import Display
 import SwiftSignalKit
 import UniversalMediaPlayer
-import TelegramUniversalVideoContent
-import TelegramCore
+import IosappUniversalVideoContent
+import IosappCore
 import AccountContext
 import ComponentFlow
 import GradientBackground
@@ -13,7 +13,7 @@ import AnimationCache
 import MultiAnimationRenderer
 import EntityKeyboard
 import AnimatedStickerNode
-import TelegramAnimatedStickerNode
+import IosappAnimatedStickerNode
 import StickerResources
 
 private let maxVideoLoopCount = 2

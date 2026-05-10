@@ -5,9 +5,9 @@ import Display
 import ComponentFlow
 import SwiftSignalKit
 import Postbox
-import TelegramCore
+import IosappCore
 import TextFormat
-import TelegramPresentationData
+import IosappPresentationData
 import MultilineTextComponent
 import AccountContext
 import ViewControllerComponent

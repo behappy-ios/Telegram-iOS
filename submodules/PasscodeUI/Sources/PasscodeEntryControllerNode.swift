@@ -3,15 +3,15 @@ import UIKit
 import Display
 import AsyncDisplayKit
 import SwiftSignalKit
-import TelegramCore
-import TelegramPresentationData
+import IosappCore
+import IosappPresentationData
 import AccountContext
 import LocalAuth
 import AppBundle
 import PasscodeInputFieldNode
 import MonotonicTime
 import GradientBackground
-import TelegramUIPreferences
+import IosappUIPreferences
 
 private extension CGRect {
     var center: CGPoint {

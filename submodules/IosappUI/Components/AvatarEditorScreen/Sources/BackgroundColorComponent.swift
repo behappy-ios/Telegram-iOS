@@ -5,7 +5,7 @@ import AsyncDisplayKit
 import ComponentFlow
 import ViewControllerComponent
 import ComponentDisplayAdapters
-import TelegramPresentationData
+import IosappPresentationData
 import AvatarBackground
 
 final class BackgroundColorComponent: Component {

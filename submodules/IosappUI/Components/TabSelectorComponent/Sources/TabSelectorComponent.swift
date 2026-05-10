@@ -7,7 +7,7 @@ import PlainButtonComponent
 import MultilineTextWithEntitiesComponent
 import TextFormat
 import AccountContext
-import TelegramPresentationData
+import IosappPresentationData
 
 public final class TabSelectorComponent: Component {
     public enum Style {

@@ -1,7 +1,7 @@
 import Foundation
 import UIKit
-import TelegramCore
-import TelegramPresentationData
+import IosappCore
+import IosappPresentationData
 
 let walletAddressLength: Int = 48
 

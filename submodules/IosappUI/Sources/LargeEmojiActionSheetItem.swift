@@ -3,12 +3,12 @@ import UIKit
 import Display
 import Postbox
 import SwiftSignalKit
-import TelegramCore
-import TelegramPresentationData
-import TelegramUIPreferences
+import IosappCore
+import IosappPresentationData
+import IosappUIPreferences
 import AccountContext
 import AnimatedStickerNode
-import TelegramAnimatedStickerNode
+import IosappAnimatedStickerNode
 import MediaResources
 import StickerResources
 import ShimmerEffect

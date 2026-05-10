@@ -4,10 +4,10 @@ import Display
 import AsyncDisplayKit
 import SwiftSignalKit
 import Postbox
-import TelegramCore
-import TelegramPresentationData
+import IosappCore
+import IosappPresentationData
 import MergeLists
-import TelegramUIPreferences
+import IosappUIPreferences
 import ItemListUI
 import PresentationDataUtils
 import WallpaperResources
@@ -15,7 +15,7 @@ import AccountContext
 import AppBundle
 import ContextUI
 import AnimatedStickerNode
-import TelegramAnimatedStickerNode
+import IosappAnimatedStickerNode
 import ShimmerEffect
 import StickerResources
 import ListItemComponentAdaptor

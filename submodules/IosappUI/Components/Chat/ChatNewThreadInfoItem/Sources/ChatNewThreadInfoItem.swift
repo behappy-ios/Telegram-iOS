@@ -4,14 +4,14 @@ import Display
 import AsyncDisplayKit
 import SwiftSignalKit
 import Postbox
-import TelegramCore
-import TelegramPresentationData
+import IosappCore
+import IosappPresentationData
 import TextFormat
 import AccountContext
 import WallpaperBackgroundNode
 import ChatControllerInteraction
 import ChatMessageBubbleContentNode
-import TelegramStringFormatting
+import IosappStringFormatting
 import ChatControllerInteraction
 import ComponentFlow
 import BundleIconComponent

@@ -3,11 +3,11 @@ import UIKit
 import AsyncDisplayKit
 import Display
 import AnimatedStickerNode
-import TelegramCore
+import IosappCore
 import Postbox
-import TelegramPresentationData
+import IosappPresentationData
 import AccountContext
-import TelegramAnimatedStickerNode
+import IosappAnimatedStickerNode
 import ReactionButtonListComponent
 import SwiftSignalKit
 import Lottie

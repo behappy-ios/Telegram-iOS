@@ -4,7 +4,7 @@ import Display
 import ComponentFlow
 import SwiftSignalKit
 import ViewControllerComponent
-import TelegramCore
+import IosappCore
 import AccountContext
 import SheetComponent
 import ButtonComponent

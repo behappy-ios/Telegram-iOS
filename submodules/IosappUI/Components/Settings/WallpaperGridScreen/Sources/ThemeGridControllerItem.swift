@@ -1,14 +1,14 @@
 import Foundation
 import UIKit
 import Display
-import TelegramCore
+import IosappCore
 import SwiftSignalKit
 import AsyncDisplayKit
 import Postbox
 import AccountContext
 import GridMessageSelectionNode
 import SettingsThemeWallpaperNode
-import TelegramPresentationData
+import IosappPresentationData
 
 private var cachedBorderImages: [String: UIImage] = [:]
 private func generateBorderImage(theme: PresentationTheme, bordered: Bool, selected: Bool) -> UIImage? {

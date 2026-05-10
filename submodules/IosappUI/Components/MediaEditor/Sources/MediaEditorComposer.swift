@@ -6,7 +6,7 @@ import Metal
 import MetalKit
 import Display
 import SwiftSignalKit
-import TelegramCore
+import IosappCore
 import Postbox
 
 public func mediaEditorGenerateGradientImage(size: CGSize, colors: [UIColor]) -> UIImage? {

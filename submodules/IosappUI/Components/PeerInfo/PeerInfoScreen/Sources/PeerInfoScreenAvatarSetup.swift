@@ -3,7 +3,7 @@ import UIKit
 import Display
 import SSignalKit
 import SwiftSignalKit
-import TelegramCore
+import IosappCore
 import AccountContext
 import MediaEditor
 import MediaEditorScreen

@@ -2,8 +2,8 @@ import Foundation
 import Display
 import UIKit
 import ComponentFlow
-import TelegramPresentationData
-import TelegramStringFormatting
+import IosappPresentationData
+import IosappStringFormatting
 
 private let purple = UIColor(rgb: 0x3252ef)
 private let pink = UIColor(rgb: 0xe4436c)

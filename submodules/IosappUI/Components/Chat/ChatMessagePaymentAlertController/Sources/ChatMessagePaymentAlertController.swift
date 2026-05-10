@@ -6,9 +6,9 @@ import Display
 import ComponentFlow
 import ComponentDisplayAdapters
 import Postbox
-import TelegramCore
-import TelegramPresentationData
-import TelegramUIPreferences
+import IosappCore
+import IosappPresentationData
+import IosappUIPreferences
 import AccountContext
 import AppBundle
 import AvatarNode

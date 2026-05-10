@@ -1,9 +1,9 @@
 import Foundation
-import TelegramPresentationData
+import IosappPresentationData
 import AccountContext
 import Postbox
 import ChatInterfaceState
-import TelegramCore
+import IosappCore
 import SwiftSignalKit
 import TextFormat
 import UndoUI

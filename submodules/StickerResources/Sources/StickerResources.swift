@@ -3,7 +3,7 @@ import UIKit
 import Postbox
 import SwiftSignalKit
 import Display
-import TelegramCore
+import IosappCore
 import MediaResources
 import Tuples
 import ImageBlur

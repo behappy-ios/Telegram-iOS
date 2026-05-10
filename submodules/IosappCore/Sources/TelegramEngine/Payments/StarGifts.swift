@@ -2,7 +2,7 @@ import Foundation
 import Postbox
 import MtProtoKit
 import SwiftSignalKit
-import TelegramApi
+import IosappApi
 
 public final class StarGiftsList: Codable, Equatable {
     public let items: [StarGift]
@@ -2366,7 +2366,7 @@ private final class ProfileGiftsContextImpl {
         }
     }
     
-    func removeStarGift(gift: TelegramCore.StarGift) {
+    func removeStarGift(gift: IosappCore.StarGift) {
         self.gifts.removeAll(where: { $0.gift == gift })
         self.filteredGifts.removeAll(where: { $0.gift == gift })
         self.pushState()
@@ -2710,7 +2710,7 @@ public final class ProfileGiftsContext {
                 case canCraftAt
             }
             
-            public let gift: TelegramCore.StarGift
+            public let gift: IosappCore.StarGift
             public let reference: StarGiftReference?
             public let fromPeer: EnginePeer?
             public let date: Int32
@@ -2741,7 +2741,7 @@ public final class ProfileGiftsContext {
             }
             
             public init (
-                gift: TelegramCore.StarGift,
+                gift: IosappCore.StarGift,
                 reference: StarGiftReference?,
                 fromPeer: EnginePeer?,
                 date: Int32,
@@ -2794,7 +2794,7 @@ public final class ProfileGiftsContext {
             public init(from decoder: Decoder) throws {
                 let container = try decoder.container(keyedBy: CodingKeys.self)
                 
-                self.gift = try container.decode(TelegramCore.StarGift.self, forKey: .gift)
+                self.gift = try container.decode(IosappCore.StarGift.self, forKey: .gift)
                 if let reference = try container.decodeIfPresent(StarGiftReference.self, forKey: .reference) {
                     self.reference = reference
                 } else if let messageId = try container.decodeIfPresent(EngineMessage.Id.self, forKey: .messageId) {
@@ -2854,7 +2854,7 @@ public final class ProfileGiftsContext {
                 try container.encodeIfPresent(self.canCraftAt, forKey: .canCraftAt)
             }
             
-            public func withGift(_ gift: TelegramCore.StarGift) -> StarGift {
+            public func withGift(_ gift: IosappCore.StarGift) -> StarGift {
                 return StarGift(
                     gift: gift,
                     reference: self.reference,
@@ -3109,7 +3109,7 @@ public final class ProfileGiftsContext {
         }
     }
     
-    public func removeStarGift(gift: TelegramCore.StarGift) {
+    public func removeStarGift(gift: IosappCore.StarGift) {
         self.impl.with { impl in
             impl.removeStarGift(gift: gift)
         }
@@ -4108,7 +4108,7 @@ private final class ResaleGiftsContextImpl {
         self.loadMore()
     }
     
-    func removeStarGift(gift: TelegramCore.StarGift) {
+    func removeStarGift(gift: IosappCore.StarGift) {
         self.gifts.removeAll(where: { $0 == gift })
         self.pushState()
     }
@@ -4334,7 +4334,7 @@ public final class ResaleGiftsContext {
         }
     }
     
-    public func removeStarGift(gift: TelegramCore.StarGift) {
+    public func removeStarGift(gift: IosappCore.StarGift) {
         self.impl.with { impl in
             impl.removeStarGift(gift: gift)
         }

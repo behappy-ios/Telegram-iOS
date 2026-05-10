@@ -3,7 +3,7 @@ import UIKit
 import Display
 import AsyncDisplayKit
 import ContextUI
-import TelegramPresentationData
+import IosappPresentationData
 
 public final class SectionTitleContextItem: ContextMenuCustomItem {
     let text: String

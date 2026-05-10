@@ -2,10 +2,10 @@ import Foundation
 import UIKit
 import LegacyComponents
 import SwiftSignalKit
-import TelegramCore
+import IosappCore
 import SSignalKit
 import Display
-import TelegramPresentationData
+import IosappPresentationData
 import AccountContext
 import LegacyUI
 import LegacyMediaPickerUI

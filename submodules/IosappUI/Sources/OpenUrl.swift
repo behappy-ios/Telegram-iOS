@@ -1,12 +1,12 @@
 import Foundation
 import Display
 import SafariServices
-import TelegramCore
+import IosappCore
 import Postbox
 import SwiftSignalKit
 import MtProtoKit
-import TelegramPresentationData
-import TelegramUIPreferences
+import IosappPresentationData
+import IosappUIPreferences
 import AccountContext
 import UrlEscaping
 import PassportUI

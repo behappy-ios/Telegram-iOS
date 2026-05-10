@@ -3,10 +3,10 @@ import UIKit
 import Intents
 import Display
 import Postbox
-import TelegramCore
+import IosappCore
 import SwiftSignalKit
-import TelegramUIPreferences
-import TelegramPresentationData
+import IosappUIPreferences
+import IosappPresentationData
 import AvatarNode
 import AccountContext
 

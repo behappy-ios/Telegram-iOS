@@ -2,7 +2,7 @@ import Foundation
 import UIKit
 import AsyncDisplayKit
 import Display
-import TelegramPresentationData
+import IosappPresentationData
 
 private let infinityFont = Font.with(size: 15.0, design: .round, weight: .bold)
 private let textFont = Font.with(size: 13.0, design: .round, weight: .bold)

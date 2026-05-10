@@ -2,7 +2,7 @@ import Foundation
 import UIKit
 import AsyncDisplayKit
 import ContextUI
-import TelegramPresentationData
+import IosappPresentationData
 import AccountContext
 import AvatarNode
 import UniversalMediaPlayer
@@ -11,10 +11,10 @@ import ComponentFlow
 import UniversalMediaPlayer
 import AvatarVideoNode
 import SwiftSignalKit
-import TelegramUniversalVideoContent
+import IosappUniversalVideoContent
 import PeerInfoAvatarListNode
 import Postbox
-import TelegramCore
+import IosappCore
 import EmojiStatusComponent
 import GalleryUI
 import HierarchyTrackingLayer

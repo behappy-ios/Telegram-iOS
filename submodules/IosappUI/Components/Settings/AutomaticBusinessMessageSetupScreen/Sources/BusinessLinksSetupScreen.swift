@@ -3,7 +3,7 @@ import UIKit
 import Display
 import ComponentFlow
 import ListSectionComponent
-import TelegramPresentationData
+import IosappPresentationData
 import PresentationDataUtils
 import AppBundle
 import AccountContext
@@ -13,7 +13,7 @@ import BalancedTextComponent
 import LottieComponent
 import Markdown
 import SwiftSignalKit
-import TelegramCore
+import IosappCore
 import ListActionItemComponent
 import BundleIconComponent
 import TextFormat

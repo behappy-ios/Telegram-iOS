@@ -5,11 +5,11 @@ import Display
 import AccountContext
 import SwiftSignalKit
 import AVKit
-import TelegramCore
+import IosappCore
 import Postbox
 
 import UndoUI
-import TelegramPresentationData
+import IosappPresentationData
 import PresentationDataUtils
 import LottieAnimationComponent
 import ContextUI

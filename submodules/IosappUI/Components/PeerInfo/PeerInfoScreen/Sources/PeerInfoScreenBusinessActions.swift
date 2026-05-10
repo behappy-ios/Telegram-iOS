@@ -4,7 +4,7 @@ import Display
 import AccountContext
 import SwiftSignalKit
 import Postbox
-import TelegramCore
+import IosappCore
 import AsyncDisplayKit
 import ContextUI
 import UndoUI

@@ -2,10 +2,10 @@ import Foundation
 import UIKit
 import SwiftSignalKit
 import Postbox
-import TelegramCore
+import IosappCore
 import AsyncDisplayKit
 import Display
-import TelegramNotices
+import IosappNotices
 import ContextUI
 import AccountContext
 import ChatMessageItemView

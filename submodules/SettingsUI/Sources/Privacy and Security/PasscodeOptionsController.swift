@@ -3,18 +3,18 @@ import UIKit
 import Display
 import SwiftSignalKit
 import Postbox
-import TelegramCore
+import IosappCore
 import LegacyComponents
 import LocalAuthentication
-import TelegramPresentationData
-import TelegramUIPreferences
+import IosappPresentationData
+import IosappUIPreferences
 import ItemListUI
 import PresentationDataUtils
 import AccountContext
 import LocalAuth
 import PasscodeUI
-import TelegramStringFormatting
-import TelegramIntents
+import IosappStringFormatting
+import IosappIntents
 
 private final class PasscodeOptionsControllerArguments {
     let turnPasscodeOff: () -> Void

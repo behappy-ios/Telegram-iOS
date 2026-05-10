@@ -3,11 +3,11 @@ import UIKit
 import Display
 import SwiftSignalKit
 import Postbox
-import TelegramCore
-import TelegramPresentationData
+import IosappCore
+import IosappPresentationData
 import ItemListUI
 import PresentationDataUtils
-import TelegramStringFormatting
+import IosappStringFormatting
 import OverlayStatusController
 import AccountContext
 import AlertUI

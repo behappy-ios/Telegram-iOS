@@ -2,13 +2,13 @@ import Foundation
 import UIKit
 import Display
 import AsyncDisplayKit
-import TelegramCore
+import IosappCore
 import SwiftSignalKit
 import AccountContext
 import SolidRoundedButtonNode
-import TelegramPresentationData
+import IosappPresentationData
 import PresentationDataUtils
-import TelegramStringFormatting
+import IosappStringFormatting
 
 public enum ChatTimerScreenStyle {
     case `default`

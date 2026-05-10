@@ -1,12 +1,12 @@
 import Foundation
 import UIKit
 import Display
-import TelegramCore
+import IosappCore
 import Postbox
 import AsyncDisplayKit
 import UIKit
 import SwiftSignalKit
-import TelegramPresentationData
+import IosappPresentationData
 import ActivityIndicator
 import OverlayStatusController
 import AccountContext

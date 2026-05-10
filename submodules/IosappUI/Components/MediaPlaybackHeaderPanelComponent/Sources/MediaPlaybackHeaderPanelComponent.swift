@@ -1,17 +1,17 @@
 import Foundation
 import UIKit
 import Display
-import TelegramPresentationData
+import IosappPresentationData
 import ComponentFlow
 import ComponentDisplayAdapters
 import AccountContext
-import TelegramCore
+import IosappCore
 import GlobalControlPanelsContext
 import SwiftSignalKit
 import UniversalMediaPlayer
 import UndoUI
 import OverlayStatusController
-import TelegramUIPreferences
+import IosappUIPreferences
 import Postbox
 import PresentationDataUtils
 

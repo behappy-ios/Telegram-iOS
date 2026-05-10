@@ -1,8 +1,8 @@
 import Foundation
 import SwiftSignalKit
-import TelegramCore
+import IosappCore
 import Network
-import TelegramUIPreferences
+import IosappUIPreferences
 import CoreMedia
 
 import TgVoipWebrtc

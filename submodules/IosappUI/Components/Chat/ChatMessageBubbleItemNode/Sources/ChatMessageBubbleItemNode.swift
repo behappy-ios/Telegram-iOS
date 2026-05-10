@@ -4,15 +4,15 @@ import AsyncDisplayKit
 import Display
 import SwiftSignalKit
 import Postbox
-import TelegramCore
-import TelegramPresentationData
-import TelegramUIPreferences
+import IosappCore
+import IosappPresentationData
+import IosappUIPreferences
 import TextFormat
 import AccountContext
 import TemporaryCachedPeerDataManager
 import LocalizedPeerData
 import ContextUI
-import TelegramUniversalVideoContent
+import IosappUniversalVideoContent
 import MosaicLayout
 import TextSelectionNode
 import PlatformRestrictionMatching
@@ -21,7 +21,7 @@ import PersistentStringHash
 import GridMessageSelectionNode
 import AppBundle
 import Markdown
-import TelegramStringFormatting
+import IosappStringFormatting
 import WallpaperBackgroundNode
 import ChatPresentationInterfaceState
 import ChatMessageBackground
@@ -81,7 +81,7 @@ import ChatMessageStarsMediaInfoNode
 import UIKitRuntimeUtils
 import ChatMessageTransitionNode
 import AnimatedStickerNode
-import TelegramAnimatedStickerNode
+import IosappAnimatedStickerNode
 import LottieMetal
 import AvatarNode
 import ChatMessageSuggestedPostInfoNode

@@ -4,7 +4,7 @@ import Display
 import ComponentFlow
 import AnimatedStickerComponent
 import ButtonComponent
-import TelegramPresentationData
+import IosappPresentationData
 import AccountContext
 import MultilineTextComponent
 import BalancedTextComponent

@@ -2,12 +2,12 @@ import Foundation
 import UIKit
 import Display
 import AsyncDisplayKit
-import TelegramCore
+import IosappCore
 import SafariServices
-import TelegramPresentationData
+import IosappPresentationData
 import AccountContext
 import OpenInExternalAppUI
-import TelegramUIPreferences
+import IosappUIPreferences
 
 class InstantPageReferenceControllerNode: ViewControllerTracingNode, ASScrollViewDelegate {
     private let context: AccountContext

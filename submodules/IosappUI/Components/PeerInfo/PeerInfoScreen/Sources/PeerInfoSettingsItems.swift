@@ -2,8 +2,8 @@ import Foundation
 import UIKit
 import Display
 import AccountContext
-import TelegramPresentationData
-import TelegramCore
+import IosappPresentationData
+import IosappCore
 import Postbox
 import PhoneNumberFormat
 import ItemListUI
@@ -11,7 +11,7 @@ import SwiftSignalKit
 import PhotoResources
 import ItemListPeerItem
 import DeviceAccess
-import TelegramStringFormatting
+import IosappStringFormatting
 import PeerNameColorItem
 
 enum SettingsSection: Int, CaseIterable {

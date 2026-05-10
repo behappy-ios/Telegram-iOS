@@ -3,7 +3,7 @@ import UIKit
 import Display
 import ComponentFlow
 import MultilineTextComponent
-import TelegramPresentationData
+import IosappPresentationData
 import SwitchComponent
 
 final class OptionListItemComponent: Component {

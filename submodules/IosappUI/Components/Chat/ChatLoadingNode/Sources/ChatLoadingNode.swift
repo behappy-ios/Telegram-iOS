@@ -4,8 +4,8 @@ import AsyncDisplayKit
 import SwiftSignalKit
 import Display
 import Postbox
-import TelegramCore
-import TelegramPresentationData
+import IosappCore
+import IosappPresentationData
 import ActivityIndicator
 import WallpaperBackgroundNode
 import ShimmerEffect

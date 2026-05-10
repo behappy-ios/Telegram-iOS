@@ -3,9 +3,9 @@ import UIKit
 import Display
 import ComponentFlow
 import SwiftSignalKit
-import TelegramCore
-import TelegramPresentationData
-import TelegramStringFormatting
+import IosappCore
+import IosappPresentationData
+import IosappStringFormatting
 import ViewControllerComponent
 import BundleIconComponent
 import BalancedTextComponent

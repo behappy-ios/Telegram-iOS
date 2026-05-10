@@ -4,14 +4,14 @@ import Display
 import AccountContext
 import SwiftSignalKit
 import Postbox
-import TelegramCore
+import IosappCore
 import AsyncDisplayKit
 import ContextUI
 import CreateExternalMediaStreamScreen
 import OverlayStatusController
-import TelegramPresentationData
+import IosappPresentationData
 import PresentationDataUtils
-import TelegramCallsUI
+import IosappCallsUI
 import AvatarNode
 
 extension PeerInfoScreenNode {

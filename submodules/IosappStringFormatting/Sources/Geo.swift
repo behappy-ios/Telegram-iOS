@@ -1,6 +1,6 @@
 import Foundation
 import MapKit
-import TelegramPresentationData
+import IosappPresentationData
 
 private var sharedShortDistanceFormatter: MKDistanceFormatter?
 public func shortStringForDistance(strings: PresentationStrings, distance: Int32) -> String {

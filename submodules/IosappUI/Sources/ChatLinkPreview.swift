@@ -1,8 +1,8 @@
 import Foundation
 import Postbox
-import TelegramCore
+import IosappCore
 import SwiftSignalKit
-import TelegramNotices
+import IosappNotices
 
 final class InteractiveChatLinkPreviewsResult {
     let f: (Bool) -> Void

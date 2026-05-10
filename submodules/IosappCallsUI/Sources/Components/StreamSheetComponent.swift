@@ -6,7 +6,7 @@ import AccountContext
 import AVKit
 import MultilineTextComponent
 import Display
-import TelegramPresentationData
+import IosappPresentationData
 
 final class StreamSheetComponent: CombinedComponent {
     let strings: PresentationStrings

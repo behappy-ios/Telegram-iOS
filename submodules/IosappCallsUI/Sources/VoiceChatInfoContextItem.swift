@@ -3,10 +3,10 @@ import UIKit
 import Display
 import AsyncDisplayKit
 import SwiftSignalKit
-import TelegramPresentationData
+import IosappPresentationData
 import AppBundle
 import ContextUI
-import TelegramStringFormatting
+import IosappStringFormatting
 
 public final class VoiceChatInfoContextItem: ContextMenuCustomItem {
     let text: String

@@ -4,9 +4,9 @@ import Display
 import SSignalKit
 import SwiftSignalKit
 import Postbox
-import TelegramCore
-import TelegramPresentationData
-import TelegramUIPreferences
+import IosappCore
+import IosappPresentationData
+import IosappUIPreferences
 import LegacyComponents
 import ItemListUI
 import PresentationDataUtils

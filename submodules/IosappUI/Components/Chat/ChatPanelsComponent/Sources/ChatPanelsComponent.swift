@@ -3,8 +3,8 @@ import UIKit
 import Display
 import ComponentFlow
 import AccountContext
-import TelegramPresentationData
-import TelegramCore
+import IosappPresentationData
+import IosappCore
 import GlassBackgroundComponent
 
 public final class ChatPanelsComponent: Component {    

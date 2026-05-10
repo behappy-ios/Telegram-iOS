@@ -5,9 +5,9 @@ import Display
 import ComponentFlow
 import SwiftSignalKit
 import Postbox
-import TelegramCore
-import TelegramPresentationData
-import TelegramUIPreferences
+import IosappCore
+import IosappPresentationData
+import IosappUIPreferences
 import AccountContext
 import AppBundle
 import AvatarNode
@@ -16,7 +16,7 @@ import ChatMessagePaymentAlertController
 import TabSelectorComponent
 import BundleIconComponent
 import MultilineTextComponent
-import TelegramStringFormatting
+import IosappStringFormatting
 import TooltipUI
 import AlertComponent
 import AlertTransferHeaderComponent

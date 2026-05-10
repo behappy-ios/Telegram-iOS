@@ -3,11 +3,11 @@ import UIKit
 import Display
 import AsyncDisplayKit
 import Postbox
-import TelegramCore
-import TelegramPresentationData
+import IosappCore
+import IosappPresentationData
 import LocalizedPeerData
-import TelegramStringFormatting
-import TelegramNotices
+import IosappStringFormatting
+import IosappNotices
 import AnimatedAvatarSetNode
 import AccountContext
 import ChatPresentationInterfaceState

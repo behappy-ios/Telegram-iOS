@@ -4,11 +4,11 @@ import AsyncDisplayKit
 import Display
 import ComponentFlow
 import AccountContext
-import TelegramPresentationData
+import IosappPresentationData
 import SwiftSignalKit
 import AnimationCache
 import MultiAnimationRenderer
-import TelegramCore
+import IosappCore
 import Postbox
 import ChatListHeaderComponent
 import ActionPanelComponent

@@ -3,11 +3,11 @@ import UIKit
 import Display
 import ComponentFlow
 import MultilineTextComponent
-import TelegramPresentationData
+import IosappPresentationData
 import BundleIconComponent
 import MetalEngine
 import CallScreen
-import TelegramCore
+import IosappCore
 import AccountContext
 import SwiftSignalKit
 import DirectMediaImageCache

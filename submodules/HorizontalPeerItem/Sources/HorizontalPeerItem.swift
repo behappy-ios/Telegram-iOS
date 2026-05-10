@@ -2,16 +2,16 @@ import Foundation
 import UIKit
 import Display
 import AsyncDisplayKit
-import TelegramCore
+import IosappCore
 import Postbox
 import SwiftSignalKit
-import TelegramPresentationData
-import TelegramStringFormatting
+import IosappPresentationData
+import IosappStringFormatting
 import PeerOnlineMarkerNode
 import SelectablePeerNode
 import ContextUI
 import AccountContext
-import TelegramUIPreferences
+import IosappUIPreferences
 import AnimationCache
 import MultiAnimationRenderer
 

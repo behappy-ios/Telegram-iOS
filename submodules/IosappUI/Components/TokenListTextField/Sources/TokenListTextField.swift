@@ -3,9 +3,9 @@ import UIKit
 import Display
 import ComponentFlow
 import AccountContext
-import TelegramPresentationData
+import IosappPresentationData
 import AsyncDisplayKit
-import TelegramCore
+import IosappCore
 import ComponentDisplayAdapters
 
 public final class TokenListTextField: Component {

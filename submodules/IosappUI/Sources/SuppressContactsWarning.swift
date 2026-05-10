@@ -2,12 +2,12 @@ import Foundation
 import AsyncDisplayKit
 import Display
 import SwiftSignalKit
-import TelegramCore
+import IosappCore
 import DeviceAccess
 import AccountContext
 import AlertUI
 import PresentationDataUtils
-import TelegramNotices
+import IosappNotices
 
 func presentContactsWarningSuppressionImpl(context: AccountContext, present: (ViewController, Any?) -> Void) {
     let presentationData = context.sharedContext.currentPresentationData.with { $0 }

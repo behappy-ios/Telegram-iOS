@@ -13,7 +13,7 @@ let package = Package(
             targets: ["TelegramMediaPlayer"]),
     ],
     dependencies: [
-        .package(name: "TelegramCore", path: "../TelegramCore"),
+        .package(name: "IosappCore", path: "../IosappCore"),
         .package(name: "Postbox", path: "../Postbox"),
         .package(name: "FFMpegBinding", path: "../FFMpegBinding"),
         .package(name: "YuvConversion", path: "../YuvConversion"),
@@ -28,7 +28,7 @@ let package = Package(
         // Targets can depend on other targets in this package, and on products in packages this package depends on.
         .target(
             name: "TelegramMediaPlayer",
-            dependencies: [.product(name: "TelegramCore", package: "TelegramCore", condition: nil),
+            dependencies: [.product(name: "IosappCore", package: "IosappCore", condition: nil),
                            .product(name: "Postbox", package: "Postbox", condition: nil),
                            .product(name: "FFMpegBinding", package: "FFMpegBinding", condition: nil),
                            .product(name: "YuvConversion", package: "YuvConversion", condition: nil),

@@ -4,12 +4,12 @@ import Display
 import ComponentFlow
 import SwiftSignalKit
 import MultilineTextComponent
-import TelegramPresentationData
+import IosappPresentationData
 import AppBundle
 import BundleIconComponent
 import PlainButtonComponent
 import Markdown
-import TelegramCore
+import IosappCore
 import AccountContext
 
 public final class BirthdayPickerContentComponent: Component {

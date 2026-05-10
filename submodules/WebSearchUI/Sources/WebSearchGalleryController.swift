@@ -4,12 +4,12 @@ import Display
 import QuickLook
 import SwiftSignalKit
 import AsyncDisplayKit
-import TelegramCore
+import IosappCore
 import LegacyComponents
-import TelegramPresentationData
+import IosappPresentationData
 import AccountContext
 import GalleryUI
-import TelegramUniversalVideoContent
+import IosappUniversalVideoContent
 
 final class WebSearchGalleryControllerInteraction {
     let dismiss: (Bool) -> Void

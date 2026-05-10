@@ -7,13 +7,13 @@ import AccountContext
 import SheetComponent
 import ButtonComponent
 import PlainButtonComponent
-import TelegramCore
+import IosappCore
 import SwiftSignalKit
 import MultilineTextComponent
 import BalancedTextComponent
-import TelegramStringFormatting
+import IosappStringFormatting
 import AvatarNode
-import TelegramPresentationData
+import IosappPresentationData
 import PhoneNumberFormat
 import BundleIconComponent
 import UndoUI

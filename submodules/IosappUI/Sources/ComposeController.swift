@@ -4,14 +4,14 @@ import Display
 import AsyncDisplayKit
 import Postbox
 import SwiftSignalKit
-import TelegramCore
-import TelegramPresentationData
+import IosappCore
+import IosappPresentationData
 import AccountContext
 import ShareController
 import AlertUI
 import PresentationDataUtils
 import SearchUI
-import TelegramPermissionsUI
+import IosappPermissionsUI
 import AppBundle
 import DeviceAccess
 

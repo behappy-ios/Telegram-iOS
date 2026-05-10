@@ -5,10 +5,10 @@ import AsyncDisplayKit
 import ComponentFlow
 import SwiftSignalKit
 import AccountContext
-import TelegramCore
+import IosappCore
 import MultilineTextComponent
 import AvatarNode
-import TelegramPresentationData
+import IosappPresentationData
 import CheckNode
 import BundleIconComponent
 

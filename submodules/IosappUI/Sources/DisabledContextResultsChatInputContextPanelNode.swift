@@ -1,11 +1,11 @@
 import Foundation
 import UIKit
-import TelegramCore
+import IosappCore
 import AsyncDisplayKit
 import Display
-import TelegramPresentationData
-import TelegramStringFormatting
-import TelegramUIPreferences
+import IosappPresentationData
+import IosappStringFormatting
+import IosappUIPreferences
 import AccountContext
 import ChatPresentationInterfaceState
 import ChatControllerInteraction

@@ -3,7 +3,7 @@ import UIKit
 import Display
 import ComponentFlow
 import MultilineTextComponent
-import TelegramPresentationData
+import IosappPresentationData
 import HierarchyTrackingLayer
 import ChatTitleActivityNode
 import AnimatedTextComponent

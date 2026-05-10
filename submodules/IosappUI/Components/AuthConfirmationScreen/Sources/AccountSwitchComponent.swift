@@ -3,8 +3,8 @@ import UIKit
 import AsyncDisplayKit
 import Display
 import ComponentFlow
-import TelegramCore
-import TelegramPresentationData
+import IosappCore
+import IosappPresentationData
 import GlassBackgroundComponent
 import AvatarComponent
 import BundleIconComponent

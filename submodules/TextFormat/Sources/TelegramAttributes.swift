@@ -1,5 +1,5 @@
 import Foundation
-import TelegramCore
+import IosappCore
 
 public final class TelegramHashtag {
     public let peerName: String?

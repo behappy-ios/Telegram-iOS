@@ -4,7 +4,7 @@ import Display
 import AsyncDisplayKit
 import SwiftSignalKit
 import MediaPlayer
-import TelegramPresentationData
+import IosappPresentationData
 
 enum CallControllerButtonsSpeakerMode: Equatable {
     enum BluetoothType: Equatable {

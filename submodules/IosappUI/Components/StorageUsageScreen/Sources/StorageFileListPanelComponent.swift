@@ -6,13 +6,13 @@ import ComponentFlow
 import SwiftSignalKit
 import ViewControllerComponent
 import ComponentDisplayAdapters
-import TelegramPresentationData
+import IosappPresentationData
 import AccountContext
-import TelegramCore
+import IosappCore
 import MultilineTextComponent
 import EmojiStatusComponent
 import Postbox
-import TelegramStringFormatting
+import IosappStringFormatting
 import CheckNode
 import AvatarNode
 import PhotoResources

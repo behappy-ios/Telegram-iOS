@@ -1,16 +1,16 @@
 import Foundation
 import UIKit
 import SwiftSignalKit
-import TelegramCore
+import IosappCore
 import Postbox
-import TelegramUIPreferences
+import IosappUIPreferences
 import LegacyComponents
 import TextFormat
 import AccountContext
 import Emoji
 import SearchPeerMembers
 import DeviceLocationManager
-import TelegramNotices
+import IosappNotices
 import ChatPresentationInterfaceState
 import ChatContextQuery
 

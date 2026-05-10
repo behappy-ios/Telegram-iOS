@@ -10,7 +10,7 @@ import EntityKeyboard
 import AnimationCache
 import MultiAnimationRenderer
 import Postbox
-import TelegramCore
+import IosappCore
 import ComponentDisplayAdapters
 import TextFormat
 import PagerComponent
@@ -19,11 +19,11 @@ import PremiumUI
 import AudioToolbox
 import UndoUI
 import ContextUI
-import TelegramPresentationData
-import TelegramNotices
+import IosappPresentationData
+import IosappNotices
 import StickerPeekUI
 import ChatInputNode
-import TelegramUIPreferences
+import IosappUIPreferences
 import MultiplexedVideoNode
 import ChatControllerInteraction
 import FeaturedStickersScreen

@@ -2,18 +2,18 @@ import Foundation
 import UIKit
 import AsyncDisplayKit
 import Display
-import TelegramCore
+import IosappCore
 import SwiftSignalKit
-import TelegramPresentationData
+import IosappPresentationData
 import TextFormat
 import AuthenticationServices
 import CodeInputView
 import PhoneNumberFormat
 import AnimatedStickerNode
-import TelegramAnimatedStickerNode
+import IosappAnimatedStickerNode
 import SolidRoundedButtonNode
 import AuthorizationUtils
-import TelegramStringFormatting
+import IosappStringFormatting
 import TextNodeWithEntities
 
 final class AuthorizationSequenceCodeEntryControllerNode: ASDisplayNode, UITextFieldDelegate {

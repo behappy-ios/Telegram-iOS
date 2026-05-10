@@ -2,10 +2,10 @@ import Foundation
 import UserNotifications
 import SwiftSignalKit
 import Postbox
-import TelegramCore
+import IosappCore
 import BuildConfig
 import OpenSSLEncryptionProvider
-import TelegramUIPreferences
+import IosappUIPreferences
 import WebPBinding
 import RLottieBinding
 import GZip

@@ -1,9 +1,9 @@
 import Foundation
 import UIKit
 import Postbox
-import TelegramCore
-import TelegramPresentationData
-import TelegramUIPreferences
+import IosappCore
+import IosappPresentationData
+import IosappUIPreferences
 import TextFormat
 import LocalizedPeerData
 import Display

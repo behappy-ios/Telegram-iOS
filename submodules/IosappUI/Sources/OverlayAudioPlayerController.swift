@@ -1,10 +1,10 @@
 import Foundation
 import UIKit
-import TelegramCore
+import IosappCore
 import Postbox
 import Display
 import SwiftSignalKit
-import TelegramUIPreferences
+import IosappUIPreferences
 import AccountContext
 import UndoUI
 import AttachmentFileController

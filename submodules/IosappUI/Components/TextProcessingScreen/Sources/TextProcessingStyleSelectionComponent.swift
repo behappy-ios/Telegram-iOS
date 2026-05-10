@@ -1,10 +1,10 @@
 import Foundation
 import UIKit
 import Display
-import TelegramPresentationData
+import IosappPresentationData
 import ComponentFlow
 import MultilineTextComponent
-import TelegramCore
+import IosappCore
 import EmojiStatusComponent
 import AccountContext
 

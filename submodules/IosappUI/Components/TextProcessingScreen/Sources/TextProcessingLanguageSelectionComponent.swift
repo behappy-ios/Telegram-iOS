@@ -1,12 +1,12 @@
 import Foundation
 import UIKit
 import Display
-import TelegramPresentationData
+import IosappPresentationData
 import ComponentFlow
 import GlassBackgroundComponent
 import MultilineTextComponent
 import BundleIconComponent
-import TelegramCore
+import IosappCore
 import TranslateUI
 import EmojiStatusComponent
 import AccountContext

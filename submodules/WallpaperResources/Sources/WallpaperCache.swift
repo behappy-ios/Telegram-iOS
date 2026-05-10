@@ -2,9 +2,9 @@ import Foundation
 import UIKit
 import SwiftSignalKit
 import Postbox
-import TelegramApi
-import TelegramCore
-import TelegramUIPreferences
+import IosappApi
+import IosappCore
+import IosappUIPreferences
 import PersistentStringHash
 
 public final class CachedWallpaper: Codable {

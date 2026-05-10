@@ -3,10 +3,10 @@ import UIKit
 import SwiftSignalKit
 import Display
 import AsyncDisplayKit
-import TelegramCore
+import IosappCore
 import LegacyComponents
-import TelegramUIPreferences
-import TelegramPresentationData
+import IosappUIPreferences
+import IosappPresentationData
 import AccountContext
 import AttachmentUI
 

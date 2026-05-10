@@ -3,7 +3,7 @@ import UIKit
 import Display
 import AccountContext
 import Postbox
-import TelegramCore
+import IosappCore
 
 func entitiesPath() -> String {
     return NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] + "/mediaEntities"

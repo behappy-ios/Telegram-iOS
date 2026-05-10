@@ -2,9 +2,9 @@ import Display
 import UIKit
 import AsyncDisplayKit
 import Postbox
-import TelegramCore
+import IosappCore
 import SwiftSignalKit
-import TelegramPresentationData
+import IosappPresentationData
 import AccountContext
 import SearchBarNode
 import SearchUI

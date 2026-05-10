@@ -2,7 +2,7 @@ import Foundation
 import UIKit
 import Postbox
 import SwiftSignalKit
-import TelegramCore
+import IosappCore
 import ImageIO
 import MobileCoreServices
 import Display
@@ -13,10 +13,10 @@ import MediaResources
 import PhotoResources
 import LocationResources
 import ImageBlur
-import TelegramAnimatedStickerNode
+import IosappAnimatedStickerNode
 import WallpaperResources
 import GZip
-import TelegramUniversalVideoContent
+import IosappUniversalVideoContent
 import GradientBackground
 import Svg
 import UniversalMediaPlayer

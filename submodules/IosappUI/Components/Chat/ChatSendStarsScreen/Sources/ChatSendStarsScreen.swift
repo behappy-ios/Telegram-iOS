@@ -1,12 +1,12 @@
 import Foundation
 import UIKit
 import AsyncDisplayKit
-import TelegramPresentationData
+import IosappPresentationData
 import ChatPresentationInterfaceState
 import ComponentFlow
 import AccountContext
 import ViewControllerComponent
-import TelegramCore
+import IosappCore
 import SwiftSignalKit
 import Display
 import MultilineTextComponent
@@ -23,7 +23,7 @@ import TextFormat
 import CheckComponent
 import ContextUI
 import StarsBalanceOverlayComponent
-import TelegramStringFormatting
+import IosappStringFormatting
 import ChatScheduleTimeController
 import StoryLiveChatMessageComponent
 

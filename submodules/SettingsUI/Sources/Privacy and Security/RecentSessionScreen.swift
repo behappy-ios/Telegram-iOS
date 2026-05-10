@@ -2,10 +2,10 @@ import Foundation
 import UIKit
 import Display
 import AsyncDisplayKit
-import TelegramCore
+import IosappCore
 import SwiftSignalKit
 import AccountContext
-import TelegramPresentationData
+import IosappPresentationData
 import ComponentFlow
 import ViewControllerComponent
 import SheetComponent
@@ -20,7 +20,7 @@ import LottieAnimationComponent
 import ListSectionComponent
 import ListActionItemComponent
 import AvatarComponent
-import TelegramStringFormatting
+import IosappStringFormatting
 import Markdown
 
 private final class RecentSessionSheetContent: CombinedComponent {

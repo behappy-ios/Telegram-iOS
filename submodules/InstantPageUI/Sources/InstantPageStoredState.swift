@@ -1,8 +1,8 @@
 import Foundation
 import UIKit
 import SwiftSignalKit
-import TelegramCore
-import TelegramUIPreferences
+import IosappCore
+import IosappUIPreferences
 
 public final class InstantPageStoredDetailsState: Codable {
     public let index: Int32

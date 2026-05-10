@@ -5,10 +5,10 @@ import Display
 import ComponentFlow
 import SwiftSignalKit
 import Postbox
-import TelegramCore
+import IosappCore
 import Markdown
 import TextFormat
-import TelegramPresentationData
+import IosappPresentationData
 import ViewControllerComponent
 import SheetComponent
 import BalancedTextComponent
@@ -19,7 +19,7 @@ import ItemListUI
 import AccountContext
 import PresentationDataUtils
 import ListSectionComponent
-import TelegramStringFormatting
+import IosappStringFormatting
 import UndoUI
 import ListActionItemComponent
 import ChatScheduleTimeController

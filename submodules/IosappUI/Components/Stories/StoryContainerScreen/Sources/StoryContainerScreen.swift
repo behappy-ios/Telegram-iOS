@@ -7,7 +7,7 @@ import AccountContext
 import SwiftSignalKit
 import AppBundle
 import MessageInputPanelComponent
-import TelegramCore
+import IosappCore
 import Postbox
 import UndoUI
 import ReactionSelectionNode
@@ -19,7 +19,7 @@ import VolumeButtons
 import TooltipUI
 import ChatEntityKeyboardInputNode
 import notify
-import TelegramNotices
+import IosappNotices
 
 func hasFirstResponder(_ view: UIView) -> Bool {
     if view.isFirstResponder {

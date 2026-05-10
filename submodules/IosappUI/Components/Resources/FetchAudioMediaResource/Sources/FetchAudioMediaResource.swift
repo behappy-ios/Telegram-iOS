@@ -2,7 +2,7 @@ import Foundation
 import UIKit
 import Postbox
 import SwiftSignalKit
-import TelegramCore
+import IosappCore
 import FFMpegBinding
 import LocalMediaResources
 

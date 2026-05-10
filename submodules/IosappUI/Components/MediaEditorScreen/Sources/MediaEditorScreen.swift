@@ -7,10 +7,10 @@ import ComponentFlow
 import SwiftSignalKit
 import ViewControllerComponent
 import ComponentDisplayAdapters
-import TelegramPresentationData
+import IosappPresentationData
 import AccountContext
 import Postbox
-import TelegramCore
+import IosappCore
 import MultilineTextComponent
 import DrawingUI
 import MediaEditor
@@ -36,7 +36,7 @@ import LocationUI
 import LegacyMediaPickerUI
 import ReactionSelectionNode
 import VolumeSliderContextItem
-import TelegramStringFormatting
+import IosappStringFormatting
 import ForwardInfoPanelComponent
 import ContextReferenceButtonComponent
 import MediaScrubberComponent
@@ -49,7 +49,7 @@ import StickerPickerScreen
 import UIKitRuntimeUtils
 import ImageObjectSeparation
 import SaveProgressScreen
-import TelegramNotices
+import IosappNotices
 import AttachmentFileController
 import SaveToCameraRoll
 

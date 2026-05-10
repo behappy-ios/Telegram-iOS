@@ -3,10 +3,10 @@ import UIKit
 import Display
 import AsyncDisplayKit
 import UIKit
-import TelegramCore
+import IosappCore
 import SwiftSignalKit
 import Photos
-import TelegramPresentationData
+import IosappPresentationData
 import AccountContext
 
 final class ChatSecretAutoremoveTimerActionSheetController: ActionSheetController {

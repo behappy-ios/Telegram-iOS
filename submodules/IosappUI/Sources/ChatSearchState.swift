@@ -1,6 +1,6 @@
 import Foundation
 import Postbox
-import TelegramCore
+import IosappCore
 
 struct ChatSearchState: Equatable {
     let query: String

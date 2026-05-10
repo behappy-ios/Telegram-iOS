@@ -2,7 +2,7 @@ import Foundation
 import UIKit
 import SwiftSignalKit
 import Postbox
-import TelegramCore
+import IosappCore
 import AsyncDisplayKit
 import Display
 import ContextUI
@@ -12,8 +12,8 @@ import ChatMessageItemView
 import ChatMessageItemCommon
 import ChatControllerInteraction
 import Pasteboard
-import TelegramStringFormatting
-import TelegramPresentationData
+import IosappStringFormatting
+import IosappPresentationData
 import AvatarNode
 import ChatPresentationInterfaceState
 

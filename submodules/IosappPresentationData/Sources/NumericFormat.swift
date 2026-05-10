@@ -1,6 +1,6 @@
 import Foundation
 import PresentationStrings
-import TelegramCore
+import IosappCore
 
 public func compactNumericCountString(_ count: Int, decimalSeparator: String = ".", showDecimalPart: Bool = true) -> String {
     if count >= 1000 * 1000 {

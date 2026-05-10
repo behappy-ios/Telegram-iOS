@@ -5,7 +5,7 @@ import AsyncDisplayKit
 import ComponentFlow
 import SwiftSignalKit
 import AnimationUI
-import TelegramPresentationData
+import IosappPresentationData
 
 public final class MultilineText: Component {
     public let text: String

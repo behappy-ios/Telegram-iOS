@@ -2,9 +2,9 @@ import Foundation
 import UIKit
 import AsyncDisplayKit
 import Display
-import TelegramPresentationData
+import IosappPresentationData
 import SwiftSignalKit
-import TelegramCore
+import IosappCore
 import ReactionSelectionNode
 import ComponentFlow
 import TabSelectorComponent

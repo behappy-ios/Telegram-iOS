@@ -1,11 +1,11 @@
 import Foundation
 import UIKit
 import AsyncDisplayKit
-import TelegramCore
+import IosappCore
 import Postbox
 import SwiftSignalKit
 import Display
-import TelegramPresentationData
+import IosappPresentationData
 import MergeLists
 import AccountContext
 

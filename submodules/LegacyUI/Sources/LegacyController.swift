@@ -4,7 +4,7 @@ import Display
 import SSignalKit
 import SwiftSignalKit
 import LegacyComponents
-import TelegramPresentationData
+import IosappPresentationData
 import Camera
 import DeviceModel
 import TooltipUI

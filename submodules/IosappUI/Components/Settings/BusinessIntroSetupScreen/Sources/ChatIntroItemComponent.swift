@@ -3,14 +3,14 @@ import UIKit
 import Display
 import ComponentFlow
 import ListSectionComponent
-import TelegramPresentationData
+import IosappPresentationData
 import AppBundle
 import AccountContext
 import ChatEmptyNode
 import AsyncDisplayKit
 import WallpaperBackgroundNode
 import ComponentDisplayAdapters
-import TelegramCore
+import IosappCore
 import ChatPresentationInterfaceState
 
 final class ChatIntroItemComponent: Component {

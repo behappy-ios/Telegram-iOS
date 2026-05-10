@@ -4,7 +4,7 @@ import Display
 import UniversalMediaPlayer
 import AccountContext
 import SwiftSignalKit
-import TelegramCore
+import IosappCore
 import CoreMedia
 
 public protocol BatchVideoRenderingContextTarget: AnyObject {

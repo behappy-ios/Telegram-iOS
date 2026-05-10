@@ -1,12 +1,12 @@
 import Foundation
 import UIKit
 import Display
-import TelegramPresentationData
+import IosappPresentationData
 import ComponentFlow
 import ComponentDisplayAdapters
 import AccountContext
 import PresentationDataUtils
-import TelegramCore
+import IosappCore
 
 public final class MessageFeeHeaderPanelComponent: Component {
     public struct Info: Equatable {

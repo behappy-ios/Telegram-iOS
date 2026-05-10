@@ -4,11 +4,11 @@ import Display
 import AsyncDisplayKit
 import SwiftSignalKit
 import Postbox
-import TelegramCore
-import TelegramPresentationData
+import IosappCore
+import IosappPresentationData
 import AppBundle
 import ContextUI
-import TelegramStringFormatting
+import IosappStringFormatting
 import AvatarNode
 import AccountContext
 import UndoUI

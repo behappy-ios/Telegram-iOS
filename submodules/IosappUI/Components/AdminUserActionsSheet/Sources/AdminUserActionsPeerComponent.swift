@@ -5,12 +5,12 @@ import AsyncDisplayKit
 import ComponentFlow
 import SwiftSignalKit
 import AccountContext
-import TelegramCore
+import IosappCore
 import MultilineTextComponent
 import AvatarNode
-import TelegramPresentationData
+import IosappPresentationData
 import CheckNode
-import TelegramStringFormatting
+import IosappStringFormatting
 import ListSectionComponent
 
 private let avatarFont = avatarPlaceholderFont(size: 15.0)

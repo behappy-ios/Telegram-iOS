@@ -1,6 +1,6 @@
 import SwiftSignalKit
 import Postbox
-import TelegramApi
+import IosappApi
 
 public extension TelegramEngine {
     final class Stickers {
@@ -303,7 +303,7 @@ public extension TelegramEngine {
         
         public func addRecentlyUsedSticker(fileReference: FileMediaReference) {
             let _ = self.account.postbox.transaction({ transaction -> Void in
-                TelegramCore.addRecentlyUsedSticker(transaction: transaction, fileReference: fileReference)
+                IosappCore.addRecentlyUsedSticker(transaction: transaction, fileReference: fileReference)
             }).start()
         }
         

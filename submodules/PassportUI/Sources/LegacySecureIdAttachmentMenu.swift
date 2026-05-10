@@ -5,7 +5,7 @@ import Display
 import SSignalKit
 import SwiftSignalKit
 import Postbox
-import TelegramCore
+import IosappCore
 import OverlayStatusController
 import AccountContext
 import LegacyUI

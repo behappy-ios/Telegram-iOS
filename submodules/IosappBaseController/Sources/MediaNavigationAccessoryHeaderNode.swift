@@ -3,15 +3,15 @@ import UIKit
 import AsyncDisplayKit
 import Display
 import SwiftSignalKit
-import TelegramCore
-import TelegramPresentationData
-import TelegramUIPreferences
+import IosappCore
+import IosappPresentationData
+import IosappUIPreferences
 import UniversalMediaPlayer
 import AccountContext
-import TelegramStringFormatting
+import IosappStringFormatting
 import ManagedAnimationNode
 import ContextUI
-import TelegramNotices
+import IosappNotices
 import TooltipUI
 import SliderContextItem
 

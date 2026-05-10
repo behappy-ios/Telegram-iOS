@@ -2,12 +2,12 @@ import Foundation
 import Display
 import AsyncDisplayKit
 import Postbox
-import TelegramCore
+import IosappCore
 import SwiftSignalKit
 import PassKit
 import Lottie
-import TelegramUIPreferences
-import TelegramPresentationData
+import IosappUIPreferences
+import IosappPresentationData
 import AccountContext
 import InstantPageUI
 import PeerAvatarGalleryUI

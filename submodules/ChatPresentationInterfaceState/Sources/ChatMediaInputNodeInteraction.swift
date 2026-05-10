@@ -1,7 +1,7 @@
 import Foundation
 import Postbox
-import TelegramCore
-import TelegramUIPreferences
+import IosappCore
+import IosappUIPreferences
 
 public struct ChatInterfaceStickerSettings: Equatable {
     public init() {

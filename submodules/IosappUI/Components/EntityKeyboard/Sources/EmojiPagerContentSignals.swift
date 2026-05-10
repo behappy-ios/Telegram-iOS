@@ -1,12 +1,12 @@
 import Foundation
 import UIKit
 import AccountContext
-import TelegramCore
+import IosappCore
 import Postbox
 import SwiftSignalKit
 import AnimationCache
 import MultiAnimationRenderer
-import TelegramNotices
+import IosappNotices
 import FlatBuffers
 import FlatSerialization
 

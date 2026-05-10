@@ -1,9 +1,9 @@
 import Foundation
 import NaturalLanguage
 import SwiftSignalKit
-import TelegramCore
+import IosappCore
 import AccountContext
-import TelegramUIPreferences
+import IosappUIPreferences
 
 public struct WebAppPermissionsState: Codable {
     enum CodingKeys: String, CodingKey {

@@ -6,10 +6,10 @@ import ComponentFlow
 import SwiftSignalKit
 import ViewControllerComponent
 import ComponentDisplayAdapters
-import TelegramPresentationData
-import TelegramStringFormatting
+import IosappPresentationData
+import IosappStringFormatting
 import AccountContext
-import TelegramCore
+import IosappCore
 import MultilineTextComponent
 import GiftAnimationComponent
 

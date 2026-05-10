@@ -3,9 +3,9 @@ import UIKit
 import Display
 import SSignalKit
 import SwiftSignalKit
-import TelegramCore
+import IosappCore
 import LegacyComponents
-import TelegramPresentationData
+import IosappPresentationData
 import DeviceAccess
 import AccountContext
 import LocalMediaResources

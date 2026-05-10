@@ -5,10 +5,10 @@ import Display
 import ComponentFlow
 import SwiftSignalKit
 import Postbox
-import TelegramCore
+import IosappCore
 import Markdown
 import TextFormat
-import TelegramPresentationData
+import IosappPresentationData
 import ViewControllerComponent
 import SheetComponent
 import BalancedTextComponent
@@ -20,7 +20,7 @@ import AccountContext
 import PresentationDataUtils
 import ListSectionComponent
 import ListItemComponentAdaptor
-import TelegramStringFormatting
+import IosappStringFormatting
 import UndoUI
 import ChatMessagePaymentAlertController
 import GlassBarButtonComponent

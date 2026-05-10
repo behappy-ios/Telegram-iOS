@@ -3,14 +3,14 @@ import AVFoundation
 import SwiftSignalKit
 import UniversalMediaPlayer
 import Postbox
-import TelegramCore
+import IosappCore
 import UIKit
 import AsyncDisplayKit
 import AccountContext
-import TelegramAudio
+import IosappAudio
 import Display
 import PhotoResources
-import TelegramVoip
+import IosappVoip
 import RangeSet
 import AppBundle
 import ManagedFile

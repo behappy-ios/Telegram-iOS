@@ -2,7 +2,7 @@ import UIKit
 import AsyncDisplayKit
 import Display
 import SwiftSignalKit
-import TelegramCore
+import IosappCore
 import ContextUI
 import QuickShareScreen
 

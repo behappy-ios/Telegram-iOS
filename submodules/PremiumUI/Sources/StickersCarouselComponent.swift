@@ -4,13 +4,13 @@ import Display
 import AsyncDisplayKit
 import SwiftSignalKit
 import ComponentFlow
-import TelegramCore
+import IosappCore
 import AccountContext
 import ReactionSelectionNode
-import TelegramPresentationData
+import IosappPresentationData
 import AccountContext
 import AnimatedStickerNode
-import TelegramAnimatedStickerNode
+import IosappAnimatedStickerNode
 import ShimmerEffect
 import StickerResources
 

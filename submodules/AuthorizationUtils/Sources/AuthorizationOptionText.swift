@@ -1,8 +1,8 @@
 import Foundation
 import UIKit
-import TelegramCore
+import IosappCore
 import Display
-import TelegramPresentationData
+import IosappPresentationData
 import TextFormat
 import Markdown
 

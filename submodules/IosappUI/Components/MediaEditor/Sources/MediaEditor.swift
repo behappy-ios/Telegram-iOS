@@ -7,8 +7,8 @@ import Photos
 import SwiftSignalKit
 import Display
 import Postbox
-import TelegramCore
-import TelegramPresentationData
+import IosappCore
+import IosappPresentationData
 import FastBlur
 import AccountContext
 import ImageTransparency

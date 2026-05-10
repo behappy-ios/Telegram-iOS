@@ -2,10 +2,10 @@ import Foundation
 import UIKit
 import Display
 import AccountContext
-import TelegramPresentationData
+import IosappPresentationData
 import SwiftSignalKit
 import ContextUI
-import TelegramCore
+import IosappCore
 import AvatarNode
 import AsyncDisplayKit
 import ComponentFlow

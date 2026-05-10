@@ -3,9 +3,9 @@ import UIKit
 import Display
 import ComponentFlow
 import MultilineTextComponent
-import TelegramPresentationData
+import IosappPresentationData
 import AppBundle
-import TelegramAudio
+import IosappAudio
 import GlassBackgroundComponent
 
 final class VideoChatActionButtonComponent: Component {

@@ -7,7 +7,7 @@ import CoreImage.CIFilterBuiltins
 import VideoToolbox
 import SwiftSignalKit
 import Postbox
-import TelegramCore
+import IosappCore
 import AccountContext
 import FileMediaResourceStatus
 import ZipArchive

@@ -2,7 +2,7 @@ import Foundation
 import Postbox
 import MtProtoKit
 import SwiftSignalKit
-import TelegramApi
+import IosappApi
 
 private let minLayer: Int32 = 65
 

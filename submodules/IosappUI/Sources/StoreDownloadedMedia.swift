@@ -1,9 +1,9 @@
 import Foundation
 import SwiftSignalKit
-import TelegramCore
+import IosappCore
 import Postbox
 import Photos
-import TelegramUIPreferences
+import IosappUIPreferences
 import AccountContext
 
 private func appSpecificAssetCollection() -> Signal<PHAssetCollection, NoError> {

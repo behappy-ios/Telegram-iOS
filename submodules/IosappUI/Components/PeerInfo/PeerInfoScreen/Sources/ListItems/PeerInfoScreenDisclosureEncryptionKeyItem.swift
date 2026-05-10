@@ -2,9 +2,9 @@ import Foundation
 import UIKit
 import AsyncDisplayKit
 import Display
-import TelegramPresentationData
+import IosappPresentationData
 import EncryptionKeyVisualization
-import TelegramCore
+import IosappCore
 import AccountContext
 
 final class PeerInfoScreenDisclosureEncryptionKeyItem: PeerInfoScreenItem {

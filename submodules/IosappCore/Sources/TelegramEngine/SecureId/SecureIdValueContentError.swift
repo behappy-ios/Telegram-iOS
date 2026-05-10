@@ -1,5 +1,5 @@
 import Foundation
-import TelegramApi
+import IosappApi
 
 
 public enum SecureIdValueContentErrorKey: Hashable {

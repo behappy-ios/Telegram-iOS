@@ -1,7 +1,7 @@
 import Foundation
 import UIKit
 import Postbox
-import TelegramCore
+import IosappCore
 import TextFormat
 import AccountContext
 import SwiftSignalKit

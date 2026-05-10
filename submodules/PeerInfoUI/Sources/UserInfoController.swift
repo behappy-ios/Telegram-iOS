@@ -3,19 +3,19 @@ import UIKit
 import AsyncDisplayKit
 import Display
 import SwiftSignalKit
-import TelegramCore
+import IosappCore
 import LegacyComponents
-import TelegramPresentationData
+import IosappPresentationData
 import ItemListUI
 import PresentationDataUtils
 import AccountContext
 import TextFormat
 import OverlayStatusController
-import TelegramStringFormatting
+import IosappStringFormatting
 import AccountContext
 import AlertUI
 import PresentationDataUtils
-import TelegramNotices
+import IosappNotices
 import GalleryUI
 import ItemListAvatarAndNameInfoItem
 import PeerAvatarGalleryUI
@@ -24,7 +24,7 @@ import NotificationSoundSelectionUI
 import Markdown
 import LocalizedPeerData
 import PhoneNumberFormat
-import TelegramIntents
+import IosappIntents
 
 private func getUserPeer(engine: TelegramEngine, peerId: EnginePeer.Id) -> Signal<(EnginePeer?, EnginePeer.StatusSettings?), NoError> {
     return engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: peerId))

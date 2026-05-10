@@ -2,12 +2,12 @@ import Foundation
 import UIKit
 import Display
 import SwiftSignalKit
-import TelegramCore
-import TelegramPresentationData
+import IosappCore
+import IosappPresentationData
 import PresentationDataUtils
 import ItemListUI
 import AccountContext
-import TelegramUIPreferences
+import IosappUIPreferences
 import ItemListPeerItem
 import ItemListPeerActionItem
 import AvatarNode

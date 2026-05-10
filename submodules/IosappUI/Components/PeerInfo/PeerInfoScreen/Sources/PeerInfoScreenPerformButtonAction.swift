@@ -4,14 +4,14 @@ import Display
 import AccountContext
 import SwiftSignalKit
 import Postbox
-import TelegramCore
+import IosappCore
 import UndoUI
 import ContextUI
-import TelegramPresentationData
+import IosappPresentationData
 import NotificationPeerExceptionController
 import NotificationExceptionsScreen
 import TranslateUI
-import TelegramNotices
+import IosappNotices
 import AlertComponent
 
 extension PeerInfoScreenNode {

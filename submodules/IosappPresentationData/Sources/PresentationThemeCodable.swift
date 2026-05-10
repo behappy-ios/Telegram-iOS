@@ -1,7 +1,7 @@
 import Foundation
 import UIKit
-import TelegramCore
-import TelegramUIPreferences
+import IosappCore
+import IosappUIPreferences
 
 private func decodeColor<Key>(_ values: KeyedDecodingContainer<Key>, _ key: Key, decoder: Decoder? = nil, fallbackKey: String? = nil) throws -> UIColor {
     if let decoder = decoder as? PresentationThemeDecoding, let fallbackKey = fallbackKey {

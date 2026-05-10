@@ -1,6 +1,6 @@
 import Foundation
 import Postbox
-import TelegramApi
+import IosappApi
 
 public final class PaidStarsMessageAttribute: Equatable, MessageAttribute {
     public let stars: StarsAmount

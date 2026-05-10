@@ -4,7 +4,7 @@ import Display
 import AsyncDisplayKit
 import ComponentFlow
 import ComponentDisplayAdapters
-import TelegramPresentationData
+import IosappPresentationData
 import SegmentedControlNode
 
 public final class SegmentControlComponent: Component {

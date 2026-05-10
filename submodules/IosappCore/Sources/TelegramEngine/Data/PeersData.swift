@@ -537,7 +537,7 @@ public extension TelegramEngine.EngineData.Item {
         }
         
         public struct ChatTheme: TelegramEngineDataItem, TelegramEngineMapKeyDataItem, PostboxViewDataItem {
-            public typealias Result = Optional<TelegramCore.ChatTheme>
+            public typealias Result = Optional<IosappCore.ChatTheme>
 
             fileprivate var id: EnginePeer.Id
             public var mapKey: EnginePeer.Id {
@@ -2396,7 +2396,7 @@ public extension TelegramEngine.EngineData.Item {
         }
         
         public struct BotAppSettings: TelegramEngineDataItem, TelegramEngineMapKeyDataItem, PostboxViewDataItem {
-            public typealias Result = Optional<TelegramCore.BotAppSettings>
+            public typealias Result = Optional<IosappCore.BotAppSettings>
             
             fileprivate var id: EnginePeer.Id
             public var mapKey: EnginePeer.Id {

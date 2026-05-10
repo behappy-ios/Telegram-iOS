@@ -3,11 +3,11 @@ import UIKit
 import Display
 import SwiftSignalKit
 import Postbox
-import TelegramCore
-import TelegramPresentationData
-import TelegramUIPreferences
-import TelegramStringFormatting
-import TelegramNotices
+import IosappCore
+import IosappPresentationData
+import IosappUIPreferences
+import IosappStringFormatting
+import IosappNotices
 import PresentationDataUtils
 import TextFormat
 import UrlHandling
@@ -29,7 +29,7 @@ import PhoneNumberFormat
 import ChatEntityKeyboardInputNode
 import PremiumUI
 import PremiumGiftAttachmentScreen
-import TelegramCallsUI
+import IosappCallsUI
 import AutomaticBusinessMessageSetupScreen
 import MediaEditorScreen
 import CameraScreen

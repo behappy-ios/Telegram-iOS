@@ -1,13 +1,13 @@
 import Foundation
 import UIKit
-import TelegramCore
+import IosappCore
 import SyncCore
 import SwiftSignalKit
 import Postbox
 import MtProtoKit
-import TelegramUIPreferences
+import IosappUIPreferences
 import LegacyComponents
-import TelegramNotices
+import IosappNotices
 import LegacyDataImportImpl
 
 @objc(TGPresentationState) private final class TGPresentationState: NSObject, NSCoding {

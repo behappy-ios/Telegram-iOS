@@ -1,7 +1,7 @@
 import Foundation
 import UIKit
 import AccountContext
-import TelegramCore
+import IosappCore
 import Postbox
 import SwiftSignalKit
 import ComponentFlow
@@ -9,7 +9,7 @@ import TinyThumbnail
 import ImageBlur
 import MediaResources
 import Display
-import TelegramPresentationData
+import IosappPresentationData
 import BundleIconComponent
 import MultilineTextComponent
 

@@ -8,7 +8,7 @@ import GZip
 import AppBundle
 import LegacyComponents
 import PremiumStarComponent
-import TelegramPresentationData
+import IosappPresentationData
 
 private let sceneVersion: Int = 5
 

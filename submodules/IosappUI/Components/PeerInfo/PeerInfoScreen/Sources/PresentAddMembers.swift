@@ -2,10 +2,10 @@ import Foundation
 import UIKit
 import Display
 import AccountContext
-import TelegramPresentationData
+import IosappPresentationData
 import SwiftSignalKit
 import Postbox
-import TelegramCore
+import IosappCore
 import InviteLinksUI
 import SendInviteLinkScreen
 import UndoUI

@@ -4,15 +4,15 @@ import AsyncDisplayKit
 import Display
 import SwiftSignalKit
 import Postbox
-import TelegramCore
-import TelegramPresentationData
+import IosappCore
+import IosappPresentationData
 import AccountContext
 import ComponentFlow
 import ViewControllerComponent
 import EntityKeyboard
 import PagerComponent
 import FeaturedStickersScreen
-import TelegramNotices
+import IosappNotices
 import ChatEntityKeyboardInputNode
 import ContextUI
 import ChatPresentationInterfaceState
@@ -24,7 +24,7 @@ import LottieComponent
 import LottieComponentResourceContent
 import UndoUI
 import TextLoadingEffect
-import TelegramStringFormatting
+import IosappStringFormatting
 
 private final class StickerSelectionComponent: Component {
     typealias EnvironmentType = Empty

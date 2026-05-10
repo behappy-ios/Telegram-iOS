@@ -4,14 +4,14 @@ import AsyncDisplayKit
 import Display
 import SwiftSignalKit
 import Postbox
-import TelegramCore
-import TelegramPresentationData
-import TelegramUIPreferences
+import IosappCore
+import IosappPresentationData
+import IosappUIPreferences
 import TextFormat
 import AccountContext
 import WallpaperBackgroundNode
 import ChatMessageItem
-import TelegramStringFormatting
+import IosappStringFormatting
 import Markdown
 
 public final class ChatMessageSuggestedPostInfoNode: ASDisplayNode {

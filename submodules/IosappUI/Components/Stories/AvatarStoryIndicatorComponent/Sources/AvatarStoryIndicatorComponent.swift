@@ -3,7 +3,7 @@ import UIKit
 import Display
 import ComponentFlow
 import HierarchyTrackingLayer
-import TelegramPresentationData
+import IosappPresentationData
 
 private extension CGFloat {
     func remap(fromLow: CGFloat, fromHigh: CGFloat, toLow: CGFloat, toHigh: CGFloat) -> CGFloat {

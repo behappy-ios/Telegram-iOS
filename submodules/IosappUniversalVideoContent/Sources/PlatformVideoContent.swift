@@ -4,10 +4,10 @@ import AsyncDisplayKit
 import Display
 import SwiftSignalKit
 import Postbox
-import TelegramCore
+import IosappCore
 import AVFoundation
 import UniversalMediaPlayer
-import TelegramAudio
+import IosappAudio
 import AccountContext
 import PhotoResources
 import RangeSet

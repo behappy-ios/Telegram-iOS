@@ -3,7 +3,7 @@ import UIKit
 import Display
 import AsyncDisplayKit
 import AccountContext
-import TelegramPresentationData
+import IosappPresentationData
 
 final class PeerInfoScreenItemSectionContainerNode: ASDisplayNode {
     private let backgroundNode: ASDisplayNode

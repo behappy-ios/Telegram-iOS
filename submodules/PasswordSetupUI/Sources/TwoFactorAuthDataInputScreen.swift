@@ -7,11 +7,11 @@ import SolidRoundedButtonNode
 import SwiftSignalKit
 import OverlayStatusController
 import AccountContext
-import TelegramPresentationData
+import IosappPresentationData
 import PresentationDataUtils
-import TelegramCore
+import IosappCore
 import AnimatedStickerNode
-import TelegramAnimatedStickerNode
+import IosappAnimatedStickerNode
 import ActivityIndicator
 
 public enum TwoFactorDataInputMode {

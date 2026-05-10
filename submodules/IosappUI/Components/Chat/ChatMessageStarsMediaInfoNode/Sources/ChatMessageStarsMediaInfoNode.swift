@@ -3,13 +3,13 @@ import UIKit
 import AsyncDisplayKit
 import Postbox
 import Display
-import TelegramCore
+import IosappCore
 import SwiftSignalKit
-import TelegramPresentationData
+import IosappPresentationData
 import AccountContext
 import LocalizedPeerData
 import PhotoResources
-import TelegramStringFormatting
+import IosappStringFormatting
 import TextFormat
 import TextNodeWithEntities
 import AnimationCache

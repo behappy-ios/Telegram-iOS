@@ -1,7 +1,7 @@
 import Foundation
 import UIKit
-import TelegramCore
-import TelegramUIPreferences
+import IosappCore
+import IosappUIPreferences
 
 public func encodePresentationTheme(_ theme: PresentationTheme) -> String? {
     let encoding = PresentationThemeEncoding()

@@ -9,7 +9,7 @@ import BundleIconComponent
 import TextFormat
 import AccountContext
 import LottieComponent
-import TelegramPresentationData
+import IosappPresentationData
 import GlassBackgroundComponent
 
 public final class FilterSelectorComponent: Component {

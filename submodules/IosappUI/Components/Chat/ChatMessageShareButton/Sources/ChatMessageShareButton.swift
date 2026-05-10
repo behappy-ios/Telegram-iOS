@@ -2,10 +2,10 @@ import Foundation
 import UIKit
 import AsyncDisplayKit
 import Display
-import TelegramPresentationData
+import IosappPresentationData
 import ChatControllerInteraction
 import AccountContext
-import TelegramCore
+import IosappCore
 import Postbox
 import WallpaperBackgroundNode
 import ChatMessageItemCommon

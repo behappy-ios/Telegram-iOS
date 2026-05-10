@@ -1,6 +1,6 @@
 import Foundation
-import TelegramCore
-import TelegramPresentationData
+import IosappCore
+import IosappPresentationData
 
 public extension DataSizeStringFormatting {
     init(presentationData: PresentationData) {

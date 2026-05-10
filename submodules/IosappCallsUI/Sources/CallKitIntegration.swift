@@ -3,12 +3,12 @@ import UIKit
 import CallKit
 import Intents
 import AVFoundation
-import TelegramCore
+import IosappCore
 import SwiftSignalKit
 import AppBundle
 import AccountContext
-import TelegramAudio
-import TelegramVoip
+import IosappAudio
+import IosappVoip
 
 private let sharedProviderDelegate: CallKitProviderDelegate? = {
     return CallKitProviderDelegate()

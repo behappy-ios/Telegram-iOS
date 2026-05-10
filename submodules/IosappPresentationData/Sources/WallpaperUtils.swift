@@ -1,6 +1,6 @@
 import Foundation
 import UIKit
-import TelegramCore
+import IosappCore
 
 public extension TelegramWallpaper {
     var isEmpty: Bool {

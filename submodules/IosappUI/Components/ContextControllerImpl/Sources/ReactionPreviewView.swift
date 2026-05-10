@@ -3,7 +3,7 @@ import UIKit
 import SwiftSignalKit
 import Display
 import ComponentFlow
-import TelegramCore
+import IosappCore
 import AccountContext
 import EmojiStatusComponent
 

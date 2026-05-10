@@ -4,8 +4,8 @@ import AsyncDisplayKit
 import Display
 import SwiftSignalKit
 import Postbox
-import TelegramCore
-import TelegramUIPreferences
+import IosappCore
+import IosappUIPreferences
 import ComponentFlow
 import AudioTranscriptionButtonComponent
 import ChatMessageDateAndStatusNode

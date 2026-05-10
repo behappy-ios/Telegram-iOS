@@ -4,10 +4,10 @@ import Display
 import ContextUI
 import SwiftSignalKit
 import AccountContext
-import TelegramPresentationData
+import IosappPresentationData
 import AsyncDisplayKit
 import ReactionSelectionNode
-import TelegramCore
+import IosappCore
 import UIKitRuntimeUtils
 import UndoUI
 import TextSelectionNode

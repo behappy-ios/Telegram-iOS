@@ -6,7 +6,7 @@ import AnimationCache
 import MultiAnimationRenderer
 import ComponentFlow
 import AccountContext
-import TelegramCore
+import IosappCore
 import Postbox
 import EmojiTextAttachmentView
 import AppBundle
@@ -14,7 +14,7 @@ import TextFormat
 import Lottie
 import GZip
 import HierarchyTrackingLayer
-import TelegramUIPreferences
+import IosappUIPreferences
 
 public final class EmojiStatusComponent: Component {
     public typealias EnvironmentType = Empty

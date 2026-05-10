@@ -4,7 +4,7 @@ import Display
 import AsyncDisplayKit
 import ComponentFlow
 import ComponentDisplayAdapters
-import TelegramPresentationData
+import IosappPresentationData
 import ButtonComponent
 import MultilineTextComponent
 

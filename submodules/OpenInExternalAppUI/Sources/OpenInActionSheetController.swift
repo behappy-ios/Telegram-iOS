@@ -3,9 +3,9 @@ import UIKit
 import Display
 import AsyncDisplayKit
 import SwiftSignalKit
-import TelegramCore
+import IosappCore
 import MapKit
-import TelegramPresentationData
+import IosappPresentationData
 import AccountContext
 import PhotoResources
 import AppBundle

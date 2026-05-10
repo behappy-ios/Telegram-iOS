@@ -3,10 +3,10 @@ import UIKit
 import Display
 import SwiftSignalKit
 import Postbox
-import TelegramCore
+import IosappCore
 import MediaResources
 import LocalMediaResources
-import TelegramUIPreferences
+import IosappUIPreferences
 import AccountContext
 import LegacyComponents
 import WallpaperGalleryScreen

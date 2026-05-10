@@ -1,13 +1,13 @@
 import Foundation
 import UIKit
-import TelegramCore
+import IosappCore
 import SSignalKit
 import SwiftSignalKit
 import MtProtoKit
 import Display
-import TelegramPresentationData
+import IosappPresentationData
 import DeviceAccess
-import TelegramAudio
+import IosappAudio
 import LegacyComponents
 import AccountContext
 

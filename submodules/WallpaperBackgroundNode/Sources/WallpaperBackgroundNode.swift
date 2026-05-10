@@ -3,8 +3,8 @@ import UIKit
 import AsyncDisplayKit
 import Display
 import GradientBackground
-import TelegramPresentationData
-import TelegramCore
+import IosappPresentationData
+import IosappCore
 import AccountContext
 import SwiftSignalKit
 import WallpaperResources
@@ -14,7 +14,7 @@ import Svg
 import GZip
 import AppBundle
 import AnimatedStickerNode
-import TelegramAnimatedStickerNode
+import IosappAnimatedStickerNode
 import HierarchyTrackingLayer
 import EdgeEffect
 

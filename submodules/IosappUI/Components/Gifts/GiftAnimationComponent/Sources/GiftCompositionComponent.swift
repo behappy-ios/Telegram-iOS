@@ -3,15 +3,15 @@ import UIKit
 import Display
 import SwiftSignalKit
 import ComponentFlow
-import TelegramCore
-import TelegramPresentationData
+import IosappCore
+import IosappPresentationData
 import AppBundle
 import AccountContext
 import EmojiTextAttachmentView
 import TextFormat
 import PeerInfoCoverComponent
 import AnimatedStickerNode
-import TelegramAnimatedStickerNode
+import IosappAnimatedStickerNode
 import EmojiStatusComponent
 import UIKitRuntimeUtils
 

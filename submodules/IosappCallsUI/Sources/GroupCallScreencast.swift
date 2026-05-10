@@ -1,6 +1,6 @@
 import Foundation
-import TelegramCore
-import TelegramVoip
+import IosappCore
+import IosappVoip
 import SwiftSignalKit
 
 protocol ScreencastContext: AnyObject {

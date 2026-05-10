@@ -6,21 +6,21 @@ import Display
 import ComponentFlow
 import ViewControllerComponent
 import Postbox
-import TelegramCore
+import IosappCore
 import AccountContext
 import PlainButtonComponent
 import SwiftSignalKit
 import LottieComponent
 import BundleIconComponent
 import ContextUI
-import TelegramPresentationData
+import IosappPresentationData
 import DeviceAccess
-import TelegramVoip
+import IosappVoip
 import PresentationDataUtils
 import UndoUI
 
 import AvatarNode
-import TelegramAudio
+import IosappAudio
 import LegacyComponents
 import TooltipUI
 import BlurredBackgroundComponent

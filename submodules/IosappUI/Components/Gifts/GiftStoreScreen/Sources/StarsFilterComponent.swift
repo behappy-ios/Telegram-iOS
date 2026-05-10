@@ -8,7 +8,7 @@ import MultilineTextComponent
 import BundleIconComponent
 import TextFormat
 import AccountContext
-import TelegramPresentationData
+import IosappPresentationData
 import GlassBackgroundComponent
 import CheckComponent
 

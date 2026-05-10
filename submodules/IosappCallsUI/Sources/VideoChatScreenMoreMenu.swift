@@ -2,7 +2,7 @@ import Foundation
 import UIKit
 import Display
 import ContextUI
-import TelegramCore
+import IosappCore
 import SwiftSignalKit
 import DeleteChatPeerActionSheetItem
 import PeerListItemComponent
@@ -15,7 +15,7 @@ import PresentationDataUtils
 import AccountContext
 import CallsEmoji
 import AlertComponent
-import TelegramPresentationData
+import IosappPresentationData
 import ComponentFlow
 import MultilineTextComponent
 import AVFoundation

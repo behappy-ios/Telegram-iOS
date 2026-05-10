@@ -5,9 +5,9 @@ import Display
 import ComponentFlow
 import SwiftSignalKit
 import Postbox
-import TelegramCore
-import TelegramPresentationData
-import TelegramUIPreferences
+import IosappCore
+import IosappPresentationData
+import IosappUIPreferences
 import AccountContext
 import AttachmentTextInputPanelNode
 import ChatPresentationInterfaceState
@@ -27,7 +27,7 @@ import TopMessageReactions
 import GlassBackgroundComponent
 import LiquidLens
 import UniversalMediaPlayer
-import TelegramBaseController
+import IosappBaseController
 import OverlayStatusController
 import UndoUI
 import TabSelectionRecognizer

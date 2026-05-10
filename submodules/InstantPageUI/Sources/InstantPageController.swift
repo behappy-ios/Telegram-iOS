@@ -1,11 +1,11 @@
 import Foundation
 import UIKit
-import TelegramCore
+import IosappCore
 import Postbox
 import SwiftSignalKit
 import Display
-import TelegramPresentationData
-import TelegramUIPreferences
+import IosappPresentationData
+import IosappUIPreferences
 import AccountContext
 
 public func instantPageAndAnchor(message: Message) -> (TelegramMediaWebpage, String?)? {

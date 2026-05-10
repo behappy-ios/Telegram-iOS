@@ -2,13 +2,13 @@ import Foundation
 import UIKit
 import AsyncDisplayKit
 import Display
-import TelegramPresentationData
+import IosappPresentationData
 import ActivityIndicator
 import ComponentFlow
 import EmojiStatusComponent
 import AnimationCache
 import MultiAnimationRenderer
-import TelegramCore
+import IosappCore
 import ComponentDisplayAdapters
 import AccountContext
 

@@ -4,8 +4,8 @@ import ComponentFlow
 import Display
 import MultilineTextComponent
 import MultilineTextWithEntitiesComponent
-import TelegramPresentationData
-import TelegramCore
+import IosappPresentationData
+import IosappCore
 import AvatarNode
 import AccountContext
 import StarsParticleEffect

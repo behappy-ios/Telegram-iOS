@@ -1,6 +1,6 @@
 import Foundation
-import TelegramCore
-import TelegramPresentationData
+import IosappCore
+import IosappPresentationData
 
 private let modernSoundsNamePaths: [KeyPath<PresentationStrings, String>] = [
     \.NotificationsSound_Note,

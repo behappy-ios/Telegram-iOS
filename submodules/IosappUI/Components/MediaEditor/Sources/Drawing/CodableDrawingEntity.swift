@@ -1,5 +1,5 @@
 import Foundation
-import TelegramCore
+import IosappCore
 import UrlEscaping
 
 public func decodeCodableDrawingEntities(data: Data) -> [CodableDrawingEntity] {

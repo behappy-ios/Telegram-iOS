@@ -1,7 +1,7 @@
 import Foundation
 import SwiftSignalKit
 import Postbox
-import TelegramApi
+import IosappApi
 
 public extension EngineMessageHistoryThread {
     final class Info: Equatable, Codable {

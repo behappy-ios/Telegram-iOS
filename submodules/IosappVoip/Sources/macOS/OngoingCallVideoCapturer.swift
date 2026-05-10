@@ -1,6 +1,6 @@
 //
 //  OngoingCallVideoCapturer.swift
-//  TelegramVoip
+//  IosappVoip
 //
 //  Created by Mikhail Filimonov on 07.01.2021.
 //

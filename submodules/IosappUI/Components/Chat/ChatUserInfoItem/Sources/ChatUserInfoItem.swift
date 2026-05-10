@@ -4,8 +4,8 @@ import Display
 import AsyncDisplayKit
 import SwiftSignalKit
 import Postbox
-import TelegramCore
-import TelegramPresentationData
+import IosappCore
+import IosappPresentationData
 import TextFormat
 import UrlEscaping
 import PhotoResources
@@ -14,7 +14,7 @@ import WallpaperBackgroundNode
 import ChatControllerInteraction
 import ChatMessageBubbleContentNode
 import CountrySelectionUI
-import TelegramStringFormatting
+import IosappStringFormatting
 import MergedAvatarsNode
 import TextNodeWithEntities
 

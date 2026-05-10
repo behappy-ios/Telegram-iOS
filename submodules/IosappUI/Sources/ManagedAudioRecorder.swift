@@ -2,8 +2,8 @@ import Foundation
 import SwiftSignalKit
 import CoreMedia
 import AVFoundation
-import TelegramCore
-import TelegramAudio
+import IosappCore
+import IosappAudio
 import UniversalMediaPlayer
 import AccountContext
 import OpusBinding

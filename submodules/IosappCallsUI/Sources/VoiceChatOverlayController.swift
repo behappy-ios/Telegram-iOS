@@ -3,12 +3,12 @@ import UIKit
 import Display
 import AsyncDisplayKit
 import SwiftSignalKit
-import TelegramPresentationData
-import TelegramUIPreferences
-import TelegramVoip
-import TelegramAudio
+import IosappPresentationData
+import IosappUIPreferences
+import IosappVoip
+import IosappAudio
 import AccountContext
-import TelegramCore
+import IosappCore
 import AppBundle
 import ContextUI
 import PresentationDataUtils

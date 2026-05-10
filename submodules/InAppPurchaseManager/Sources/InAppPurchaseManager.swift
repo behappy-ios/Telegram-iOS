@@ -2,10 +2,10 @@ import Foundation
 import CoreLocation
 import SwiftSignalKit
 import StoreKit
-import TelegramCore
+import IosappCore
 import Postbox
-import TelegramStringFormatting
-import TelegramUIPreferences
+import IosappStringFormatting
+import IosappUIPreferences
 import PersistentStringHash
 
 private let productIdentifiers = [

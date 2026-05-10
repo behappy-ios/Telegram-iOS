@@ -1,6 +1,6 @@
 import Foundation
 import Postbox
-import TelegramApi
+import IosappApi
 
 public final class SuggestedPostMessageAttribute: Equatable, MessageAttribute {
     public enum State: Int32 {

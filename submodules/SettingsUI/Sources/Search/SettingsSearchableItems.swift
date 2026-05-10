@@ -3,9 +3,9 @@ import UIKit
 import Display
 import SwiftSignalKit
 import Postbox
-import TelegramCore
-import TelegramUIPreferences
-import TelegramCallsUI
+import IosappCore
+import IosappUIPreferences
+import IosappCallsUI
 import OverlayStatusController
 import AccountContext
 import PassportUI

@@ -2,10 +2,10 @@ import Foundation
 import UIKit
 import Display
 import AccountContext
-import TelegramCore
+import IosappCore
 import Postbox
 import SwiftSignalKit
-import TelegramPresentationData
+import IosappPresentationData
 import ComponentFlow
 import ViewControllerComponent
 import AttachmentUI
@@ -14,7 +14,7 @@ import ChatEntityKeyboardInputNode
 import ChatPresentationInterfaceState
 import PagerComponent
 import FeaturedStickersScreen
-import TelegramNotices
+import IosappNotices
 import CounterControllerTitleView
 import GlassBackgroundComponent
 import GlassBarButtonComponent

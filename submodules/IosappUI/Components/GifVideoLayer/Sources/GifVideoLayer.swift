@@ -3,7 +3,7 @@ import UIKit
 import Display
 import BatchVideoRendering
 import AccountContext
-import TelegramCore
+import IosappCore
 import AVFoundation
 import SwiftSignalKit
 import PhotoResources

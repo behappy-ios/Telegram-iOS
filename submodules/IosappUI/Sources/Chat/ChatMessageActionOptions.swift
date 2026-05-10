@@ -4,8 +4,8 @@ import AsyncDisplayKit
 import Display
 import SwiftSignalKit
 import Postbox
-import TelegramCore
-import TelegramPresentationData
+import IosappCore
+import IosappPresentationData
 import AccountContext
 import ChatPresentationInterfaceState
 import ContextUI
@@ -15,7 +15,7 @@ import ChatMessageTextBubbleContentNode
 import TextFormat
 import ChatMessageItemView
 import ChatMessageBubbleItemNode
-import TelegramNotices
+import IosappNotices
 import ChatMessageWebpageBubbleContentNode
 import PremiumUI
 import UndoUI

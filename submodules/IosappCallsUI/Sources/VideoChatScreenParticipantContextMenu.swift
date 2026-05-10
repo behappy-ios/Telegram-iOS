@@ -4,7 +4,7 @@ import Display
 import SSignalKit
 import SwiftSignalKit
 import AccountContext
-import TelegramCore
+import IosappCore
 import ContextUI
 import DeleteChatPeerActionSheetItem
 import UndoUI

@@ -4,14 +4,14 @@ import Display
 import ComponentFlow
 import ComponentDisplayAdapters
 import SwiftSignalKit
-import TelegramCore
+import IosappCore
 import AccountContext
-import TelegramPresentationData
+import IosappPresentationData
 import MultilineTextComponent
 import MultilineTextWithEntitiesComponent
 import TextFormat
 import Markdown
-import TelegramStringFormatting
+import IosappStringFormatting
 
 public final class StarsBalanceOverlayComponent: Component {
     private let context: AccountContext

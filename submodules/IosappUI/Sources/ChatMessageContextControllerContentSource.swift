@@ -4,15 +4,15 @@ import AsyncDisplayKit
 import Display
 import ContextUI
 import Postbox
-import TelegramCore
+import IosappCore
 import SwiftSignalKit
 import ChatMessageItemView
 import AccountContext
 import WallpaperBackgroundNode
-import TelegramPresentationData
+import IosappPresentationData
 import DustEffect
 import TooltipUI
-import TelegramNotices
+import IosappNotices
  
 final class ChatMessageContextLocationContentSource: ContextLocationContentSource {
     private let controller: ViewController

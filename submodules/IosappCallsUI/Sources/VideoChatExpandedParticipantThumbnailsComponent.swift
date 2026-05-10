@@ -3,9 +3,9 @@ import UIKit
 import Display
 import ComponentFlow
 import MultilineTextComponent
-import TelegramPresentationData
+import IosappPresentationData
 import AppBundle
-import TelegramCore
+import IosappCore
 import AccountContext
 import SwiftSignalKit
 import MetalEngine

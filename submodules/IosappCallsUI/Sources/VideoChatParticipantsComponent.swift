@@ -3,12 +3,12 @@ import UIKit
 import Display
 import ComponentFlow
 import Postbox
-import TelegramCore
+import IosappCore
 import AccountContext
 import PlainButtonComponent
 import SwiftSignalKit
 import MultilineTextComponent
-import TelegramPresentationData
+import IosappPresentationData
 import PeerListItemComponent
 import ContextUI
 import CallScreen

@@ -6,9 +6,9 @@ import ComponentFlow
 import SwiftSignalKit
 import ViewControllerComponent
 import ComponentDisplayAdapters
-import TelegramPresentationData
+import IosappPresentationData
 import AccountContext
-import TelegramCore
+import IosappCore
 import MultilineTextComponent
 import SolidRoundedButtonComponent
 import PresentationDataUtils
@@ -16,7 +16,7 @@ import Markdown
 import UndoUI
 import AnimatedAvatarSetNode
 import AvatarNode
-import TelegramStringFormatting
+import IosappStringFormatting
 import ChatMessagePaymentAlertController
 
 private final class SendInviteLinkScreenComponent: Component {

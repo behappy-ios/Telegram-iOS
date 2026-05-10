@@ -3,15 +3,15 @@ import UIKit
 import AsyncDisplayKit
 import Display
 import SwiftSignalKit
-import TelegramCore
+import IosappCore
 import Postbox
-import TelegramPresentationData
+import IosappPresentationData
 import MergeLists
 import HorizontalPeerItem
 import ListSectionHeaderNode
 import ContextUI
 import AccountContext
-import TelegramUIPreferences
+import IosappUIPreferences
 import AnimationCache
 import MultiAnimationRenderer
 

@@ -2,14 +2,14 @@ import Foundation
 import UIKit
 import Display
 import AsyncDisplayKit
-import TelegramCore
+import IosappCore
 import SwiftSignalKit
-import TelegramPresentationData
+import IosappPresentationData
 import ItemListUI
 import PresentationDataUtils
 import AccountContext
 import LocalizedPeerData
-import TelegramStringFormatting
+import IosappStringFormatting
 import NotificationSoundSelectionUI
 
 public struct NotificationExceptionWrapper : Equatable {

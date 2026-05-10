@@ -2,10 +2,10 @@ import Foundation
 import UIKit
 import Display
 import SwiftSignalKit
-import TelegramCore
-import TelegramPresentationData
-import TelegramUIPreferences
-import TelegramStringFormatting
+import IosappCore
+import IosappPresentationData
+import IosappUIPreferences
+import IosappStringFormatting
 import ItemListUI
 import PresentationDataUtils
 import OverlayStatusController
@@ -14,7 +14,7 @@ import TemporaryCachedPeerDataManager
 import AlertUI
 import PresentationDataUtils
 import ItemListPeerItem
-import TelegramPermissionsUI
+import IosappPermissionsUI
 import ItemListPeerActionItem
 import Markdown
 import UndoUI

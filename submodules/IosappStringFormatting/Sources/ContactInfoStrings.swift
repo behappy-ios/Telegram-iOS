@@ -1,7 +1,7 @@
 import Foundation
 import Contacts
 import AddressBook
-import TelegramPresentationData
+import IosappPresentationData
 
 public func localizedPhoneNumberLabel(label: String, strings: PresentationStrings) -> String {
     if #available(iOSApplicationExtension 9.0, iOS 9.0, *) {

@@ -3,7 +3,7 @@ import UIKit
 import AsyncDisplayKit
 import Display
 import Postbox
-import TelegramCore
+import IosappCore
 import AccountContext
 import ChatPresentationInterfaceState
 import ChatControllerInteraction

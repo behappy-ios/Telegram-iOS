@@ -3,7 +3,7 @@ import UIKit
 import Display
 import ComponentFlow
 import AccountContext
-import TelegramPresentationData
+import IosappPresentationData
 import AnimationCache
 import MultiAnimationRenderer
 import PagerComponent

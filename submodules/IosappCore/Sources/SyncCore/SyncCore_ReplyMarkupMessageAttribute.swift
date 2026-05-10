@@ -1,5 +1,5 @@
 import Postbox
-import TelegramApi
+import IosappApi
 
 public enum ReplyMarkupButtonRequestPeerType: Codable, Equatable {
     enum CodingKeys: String, CodingKey {

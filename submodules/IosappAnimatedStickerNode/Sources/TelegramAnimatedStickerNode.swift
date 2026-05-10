@@ -2,7 +2,7 @@ import Foundation
 import AnimatedStickerNode
 import SwiftSignalKit
 import Postbox
-import TelegramCore
+import IosappCore
 import MediaResources
 import StickerResources
 import LocalMediaResources

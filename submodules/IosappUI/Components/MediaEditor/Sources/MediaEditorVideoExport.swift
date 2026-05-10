@@ -2,7 +2,7 @@ import Foundation
 import AVFoundation
 import MetalKit
 import SwiftSignalKit
-import TelegramCore
+import IosappCore
 import Postbox
 import ImageTransparency
 import Photos

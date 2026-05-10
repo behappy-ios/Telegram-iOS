@@ -11,7 +11,7 @@ import LottieComponent
 import MultilineTextComponent
 import BundleIconComponent
 import Markdown
-import TelegramStringFormatting
+import IosappStringFormatting
 import GlassBarButtonComponent
 
 private final class StoryStealthModeSheetContentComponent: Component {

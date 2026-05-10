@@ -7,7 +7,7 @@ import MetalEngine
 import ComponentFlow
 import SwiftSignalKit
 import UIKitRuntimeUtils
-import TelegramPresentationData
+import IosappPresentationData
 
 public final class PrivateCallScreen: OverlayMaskContainerView, AVPictureInPictureControllerDelegate {
     public struct State: Equatable {

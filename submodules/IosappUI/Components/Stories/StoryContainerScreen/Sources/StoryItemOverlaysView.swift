@@ -1,7 +1,7 @@
 import Foundation
 import UIKit
 import AccountContext
-import TelegramCore
+import IosappCore
 import Postbox
 import SwiftSignalKit
 import ComponentFlow
@@ -9,7 +9,7 @@ import TinyThumbnail
 import ImageBlur
 import MediaResources
 import Display
-import TelegramPresentationData
+import IosappPresentationData
 import BundleIconComponent
 import MultilineTextComponent
 import AppBundle
@@ -20,7 +20,7 @@ import LottieComponent
 import LottieComponentResourceContent
 import StickerResources
 import AnimationCache
-import TelegramStringFormatting
+import IosappStringFormatting
 
 private let shadowImage: UIImage = {
     return UIImage(bundleImageName: "Stories/ReactionShadow")!

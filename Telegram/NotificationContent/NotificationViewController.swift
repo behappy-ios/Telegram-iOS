@@ -1,7 +1,7 @@
 import UIKit
 import UserNotifications
 import UserNotificationsUI
-import TelegramUI
+import IosappUI
 import BuildConfig
 
 @objc(NotificationViewController)

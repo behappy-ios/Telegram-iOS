@@ -3,12 +3,12 @@ import NaturalLanguage
 import UIKit
 import SwiftSignalKit
 import Display
-import TelegramPresentationData
+import IosappPresentationData
 import ComponentFlow
 import AccountContext
 import MultilineTextComponent
 import BundleIconComponent
-import TelegramCore
+import IosappCore
 import TranslateUI
 import TooltipComponent
 

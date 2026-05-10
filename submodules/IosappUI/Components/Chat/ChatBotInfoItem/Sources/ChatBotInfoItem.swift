@@ -4,14 +4,14 @@ import Display
 import AsyncDisplayKit
 import SwiftSignalKit
 import Postbox
-import TelegramCore
-import TelegramPresentationData
+import IosappCore
+import IosappPresentationData
 import TextFormat
 import UrlEscaping
 import PhotoResources
 import AccountContext
 import UniversalMediaPlayer
-import TelegramUniversalVideoContent
+import IosappUniversalVideoContent
 import WallpaperBackgroundNode
 import ChatControllerInteraction
 import ChatMessageBubbleContentNode

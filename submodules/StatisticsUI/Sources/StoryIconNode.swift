@@ -5,11 +5,11 @@ import AsyncDisplayKit
 import ComponentFlow
 import SwiftSignalKit
 import Postbox
-import TelegramCore
+import IosappCore
 import PhotoResources
 import AvatarStoryIndicatorComponent
 import AccountContext
-import TelegramPresentationData
+import IosappPresentationData
 
 final class StoryIconNode: ASDisplayNode {
     private let imageNode = TransformImageNode()

@@ -8,7 +8,7 @@ import Camera
 import ContextUI
 import AccountContext
 import MetalEngine
-import TelegramPresentationData
+import IosappPresentationData
 import Photos
 
 final class CameraCollage {

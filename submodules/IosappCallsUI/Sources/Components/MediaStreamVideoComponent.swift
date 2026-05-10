@@ -6,11 +6,11 @@ import AVKit
 import MultilineTextComponent
 import Display
 import ShimmerEffect
-import TelegramCore
+import IosappCore
 import SwiftSignalKit
 import AvatarNode
 import Postbox
-import TelegramVoip
+import IosappVoip
 import ComponentDisplayAdapters
 
 public final class MediaStreamVideoComponent: Component {

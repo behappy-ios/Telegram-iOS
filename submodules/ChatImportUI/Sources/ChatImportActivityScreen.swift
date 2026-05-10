@@ -1,19 +1,19 @@
 import UIKit
 import AsyncDisplayKit
 import Display
-import TelegramCore
+import IosappCore
 import SwiftSignalKit
-import TelegramPresentationData
+import IosappPresentationData
 import AccountContext
 import PresentationDataUtils
 import RadialStatusNode
 import AnimatedStickerNode
-import TelegramAnimatedStickerNode
+import IosappAnimatedStickerNode
 import AppBundle
 import ZipArchive
 import MimeTypes
 import ConfettiEffect
-import TelegramUniversalVideoContent
+import IosappUniversalVideoContent
 import SolidRoundedButtonNode
 import ActivityIndicator
 

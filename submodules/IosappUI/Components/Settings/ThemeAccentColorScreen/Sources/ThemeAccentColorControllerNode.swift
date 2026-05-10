@@ -4,9 +4,9 @@ import Display
 import Postbox
 import SwiftSignalKit
 import AsyncDisplayKit
-import TelegramCore
-import TelegramPresentationData
-import TelegramUIPreferences
+import IosappCore
+import IosappPresentationData
+import IosappUIPreferences
 import ChatListUI
 import AccountContext
 import WallpaperResources

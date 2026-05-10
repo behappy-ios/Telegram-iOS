@@ -3,10 +3,10 @@ import UIKit
 import Display
 import ComponentFlow
 import AccountContext
-import TelegramCore
-import TelegramStringFormatting
+import IosappCore
+import IosappStringFormatting
 import MultilineTextComponent
-import TelegramPresentationData
+import IosappPresentationData
 import AvatarNode
 import PeerNameTextComponent
 

@@ -2,7 +2,7 @@ import Foundation
 import UIKit
 import Display
 import ComponentFlow
-import TelegramCore
+import IosappCore
 import EmojiStatusComponent
 import AccountContext
 

@@ -1,7 +1,7 @@
 import Foundation
 import SwiftSignalKit
 import TgVoipWebrtc
-import TelegramCore
+import IosappCore
 import CoreMedia
 
 #if os(macOS)

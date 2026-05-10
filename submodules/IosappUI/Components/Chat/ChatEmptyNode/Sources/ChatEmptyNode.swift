@@ -4,11 +4,11 @@ import AsyncDisplayKit
 import Display
 import SwiftSignalKit
 import Postbox
-import TelegramCore
-import TelegramPresentationData
+import IosappCore
+import IosappPresentationData
 import AppBundle
 import LocalizedPeerData
-import TelegramStringFormatting
+import IosappStringFormatting
 import AccountContext
 import ChatPresentationInterfaceState
 import WallpaperBackgroundNode

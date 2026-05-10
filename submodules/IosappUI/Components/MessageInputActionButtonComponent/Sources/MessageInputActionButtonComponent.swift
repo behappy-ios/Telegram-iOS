@@ -3,10 +3,10 @@ import UIKit
 import Display
 import ComponentFlow
 import AppBundle
-import TelegramCore
+import IosappCore
 import ChatTextInputMediaRecordingButton
 import AccountContext
-import TelegramPresentationData
+import IosappPresentationData
 import ChatPresentationInterfaceState
 import MoreHeaderButton
 import ContextUI

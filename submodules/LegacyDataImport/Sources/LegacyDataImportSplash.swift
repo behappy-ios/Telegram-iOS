@@ -1,7 +1,7 @@
 import Foundation
 import Display
 import AsyncDisplayKit
-import TelegramPresentationData
+import IosappPresentationData
 import RadialStatusNode
 
 public protocol LegacyDataImportSplash: WindowCoveringView {

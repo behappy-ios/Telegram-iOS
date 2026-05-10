@@ -4,7 +4,7 @@ import AsyncDisplayKit
 import ContextUI
 import AnimationUI
 import Display
-import TelegramPresentationData
+import IosappPresentationData
 import ComponentFlow
 import LottieComponent
 

@@ -4,19 +4,19 @@ import AsyncDisplayKit
 import Display
 import SwiftSignalKit
 import Postbox
-import TelegramCore
+import IosappCore
 import UniversalMediaPlayer
-import TelegramPresentationData
+import IosappPresentationData
 import AccountContext
 import SemanticStatusNode
 import PhotoResources
-import TelegramUniversalVideoContent
+import IosappUniversalVideoContent
 import FileMediaResourceStatus
 import HierarchyTrackingLayer
 import ComponentFlow
 import AudioTranscriptionButtonComponent
 import UndoUI
-import TelegramNotices
+import IosappNotices
 import Markdown
 import TextFormat
 import ChatMessageForwardInfoNode
@@ -28,7 +28,7 @@ import InstantVideoRadialStatusNode
 import ChatInstantVideoMessageDurationNode
 import ChatControllerInteraction
 import WallpaperBackgroundNode
-import TelegramStringFormatting
+import IosappStringFormatting
 import InvisibleInkDustNode
 
 public struct ChatMessageInstantVideoItemLayoutResult {

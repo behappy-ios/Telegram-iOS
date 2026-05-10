@@ -3,10 +3,10 @@ import UIKit
 import Display
 import AsyncDisplayKit
 import SwiftSignalKit
-import TelegramPresentationData
+import IosappPresentationData
 import AppBundle
 import ContextUI
-import TelegramStringFormatting
+import IosappStringFormatting
 
 func generateStartRecordingIcon(color: UIColor) -> UIImage? {
     return generateImage(CGSize(width: 18.0, height: 18.0), opaque: false, rotatedContext: { size, context in

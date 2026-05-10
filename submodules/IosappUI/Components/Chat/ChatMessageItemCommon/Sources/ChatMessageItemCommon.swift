@@ -2,7 +2,7 @@ import Foundation
 import UIKit
 import Display
 import Postbox
-import TelegramCore
+import IosappCore
 import Emoji
 
 public struct ChatMessageItemWidthFill {

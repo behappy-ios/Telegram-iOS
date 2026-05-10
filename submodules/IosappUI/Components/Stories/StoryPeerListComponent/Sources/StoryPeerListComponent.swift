@@ -5,10 +5,10 @@ import ComponentFlow
 import AppBundle
 import BundleIconComponent
 import AccountContext
-import TelegramCore
+import IosappCore
 import Postbox
 import SwiftSignalKit
-import TelegramPresentationData
+import IosappPresentationData
 import StoryContainerScreen
 import EmojiStatusComponent
 import ChatListTitleView

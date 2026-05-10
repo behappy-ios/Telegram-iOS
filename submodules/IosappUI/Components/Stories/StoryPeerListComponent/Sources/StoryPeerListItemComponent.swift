@@ -5,9 +5,9 @@ import ComponentFlow
 import AppBundle
 import BundleIconComponent
 import AccountContext
-import TelegramCore
+import IosappCore
 import SwiftSignalKit
-import TelegramPresentationData
+import IosappPresentationData
 import AvatarNode
 import ContextUI
 import AsyncDisplayKit

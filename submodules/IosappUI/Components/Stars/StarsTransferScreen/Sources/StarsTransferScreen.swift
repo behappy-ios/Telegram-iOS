@@ -3,10 +3,10 @@ import UIKit
 import Display
 import ComponentFlow
 import SwiftSignalKit
-import TelegramCore
+import IosappCore
 import Markdown
 import TextFormat
-import TelegramPresentationData
+import IosappPresentationData
 import ViewControllerComponent
 import SheetComponent
 import BalancedTextComponent
@@ -23,7 +23,7 @@ import PremiumPeerShortcutComponent
 import StarsBalanceOverlayComponent
 import PlainButtonComponent
 import GlassBarButtonComponent
-import TelegramStringFormatting
+import IosappStringFormatting
 
 private final class SheetContent: CombinedComponent {
     typealias EnvironmentType = ViewControllerComponentContainer.Environment

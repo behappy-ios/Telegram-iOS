@@ -4,9 +4,9 @@ import AsyncDisplayKit
 import Display
 import SwiftSignalKit
 import Postbox
-import TelegramCore
-import TelegramUIPreferences
-import TelegramPresentationData
+import IosappCore
+import IosappUIPreferences
+import IosappPresentationData
 import AccountContext
 import GridMessageSelectionNode
 import ChatControllerInteraction
@@ -16,7 +16,7 @@ import ChatMessageItemCommon
 import ChatMessageInteractiveMediaNode
 import ChatControllerInteraction
 import InvisibleInkDustNode
-import TelegramUniversalVideoContent
+import IosappUniversalVideoContent
 
 public class ChatMessageMediaBubbleContentNode: ChatMessageBubbleContentNode {
     override public var supportsMosaic: Bool {

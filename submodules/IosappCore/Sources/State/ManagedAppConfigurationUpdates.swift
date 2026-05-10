@@ -1,7 +1,7 @@
 import Foundation
 import Postbox
 import SwiftSignalKit
-import TelegramApi
+import IosappApi
 import MtProtoKit
 
 func updateAppConfigurationOnce(postbox: Postbox, network: Network) -> Signal<Void, NoError> {

@@ -1,10 +1,10 @@
 import Foundation
 import UIKit
-import TelegramCore
+import IosappCore
 import Display
-import TelegramPresentationData
-import TelegramUIPreferences
-import TelegramStringFormatting
+import IosappPresentationData
+import IosappUIPreferences
+import IosappStringFormatting
 import MosaicLayout
 
 public final class InstantPageLayout {

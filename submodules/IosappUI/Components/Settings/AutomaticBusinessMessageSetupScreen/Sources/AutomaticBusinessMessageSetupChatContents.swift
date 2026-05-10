@@ -2,7 +2,7 @@ import Foundation
 import UIKit
 import SwiftSignalKit
 import Postbox
-import TelegramCore
+import IosappCore
 import AccountContext
 
 final class AutomaticBusinessMessageSetupChatContents: ChatCustomContentsProtocol {
@@ -125,7 +125,7 @@ final class AutomaticBusinessMessageSetupChatContents: ChatCustomContentsProtoco
         
         func enqueueMessages(messages: [EnqueueMessage]) {
             let threadId = self.shortcutId.flatMap(Int64.init)
-            let _ = (TelegramCore.enqueueMessages(account: self.context.account, peerId: self.context.account.peerId, messages: messages.map { message in
+            let _ = (IosappCore.enqueueMessages(account: self.context.account, peerId: self.context.account.peerId, messages: messages.map { message in
                 return message.withUpdatedThreadId(threadId).withUpdatedAttributes { attributes in
                     var attributes = attributes
                     attributes.removeAll(where: { $0 is OutgoingQuickReplyMessageAttribute })

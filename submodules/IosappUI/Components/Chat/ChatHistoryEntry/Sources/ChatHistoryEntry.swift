@@ -1,6 +1,6 @@
 import Postbox
-import TelegramCore
-import TelegramPresentationData
+import IosappCore
+import IosappPresentationData
 import MergeLists
 import TemporaryCachedPeerDataManager
 import AccountContext

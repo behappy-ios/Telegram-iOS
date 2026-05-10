@@ -3,8 +3,8 @@ import UIKit
 import AsyncDisplayKit
 import Display
 import SwiftSignalKit
-import TelegramPresentationData
-import TelegramStringFormatting
+import IosappPresentationData
+import IosappStringFormatting
 
 private let purple = UIColor(rgb: 0x3252ef)
 private let pink = UIColor(rgb: 0xef436c)

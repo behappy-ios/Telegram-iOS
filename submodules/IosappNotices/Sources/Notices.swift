@@ -1,8 +1,8 @@
 import Foundation
 import Postbox
-import TelegramCore
+import IosappCore
 import SwiftSignalKit
-import TelegramPermissions
+import IosappPermissions
 
 public final class ApplicationSpecificBoolNotice: Codable {
     public init() {

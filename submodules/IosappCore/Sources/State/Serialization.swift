@@ -1,6 +1,6 @@
 import Foundation
 import MtProtoKit
-import TelegramApi
+import IosappApi
 
 private let apiPrefix: String = {
     let type = _typeName(Api.User.self)
@@ -8,7 +8,7 @@ private let apiPrefix: String = {
     if type.hasSuffix(userType) {
         return String(type[type.startIndex ..< type.index(type.endIndex, offsetBy: -userType.count)])
     } else {
-        return "TelegramApi.Api."
+        return "IosappApi.Api."
     }
 }()
 

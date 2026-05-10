@@ -5,8 +5,8 @@ import ContextUI
 import Display
 import SwiftSignalKit
 import Postbox
-import TelegramCore
-import TelegramNotices
+import IosappCore
+import IosappNotices
 import ChatSendMessageActionUI
 import AccountContext
 import TopMessageReactions

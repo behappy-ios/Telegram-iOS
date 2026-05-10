@@ -6,11 +6,11 @@ import AnimationCache
 import MultiAnimationRenderer
 import ComponentFlow
 import AccountContext
-import TelegramCore
-import TelegramPresentationData
+import IosappCore
+import IosappPresentationData
 import EmojiTextAttachmentView
 import TextFormat
-import TelegramUIPreferences
+import IosappUIPreferences
 
 public final class EmojiSuggestionsComponent: Component {
     public typealias EnvironmentType = Empty

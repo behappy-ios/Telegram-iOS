@@ -1,7 +1,7 @@
 import Postbox
 import TemporaryCachedPeerDataManager
-import TelegramUIPreferences
-import TelegramNotices
+import IosappUIPreferences
+import IosappNotices
 import InstantPageUI
 import AccountContext
 import LocalMediaResources

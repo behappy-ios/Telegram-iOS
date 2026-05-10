@@ -2,12 +2,12 @@ import Foundation
 import UIKit
 import AsyncDisplayKit
 import Display
-import TelegramCore
+import IosappCore
 import Postbox
 import SwiftSignalKit
-import TelegramStringFormatting
+import IosappStringFormatting
 import ChatPresentationInterfaceState
-import TelegramPresentationData
+import IosappPresentationData
 import ChatInputPanelNode
 import AccountContext
 import GlassBackgroundComponent

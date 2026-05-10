@@ -2,7 +2,7 @@ import Foundation
 import UIKit
 import SwiftSignalKit
 import Display
-import TelegramPresentationData
+import IosappPresentationData
 import ComponentFlow
 import ComponentDisplayAdapters
 import AccountContext
@@ -13,9 +13,9 @@ import ButtonComponent
 import BundleIconComponent
 import Markdown
 import Postbox
-import TelegramCore
+import IosappCore
 import AvatarNode
-import TelegramStringFormatting
+import IosappStringFormatting
 import AnimatedAvatarSetNode
 import UndoUI
 import PresentationDataUtils

@@ -5,9 +5,9 @@ import Display
 import AsyncDisplayKit
 import SwiftSignalKit
 import Postbox
-import TelegramCore
-import TelegramPresentationData
-import TelegramUIPreferences
+import IosappCore
+import IosappPresentationData
+import IosappUIPreferences
 import PresentationDataUtils
 import AccountContext
 import ComponentFlow
@@ -26,7 +26,7 @@ import AvatarNode
 import ListItemSliderSelectorComponent
 import DateSelectionUI
 import PlainButtonComponent
-import TelegramStringFormatting
+import IosappStringFormatting
 import TextFormat
 import TimeSelectionActionSheet
 

@@ -1,6 +1,6 @@
 import Foundation
 import UIKit
-import TelegramPresentationData
+import IosappPresentationData
 import DeviceAccess
 
 enum ApplicationShortcutItemType: String {

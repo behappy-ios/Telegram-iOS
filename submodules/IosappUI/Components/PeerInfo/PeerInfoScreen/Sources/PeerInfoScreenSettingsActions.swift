@@ -4,7 +4,7 @@ import Display
 import AccountContext
 import SwiftSignalKit
 import Postbox
-import TelegramCore
+import IosappCore
 import SettingsUI
 import PeerInfoStoryGridScreen
 import CallListUI
@@ -12,7 +12,7 @@ import PassportUI
 import AccountUtils
 import OverlayStatusController
 import PremiumUI
-import TelegramPresentationData
+import IosappPresentationData
 import PresentationDataUtils
 import PasswordSetupUI
 import InstantPageCache

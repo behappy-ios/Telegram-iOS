@@ -1,11 +1,11 @@
 import Foundation
 import UIKit
-import TelegramCore
+import IosappCore
 import Postbox
 import SwiftSignalKit
 import Display
 import PhotoResources
-import TelegramPresentationData
+import IosappPresentationData
 import AsyncDisplayKit
 
 private final class SoftwareVideoThumbnailLayerNullAction: NSObject, CAAction {

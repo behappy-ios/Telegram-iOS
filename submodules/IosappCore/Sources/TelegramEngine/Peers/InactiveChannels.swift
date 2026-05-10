@@ -2,7 +2,7 @@
 import Foundation
 import SwiftSignalKit
 import Postbox
-import TelegramApi
+import IosappApi
 
 public struct InactiveChannel : Equatable {
     public let peer: Peer

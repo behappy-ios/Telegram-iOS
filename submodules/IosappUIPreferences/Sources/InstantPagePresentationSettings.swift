@@ -1,6 +1,6 @@
 import Foundation
 import Postbox
-import TelegramCore
+import IosappCore
 import SwiftSignalKit
 
 public enum InstantPageThemeType: Int32 {

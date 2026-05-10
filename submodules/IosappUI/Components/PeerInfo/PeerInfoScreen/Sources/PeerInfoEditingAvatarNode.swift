@@ -1,16 +1,16 @@
 import Foundation
 import UIKit
 import AsyncDisplayKit
-import TelegramPresentationData
+import IosappPresentationData
 import AccountContext
 import AvatarNode
 import UniversalMediaPlayer
 import PeerInfoAvatarListNode
 import AvatarVideoNode
-import TelegramUniversalVideoContent
+import IosappUniversalVideoContent
 import SwiftSignalKit
 import Postbox
-import TelegramCore
+import IosappCore
 import Display
 import GalleryUI
 

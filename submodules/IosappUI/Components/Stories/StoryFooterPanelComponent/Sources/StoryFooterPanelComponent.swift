@@ -6,11 +6,11 @@ import AppBundle
 import BundleIconComponent
 import AnimatedAvatarSetNode
 import AccountContext
-import TelegramCore
+import IosappCore
 import MoreHeaderButton
 import SemanticStatusNode
 import SwiftSignalKit
-import TelegramPresentationData
+import IosappPresentationData
 import AnimatedCountLabelNode
 import MessageInputActionButtonComponent
 

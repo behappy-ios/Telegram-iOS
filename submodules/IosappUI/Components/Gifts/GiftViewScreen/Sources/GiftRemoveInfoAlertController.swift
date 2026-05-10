@@ -4,13 +4,13 @@ import AsyncDisplayKit
 import Display
 import ComponentFlow
 import Postbox
-import TelegramCore
-import TelegramPresentationData
-import TelegramUIPreferences
+import IosappCore
+import IosappPresentationData
+import IosappUIPreferences
 import AccountContext
 import AppBundle
 import ChatMessagePaymentAlertController
-import TelegramStringFormatting
+import IosappStringFormatting
 import TextFormat
 import AlertComponent
 

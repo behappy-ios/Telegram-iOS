@@ -3,7 +3,7 @@ import UIKit
 import Display
 import ComponentFlow
 import AccountContext
-import TelegramCore
+import IosappCore
 
 private let premiumBadgeIcon: UIImage? = generateTintedImage(image: UIImage(bundleImageName: "Chat List/PeerPremiumIcon"), color: .white)
 private let featuredBadgeIcon: UIImage? = generateTintedImage(image: UIImage(bundleImageName: "Chat/Input/Media/PanelBadgeAdd"), color: .white)

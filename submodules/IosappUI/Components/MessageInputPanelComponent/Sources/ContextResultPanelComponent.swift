@@ -3,9 +3,9 @@ import UIKit
 import Display
 import ComponentFlow
 import ComponentDisplayAdapters
-import TelegramCore
+import IosappCore
 import AccountContext
-import TelegramPresentationData
+import IosappPresentationData
 import PeerListItemComponent
 
 final class ContextResultPanelComponent: Component {

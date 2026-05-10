@@ -2,8 +2,8 @@ import Foundation
 import UIKit
 import Display
 import SwiftSignalKit
-import TelegramCore
-import TelegramPresentationData
+import IosappCore
+import IosappPresentationData
 import ItemListUI
 import PresentationDataUtils
 import AccountContext
@@ -12,7 +12,7 @@ import AlertUI
 import PresentationDataUtils
 import UndoUI
 import AppBundle
-import TelegramPermissionsUI
+import IosappPermissionsUI
 import Markdown
 
 public enum PeerReportSubject {

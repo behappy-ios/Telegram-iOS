@@ -6,12 +6,12 @@ import ViewControllerComponent
 import AccountContext
 import SheetComponent
 import ButtonComponent
-import TelegramCore
+import IosappCore
 import AnimatedTextComponent
 import MultilineTextComponent
 import BalancedTextComponent
-import TelegramPresentationData
-import TelegramStringFormatting
+import IosappPresentationData
+import IosappStringFormatting
 import TextFormat
 import Markdown
 import GlassControls

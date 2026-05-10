@@ -4,13 +4,13 @@ import AsyncDisplayKit
 import AVFoundation
 import Display
 import SwiftSignalKit
-import TelegramCore
+import IosappCore
 import AnimatedStickerNode
-import TelegramAnimatedStickerNode
+import IosappAnimatedStickerNode
 import StickerResources
 import AccountContext
 import MediaEditor
-import TelegramPresentationData
+import IosappPresentationData
 import ReactionSelectionNode
 import UndoUI
 import EntityKeyboard

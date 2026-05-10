@@ -3,8 +3,8 @@ import UIKit
 import Display
 import ComponentFlow
 import MultilineTextComponent
-import TelegramPresentationData
-import TelegramStringFormatting
+import IosappPresentationData
+import IosappStringFormatting
 import HierarchyTrackingLayer
 
 private let purple = UIColor(rgb: 0x3252ef)

@@ -2,8 +2,8 @@ import Foundation
 import UIKit
 import Display
 import ComponentFlow
-import TelegramPresentationData
-import TelegramCore
+import IosappPresentationData
+import IosappCore
 import Postbox
 import AnimationCache
 import MultiAnimationRenderer

@@ -1,6 +1,6 @@
 import SwiftSignalKit
 import Postbox
-import TelegramApi
+import IosappApi
 import MtProtoKit
 
 public enum TelegramEngineAuthorizationState {

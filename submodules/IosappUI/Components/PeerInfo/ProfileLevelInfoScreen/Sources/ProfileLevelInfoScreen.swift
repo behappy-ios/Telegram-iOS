@@ -2,8 +2,8 @@ import Foundation
 import UIKit
 import SwiftSignalKit
 import Display
-import TelegramCore
-import TelegramPresentationData
+import IosappCore
+import IosappPresentationData
 import ComponentFlow
 import ComponentDisplayAdapters
 import AccountContext

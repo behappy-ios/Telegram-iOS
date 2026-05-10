@@ -3,9 +3,9 @@ import AsyncDisplayKit
 import Display
 import ComponentFlow
 import SwiftSignalKit
-import TelegramCore
+import IosappCore
 import AccountContext
-import TelegramPresentationData
+import IosappPresentationData
 import UIKit
 import AnimatedAvatarSetNode
 import ContextUI
@@ -16,7 +16,7 @@ import MultiAnimationRenderer
 import EmojiTextAttachmentView
 import TextFormat
 import EmojiStatusComponent
-import TelegramStringFormatting
+import IosappStringFormatting
 
 private let avatarFont = avatarPlaceholderFont(size: 16.0)
 

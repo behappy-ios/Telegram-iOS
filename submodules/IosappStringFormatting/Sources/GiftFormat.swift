@@ -1,5 +1,5 @@
 import Foundation
-import TelegramPresentationData
+import IosappPresentationData
 
 public func formatCollectibleNumber(_ number: Int32, dateTimeFormat: PresentationDateTimeFormat) -> String {
     if number > 9999 {

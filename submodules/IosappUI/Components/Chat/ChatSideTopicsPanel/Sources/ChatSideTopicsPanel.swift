@@ -2,10 +2,10 @@ import Foundation
 import UIKit
 import SwiftSignalKit
 import Postbox
-import TelegramCore
+import IosappCore
 import Display
 import AsyncDisplayKit
-import TelegramPresentationData
+import IosappPresentationData
 import ChatPresentationInterfaceState
 import ComponentFlow
 import MultilineTextComponent

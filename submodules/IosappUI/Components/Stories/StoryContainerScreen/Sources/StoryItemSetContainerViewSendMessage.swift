@@ -1,13 +1,13 @@
 import Foundation
 import SwiftSignalKit
-import TelegramCore
+import IosappCore
 import AccountContext
 import Display
 import ComponentFlow
 import MessageInputPanelComponent
 import UndoUI
 import AttachmentUI
-import TelegramUIPreferences
+import IosappUIPreferences
 import MediaPickerUI
 import LegacyMediaPickerUI
 import LocationUI
@@ -15,7 +15,7 @@ import ChatEntityKeyboardInputNode
 import ChatScheduleTimeController
 import TextFormat
 import PhoneNumberFormat
-import TelegramIntents
+import IosappIntents
 import LegacyUI
 import WebSearchUI
 import ChatTimerScreen
@@ -24,9 +24,9 @@ import ICloudResources
 import LegacyComponents
 import LegacyCamera
 import StoryFooterPanelComponent
-import TelegramPresentationData
+import IosappPresentationData
 import LegacyInstantVideoController
-import TelegramPresentationData
+import IosappPresentationData
 import ChatPresentationInterfaceState
 import Postbox
 import OverlayStatusController
@@ -41,7 +41,7 @@ import ChatScheduleTimeController
 import StoryStealthModeSheetScreen
 import Speak
 import TranslateUI
-import TelegramNotices
+import IosappNotices
 import ObjectiveC
 import LocationUI
 import ReactionSelectionNode

@@ -2,12 +2,12 @@ import Foundation
 import UIKit
 import Display
 import ComponentFlow
-import TelegramPresentationData
+import IosappPresentationData
 import AccountContext
 import ChatListTitleView
 import AppBundle
 import StoryPeerListComponent
-import TelegramCore
+import IosappCore
 import MoreHeaderButton
 import GlassBackgroundComponent
 

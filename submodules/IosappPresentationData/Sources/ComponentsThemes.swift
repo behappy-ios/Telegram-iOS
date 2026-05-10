@@ -1,7 +1,7 @@
 import Foundation
 import UIKit
 import Display
-import TelegramUIPreferences
+import IosappUIPreferences
 import PresentationStrings
 
 public extension PresentationFontSize {

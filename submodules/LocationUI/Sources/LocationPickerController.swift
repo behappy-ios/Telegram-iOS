@@ -2,9 +2,9 @@ import Foundation
 import UIKit
 import Display
 import LegacyComponents
-import TelegramCore
+import IosappCore
 import SwiftSignalKit
-import TelegramPresentationData
+import IosappPresentationData
 import AccountContext
 import AppBundle
 import CoreLocation

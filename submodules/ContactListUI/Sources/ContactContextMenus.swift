@@ -3,7 +3,7 @@ import UIKit
 import SwiftSignalKit
 import ContextUI
 import AccountContext
-import TelegramCore
+import IosappCore
 import Display
 import AlertUI
 import PresentationDataUtils

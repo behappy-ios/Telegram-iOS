@@ -5,9 +5,9 @@ import Display
 import AsyncDisplayKit
 import SwiftSignalKit
 import Postbox
-import TelegramCore
+import IosappCore
 import MobileCoreServices
-import TelegramPresentationData
+import IosappPresentationData
 import TextFormat
 import AccountContext
 import TouchDownGesture
@@ -40,9 +40,9 @@ import ChatTextInputMediaRecordingButton
 import ChatContextQuery
 import ChatInputTextNode
 import ChatInputPanelNode
-import TelegramNotices
+import IosappNotices
 import AnimatedCountLabelNode
-import TelegramStringFormatting
+import IosappStringFormatting
 import TextNodeWithEntities
 import DeviceModel
 import PhotoResources

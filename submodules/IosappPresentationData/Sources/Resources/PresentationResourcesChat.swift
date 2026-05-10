@@ -1,7 +1,7 @@
 import Foundation
 import UIKit
 import Display
-import TelegramCore
+import IosappCore
 import AppBundle
 
 private func generateLineImage(color: UIColor) -> UIImage? {

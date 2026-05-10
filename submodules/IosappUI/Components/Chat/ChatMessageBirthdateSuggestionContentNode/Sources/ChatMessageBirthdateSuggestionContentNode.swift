@@ -4,19 +4,19 @@ import AsyncDisplayKit
 import Display
 import SwiftSignalKit
 import Postbox
-import TelegramCore
+import IosappCore
 import AccountContext
-import TelegramPresentationData
-import TelegramUIPreferences
+import IosappPresentationData
+import IosappUIPreferences
 import TextFormat
-import TelegramStringFormatting
+import IosappStringFormatting
 import WallpaperBackgroundNode
 import Markdown
 import ChatMessageBubbleContentNode
 import ChatMessageItemCommon
 import ChatControllerInteraction
 import AnimatedStickerNode
-import TelegramAnimatedStickerNode
+import IosappAnimatedStickerNode
 
 public class ChatMessageBirthdateSuggestionContentNode: ChatMessageBubbleContentNode {
     private var mediaBackgroundContent: WallpaperBubbleBackgroundNode?

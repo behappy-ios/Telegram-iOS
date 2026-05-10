@@ -1,10 +1,10 @@
 import Foundation
 import UIKit
 import Postbox
-import TelegramCore
+import IosappCore
 import SwiftSignalKit
-import TelegramPresentationData
-import TelegramUIPreferences
+import IosappPresentationData
+import IosappUIPreferences
 import MediaResources
 import AccountContext
 

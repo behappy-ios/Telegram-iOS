@@ -3,7 +3,7 @@ import UIKit
 import AsyncDisplayKit
 import SwiftSignalKit
 @preconcurrency import WebKit
-import TelegramCore
+import IosappCore
 import UniversalMediaPlayer
 
 protocol WebEmbedImplementation {

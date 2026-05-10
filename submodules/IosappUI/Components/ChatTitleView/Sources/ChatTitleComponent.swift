@@ -2,16 +2,16 @@ import Foundation
 import UIKit
 import Display
 import ComponentFlow
-import TelegramPresentationData
+import IosappPresentationData
 import AccountContext
-import TelegramUIPreferences
+import IosappUIPreferences
 import Postbox
-import TelegramCore
+import IosappCore
 import PeerPresenceStatusManager
 import ChatTitleActivityNode
 import AnimatedTextComponent
 import PhoneNumberFormat
-import TelegramStringFormatting
+import IosappStringFormatting
 import EmojiStatusComponent
 import GlassBackgroundComponent
 

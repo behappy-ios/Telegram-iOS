@@ -3,12 +3,12 @@ import UIKit
 import AsyncDisplayKit
 import Display
 import Postbox
-import TelegramCore
+import IosappCore
 import AccountContext
 import LocalizedPeerData
 import ContextUI
 import ChatListUI
-import TelegramPresentationData
+import IosappPresentationData
 import SwiftSignalKit
 import ChatControllerInteraction
 import ChatMessageItemCommon
@@ -16,7 +16,7 @@ import TextFormat
 import ChatMessageItem
 import ChatMessageTransitionNode
 import AnimatedStickerNode
-import TelegramAnimatedStickerNode
+import IosappAnimatedStickerNode
 import LottieMetal
 
 public func chatMessageItemLayoutConstants(_ constants: (ChatMessageItemLayoutConstants, ChatMessageItemLayoutConstants), params: ListViewItemLayoutParams, presentationData: ChatPresentationData) -> ChatMessageItemLayoutConstants {

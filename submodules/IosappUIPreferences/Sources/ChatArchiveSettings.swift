@@ -1,6 +1,6 @@
 import Foundation
 import SwiftSignalKit
-import TelegramCore
+import IosappCore
 
 public struct ChatArchiveSettings: Equatable, Codable {
     public var isHiddenByDefault: Bool

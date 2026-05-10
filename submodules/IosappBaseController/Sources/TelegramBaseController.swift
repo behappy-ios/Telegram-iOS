@@ -2,16 +2,16 @@ import Foundation
 import UIKit
 import AsyncDisplayKit
 import Display
-import TelegramCore
+import IosappCore
 import SwiftSignalKit
 import Postbox
-import TelegramPresentationData
-import TelegramUIPreferences
+import IosappPresentationData
+import IosappUIPreferences
 import UniversalMediaPlayer
 import AccountContext
 import OverlayStatusController
 import PresentationDataUtils
-import TelegramCallsUI
+import IosappCallsUI
 import UndoUI
 
 private func presentLiveLocationController(context: AccountContext, peerId: PeerId, controller: ViewController) {
@@ -47,7 +47,7 @@ private func presentLiveLocationController(context: AccountContext, peerId: Peer
     }
 }
 
-open class TelegramBaseController: ViewController, KeyShortcutResponder {
+open class IosappBaseController: ViewController, KeyShortcutResponder {
     private let context: AccountContext
     
     public var accessoryPanelContainer: ASDisplayNode?

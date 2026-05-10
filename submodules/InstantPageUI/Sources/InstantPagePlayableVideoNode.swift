@@ -2,13 +2,13 @@ import Foundation
 import UIKit
 import AsyncDisplayKit
 import Display
-import TelegramCore
+import IosappCore
 import SwiftSignalKit
-import TelegramPresentationData
+import IosappPresentationData
 import AccountContext
 import RadialStatusNode
 import GalleryUI
-import TelegramUniversalVideoContent
+import IosappUniversalVideoContent
 
 private struct FetchControls {
     let fetch: (Bool) -> Void

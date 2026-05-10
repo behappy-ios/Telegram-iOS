@@ -1,11 +1,11 @@
 import Foundation
 import UIKit
-import TelegramCore
+import IosappCore
 import AsyncDisplayKit
 import Display
-import TelegramPresentationData
+import IosappPresentationData
 import AccountContext
-import TelegramUIPreferences
+import IosappUIPreferences
 import ContextUI
 
 private final class InstantPageSlideshowItemNode: ASDisplayNode {

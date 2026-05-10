@@ -4,9 +4,9 @@ import Display
 import ComponentFlow
 import ComponentDisplayAdapters
 import SwiftSignalKit
-import TelegramCore
+import IosappCore
 import AccountContext
-import TelegramPresentationData
+import IosappPresentationData
 import PeerListItemComponent
 import EmojiTextAttachmentView
 import TextFormat

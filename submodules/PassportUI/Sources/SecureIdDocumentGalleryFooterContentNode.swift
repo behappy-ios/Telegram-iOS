@@ -3,10 +3,10 @@ import UIKit
 import AsyncDisplayKit
 import Display
 import Postbox
-import TelegramCore
+import IosappCore
 import SwiftSignalKit
 import Photos
-import TelegramPresentationData
+import IosappPresentationData
 import AccountContext
 import GalleryUI
 import AppBundle

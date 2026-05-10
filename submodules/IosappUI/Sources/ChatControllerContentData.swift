@@ -1,20 +1,20 @@
 import Foundation
-import TelegramPresentationData
+import IosappPresentationData
 import AccountContext
 import Postbox
 import ChatInterfaceState
-import TelegramCore
+import IosappCore
 import SwiftSignalKit
 import ChatTitleView
 import AvatarNode
 import ChatPresentationInterfaceState
 import PeerInfoScreen
-import TelegramNotices
+import IosappNotices
 import ChatListUI
 import EmojiStatusComponent
-import TelegramUIPreferences
+import IosappUIPreferences
 import TranslateUI
-import TelegramNotices
+import IosappNotices
 
 extension ChatControllerImpl {
     final class ContentData {

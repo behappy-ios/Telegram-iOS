@@ -2,7 +2,7 @@ import Foundation
 import UIKit
 import AsyncDisplayKit
 import Display
-import TelegramCore
+import IosappCore
 import SwiftSignalKit
 import Postbox
 import AVFoundation
@@ -10,8 +10,8 @@ import RadialStatusNode
 import StickerResources
 import PhotoResources
 import AnimatedStickerNode
-import TelegramAnimatedStickerNode
-import TelegramPresentationData
+import IosappAnimatedStickerNode
+import IosappPresentationData
 import AccountContext
 import ShimmerEffect
 import SoftwareVideo

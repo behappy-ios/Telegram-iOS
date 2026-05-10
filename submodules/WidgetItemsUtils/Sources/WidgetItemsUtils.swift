@@ -1,5 +1,5 @@
 import Foundation
-import TelegramCore
+import IosappCore
 import WidgetItems
 
 public extension WidgetDataPeer.Message {

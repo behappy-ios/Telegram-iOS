@@ -1,17 +1,17 @@
 import Foundation
 import UIKit
 import SwiftSignalKit
-import TelegramPresentationData
+import IosappPresentationData
 import AppBundle
 import AsyncDisplayKit
-import TelegramCore
+import IosappCore
 import Display
 import AccountContext
 import SolidRoundedButtonNode
 import ItemListUI
 import ItemListPeerItem
 import SectionHeaderItem
-import TelegramStringFormatting
+import IosappStringFormatting
 import MergeLists
 import ContextUI
 

@@ -1,17 +1,17 @@
 import Foundation
 import UIKit
 import Postbox
-import TelegramCore
+import IosappCore
 import TemporaryCachedPeerDataManager
 import Emoji
 import AccountContext
-import TelegramPresentationData
+import IosappPresentationData
 import ChatHistoryEntry
 import ChatMessageItemCommon
 import TextFormat
 import Markdown
 import Display
-import TelegramStringFormatting
+import IosappStringFormatting
 
 struct ChatHistoryEntriesForViewState {
     private var messageStableIdToLocalId: [UInt32: Int64] = [:]

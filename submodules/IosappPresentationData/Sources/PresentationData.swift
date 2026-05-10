@@ -2,10 +2,10 @@ import Foundation
 import UIKit
 import SwiftSignalKit
 import Postbox
-import TelegramCore
+import IosappCore
 import Contacts
 import Display
-import TelegramUIPreferences
+import IosappUIPreferences
 import AppBundle
 import Sunrise
 import PresentationStrings

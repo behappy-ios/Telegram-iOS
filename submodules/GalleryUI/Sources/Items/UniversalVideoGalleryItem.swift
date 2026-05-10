@@ -2,14 +2,14 @@ import Foundation
 import UIKit
 import AsyncDisplayKit
 import SwiftSignalKit
-import TelegramCore
+import IosappCore
 import Display
 import Postbox
-import TelegramPresentationData
+import IosappPresentationData
 import UniversalMediaPlayer
 import AccountContext
 import RadialStatusNode
-import TelegramUniversalVideoContent
+import IosappUniversalVideoContent
 import PresentationDataUtils
 import OverlayStatusController
 import StickerPackPreviewUI
@@ -18,7 +18,7 @@ import AnimationUI
 import ContextUI
 import SaveToCameraRoll
 import UndoUI
-import TelegramUIPreferences
+import IosappUIPreferences
 import OpenInExternalAppUI
 import AVKit
 import TextFormat

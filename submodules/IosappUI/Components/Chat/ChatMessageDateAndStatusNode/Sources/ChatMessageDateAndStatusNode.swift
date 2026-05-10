@@ -2,17 +2,17 @@ import Foundation
 import UIKit
 import AsyncDisplayKit
 import Postbox
-import TelegramCore
+import IosappCore
 import Display
 import SwiftSignalKit
-import TelegramPresentationData
+import IosappPresentationData
 import AccountContext
 import AppBundle
 import ReactionButtonListComponent
 import ReactionImageComponent
 import AnimationCache
 import MultiAnimationRenderer
-import TelegramStringFormatting
+import IosappStringFormatting
 
 private func maybeAddRotationAnimation(_ layer: CALayer, duration: Double) {
     if let _ = layer.animation(forKey: "clockFrameAnimation") {

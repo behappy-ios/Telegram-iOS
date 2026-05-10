@@ -4,9 +4,9 @@ import Display
 import AsyncDisplayKit
 import SwiftSignalKit
 import Postbox
-import TelegramCore
-import TelegramPresentationData
-import TelegramUIPreferences
+import IosappCore
+import IosappPresentationData
+import IosappUIPreferences
 import ItemListUI
 import PresentationDataUtils
 import OverlayStatusController
@@ -14,7 +14,7 @@ import AccountContext
 import ShareController
 import AlertUI
 import PresentationDataUtils
-import TelegramNotices
+import IosappNotices
 import ItemListPeerItem
 import ItemListPeerActionItem
 import AccountContext

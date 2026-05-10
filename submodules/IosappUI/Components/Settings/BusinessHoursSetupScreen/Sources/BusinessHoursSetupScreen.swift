@@ -4,9 +4,9 @@ import Display
 import AsyncDisplayKit
 import SwiftSignalKit
 import Postbox
-import TelegramCore
-import TelegramPresentationData
-import TelegramUIPreferences
+import IosappCore
+import IosappPresentationData
+import IosappUIPreferences
 import PresentationDataUtils
 import AccountContext
 import ComponentFlow
@@ -19,7 +19,7 @@ import BundleIconComponent
 import LottieComponent
 import Markdown
 import LocationUI
-import TelegramStringFormatting
+import IosappStringFormatting
 import TimezoneSelectionScreen
 import TextFormat
 

@@ -1,14 +1,14 @@
 import Foundation
 import UIKit
 import Display
-import TelegramPresentationData
+import IosappPresentationData
 import ComponentFlow
 import ComponentDisplayAdapters
 import SwitchComponent
 import EntityKeyboard
 import AccountContext
 import HierarchyTrackingLayer
-import TelegramCore
+import IosappCore
 
 private final class CaretIndicatorView: UIImageView {
     private let hierarchyTrackingLayer: HierarchyTrackingLayer

@@ -1,10 +1,10 @@
 import UIKit
-import TelegramUI
+import IosappUI
 import BuildConfig
 import ShareExtensionContext
 import SwiftSignalKit
 import Postbox
-import TelegramCore
+import IosappCore
 
 @objc(ShareRootController)
 class ShareRootController: UIViewController {

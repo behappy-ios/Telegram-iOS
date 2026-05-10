@@ -1,6 +1,6 @@
 import Foundation
 import Postbox
-import TelegramApi
+import IosappApi
 
 public class ReplyMessageAttribute: MessageAttribute {
     public let messageId: MessageId

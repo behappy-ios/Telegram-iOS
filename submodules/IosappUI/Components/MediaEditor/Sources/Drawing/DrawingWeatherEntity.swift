@@ -4,7 +4,7 @@ import Display
 import AccountContext
 import TextFormat
 import Postbox
-import TelegramCore
+import IosappCore
 
 public final class DrawingWeatherEntity: DrawingEntity, Codable {
     private enum CodingKeys: String, CodingKey {

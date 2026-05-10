@@ -6,9 +6,9 @@ import ComponentFlow
 import SwiftSignalKit
 import ViewControllerComponent
 import ComponentDisplayAdapters
-import TelegramPresentationData
+import IosappPresentationData
 import AccountContext
-import TelegramCore
+import IosappCore
 import Postbox
 import MultilineTextComponent
 import PresentationDataUtils
@@ -20,7 +20,7 @@ import PeerListItemComponent
 import LottieComponent
 import TooltipUI
 import Markdown
-import TelegramStringFormatting
+import IosappStringFormatting
 import ListSectionComponent
 import ListActionItemComponent
 import BundleIconComponent

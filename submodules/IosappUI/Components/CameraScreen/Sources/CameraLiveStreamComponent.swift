@@ -3,11 +3,11 @@ import UIKit
 import Display
 import ComponentFlow
 import Postbox
-import TelegramCore
+import IosappCore
 import SwiftSignalKit
 import AccountContext
-import TelegramCallsUI
-import TelegramPresentationData
+import IosappCallsUI
+import IosappPresentationData
 import StoryContainerScreen
 import ChatEntityKeyboardInputNode
 import AvatarNode

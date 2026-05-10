@@ -1,11 +1,11 @@
 import Foundation
 import UIKit
 import Display
-import TelegramCore
+import IosappCore
 import Postbox
 import SwiftSignalKit
-import TelegramPresentationData
-import TelegramBaseController
+import IosappPresentationData
+import IosappBaseController
 import AccountContext
 import AlertUI
 import PresentationDataUtils
@@ -14,7 +14,7 @@ import ChatNavigationButton
 import CounterControllerTitleView
 import AdminUserActionsSheet
 
-public final class ChatRecentActionsController: TelegramBaseController {
+public final class ChatRecentActionsController: IosappBaseController {
     private var controllerNode: ChatRecentActionsControllerNode {
         return self.displayNode as! ChatRecentActionsControllerNode
     }

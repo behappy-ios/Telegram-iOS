@@ -4,13 +4,13 @@
 import PackageDescription
 
 let package = Package(
-    name: "TelegramVoip",
+    name: "IosappVoip",
     platforms: [.macOS(.v10_13)],
     products: [
         // Products define the executables and libraries a package produces, and make them visible to other packages.
         .library(
-            name: "TelegramVoip",
-            targets: ["TelegramVoip"]),
+            name: "IosappVoip",
+            targets: ["IosappVoip"]),
     ],
     dependencies: [
         // Dependencies declare other packages that this package depends on.
@@ -18,19 +18,19 @@ let package = Package(
         .package(name: "TgVoipWebrtc", path: "../../../tgcalls"),
         .package(name: "SSignalKit", path: "../SSignalKit"),
         .package(name: "FFMpegBinding", path: "../FFMpegBinding"),
-        .package(name: "TelegramCore", path: "../TelegramCore")
+        .package(name: "IosappCore", path: "../IosappCore")
 
     ],
     targets: [
         // Targets are the basic building blocks of a package. A target can define a module or a test suite.
         // Targets can depend on other targets in this package, and on products in packages this package depends on.
         .target(
-            name: "TelegramVoip",
+            name: "IosappVoip",
             dependencies: [
                 .product(name: "TgVoipWebrtc", package: "TgVoipWebrtc", condition: nil),
                 .product(name: "SwiftSignalKit", package: "SSignalKit", condition: nil),
                 .product(name: "FFMpegBinding", package: "FFMpegBinding", condition: nil),
-                .product(name: "TelegramCore", package: "TelegramCore", condition: nil),
+                .product(name: "IosappCore", package: "IosappCore", condition: nil),
             ],
             path: "Sources",
             exclude: [

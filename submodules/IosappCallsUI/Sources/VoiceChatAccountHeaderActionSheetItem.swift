@@ -2,9 +2,9 @@ import Foundation
 import UIKit
 import Display
 import Postbox
-import TelegramCore
-import TelegramPresentationData
-import TelegramUIPreferences
+import IosappCore
+import IosappPresentationData
+import IosappUIPreferences
 import AccountContext
 import AnimatedStickerNode
 import AppBundle

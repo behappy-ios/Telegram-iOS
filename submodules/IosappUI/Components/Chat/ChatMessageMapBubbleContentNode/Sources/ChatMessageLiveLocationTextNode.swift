@@ -2,9 +2,9 @@ import Foundation
 import UIKit
 import AsyncDisplayKit
 import Display
-import TelegramPresentationData
-import TelegramUIPreferences
-import TelegramStringFormatting
+import IosappPresentationData
+import IosappUIPreferences
+import IosappStringFormatting
 
 private let textFont: UIFont = Font.regular(14.0)
 

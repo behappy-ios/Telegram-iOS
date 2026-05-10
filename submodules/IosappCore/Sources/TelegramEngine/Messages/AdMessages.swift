@@ -1,7 +1,7 @@
 import Foundation
 import Postbox
 import SwiftSignalKit
-import TelegramApi
+import IosappApi
 
 private class AdMessagesHistoryContextImpl {
     final class CachedMessage: Equatable, Codable {

@@ -3,10 +3,10 @@ import UIKit
 import Display
 import AsyncDisplayKit
 import Postbox
-import TelegramCore
+import IosappCore
 import SSignalKit
 import SwiftSignalKit
-import TelegramPresentationData
+import IosappPresentationData
 import LegacyComponents
 import SolidRoundedButtonNode
 import RMIntro

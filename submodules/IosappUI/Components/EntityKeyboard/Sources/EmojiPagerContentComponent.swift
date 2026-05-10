@@ -3,8 +3,8 @@ import UIKit
 import Display
 import ComponentFlow
 import PagerComponent
-import TelegramPresentationData
-import TelegramCore
+import IosappPresentationData
+import IosappCore
 import Postbox
 import MultiAnimationRenderer
 import AnimationCache
@@ -12,7 +12,7 @@ import AccountContext
 import LottieAnimationCache
 import VideoAnimationCache
 import AnimatedStickerNode
-import TelegramAnimatedStickerNode
+import IosappAnimatedStickerNode
 import SwiftSignalKit
 import ShimmerEffect
 import PagerComponent
@@ -23,7 +23,7 @@ import AudioToolbox
 import SolidRoundedButtonComponent
 import EmojiTextAttachmentView
 import EmojiStatusComponent
-import TelegramNotices
+import IosappNotices
 import GenerateStickerPlaceholderImage
 
 public struct EmojiComponentReactionItem: Equatable {

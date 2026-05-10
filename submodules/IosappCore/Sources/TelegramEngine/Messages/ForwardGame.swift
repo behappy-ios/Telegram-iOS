@@ -1,6 +1,6 @@
 import Foundation
 import Postbox
-import TelegramApi
+import IosappApi
 import SwiftSignalKit
 
 func _internal_forwardGameWithScore(account: Account, messageId: MessageId, to peerId: PeerId, threadId: Int64?, as sendAsPeerId: PeerId?) -> Signal<Void, NoError> {

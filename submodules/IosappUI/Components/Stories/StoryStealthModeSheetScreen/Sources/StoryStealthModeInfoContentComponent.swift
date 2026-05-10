@@ -3,11 +3,11 @@ import UIKit
 import Display
 import ComponentFlow
 import MultilineTextComponent
-import TelegramPresentationData
+import IosappPresentationData
 import AppBundle
 import BundleIconComponent
 import Markdown
-import TelegramCore
+import IosappCore
 import BalancedTextComponent
 
 public final class StoryStealthModeInfoContentComponent: Component {

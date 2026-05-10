@@ -2,7 +2,7 @@ import Foundation
 import UIKit
 import SwiftSignalKit
 import Display
-import TelegramPresentationData
+import IosappPresentationData
 import ComponentFlow
 import ComponentDisplayAdapters
 import AccountContext
@@ -11,7 +11,7 @@ import MultilineTextComponent
 import BalancedTextComponent
 import ButtonComponent
 import BundleIconComponent
-import TelegramCore
+import IosappCore
 import PresentationDataUtils
 import ResizableSheetComponent
 import GlassBarButtonComponent

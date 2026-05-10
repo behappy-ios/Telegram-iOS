@@ -4,11 +4,11 @@ import Display
 import ComponentFlow
 import SwiftSignalKit
 import Postbox
-import TelegramCore
+import IosappCore
 import AppBundle
 import LocalMediaResources
-import TelegramPresentationData
-import TelegramStringFormatting
+import IosappPresentationData
+import IosappStringFormatting
 import ViewControllerComponent
 import BundleIconComponent
 import BalancedTextComponent
@@ -32,7 +32,7 @@ import TooltipUI
 import TextFormat
 import GlassBackgroundComponent
 import ConfettiEffect
-import TelegramNotices
+import IosappNotices
 
 private final class CraftGiftPageContent: Component {
     typealias EnvironmentType = ViewControllerComponentContainer.Environment

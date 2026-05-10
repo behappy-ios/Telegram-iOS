@@ -5,9 +5,9 @@ import AsyncDisplayKit
 import Display
 import SwiftSignalKit
 import Postbox
-import TelegramCore
+import IosappCore
 import CoreImage
-import TelegramPresentationData
+import IosappPresentationData
 import Compression
 import TextFormat
 import AccountContext
@@ -15,7 +15,7 @@ import MediaResources
 import StickerResources
 import ContextUI
 import AnimatedStickerNode
-import TelegramAnimatedStickerNode
+import IosappAnimatedStickerNode
 import Emoji
 import Markdown
 import ManagedAnimationNode
@@ -47,7 +47,7 @@ import ManagedDiceAnimationNode
 import MessageHaptics
 import ChatMessageTransitionNode
 import ChatMessageSuggestedPostInfoNode
-import TelegramStringFormatting
+import IosappStringFormatting
 
 private let nameFont = Font.medium(14.0)
 private let inlineBotPrefixFont = Font.regular(14.0)

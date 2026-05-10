@@ -1,8 +1,8 @@
 import Foundation
 import UIKit
 import Postbox
-import TelegramUIPreferences
-import TelegramCore
+import IosappUIPreferences
+import IosappCore
 
 public func makeDefaultPresentationTheme(reference: PresentationBuiltinThemeReference, extendingThemeReference: PresentationThemeReference? = nil, serviceBackgroundColor: UIColor?, preview: Bool = false) -> PresentationTheme {
     let theme: PresentationTheme

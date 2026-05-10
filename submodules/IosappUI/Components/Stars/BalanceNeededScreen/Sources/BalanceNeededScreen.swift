@@ -10,10 +10,10 @@ import LottieComponent
 import MultilineTextComponent
 import BalancedTextComponent
 import Markdown
-import TelegramStringFormatting
+import IosappStringFormatting
 import BundleIconComponent
-import TelegramCore
-import TelegramPresentationData
+import IosappCore
+import IosappPresentationData
 import GlassBarButtonComponent
 
 private final class BalanceNeededSheetContentComponent: Component {

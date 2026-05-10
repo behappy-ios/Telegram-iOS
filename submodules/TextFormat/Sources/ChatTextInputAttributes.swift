@@ -3,8 +3,8 @@ import UIKit
 import Display
 import AsyncDisplayKit
 import Postbox
-import TelegramCore
-import TelegramPresentationData
+import IosappCore
+import IosappPresentationData
 import Emoji
 
 private let alphanumericCharacters = CharacterSet.alphanumerics

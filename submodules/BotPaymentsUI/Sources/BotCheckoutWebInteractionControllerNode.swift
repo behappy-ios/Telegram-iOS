@@ -3,7 +3,7 @@ import UIKit
 import Display
 import AsyncDisplayKit
 @preconcurrency import WebKit
-import TelegramPresentationData
+import IosappPresentationData
 import AccountContext
 
 private class WeakPaymentScriptMessageHandler: NSObject, WKScriptMessageHandler {

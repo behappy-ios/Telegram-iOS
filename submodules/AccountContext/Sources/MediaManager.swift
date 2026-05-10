@@ -1,10 +1,10 @@
 import Foundation
 import Postbox
-import TelegramCore
+import IosappCore
 import SwiftSignalKit
 import UIKit
 import AsyncDisplayKit
-import TelegramAudio
+import IosappAudio
 import UniversalMediaPlayer
 import RangeSet
 

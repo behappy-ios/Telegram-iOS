@@ -4,12 +4,12 @@ import SceneKit
 import Display
 import AsyncDisplayKit
 import SwiftSignalKit
-import TelegramCore
+import IosappCore
 import ComponentFlow
 import AccountContext
 import RadialStatusNode
 import UniversalMediaPlayer
-import TelegramUniversalVideoContent
+import IosappUniversalVideoContent
 import AppBundle
 import ShimmerEffect
 

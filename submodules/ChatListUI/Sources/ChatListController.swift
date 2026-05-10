@@ -4,25 +4,25 @@ import Postbox
 import SwiftSignalKit
 import AsyncDisplayKit
 import Display
-import TelegramCore
-import TelegramPresentationData
-import TelegramUIPreferences
-import TelegramBaseController
+import IosappCore
+import IosappPresentationData
+import IosappUIPreferences
+import IosappBaseController
 import OverlayStatusController
 import AccountContext
 import AlertUI
 import PresentationDataUtils
 import UndoUI
-import TelegramNotices
+import IosappNotices
 import SearchUI
 import DeleteChatPeerActionSheetItem
 import LanguageSuggestionUI
 import ContextUI
 import AppBundle
 import LocalizedPeerData
-import TelegramIntents
+import IosappIntents
 import TooltipUI
-import TelegramCallsUI
+import IosappCallsUI
 import StickerResources
 import PasswordSetupUI
 import FetchManagerImpl
@@ -35,7 +35,7 @@ import AnimationCache
 import MultiAnimationRenderer
 import EmojiStatusSelectionComponent
 import EntityKeyboard
-import TelegramStringFormatting
+import IosappStringFormatting
 import ForumCreateTopicScreen
 import AnimationUI
 import ChatTitleView
@@ -89,7 +89,7 @@ private final class ContextControllerContentSourceImpl: ContextControllerContent
     }
 }
 
-public class ChatListControllerImpl: TelegramBaseController, ChatListController {
+public class ChatListControllerImpl: IosappBaseController, ChatListController {
     private var validLayout: ContainerViewLayout?
     
     public let context: AccountContext

@@ -5,12 +5,12 @@ import QuickLook
 import Postbox
 import SwiftSignalKit
 import AsyncDisplayKit
-import TelegramCore
+import IosappCore
 import SafariServices
-import TelegramPresentationData
+import IosappPresentationData
 import AccountContext
 import GalleryUI
-import TelegramUniversalVideoContent
+import IosappUniversalVideoContent
 import OpenInExternalAppUI
 
 public struct InstantPageGalleryEntryLocation: Equatable {

@@ -9,10 +9,10 @@ import AppBundle
 import LegacyComponents
 import AvatarNode
 import AccountContext
-import TelegramCore
+import IosappCore
 import MergedAvatarsNode
 import MultilineTextComponent
-import TelegramPresentationData
+import IosappPresentationData
 import PhotoResources
 
 private let sceneVersion: Int = 1

@@ -9,7 +9,7 @@ import TextFormat
 import AccountContext
 import AnimationCache
 import MultiAnimationRenderer
-import TelegramCore
+import IosappCore
 import EmojiTextAttachmentView
 
 private final class InlineStickerItem: Hashable {

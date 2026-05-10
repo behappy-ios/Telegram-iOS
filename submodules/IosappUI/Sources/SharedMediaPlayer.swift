@@ -2,12 +2,12 @@ import Foundation
 import UIKit
 import SwiftSignalKit
 import Postbox
-import TelegramCore
-import TelegramUIPreferences
+import IosappCore
+import IosappUIPreferences
 import UniversalMediaPlayer
-import TelegramAudio
+import IosappAudio
 import AccountContext
-import TelegramUniversalVideoContent
+import IosappUniversalVideoContent
 import DeviceProximity
 import PeerMessagesMediaPlaylist
 

@@ -3,7 +3,7 @@ import UIKit
 import Display
 import HierarchyTrackingLayer
 import Postbox
-import TelegramCore
+import IosappCore
 import AnimationCache
 import MultiAnimationRenderer
 import SwiftSignalKit

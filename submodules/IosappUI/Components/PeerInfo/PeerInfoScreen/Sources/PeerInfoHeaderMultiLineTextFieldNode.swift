@@ -2,9 +2,9 @@ import Foundation
 import UIKit
 import AsyncDisplayKit
 import ContextUI
-import TelegramPresentationData
+import IosappPresentationData
 import Display
-import TelegramUIPreferences
+import IosappUIPreferences
 
 final class PeerInfoHeaderMultiLineTextFieldNode: ASDisplayNode, PeerInfoHeaderTextFieldNode, ASEditableTextNodeDelegate {
     private let backgroundNode: ASDisplayNode

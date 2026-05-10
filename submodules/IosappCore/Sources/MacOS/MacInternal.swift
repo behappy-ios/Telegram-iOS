@@ -1,5 +1,5 @@
 
-import TelegramApi
+import IosappApi
 import SwiftSignalKit
 import Postbox
 import Foundation

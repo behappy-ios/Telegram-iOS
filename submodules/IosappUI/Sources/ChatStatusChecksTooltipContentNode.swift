@@ -4,7 +4,7 @@ import AsyncDisplayKit
 import Display
 import SwiftSignalKit
 import LegacyComponents
-import TelegramPresentationData
+import IosappPresentationData
 import TooltipUI
 
 private final class ChecksNodeParameters: NSObject {

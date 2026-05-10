@@ -3,7 +3,7 @@ import UIKit
 import ComponentFlow
 import AppBundle
 import Display
-import TelegramPresentationData
+import IosappPresentationData
 import LottieAnimationComponent
 import BundleIconComponent
 

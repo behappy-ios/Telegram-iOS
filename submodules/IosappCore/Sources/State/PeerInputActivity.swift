@@ -1,6 +1,6 @@
 import Foundation
 import Postbox
-import TelegramApi
+import IosappApi
 
 public struct EmojiInteraction: Equatable {
     public struct Animation: Equatable {

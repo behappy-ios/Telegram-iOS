@@ -6,10 +6,10 @@ import Metal
 import MetalKit
 import Display
 import SwiftSignalKit
-import TelegramCore
+import IosappCore
 import Postbox
 import AnimatedStickerNode
-import TelegramAnimatedStickerNode
+import IosappAnimatedStickerNode
 import YuvConversion
 import StickerResources
 

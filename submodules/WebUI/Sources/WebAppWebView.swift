@@ -3,7 +3,7 @@ import UIKit
 import Display
 import WebKit
 import SwiftSignalKit
-import TelegramCore
+import IosappCore
 
 private let findActiveElementY = """
 function getOffset(el) {

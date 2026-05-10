@@ -2,14 +2,14 @@ import Foundation
 import UIKit
 import Display
 import SwiftSignalKit
-import TelegramCore
+import IosappCore
 import ComponentFlow
-import TelegramPresentationData
+import IosappPresentationData
 import AccountContext
 import ComponentDisplayAdapters
 import MultilineTextComponent
 import EmojiStatusComponent
-import TelegramStringFormatting
+import IosappStringFormatting
 import SolidRoundedButtonComponent
 import PresentationDataUtils
 

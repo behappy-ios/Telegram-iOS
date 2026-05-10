@@ -6,7 +6,7 @@ import MediaEditor
 import DrawingUI
 import ChatPresentationInterfaceState
 import PresentationDataUtils
-import TelegramPresentationData
+import IosappPresentationData
 import DeviceAccess
 import AccountContext
 

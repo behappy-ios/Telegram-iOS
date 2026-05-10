@@ -1,16 +1,16 @@
 import Foundation
 import UIKit
 import AsyncDisplayKit
-import TelegramCore
+import IosappCore
 import SwiftSignalKit
-import TelegramPresentationData
+import IosappPresentationData
 import AccountContext
 import ItemListUI
 import Display
 import ItemListPeerItem
 import ItemListPeerActionItem
 import TextFormat
-import TelegramStringFormatting
+import IosappStringFormatting
 
 private let collapsedResultCount: Int = 10
 private let collapsedInitialLimit: Int = 10

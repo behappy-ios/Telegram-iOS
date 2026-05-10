@@ -1,7 +1,7 @@
 import Foundation
 import SwiftSignalKit
 import MtProtoKit
-import TelegramApi
+import IosappApi
 
 
 public enum ConfirmTwoStepRecoveryEmailError {

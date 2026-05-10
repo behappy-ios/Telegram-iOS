@@ -2,10 +2,10 @@ import Foundation
 import UIKit
 import SwiftSignalKit
 import Postbox
-import TelegramCore
+import IosappCore
 import QuickLook
 import Display
-import TelegramPresentationData
+import IosappPresentationData
 
 private final class DocumentPreviewItem: NSObject, QLPreviewItem {
     private let url: URL

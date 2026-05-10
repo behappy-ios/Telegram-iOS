@@ -4,7 +4,7 @@ import Display
 import AsyncDisplayKit
 import SwiftSignalKit
 import ContextUI
-import TelegramPresentationData
+import IosappPresentationData
 import AnimatedCountLabelNode
 
 public final class SliderContextItem: ContextMenuCustomItem {

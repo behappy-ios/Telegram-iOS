@@ -5,10 +5,10 @@ import AsyncDisplayKit
 import ComponentFlow
 import SwiftSignalKit
 import Postbox
-import TelegramCore
+import IosappCore
 import AccountContext
-import TelegramPresentationData
-import TelegramStringFormatting
+import IosappPresentationData
+import IosappStringFormatting
 import ItemListUI
 import PresentationDataUtils
 import PhotoResources

@@ -1,11 +1,11 @@
 import AsyncDisplayKit
 import Display
-import TelegramPresentationData
+import IosappPresentationData
 import AccountContext
 import TextFormat
 import UIKit
 import AppBundle
-import TelegramStringFormatting
+import IosappStringFormatting
 import ContextUI
 
 final class PeerInfoScreenContactInfoItem: PeerInfoScreenItem {

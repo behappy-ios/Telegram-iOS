@@ -5,8 +5,8 @@ import Postbox
 import Display
 import SwiftSignalKit
 import WebKit
-import TelegramCore
-import TelegramPresentationData
+import IosappCore
+import IosappPresentationData
 import AccountContext
 import RadialStatusNode
 

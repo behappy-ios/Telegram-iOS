@@ -3,11 +3,11 @@ import UIKit
 import Display
 import AsyncDisplayKit
 import Postbox
-import TelegramCore
+import IosappCore
 import SwiftSignalKit
-import TelegramPresentationData
-import TelegramUIPreferences
-import TelegramAudio
+import IosappPresentationData
+import IosappUIPreferences
+import IosappAudio
 import AccountContext
 import LocalizedPeerData
 import PhotoResources

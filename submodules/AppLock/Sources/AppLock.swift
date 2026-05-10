@@ -1,13 +1,13 @@
 import Foundation
 import UIKit
-import TelegramCore
+import IosappCore
 import Display
 import SwiftSignalKit
 import MonotonicTime
 import AccountContext
-import TelegramPresentationData
+import IosappPresentationData
 import PasscodeUI
-import TelegramUIPreferences
+import IosappUIPreferences
 import ImageBlur
 import FastBlur
 import AppLockState

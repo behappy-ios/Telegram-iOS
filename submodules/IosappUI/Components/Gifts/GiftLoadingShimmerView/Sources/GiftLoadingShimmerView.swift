@@ -1,7 +1,7 @@
 import UIKit
 import Display
 import ComponentFlow
-import TelegramPresentationData
+import IosappPresentationData
 
 private final class ShimmerEffectView: UIView {
     private var currentBackgroundColor: UIColor?

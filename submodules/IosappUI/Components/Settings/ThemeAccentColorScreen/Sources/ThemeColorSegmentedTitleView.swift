@@ -1,7 +1,7 @@
 import Foundation
 import UIKit
 import SegmentedControlNode
-import TelegramPresentationData
+import IosappPresentationData
 
 final class ThemeColorSegmentedTitleView: UIView {
     private let segmentedControlNode: SegmentedControlNode

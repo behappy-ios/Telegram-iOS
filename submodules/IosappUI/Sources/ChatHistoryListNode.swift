@@ -4,10 +4,10 @@ import Postbox
 import SwiftSignalKit
 import Display
 import AsyncDisplayKit
-import TelegramCore
+import IosappCore
 import Postbox
-import TelegramPresentationData
-import TelegramUIPreferences
+import IosappPresentationData
+import IosappUIPreferences
 import MediaResources
 import AccountContext
 import TemporaryCachedPeerDataManager
@@ -21,7 +21,7 @@ import ChatListUI
 import ComponentFlow
 import ReactionSelectionNode
 import ChatPresentationInterfaceState
-import TelegramNotices
+import IosappNotices
 import ChatControllerInteraction
 import TranslateUI
 import ChatHistoryEntry

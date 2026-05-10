@@ -3,18 +3,18 @@ import UIKit
 import Display
 import ComponentFlow
 import AccountContext
-import TelegramCore
+import IosappCore
 import Postbox
 import AsyncDisplayKit
 import PhotoResources
 import SwiftSignalKit
 import UniversalMediaPlayer
-import TelegramUniversalVideoContent
+import IosappUniversalVideoContent
 import HierarchyTrackingLayer
 import ButtonComponent
 import MultilineTextComponent
-import TelegramPresentationData
-import TelegramCallsUI
+import IosappPresentationData
+import IosappCallsUI
 
 final class StoryItemContentComponent: Component {
     typealias EnvironmentType = StoryContentItem.Environment

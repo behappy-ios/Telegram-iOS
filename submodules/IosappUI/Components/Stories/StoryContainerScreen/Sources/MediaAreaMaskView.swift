@@ -1,7 +1,7 @@
 import Foundation
 import UIKit
 import Display
-import TelegramCore
+import IosappCore
 
 final class MediaAreaMaskLayer: CALayer {
     private var params: (referenceSize: CGSize, mediaAreas: [MediaArea])?

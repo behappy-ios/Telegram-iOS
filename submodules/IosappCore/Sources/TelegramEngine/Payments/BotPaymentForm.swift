@@ -2,7 +2,7 @@ import Foundation
 import Postbox
 import MtProtoKit
 import SwiftSignalKit
-import TelegramApi
+import IosappApi
 
 public enum BotPaymentInvoiceSource {
     case message(MessageId)

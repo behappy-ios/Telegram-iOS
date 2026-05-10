@@ -5,7 +5,7 @@ import Postbox
 import AccountContext
 import OverlayStatusController
 import UrlWhitelist
-import TelegramPresentationData
+import IosappPresentationData
 import AlertComponent
 import UrlHandling
 

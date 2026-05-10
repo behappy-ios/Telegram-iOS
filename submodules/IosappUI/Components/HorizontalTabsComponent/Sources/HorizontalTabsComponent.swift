@@ -2,9 +2,9 @@ import Foundation
 import UIKit
 import Display
 import ComponentFlow
-import TelegramPresentationData
+import IosappPresentationData
 import AccountContext
-import TelegramCore
+import IosappCore
 import MultilineTextWithEntitiesComponent
 import TextBadgeComponent
 import LiquidLens

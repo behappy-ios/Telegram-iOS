@@ -1,15 +1,15 @@
 import Foundation
 import AccountContext
 import Postbox
-import TelegramCore
+import IosappCore
 import SwiftSignalKit
 import Display
-import TelegramPresentationData
+import IosappPresentationData
 import PresentationDataUtils
 import UndoUI
 import EmojiGameStakeScreen
 import ChatPresentationInterfaceState
-import TelegramStringFormatting
+import IosappStringFormatting
 
 extension ChatControllerImpl {
     func presentEmojiGameStake() {

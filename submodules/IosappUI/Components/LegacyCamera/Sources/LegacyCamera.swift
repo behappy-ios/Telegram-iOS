@@ -2,7 +2,7 @@ import Foundation
 import UIKit
 import LegacyComponents
 import Display
-import TelegramCore
+import IosappCore
 import Postbox
 import SSignalKit
 import SwiftSignalKit

@@ -1,7 +1,7 @@
 import Foundation
 import UIKit
 import AsyncDisplayKit
-import TelegramPresentationData
+import IosappPresentationData
 import ChatPresentationInterfaceState
 import AccountContext
 import ChatSendMessageActionUI
@@ -9,7 +9,7 @@ import SwiftSignalKit
 import ComponentFlow
 import Display
 import Postbox
-import TelegramCore
+import IosappCore
 import WallpaperBackgroundNode
 import AudioWaveform
 import ChatMessageItemView
@@ -17,7 +17,7 @@ import ChatMessageItemCommon
 import ChatMessageBubbleContentNode
 import ChatMessageMediaBubbleContentNode
 import ChatControllerInteraction
-import TelegramUIPreferences
+import IosappUIPreferences
 import ChatHistoryEntry
 import MosaicLayout
 

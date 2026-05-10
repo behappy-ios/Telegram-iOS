@@ -10,7 +10,7 @@ import LottieComponent
 import MultilineTextComponent
 import BalancedTextComponent
 import Markdown
-import TelegramStringFormatting
+import IosappStringFormatting
 import BundleIconComponent
 import GlassBarButtonComponent
 

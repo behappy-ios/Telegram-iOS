@@ -1,9 +1,9 @@
 import Foundation
 import Postbox
-import TelegramCore
-import TelegramPresentationData
-import TelegramUIPreferences
-import TelegramStringFormatting
+import IosappCore
+import IosappPresentationData
+import IosappUIPreferences
+import IosappStringFormatting
 import TextFormat
 import LocalizedPeerData
 import AccountContext

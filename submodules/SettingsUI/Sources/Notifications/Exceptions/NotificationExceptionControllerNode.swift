@@ -2,10 +2,10 @@ import Foundation
 import UIKit
 import Display
 import AsyncDisplayKit
-import TelegramCore
+import IosappCore
 import SwiftSignalKit
-import TelegramPresentationData
-import TelegramUIPreferences
+import IosappPresentationData
+import IosappUIPreferences
 import ItemListUI
 import PresentationDataUtils
 import MergeLists
@@ -17,7 +17,7 @@ import ContactsPeerItem
 import ChatListSearchItemHeader
 import ChatListUI
 import ItemListPeerActionItem
-import TelegramStringFormatting
+import IosappStringFormatting
 import NotificationPeerExceptionController
 import Postbox
 

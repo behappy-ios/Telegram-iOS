@@ -3,10 +3,10 @@ import UIKit
 import Display
 import AsyncDisplayKit
 import SwiftSignalKit
-import TelegramPresentationData
+import IosappPresentationData
 import AccountContext
 import ContextUI
-import TelegramCore
+import IosappCore
 import Postbox
 import TextFormat
 import ReactionSelectionNode
@@ -17,7 +17,7 @@ import WallpaperBackgroundNode
 import ReactionSelectionNode
 import EntityKeyboard
 import LottieMetal
-import TelegramAnimatedStickerNode
+import IosappAnimatedStickerNode
 import AnimatedStickerNode
 import ChatInputTextNode
 import UndoUI

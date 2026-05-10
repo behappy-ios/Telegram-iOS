@@ -2,14 +2,14 @@ import Foundation
 import UIKit
 import Display
 import ComponentFlow
-import TelegramCore
+import IosappCore
 import AvatarNode
 import AppBundle
 import AccountContext
 import HierarchyTrackingLayer
 import LokiRng
 import SwiftSignalKit
-import TelegramPresentationData
+import IosappPresentationData
 
 private let gradientColors: [NSArray] = [
     [UIColor(rgb: 0xff516a).cgColor, UIColor(rgb: 0xff885e).cgColor],

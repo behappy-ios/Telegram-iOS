@@ -4,12 +4,12 @@ import Display
 import AsyncDisplayKit
 import SwiftSignalKit
 import AccountContext
-import TelegramPresentationData
+import IosappPresentationData
 import ItemListUI
 import SolidRoundedButtonNode
 import AnimatedAvatarSetNode
 import ShimmerEffect
-import TelegramCore
+import IosappCore
 
 private func actionButtonImage(color: UIColor) -> UIImage? {
     return generateImage(CGSize(width: 24.0, height: 24.0), contextGenerator: { size, context in

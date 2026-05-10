@@ -1,12 +1,12 @@
 import Foundation
 import UIKit
 import AsyncDisplayKit
-import TelegramCore
+import IosappCore
 import Postbox
 import SwiftSignalKit
 import Display
-import TelegramPresentationData
-import TelegramUIPreferences
+import IosappPresentationData
+import IosappUIPreferences
 import SafariServices
 import AccountContext
 import TemporaryCachedPeerDataManager
@@ -21,7 +21,7 @@ import LanguageLinkPreviewUI
 import PeerInfoUI
 import InviteLinksUI
 import UndoUI
-import TelegramCallsUI
+import IosappCallsUI
 import WallpaperBackgroundNode
 import BotPaymentsUI
 import ContextUI

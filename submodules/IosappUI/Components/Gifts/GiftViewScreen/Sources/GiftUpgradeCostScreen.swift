@@ -2,8 +2,8 @@ import Foundation
 import UIKit
 import SwiftSignalKit
 import Display
-import TelegramCore
-import TelegramPresentationData
+import IosappCore
+import IosappPresentationData
 import ComponentFlow
 import ComponentDisplayAdapters
 import AccountContext
@@ -16,7 +16,7 @@ import PresentationDataUtils
 import LottieComponent
 import ProfileLevelRatingBarComponent
 import TextFormat
-import TelegramStringFormatting
+import IosappStringFormatting
 import TableComponent
 import ResizableSheetComponent
 import GlassBarButtonComponent

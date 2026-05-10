@@ -3,21 +3,21 @@ import UIKit
 import AsyncDisplayKit
 import LegacyComponents
 import Display
-import TelegramCore
+import IosappCore
 import Postbox
 import SwiftSignalKit
 import AccountContext
 import LegacyComponents
 import ComponentFlow
 import MessageInputPanelComponent
-import TelegramPresentationData
+import IosappPresentationData
 import ContextUI
 import TooltipUI
 import LegacyMessageInputPanelInputView
 import UndoUI
-import TelegramNotices
+import IosappNotices
 import TextFormat
-import TelegramUIPreferences
+import IosappUIPreferences
 import Pasteboard
 
 public class LegacyMessageInputPanelNode: ASDisplayNode, TGCaptionPanelView {

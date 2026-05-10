@@ -3,7 +3,7 @@ import UIKit
 import Display
 import AsyncDisplayKit
 import AccountContext
-import TelegramPresentationData
+import IosappPresentationData
 
 protocol PeerInfoScreenItem: AnyObject {
     var id: AnyHashable { get }

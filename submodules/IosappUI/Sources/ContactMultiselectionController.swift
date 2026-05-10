@@ -4,9 +4,9 @@ import Display
 import AsyncDisplayKit
 import Postbox
 import SwiftSignalKit
-import TelegramCore
-import TelegramPresentationData
-import TelegramUIPreferences
+import IosappCore
+import IosappPresentationData
+import IosappUIPreferences
 import ProgressNavigationButtonNode
 import AccountContext
 import AlertUI

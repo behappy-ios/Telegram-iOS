@@ -8,8 +8,8 @@ import Camera
 import GlassButtonNode
 import CoreImage
 import AlertUI
-import TelegramPresentationData
-import TelegramCore
+import IosappPresentationData
+import IosappCore
 import UndoUI
 import Markdown
 import TextFormat

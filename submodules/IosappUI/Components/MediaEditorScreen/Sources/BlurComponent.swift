@@ -4,7 +4,7 @@ import Display
 import ComponentFlow
 import LegacyComponents
 import MediaEditor
-import TelegramPresentationData
+import IosappPresentationData
 
 private final class BlurModeComponent: Component {
     typealias EnvironmentType = Empty

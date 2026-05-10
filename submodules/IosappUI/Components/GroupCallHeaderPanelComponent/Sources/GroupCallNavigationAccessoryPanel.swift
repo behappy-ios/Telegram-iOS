@@ -2,17 +2,17 @@ import Foundation
 import UIKit
 import AsyncDisplayKit
 import Display
-import TelegramCore
+import IosappCore
 import Postbox
-import TelegramPresentationData
-import TelegramUIPreferences
-import TelegramStringFormatting
+import IosappPresentationData
+import IosappUIPreferences
+import IosappStringFormatting
 import AccountContext
 import AppBundle
 import SwiftSignalKit
 import AnimatedAvatarSetNode
 import AudioBlob
-import TelegramCallsUI
+import IosappCallsUI
 import GlobalControlPanelsContext
 
 func textForTimeout(value: Int32) -> String {

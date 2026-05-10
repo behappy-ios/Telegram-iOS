@@ -3,7 +3,7 @@ import UIKit
 import Display
 import AccountContext
 import SwiftSignalKit
-import TelegramCore
+import IosappCore
 import Postbox
 import AvatarNode
 

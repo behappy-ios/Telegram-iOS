@@ -1,5 +1,5 @@
 import Foundation
-import TelegramCore
+import IosappCore
 
 public func hasBirthdayToday(cachedData: CachedUserData) -> Bool {
     if let birthday = cachedData.birthday {

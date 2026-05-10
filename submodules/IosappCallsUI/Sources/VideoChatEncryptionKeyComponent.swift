@@ -4,7 +4,7 @@ import Display
 import ComponentFlow
 import MultilineTextComponent
 import BalancedTextComponent
-import TelegramPresentationData
+import IosappPresentationData
 import CallsEmoji
 import ImageBlur
 import HierarchyTrackingLayer

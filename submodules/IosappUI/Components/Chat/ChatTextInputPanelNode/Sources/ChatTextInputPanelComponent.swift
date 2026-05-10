@@ -2,12 +2,12 @@ import Foundation
 import UIKit
 import Display
 import AsyncDisplayKit
-import TelegramPresentationData
+import IosappPresentationData
 import ComponentFlow
 import ChatControllerInteraction
 import AccountContext
 import ChatPresentationInterfaceState
-import TelegramCore
+import IosappCore
 import ComponentDisplayAdapters
 
 private final class EmptyInputView: UIView, UIInputViewAudioFeedback {

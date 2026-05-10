@@ -3,13 +3,13 @@ import UIKit
 import Display
 import AsyncDisplayKit
 import SwiftSignalKit
-import TelegramCore
+import IosappCore
 import AccountContext
-import TelegramPresentationData
+import IosappPresentationData
 import ComponentFlow
 import PhotoResources
 import DirectMediaImageCache
-import TelegramStringFormatting
+import IosappStringFormatting
 import TooltipUI
 
 private enum SelectionTransition {

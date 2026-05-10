@@ -2,10 +2,10 @@ import Foundation
 import UIKit
 import AVFoundation
 import SwiftSignalKit
-import TelegramCore
+import IosappCore
 import AccountContext
-import TelegramUIPreferences
-import TelegramPresentationData
+import IosappUIPreferences
+import IosappPresentationData
 
 extension AVPlayer {
     func fadeVolume(from: Float, to: Float, duration: Float, completion: (() -> Void)? = nil) -> SwiftSignalKit.Timer? {

@@ -2,8 +2,8 @@ import Foundation
 import UIKit
 import Vision
 import SwiftSignalKit
-import TelegramCore
-import TelegramUIPreferences
+import IosappCore
+import IosappUIPreferences
 import AccountContext
 
 private final class CachedImageRecognizedContent: Codable {

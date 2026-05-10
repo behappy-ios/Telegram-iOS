@@ -4,12 +4,12 @@ import AsyncDisplayKit
 import Display
 import SwiftSignalKit
 import Postbox
-import TelegramCore
+import IosappCore
 import AccountContext
 import ConfettiEffect
 import AnimatedStickerNode
-import TelegramAnimatedStickerNode
-import TelegramStringFormatting
+import IosappAnimatedStickerNode
+import IosappStringFormatting
 
 final class PeerInfoBirthdayOverlay: ASDisplayNode {
     private let context: AccountContext

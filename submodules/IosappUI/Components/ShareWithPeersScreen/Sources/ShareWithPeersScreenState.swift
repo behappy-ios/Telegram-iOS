@@ -1,8 +1,8 @@
 import Foundation
 import SwiftSignalKit
-import TelegramCore
+import IosappCore
 import AccountContext
-import TelegramUIPreferences
+import IosappUIPreferences
 import TemporaryCachedPeerDataManager
 import Postbox
 

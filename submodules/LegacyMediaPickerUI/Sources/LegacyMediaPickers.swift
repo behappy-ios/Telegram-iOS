@@ -2,11 +2,11 @@ import Foundation
 import UIKit
 import LegacyComponents
 import SwiftSignalKit
-import TelegramCore
+import IosappCore
 import Postbox
 import SSignalKit
 import Display
-import TelegramPresentationData
+import IosappPresentationData
 import DeviceAccess
 import AccountContext
 import ImageCompression

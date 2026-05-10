@@ -1,6 +1,6 @@
 import Foundation
 import SwiftSignalKit
-import TelegramCore
+import IosappCore
 
 enum VideoChatNotificationIcon {
     case peer(EnginePeer)

@@ -2,11 +2,11 @@ import Foundation
 import UIKit
 import Display
 import AsyncDisplayKit
-import TelegramPresentationData
+import IosappPresentationData
 import SwiftSignalKit
 import ChatPresentationInterfaceState
 import AnimatedCountLabelNode
-import TelegramStringFormatting
+import IosappStringFormatting
 
 private func generateClearImage(color: UIColor) -> UIImage? {
     return generateImage(CGSize(width: 17.0, height: 17.0), rotatedContext: { size, context in

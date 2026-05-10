@@ -1,11 +1,11 @@
 import Foundation
 import UIKit
 import AsyncDisplayKit
-import TelegramPresentationData
+import IosappPresentationData
 import ComponentFlow
 import AccountContext
 import ViewControllerComponent
-import TelegramCore
+import IosappCore
 import SwiftSignalKit
 import Display
 import MultilineTextComponent
@@ -15,7 +15,7 @@ import PlainButtonComponent
 import Markdown
 import BundleIconComponent
 import TextFormat
-import TelegramStringFormatting
+import IosappStringFormatting
 import GlassBarButtonComponent
 import GiftItemComponent
 import EdgeEffect

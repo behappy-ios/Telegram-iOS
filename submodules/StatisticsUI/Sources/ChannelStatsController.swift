@@ -4,10 +4,10 @@ import Display
 import AsyncDisplayKit
 import SwiftSignalKit
 import Postbox
-import TelegramCore
-import TelegramPresentationData
-import TelegramUIPreferences
-import TelegramStringFormatting
+import IosappCore
+import IosappPresentationData
+import IosappUIPreferences
+import IosappStringFormatting
 import ItemListUI
 import PresentationDataUtils
 import AccountContext
@@ -22,7 +22,7 @@ import UndoUI
 import ItemListPeerActionItem
 import PremiumUI
 import StoryContainerScreen
-import TelegramNotices
+import IosappNotices
 import ComponentFlow
 import BoostLevelIconComponent
 import StarsWithdrawalScreen

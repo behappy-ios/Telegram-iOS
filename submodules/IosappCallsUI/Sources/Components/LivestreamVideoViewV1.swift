@@ -4,15 +4,15 @@ import AVFoundation
 import SwiftSignalKit
 import UniversalMediaPlayer
 import Postbox
-import TelegramCore
+import IosappCore
 import AccountContext
-import TelegramAudio
+import IosappAudio
 import Display
-import TelegramVoip
+import IosappVoip
 import RangeSet
 import ManagedFile
 import FFMpegBinding
-import TelegramUniversalVideoContent
+import IosappUniversalVideoContent
 
 final class LivestreamVideoViewV1: UIView {
     private final class PartContext {

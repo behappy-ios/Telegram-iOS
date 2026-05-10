@@ -3,7 +3,7 @@ import UIKit
 import Display
 import AsyncDisplayKit
 import SwiftSignalKit
-import TelegramPresentationData
+import IosappPresentationData
 
 private let labelFont = Font.regular(17.0)
 private let smallLabelFont = Font.regular(15.0)

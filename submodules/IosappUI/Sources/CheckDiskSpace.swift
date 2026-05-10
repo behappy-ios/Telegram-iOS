@@ -1,6 +1,6 @@
 import Foundation
 import Display
-import TelegramCore
+import IosappCore
 import AccountContext
 import AlertUI
 import PresentationDataUtils

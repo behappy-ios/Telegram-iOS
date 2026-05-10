@@ -4,8 +4,8 @@ import Display
 import AsyncDisplayKit
 import ComponentFlow
 import MultilineTextComponent
-import TelegramPresentationData
-import TelegramCore
+import IosappPresentationData
+import IosappCore
 import CheckNode
 
 func cancelContextGestures(view: UIView) {

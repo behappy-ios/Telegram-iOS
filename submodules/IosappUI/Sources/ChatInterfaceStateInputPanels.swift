@@ -1,7 +1,7 @@
 import Foundation
 import UIKit
 import AsyncDisplayKit
-import TelegramCore
+import IosappCore
 import AccountContext
 import ChatPresentationInterfaceState
 import ChatInputPanelNode

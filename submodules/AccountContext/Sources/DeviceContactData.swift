@@ -1,6 +1,6 @@
 import Foundation
 import Contacts
-import TelegramCore
+import IosappCore
 import FlatBuffers
 import FlatSerialization
 

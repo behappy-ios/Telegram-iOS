@@ -4,10 +4,10 @@ import Display
 import AsyncDisplayKit
 import Postbox
 import SwiftSignalKit
-import TelegramCore
-import TelegramPresentationData
+import IosappCore
+import IosappPresentationData
 import LocalizedPeerData
-import TelegramStringFormatting
+import IosappStringFormatting
 import TextFormat
 import Markdown
 import ChatPresentationInterfaceState

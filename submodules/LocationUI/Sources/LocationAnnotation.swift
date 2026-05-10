@@ -3,10 +3,10 @@ import UIKit
 import MapKit
 import Display
 import SwiftSignalKit
-import TelegramCore
+import IosappCore
 import AvatarNode
 import AppBundle
-import TelegramPresentationData
+import IosappPresentationData
 import LocationResources
 import AccountContext
 

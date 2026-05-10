@@ -2,13 +2,13 @@ import Foundation
 import UIKit
 import AVFoundation
 import AsyncDisplayKit
-import TelegramCore
+import IosappCore
 import Postbox
 import Display
 import ComponentFlow
 import SwiftSignalKit
-import TelegramUIPreferences
-import TelegramPresentationData
+import IosappUIPreferences
+import IosappPresentationData
 import AccountContext
 import OverlayStatusController
 import AlertUI
@@ -21,7 +21,7 @@ import LanguageLinkPreviewUI
 import SettingsUI
 import UrlHandling
 import ChatInterfaceState
-import TelegramCallsUI
+import IosappCallsUI
 import UndoUI
 import ImportStickerPackUI
 import PeerInfoUI
@@ -33,7 +33,7 @@ import AuthorizationUI
 import ChatFolderLinkPreviewScreen
 import StoryContainerScreen
 import WallpaperGalleryScreen
-import TelegramStringFormatting
+import IosappStringFormatting
 import TextFormat
 import BrowserUI
 import MediaEditorScreen

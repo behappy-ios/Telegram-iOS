@@ -1,11 +1,11 @@
 import Foundation
 import UIKit
 import AsyncDisplayKit
-import TelegramPresentationData
+import IosappPresentationData
 import AccountContext
 import Display
 import Postbox
-import TelegramCore
+import IosappCore
 import SwiftSignalKit
 
 final class PeerInfoHeaderEditingContentNode: ASDisplayNode {

@@ -1,6 +1,6 @@
 import Foundation
 import AVFoundation
-import TelegramCore
+import IosappCore
 import FFMpegBinding
 
 final class MediaEditorVideoAVAssetWriter: MediaEditorVideoExportWriter {

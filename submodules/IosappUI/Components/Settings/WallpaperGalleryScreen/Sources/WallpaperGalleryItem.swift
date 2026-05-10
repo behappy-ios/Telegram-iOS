@@ -4,10 +4,10 @@ import Display
 import AsyncDisplayKit
 import SwiftSignalKit
 import Postbox
-import TelegramCore
+import IosappCore
 import LegacyComponents
-import TelegramPresentationData
-import TelegramUIPreferences
+import IosappPresentationData
+import IosappUIPreferences
 import ProgressNavigationButtonNode
 import MediaResources
 import AccountContext
@@ -20,7 +20,7 @@ import AppBundle
 import WallpaperBackgroundNode
 import TextFormat
 import TooltipUI
-import TelegramNotices
+import IosappNotices
 
 struct WallpaperGalleryItemArguments {
     let colorPreview: Bool

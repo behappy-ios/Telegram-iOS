@@ -1,9 +1,9 @@
 import Foundation
 import UIKit
 import Display
-import TelegramCore
+import IosappCore
 import Postbox
-import TelegramPresentationData
+import IosappPresentationData
 import MergeLists
 import AccountContext
 import ChatControllerInteraction

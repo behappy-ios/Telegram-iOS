@@ -1,11 +1,11 @@
 import UIKit
 import AsyncDisplayKit
 import Display
-import TelegramCore
+import IosappCore
 import SwiftSignalKit
 import Postbox
-import TelegramPresentationData
-import TelegramUIPreferences
+import IosappPresentationData
+import IosappUIPreferences
 import AccountContext
 import ShareController
 import LegacyUI
@@ -24,13 +24,13 @@ import ZipArchive
 import ActivityIndicator
 import DebugSettingsUI
 import ManagedFile
-import TelegramUIDeclareEncodables
+import IosappUIDeclareEncodables
 import AnimationCache
 import MultiAnimationRenderer
 import DCTAnimationCacheImpl
 import DCTMultiAnimationRendererImpl
-import TelegramUIDeclareEncodables
-import TelegramAccountAuxiliaryMethods
+import IosappUIDeclareEncodables
+import IosappAccountAuxiliaryMethods
 import PeerSelectionController
 import ContextMenuScreen
 import NavigationBarImpl
@@ -434,7 +434,7 @@ public class ShareRootControllerImpl {
                             salt: ValueBoxEncryptionParameters.Salt(data: initializationData.encryptionParameters.1)!
                         ),
                         rootPath: rootPath,
-                        auxiliaryMethods: makeTelegramAccountAuxiliaryMethods(uploadInBackground: nil)
+                        auxiliaryMethods: makeIosappAccountAuxiliaryMethods(uploadInBackground: nil)
                     )
                     |> mapToSignal { result -> Signal<(AccountRecordId, AccountStateManager, Peer)?, NoError> in
                         if let result {
@@ -536,7 +536,7 @@ public class ShareRootControllerImpl {
                         }
                         
                         let sentItems: ([PeerId], [PeerId: Int64], [PeerId: StarsAmount], [PreparedShareItemContent], ShareControllerAccountContext, Bool, String) -> Signal<ShareControllerExternalStatus, NoError> = { peerIds, threadIds, requireStars, contents, account, silently, additionalText in
-                            let sentItems = sentShareItems(accountPeerId: account.accountPeerId, postbox: account.stateManager.postbox, network: account.stateManager.network, stateManager: account.stateManager, auxiliaryMethods: makeTelegramAccountAuxiliaryMethods(uploadInBackground: nil), to: peerIds, threadIds: threadIds, requireStars: requireStars, items: contents, silently: silently, additionalText: additionalText)
+                            let sentItems = sentShareItems(accountPeerId: account.accountPeerId, postbox: account.stateManager.postbox, network: account.stateManager.network, stateManager: account.stateManager, auxiliaryMethods: makeIosappAccountAuxiliaryMethods(uploadInBackground: nil), to: peerIds, threadIds: threadIds, requireStars: requireStars, items: contents, silently: silently, additionalText: additionalText)
                             |> `catch` { _ -> Signal<
                                 Float, NoError> in
                                 return .complete()

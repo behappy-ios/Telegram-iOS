@@ -2,7 +2,7 @@ import Foundation
 import UIKit
 import AsyncDisplayKit
 import ContextUI
-import TelegramPresentationData
+import IosappPresentationData
 import Display
 import ComponentFlow
 import ComponentDisplayAdapters

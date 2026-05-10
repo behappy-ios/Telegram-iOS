@@ -1,7 +1,7 @@
 import Foundation
-import TelegramPresentationData
-import TelegramUIPreferences
-import TelegramCore
+import IosappPresentationData
+import IosappUIPreferences
+import IosappCore
 
 public func stringForFullAuthorName(message: EngineMessage, strings: PresentationStrings, nameDisplayOrder: PresentationPersonNameOrder, accountPeerId: EnginePeer.Id) -> [String] {
     var authorString: [String] = []

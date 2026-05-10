@@ -68,7 +68,7 @@ private func requestEditMessageInternal(accountPeerId: PeerId, postbox: Postbox,
             }
             return mediaContentToUpload(accountPeerId: accountPeerId, network: network, postbox: postbox, auxiliaryMethods: stateManager.auxiliaryMethods, transformOutgoingMessageMedia: transformOutgoingMessageMedia, messageMediaPreuploadManager: messageMediaPreuploadManager, revalidationContext: mediaReferenceRevalidationContext, forceReupload: forceReupload, isGrouped: false, passFetchProgress: false, forceNoBigParts: false, peerId: messageId.peerId, media: augmentedMedia, text: "", autoremoveMessageAttribute: nil, autoclearMessageAttribute: nil, messageId: nil, attributes: attributes, mediaReference: nil, explicitPartialReference: nil)
         }
-        if let todo = media.media as? TelegramMediaTodo {
+        if let todo = media.media as? IosappMediaTodo {
             var flags: Int32 = 0
             if todo.flags.contains(.othersCanAppend) {
                 flags |= 1 << 0
@@ -121,7 +121,7 @@ private func requestEditMessageInternal(accountPeerId: PeerId, postbox: Postbox,
             if text.isEmpty {
                 for media in message.media {
                     switch media {
-                        case _ as TelegramMediaImage, _ as TelegramMediaFile, _ as TelegramMediaTodo:
+                        case _ as IosappMediaImage, _ as IosappMediaFile, _ as IosappMediaTodo:
                             break
                         default:
                             if let _ = scheduleInfoAttribute {
@@ -257,7 +257,7 @@ private func requestEditMessageInternal(accountPeerId: PeerId, postbox: Postbox,
                                                 }
 
                                                 var updatedMedia = message.media
-                                                if let previousPaidContent = previousMessage.media.first(where: { $0 is TelegramMediaPaidContent }) as? TelegramMediaPaidContent, case .full = previousPaidContent.extendedMedia.first {
+                                                if let previousPaidContent = previousMessage.media.first(where: { $0 is IosappMediaPaidContent }) as? IosappMediaPaidContent, case .full = previousPaidContent.extendedMedia.first {
                                                     updatedMedia = previousMessage.media
                                                 }
 
@@ -283,7 +283,7 @@ private func requestEditMessageInternal(accountPeerId: PeerId, postbox: Postbox,
                                                 }
 
                                                 var updatedMedia = message.media
-                                                if let previousPaidContent = previousMessage.media.first(where: { $0 is TelegramMediaPaidContent }) as? TelegramMediaPaidContent, case .full = previousPaidContent.extendedMedia.first {
+                                                if let previousPaidContent = previousMessage.media.first(where: { $0 is IosappMediaPaidContent }) as? IosappMediaPaidContent, case .full = previousPaidContent.extendedMedia.first {
                                                     updatedMedia = previousMessage.media
                                                 }
 
@@ -309,7 +309,7 @@ private func requestEditMessageInternal(accountPeerId: PeerId, postbox: Postbox,
                                                 }
 
                                                 var updatedMedia = message.media
-                                                if let previousPaidContent = previousMessage.media.first(where: { $0 is TelegramMediaPaidContent }) as? TelegramMediaPaidContent, case .full = previousPaidContent.extendedMedia.first {
+                                                if let previousPaidContent = previousMessage.media.first(where: { $0 is IosappMediaPaidContent }) as? IosappMediaPaidContent, case .full = previousPaidContent.extendedMedia.first {
                                                     updatedMedia = previousMessage.media
                                                 }
 
@@ -335,7 +335,7 @@ private func requestEditMessageInternal(accountPeerId: PeerId, postbox: Postbox,
                                                 }
                                                 
                                                 var updatedMedia = message.media
-                                                if let previousPaidContent = previousMessage.media.first(where: { $0 is TelegramMediaPaidContent }) as? TelegramMediaPaidContent, case .full = previousPaidContent.extendedMedia.first {
+                                                if let previousPaidContent = previousMessage.media.first(where: { $0 is IosappMediaPaidContent }) as? IosappMediaPaidContent, case .full = previousPaidContent.extendedMedia.first {
                                                     updatedMedia = previousMessage.media
                                                 }
                                                 
@@ -368,7 +368,7 @@ private func requestEditMessageInternal(accountPeerId: PeerId, postbox: Postbox,
 }
 
 func _internal_requestEditLiveLocation(postbox: Postbox, network: Network, stateManager: AccountStateManager, messageId: MessageId, stop: Bool, coordinate: (latitude: Double, longitude: Double, accuracyRadius: Int32?)?, heading: Int32?, proximityNotificationRadius: Int32?, extendPeriod: Int32?) -> Signal<Void, NoError> {
-    return postbox.transaction { transaction -> (Api.InputPeer, TelegramMediaMap)? in
+    return postbox.transaction { transaction -> (Api.InputPeer, IosappMediaMap)? in
         guard let inputPeer = transaction.getPeer(messageId.peerId).flatMap(apiInputPeer) else {
             return nil
         }
@@ -376,7 +376,7 @@ func _internal_requestEditLiveLocation(postbox: Postbox, network: Network, state
             return nil
         }
         for media in message.media {
-            if let media = media as? TelegramMediaMap {
+            if let media = media as? IosappMediaMap {
                 return (inputPeer, media)
             }
         }

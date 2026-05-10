@@ -153,20 +153,20 @@ private func contentNodeMessagesAndClassesForItem(_ item: ChatMessageItem) -> ([
         
         var isFile = false
         inner: for media in messageMedia {
-            if let media = media as? TelegramMediaPaidContent {
+            if let media = media as? IosappMediaPaidContent {
                 var index = 0
                 for _ in media.extendedMedia {
                     result.append((message, ChatMessageMediaBubbleContentNode.self, itemAttributes, BubbleItemAttributes(index: index, isAttachment: false, neighborType: .media, neighborSpacing: .default)))
                     index += 1
                 }
-            } else if let _ = media as? TelegramMediaImage {
+            } else if let _ = media as? IosappMediaImage {
                 if let forwardInfo = message.forwardInfo, forwardInfo.flags.contains(.isImported), message.text.isEmpty {
                     messageWithCaptionToAdd = (message, itemAttributes)
                 }
                 result.append((message, ChatMessageMediaBubbleContentNode.self, itemAttributes, BubbleItemAttributes(isAttachment: false, neighborType: .media, neighborSpacing: .default)))
-            } else if let _ = media as? TelegramMediaWebFile {
+            } else if let _ = media as? IosappMediaWebFile {
                 result.append((message, ChatMessageMediaBubbleContentNode.self, itemAttributes, BubbleItemAttributes(isAttachment: false, neighborType: .media, neighborSpacing: .default)))
-            } else if let story = media as? TelegramMediaStory {
+            } else if let story = media as? IosappMediaStory {
                 if story.isMention {
                     if let storyItem = message.associatedStories[story.storyId], storyItem.data.isEmpty {
                         result.append((message, ChatMessageActionBubbleContentNode.self, itemAttributes, BubbleItemAttributes(isAttachment: false, neighborType: .text, neighborSpacing: .default)))
@@ -175,7 +175,7 @@ private func contentNodeMessagesAndClassesForItem(_ item: ChatMessageItem) -> ([
                     }
                 } else {
                     var hideStory = false
-                    if let peer = message.peers[story.storyId.peerId] as? TelegramChannel, peer.username == nil, peer.usernames.isEmpty {
+                    if let peer = message.peers[story.storyId.peerId] as? IosappChannel, peer.username == nil, peer.usernames.isEmpty {
                         switch peer.participationStatus {
                         case .member:
                             break
@@ -197,7 +197,7 @@ private func contentNodeMessagesAndClassesForItem(_ item: ChatMessageItem) -> ([
                         }
                     }
                 }
-            } else if let file = media as? TelegramMediaFile {
+            } else if let file = media as? IosappMediaFile {
                 let isVideo = file.isVideo || (file.isAnimated && file.dimensions != nil)
                 if isVideo {
                     if file.isInstantVideo {
@@ -219,7 +219,7 @@ private func contentNodeMessagesAndClassesForItem(_ item: ChatMessageItem) -> ([
                     result.append((message, ChatMessageFileBubbleContentNode.self, itemAttributes, BubbleItemAttributes(isAttachment: false, neighborType: .text, neighborSpacing: neighborSpacing)))
                     needReactions = false
                 }
-            } else if let action = media as? TelegramMediaAction {
+            } else if let action = media as? IosappMediaAction {
                 isAction = true
                 if case .phoneCall = action.action {
                     result.append((message, ChatMessageCallBubbleContentNode.self, itemAttributes, BubbleItemAttributes(isAttachment: false, neighborType: .text, neighborSpacing: .default)))
@@ -262,14 +262,14 @@ private func contentNodeMessagesAndClassesForItem(_ item: ChatMessageItem) -> ([
                     }
                     result.append((message, ChatMessageActionBubbleContentNode.self, itemAttributes, BubbleItemAttributes(isAttachment: false, neighborType: .text, neighborSpacing: .default)))
                 }
-            } else if let _ = media as? TelegramMediaMap {
+            } else if let _ = media as? IosappMediaMap {
                 result.append((message, ChatMessageMapBubbleContentNode.self, itemAttributes, BubbleItemAttributes(isAttachment: false, neighborType: .media, neighborSpacing: .default)))
-            } else if let _ = media as? TelegramMediaGame {
+            } else if let _ = media as? IosappMediaGame {
                 skipText = true
                 result.append((message, ChatMessageGameBubbleContentNode.self, itemAttributes, BubbleItemAttributes(isAttachment: false, neighborType: .text, neighborSpacing: .default)))
                 needReactions = false
                 break inner
-            } else if let invoice = media as? TelegramMediaInvoice {
+            } else if let invoice = media as? IosappMediaInvoice {
                 if let _ = invoice.extendedMedia {
                     result.append((message, ChatMessageMediaBubbleContentNode.self, itemAttributes, BubbleItemAttributes(isAttachment: false, neighborType: .media, neighborSpacing: .default)))
                 } else {
@@ -278,46 +278,46 @@ private func contentNodeMessagesAndClassesForItem(_ item: ChatMessageItem) -> ([
                 }
                 needReactions = false
                 break inner
-            } else if let _ = media as? TelegramMediaContact {
+            } else if let _ = media as? IosappMediaContact {
                 result.append((message, ChatMessageContactBubbleContentNode.self, itemAttributes, BubbleItemAttributes(isAttachment: false, neighborType: .text, neighborSpacing: .default)))
                 needReactions = false
-            } else if let _ = media as? TelegramMediaExpiredContent {
+            } else if let _ = media as? IosappMediaExpiredContent {
                 result.removeAll()
                 result.append((message, ChatMessageActionBubbleContentNode.self, itemAttributes, BubbleItemAttributes(isAttachment: false, neighborType: .text, neighborSpacing: .default)))
                 return (result, false, true)
-            } else if let poll = media as? TelegramMediaPoll {
+            } else if let poll = media as? IosappMediaPoll {
                 if item.controllerInteraction.currentPollMessageWithTooltip == item.message.id, let _ = poll.results.solution {
                     result.append((message, ChatMessageQuizAnswerBubbleContentNode.self, itemAttributes, BubbleItemAttributes(isAttachment: false, neighborType: .media, neighborSpacing: .default)))
                     addedQuizAnswer = true
                 }
                 
                 if let attachedMedia = poll.attachedMedia {
-                    if let _ = attachedMedia as? TelegramMediaImage {
+                    if let _ = attachedMedia as? IosappMediaImage {
                         result.append((message, ChatMessageMediaBubbleContentNode.self, itemAttributes, BubbleItemAttributes(isAttachment: false, neighborType: .media, neighborSpacing: .default)))
-                    } else if let file = attachedMedia as? TelegramMediaFile {
+                    } else if let file = attachedMedia as? IosappMediaFile {
                         let isVideo = file.isVideo || (file.isAnimated && file.dimensions != nil)
                         if isVideo {
                             result.append((message, ChatMessageMediaBubbleContentNode.self, itemAttributes, BubbleItemAttributes(isAttachment: false, neighborType: .media, neighborSpacing: .default)))
                         } else {
                             result.append((message, ChatMessageFileBubbleContentNode.self, itemAttributes, BubbleItemAttributes(isAttachment: false, neighborType: .text, neighborSpacing: .default)))
                         }
-                    } else if let _ =  attachedMedia as? TelegramMediaMap {
+                    } else if let _ =  attachedMedia as? IosappMediaMap {
                         result.append((message, ChatMessageMapBubbleContentNode.self, itemAttributes, BubbleItemAttributes(isAttachment: false, neighborType: .media, neighborSpacing: .default)))
                     }
                     addedPollMedia = true
                 }
                 result.append((message, ChatMessagePollBubbleContentNode.self, itemAttributes, BubbleItemAttributes(isAttachment: false, neighborType: .text, neighborSpacing: .default)))
                 needReactions = false
-            } else if let _ = media as? TelegramMediaTodo {
+            } else if let _ = media as? IosappMediaTodo {
                 result.append((message, ChatMessageTodoBubbleContentNode.self, itemAttributes, BubbleItemAttributes(isAttachment: false, neighborType: .text, neighborSpacing: .default)))
                 needReactions = false
-            } else if let _ = media as? TelegramMediaGiveaway {
+            } else if let _ = media as? IosappMediaGiveaway {
                 result.append((message, ChatMessageGiveawayBubbleContentNode.self, itemAttributes, BubbleItemAttributes(isAttachment: false, neighborType: .text, neighborSpacing: .default)))
                 needReactions = false
-            } else if let _ = media as? TelegramMediaGiveawayResults {
+            } else if let _ = media as? IosappMediaGiveawayResults {
                 result.append((message, ChatMessageGiveawayBubbleContentNode.self, itemAttributes, BubbleItemAttributes(isAttachment: false, neighborType: .text, neighborSpacing: .default)))
                 needReactions = false
-            } else if let _ = media as? TelegramMediaUnsupported {
+            } else if let _ = media as? IosappMediaUnsupported {
                 isUnsupportedMedia = true
                 needReactions = false
             }
@@ -340,7 +340,7 @@ private func contentNodeMessagesAndClassesForItem(_ item: ChatMessageItem) -> ([
                         isMediaInverted = updatingMedia.invertMediaAttribute != nil
                     } else if let _ = message.attributes.first(where: { $0 is InvertMediaMessageAttribute }) {
                         isMediaInverted = true
-                    } else if let _ = message.media.first(where: { $0 is TelegramMediaPoll }) {
+                    } else if let _ = message.media.first(where: { $0 is IosappMediaPoll }) {
                         isMediaInverted = true
                     }
                     
@@ -370,7 +370,7 @@ private func contentNodeMessagesAndClassesForItem(_ item: ChatMessageItem) -> ([
         }
         
         inner: for media in message.media {
-            if let webpage = media as? TelegramMediaWebpage {
+            if let webpage = media as? IosappMediaWebpage {
                 if case let .Loaded(content) = webpage.content {
                     if let story = content.story {
                         if let storyItem = message.associatedStories[story.storyId], !storyItem.data.isEmpty {
@@ -1437,10 +1437,10 @@ public class ChatMessageBubbleItemNode: ChatMessageItemView, ChatMessagePreviewI
                     return false
                 }
                 for media in item.content.firstMessage.media {
-                    if let _ = media as? TelegramMediaExpiredContent {
+                    if let _ = media as? IosappMediaExpiredContent {
                         return false
                     }
-                    else if let media = media as? TelegramMediaAction {
+                    else if let media = media as? IosappMediaAction {
                         if case .phoneCall = media.action {
                         } else if case .conferenceCall = media.action {
                         } else {
@@ -1632,11 +1632,11 @@ public class ChatMessageBubbleItemNode: ChatMessageItemView, ChatMessagePreviewI
                     if let sourceAuthorInfo, let originalAuthorId = sourceAuthorInfo.originalAuthor, let peer = item.message.peers[originalAuthorId] {
                         effectiveAuthor = peer
                     } else if let sourceAuthorInfo, let originalAuthorName = sourceAuthorInfo.originalAuthorName {
-                        effectiveAuthor = TelegramUser(id: PeerId(namespace: Namespaces.Peer.Empty, id: PeerId.Id._internalFromInt64Value(Int64(originalAuthorName.persistentHashValue % 32))), accessHash: nil, firstName: originalAuthorName, lastName: nil, username: nil, phone: nil, photo: [], botInfo: nil, restrictionInfo: nil, flags: [], emojiStatus: nil, usernames: [], storiesHidden: nil, nameColor: nil, backgroundEmojiId: nil, profileColor: nil, profileBackgroundEmojiId: nil, subscriberCount: nil, verificationIconFileId: nil)
+                        effectiveAuthor = IosappUser(id: PeerId(namespace: Namespaces.Peer.Empty, id: PeerId.Id._internalFromInt64Value(Int64(originalAuthorName.persistentHashValue % 32))), accessHash: nil, firstName: originalAuthorName, lastName: nil, username: nil, phone: nil, photo: [], botInfo: nil, restrictionInfo: nil, flags: [], emojiStatus: nil, usernames: [], storiesHidden: nil, nameColor: nil, backgroundEmojiId: nil, profileColor: nil, profileBackgroundEmojiId: nil, subscriberCount: nil, verificationIconFileId: nil)
                     } else {
                         ignoreForward = true
                         if effectiveAuthor == nil, let authorSignature = forwardInfo.authorSignature {
-                            effectiveAuthor = TelegramUser(id: PeerId(namespace: Namespaces.Peer.Empty, id: PeerId.Id._internalFromInt64Value(Int64(authorSignature.persistentHashValue % 32))), accessHash: nil, firstName: authorSignature, lastName: nil, username: nil, phone: nil, photo: [], botInfo: nil, restrictionInfo: nil, flags: [], emojiStatus: nil, usernames: [], storiesHidden: nil, nameColor: nil, backgroundEmojiId: nil, profileColor: nil, profileBackgroundEmojiId: nil, subscriberCount: nil, verificationIconFileId: nil)
+                            effectiveAuthor = IosappUser(id: PeerId(namespace: Namespaces.Peer.Empty, id: PeerId.Id._internalFromInt64Value(Int64(authorSignature.persistentHashValue % 32))), accessHash: nil, firstName: authorSignature, lastName: nil, username: nil, phone: nil, photo: [], botInfo: nil, restrictionInfo: nil, flags: [], emojiStatus: nil, usernames: [], storiesHidden: nil, nameColor: nil, backgroundEmojiId: nil, profileColor: nil, profileBackgroundEmojiId: nil, subscriberCount: nil, verificationIconFileId: nil)
                         }
                     }
                 }
@@ -1653,7 +1653,7 @@ public class ChatMessageBubbleItemNode: ChatMessageItemView, ChatMessagePreviewI
                 displayAuthorInfo = !mergedTop.merged && incoming
             } else if let forwardInfo = item.content.firstMessage.forwardInfo, forwardInfo.flags.contains(.isImported), let authorSignature = forwardInfo.authorSignature {
                 ignoreForward = true
-                effectiveAuthor = TelegramUser(id: PeerId(namespace: Namespaces.Peer.Empty, id: PeerId.Id._internalFromInt64Value(Int64(authorSignature.persistentHashValue % 32))), accessHash: nil, firstName: authorSignature, lastName: nil, username: nil, phone: nil, photo: [], botInfo: nil, restrictionInfo: nil, flags: [], emojiStatus: nil, usernames: [], storiesHidden: nil, nameColor: nil, backgroundEmojiId: nil, profileColor: nil, profileBackgroundEmojiId: nil, subscriberCount: nil, verificationIconFileId: nil)
+                effectiveAuthor = IosappUser(id: PeerId(namespace: Namespaces.Peer.Empty, id: PeerId.Id._internalFromInt64Value(Int64(authorSignature.persistentHashValue % 32))), accessHash: nil, firstName: authorSignature, lastName: nil, username: nil, phone: nil, photo: [], botInfo: nil, restrictionInfo: nil, flags: [], emojiStatus: nil, usernames: [], storiesHidden: nil, nameColor: nil, backgroundEmojiId: nil, profileColor: nil, profileBackgroundEmojiId: nil, subscriberCount: nil, verificationIconFileId: nil)
                 displayAuthorInfo = !mergedTop.merged && incoming
             } else if let _ = item.content.firstMessage.adAttribute, let author = item.content.firstMessage.author {
                 ignoreForward = true
@@ -1664,7 +1664,7 @@ public class ChatMessageBubbleItemNode: ChatMessageItemView, ChatMessagePreviewI
                 
                 var allowAuthor = incoming
                 
-                if let author = firstMessage.author, author is TelegramChannel, !incoming || item.presentationData.isPreview {
+                if let author = firstMessage.author, author is IosappChannel, !incoming || item.presentationData.isPreview {
                     allowAuthor = true
                     ignoreNameHiding = true
                 }
@@ -1679,7 +1679,7 @@ public class ChatMessageBubbleItemNode: ChatMessageItemView, ChatMessagePreviewI
                 }
                 
                 var isMonoForum = false
-                if let peer = firstMessage.peers[firstMessage.id.peerId] as? TelegramChannel {
+                if let peer = firstMessage.peers[firstMessage.id.peerId] as? IosappChannel {
                     if peer.isMonoForum {
                         isMonoForum = true
                     }
@@ -1691,12 +1691,12 @@ public class ChatMessageBubbleItemNode: ChatMessageItemView, ChatMessagePreviewI
                 }
             }
             
-            if let channel = firstMessage.peers[firstMessage.id.peerId] as? TelegramChannel, case let .broadcast(info) = channel.info {
+            if let channel = firstMessage.peers[firstMessage.id.peerId] as? IosappChannel, case let .broadcast(info) = channel.info {
                 if info.flags.contains(.messagesShouldHaveProfiles) && !item.presentationData.isPreview {
                     var allowAuthor = incoming
                     overrideEffectiveAuthor = true
                     
-                    if let author = firstMessage.author, author is TelegramChannel, !incoming {
+                    if let author = firstMessage.author, author is IosappChannel, !incoming {
                         allowAuthor = true
                         ignoreNameHiding = true
                     }
@@ -1716,7 +1716,7 @@ public class ChatMessageBubbleItemNode: ChatMessageItemView, ChatMessagePreviewI
                 if peerId.isGroupOrChannel && effectiveAuthor != nil {
                     var isBroadcastChannel = false
                     var isMonoForum = false
-                    if let peer = firstMessage.peers[firstMessage.id.peerId] as? TelegramChannel {
+                    if let peer = firstMessage.peers[firstMessage.id.peerId] as? IosappChannel {
                         if case .broadcast = peer.info {
                             isBroadcastChannel = true
                             allowFullWidth = true
@@ -1752,7 +1752,7 @@ public class ChatMessageBubbleItemNode: ChatMessageItemView, ChatMessagePreviewI
             }
         }
         
-        if isPreview, let peer = firstMessage.peers[firstMessage.id.peerId] as? TelegramUser, peer.firstName == nil {
+        if isPreview, let peer = firstMessage.peers[firstMessage.id.peerId] as? IosappUser, peer.firstName == nil {
             hasAvatar = false
             effectiveAuthor = nil
         }
@@ -1760,7 +1760,7 @@ public class ChatMessageBubbleItemNode: ChatMessageItemView, ChatMessagePreviewI
         var isInstantVideo = false
         if let forwardInfo = item.content.firstMessage.forwardInfo, forwardInfo.source == nil, forwardInfo.author?.id.namespace == Namespaces.Peer.CloudUser {
             for media in item.content.firstMessage.media {
-                if let file = media as? TelegramMediaFile {
+                if let file = media as? IosappMediaFile {
                     if file.isMusic {
                         ignoreForward = true
                     } else if file.isInstantVideo {
@@ -1786,7 +1786,7 @@ public class ChatMessageBubbleItemNode: ChatMessageItemView, ChatMessagePreviewI
         } else if case .pinnedMessages = item.associatedData.subject {
             needsShareButton = true
             for media in item.message.media {
-                if let _ = media as? TelegramMediaExpiredContent {
+                if let _ = media as? IosappMediaExpiredContent {
                     needsShareButton = false
                     break
                 }
@@ -1812,7 +1812,7 @@ public class ChatMessageBubbleItemNode: ChatMessageItemView, ChatMessagePreviewI
             }
             
             if let peer = item.message.peers[item.message.id.peerId] {
-                if let channel = peer as? TelegramChannel {
+                if let channel = peer as? IosappChannel {
                     if case .broadcast = channel.info {
                         needsShareButton = true
                     }
@@ -1820,15 +1820,15 @@ public class ChatMessageBubbleItemNode: ChatMessageItemView, ChatMessagePreviewI
             }
             
             if let info = item.message.forwardInfo {
-                if let author = info.author as? TelegramUser, let _ = author.botInfo, !item.message.media.isEmpty && !(item.message.media.first is TelegramMediaAction) {
+                if let author = info.author as? IosappUser, let _ = author.botInfo, !item.message.media.isEmpty && !(item.message.media.first is IosappMediaAction) {
                     needsShareButton = true
-                } else if let author = info.author as? TelegramChannel, case .broadcast = author.info {
+                } else if let author = info.author as? IosappChannel, case .broadcast = author.info {
                     needsShareButton = true
                 }
             }
             
-            if !needsShareButton, let author = item.message.author as? TelegramUser, let _ = author.botInfo {
-                if !item.message.media.isEmpty && !(item.message.media.first is TelegramMediaAction) {
+            if !needsShareButton, let author = item.message.author as? IosappUser, let _ = author.botInfo {
+                if !item.message.media.isEmpty && !(item.message.media.first is IosappMediaAction) {
                     needsShareButton = true
                 } else if author.id == PeerId(namespace: Namespaces.Peer.CloudUser, id: PeerId.Id._internalFromInt64Value(92386307)) || author.id == PeerId(namespace: Namespaces.Peer.CloudUser, id: PeerId.Id._internalFromInt64Value(6435149744)) {
                     needsShareButton = true
@@ -1837,21 +1837,21 @@ public class ChatMessageBubbleItemNode: ChatMessageItemView, ChatMessagePreviewI
             var mayHaveSeparateCommentsButton = false
             if !needsShareButton {
                 loop: for media in item.message.media {
-                    if media is TelegramMediaGame || media is TelegramMediaInvoice {
+                    if media is IosappMediaGame || media is IosappMediaInvoice {
                         needsShareButton = true
                         break loop
-                    } else if let media = media as? TelegramMediaWebpage, case .Loaded = media.content {
+                    } else if let media = media as? IosappMediaWebpage, case .Loaded = media.content {
                         needsShareButton = true
                         break loop
                     }
                 }
             } else {
                 loop: for media in item.message.media {
-                    if media is TelegramMediaAction {
+                    if media is IosappMediaAction {
                         needsShareButton = false
                         needsSummarizeButton = false
                         break loop
-                    } else if let media = media as? TelegramMediaFile, media.isInstantVideo {
+                    } else if let media = media as? IosappMediaFile, media.isInstantVideo {
                         mayHaveSeparateCommentsButton = true
                         break loop
                     }
@@ -1965,10 +1965,10 @@ public class ChatMessageBubbleItemNode: ChatMessageItemView, ChatMessagePreviewI
         var authorIsChannel: Bool = false
         switch content {
             case let .message(message, _, _, attributes, _):
-                if let peer = message.peers[message.id.peerId] as? TelegramChannel {
+                if let peer = message.peers[message.id.peerId] as? IosappChannel {
                     if case .broadcast = peer.info {
                     } else {
-                        if isCrosspostFromChannel, let sourceReference = sourceReference, let _ = firstMessage.peers[sourceReference.messageId.peerId] as? TelegramChannel {
+                        if isCrosspostFromChannel, let sourceReference = sourceReference, let _ = firstMessage.peers[sourceReference.messageId.peerId] as? IosappChannel {
                             authorIsChannel = true
                             authorRank = attributes.rank
                         } else {
@@ -1979,7 +1979,7 @@ public class ChatMessageBubbleItemNode: ChatMessageItemView, ChatMessagePreviewI
                         }
                     }
                 } else {
-                    if isCrosspostFromChannel, let _ = firstMessage.forwardInfo?.source as? TelegramChannel {
+                    if isCrosspostFromChannel, let _ = firstMessage.forwardInfo?.source as? IosappChannel {
                         authorIsChannel = true
                     }
                     authorRank = attributes.rank
@@ -2020,7 +2020,7 @@ public class ChatMessageBubbleItemNode: ChatMessageItemView, ChatMessagePreviewI
         
         for attribute in firstMessage.attributes {
             if let attribute = attribute as? InlineBotMessageAttribute {
-                if let peerId = attribute.peerId, let bot = firstMessage.peers[peerId] as? TelegramUser {
+                if let peerId = attribute.peerId, let bot = firstMessage.peers[peerId] as? IosappUser {
                     inlineBotNameString = bot.addressName
                 } else {
                     inlineBotNameString = attribute.title
@@ -2039,7 +2039,7 @@ public class ChatMessageBubbleItemNode: ChatMessageItemView, ChatMessagePreviewI
             } else if let attribute = attribute as? ReplyMarkupMessageAttribute, attribute.flags.contains(.inline), !attribute.rows.isEmpty && !isPreview {
                 var isExtendedMedia = false
                 for media in firstMessage.media {
-                    if let invoice = media as? TelegramMediaInvoice, let _ = invoice.extendedMedia {
+                    if let invoice = media as? IosappMediaInvoice, let _ = invoice.extendedMedia {
                         isExtendedMedia = true
                         break
                     }
@@ -2065,7 +2065,7 @@ public class ChatMessageBubbleItemNode: ChatMessageItemView, ChatMessagePreviewI
                     replyMarkup = attribute
                 }
             } else if let attribute = attribute as? AuthorSignatureMessageAttribute {
-                if let chatPeer = firstMessage.peers[firstMessage.id.peerId] as? TelegramChannel, case .group = chatPeer.info, firstMessage.author is TelegramChannel, !attribute.signature.isEmpty {
+                if let chatPeer = firstMessage.peers[firstMessage.id.peerId] as? IosappChannel, case .group = chatPeer.info, firstMessage.author is IosappChannel, !attribute.signature.isEmpty {
                     authorRank = .member(attribute.signature)
                 }
             }
@@ -2268,13 +2268,13 @@ public class ChatMessageBubbleItemNode: ChatMessageItemView, ChatMessagePreviewI
             var hasForwardLikeContent = false
             if firstMessage.forwardInfo != nil {
                 hasForwardLikeContent = true
-            } else if firstMessage.media.contains(where: { $0 is TelegramMediaStory }) {
+            } else if firstMessage.media.contains(where: { $0 is IosappMediaStory }) {
                 hasForwardLikeContent = true
             }
             
             if inlineBotNameString == nil && (ignoreForward || !hasForwardLikeContent) && replyMessage == nil && replyForward == nil && replyStory == nil {
                 if let first = contentPropertiesAndLayouts.first, first.1.hidesSimpleAuthorHeader && !ignoreNameHiding {
-                    if let author = firstMessage.author as? TelegramChannel, case .group = author.info, author.id == firstMessage.id.peerId, !incoming {
+                    if let author = firstMessage.author as? IosappChannel, case .group = author.info, author.id == firstMessage.id.peerId, !incoming {
                     } else {
                         initialDisplayHeader = false
                     }
@@ -2282,7 +2282,7 @@ public class ChatMessageBubbleItemNode: ChatMessageItemView, ChatMessagePreviewI
             }
         }
         
-        if let peer = firstMessage.peers[firstMessage.id.peerId] as? TelegramChannel, case .broadcast = peer.info, item.content.firstMessage.adAttribute == nil {
+        if let peer = firstMessage.peers[firstMessage.id.peerId] as? IosappChannel, case .broadcast = peer.info, item.content.firstMessage.adAttribute == nil {
             let peer = (peer as Peer)
             let nameColors: PeerNameColors.Colors?
             switch peer.nameColor {
@@ -2314,7 +2314,7 @@ public class ChatMessageBubbleItemNode: ChatMessageItemView, ChatMessagePreviewI
         }
                 
         if initialDisplayHeader && displayAuthorInfo {
-            if let peer = firstMessage.peers[firstMessage.id.peerId] as? TelegramChannel, case .broadcast = peer.info, item.content.firstMessage.adAttribute == nil, !overrideEffectiveAuthor {
+            if let peer = firstMessage.peers[firstMessage.id.peerId] as? IosappChannel, case .broadcast = peer.info, item.content.firstMessage.adAttribute == nil, !overrideEffectiveAuthor {
                 authorNameString = EnginePeer(peer).displayTitle(strings: item.presentationData.strings, displayOrder: item.presentationData.nameDisplayOrder)
                 
                 let peer = (peer as Peer)
@@ -2349,7 +2349,7 @@ public class ChatMessageBubbleItemNode: ChatMessageItemView, ChatMessagePreviewI
                 authorNameColor = color
 
                 if case let .peer(peerId) = item.chatLocation, let authorPeerId = item.message.author?.id, authorPeerId == peerId {
-                    if effectiveAuthor is TelegramChannel, let emojiStatus = effectiveAuthor.emojiStatus {
+                    if effectiveAuthor is IosappChannel, let emojiStatus = effectiveAuthor.emojiStatus {
                         currentCredibilityIcon = (.animation(content: .customEmoji(fileId: emojiStatus.fileId), size: CGSize(width: 20.0, height: 20.0), placeholderColor: incoming ? item.presentationData.theme.theme.chat.message.incoming.mediaPlaceholderColor : item.presentationData.theme.theme.chat.message.outgoing.mediaPlaceholderColor, themeColor: color.withMultipliedAlpha(0.4), loopMode: .count(2)), nil)
                     }
                 } else if effectiveAuthor.isScam {
@@ -2404,17 +2404,17 @@ public class ChatMessageBubbleItemNode: ChatMessageItemView, ChatMessagePreviewI
             if firstMessage.forwardInfo != nil {
                 displayHeader = true
             }
-            if firstMessage.media.contains(where: { $0 is TelegramMediaStory }) {
+            if firstMessage.media.contains(where: { $0 is IosappMediaStory }) {
                 displayHeader = true
             }
             if replyMessage != nil || replyForward != nil || replyStory != nil {
                 displayHeader = true
             }
-            if !displayHeader, case .peer = item.chatLocation, let channel = item.message.peers[item.message.id.peerId] as? TelegramChannel, channel.isForumOrMonoForum, item.message.associatedThreadInfo != nil {
+            if !displayHeader, case .peer = item.chatLocation, let channel = item.message.peers[item.message.id.peerId] as? IosappChannel, channel.isForumOrMonoForum, item.message.associatedThreadInfo != nil {
                 displayHeader = true
             }
             if case let .customChatContents(contents) = item.associatedData.subject, case .hashTagSearch = contents.kind, let peer = item.message.peers[item.message.id.peerId] {
-                if let channel = peer as? TelegramChannel, case .broadcast = channel.info {
+                if let channel = peer as? IosappChannel, case .broadcast = channel.info {
                     
                 } else {
                     displayHeader = true
@@ -2481,7 +2481,7 @@ public class ChatMessageBubbleItemNode: ChatMessageItemView, ChatMessagePreviewI
                     } else if let attribute = attribute as? ViewCountMessageAttribute {
                         viewCount = attribute.count
                     } else if let attribute = attribute as? ReplyThreadMessageAttribute, case .peer = item.chatLocation {
-                        if let channel = message.peers[message.id.peerId] as? TelegramChannel, case .group = channel.info {
+                        if let channel = message.peers[message.id.peerId] as? IosappChannel, case .group = channel.info {
                             dateReplies = Int(attribute.count)
                         }
                     } else if let attribute = attribute as? PaidStarsMessageAttribute, item.message.id.peerId.namespace == Namespaces.Peer.CloudChannel {
@@ -2771,7 +2771,7 @@ public class ChatMessageBubbleItemNode: ChatMessageItemView, ChatMessagePreviewI
                 forwardInfoOriginY = headerSize.height
                 headerSize.width = max(headerSize.width, forwardInfoSizeApply.0.width + bubbleWidthInsets)
                 headerSize.height += forwardInfoSizeApply.0.height
-            } else if let storyMedia = firstMessage.media.first(where: { $0 is TelegramMediaStory }) as? TelegramMediaStory {
+            } else if let storyMedia = firstMessage.media.first(where: { $0 is IosappMediaStory }) as? IosappMediaStory {
                 let _ = storyMedia
                 if headerSize.height.isZero {
                     headerSize.height += 5.0
@@ -2783,7 +2783,7 @@ public class ChatMessageBubbleItemNode: ChatMessageItemView, ChatMessagePreviewI
                 if let storyItem = firstMessage.associatedStories[storyMedia.storyId], storyItem.data.isEmpty {
                     storyType = .expired
                 }
-                if let peer = firstMessage.peers[storyMedia.storyId.peerId] as? TelegramChannel, peer.username == nil, peer.usernames.isEmpty {
+                if let peer = firstMessage.peers[storyMedia.storyId.peerId] as? IosappChannel, peer.username == nil, peer.usernames.isEmpty {
                     switch peer.participationStatus {
                     case .member:
                         break
@@ -2936,7 +2936,7 @@ public class ChatMessageBubbleItemNode: ChatMessageItemView, ChatMessagePreviewI
             actionButtonsFinalize = buttonsLayout
             
             lastNodeTopPosition = .None(.Both)
-        } else if incoming, let action = item.message.media.first(where: { $0 is TelegramMediaAction }) as? TelegramMediaAction, case let .copyProtectionRequest(isExpired, _, _) = action.action, !isExpired {
+        } else if incoming, let action = item.message.media.first(where: { $0 is IosappMediaAction }) as? IosappMediaAction, case let .copyProtectionRequest(isExpired, _, _) = action.action, !isExpired {
             let appConfiguration = item.context.currentAppConfiguration.with { $0 }
             let configuration = CopyProtectionConfiguration.with(appConfiguration: appConfiguration)
             
@@ -2982,7 +2982,7 @@ public class ChatMessageBubbleItemNode: ChatMessageItemView, ChatMessagePreviewI
                 
                 lastNodeTopPosition = .None(.Both)
             }
-        } else if incoming, let action = item.message.media.first(where: { $0 is TelegramMediaAction }) as? TelegramMediaAction, case let .starGiftPurchaseOffer(_, _, expireDate, isAccepted, isDeclined) = action.action, !isAccepted && !isDeclined {
+        } else if incoming, let action = item.message.media.first(where: { $0 is IosappMediaAction }) as? IosappMediaAction, case let .starGiftPurchaseOffer(_, _, expireDate, isAccepted, isDeclined) = action.action, !isAccepted && !isDeclined {
             let currentTimestamp = Int32(CFAbsoluteTimeGetCurrent() + NSTimeIntervalSince1970)
             if expireDate <= currentTimestamp {
                 
@@ -3025,7 +3025,7 @@ public class ChatMessageBubbleItemNode: ChatMessageItemView, ChatMessagePreviewI
             }
         } else if incoming, let attribute = item.message.attributes.first(where: { $0 is SuggestedPostMessageAttribute }) as? SuggestedPostMessageAttribute, attribute.state == nil {
             var canApprove = true
-            if let peer = item.message.peers[item.message.id.peerId] as? TelegramChannel, peer.isMonoForum, let linkedMonoforumId = peer.linkedMonoforumId, let mainChannel = item.message.peers[linkedMonoforumId] as? TelegramChannel, mainChannel.hasPermission(.manageDirect), !mainChannel.hasPermission(.sendSomething) {
+            if let peer = item.message.peers[item.message.id.peerId] as? IosappChannel, peer.isMonoForum, let linkedMonoforumId = peer.linkedMonoforumId, let mainChannel = item.message.peers[linkedMonoforumId] as? IosappChannel, mainChannel.hasPermission(.manageDirect), !mainChannel.hasPermission(.sendSomething) {
                 canApprove = false
             }
             
@@ -3114,7 +3114,7 @@ public class ChatMessageBubbleItemNode: ChatMessageItemView, ChatMessagePreviewI
         if !bubbleReactions.reactions.isEmpty && !item.presentationData.isPreview {
             var centerAligned = false
             for media in item.message.media {
-                if let action = media as? TelegramMediaAction {
+                if let action = media as? IosappMediaAction {
                     switch action.action {
                     case .phoneCall:
                         break
@@ -3123,7 +3123,7 @@ public class ChatMessageBubbleItemNode: ChatMessageItemView, ChatMessagePreviewI
                     default:
                         centerAligned = true
                     }
-                } else if let _ = media as? TelegramMediaExpiredContent {
+                } else if let _ = media as? IosappMediaExpiredContent {
                     centerAligned = true
                 }
                 break
@@ -3453,7 +3453,7 @@ public class ChatMessageBubbleItemNode: ChatMessageItemView, ChatMessagePreviewI
         
         contentSize.height += totalContentNodesHeight
         
-        if let paidContent = item.message.media.first(where: { $0 is TelegramMediaPaidContent }) as? TelegramMediaPaidContent, let media = paidContent.extendedMedia.first {
+        if let paidContent = item.message.media.first(where: { $0 is IosappMediaPaidContent }) as? IosappMediaPaidContent, let media = paidContent.extendedMedia.first {
             var isLocked = false
             if case .preview = media {
                 isLocked = true
@@ -5185,7 +5185,7 @@ public class ChatMessageBubbleItemNode: ChatMessageItemView, ChatMessagePreviewI
         }
         
         var isCurrentlyPlayingMedia = false
-        if item.associatedData.currentlyPlayingMessageId == item.message.index, let file = item.message.media.first(where: { $0 is TelegramMediaFile }) as? TelegramMediaFile, file.isInstantVideo {
+        if item.associatedData.currentlyPlayingMessageId == item.message.index, let file = item.message.media.first(where: { $0 is IosappMediaFile }) as? IosappMediaFile, file.isInstantVideo {
             isCurrentlyPlayingMedia = true
         }
         
@@ -5376,7 +5376,7 @@ public class ChatMessageBubbleItemNode: ChatMessageItemView, ChatMessagePreviewI
             hasMenuGesture = false
         }
         for media in item.message.media {
-            if let action = media as? TelegramMediaAction {
+            if let action = media as? IosappMediaAction {
                 if case .joinedChannel = action.action {
                     hasMenuGesture = false
                     break
@@ -5504,14 +5504,14 @@ public class ChatMessageBubbleItemNode: ChatMessageItemView, ChatMessagePreviewI
                 }
                 if let message {
                     for media in message.media {
-                        if let file = media as? TelegramMediaFile, file.duration != nil {
+                        if let file = media as? IosappMediaFile, file.duration != nil {
                             mediaMessage = message
                         }
                     }
                 }
             } else {
                 for media in item.message.media {
-                    if let file = media as? TelegramMediaFile, file.duration != nil {
+                    if let file = media as? IosappMediaFile, file.duration != nil {
                         mediaMessage = item.message
                     }
                 }
@@ -5521,12 +5521,12 @@ public class ChatMessageBubbleItemNode: ChatMessageItemView, ChatMessagePreviewI
                     if let attribute = attribute as? ReplyMessageAttribute {
                         if let replyMessage = item.message.associatedMessages[attribute.messageId] {
                             for media in replyMessage.media {
-                                if let file = media as? TelegramMediaFile, file.duration != nil {
+                                if let file = media as? IosappMediaFile, file.duration != nil {
                                     mediaMessage = replyMessage
                                     forceOpen = true
                                     break
                                 }
-                                if let webpage = media as? TelegramMediaWebpage, case let .Loaded(content) = webpage.content, webEmbedType(content: content).supportsSeeking {
+                                if let webpage = media as? IosappMediaWebpage, case let .Loaded(content) = webpage.content, webEmbedType(content: content).supportsSeeking {
                                     mediaMessage = replyMessage
                                     forceOpen = true
                                     break
@@ -5555,7 +5555,7 @@ public class ChatMessageBubbleItemNode: ChatMessageItemView, ChatMessagePreviewI
                                 }
                                 
                                 if let peerId = attribute.peerId {
-                                    if let botPeer = item.message.peers[peerId] as? TelegramUser, let inlinePlaceholder = botPeer.botInfo?.inlinePlaceholder, !inlinePlaceholder.isEmpty {
+                                    if let botPeer = item.message.peers[peerId] as? IosappUser, let inlinePlaceholder = botPeer.botInfo?.inlinePlaceholder, !inlinePlaceholder.isEmpty {
                                         return .optionalAction({
                                             if let botAddressName = botAddressName {
                                                 item.controllerInteraction.updateInputState { textInputState in
@@ -5655,7 +5655,7 @@ public class ChatMessageBubbleItemNode: ChatMessageItemView, ChatMessagePreviewI
                     if let item = self.item, let forwardInfo = item.message.forwardInfo {
                         let performAction: () -> Void = { [weak forwardInfoNode] in
                             if let sourceMessageId = forwardInfo.sourceMessageId {
-                                if let channel = forwardInfo.author as? TelegramChannel, channel.addressName == nil {
+                                if let channel = forwardInfo.author as? IosappChannel, channel.addressName == nil {
                                     if case let .broadcast(info) = channel.info, info.flags.contains(.hasDiscussionGroup) {
                                     } else if case .member = channel.participationStatus {
                                     } else if !item.message.id.peerId.isReplies {
@@ -5669,7 +5669,7 @@ public class ChatMessageBubbleItemNode: ChatMessageItemView, ChatMessagePreviewI
                                     item.controllerInteraction.navigateToMessage(item.message.id, sourceMessageId, NavigateToMessageParams(timestamp: nil, quote: nil, progress: forwardInfoNode.makeActivate()?()))
                                 }
                             } else if let peer = forwardInfo.source ?? forwardInfo.author {
-                                item.controllerInteraction.openPeer(EnginePeer(peer), peer is TelegramUser ? .info(nil) : .chat(textInputState: nil, subject: nil, peekData: nil), nil, .default)
+                                item.controllerInteraction.openPeer(EnginePeer(peer), peer is IosappUser ? .info(nil) : .chat(textInputState: nil, subject: nil, peekData: nil), nil, .default)
                             } else if let _ = forwardInfo.authorSignature {
                                 if let forwardInfoNode {
                                     var subRect: CGRect?
@@ -5686,7 +5686,7 @@ public class ChatMessageBubbleItemNode: ChatMessageItemView, ChatMessagePreviewI
                         } else {
                             return .optionalAction(performAction)
                         }
-                    } else if let item = self.item, let story = item.message.media.first(where: { $0 is TelegramMediaStory }) as? TelegramMediaStory {
+                    } else if let item = self.item, let story = item.message.media.first(where: { $0 is IosappMediaStory }) as? IosappMediaStory {
                         if let storyItem = item.message.associatedStories[story.storyId] {
                             if storyItem.data.isEmpty {
                                 return .action(InternalBubbleTapAction.Action {
@@ -5695,7 +5695,7 @@ public class ChatMessageBubbleItemNode: ChatMessageItemView, ChatMessagePreviewI
                             } else {
                                 if let peer = item.message.peers[story.storyId.peerId] {
                                     return .action(InternalBubbleTapAction.Action {
-                                        item.controllerInteraction.openPeer(EnginePeer(peer), peer is TelegramUser ? .info(nil) : .chat(textInputState: nil, subject: nil, peekData: nil), nil, .default)
+                                        item.controllerInteraction.openPeer(EnginePeer(peer), peer is IosappUser ? .info(nil) : .chat(textInputState: nil, subject: nil, peekData: nil), nil, .default)
                                     })
                                 }
                             }
@@ -5765,7 +5765,7 @@ public class ChatMessageBubbleItemNode: ChatMessageItemView, ChatMessagePreviewI
                     case let .peerMention(peerId, _, openProfile):
                         return .action(InternalBubbleTapAction.Action { [weak self] in
                             if let item = self?.item {
-                                let _ = (item.context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: peerId))
+                                let _ = (item.context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: peerId))
                                 |> deliverOnMainQueue).startStandalone(next: { peer in
                                     if let self = self, let item = self.item, let peer = peer {
                                         item.controllerInteraction.openPeer(peer, openProfile ? .info(nil) : .chat(textInputState: nil, subject: nil, peekData: nil), nil, .default)
@@ -6316,14 +6316,14 @@ public class ChatMessageBubbleItemNode: ChatMessageItemView, ChatMessagePreviewI
         switch item.content {
             case let .message(message, _, _, _, _):
                 for media in message.media {
-                    if let action = media as? TelegramMediaAction {
+                    if let action = media as? IosappMediaAction {
                         if case .phoneCall = action.action {
                         } else if case .conferenceCall = action.action {
                         } else {
                             canHaveSelection = false
                             break
                         }
-                    } else if media is TelegramMediaExpiredContent {
+                    } else if media is IosappMediaExpiredContent {
                         canHaveSelection = false
                     }
                 }
@@ -6630,7 +6630,7 @@ public class ChatMessageBubbleItemNode: ChatMessageItemView, ChatMessagePreviewI
                 item.controllerInteraction.updateChatLocationThread(item.message.threadId, nil)
             } else {
                 if !self.disablesComments {
-                    if let channel = item.message.peers[item.message.id.peerId] as? TelegramChannel, case .broadcast = channel.info {
+                    if let channel = item.message.peers[item.message.id.peerId] as? IosappChannel, case .broadcast = channel.info {
                         for attribute in item.message.attributes {
                             if let _ = attribute as? ReplyThreadMessageAttribute {
                                 item.controllerInteraction.openMessageReplies(item.message.id, true, false)
@@ -6660,12 +6660,12 @@ public class ChatMessageBubbleItemNode: ChatMessageItemView, ChatMessagePreviewI
         if let item = self.item, let peer = item.message.author {
             let messageReference = MessageReference(item.message)
             if peer.id.isVerificationCodes, let forwardAuthor = item.content.firstMessage.forwardInfo?.author {
-                if let channel = forwardAuthor as? TelegramChannel, case .broadcast = channel.info {
+                if let channel = forwardAuthor as? IosappChannel, case .broadcast = channel.info {
                     item.controllerInteraction.openPeer(EnginePeer(channel), .chat(textInputState: nil, subject: nil, peekData: nil), messageReference, .default)
                 } else {
                     item.controllerInteraction.openPeer(EnginePeer(forwardAuthor), .info(nil), messageReference, .default)
                 }
-            } else if let channel = peer as? TelegramChannel, case .broadcast = channel.info {
+            } else if let channel = peer as? IosappChannel, case .broadcast = channel.info {
                 item.controllerInteraction.openPeer(EnginePeer(peer), .chat(textInputState: nil, subject: nil, peekData: nil), messageReference, .default)
             } else {
                 item.controllerInteraction.openPeer(EnginePeer(peer), .info(nil), messageReference, .groupParticipant(storyStats: nil, avatarHeaderNode: nil))

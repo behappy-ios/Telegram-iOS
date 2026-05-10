@@ -3595,7 +3595,7 @@ public func mediaPickerController(
         }
         if hasSearch {
             mediaPickerController.presentWebSearch = { [weak mediaPickerController] groups, activateOnDisplay in
-                let _ = (context.engine.data.get(TelegramEngine.EngineData.Item.Configuration.SearchBots())
+                let _ = (context.engine.data.get(IosappEngine.EngineData.Item.Configuration.SearchBots())
                 |> deliverOnMainQueue).start(next: { configuration in
                     let webSearchController = WebSearchController(
                         context: context,

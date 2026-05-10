@@ -1,7 +1,7 @@
 import Foundation
 import Postbox
 
-public final class TelegramSecretChat: Peer, Equatable {
+public final class IosappSecretChat: Peer, Equatable {
     public let id: PeerId
     public let regularPeerId: PeerId
     public let accessHash: Int64
@@ -65,23 +65,23 @@ public final class TelegramSecretChat: Peer, Equatable {
     }
     
     public func isEqual(_ other: Peer) -> Bool {
-        if let other = other as? TelegramSecretChat {
+        if let other = other as? IosappSecretChat {
             return self == other
         } else {
             return false
         }
     }
 
-    public static func ==(lhs: TelegramSecretChat, rhs: TelegramSecretChat) -> Bool {
+    public static func ==(lhs: IosappSecretChat, rhs: IosappSecretChat) -> Bool {
         return lhs.id == rhs.id && lhs.regularPeerId == rhs.regularPeerId && lhs.accessHash == rhs.accessHash && lhs.embeddedState == rhs.embeddedState && lhs.messageAutoremoveTimeout == rhs.messageAutoremoveTimeout && lhs.creationDate == rhs.creationDate && lhs.role == rhs.role
     }
     
-    public func withUpdatedEmbeddedState(_ embeddedState: SecretChatEmbeddedPeerState) -> TelegramSecretChat {
-        return TelegramSecretChat(id: self.id, creationDate: self.creationDate, regularPeerId: self.regularPeerId, accessHash: self.accessHash, role: self.role, embeddedState: embeddedState, messageAutoremoveTimeout: self.messageAutoremoveTimeout)
+    public func withUpdatedEmbeddedState(_ embeddedState: SecretChatEmbeddedPeerState) -> IosappSecretChat {
+        return IosappSecretChat(id: self.id, creationDate: self.creationDate, regularPeerId: self.regularPeerId, accessHash: self.accessHash, role: self.role, embeddedState: embeddedState, messageAutoremoveTimeout: self.messageAutoremoveTimeout)
     }
     
-    public func withUpdatedMessageAutoremoveTimeout(_ messageAutoremoveTimeout: Int32?) -> TelegramSecretChat {
-        return TelegramSecretChat(id: self.id, creationDate: self.creationDate, regularPeerId: self.regularPeerId, accessHash: self.accessHash, role: self.role, embeddedState: self.embeddedState, messageAutoremoveTimeout: messageAutoremoveTimeout)
+    public func withUpdatedMessageAutoremoveTimeout(_ messageAutoremoveTimeout: Int32?) -> IosappSecretChat {
+        return IosappSecretChat(id: self.id, creationDate: self.creationDate, regularPeerId: self.regularPeerId, accessHash: self.accessHash, role: self.role, embeddedState: self.embeddedState, messageAutoremoveTimeout: messageAutoremoveTimeout)
     }
 }
 

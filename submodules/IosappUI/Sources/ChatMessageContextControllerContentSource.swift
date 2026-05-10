@@ -37,7 +37,7 @@ final class ChatMessageContextExtractedContentSource: ContextExtractedContentSou
     
     private weak var chatController: ChatControllerImpl?
     private weak var chatNode: ChatControllerNode?
-    private let engine: TelegramEngine
+    private let engine: IosappEngine
     private let message: Message
     private let selectAll: Bool
     private let snapshot: Bool
@@ -50,7 +50,7 @@ final class ChatMessageContextExtractedContentSource: ContextExtractedContentSou
             return .single(false)
         }
     
-        return self.engine.data.subscribe(TelegramEngine.EngineData.Item.Messages.Message(id: self.message.id))
+        return self.engine.data.subscribe(IosappEngine.EngineData.Item.Messages.Message(id: self.message.id))
         |> map { message -> Bool in
             if let _ = message {
                 return false
@@ -61,7 +61,7 @@ final class ChatMessageContextExtractedContentSource: ContextExtractedContentSou
         |> distinctUntilChanged
     }
     
-    init(chatController: ChatControllerImpl, chatNode: ChatControllerNode, engine: TelegramEngine, message: Message, selectAll: Bool, centerVertically: Bool = false, keepDefaultContentTouches: Bool = false, snapshot: Bool = false) {
+    init(chatController: ChatControllerImpl, chatNode: ChatControllerNode, engine: IosappEngine, message: Message, selectAll: Bool, centerVertically: Bool = false, keepDefaultContentTouches: Bool = false, snapshot: Bool = false) {
         self.chatController = chatController
         self.chatNode = chatNode
         self.engine = engine
@@ -133,7 +133,7 @@ final class ChatViewOnceMessageContextExtractedContentSource: ContextExtractedCo
     private let presentationData: PresentationData
     private weak var chatNode: ChatControllerNode?
     private weak var backgroundNode: WallpaperBackgroundNode?
-    private let engine: TelegramEngine
+    private let engine: IosappEngine
     private let message: Message
     private let present: (ViewController) -> Void
 
@@ -167,7 +167,7 @@ final class ChatViewOnceMessageContextExtractedContentSource: ContextExtractedCo
         )
     }
     
-    init(context: AccountContext, presentationData: PresentationData, chatNode: ChatControllerNode, backgroundNode: WallpaperBackgroundNode, engine: TelegramEngine, message: Message, present: @escaping (ViewController) -> Void) {
+    init(context: AccountContext, presentationData: PresentationData, chatNode: ChatControllerNode, backgroundNode: WallpaperBackgroundNode, engine: IosappEngine, message: Message, present: @escaping (ViewController) -> Void) {
         self.context = context
         self.presentationData = presentationData
         self.chatNode = chatNode
@@ -190,7 +190,7 @@ final class ChatViewOnceMessageContextExtractedContentSource: ContextExtractedCo
         self.idleTimerExtensionDisposable.set(self.context.sharedContext.applicationBindings.pushIdleTimerExtension())
         
         let isIncoming = self.message.effectivelyIncoming(self.context.account.peerId)
-        let isVideo = (self.message.media.first(where: { $0 is TelegramMediaFile }) as? TelegramMediaFile)?.isInstantVideo ?? false
+        let isVideo = (self.message.media.first(where: { $0 is IosappMediaFile }) as? IosappMediaFile)?.isInstantVideo ?? false
         
         var result: ContextControllerTakeViewInfo?
         var sourceNode: ContextExtractedContentContainingNode?
@@ -423,7 +423,7 @@ final class ChatMessageReactionContextExtractedContentSource: ContextExtractedCo
     let actionsHorizontalAlignment: ContextActionsHorizontalAlignment = .center
     
     private weak var chatNode: ChatControllerNode?
-    private let engine: TelegramEngine
+    private let engine: IosappEngine
     private let message: Message
     private let contentView: ContextExtractedContentContainingView
     
@@ -432,7 +432,7 @@ final class ChatMessageReactionContextExtractedContentSource: ContextExtractedCo
             return .single(false)
         }
         
-        return self.engine.data.subscribe(TelegramEngine.EngineData.Item.Messages.Message(id: self.message.id))
+        return self.engine.data.subscribe(IosappEngine.EngineData.Item.Messages.Message(id: self.message.id))
         |> map { message -> Bool in
             if let _ = message {
                 return false
@@ -443,7 +443,7 @@ final class ChatMessageReactionContextExtractedContentSource: ContextExtractedCo
         |> distinctUntilChanged
     }
     
-    init(chatNode: ChatControllerNode, engine: TelegramEngine, message: Message, contentView: ContextExtractedContentContainingView) {
+    init(chatNode: ChatControllerNode, engine: IosappEngine, message: Message, contentView: ContextExtractedContentContainingView) {
         self.chatNode = chatNode
         self.engine = engine
         self.message = message

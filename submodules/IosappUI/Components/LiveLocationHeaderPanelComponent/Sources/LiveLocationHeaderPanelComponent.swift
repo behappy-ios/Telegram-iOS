@@ -33,7 +33,7 @@ private func presentLiveLocationController(context: AccountContext, peerId: Peer
         }
     }
     if let id = context.liveLocationManager?.internalMessageForPeerId(peerId) {
-        let _ = (context.engine.data.get(TelegramEngine.EngineData.Item.Messages.Message(id: id))
+        let _ = (context.engine.data.get(IosappEngine.EngineData.Item.Messages.Message(id: id))
         |> deliverOnMainQueue).start(next: presentImpl)
     } else if let liveLocationManager = context.liveLocationManager {
         let _ = (liveLocationManager.summaryManager.peersBroadcastingTo(peerId: peerId)
@@ -136,7 +136,7 @@ public final class LiveLocationHeaderPanelComponent: Component {
                                         if let peer = message.peers[message.id.peerId] {
                                             var beginTimeAndTimeout: (Double, Double)?
                                             for media in message.media {
-                                                if let media = media as? TelegramMediaMap, let timeout = media.liveBroadcastingTimeout {
+                                                if let media = media as? IosappMediaMap, let timeout = media.liveBroadcastingTimeout {
                                                     beginTimeAndTimeout = (Double(message.timestamp), Double(timeout))
                                                 }
                                             }

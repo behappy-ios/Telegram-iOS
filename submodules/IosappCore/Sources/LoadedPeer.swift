@@ -9,7 +9,7 @@ public func actualizedPeer(accountPeerId: PeerId, postbox: Postbox, network: Net
         var actualizeChannel: Api.InputChannel?
         if let currentPeer = transaction.getPeer(peer.id) {
             signal = .single(currentPeer)
-            if let currentPeer = currentPeer as? TelegramChannel {
+            if let currentPeer = currentPeer as? IosappChannel {
                 switch currentPeer.participationStatus {
                     case .left, .kicked:
                         actualizeChannel = apiInputChannel(currentPeer)
@@ -19,7 +19,7 @@ public func actualizedPeer(accountPeerId: PeerId, postbox: Postbox, network: Net
             }
         } else {
             signal = .single(peer)
-            if let peer = peer as? TelegramChannel {
+            if let peer = peer as? IosappChannel {
                 actualizeChannel = apiInputChannel(peer)
             }
         }

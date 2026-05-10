@@ -5,12 +5,12 @@ import FlatSerialization
 
 public final class StickerPackItem: ItemCollectionItem, Equatable {
     public let index: ItemCollectionItemIndex
-    public let file: TelegramMediaFile.Accessor
+    public let file: IosappMediaFile.Accessor
     public let indexKeys: [MemoryBuffer]
     
-    public init(index: ItemCollectionItemIndex, file: TelegramMediaFile, indexKeys: [MemoryBuffer]) {
+    public init(index: ItemCollectionItemIndex, file: IosappMediaFile, indexKeys: [MemoryBuffer]) {
         self.index = index
-        self.file = TelegramMediaFile.Accessor(file)
+        self.file = IosappMediaFile.Accessor(file)
         self.indexKeys = indexKeys
     }
     
@@ -18,8 +18,8 @@ public final class StickerPackItem: ItemCollectionItem, Equatable {
         self.index = index
         
         var byteBuffer = ByteBuffer(data: serializedFile)
-        let accessor = FlatBuffers_getRoot(byteBuffer: &byteBuffer) as TelegramCore_TelegramMediaFile
-        self.file = TelegramMediaFile.Accessor(accessor, serializedFile)
+        let accessor = FlatBuffers_getRoot(byteBuffer: &byteBuffer) as IosappCore_IosappMediaFile
+        self.file = IosappMediaFile.Accessor(accessor, serializedFile)
         
         self.indexKeys = indexKeys
     }
@@ -29,10 +29,10 @@ public final class StickerPackItem: ItemCollectionItem, Equatable {
         
         if let serializedFileData = decoder.decodeDataForKey("fd") {
             var byteBuffer = ByteBuffer(data: serializedFileData)
-            self.file = TelegramMediaFile.Accessor(FlatBuffers_getRoot(byteBuffer: &byteBuffer) as TelegramCore_TelegramMediaFile, serializedFileData)
+            self.file = IosappMediaFile.Accessor(FlatBuffers_getRoot(byteBuffer: &byteBuffer) as IosappCore_IosappMediaFile, serializedFileData)
         } else {
-            let file = decoder.decodeObjectForKey("f") as! TelegramMediaFile
-            self.file = TelegramMediaFile.Accessor(file)
+            let file = decoder.decodeObjectForKey("f") as! IosappMediaFile
+            self.file = IosappMediaFile.Accessor(file)
         }
         
         self.indexKeys = decoder.decodeBytesArrayForKey("s")

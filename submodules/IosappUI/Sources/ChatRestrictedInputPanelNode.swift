@@ -87,13 +87,13 @@ final class ChatRestrictedInputPanelNode: ChatInputPanelNode {
         }
         
         var bannedPermission: (Int32, Bool)?
-        if let channel = interfaceState.renderedPeer?.peer as? TelegramChannel {
+        if let channel = interfaceState.renderedPeer?.peer as? IosappChannel {
             if let value = channel.hasBannedPermission(.banSendText) {
                 bannedPermission = value
             } else if !channel.hasPermission(.sendSomething) {
                 bannedPermission = (Int32.max, false)
             }
-        } else if let group = interfaceState.renderedPeer?.peer as? TelegramGroup {
+        } else if let group = interfaceState.renderedPeer?.peer as? IosappGroup {
             if !group.hasPermission(.sendSomething) {
                 bannedPermission = (Int32.max, false)
             }
@@ -107,7 +107,7 @@ final class ChatRestrictedInputPanelNode: ChatInputPanelNode {
         if let context = self.context {
             accountFreezeConfiguration = AccountFreezeConfiguration.with(appConfiguration: context.currentAppConfiguration.with { $0 })
         }
-        if let channel = interfaceState.renderedPeer?.chatMainPeer as? TelegramChannel, channel.isMonoForum {
+        if let channel = interfaceState.renderedPeer?.chatMainPeer as? IosappChannel, channel.isMonoForum {
             self.textNode.attributedText = NSAttributedString(string: interfaceState.strings.Chat_PanelForumModeReplyText, font: Font.regular(15.0), textColor: interfaceState.theme.chat.inputPanel.secondaryTextColor)
         } else if let _ = accountFreezeConfiguration?.freezeUntilDate {
             self.textNode.attributedText = NSAttributedString(string: interfaceState.strings.Chat_PanelFrozenAccount_Title, font: Font.semibold(15.0), textColor: interfaceState.theme.list.itemDestructiveColor)
@@ -118,7 +118,7 @@ final class ChatRestrictedInputPanelNode: ChatInputPanelNode {
         } else if let threadData = interfaceState.threadData, threadData.isClosed {
             iconImage = PresentationResourcesChat.chatPanelLockIcon(interfaceState.theme)
             self.textNode.attributedText = NSAttributedString(string: interfaceState.strings.Chat_PanelTopicClosedText, font: Font.regular(15.0), textColor: interfaceState.theme.chat.inputPanel.secondaryTextColor)
-        } else if let channel = interfaceState.renderedPeer?.peer as? TelegramChannel, channel.isForumOrMonoForum, case .peer = interfaceState.chatLocation {
+        } else if let channel = interfaceState.renderedPeer?.peer as? IosappChannel, channel.isForumOrMonoForum, case .peer = interfaceState.chatLocation {
             if let replyMessage = interfaceState.replyMessage, let threadInfo = replyMessage.associatedThreadInfo {
                 self.textNode.attributedText = NSAttributedString(string: interfaceState.strings.Chat_TopicIsClosedLabel(threadInfo.title).string, font: Font.regular(15.0), textColor: interfaceState.theme.chat.inputPanel.secondaryTextColor)
             } else {

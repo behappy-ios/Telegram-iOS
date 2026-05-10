@@ -94,9 +94,9 @@ final class HorizontalListContextResultsChatInputPanelItemNode: ListViewItemNode
     private var animationNode: AnimatedStickerNode?
     private var placeholderNode: StickerShimmerEffectNode?
     private var videoLayer: GifVideoLayer?
-    private var currentImageResource: TelegramMediaResource?
-    private var currentVideoFile: TelegramMediaFile?
-    private var currentAnimatedStickerFile: TelegramMediaFile?
+    private var currentImageResource: IosappMediaResource?
+    private var currentVideoFile: IosappMediaFile?
+    private var currentAnimatedStickerFile: IosappMediaFile?
     private var resourceStatus: MediaResourceStatus?
     private(set) var item: HorizontalListContextResultsChatInputPanelItem?
     private var statusDisposable = MetaDisposable()
@@ -204,10 +204,10 @@ final class HorizontalListContextResultsChatInputPanelItemNode: ListViewItemNode
             var updateImageSignal: Signal<(TransformImageArguments) -> DrawingContext?, NoError>?
             var updatedStatusSignal: Signal<MediaResourceStatus, NoError>?
 
-            var imageResource: TelegramMediaResource?
-            var stickerFile: TelegramMediaFile?
-            var animatedStickerFile: TelegramMediaFile?
-            var videoFile: TelegramMediaFile?
+            var imageResource: IosappMediaResource?
+            var stickerFile: IosappMediaFile?
+            var animatedStickerFile: IosappMediaFile?
+            var videoFile: IosappMediaFile?
             var imageDimensions: CGSize?
             switch item.result {
                 case let .externalReference(externalReference):
@@ -218,7 +218,7 @@ final class HorizontalListContextResultsChatInputPanelItemNode: ListViewItemNode
                     }
                     imageDimensions = externalReference.content?.dimensions?.cgSize
                     if externalReference.type == "gif", let thumbnailResource = externalReference.thumbnail?.resource, let content = externalReference.content, let dimensions = content.dimensions {
-                        videoFile = TelegramMediaFile(fileId: MediaId(namespace: Namespaces.Media.LocalFile, id: 0), partialReference: nil, resource: thumbnailResource, previewRepresentations: [], videoThumbnails: [], immediateThumbnailData: nil, mimeType: "video/mp4", size: nil, attributes: [.Animated, .Video(duration: 0, size: dimensions, flags: [], preloadSize: nil, coverTime: nil, videoCodec: nil)], alternativeRepresentations: [])
+                        videoFile = IosappMediaFile(fileId: MediaId(namespace: Namespaces.Media.LocalFile, id: 0), partialReference: nil, resource: thumbnailResource, previewRepresentations: [], videoThumbnails: [], immediateThumbnailData: nil, mimeType: "video/mp4", size: nil, attributes: [.Animated, .Video(duration: 0, size: dimensions, flags: [], preloadSize: nil, coverTime: nil, videoCodec: nil)], alternativeRepresentations: [])
                         imageResource = nil
                     }
                 
@@ -311,8 +311,8 @@ final class HorizontalListContextResultsChatInputPanelItemNode: ListViewItemNode
                     if let stickerFile = stickerFile {
                         updateImageSignal = chatMessageSticker(account: item.context.account, userLocation: .other, file: stickerFile, small: false, fetched: true)
                     } else {
-                        let tmpRepresentation = TelegramMediaImageRepresentation(dimensions: PixelDimensions(CGSize(width: fittedImageDimensions.width * 2.0, height: fittedImageDimensions.height * 2.0)), resource: imageResource, progressiveSizes: [], immediateThumbnailData: nil, hasVideo: false, isPersonal: false)
-                        let tmpImage = TelegramMediaImage(imageId: MediaId(namespace: 0, id: 0), representations: [tmpRepresentation], immediateThumbnailData: nil, reference: nil, partialReference: nil, flags: [])
+                        let tmpRepresentation = IosappMediaImageRepresentation(dimensions: PixelDimensions(CGSize(width: fittedImageDimensions.width * 2.0, height: fittedImageDimensions.height * 2.0)), resource: imageResource, progressiveSizes: [], immediateThumbnailData: nil, hasVideo: false, isPersonal: false)
+                        let tmpImage = IosappMediaImage(imageId: MediaId(namespace: 0, id: 0), representations: [tmpRepresentation], immediateThumbnailData: nil, reference: nil, partialReference: nil, flags: [])
                         updateImageSignal = chatMessagePhoto(postbox: item.context.account.postbox, userLocation: .other, photoReference: .standalone(media: tmpImage), synchronousLoad: true)
                     }
                 } else {

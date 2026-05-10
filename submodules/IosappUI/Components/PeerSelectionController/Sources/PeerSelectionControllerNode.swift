@@ -262,7 +262,7 @@ final class PeerSelectionControllerNode: ASDisplayNode {
             
             if let (peerId, isMonoforum) = self.forumPeerId, isMonoforum {
                 let _ = (self.context.engine.data.get(
-                    TelegramEngine.EngineData.Item.Peer.Peer(id: peerId)
+                    IosappEngine.EngineData.Item.Peer.Peer(id: peerId)
                 )
                 |> deliverOnMainQueue).startStandalone(next: { [weak self] mainPeer in
                     guard let self, let mainPeer else {
@@ -283,7 +283,7 @@ final class PeerSelectionControllerNode: ASDisplayNode {
             
             if let (peerId, isMonoforum) = self.forumPeerId, isMonoforum {
                 let _ = (self.context.engine.data.get(
-                    TelegramEngine.EngineData.Item.Peer.Peer(id: peerId)
+                    IosappEngine.EngineData.Item.Peer.Peer(id: peerId)
                 )
                 |> deliverOnMainQueue).startStandalone(next: { [weak self] mainPeer in
                     guard let self, let mainPeer else {
@@ -468,13 +468,13 @@ final class PeerSelectionControllerNode: ASDisplayNode {
                     var isDice = false
                     var isMusic = false
                     for media in message.media {
-                        if let media = media as? TelegramMediaFile, media.isMusic {
+                        if let media = media as? IosappMediaFile, media.isMusic {
                             isMusic = true
-                        } else if media is TelegramMediaDice {
+                        } else if media is IosappMediaDice {
                             isDice = true
                         } else {
                             if !message.text.isEmpty {
-                                if media is TelegramMediaImage || media is TelegramMediaFile {
+                                if media is IosappMediaImage || media is IosappMediaFile {
                                     hasCaptions = true
                                 }
                             }
@@ -1472,7 +1472,7 @@ final class PeerSelectionControllerNode: ASDisplayNode {
                     } else {
                         switch peer {
                             case let .peer(peer, _, _):
-                                let _ = (strongSelf.context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: peer.id))
+                                let _ = (strongSelf.context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: peer.id))
                                 |> deliverOnMainQueue).start(next: { peer in
                                     if let strongSelf = self, let peer = peer {
                                         strongSelf.requestOpenPeerFromSearch?(peer, nil)
@@ -1664,7 +1664,7 @@ final class PeerSelectionControllerNode: ASDisplayNode {
     }
 }
 
-public func stringForAdminRights(strings: PresentationStrings, adminRights: TelegramChatAdminRights, isChannel: Bool) -> String {
+public func stringForAdminRights(strings: PresentationStrings, adminRights: IosappChatAdminRights, isChannel: Bool) -> String {
     var rights: [String] = []
     func append(_ string: String) {
         rights.append("•  \(string)")

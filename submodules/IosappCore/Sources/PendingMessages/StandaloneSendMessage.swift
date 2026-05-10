@@ -7,7 +7,7 @@ import MtProtoKit
 
 public enum StandaloneMedia {
     case image(Data)
-    case file(data: Data, mimeType: String, attributes: [TelegramMediaFileAttribute])
+    case file(data: Data, mimeType: String, attributes: [IosappMediaFileAttribute])
 }
 
 private enum StandaloneMessageContent {
@@ -57,10 +57,10 @@ public struct StandaloneSendEnqueueMessage {
     }
     
     public struct Image {
-        public var representation: TelegramMediaImageRepresentation
+        public var representation: IosappMediaImageRepresentation
         
         public init(
-            representation: TelegramMediaImageRepresentation
+            representation: IosappMediaImageRepresentation
         ) {
             self.representation = representation
         }
@@ -95,7 +95,7 @@ public struct StandaloneSendEnqueueMessage {
     public enum Content {
         case text(text: Text)
         case image(image: Image, text: Text)
-        case map(map: TelegramMediaMap)
+        case map(map: IosappMediaMap)
         case arbitraryMedia(media: AnyMediaReference, text: Text)
         case forward(forward: Forward)
     }
@@ -144,7 +144,7 @@ public func standaloneSendEnqueueMessages(
                 attributes.append(TextEntitiesMessageAttribute(entities: textValue.entities))
             }
         case let .image(image, textValue):
-            media.append(TelegramMediaImage(
+            media.append(IosappMediaImage(
                 imageId: MediaId(namespace: Namespaces.Media.LocalImage, id: MediaId.Id.random(in: Int64.min ... Int64.max)),
                 representations: [image.representation],
                 immediateThumbnailData: nil,
@@ -328,7 +328,7 @@ private func sendUploadedMessageContent(
             var topMsgId: Int32?
             var monoforumPeerId: Api.InputPeer?
             if let threadId {
-                if let channel = peer as? TelegramChannel, channel.flags.contains(.isMonoforum) {
+                if let channel = peer as? IosappChannel, channel.flags.contains(.isMonoforum) {
                     if let monoforumTargetPeer = transaction.getPeer(PeerId(threadId)) {
                         monoforumPeerId = apiInputPeer(monoforumTargetPeer)
                     }
@@ -775,7 +775,7 @@ private enum UploadMediaEvent {
 }
 
 private func uploadedImage(account: Account, data: Data) -> Signal<UploadMediaEvent, StandaloneSendMessageError> {
-    return multipartUpload(network: account.network, postbox: account.postbox, source: .data(data), encrypt: false, tag: TelegramMediaResourceFetchTag(statsCategory: .image, userContentType: .image), hintFileSize: nil, hintFileIsLarge: false, forceNoBigParts: false)
+    return multipartUpload(network: account.network, postbox: account.postbox, source: .data(data), encrypt: false, tag: IosappMediaResourceFetchTag(statsCategory: .image, userContentType: .image), hintFileSize: nil, hintFileIsLarge: false, forceNoBigParts: false)
         |> mapError { _ -> StandaloneSendMessageError in return .generic }
         |> map { next -> UploadMediaEvent in
             switch next {
@@ -790,8 +790,8 @@ private func uploadedImage(account: Account, data: Data) -> Signal<UploadMediaEv
         }
 }
 
-private func uploadedFile(account: Account, data: Data, mimeType: String, attributes: [TelegramMediaFileAttribute]) -> Signal<UploadMediaEvent, PendingMessageUploadError> {
-    return multipartUpload(network: account.network, postbox: account.postbox, source: .data(data), encrypt: false, tag: TelegramMediaResourceFetchTag(statsCategory: statsCategoryForFileWithAttributes(attributes), userContentType: nil), hintFileSize: Int64(data.count), hintFileIsLarge: false, forceNoBigParts: false)
+private func uploadedFile(account: Account, data: Data, mimeType: String, attributes: [IosappMediaFileAttribute]) -> Signal<UploadMediaEvent, PendingMessageUploadError> {
+    return multipartUpload(network: account.network, postbox: account.postbox, source: .data(data), encrypt: false, tag: IosappMediaResourceFetchTag(statsCategory: statsCategoryForFileWithAttributes(attributes), userContentType: nil), hintFileSize: Int64(data.count), hintFileIsLarge: false, forceNoBigParts: false)
         |> mapError { _ -> PendingMessageUploadError in return .generic }
         |> map { next -> UploadMediaEvent in
             switch next {

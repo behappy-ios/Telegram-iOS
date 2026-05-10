@@ -185,9 +185,9 @@ public class ChatMessageInstantVideoBubbleContentNode: ChatMessageBubbleContentN
         let didSetupFileNode = self.item != nil
         
         return { item, layoutConstants, preparePosition, selection, constrainedSize, avatarInset in
-            var selectedFile: TelegramMediaFile?
+            var selectedFile: IosappMediaFile?
             for media in item.message.media {
-                if let telegramFile = media as? TelegramMediaFile {
+                if let telegramFile = media as? IosappMediaFile {
                     selectedFile = telegramFile
                 }
             }

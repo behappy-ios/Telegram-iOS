@@ -50,7 +50,7 @@ public let telegramPostboxSeedConfiguration: SeedConfiguration = {
         existingGlobalMessageTags: GlobalMessageTags.all,
         peerNamespacesRequiringMessageTextIndex: [Namespaces.Peer.SecretChat],
         peerSummaryCounterTags: { peer, isContact in
-            if let peer = peer as? TelegramUser {
+            if let peer = peer as? IosappUser {
                 if peer.botInfo != nil {
                     return .bot
                 } else if isContact {
@@ -58,11 +58,11 @@ public let telegramPostboxSeedConfiguration: SeedConfiguration = {
                 } else {
                     return .nonContact
                 }
-            } else if let _ = peer as? TelegramGroup {
+            } else if let _ = peer as? IosappGroup {
                 return .group
-            } else if let _ = peer as? TelegramSecretChat {
+            } else if let _ = peer as? IosappSecretChat {
                 return .nonContact
-            } else if let channel = peer as? TelegramChannel {
+            } else if let channel = peer as? IosappChannel {
                 switch channel.info {
                 case .broadcast:
                     return .channel
@@ -75,7 +75,7 @@ public let telegramPostboxSeedConfiguration: SeedConfiguration = {
             }
         },
         peerSummaryIsThreadBased: { peer, associatedPeer in
-            if let channel = peer as? TelegramChannel {
+            if let channel = peer as? IosappChannel {
                 if channel.flags.contains(.isForum) {
                     if channel.flags.contains(.displayForumAsTabs) {
                         return (false, false)
@@ -83,7 +83,7 @@ public let telegramPostboxSeedConfiguration: SeedConfiguration = {
                         return (true, false)
                     }
                 } else if channel.flags.contains(.isMonoforum) {
-                    if let associatedPeer = associatedPeer as? TelegramChannel, associatedPeer.hasPermission(.manageDirect) {
+                    if let associatedPeer = associatedPeer as? IosappChannel, associatedPeer.hasPermission(.manageDirect) {
                         return (true, true)
                     } else {
                         return (false, false)
@@ -91,7 +91,7 @@ public let telegramPostboxSeedConfiguration: SeedConfiguration = {
                 } else {
                     return (false, false)
                 }
-            } else if let user = peer as? TelegramUser, let botInfo = user.botInfo, botInfo.flags.contains(.hasForum) {
+            } else if let user = peer as? IosappUser, let botInfo = user.botInfo, botInfo.flags.contains(.hasForum) {
                 return (true, false)
             } else {
                 return (false, false)
@@ -188,7 +188,7 @@ public let telegramPostboxSeedConfiguration: SeedConfiguration = {
         },
         isPeerUpgradeMessage: { message in
             for media in message.media {
-                if let action = media as? TelegramMediaAction {
+                if let action = media as? IosappMediaAction {
                     switch action.action {
                     case .groupMigratedToChannel, .channelMigratedFromGroup:
                         return true

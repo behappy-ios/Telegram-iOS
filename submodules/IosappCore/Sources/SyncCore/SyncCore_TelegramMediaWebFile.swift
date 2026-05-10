@@ -1,26 +1,26 @@
 import Foundation
 import Postbox
 
-public enum TelegramMediaWebFileDecodingError: Error {
+public enum IosappMediaWebFileDecodingError: Error {
     case generic
 }
 
-public class TelegramMediaWebFile: Media, Codable, Equatable {
+public class IosappMediaWebFile: Media, Codable, Equatable {
     enum CodingKeys: String, CodingKey {
         case data
     }
     
-    public let resource: TelegramMediaResource
+    public let resource: IosappMediaResource
     public let mimeType: String
     public let size: Int32
-    public let attributes: [TelegramMediaFileAttribute]
+    public let attributes: [IosappMediaFileAttribute]
     public let peerIds: [PeerId] = []
     
     public var id: MediaId? {
         return nil
     }
     
-    public init(resource: TelegramMediaResource, mimeType: String, size: Int32, attributes: [TelegramMediaFileAttribute]) {
+    public init(resource: IosappMediaResource, mimeType: String, size: Int32, attributes: [IosappMediaFileAttribute]) {
         self.resource = resource
         self.mimeType = mimeType
         self.size = size
@@ -28,7 +28,7 @@ public class TelegramMediaWebFile: Media, Codable, Equatable {
     }
     
     public required init(decoder: PostboxDecoder) {
-        self.resource = decoder.decodeObjectForKey("r") as! TelegramMediaResource
+        self.resource = decoder.decodeObjectForKey("r") as! IosappMediaResource
         self.mimeType = decoder.decodeStringForKey("mt", orElse: "")
         self.size = decoder.decodeInt32ForKey("s", orElse: 0)
         self.attributes = decoder.decodeObjectArrayForKey("at")
@@ -45,8 +45,8 @@ public class TelegramMediaWebFile: Media, Codable, Equatable {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         let data = try container.decode(Data.self, forKey: .data)
         let postboxDecoder = PostboxDecoder(buffer: MemoryBuffer(data: data))
-        guard let object = postboxDecoder.decodeRootObject() as? TelegramMediaWebFile else {
-            throw TelegramMediaWebFileDecodingError.generic
+        guard let object = postboxDecoder.decodeRootObject() as? IosappMediaWebFile else {
+            throw IosappMediaWebFileDecodingError.generic
         }
         self.resource = object.resource
         self.mimeType = object.mimeType
@@ -63,14 +63,14 @@ public class TelegramMediaWebFile: Media, Codable, Equatable {
     }
     
     public func isEqual(to other: Media) -> Bool {
-        guard let other = other as? TelegramMediaWebFile else {
+        guard let other = other as? IosappMediaWebFile else {
             return false
         }
         
         return self == other
     }
     
-    public static func ==(lhs: TelegramMediaWebFile, rhs: TelegramMediaWebFile) -> Bool {
+    public static func ==(lhs: IosappMediaWebFile, rhs: IosappMediaWebFile) -> Bool {
         if !lhs.resource.isEqual(to: rhs.resource) {
             return false
         }

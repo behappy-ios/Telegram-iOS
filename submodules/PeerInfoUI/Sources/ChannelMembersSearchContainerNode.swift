@@ -484,7 +484,7 @@ public final class ChannelMembersSearchContainerNode: SearchDisplayControllerCon
                             }
                         }
                         
-                        return context.peerChannelMemberCategoriesContextsManager.updateMemberBannedRights(engine: context.engine, peerId: peerId, memberId: memberId, bannedRights: TelegramChatBannedRights(flags: [.banReadMessages], untilDate: Int32.max))
+                        return context.peerChannelMemberCategoriesContextsManager.updateMemberBannedRights(engine: context.engine, peerId: peerId, memberId: memberId, bannedRights: IosappChatBannedRights(flags: [.banReadMessages], untilDate: Int32.max))
                         |> afterDisposed {
                             Queue.mainQueue().async {
                                 updateState { state in
@@ -533,7 +533,7 @@ public final class ChannelMembersSearchContainerNode: SearchDisplayControllerCon
         if let searchContext = searchContext {
             emptyQueryItems = combineLatest(queue: .mainQueue(), statePromise.get(), searchContext.state.get(), context.account.postbox.peerView(id: peerId) |> take(1), presentationDataPromise.get())
             |> map { state, searchState, peerView, presentationData -> [ChannelMembersSearchEntry]? in
-                if let channel = peerView.peers[peerId] as? TelegramChannel {
+                if let channel = peerView.peers[peerId] as? IosappChannel {
                     var entries: [ChannelMembersSearchEntry] = []
                     
                     var index = 0
@@ -622,7 +622,7 @@ public final class ChannelMembersSearchContainerNode: SearchDisplayControllerCon
             guard let query = query, !query.isEmpty else {
                 return .single(nil)
             }
-            if let channel = peerView.peers[peerId] as? TelegramChannel {
+            if let channel = peerView.peers[peerId] as? IosappChannel {
                 updateActivity(true)
                 let foundGroupMembers: Signal<[RenderedChannelParticipant], NoError>
                 let foundMembers: Signal<[RenderedChannelParticipant], NoError>
@@ -742,7 +742,7 @@ public final class ChannelMembersSearchContainerNode: SearchDisplayControllerCon
                             continue
                         }
                         
-                        if excludeBots, let user = participant.peer as? TelegramUser, user.botInfo != nil {
+                        if excludeBots, let user = participant.peer as? IosappUser, user.botInfo != nil {
                             continue
                         }
                         
@@ -874,7 +874,7 @@ public final class ChannelMembersSearchContainerNode: SearchDisplayControllerCon
                     }
                     
                     for participant in foundMembers {
-                        if excludeBots, let user = participant.peer as? TelegramUser, user.botInfo != nil {
+                        if excludeBots, let user = participant.peer as? IosappUser, user.botInfo != nil {
                             continue
                         }
                         
@@ -919,11 +919,11 @@ public final class ChannelMembersSearchContainerNode: SearchDisplayControllerCon
                     for foundPeer in foundRemotePeers.0 {
                         let peer = foundPeer.peer
                         
-                        if excludeBots, let user = peer as? TelegramUser, user.botInfo != nil {
+                        if excludeBots, let user = peer as? IosappUser, user.botInfo != nil {
                             continue
                         }
                         
-                        if !existingPeerIds.contains(peer.id) && peer is TelegramUser {
+                        if !existingPeerIds.contains(peer.id) && peer is IosappUser {
                             existingPeerIds.insert(peer.id)
                             entries.append(ChannelMembersSearchEntry(index: index, content: .peer(EnginePeer(peer)), section: .global, dateTimeFormat: presentationData.dateTimeFormat))
                             index += 1
@@ -932,11 +932,11 @@ public final class ChannelMembersSearchContainerNode: SearchDisplayControllerCon
                     
                     for foundPeer in foundRemotePeers.1 {
                         let peer = foundPeer.peer
-                        if excludeBots, let user = peer as? TelegramUser, user.botInfo != nil {
+                        if excludeBots, let user = peer as? IosappUser, user.botInfo != nil {
                             continue
                         }
                         
-                        if !existingPeerIds.contains(peer.id) && peer is TelegramUser {
+                        if !existingPeerIds.contains(peer.id) && peer is IosappUser {
                             existingPeerIds.insert(peer.id)
                             entries.append(ChannelMembersSearchEntry(index: index, content: .peer(EnginePeer(peer)), section: .global, dateTimeFormat: presentationData.dateTimeFormat))
                             index += 1
@@ -945,7 +945,7 @@ public final class ChannelMembersSearchContainerNode: SearchDisplayControllerCon
                     
                     return entries
                 }
-            } else if let group = peerView.peers[peerId] as? TelegramGroup, let cachedData = peerView.cachedData as? CachedGroupData {
+            } else if let group = peerView.peers[peerId] as? IosappGroup, let cachedData = peerView.cachedData as? CachedGroupData {
                 updateActivity(true)
                 let foundGroupMembers: Signal<[RenderedChannelParticipant], NoError>
                 let foundMembers: Signal<[RenderedChannelParticipant], NoError>
@@ -984,7 +984,7 @@ public final class ChannelMembersSearchContainerNode: SearchDisplayControllerCon
                                             peers[creator.id] = creator
                                         }
                                         peers[peer.id] = EnginePeer(peer)
-                                        renderedParticipant = RenderedChannelParticipant(participant: .member(id: peer.id, invitedAt: 0, adminInfo: ChannelParticipantAdminInfo(rights: TelegramChatAdminRights(rights: TelegramChatAdminRightsFlags.peerSpecific(peer: .legacyGroup(group))), promotedBy: creatorPeer?.id ?? context.account.peerId, canBeEditedByAccountPeer: creatorPeer?.id == context.account.peerId), banInfo: nil, rank: nil, subscriptionUntilDate: nil), peer: peer, peers: peers.mapValues({ $0._asPeer() }))
+                                        renderedParticipant = RenderedChannelParticipant(participant: .member(id: peer.id, invitedAt: 0, adminInfo: ChannelParticipantAdminInfo(rights: IosappChatAdminRights(rights: IosappChatAdminRightsFlags.peerSpecific(peer: .legacyGroup(group))), promotedBy: creatorPeer?.id ?? context.account.peerId, canBeEditedByAccountPeer: creatorPeer?.id == context.account.peerId), banInfo: nil, rank: nil, subscriptionUntilDate: nil), peer: peer, peers: peers.mapValues({ $0._asPeer() }))
                                     case .member:
                                         var peers: [EnginePeer.Id: EnginePeer] = [:]
                                         peers[peer.id] = EnginePeer(peer)
@@ -1042,7 +1042,7 @@ public final class ChannelMembersSearchContainerNode: SearchDisplayControllerCon
                     var index = 0
                     
                     for participant in foundGroupMembers {
-                        if excludeBots, let user = participant.peer as? TelegramUser, user.botInfo != nil {
+                        if excludeBots, let user = participant.peer as? IosappUser, user.botInfo != nil {
                             continue
                         }
                         
@@ -1126,7 +1126,7 @@ public final class ChannelMembersSearchContainerNode: SearchDisplayControllerCon
                     }
                     
                     for participant in foundMembers {
-                        if excludeBots, let user = participant.peer as? TelegramUser, user.botInfo != nil {
+                        if excludeBots, let user = participant.peer as? IosappUser, user.botInfo != nil {
                             continue
                         }
                         
@@ -1161,11 +1161,11 @@ public final class ChannelMembersSearchContainerNode: SearchDisplayControllerCon
                     for foundPeer in foundRemotePeers.0 {
                         let peer = foundPeer.peer
                         
-                        if excludeBots, let user = peer as? TelegramUser, user.botInfo != nil {
+                        if excludeBots, let user = peer as? IosappUser, user.botInfo != nil {
                             continue
                         }
                         
-                        if !existingPeerIds.contains(peer.id) && peer is TelegramUser {
+                        if !existingPeerIds.contains(peer.id) && peer is IosappUser {
                             existingPeerIds.insert(peer.id)
                             entries.append(ChannelMembersSearchEntry(index: index, content: .peer(EnginePeer(peer)), section: .global, dateTimeFormat: presentationData.dateTimeFormat))
                             index += 1
@@ -1175,11 +1175,11 @@ public final class ChannelMembersSearchContainerNode: SearchDisplayControllerCon
                     for foundPeer in foundRemotePeers.1 {
                         let peer = foundPeer.peer
                         
-                        if excludeBots, let user = peer as? TelegramUser, user.botInfo != nil {
+                        if excludeBots, let user = peer as? IosappUser, user.botInfo != nil {
                             continue
                         }
                         
-                        if !existingPeerIds.contains(peer.id) && peer is TelegramUser {
+                        if !existingPeerIds.contains(peer.id) && peer is IosappUser {
                             existingPeerIds.insert(peer.id)
                             entries.append(ChannelMembersSearchEntry(index: index, content: .peer(EnginePeer(peer)), section: .global, dateTimeFormat: presentationData.dateTimeFormat))
                             index += 1

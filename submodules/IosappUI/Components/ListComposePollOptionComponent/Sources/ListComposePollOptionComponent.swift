@@ -970,7 +970,7 @@ public final class ListComposePollOptionComponent: Component {
             let imageNodeFrame = CGRect(origin: CGPoint(x: size.width - 16.0 - imageNodeSize.width + self.revealOffset, y: size.height - minHeight + floor((minHeight - imageNodeSize.height) * 0.5)), size: imageNodeSize)
             
             var isSticker = false
-            if let attachment = component.attachment, let file = attachment.media?.media as? TelegramMediaFile, file.isSticker || file.isCustomEmoji {
+            if let attachment = component.attachment, let file = attachment.media?.media as? IosappMediaFile, file.isSticker || file.isCustomEmoji {
                 isSticker = true
                 
                 var updateMedia = false
@@ -1055,13 +1055,13 @@ public final class ListComposePollOptionComponent: Component {
                 }
                 
                 var isVideo = false
-                if let image = media.media as? TelegramMediaImage, let largest = largestImageRepresentation(image.representations), let photoReference = media.concrete(TelegramMediaImage.self) {
+                if let image = media.media as? IosappMediaImage, let largest = largestImageRepresentation(image.representations), let photoReference = media.concrete(IosappMediaImage.self) {
                     imageSize = largest.dimensions.cgSize.aspectFilled(imageNodeSize)
                     
                     if updateMedia {
                         imageNode.setSignal(chatMessagePhoto(postbox: component.context.account.postbox, userLocation: .other, photoReference: photoReference))
                     }
-                } else if let file = media.media as? TelegramMediaFile, let fileReference = media.concrete(TelegramMediaFile.self) {
+                } else if let file = media.media as? IosappMediaFile, let fileReference = media.concrete(IosappMediaFile.self) {
                     if let dimensions = file.dimensions {
                         imageSize = dimensions.cgSize.aspectFilled(imageNodeSize)
                     }
@@ -1093,7 +1093,7 @@ public final class ListComposePollOptionComponent: Component {
                             return context
                         }))
                     }
-                } else if let map = media.media as? TelegramMediaMap {
+                } else if let map = media.media as? IosappMediaMap {
                     imageSize = CGSize(width: 40.0, height: 40.0)
                     if updateMedia {
                         let resource = MapSnapshotMediaResource(latitude: map.latitude, longitude: map.longitude, width: Int32(imageSize.width), height: Int32(imageSize.height))

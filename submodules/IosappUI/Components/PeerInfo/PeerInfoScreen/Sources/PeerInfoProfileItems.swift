@@ -67,7 +67,7 @@ func infoItems(data: PeerInfoScreenData?, context: AccountContext, presentationD
         interaction.openBirthdayContextMenu(node, gesture)
     }
     
-    if let user = data.peer as? TelegramUser {
+    if let user = data.peer as? IosappUser {
         let ItemCallList = 1000
         let ItemPersonalChannelHeader = 2000
         let ItemPersonalChannel = 2001
@@ -190,7 +190,7 @@ func infoItems(data: PeerInfoScreenData?, context: AccountContext, presentationD
                     birthdayAction = { node, _ in
                         birthdayContextAction(node, nil, nil)
                     }
-                } else if hasBirthdayToday && cachedData.disallowedGifts != TelegramDisallowedGifts.All {
+                } else if hasBirthdayToday && cachedData.disallowedGifts != IosappDisallowedGifts.All {
                     birthdayAction = { _, _ in
                         interaction.openPremiumGift()
                     }
@@ -527,7 +527,7 @@ func infoItems(data: PeerInfoScreenData?, context: AccountContext, presentationD
                 }
             }
         }
-    } else if let channel = data.peer as? TelegramChannel {
+    } else if let channel = data.peer as? IosappChannel {
         let ItemUsername = 1
         let ItemUsernameInfo = 2
         let ItemAbout = 3
@@ -793,7 +793,7 @@ func infoItems(data: PeerInfoScreenData?, context: AccountContext, presentationD
                 }
             }
         }
-    } else if let group = data.peer as? TelegramGroup {
+    } else if let group = data.peer as? IosappGroup {
         if let cachedData = data.cachedData as? CachedGroupData {
             let aboutText: String?
             if group.isFake {
@@ -818,7 +818,7 @@ func infoItems(data: PeerInfoScreenData?, context: AccountContext, presentationD
     
     if let peer = data.peer, let members = data.members, case let .shortList(_, memberList) = members {
         var canAddMembers = false
-        if let group = data.peer as? TelegramGroup {
+        if let group = data.peer as? IosappGroup {
             switch group.role {
                 case .admin, .creator:
                     canAddMembers = true
@@ -828,7 +828,7 @@ func infoItems(data: PeerInfoScreenData?, context: AccountContext, presentationD
             if !group.hasBannedPermission(.banAddMembers) {
                 canAddMembers = true
             }
-        } else if let channel = data.peer as? TelegramChannel {
+        } else if let channel = data.peer as? IosappChannel {
             switch channel.info {
             case .broadcast:
                 break
@@ -901,7 +901,7 @@ func editingItems(data: PeerInfoScreenData?, boostStatus: ChannelBoostStatus?, s
     }
     
     if let data = data {
-        if let user = data.peer as? TelegramUser {
+        if let user = data.peer as? IosappUser {
             let ItemNote: AnyHashable = AnyHashable("note_edit")
             let ItemNoteInfo = 1
             
@@ -1009,7 +1009,7 @@ func editingItems(data: PeerInfoScreenData?, boostStatus: ChannelBoostStatus?, s
                 }))
                 
                 if user.photo.first?.isPersonal == true || state.updatingAvatar != nil {
-                    var representation: TelegramMediaImageRepresentation?
+                    var representation: IosappMediaImageRepresentation?
                     var originalIsVideo: Bool?
                     if let cachedData = data.cachedData as? CachedUserData, case let .known(photo) = cachedData.photo {
                         representation = photo?.representationForDisplayAtSize(PixelDimensions(width: 28, height: 28))
@@ -1045,7 +1045,7 @@ func editingItems(data: PeerInfoScreenData?, boostStatus: ChannelBoostStatus?, s
                     interaction.requestDeleteContact()
                 }))
             }
-        } else if let channel = data.peer as? TelegramChannel {
+        } else if let channel = data.peer as? IosappChannel {
             switch channel.info {
             case .broadcast:
                 let ItemUsername = 1
@@ -1192,7 +1192,7 @@ func editingItems(data: PeerInfoScreenData?, boostStatus: ChannelBoostStatus?, s
                 if isCreator || (channel.adminRights?.rights.contains(.canChangeInfo) == true) {
                     let labelString: NSAttributedString
                     if channel.linkedMonoforumId != nil {
-                        if let monoforumPeer = data.linkedMonoforumPeer as? TelegramChannel {
+                        if let monoforumPeer = data.linkedMonoforumPeer as? IosappChannel {
                             if let sendPaidMessageStars = monoforumPeer.sendPaidMessageStars {
                                 let formattedLabel = formatStarsAmountText(sendPaidMessageStars, dateTimeFormat: presentationData.dateTimeFormat)
                                 let smallLabelFont = Font.regular(floor(presentationData.listsFontSize.itemListBaseFontSize / 17.0 * 13.0))
@@ -1589,7 +1589,7 @@ func editingItems(data: PeerInfoScreenData?, boostStatus: ChannelBoostStatus?, s
                     }
                 }
             }
-        } else if let group = data.peer as? TelegramGroup {
+        } else if let group = data.peer as? IosappGroup {
             let ItemUsername = 101
             let ItemInviteLinks = 102
             let ItemPreHistory = 103

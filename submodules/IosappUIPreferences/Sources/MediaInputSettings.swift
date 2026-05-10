@@ -42,7 +42,7 @@ public struct MediaInputSettings: Codable, Equatable {
     }
 }
 
-public func updateMediaInputSettingsInteractively(accountManager: AccountManager<TelegramAccountManagerTypes>, _ f: @escaping (MediaInputSettings) -> MediaInputSettings) -> Signal<Void, NoError> {
+public func updateMediaInputSettingsInteractively(accountManager: AccountManager<IosappAccountManagerTypes>, _ f: @escaping (MediaInputSettings) -> MediaInputSettings) -> Signal<Void, NoError> {
     return accountManager.transaction { transaction -> Void in
         transaction.updateSharedData(ApplicationSpecificSharedDataKeys.mediaInputSettings, { entry in
             let currentSettings: MediaInputSettings

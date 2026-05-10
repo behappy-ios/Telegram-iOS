@@ -263,7 +263,7 @@ public final class AlertTextComponent: Component {
                     bold: MarkdownAttributeSet(font: boldTextFont, textColor: textColor),
                     link: MarkdownAttributeSet(font: textFont, textColor: linkColor),
                     linkAttribute: { contents in
-                        return (TelegramTextAttributes.URL, contents)
+                        return (IosappTextAttributes.URL, contents)
                     }
                 )
                 finalText = parseMarkdownIntoAttributedString(text, attributes: markdownAttributes)
@@ -302,8 +302,8 @@ public final class AlertTextComponent: Component {
                         manualVisibilityControl: true,
                         resetAnimationsOnVisibilityChange: true,
                         highlightAction: { attributes in
-                            if let _ = attributes[NSAttributedString.Key(rawValue: TelegramTextAttributes.URL)] {
-                                return NSAttributedString.Key(rawValue: TelegramTextAttributes.URL)
+                            if let _ = attributes[NSAttributedString.Key(rawValue: IosappTextAttributes.URL)] {
+                                return NSAttributedString.Key(rawValue: IosappTextAttributes.URL)
                             } else {
                                 return nil
                             }

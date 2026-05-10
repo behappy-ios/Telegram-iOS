@@ -352,8 +352,8 @@ final class LanguageSelectionScreenNode: ViewControllerTracingNode {
         let previousEntriesHolder = Atomic<([LanguageListEntry], PresentationTheme, PresentationStrings)?>(value: nil)
         self.listDisposable = combineLatest(
             queue: .mainQueue(),
-            context.engine.data.subscribe(TelegramEngine.EngineData.Item.Configuration.LocalizationList()),
-            context.engine.data.subscribe(TelegramEngine.EngineData.Item.Peer.Peer(id: context.account.peerId)),
+            context.engine.data.subscribe(IosappEngine.EngineData.Item.Configuration.LocalizationList()),
+            context.engine.data.subscribe(IosappEngine.EngineData.Item.Peer.Peer(id: context.account.peerId)),
             context.sharedContext.accountManager.sharedData(keys: [SharedDataKeys.localizationSettings, ApplicationSpecificSharedDataKeys.translationSettings]),
             self.presentationDataValue.get()
         ).start(next: { [weak self] localizationListState, peer, sharedData, presentationData in

@@ -25,7 +25,7 @@ public enum PeerInfoPaneKey: Int32 {
     case similarBots
     case storyArchive
     
-    public init(tab: TelegramProfileTab) {
+    public init(tab: IosappProfileTab) {
         switch tab {
         case .files:
             self = .files
@@ -46,7 +46,7 @@ public enum PeerInfoPaneKey: Int32 {
         }
     }
     
-    public var tab: TelegramProfileTab? {
+    public var tab: IosappProfileTab? {
         switch self {
         case .stories:
             return .posts

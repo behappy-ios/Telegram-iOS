@@ -10,13 +10,13 @@ import SettingsThemeWallpaperNode
 
 final class ThemeColorsGridControllerItem: GridItem {
     let context: AccountContext
-    let wallpaper: TelegramWallpaper
+    let wallpaper: IosappWallpaper
     let selected: Bool
     let interaction: ThemeColorsGridControllerInteraction
     
     let section: GridSection? = nil
     
-    init(context: AccountContext, wallpaper: TelegramWallpaper, selected: Bool, interaction: ThemeColorsGridControllerInteraction) {
+    init(context: AccountContext, wallpaper: IosappWallpaper, selected: Bool, interaction: ThemeColorsGridControllerInteraction) {
         self.context = context
         self.wallpaper = wallpaper
         self.selected = selected
@@ -42,7 +42,7 @@ final class ThemeColorsGridControllerItemNode: GridItemNode {
     private let wallpaperNode: SettingsThemeWallpaperNode
     private var selectionNode: GridMessageSelectionNode?
     
-    private var currentState: (AccountContext, TelegramWallpaper, Bool)?
+    private var currentState: (AccountContext, IosappWallpaper, Bool)?
     private var interaction: ThemeColorsGridControllerInteraction?
     
     override init() {
@@ -59,7 +59,7 @@ final class ThemeColorsGridControllerItemNode: GridItemNode {
         self.view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.tapGesture(_:))))
     }
     
-    func setup(context: AccountContext, wallpaper: TelegramWallpaper, selected: Bool, interaction: ThemeColorsGridControllerInteraction) {
+    func setup(context: AccountContext, wallpaper: IosappWallpaper, selected: Bool, interaction: ThemeColorsGridControllerInteraction) {
         self.interaction = interaction
         
         if self.currentState == nil || self.currentState!.0 !== context || wallpaper != self.currentState!.1 || selected != self.currentState!.2 {

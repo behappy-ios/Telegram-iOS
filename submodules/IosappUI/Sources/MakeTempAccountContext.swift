@@ -12,10 +12,10 @@ public func makeTempContext(
     sharedContainerPath: String,
     rootPath: String,
     appGroupPath: String,
-    accountManager: AccountManager<TelegramAccountManagerTypes>,
+    accountManager: AccountManager<IosappAccountManagerTypes>,
     appLockContext: AppLockContext,
     encryptionParameters: ValueBoxEncryptionParameters,
-    applicationBindings: TelegramApplicationBindings,
+    applicationBindings: IosappApplicationBindings,
     initialPresentationDataAndSettings: InitialPresentationDataAndSettings,
     networkArguments: NetworkInitializationArguments,
     buildConfig: BuildConfig

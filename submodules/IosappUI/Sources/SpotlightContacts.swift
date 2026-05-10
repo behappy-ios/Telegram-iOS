@@ -186,13 +186,13 @@ private func manageableSpotlightContacts(appBasePath: String, accounts: Signal<[
     return accounts
     |> mapToSignal { accounts -> Signal<[[EnginePeer.Id: SpotlightIndexStorageItem]], NoError> in
         return combineLatest(queue: queue, accounts.map { account -> Signal<[EnginePeer.Id: SpotlightIndexStorageItem], NoError> in
-            let engine = TelegramEngine(account: account)
+            let engine = IosappEngine(account: account)
             let recentApps = engine.peers.recentApps()
             |> mapToSignal { peerIds -> Signal<[EnginePeer], NoError> in
                 return engine.data.get(
                     EngineDataMap(
-                        peerIds.map { peerId -> TelegramEngine.EngineData.Item.Peer.Peer in
-                            return TelegramEngine.EngineData.Item.Peer.Peer(id: peerId)
+                        peerIds.map { peerId -> IosappEngine.EngineData.Item.Peer.Peer in
+                            return IosappEngine.EngineData.Item.Peer.Peer(id: peerId)
                         }
                     )
                 ) 
@@ -208,7 +208,7 @@ private func manageableSpotlightContacts(appBasePath: String, accounts: Signal<[
             }
             return combineLatest(
                 engine.data.subscribe(
-                    TelegramEngine.EngineData.Item.Contacts.List(includePresences: false)
+                    IosappEngine.EngineData.Item.Contacts.List(includePresences: false)
                 ),
                 recentApps
             )
@@ -251,12 +251,12 @@ private func manageableSpotlightContacts(appBasePath: String, accounts: Signal<[
 private final class SpotlightDataContextImpl {
     private let queue: Queue
     private let appBasePath: String
-    private let accountManager: AccountManager<TelegramAccountManagerTypes>
+    private let accountManager: AccountManager<IosappAccountManagerTypes>
     private let indexStorage: SpotlightIndexStorage
     
     private var listDisposable: Disposable?
     
-    init(queue: Queue, appBasePath: String, accountManager: AccountManager<TelegramAccountManagerTypes>, accounts: Signal<[Account], NoError>) {
+    init(queue: Queue, appBasePath: String, accountManager: AccountManager<IosappAccountManagerTypes>, accounts: Signal<[Account], NoError>) {
         self.queue = queue
         self.appBasePath = appBasePath
         self.accountManager = accountManager
@@ -297,7 +297,7 @@ private final class SpotlightDataContextImpl {
 public final class SpotlightDataContext {
     private let impl: QueueLocalObject<SpotlightDataContextImpl>
     
-    public init(appBasePath: String, accountManager: AccountManager<TelegramAccountManagerTypes>, accounts: Signal<[Account], NoError>) {
+    public init(appBasePath: String, accountManager: AccountManager<IosappAccountManagerTypes>, accounts: Signal<[Account], NoError>) {
         let queue = Queue()
         self.impl = QueueLocalObject(queue: queue, generate: {
             return SpotlightDataContextImpl(queue: queue, appBasePath: appBasePath, accountManager: accountManager, accounts: accounts)

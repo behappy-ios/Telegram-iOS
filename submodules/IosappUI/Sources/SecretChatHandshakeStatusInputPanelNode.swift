@@ -58,7 +58,7 @@ final class SecretChatHandshakeStatusInputPanelNode: ChatInputPanelNode {
         
         var text: String?
         
-        if let renderedPeer = interfaceState.renderedPeer, let peer = renderedPeer.peer as? TelegramSecretChat, let userPeer = renderedPeer.peers[peer.regularPeerId] {
+        if let renderedPeer = interfaceState.renderedPeer, let peer = renderedPeer.peer as? IosappSecretChat, let userPeer = renderedPeer.peers[peer.regularPeerId] {
             switch peer.embeddedState {
             case .handshake:
                 switch peer.role {

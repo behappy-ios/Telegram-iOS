@@ -60,7 +60,7 @@ public struct StickerSettings: Codable, Equatable {
     }
 }
 
-public func updateStickerSettingsInteractively(accountManager: AccountManager<TelegramAccountManagerTypes>, _ f: @escaping (StickerSettings) -> StickerSettings) -> Signal<Void, NoError> {
+public func updateStickerSettingsInteractively(accountManager: AccountManager<IosappAccountManagerTypes>, _ f: @escaping (StickerSettings) -> StickerSettings) -> Signal<Void, NoError> {
     return accountManager.transaction { transaction -> Void in
         transaction.updateSharedData(ApplicationSpecificSharedDataKeys.stickerSettings, { entry in
             let currentSettings: StickerSettings

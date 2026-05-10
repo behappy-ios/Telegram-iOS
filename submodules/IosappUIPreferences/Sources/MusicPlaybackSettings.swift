@@ -140,7 +140,7 @@ public struct MusicPlaybackSettings: Codable, Equatable {
     }
 }
 
-public func updateMusicPlaybackSettingsInteractively(accountManager: AccountManager<TelegramAccountManagerTypes>, _ f: @escaping (MusicPlaybackSettings) -> MusicPlaybackSettings) -> Signal<Void, NoError> {
+public func updateMusicPlaybackSettingsInteractively(accountManager: AccountManager<IosappAccountManagerTypes>, _ f: @escaping (MusicPlaybackSettings) -> MusicPlaybackSettings) -> Signal<Void, NoError> {
     return accountManager.transaction { transaction -> Void in
         transaction.updateSharedData(ApplicationSpecificSharedDataKeys.musicPlaybackSettings, { entry in
             let currentSettings: MusicPlaybackSettings

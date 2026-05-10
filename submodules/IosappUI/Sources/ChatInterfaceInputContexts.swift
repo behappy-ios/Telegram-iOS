@@ -121,7 +121,7 @@ func inputTextPanelStateForChatPresentationInterfaceState(_ chatPresentationInte
     
     var accessoryItems: [ChatTextInputAccessoryItem] = []
     
-    if let peer = chatPresentationInterfaceState.renderedPeer?.peer as? TelegramSecretChat {
+    if let peer = chatPresentationInterfaceState.renderedPeer?.peer as? IosappSecretChat {
         var extendedSearchLayout = false
         loop: for (_, result) in chatPresentationInterfaceState.inputQueryResults {
             if case let .contextRequestResult(peer, _) = result, peer != nil {
@@ -134,16 +134,16 @@ func inputTextPanelStateForChatPresentationInterfaceState(_ chatPresentationInte
             currentAutoremoveTimeout = peer.messageAutoremoveTimeout
             canSetupAutoremoveTimeout = true
         }
-    } else if let group = chatPresentationInterfaceState.renderedPeer?.peer as? TelegramGroup {
+    } else if let group = chatPresentationInterfaceState.renderedPeer?.peer as? IosappGroup {
         if !group.hasBannedPermission(.banChangeInfo) {
             canSetupAutoremoveTimeout = true
         }
         canSendTextMessages = !group.hasBannedPermission(.banSendText)
-    } else if let user = chatPresentationInterfaceState.renderedPeer?.peer as? TelegramUser {
+    } else if let user = chatPresentationInterfaceState.renderedPeer?.peer as? IosappUser {
         if user.botInfo == nil {
             canSetupAutoremoveTimeout = true
         }
-    } else if let channel = chatPresentationInterfaceState.renderedPeer?.peer as? TelegramChannel {
+    } else if let channel = chatPresentationInterfaceState.renderedPeer?.peer as? IosappChannel {
         if channel.hasPermission(.changeInfo) {
             canSetupAutoremoveTimeout = true
         }
@@ -153,7 +153,7 @@ func inputTextPanelStateForChatPresentationInterfaceState(_ chatPresentationInte
     if canSetupAutoremoveTimeout {
         if case .scheduledMessages = chatPresentationInterfaceState.subject {
         } else if chatPresentationInterfaceState.renderedPeer?.peerId != context.account.peerId {
-            if currentAutoremoveTimeout != nil || chatPresentationInterfaceState.renderedPeer?.peer is TelegramSecretChat {
+            if currentAutoremoveTimeout != nil || chatPresentationInterfaceState.renderedPeer?.peer is IosappSecretChat {
                 accessoryItems.append(.messageAutoremoveTimeout(currentAutoremoveTimeout))
             }
         }
@@ -188,7 +188,7 @@ func inputTextPanelStateForChatPresentationInterfaceState(_ chatPresentationInte
                 if !extendedSearchLayout {
                     if case .scheduledMessages = chatPresentationInterfaceState.subject {
                     } else if chatPresentationInterfaceState.renderedPeer?.peerId != context.account.peerId {
-                        if let peer = chatPresentationInterfaceState.renderedPeer?.peer as? TelegramSecretChat, chatPresentationInterfaceState.interfaceState.composeInputState.inputText.length == 0 {
+                        if let peer = chatPresentationInterfaceState.renderedPeer?.peer as? IosappSecretChat, chatPresentationInterfaceState.interfaceState.composeInputState.inputText.length == 0 {
                             accessoryItems.append(.messageAutoremoveTimeout(peer.messageAutoremoveTimeout))
                         } else if currentAutoremoveTimeout != nil && chatPresentationInterfaceState.interfaceState.composeInputState.inputText.length == 0 {
                             accessoryItems.append(.messageAutoremoveTimeout(currentAutoremoveTimeout))
@@ -200,7 +200,7 @@ func inputTextPanelStateForChatPresentationInterfaceState(_ chatPresentationInte
                 } else {
                     let premiumConfiguration = PremiumConfiguration.with(appConfiguration: context.currentAppConfiguration.with { $0 })
                     var showPremiumGift = false
-                    if !premiumConfiguration.isPremiumDisabled && chatPresentationInterfaceState.disallowedGifts != TelegramDisallowedGifts.All {
+                    if !premiumConfiguration.isPremiumDisabled && chatPresentationInterfaceState.disallowedGifts != IosappDisallowedGifts.All {
                         if chatPresentationInterfaceState.alwaysShowGiftButton {
                             showPremiumGift = true
                         } else if chatPresentationInterfaceState.hasBirthdayToday {
@@ -209,7 +209,7 @@ func inputTextPanelStateForChatPresentationInterfaceState(_ chatPresentationInte
                             showPremiumGift = true
                         }
                     }
-                    if isTextEmpty, showPremiumGift, let peer = chatPresentationInterfaceState.renderedPeer?.peer as? TelegramUser, !peer.isDeleted && peer.botInfo == nil && !peer.flags.contains(.isSupport) { //&& chatPresentationInterfaceState.suggestPremiumGift {
+                    if isTextEmpty, showPremiumGift, let peer = chatPresentationInterfaceState.renderedPeer?.peer as? IosappUser, !peer.isDeleted && peer.botInfo == nil && !peer.flags.contains(.isSupport) { //&& chatPresentationInterfaceState.suggestPremiumGift {
                         accessoryItems.append(.gift)
                     }
                 }
@@ -220,7 +220,7 @@ func inputTextPanelStateForChatPresentationInterfaceState(_ chatPresentationInte
                     
                 var stickersEnabled = true
                 var stickersAreEmoji = !isTextEmpty
-                if let peer = chatPresentationInterfaceState.renderedPeer?.peer as? TelegramChannel {
+                if let peer = chatPresentationInterfaceState.renderedPeer?.peer as? IosappChannel {
                     if isTextEmpty, case .broadcast = peer.info, canSendMessagesToPeer(peer) {
                         accessoryItems.append(.silentPost(chatPresentationInterfaceState.interfaceState.silentPosting))
                     }
@@ -231,13 +231,13 @@ func inputTextPanelStateForChatPresentationInterfaceState(_ chatPresentationInte
                             stickersEnabled = false
                         }
                     }
-                } else if let peer = chatPresentationInterfaceState.renderedPeer?.peer as? TelegramGroup {
+                } else if let peer = chatPresentationInterfaceState.renderedPeer?.peer as? IosappGroup {
                     if peer.hasBannedPermission(.banSendStickers) {
                         stickersEnabled = false
                     }
                 }
                 
-                if let channel = chatPresentationInterfaceState.renderedPeer?.peer as? TelegramChannel, channel.isMonoForum, let mainChannel = chatPresentationInterfaceState.renderedPeer?.chatOrMonoforumMainPeer as? TelegramChannel, (!mainChannel.hasPermission(.manageDirect) || chatPresentationInterfaceState.chatLocation.threadId != nil) {
+                if let channel = chatPresentationInterfaceState.renderedPeer?.peer as? IosappChannel, channel.isMonoForum, let mainChannel = chatPresentationInterfaceState.renderedPeer?.chatOrMonoforumMainPeer as? IosappChannel, (!mainChannel.hasPermission(.manageDirect) || chatPresentationInterfaceState.chatLocation.threadId != nil) {
                     if chatPresentationInterfaceState.interfaceState.postSuggestionState == nil {
                         accessoryItems.append(.suggestPost)
                     }

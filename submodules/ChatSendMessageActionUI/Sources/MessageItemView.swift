@@ -22,7 +22,7 @@ import EmojiTextAttachmentView
 
 public final class ChatSendMessageScreenEffectIcon: Component {
     public enum Content: Equatable {
-        case file(TelegramMediaFile)
+        case file(IosappMediaFile)
         case text(String)
     }
     

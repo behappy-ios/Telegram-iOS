@@ -1,7 +1,7 @@
 import Foundation
 import Postbox
 
-public final class TelegramMediaDice: Media, Equatable {
+public final class IosappMediaDice: Media, Equatable {
     public struct GameOutcome: Equatable {
         let seed: Data
         public let tonAmount: Int64
@@ -54,12 +54,12 @@ public final class TelegramMediaDice: Media, Equatable {
         }
     }
     
-    public static func ==(lhs: TelegramMediaDice, rhs: TelegramMediaDice) -> Bool {
+    public static func ==(lhs: IosappMediaDice, rhs: IosappMediaDice) -> Bool {
         return lhs.isEqual(to: rhs)
     }
     
     public func isEqual(to other: Media) -> Bool {
-        if let other = other as? TelegramMediaDice {
+        if let other = other as? IosappMediaDice {
             if self.emoji != other.emoji {
                 return false
             }

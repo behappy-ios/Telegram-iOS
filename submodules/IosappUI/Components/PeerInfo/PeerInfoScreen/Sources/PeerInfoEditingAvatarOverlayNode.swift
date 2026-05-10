@@ -19,7 +19,7 @@ final class PeerInfoEditingAvatarOverlayNode: ASDisplayNode {
     private let iconNode: ASImageNode
     private var statusNode: RadialStatusNode
     
-    private var currentRepresentation: TelegramMediaImageRepresentation?
+    private var currentRepresentation: IosappMediaImageRepresentation?
     
     init(context: AccountContext) {
         self.context = context
@@ -71,7 +71,7 @@ final class PeerInfoEditingAvatarOverlayNode: ASDisplayNode {
         let transition = ContainedViewLayoutTransition.animated(duration: 0.2, curve: .linear)
         
         let clipStyle: AvatarNodeClipStyle
-        if let channel = peer as? TelegramChannel, channel.isForumOrMonoForum {
+        if let channel = peer as? IosappChannel, channel.isForumOrMonoForum {
             clipStyle = .roundedRect
         } else {
             clipStyle = .round

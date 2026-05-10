@@ -19,7 +19,7 @@ public func makeDefaultPresentationTheme(reference: PresentationBuiltinThemeRefe
     return theme
 }
 
-public func customizePresentationTheme(_ theme: PresentationTheme, editing: Bool, title: String? = nil, accentColor: UIColor?, outgoingAccentColor: UIColor?, backgroundColors: [UInt32], bubbleColors: [UInt32], animateBubbleColors: Bool?, wallpaper: TelegramWallpaper? = nil, baseColor: PresentationThemeBaseColor? = nil) -> PresentationTheme {
+public func customizePresentationTheme(_ theme: PresentationTheme, editing: Bool, title: String? = nil, accentColor: UIColor?, outgoingAccentColor: UIColor?, backgroundColors: [UInt32], bubbleColors: [UInt32], animateBubbleColors: Bool?, wallpaper: IosappWallpaper? = nil, baseColor: PresentationThemeBaseColor? = nil) -> PresentationTheme {
     if accentColor == nil && bubbleColors.isEmpty && backgroundColors.isEmpty && wallpaper == nil {
         return theme
     }
@@ -33,13 +33,13 @@ public func customizePresentationTheme(_ theme: PresentationTheme, editing: Bool
     }
 }
 
-public func makePresentationTheme(settings: TelegramThemeSettings, title: String? = nil, serviceBackgroundColor: UIColor? = nil) -> PresentationTheme? {
+public func makePresentationTheme(settings: IosappThemeSettings, title: String? = nil, serviceBackgroundColor: UIColor? = nil) -> PresentationTheme? {
     let defaultTheme = makeDefaultPresentationTheme(reference: PresentationBuiltinThemeReference(baseTheme: settings.baseTheme), extendingThemeReference: nil, serviceBackgroundColor: serviceBackgroundColor, preview: false)
     return customizePresentationTheme(defaultTheme, editing: true, title: title, accentColor: UIColor(argb: settings.accentColor), outgoingAccentColor: settings.outgoingAccentColor.flatMap { UIColor(argb: $0) }, backgroundColors: [], bubbleColors: settings.messageColors, animateBubbleColors: settings.animateMessageColors, wallpaper: settings.wallpaper)
 }
 
-public func makePresentationTheme(cloudTheme: TelegramTheme, dark: Bool = false) -> PresentationTheme? {
-    let settings: TelegramThemeSettings?
+public func makePresentationTheme(cloudTheme: IosappTheme, dark: Bool = false) -> PresentationTheme? {
+    let settings: IosappThemeSettings?
     if let exactSettings = cloudTheme.settings?.first(where: { dark ? ($0.baseTheme == .night || $0.baseTheme == .tinted) : ($0.baseTheme == .classic || $0.baseTheme == .day) }) {
         settings = exactSettings
     } else if let firstSettings = cloudTheme.settings?.first {
@@ -58,7 +58,7 @@ public func makePresentationTheme(chatTheme: ChatTheme, dark: Bool = false) -> P
     guard case let .gift(_, themeSettings) = chatTheme else {
         return nil
     }
-    let settings: TelegramThemeSettings?
+    let settings: IosappThemeSettings?
     if let exactSettings = themeSettings.first(where: { dark ? ($0.baseTheme == .night || $0.baseTheme == .tinted) : ($0.baseTheme == .classic || $0.baseTheme == .day) }) {
         settings = exactSettings
     } else if let firstSettings = themeSettings.first {
@@ -77,8 +77,8 @@ public func makePresentationTheme(chatTheme: ChatTheme, dark: Bool = false) -> P
     return theme
 }
 
-public func makePresentationTheme(cloudTheme: TelegramTheme, baseTheme: TelegramBaseTheme? = nil) -> PresentationTheme? {
-    let settings: TelegramThemeSettings?
+public func makePresentationTheme(cloudTheme: IosappTheme, baseTheme: IosappBaseTheme? = nil) -> PresentationTheme? {
+    let settings: IosappThemeSettings?
     if let exactSettings = cloudTheme.settings?.first(where: { $0.baseTheme == baseTheme }) {
         settings = exactSettings
     } else if let firstSettings = cloudTheme.settings?.first {
@@ -93,7 +93,7 @@ public func makePresentationTheme(cloudTheme: TelegramTheme, baseTheme: Telegram
     return customizePresentationTheme(defaultTheme, editing: true, accentColor: UIColor(argb: settings.accentColor), outgoingAccentColor: settings.outgoingAccentColor.flatMap { UIColor(argb: $0) }, backgroundColors: [], bubbleColors: settings.messageColors, animateBubbleColors: settings.animateMessageColors, wallpaper: settings.wallpaper)
 }
 
-public func makePresentationTheme(mediaBox: MediaBox, themeReference: PresentationThemeReference, baseTheme: TelegramBaseTheme? = nil, extendingThemeReference: PresentationThemeReference? = nil, accentColor: UIColor? = nil, outgoingAccentColor: UIColor? = nil, backgroundColors: [UInt32] = [], bubbleColors: [UInt32] = [], animateBubbleColors: Bool? = nil, wallpaper: TelegramWallpaper? = nil, baseColor: PresentationThemeBaseColor? = nil, serviceBackgroundColor: UIColor? = nil, preview: Bool = false) -> PresentationTheme? {
+public func makePresentationTheme(mediaBox: MediaBox, themeReference: PresentationThemeReference, baseTheme: IosappBaseTheme? = nil, extendingThemeReference: PresentationThemeReference? = nil, accentColor: UIColor? = nil, outgoingAccentColor: UIColor? = nil, backgroundColors: [UInt32] = [], bubbleColors: [UInt32] = [], animateBubbleColors: Bool? = nil, wallpaper: IosappWallpaper? = nil, baseColor: PresentationThemeBaseColor? = nil, serviceBackgroundColor: UIColor? = nil, preview: Bool = false) -> PresentationTheme? {
     var accentColor = accentColor
     if accentColor == .clear {
         accentColor = nil
@@ -110,7 +110,7 @@ public func makePresentationTheme(mediaBox: MediaBox, themeReference: Presentati
                 return nil
             }
         case let .cloud(info):
-            let settings: TelegramThemeSettings?
+            let settings: IosappThemeSettings?
             if let exactSettings = info.theme.settings?.first(where: { $0.baseTheme == baseTheme }) {
                 settings = exactSettings
             } else if let firstSettings = info.theme.settings?.first {

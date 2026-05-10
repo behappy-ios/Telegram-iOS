@@ -134,14 +134,14 @@ final class WallpaperGalleryItemNode: GalleryItemNode {
     let status = Promise<MediaResourceStatus>(.Local)
     let actionButton = Promise<UIBarButtonItem?>(nil)
     var action: (() -> Void)?
-    var requestPatternPanel: ((Bool, TelegramWallpaper) -> Void)?
+    var requestPatternPanel: ((Bool, IosappWallpaper) -> Void)?
     var toggleColorsPanel: (([UIColor]?) -> Void)?
     var requestRotateGradient: ((Int32) -> Void)?
     
     private var validLayout: (ContainerViewLayout, CGFloat)?
     private var validOffset: CGFloat?
 
-    private var initialWallpaper: TelegramWallpaper?
+    private var initialWallpaper: IosappWallpaper?
 
     private let playButtonPlayImage: UIImage?
     private let playButtonRotateImage: UIImage?
@@ -372,10 +372,10 @@ final class WallpaperGalleryItemNode: GalleryItemNode {
             var presentationData = strongSelf.presentationData
             
             let lightTheme: PresentationTheme
-            let lightWallpaper: TelegramWallpaper
+            let lightWallpaper: IosappWallpaper
             
             let darkTheme: PresentationTheme
-            let darkWallpaper: TelegramWallpaper
+            let darkWallpaper: IosappWallpaper
             
             if !strongSelf.isDarkAppearance {
                 darkTheme = presentationData.theme
@@ -395,7 +395,7 @@ final class WallpaperGalleryItemNode: GalleryItemNode {
                     lightWallpaper = theme.chat.defaultWallpaper
                 }
                 
-                var preferredBaseTheme: TelegramBaseTheme?
+                var preferredBaseTheme: IosappBaseTheme?
                 if let baseTheme = themeSettings.themePreferredBaseTheme[themeSettings.theme.index], [.classic, .day].contains(baseTheme) {
                     preferredBaseTheme = baseTheme
                 }
@@ -409,7 +409,7 @@ final class WallpaperGalleryItemNode: GalleryItemNode {
                 let effectiveColors = themeSettings.themeSpecificAccentColors[automaticTheme.index]
                 let themeSpecificWallpaper = (themeSettings.themeSpecificChatWallpapers[coloredThemeIndex(reference: automaticTheme, accentColor: effectiveColors)] ?? themeSettings.themeSpecificChatWallpapers[automaticTheme.index])
                 
-                var preferredBaseTheme: TelegramBaseTheme?
+                var preferredBaseTheme: IosappBaseTheme?
                 if let baseTheme = themeSettings.themePreferredBaseTheme[automaticTheme.index], [.night, .tinted].contains(baseTheme) {
                     preferredBaseTheme = baseTheme
                 } else {
@@ -886,9 +886,9 @@ final class WallpaperGalleryItemNode: GalleryItemNode {
                     canEdit = true
                 case let .contextResult(result):
                     var imageDimensions: CGSize?
-                    var imageResource: TelegramMediaResource?
+                    var imageResource: IosappMediaResource?
                     var thumbnailDimensions: CGSize?
-                    var thumbnailResource: TelegramMediaResource?
+                    var thumbnailResource: IosappMediaResource?
                     switch result {
                     case let .externalReference(externalReference):
                         if let content = externalReference.content {
@@ -918,12 +918,12 @@ final class WallpaperGalleryItemNode: GalleryItemNode {
                         contentSize = imageDimensions
                         displaySize = imageDimensions.aspectFittedOrSmaller(CGSize(width: 2048.0, height: 2048.0))
                         
-                        var representations: [TelegramMediaImageRepresentation] = []
+                        var representations: [IosappMediaImageRepresentation] = []
                         if let thumbnailResource = thumbnailResource, let thumbnailDimensions = thumbnailDimensions {
-                            representations.append(TelegramMediaImageRepresentation(dimensions: PixelDimensions(thumbnailDimensions), resource: thumbnailResource, progressiveSizes: [], immediateThumbnailData: nil, hasVideo: false, isPersonal: false))
+                            representations.append(IosappMediaImageRepresentation(dimensions: PixelDimensions(thumbnailDimensions), resource: thumbnailResource, progressiveSizes: [], immediateThumbnailData: nil, hasVideo: false, isPersonal: false))
                         }
-                        representations.append(TelegramMediaImageRepresentation(dimensions: PixelDimensions(imageDimensions), resource: imageResource, progressiveSizes: [], immediateThumbnailData: nil, hasVideo: false, isPersonal: false))
-                        let tmpImage = TelegramMediaImage(imageId: MediaId(namespace: 0, id: 0), representations: representations, immediateThumbnailData: nil, reference: nil, partialReference: nil, flags: [])
+                        representations.append(IosappMediaImageRepresentation(dimensions: PixelDimensions(imageDimensions), resource: imageResource, progressiveSizes: [], immediateThumbnailData: nil, hasVideo: false, isPersonal: false))
+                        let tmpImage = IosappMediaImage(imageId: MediaId(namespace: 0, id: 0), representations: representations, immediateThumbnailData: nil, reference: nil, partialReference: nil, flags: [])
                         
                         signal = chatMessagePhoto(postbox: context.account.postbox, userLocation: .other, photoReference: .standalone(media: tmpImage))
                         fetchSignal = fetchedMediaResource(mediaBox: context.account.postbox.mediaBox, userLocation: .other, userContentType: .other, reference: .media(media: .standalone(media: tmpImage), resource: imageResource))
@@ -988,7 +988,7 @@ final class WallpaperGalleryItemNode: GalleryItemNode {
                         let resource = LocalFileMediaResource(fileId: Int64.random(in: Int64.min ... Int64.max))
                         strongSelf.context.sharedContext.accountManager.mediaBox.storeResourceData(resource.id, data: data, synchronous: true)
                         
-                        let wallpaper: TelegramWallpaper = .image([TelegramMediaImageRepresentation(dimensions: PixelDimensions(image.size), resource: resource, progressiveSizes: [], immediateThumbnailData: nil, hasVideo: false, isPersonal: false)], WallpaperSettings())
+                        let wallpaper: IosappWallpaper = .image([IosappMediaImageRepresentation(dimensions: PixelDimensions(image.size), resource: resource, progressiveSizes: [], immediateThumbnailData: nil, hasVideo: false, isPersonal: false)], WallpaperSettings())
                         strongSelf.nativeNode.update(wallpaper: wallpaper, animated: false)
                     }
                 }
@@ -1513,8 +1513,8 @@ final class WallpaperGalleryItemNode: GalleryItemNode {
         
         let replyAuthor = self.presentationData.strings.Appearance_ThemePreview_Chat_2_ReplyName
         
-        var messageAuthor: Peer = TelegramUser(id: peerId, accessHash: nil, firstName: self.presentationData.strings.Appearance_PreviewReplyAuthor, lastName: "", username: nil, phone: nil, photo: [], botInfo: nil, restrictionInfo: nil, flags: [], emojiStatus: nil, usernames: [], storiesHidden: nil, nameColor: .preset(.blue), backgroundEmojiId: nil, profileColor: nil, profileBackgroundEmojiId: nil, subscriberCount: nil, verificationIconFileId: nil)
-        let otherAuthor = TelegramUser(id: otherPeerId, accessHash: nil, firstName: replyAuthor, lastName: "", username: nil, phone: nil, photo: [], botInfo: nil, restrictionInfo: nil, flags: [], emojiStatus: nil, usernames: [], storiesHidden: nil, nameColor: .preset(.blue), backgroundEmojiId: nil, profileColor: nil, profileBackgroundEmojiId: nil, subscriberCount: nil, verificationIconFileId: nil)
+        var messageAuthor: Peer = IosappUser(id: peerId, accessHash: nil, firstName: self.presentationData.strings.Appearance_PreviewReplyAuthor, lastName: "", username: nil, phone: nil, photo: [], botInfo: nil, restrictionInfo: nil, flags: [], emojiStatus: nil, usernames: [], storiesHidden: nil, nameColor: .preset(.blue), backgroundEmojiId: nil, profileColor: nil, profileBackgroundEmojiId: nil, subscriberCount: nil, verificationIconFileId: nil)
+        let otherAuthor = IosappUser(id: otherPeerId, accessHash: nil, firstName: replyAuthor, lastName: "", username: nil, phone: nil, photo: [], botInfo: nil, restrictionInfo: nil, flags: [], emojiStatus: nil, usernames: [], storiesHidden: nil, nameColor: .preset(.blue), backgroundEmojiId: nil, profileColor: nil, profileBackgroundEmojiId: nil, subscriberCount: nil, verificationIconFileId: nil)
         peers[otherPeerId] = otherAuthor
         
         var messageAttributes: [MessageAttribute] = []
@@ -1532,7 +1532,7 @@ final class WallpaperGalleryItemNode: GalleryItemNode {
         var topMessageText = ""
         var bottomMessageText = ""
         var serviceMessageText: String?
-        var currentWallpaper: TelegramWallpaper = self.presentationData.chatWallpaper
+        var currentWallpaper: IosappWallpaper = self.presentationData.chatWallpaper
         if let entry = self.entry, case let .wallpaper(wallpaper, _) = entry {
             currentWallpaper = wallpaper
         }
@@ -1638,7 +1638,7 @@ final class WallpaperGalleryItemNode: GalleryItemNode {
             let attributedText = convertMarkdownToAttributes(NSAttributedString(string: serviceMessageText))
             let entities = generateChatInputTextEntities(attributedText)
             
-            let message3 = Message(stableId: 0, stableVersion: 0, id: MessageId(peerId: peerId, namespace: 0, id: 0), globallyUniqueId: nil, groupingKey: nil, groupInfo: nil, threadId: nil, timestamp: 66002, flags: [.Incoming], tags: [], globalTags: [], localTags: [], customTags: [], forwardInfo: nil, author: peers[peerId], text: "", attributes: [], media: [TelegramMediaAction(action: .customText(text: attributedText.string, entities: entities, additionalAttributes: nil))], peers: peers, associatedMessages: messages, associatedMessageIds: [], associatedMedia: [:], associatedThreadInfo: nil, associatedStories: [:])
+            let message3 = Message(stableId: 0, stableVersion: 0, id: MessageId(peerId: peerId, namespace: 0, id: 0), globallyUniqueId: nil, groupingKey: nil, groupInfo: nil, threadId: nil, timestamp: 66002, flags: [.Incoming], tags: [], globalTags: [], localTags: [], customTags: [], forwardInfo: nil, author: peers[peerId], text: "", attributes: [], media: [IosappMediaAction(action: .customText(text: attributedText.string, entities: entities, additionalAttributes: nil))], peers: peers, associatedMessages: messages, associatedMessageIds: [], associatedMedia: [:], associatedThreadInfo: nil, associatedStories: [:])
             items.append(self.context.sharedContext.makeChatMessagePreviewItem(context: self.context, messages: [message3], theme: theme, strings: self.presentationData.strings, wallpaper: currentWallpaper, fontSize: self.presentationData.chatFontSize, chatBubbleCorners: self.presentationData.chatBubbleCorners, dateTimeFormat: self.presentationData.dateTimeFormat, nameOrder: self.presentationData.nameDisplayOrder, forcedResourceStatus: nil, tapMessage: nil, clickThroughMessage: nil, backgroundNode: self.nativeNode, availableReactions: nil, accountPeer: nil, isCentered: false, isPreview: true, isStandalone: false, rank: nil, rankRole: nil))
         }
         

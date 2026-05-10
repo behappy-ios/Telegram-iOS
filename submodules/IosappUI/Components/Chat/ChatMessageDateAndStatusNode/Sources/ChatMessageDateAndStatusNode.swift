@@ -57,7 +57,7 @@ private final class StatusReactionNode: ASDisplayNode {
     private var value: MessageReaction.Reaction?
     private var isSelected: Bool?
     
-    private var resolvedFile: TelegramMediaFile?
+    private var resolvedFile: IosappMediaFile?
     private var fileDisposable: Disposable?
     
     private var alternativeTextView: ImmediateTextView?
@@ -75,7 +75,7 @@ private final class StatusReactionNode: ASDisplayNode {
         self.fileDisposable?.dispose()
     }
     
-    func update(context: AccountContext, type: ChatMessageDateAndStatusType, value: MessageReaction.Reaction, file: TelegramMediaFile?, fileId: Int64?, alternativeText: String, isSelected: Bool, count: Int, theme: PresentationTheme, wallpaper: TelegramWallpaper, animationCache: AnimationCache, animationRenderer: MultiAnimationRenderer, animated: Bool) {
+    func update(context: AccountContext, type: ChatMessageDateAndStatusType, value: MessageReaction.Reaction, file: IosappMediaFile?, fileId: Int64?, alternativeText: String, isSelected: Bool, count: Int, theme: PresentationTheme, wallpaper: IosappWallpaper, animationCache: AnimationCache, animationRenderer: MultiAnimationRenderer, animated: Bool) {
         if self.value != value {
             self.value = value
             
@@ -803,7 +803,7 @@ public class ChatMessageDateAndStatusNode: ASDisplayNode {
                     
                     var hadStars = false
                     var mappedReactions = arguments.reactions.map { reaction in
-                        var centerAnimation: TelegramMediaFile?
+                        var centerAnimation: IosappMediaFile?
                         var animationFileId: Int64?
                         
                         if case .stars = reaction.value {
@@ -861,7 +861,7 @@ public class ChatMessageDateAndStatusNode: ASDisplayNode {
                     }
                     
                     if arguments.areStarReactionsEnabled && !hadStars && !mappedReactions.isEmpty {
-                        var centerAnimation: TelegramMediaFile?
+                        var centerAnimation: IosappMediaFile?
                         let animationFileId: Int64? = nil
                         
                         if let availableReactions = arguments.availableReactions {
@@ -1232,7 +1232,7 @@ public class ChatMessageDateAndStatusNode: ASDisplayNode {
                                 }
                                 validReactions.insert(.custom(messageEffect.id))
                                 
-                                var centerAnimation: TelegramMediaFile?
+                                var centerAnimation: IosappMediaFile?
                                 
                                 centerAnimation = messageEffect.staticIcon?._parse()
                                 

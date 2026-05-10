@@ -265,10 +265,10 @@ final class BusinessRecipientListScreenComponent: Component {
                 
                 let _ = (context.engine.data.get(
                     EngineDataMap(
-                        peerIds.map(TelegramEngine.EngineData.Item.Peer.Peer.init(id:))
+                        peerIds.map(IosappEngine.EngineData.Item.Peer.Peer.init(id:))
                     ),
                     EngineDataMap(
-                        peerIds.map(TelegramEngine.EngineData.Item.Peer.IsContact.init(id:))
+                        peerIds.map(IosappEngine.EngineData.Item.Peer.IsContact.init(id:))
                     )
                 )
                 |> deliverOnMainQueue).start(next: { peerMap, isContactMap in

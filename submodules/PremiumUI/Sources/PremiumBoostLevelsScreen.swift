@@ -311,7 +311,7 @@ private final class SheetContent: CombinedComponent {
             let textColor = theme.actionSheet.primaryTextColor
             let linkColor = theme.actionSheet.controlAccentColor
             let markdownAttributes = MarkdownAttributes(body: MarkdownAttributeSet(font: textFont, textColor: textColor), bold: MarkdownAttributeSet(font: boldTextFont, textColor: textColor), link: MarkdownAttributeSet(font: textFont, textColor: linkColor), linkAttribute: { contents in
-                return (TelegramTextAttributes.URL, contents)
+                return (IosappTextAttributes.URL, contents)
             })
             
             let gradientColors = [
@@ -881,7 +881,7 @@ private final class PremiumBoostLevelsSheetComponent: CombinedComponent {
                 peerIds.append(userId)
             }
             self.peerDisposable = (context.engine.data.get(
-                EngineDataMap(peerIds.map(TelegramEngine.EngineData.Item.Peer.Peer.init(id:)))
+                EngineDataMap(peerIds.map(IosappEngine.EngineData.Item.Peer.Peer.init(id:)))
             ) |> deliverOnMainQueue).startStrict(next: { [weak self] peers in
                 guard let self else {
                     return
@@ -1100,7 +1100,7 @@ private final class PremiumBoostLevelsSheetComponent: CombinedComponent {
                             )
                             controller.present(alertController, in: .window(.root))
                         } else {
-                            let _ = (context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: peerId))
+                            let _ = (context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: peerId))
                             |> deliverOnMainQueue).start(next: { [weak controller] peer in
                                 guard let peer, let controller else {
                                     return
@@ -1137,7 +1137,7 @@ private final class PremiumBoostLevelsSheetComponent: CombinedComponent {
                         if !canBoostAgain {
                             controller.dismissAnimated()
                         } else {
-                            let _ = (context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: peerId))
+                            let _ = (context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: peerId))
                             |> deliverOnMainQueue).start(next: { [weak controller] peer in
                                 guard let peer, let controller else {
                                     return
@@ -1562,7 +1562,7 @@ private final class PremiumBoostLevelsSheetComponent: CombinedComponent {
 //        init(context: AccountContext, peerId: EnginePeer.Id, updated: @escaping () -> Void) {
 //            super.init()
 //            
-//            self.disposable = (context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: peerId))
+//            self.disposable = (context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: peerId))
 //            |> deliverOnMainQueue).startStrict(next: { [weak self] peer in
 //                guard let self else {
 //                    return
@@ -2620,7 +2620,7 @@ public class PremiumBoostLevelsScreen: ViewControllerComponentContainer {
 //                            )
 //                            controller.present(alertController, in: .window(.root))
 //                        } else {
-//                            let _ = (context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: peerId))
+//                            let _ = (context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: peerId))
 //                            |> deliverOnMainQueue).start(next: { [weak controller] peer in
 //                                guard let peer, let controller else {
 //                                    return
@@ -2657,7 +2657,7 @@ public class PremiumBoostLevelsScreen: ViewControllerComponentContainer {
 //                        if !canBoostAgain {
 //                            controller.dismiss(animated: true, completion: nil)
 //                        } else {
-//                            let _ = (context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: peerId))
+//                            let _ = (context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: peerId))
 //                            |> deliverOnMainQueue).start(next: { [weak controller] peer in
 //                                guard let peer, let controller else {
 //                                    return

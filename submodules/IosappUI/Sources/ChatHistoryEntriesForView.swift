@@ -81,7 +81,7 @@ func chatHistoryEntriesForView(
                 }
             } else if case let .peer(_, peer) = additionalEntry {
                 chatPeer = peer
-                if let channel = peer as? TelegramChannel, !channel.flags.contains(.isGigagroup) {
+                if let channel = peer as? IosappChannel, !channel.flags.contains(.isGigagroup) {
                     if let defaultBannedRights = channel.defaultBannedRights, defaultBannedRights.flags.contains(.banSendStickers) {
                         stickersEnabled = false
                     }
@@ -109,7 +109,7 @@ func chatHistoryEntriesForView(
     if (associatedData.subject?.isService ?? false) {
         
     } else {
-        if let peer = chatPeer as? TelegramChannel, case .broadcast = peer.info, case .member = peer.participationStatus, !peer.flags.contains(.isCreator) {
+        if let peer = chatPeer as? IosappChannel, case .broadcast = peer.info, case .member = peer.participationStatus, !peer.flags.contains(.isCreator) {
             joinMessage = Message(
                 stableId: UInt32.max - 1000,
                 stableVersion: 0,
@@ -128,7 +128,7 @@ func chatHistoryEntriesForView(
                 author: chatPeer,
                 text: "",
                 attributes: [],
-                media: [TelegramMediaAction(action: .joinedChannel)],
+                media: [IosappMediaAction(action: .joinedChannel)],
                 peers: SimpleDictionary<PeerId, Peer>(),
                 associatedMessages: SimpleDictionary<MessageId, Message>(),
                 associatedMessageIds: [],
@@ -150,7 +150,7 @@ func chatHistoryEntriesForView(
         
         if case let .replyThread(replyThreadMessage) = location, replyThreadMessage.isForumPost {
             for media in message.media {
-                if let action = media as? TelegramMediaAction {
+                if let action = media as? IosappMediaAction {
                     if case .topicCreated = action.action {
                         continue loop
                     } else if case .groupCreated = action.action {
@@ -160,9 +160,9 @@ func chatHistoryEntriesForView(
                                 chatPeer = peer
                             }
                         }
-                        if let channel = chatPeer as? TelegramChannel, channel.isMonoForum {
+                        if let channel = chatPeer as? IosappChannel, channel.isMonoForum {
                             continue loop
-                        } else if let user = chatPeer as? TelegramUser, user.isForum {
+                        } else if let user = chatPeer as? IosappUser, user.isForum {
                             continue loop
                         }
                     }
@@ -170,16 +170,16 @@ func chatHistoryEntriesForView(
             }
         } else if case .peer = location {
             for media in message.media {
-                if let action = media as? TelegramMediaAction, case .groupCreated = action.action {
+                if let action = media as? IosappMediaAction, case .groupCreated = action.action {
                     var chatPeer: Peer?
                     for entry in view.additionalData {
                         if case let .peer(_, peer) = entry {
                             chatPeer = peer
                         }
                     }
-                    if let channel = chatPeer as? TelegramChannel, channel.isMonoForum {
+                    if let channel = chatPeer as? IosappChannel, channel.isMonoForum {
                         continue loop
-                    } else if let user = chatPeer as? TelegramChannel, user.isForum {
+                    } else if let user = chatPeer as? IosappChannel, user.isForum {
                         continue loop
                     }
                 }
@@ -216,10 +216,10 @@ func chatHistoryEntriesForView(
         var contentTypeHint: ChatMessageEntryContentType = .generic
         
         for media in message.media {
-            if media is TelegramMediaDice {
+            if media is IosappMediaDice {
                 contentTypeHint = .animatedEmoji
             }
-            if let action = media as? TelegramMediaAction {
+            if let action = media as? IosappMediaAction {
                 switch action.action {
                     case .channelMigratedFromGroup, .groupMigratedToChannel, .historyCleared:
                         continue loop
@@ -335,7 +335,7 @@ func chatHistoryEntriesForView(
     }
     
     var addBotForumHeader = false
-    if location.threadId == nil, let user = chatPeer as? TelegramUser, let botInfo = user.botInfo, botInfo.flags.contains(.hasForum), botInfo.flags.contains(.forumManagedByUser), !entries.isEmpty, !view.holeEarlier, !view.isLoading {
+    if location.threadId == nil, let user = chatPeer as? IosappUser, let botInfo = user.botInfo, botInfo.flags.contains(.hasForum), botInfo.flags.contains(.forumManagedByUser), !entries.isEmpty, !view.holeEarlier, !view.isLoading {
         addBotForumHeader = true
         outer: for i in (0 ..< entries.count).reversed() {
             switch entries[i] {
@@ -344,7 +344,7 @@ func chatHistoryEntriesForView(
                     continue outer
                 }
                 for media in message.media {
-                    if let _ = media as? TelegramMediaAction {
+                    if let _ = media as? IosappMediaAction {
                         continue outer
                     }
                 }
@@ -380,7 +380,7 @@ func chatHistoryEntriesForView(
             author: nil,
             text: "",
             attributes: [],
-            media: [TelegramMediaAction(action: .customText(text: presentationData.strings.Chat_VideoProcessingServiceMessage(Int32(messages.count)), entities: [], additionalAttributes: nil))],
+            media: [IosappMediaAction(action: .customText(text: presentationData.strings.Chat_VideoProcessingServiceMessage(Int32(messages.count)), entities: [], additionalAttributes: nil))],
             peers: SimpleDictionary<PeerId, Peer>(),
             associatedMessages: SimpleDictionary<MessageId, Message>(),
             associatedMessageIds: [],
@@ -465,7 +465,7 @@ func chatHistoryEntriesForView(
                     
                     var hasTopicCreated = false
                     inner: for media in topMessage.media {
-                        if let action = media as? TelegramMediaAction {
+                        if let action = media as? IosappMediaAction {
                             switch action.action {
                                 case .topicCreated:
                                     hasTopicCreated = true
@@ -570,7 +570,7 @@ func chatHistoryEntriesForView(
                                 author: chatPeer,
                                 text: "",
                                 attributes: [],
-                                media: [TelegramMediaAction(action: .customText(
+                                media: [IosappMediaAction(action: .customText(
                                     text: text.string,
                                     entities: entities,
                                     additionalAttributes: nil
@@ -610,7 +610,7 @@ func chatHistoryEntriesForView(
                                 author: chatPeer,
                                 text: "",
                                 attributes: [],
-                                media: [TelegramMediaAction(action: .customText(
+                                media: [IosappMediaAction(action: .customText(
                                     text: text.string,
                                     entities: entities,
                                     additionalAttributes: nil
@@ -637,7 +637,7 @@ func chatHistoryEntriesForView(
                         var isEmptyMedia = false
                         var isPeerJoined = false
                         for media in entry.message.media {
-                            if let action = media as? TelegramMediaAction {
+                            if let action = media as? IosappMediaAction {
                                 switch action.action {
                                     case .groupCreated, .photoUpdated, .channelMigratedFromGroup, .groupMigratedToChannel:
                                         isEmptyMedia = true
@@ -649,9 +649,9 @@ func chatHistoryEntriesForView(
                             }
                         }
                         var isCreator = false
-                        if let peer = entry.message.peers[entry.message.id.peerId] as? TelegramGroup, case .creator = peer.role {
+                        if let peer = entry.message.peers[entry.message.id.peerId] as? IosappGroup, case .creator = peer.role {
                             isCreator = true
-                        } else if let peer = entry.message.peers[entry.message.id.peerId] as? TelegramChannel, case .group = peer.info, peer.flags.contains(.isCreator) {
+                        } else if let peer = entry.message.peers[entry.message.id.peerId] as? IosappChannel, case .group = peer.info, peer.flags.contains(.isCreator) {
                             isCreator = true
                         }
                         if isPeerJoined || (isEmptyMedia && isCreator) {
@@ -764,7 +764,7 @@ func chatHistoryEntriesForView(
                 author: nil,
                 text: "",
                 attributes: [],
-                media: [TelegramMediaAction(action: .customText(text: formattedString.string, entities: entities, additionalAttributes: nil))],
+                media: [IosappMediaAction(action: .customText(text: formattedString.string, entities: entities, additionalAttributes: nil))],
                 peers: SimpleDictionary<PeerId, Peer>(),
                 associatedMessages: SimpleDictionary<MessageId, Message>(),
                 associatedMessageIds: [],
@@ -821,7 +821,7 @@ func chatHistoryEntriesForView(
                     author: nil,
                     text: "",
                     attributes: [],
-                    media: [TelegramMediaAction(action: .customText(text: formattedString.string, entities: entities, additionalAttributes: nil))],
+                    media: [IosappMediaAction(action: .customText(text: formattedString.string, entities: entities, additionalAttributes: nil))],
                     peers: SimpleDictionary<PeerId, Peer>(),
                     associatedMessages: SimpleDictionary<MessageId, Message>(),
                     associatedMessageIds: [],

@@ -244,7 +244,7 @@ final class VerticalListContextResultsChatInputContextPanelNode: ChatInputContex
                 if let switchPeer = results.switchPeer {
                     interfaceInteraction.botSwitchChatWithPayload(results.botId, switchPeer.startParam)
                 } else if let webView = results.webView {
-                    let _ = (strongSelf.context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: results.botId))
+                    let _ = (strongSelf.context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: results.botId))
                     |> deliverOnMainQueue).startStandalone(next: { bot in
                         if let bot {
                             interfaceInteraction.openWebView(webView.text, webView.url, true, .inline(bot: bot))

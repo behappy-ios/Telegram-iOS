@@ -341,7 +341,7 @@ private class PresentationThemeDecodingLevel {
     }
 }
 
-public func makePresentationTheme(data: Data, themeReference: PresentationThemeReference? = nil, resolvedWallpaper: TelegramWallpaper? = nil) -> PresentationTheme? {
+public func makePresentationTheme(data: Data, themeReference: PresentationThemeReference? = nil, resolvedWallpaper: IosappWallpaper? = nil) -> PresentationTheme? {
     guard let string = String(data: data, encoding: .utf8) else {
         return nil
     }
@@ -422,7 +422,7 @@ class PresentationThemeDecoding: Decoder {
     var reference: PresentationThemeReference?
     var referenceTheme: PresentationTheme?
     var serviceBackgroundColor: UIColor?
-    var resolvedWallpaper: TelegramWallpaper?
+    var resolvedWallpaper: IosappWallpaper?
     var fallbackKeys: [String: String] = [:]
 
     private var _referenceCoding: PresentationThemeEncoding?

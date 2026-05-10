@@ -15,7 +15,7 @@ private let titleFont: UIFont = Font.semibold(15.0)
 private let textFont: UIFont = Font.regular(15.0)
 
 public final class ChatMessageInvoiceBubbleContentNode: ChatMessageBubbleContentNode {
-    private var invoice: TelegramMediaInvoice?
+    private var invoice: IosappMediaInvoice?
     
     private let contentNode: ChatMessageAttachedContentNode
     
@@ -41,9 +41,9 @@ public final class ChatMessageInvoiceBubbleContentNode: ChatMessageBubbleContent
         let contentNodeLayout = self.contentNode.asyncLayout()
         
         return { item, layoutConstants, preparePosition, _, constrainedSize, _ in
-            var invoice: TelegramMediaInvoice?
+            var invoice: IosappMediaInvoice?
             for media in item.message.media {
-                if let media = media as? TelegramMediaInvoice {
+                if let media = media as? IosappMediaInvoice {
                     invoice = media
                     break
                 }

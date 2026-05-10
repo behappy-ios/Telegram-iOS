@@ -37,7 +37,7 @@ private extension PresentationThemeBaseColor {
     }
 }
 
-public func customizeDefaultDarkPresentationTheme(theme: PresentationTheme, editing: Bool, title: String?, accentColor: UIColor?, backgroundColors: [UInt32], bubbleColors: [UInt32], animateBubbleColors: Bool?, wallpaper forcedWallpaper: TelegramWallpaper? = nil, baseColor: PresentationThemeBaseColor? = nil) -> PresentationTheme {
+public func customizeDefaultDarkPresentationTheme(theme: PresentationTheme, editing: Bool, title: String?, accentColor: UIColor?, backgroundColors: [UInt32], bubbleColors: [UInt32], animateBubbleColors: Bool?, wallpaper forcedWallpaper: IosappWallpaper? = nil, baseColor: PresentationThemeBaseColor? = nil) -> PresentationTheme {
     if (theme.referenceTheme != .night) {
         return theme
     }
@@ -120,14 +120,14 @@ public func customizeDefaultDarkPresentationTheme(theme: PresentationTheme, edit
         )
     }
     
-    var defaultWallpaper: TelegramWallpaper?
+    var defaultWallpaper: IosappWallpaper?
     if let forcedWallpaper = forcedWallpaper {
         defaultWallpaper = forcedWallpaper
     } else if let baseColor = baseColor, let (variant, intensity, colors) = baseColor.colorWallpaper, !colors.isEmpty {
         defaultWallpaper = defaultBuiltinWallpaper(data: variant, colors: colors, intensity: intensity)
     } else if !backgroundColors.isEmpty {
         if backgroundColors.count >= 2 {
-            defaultWallpaper = .gradient(TelegramWallpaper.Gradient(id: nil, colors: backgroundColors, settings: WallpaperSettings()))
+            defaultWallpaper = .gradient(IosappWallpaper.Gradient(id: nil, colors: backgroundColors, settings: WallpaperSettings()))
         } else {
             defaultWallpaper = .color(backgroundColors[0])
         }
@@ -727,7 +727,7 @@ public func makeDefaultDarkPresentationTheme(extendingThemeReference: Presentati
         badgeTextColor:  UIColor(rgb: 0x000000)
     )
 
-    let defaultPatternWallpaper: TelegramWallpaper = defaultBuiltinWallpaper(data: .default, colors: defaultDarkWallpaperGradientColors.map(\.rgb), intensity: -34)
+    let defaultPatternWallpaper: IosappWallpaper = defaultBuiltinWallpaper(data: .default, colors: defaultDarkWallpaperGradientColors.map(\.rgb), intensity: -34)
     
     let chat = PresentationThemeChat(
         defaultWallpaper: defaultPatternWallpaper,

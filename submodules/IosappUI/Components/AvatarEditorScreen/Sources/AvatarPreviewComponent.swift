@@ -22,13 +22,13 @@ final class AvatarPreviewComponent: Component {
     
     let context: AccountContext
     let background: AvatarBackground
-    let file: TelegramMediaFile?
+    let file: IosappMediaFile?
     let tapped: () -> Void
     
     init(
         context: AccountContext,
         background: AvatarBackground,
-        file: TelegramMediaFile?,
+        file: IosappMediaFile?,
         tapped: @escaping () -> Void
     ) {
         self.context = context

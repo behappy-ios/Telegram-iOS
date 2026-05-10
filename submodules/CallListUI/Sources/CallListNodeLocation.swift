@@ -44,7 +44,7 @@ struct CallListNodeViewUpdate {
     let scrollPosition: CallListNodeViewScrollPosition?
 }
 
-func callListViewForLocationAndType(locationAndType: CallListNodeLocationAndType, engine: TelegramEngine) -> Signal<(CallListNodeViewUpdate, EngineCallList.Scope), NoError> {
+func callListViewForLocationAndType(locationAndType: CallListNodeLocationAndType, engine: IosappEngine) -> Signal<(CallListNodeViewUpdate, EngineCallList.Scope), NoError> {
     switch locationAndType.location {
     case let .initial(count):
         return engine.messages.callList(

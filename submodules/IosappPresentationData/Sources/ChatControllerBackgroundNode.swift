@@ -10,9 +10,9 @@ import AppBundle
 import TinyThumbnail
 import FastBlur
 
-private var backgroundImageForWallpaper: (TelegramWallpaper, Bool, UIImage)?
+private var backgroundImageForWallpaper: (IosappWallpaper, Bool, UIImage)?
 
-public func chatControllerBackgroundImage(theme: PresentationTheme?, wallpaper initialWallpaper: TelegramWallpaper, mediaBox: MediaBox, composed: Bool = true, knockoutMode: Bool, cached: Bool = true) -> UIImage? {
+public func chatControllerBackgroundImage(theme: PresentationTheme?, wallpaper initialWallpaper: IosappWallpaper, mediaBox: MediaBox, composed: Bool = true, knockoutMode: Bool, cached: Bool = true) -> UIImage? {
     var wallpaper = initialWallpaper
     if knockoutMode, let theme = theme {
         switch theme.name {
@@ -99,9 +99,9 @@ public func chatControllerBackgroundImage(theme: PresentationTheme?, wallpaper i
     return backgroundImage
 }
 
-private var signalBackgroundImageForWallpaper: (TelegramWallpaper, Bool, UIImage)?
+private var signalBackgroundImageForWallpaper: (IosappWallpaper, Bool, UIImage)?
 
-public func chatControllerBackgroundImageSignal(wallpaper: TelegramWallpaper, mediaBox: MediaBox, accountMediaBox: MediaBox) -> Signal<(UIImage?, Bool)?, NoError> {
+public func chatControllerBackgroundImageSignal(wallpaper: IosappWallpaper, mediaBox: MediaBox, accountMediaBox: MediaBox) -> Signal<(UIImage?, Bool)?, NoError> {
     if wallpaper == signalBackgroundImageForWallpaper?.0, (wallpaper.settings?.blur ?? false) == signalBackgroundImageForWallpaper?.1, let image = signalBackgroundImageForWallpaper?.2 {
         return .single((image, true))
     } else {

@@ -148,7 +148,7 @@ private func synchronizeChatInputState(transaction: Transaction, postbox: Postbo
         var topMsgId: Int32?
         var monoforumPeerId: Api.InputPeer?
         if let threadId {
-            if let channel = peer as? TelegramChannel, channel.flags.contains(.isMonoforum) {
+            if let channel = peer as? IosappChannel, channel.flags.contains(.isMonoforum) {
                 monoforumPeerId = transaction.getPeer(PeerId(threadId)).flatMap(apiInputPeer)
             } else {
                 topMsgId = Int32(clamping: threadId)

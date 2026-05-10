@@ -1,5 +1,5 @@
 import Foundation
 import Postbox
 
-public protocol TelegramMediaResource: MediaResource, PostboxCoding {
+public protocol IosappMediaResource: MediaResource, PostboxCoding {
 }

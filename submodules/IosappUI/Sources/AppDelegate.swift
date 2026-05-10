@@ -194,7 +194,7 @@ private struct AccountManagerState {
     var notificationKeys: [NotificationKey]
 }
 
-private func extractAccountManagerState(records: AccountRecordsView<TelegramAccountManagerTypes>) -> AccountManagerState {
+private func extractAccountManagerState(records: AccountRecordsView<IosappAccountManagerTypes>) -> AccountManagerState {
     return AccountManagerState(
         notificationKeys: records.records.compactMap { record -> AccountManagerState.NotificationKey? in
             for attribute in record.attributes {
@@ -231,7 +231,7 @@ private func extractAccountManagerState(records: AccountRecordsView<TelegramAcco
     
     private let sharedContextPromise = Promise<SharedApplicationContext>()
 
-    private var accountManager: AccountManager<TelegramAccountManagerTypes>?
+    private var accountManager: AccountManager<IosappAccountManagerTypes>?
     private var accountManagerState: AccountManagerState?
     
     private var contextValue: AuthorizedApplicationContext?
@@ -793,7 +793,7 @@ private func extractAccountManagerState(records: AccountRecordsView<TelegramAcco
             |> distinctUntilChanged
         )
         
-        let applicationBindings = TelegramApplicationBindings(isMainApp: true, appBundleId: baseAppBundleId, appBuildType: buildConfig.isAppStoreBuild ? .public : .internal, containerPath: appGroupUrl.path, appSpecificScheme: buildConfig.appSpecificUrlScheme, openUrl: { url in
+        let applicationBindings = IosappApplicationBindings(isMainApp: true, appBundleId: baseAppBundleId, appBuildType: buildConfig.isAppStoreBuild ? .public : .internal, containerPath: appGroupUrl.path, appSpecificScheme: buildConfig.appSpecificUrlScheme, openUrl: { url in
             var parsedUrl = URL(string: url)
             if let parsed = parsedUrl {
                 if parsed.scheme == nil || parsed.scheme!.isEmpty {
@@ -1003,7 +1003,7 @@ private func extractAccountManagerState(records: AccountRecordsView<TelegramAcco
             }
         })
         
-        let accountManager = AccountManager<TelegramAccountManagerTypes>(basePath: rootPath + "/accounts-metadata", isTemporary: false, isReadOnly: false, useCaches: true, removeDatabaseOnError: true)
+        let accountManager = AccountManager<IosappAccountManagerTypes>(basePath: rootPath + "/accounts-metadata", isTemporary: false, isReadOnly: false, useCaches: true, removeDatabaseOnError: true)
         self.accountManager = accountManager
 
         telegramUIDeclareEncodables()
@@ -1077,7 +1077,7 @@ private func extractAccountManagerState(records: AccountRecordsView<TelegramAcco
             
             let presentationDataPromise = Promise<PresentationData>()
             let appLockContext = AppLockContextImpl(rootPath: rootPath, window: self.mainWindow!, rootController: self.window?.rootViewController, applicationBindings: applicationBindings, accountManager: accountManager, presentationDataSignal: presentationDataPromise.get(), lockIconInitialFrame: {
-                return (self.mainWindow?.viewController as? TelegramRootController)?.chatListController?.lockViewFrame
+                return (self.mainWindow?.viewController as? IosappRootController)?.chatListController?.lockViewFrame
             })
             
             var setPresentationCall: ((PresentationCall?) -> Void)?
@@ -1269,7 +1269,7 @@ private func extractAccountManagerState(records: AccountRecordsView<TelegramAcco
             |> mapToSignal { authAndAccounts -> Signal<(UnauthorizedAccount, ((String, AccountRecordId, Bool)?, [(String, AccountRecordId, Bool)]))?, NoError> in
                 if let (primary, auth, accounts) = authAndAccounts {
                     let phoneNumbers = combineLatest(accounts.map { context -> Signal<(AccountRecordId, String, Bool)?, NoError> in
-                        return context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: context.account.peerId))
+                        return context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: context.account.peerId))
                         |> map { peer -> (AccountRecordId, String, Bool)? in
                             if case let .user(user) = peer, let phone = user.phone {
                                 return (context.account.id, phone, context.account.testingEnvironment)
@@ -1431,7 +1431,7 @@ private func extractAccountManagerState(records: AccountRecordsView<TelegramAcco
 
         let logoutDataSignal: Signal<(AccountManager, Set<PeerId>), NoError> = self.sharedContextPromise.get()
         |> take(1)
-        |> mapToSignal { sharedContext -> Signal<(AccountManager<TelegramAccountManagerTypes>, Set<PeerId>), NoError> in
+        |> mapToSignal { sharedContext -> Signal<(AccountManager<IosappAccountManagerTypes>, Set<PeerId>), NoError> in
             return sharedContext.sharedContext.activeAccountContexts
             |> map { _, accounts, _ -> Set<PeerId> in
                 return Set(accounts.map { $0.1.account.peerId })
@@ -1442,7 +1442,7 @@ private func extractAccountManagerState(records: AccountRecordsView<TelegramAcco
                 }
                 return updated
             }
-            |> map { loggedOutAccountPeerIds -> (AccountManager<TelegramAccountManagerTypes>, Set<PeerId>) in
+            |> map { loggedOutAccountPeerIds -> (AccountManager<IosappAccountManagerTypes>, Set<PeerId>) in
                 return (sharedContext.sharedContext.accountManager, loggedOutAccountPeerIds)
             }
         }
@@ -1579,9 +1579,9 @@ private func extractAccountManagerState(records: AccountRecordsView<TelegramAcco
         
         let timestamp = Int(CFAbsoluteTimeGetCurrent())
         let minReindexTimestamp = timestamp - 2 * 24 * 60 * 60
-        if let indexTimestamp = UserDefaults.standard.object(forKey: "TelegramCacheIndexTimestamp_v2") as? NSNumber, indexTimestamp.intValue >= minReindexTimestamp {
+        if let indexTimestamp = UserDefaults.standard.object(forKey: "IosappCacheIndexTimestamp_v2") as? NSNumber, indexTimestamp.intValue >= minReindexTimestamp {
         } else {
-            UserDefaults.standard.set(timestamp as NSNumber, forKey: "TelegramCacheIndexTimestamp_v2")
+            UserDefaults.standard.set(timestamp as NSNumber, forKey: "IosappCacheIndexTimestamp_v2")
             
             Logger.shared.log("App \(self.episodeId)", "Executing low-impact cache reindex in foreground")
             let _ = self.runCacheReindexTasks(lowImpact: true, completion: {
@@ -2611,7 +2611,7 @@ private func extractAccountManagerState(records: AccountRecordsView<TelegramAcco
                                         guard let context = self.contextValue?.context else {
                                             return
                                         }
-                                        let _ = (context.engine.data.get(TelegramEngine.EngineData.Item.Contacts.List(includePresences: false))
+                                        let _ = (context.engine.data.get(IosappEngine.EngineData.Item.Contacts.List(includePresences: false))
                                         |> map { contactList -> PeerId? in
                                             var result: PeerId?
                                             for peer in contactList.peers {
@@ -2665,7 +2665,7 @@ private func extractAccountManagerState(records: AccountRecordsView<TelegramAcco
                         |> take(1)
                         |> mapToSignal { primary, contexts, _ -> Signal<(AccountRecordId?, [AccountContext?]), NoError> in
                             return combineLatest(contexts.map { _, context, _ -> Signal<AccountContext?, NoError> in
-                                return context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: peerId))
+                                return context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: peerId))
                                 |> map { peer -> AccountContext? in
                                     if peer != nil {
                                         return context
@@ -2874,7 +2874,7 @@ private func extractAccountManagerState(records: AccountRecordsView<TelegramAcco
                     |> deliverOnMainQueue
                     |> mapToSignal { account -> Signal<Void, NoError> in
                         if let messageId = messageIdFromNotification(peerId: peerId, notification: response.notification) {
-                            let _ = TelegramEngine(account: account).messages.applyMaxReadIndexInteractively(index: MessageIndex(id: messageId, timestamp: 0)).start()
+                            let _ = IosappEngine(account: account).messages.applyMaxReadIndexInteractively(index: MessageIndex(id: messageId, timestamp: 0)).start()
                         }
                         var replyToMessageId: MessageId?
                         if let threadId {

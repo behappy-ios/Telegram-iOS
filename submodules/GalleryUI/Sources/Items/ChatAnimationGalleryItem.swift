@@ -34,7 +34,7 @@ class ChatAnimationGalleryItem: GalleryItem {
         let node = ChatAnimationGalleryItemNode(context: self.context, presentationData: self.presentationData)
 
         for media in self.message.media {
-            if let file = media as? TelegramMediaFile {
+            if let file = media as? IosappMediaFile {
                 node.setFile(context: self.context, fileReference: .message(message: MessageReference(self.message), media: file))
                 break
             }
@@ -310,7 +310,7 @@ final class ChatAnimationGalleryItemNode: ZoomableContentGalleryItemNode {
     override func visibilityUpdated(isVisible: Bool) {
         super.visibilityUpdated(isVisible: isVisible)
         
-        if let (_, mediaReference) = self.contextAndMedia, let _ = mediaReference.concrete(TelegramMediaFile.self) {
+        if let (_, mediaReference) = self.contextAndMedia, let _ = mediaReference.concrete(IosappMediaFile.self) {
             if isVisible {
             } else {
                 self.fetchDisposable.set(nil)
@@ -334,7 +334,7 @@ final class ChatAnimationGalleryItemNode: ZoomableContentGalleryItemNode {
         if let (_, mediaReference) = self.contextAndMedia, let status = self.status {
             var resource: MediaResourceReference?
             var statsCategory: MediaResourceStatsCategory?
-            if let fileReference = mediaReference.concrete(TelegramMediaFile.self) {
+            if let fileReference = mediaReference.concrete(IosappMediaFile.self) {
                 resource = fileReference.resourceReference(fileReference.media.resource)
                 statsCategory = statsCategoryForFileWithAttributes(fileReference.media.attributes)
             }

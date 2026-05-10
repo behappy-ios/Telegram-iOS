@@ -267,7 +267,7 @@ public final class PeerInfoGiftsCoverComponent: Component {
                 self.giftsDisposable = combineLatest(
                     queue: Queue.mainQueue(),
                     component.giftsContext.state,
-                    component.context.engine.data.subscribe(TelegramEngine.EngineData.Item.Peer.Peer(id: component.peerId))
+                    component.context.engine.data.subscribe(IosappEngine.EngineData.Item.Peer.Peer(id: component.peerId))
                     |> map { peer -> Int64? in
                         if case let .user(user) = peer, case let .starGift(id, _, _, _, _, _, _, _, _) = user.emojiStatus?.content {
                             return id
@@ -497,7 +497,7 @@ private class GiftIconLayer: SimpleLayer {
         let size = layer.size
         let glowing = layer.glowing
         
-        var file: TelegramMediaFile?
+        var file: IosappMediaFile?
         var color: UIColor = .white
         switch gift.gift {
         case let .generic(gift):
@@ -563,7 +563,7 @@ private class GiftIconLayer: SimpleLayer {
         self.size = size
         self.glowing = glowing
         
-        var file: TelegramMediaFile?
+        var file: IosappMediaFile?
         var color: UIColor = .white
         switch gift.gift {
         case let .generic(gift):

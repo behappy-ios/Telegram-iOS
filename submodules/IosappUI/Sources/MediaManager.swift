@@ -63,7 +63,7 @@ public final class MediaManagerImpl: NSObject, MediaManager {
     
     private let queue = Queue.mainQueue()
     
-    private let accountManager: AccountManager<TelegramAccountManagerTypes>
+    private let accountManager: AccountManager<IosappAccountManagerTypes>
     private let inForeground: Signal<Bool, NoError>
     private let presentationData: Signal<PresentationData, NoError>
     
@@ -195,7 +195,7 @@ public final class MediaManagerImpl: NSObject, MediaManager {
     
     public let galleryHiddenMediaManager: GalleryHiddenMediaManager = GalleryHiddenMediaManagerImpl()
     
-    init(accountManager: AccountManager<TelegramAccountManagerTypes>, inForeground: Signal<Bool, NoError>, presentationData: Signal<PresentationData, NoError>) {
+    init(accountManager: AccountManager<IosappAccountManagerTypes>, inForeground: Signal<Bool, NoError>, presentationData: Signal<PresentationData, NoError>) {
         self.accountManager = accountManager
         self.inForeground = inForeground
         self.presentationData = presentationData
@@ -331,7 +331,7 @@ public final class MediaManagerImpl: NSObject, MediaManager {
         |> distinctUntilChanged(isEqual: { $0?.0 === $1?.0 && $0?.1 == $1?.1 })
         |> mapToSignal { value -> Signal<UIImage?, NoError> in
             if let (account, value) = value {
-                return playerAlbumArt(postbox: account.postbox, engine: TelegramEngine(account: account), fileReference: value.fullSizeResource.file, albumArt: value, thumbnail: false)
+                return playerAlbumArt(postbox: account.postbox, engine: IosappEngine(account: account), fileReference: value.fullSizeResource.file, albumArt: value, thumbnail: false)
                 |> map { generator -> UIImage? in
                     let arguments = TransformImageArguments(corners: ImageCorners(), imageSize: CGSize(width: 640, height: 640), boundingSize: CGSize(width: 640, height: 640), intrinsicInsets: .zero)
                     return generator(arguments)?.generateImage()
@@ -428,7 +428,7 @@ public final class MediaManagerImpl: NSObject, MediaManager {
                         if state.status.timestamp > 5.0 && state.status.timestamp < state.status.duration - 5.0 {
                             storedState = MediaPlaybackStoredState(timestamp: state.status.timestamp, playbackRate: state.status.baseRate > 1.0 ? .x2 : .x1)
                         }
-                        let _ = updateMediaPlaybackStoredStateInteractively(engine: TelegramEngine(account: account), messageId: item.message.id, state: storedState).startStandalone()
+                        let _ = updateMediaPlaybackStoredStateInteractively(engine: IosappEngine(account: account), messageId: item.message.id, state: storedState).startStandalone()
                     }
                 }
             }
@@ -463,7 +463,7 @@ public final class MediaManagerImpl: NSObject, MediaManager {
     public func audioRecorder(
         resumeData: AudioRecorderResumeData?,
         beginWithTone: Bool,
-        applicationBindings: TelegramApplicationBindings,
+        applicationBindings: IosappApplicationBindings,
         beganWithTone: @escaping (Bool) -> Void
     ) -> Signal<ManagedAudioRecorder?, NoError> {
         return Signal { subscriber in

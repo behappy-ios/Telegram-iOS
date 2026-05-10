@@ -325,7 +325,7 @@ public func legacyAttachmentMenu(
     
     var selectionLimit: Int32 = 100
     var slowModeEnabled = false
-    if let channel = peer as? TelegramChannel, channel.isRestrictedBySlowmode {
+    if let channel = peer as? IosappChannel, channel.isRestrictedBySlowmode {
         slowModeEnabled = true
         selectionLimit = 10
     }
@@ -364,7 +364,7 @@ public func legacyAttachmentMenu(
             presentSelectionLimitExceeded()
         }
         if let peer, peer.id != context.account.peerId {
-            if peer is TelegramUser {
+            if peer is IosappUser {
                 carouselItem.hasTimer = hasSchedule
             }
             carouselItem.hasSilentPosting = true
@@ -479,7 +479,7 @@ public func legacyAttachmentMenu(
     
     if let editCurrentMedia = editCurrentMedia {
         let title: String
-        if editCurrentMedia.media is TelegramMediaImage {
+        if editCurrentMedia.media is IosappMediaImage {
             title = presentationData.strings.Conversation_EditingMessageMediaEditCurrentPhoto
         } else {
             title = presentationData.strings.Conversation_EditingMessageMediaEditCurrentVideo
@@ -558,9 +558,9 @@ public func legacyAttachmentMenu(
         
         var peerSupportsPolls = false
         if let peer {
-            if peer is TelegramGroup || peer is TelegramChannel {
+            if peer is IosappGroup || peer is IosappChannel {
                 peerSupportsPolls = true
-            } else if let user = peer as? TelegramUser, let _ = user.botInfo {
+            } else if let user = peer as? IosappUser, let _ = user.botInfo {
                 peerSupportsPolls = true
             }
         }

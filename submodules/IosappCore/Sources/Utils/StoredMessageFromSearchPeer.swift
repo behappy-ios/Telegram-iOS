@@ -9,7 +9,7 @@ public func _internal_storedMessageFromSearchPeer(postbox: Postbox, peer: Peer) 
                 return updatedPeer
             })
         }
-        if let group = transaction.getPeer(peer.id) as? TelegramGroup, let migrationReference = group.migrationReference {
+        if let group = transaction.getPeer(peer.id) as? IosappGroup, let migrationReference = group.migrationReference {
             if let migrationPeer = transaction.getPeer(migrationReference.peerId) {
                 return migrationPeer
             } else {

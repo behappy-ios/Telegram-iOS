@@ -408,7 +408,7 @@ private final class ChatMessageTodoItemNode: ASDisplayNode {
     
     var context: AccountContext?
     var message: Message?
-    var option: TelegramMediaTodo.Item?
+    var option: IosappMediaTodo.Item?
     
     var pressed: (() -> Void)?
     var selectionUpdated: (() -> Void)?
@@ -681,13 +681,13 @@ private final class ChatMessageTodoItemNode: ASDisplayNode {
             let textNodeFrame = textNode.textNode.frame
             if let (index, attributes) = textNode.textNode.attributesAtPoint(CGPoint(x: point.x - textNodeFrame.minX, y: point.y - textNodeFrame.minY)) {
                 let possibleNames: [String] = [
-                    TelegramTextAttributes.URL,
-                    TelegramTextAttributes.PeerMention,
-                    TelegramTextAttributes.PeerTextMention,
-                    TelegramTextAttributes.BotCommand,
-                    TelegramTextAttributes.Hashtag,
-                    TelegramTextAttributes.BankCard,
-                    TelegramTextAttributes.Date
+                    IosappTextAttributes.URL,
+                    IosappTextAttributes.PeerMention,
+                    IosappTextAttributes.PeerTextMention,
+                    IosappTextAttributes.BotCommand,
+                    IosappTextAttributes.Hashtag,
+                    IosappTextAttributes.BankCard,
+                    IosappTextAttributes.Date
                 ]
                 for name in possibleNames {
                     if let _ = attributes[NSAttributedString.Key(rawValue: name)], let textRects = textNode.textNode.attributeRects(name: name, at: index) {
@@ -706,19 +706,19 @@ private final class ChatMessageTodoItemNode: ASDisplayNode {
         }
         let textNodeFrame = textNode.textNode.frame
         if let (index, attributes) = textNode.textNode.attributesAtPoint(CGPoint(x: point.x - textNodeFrame.minX, y: point.y - textNodeFrame.minY)) {
-            if let url = attributes[NSAttributedString.Key(rawValue: TelegramTextAttributes.URL)] as? String {
+            if let url = attributes[NSAttributedString.Key(rawValue: IosappTextAttributes.URL)] as? String {
                 var concealed = true
-                if let (attributeText, fullText) = textNode.textNode.attributeSubstring(name: TelegramTextAttributes.URL, index: index) {
+                if let (attributeText, fullText) = textNode.textNode.attributeSubstring(name: IosappTextAttributes.URL, index: index) {
                     concealed = !doesUrlMatchText(url: url, text: attributeText, fullText: fullText)
                 }
                 return ChatMessageBubbleContentTapAction(content: .url(ChatMessageBubbleContentTapAction.Url(url: url, concealed: concealed)))
-            } else if let peerMention = attributes[NSAttributedString.Key(rawValue: TelegramTextAttributes.PeerMention)] as? TelegramPeerMention {
+            } else if let peerMention = attributes[NSAttributedString.Key(rawValue: IosappTextAttributes.PeerMention)] as? IosappPeerMention {
                 return ChatMessageBubbleContentTapAction(content: .peerMention(peerId: peerMention.peerId, mention: peerMention.mention, openProfile: false))
-            } else if let peerName = attributes[NSAttributedString.Key(rawValue: TelegramTextAttributes.PeerTextMention)] as? String {
+            } else if let peerName = attributes[NSAttributedString.Key(rawValue: IosappTextAttributes.PeerTextMention)] as? String {
                 return ChatMessageBubbleContentTapAction(content: .textMention(peerName))
-            } else if let botCommand = attributes[NSAttributedString.Key(rawValue: TelegramTextAttributes.BotCommand)] as? String {
+            } else if let botCommand = attributes[NSAttributedString.Key(rawValue: IosappTextAttributes.BotCommand)] as? String {
                 return ChatMessageBubbleContentTapAction(content: .botCommand(botCommand))
-            } else if let hashtag = attributes[NSAttributedString.Key(rawValue: TelegramTextAttributes.Hashtag)] as? TelegramHashtag {
+            } else if let hashtag = attributes[NSAttributedString.Key(rawValue: IosappTextAttributes.Hashtag)] as? IosappHashtag {
                 return ChatMessageBubbleContentTapAction(content: .hashtag(hashtag.peerName, hashtag.hashtag))
             } else {
                 return ChatMessageBubbleContentTapAction(content: .none)
@@ -727,7 +727,7 @@ private final class ChatMessageTodoItemNode: ASDisplayNode {
         return ChatMessageBubbleContentTapAction(content: .none)
     }
     
-    static func asyncLayout(_ maybeNode: ChatMessageTodoItemNode?) -> (_ context: AccountContext, _ presentationData: ChatPresentationData, _ presentationContext: ChatPresentationContext, _ message: Message, _ todo: TelegramMediaTodo, _ option: TelegramMediaTodo.Item, _ completion: TelegramMediaTodo.Completion?, _ translation: TranslationMessageAttribute.Additional?, _ constrainedWidth: CGFloat) -> (minimumWidth: CGFloat, layout: ((CGFloat) -> (CGSize, (Bool, Bool, Bool) -> ChatMessageTodoItemNode))) {
+    static func asyncLayout(_ maybeNode: ChatMessageTodoItemNode?) -> (_ context: AccountContext, _ presentationData: ChatPresentationData, _ presentationContext: ChatPresentationContext, _ message: Message, _ todo: IosappMediaTodo, _ option: IosappMediaTodo.Item, _ completion: IosappMediaTodo.Completion?, _ translation: TranslationMessageAttribute.Additional?, _ constrainedWidth: CGFloat) -> (minimumWidth: CGFloat, layout: ((CGFloat) -> (CGSize, (Bool, Bool, Bool) -> ChatMessageTodoItemNode))) {
         let makeTitleLayout = TextNodeWithEntities.asyncLayout(maybeNode?.titleNode)
         let makeNameLayout = TextNode.asyncLayout(maybeNode?.nameNode)
         
@@ -1022,7 +1022,7 @@ public class ChatMessageTodoBubbleContentNode: ChatMessageBubbleContentNode {
     
     private var linkHighlightingNode: LinkHighlightingNode?
     
-    private var todo: TelegramMediaTodo?
+    private var todo: IosappMediaTodo?
     
     override public var visibility: ListViewItemNodeVisibility {
         didSet {
@@ -1087,7 +1087,7 @@ public class ChatMessageTodoBubbleContentNode: ChatMessageBubbleContentNode {
         let makeViewResultsTextLayout = TextNode.asyncLayout(self.buttonViewResultsTextNode)
         let statusLayout = self.statusNode.asyncLayout()
                 
-        var previousOptionNodeLayouts: [Int32: (_ contet: AccountContext, _ presentationData: ChatPresentationData, _ presentationContext: ChatPresentationContext, _ message: Message, _ poll: TelegramMediaTodo, _ option: TelegramMediaTodo.Item, _ completion: TelegramMediaTodo.Completion?, _ translation: TranslationMessageAttribute.Additional?, _ constrainedWidth: CGFloat) -> (minimumWidth: CGFloat, layout: ((CGFloat) -> (CGSize, (Bool, Bool, Bool) -> ChatMessageTodoItemNode)))] = [:]
+        var previousOptionNodeLayouts: [Int32: (_ contet: AccountContext, _ presentationData: ChatPresentationData, _ presentationContext: ChatPresentationContext, _ message: Message, _ poll: IosappMediaTodo, _ option: IosappMediaTodo.Item, _ completion: IosappMediaTodo.Completion?, _ translation: TranslationMessageAttribute.Additional?, _ constrainedWidth: CGFloat) -> (minimumWidth: CGFloat, layout: ((CGFloat) -> (CGSize, (Bool, Bool, Bool) -> ChatMessageTodoItemNode)))] = [:]
         for optionNode in self.optionNodes {
             if let option = optionNode.option {
                 previousOptionNodeLayouts[option.id] = ChatMessageTodoItemNode.asyncLayout(optionNode)
@@ -1124,7 +1124,7 @@ public class ChatMessageTodoBubbleContentNode: ChatMessageBubbleContentNode {
                     } else if let attribute = attribute as? ViewCountMessageAttribute {
                         viewCount = attribute.count
                     } else if let attribute = attribute as? ReplyThreadMessageAttribute, case .peer = item.chatLocation {
-                        if let channel = item.message.peers[item.message.id.peerId] as? TelegramChannel, case .group = channel.info {
+                        if let channel = item.message.peers[item.message.id.peerId] as? IosappChannel, case .group = channel.info {
                             dateReplies = Int(attribute.count)
                         }
                     } else if let attribute = attribute as? PaidStarsMessageAttribute, item.message.id.peerId.namespace == Namespaces.Peer.CloudChannel {
@@ -1197,9 +1197,9 @@ public class ChatMessageTodoBubbleContentNode: ChatMessageBubbleContentNode {
                     ))
                 }
                 
-                var todo: TelegramMediaTodo?
+                var todo: IosappMediaTodo?
                 for media in item.message.media {
-                    if let media = media as? TelegramMediaTodo {
+                    if let media = media as? IosappMediaTodo {
                         todo = media
                         break
                     }
@@ -1293,7 +1293,7 @@ public class ChatMessageTodoBubbleContentNode: ChatMessageBubbleContentNode {
                     for i in 0 ..< todo.items.count {
                         let todoItem = todo.items[i]
                         
-                        let makeLayout: (_ context: AccountContext, _ presentationData: ChatPresentationData, _ presentationContext: ChatPresentationContext, _ message: Message, _ todo: TelegramMediaTodo, _ item: TelegramMediaTodo.Item, _ completion: TelegramMediaTodo.Completion?, _ translation: TranslationMessageAttribute.Additional?, _ constrainedWidth: CGFloat) -> (minimumWidth: CGFloat, layout: ((CGFloat) -> (CGSize, (Bool, Bool, Bool) -> ChatMessageTodoItemNode)))
+                        let makeLayout: (_ context: AccountContext, _ presentationData: ChatPresentationData, _ presentationContext: ChatPresentationContext, _ message: Message, _ todo: IosappMediaTodo, _ item: IosappMediaTodo.Item, _ completion: IosappMediaTodo.Completion?, _ translation: TranslationMessageAttribute.Additional?, _ constrainedWidth: CGFloat) -> (minimumWidth: CGFloat, layout: ((CGFloat) -> (CGSize, (Bool, Bool, Bool) -> ChatMessageTodoItemNode)))
                         if let previous = previousOptionNodeLayouts[todoItem.id] {
                             makeLayout = previous
                         } else {
@@ -1530,19 +1530,19 @@ public class ChatMessageTodoBubbleContentNode: ChatMessageBubbleContentNode {
     override public func tapActionAtPoint(_ point: CGPoint, gesture: TapLongTapOrDoubleTapGesture, isEstimating: Bool) -> ChatMessageBubbleContentTapAction {
         let textNodeFrame = self.textNode.textNode.frame
         if let (index, attributes) = self.textNode.textNode.attributesAtPoint(CGPoint(x: point.x - textNodeFrame.minX, y: point.y - textNodeFrame.minY)) {
-            if let url = attributes[NSAttributedString.Key(rawValue: TelegramTextAttributes.URL)] as? String {
+            if let url = attributes[NSAttributedString.Key(rawValue: IosappTextAttributes.URL)] as? String {
                 var concealed = true
-                if let (attributeText, fullText) = self.textNode.textNode.attributeSubstring(name: TelegramTextAttributes.URL, index: index) {
+                if let (attributeText, fullText) = self.textNode.textNode.attributeSubstring(name: IosappTextAttributes.URL, index: index) {
                     concealed = !doesUrlMatchText(url: url, text: attributeText, fullText: fullText)
                 }
                 return ChatMessageBubbleContentTapAction(content: .url(ChatMessageBubbleContentTapAction.Url(url: url, concealed: concealed)))
-            } else if let peerMention = attributes[NSAttributedString.Key(rawValue: TelegramTextAttributes.PeerMention)] as? TelegramPeerMention {
+            } else if let peerMention = attributes[NSAttributedString.Key(rawValue: IosappTextAttributes.PeerMention)] as? IosappPeerMention {
                 return ChatMessageBubbleContentTapAction(content: .peerMention(peerId: peerMention.peerId, mention: peerMention.mention, openProfile: false))
-            } else if let peerName = attributes[NSAttributedString.Key(rawValue: TelegramTextAttributes.PeerTextMention)] as? String {
+            } else if let peerName = attributes[NSAttributedString.Key(rawValue: IosappTextAttributes.PeerTextMention)] as? String {
                 return ChatMessageBubbleContentTapAction(content: .textMention(peerName))
-            } else if let botCommand = attributes[NSAttributedString.Key(rawValue: TelegramTextAttributes.BotCommand)] as? String {
+            } else if let botCommand = attributes[NSAttributedString.Key(rawValue: IosappTextAttributes.BotCommand)] as? String {
                 return ChatMessageBubbleContentTapAction(content: .botCommand(botCommand))
-            } else if let hashtag = attributes[NSAttributedString.Key(rawValue: TelegramTextAttributes.Hashtag)] as? TelegramHashtag {
+            } else if let hashtag = attributes[NSAttributedString.Key(rawValue: IosappTextAttributes.Hashtag)] as? IosappHashtag {
                 return ChatMessageBubbleContentTapAction(content: .hashtag(hashtag.peerName, hashtag.hashtag))
             } else {
                 return ChatMessageBubbleContentTapAction(content: .none)
@@ -1580,13 +1580,13 @@ public class ChatMessageTodoBubbleContentNode: ChatMessageBubbleContentNode {
             let textNodeFrame = self.textNode.textNode.frame
             if let (index, attributes) = self.textNode.textNode.attributesAtPoint(CGPoint(x: point.x - textNodeFrame.minX, y: point.y - textNodeFrame.minY)) {
                 let possibleNames: [String] = [
-                    TelegramTextAttributes.URL,
-                    TelegramTextAttributes.PeerMention,
-                    TelegramTextAttributes.PeerTextMention,
-                    TelegramTextAttributes.BotCommand,
-                    TelegramTextAttributes.Hashtag,
-                    TelegramTextAttributes.BankCard,
-                    TelegramTextAttributes.Date
+                    IosappTextAttributes.URL,
+                    IosappTextAttributes.PeerMention,
+                    IosappTextAttributes.PeerTextMention,
+                    IosappTextAttributes.BotCommand,
+                    IosappTextAttributes.Hashtag,
+                    IosappTextAttributes.BankCard,
+                    IosappTextAttributes.Date
                 ]
                 for name in possibleNames {
                     if let _ = attributes[NSAttributedString.Key(rawValue: name)], let textRects = self.textNode.textNode.attributeRects(name: name, at: index) {

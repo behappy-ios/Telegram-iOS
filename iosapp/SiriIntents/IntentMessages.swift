@@ -21,7 +21,7 @@ func getMessages(account: Account, ids: [MessageId]) -> Signal<[INMessage], NoEr
     return account.postbox.transaction { transaction -> [INMessage] in
         var messages: [INMessage] = []
         for id in ids {
-            if let message = transaction.getMessage(id).flatMap(messageWithTelegramMessage) {
+            if let message = transaction.getMessage(id).flatMap(messageWithIosappMessage) {
                 messages.append(message)
             }
         }
@@ -64,7 +64,7 @@ func unreadMessages(account: Account) -> Signal<[INMessage], NoError> {
                             }
                             
                             if !isRead {
-                                if let message = messageWithTelegramMessage(entry.message) {
+                                if let message = messageWithIosappMessage(entry.message) {
                                     messages.append(message)
                                 }
                             }
@@ -110,7 +110,7 @@ func missedCalls(account: Account) -> Signal<[CallRecord], NoError> {
             switch entry {
                 case let .message(_, messages):
                     for message in messages {
-                        if let call = callWithTelegramMessage(message, account: account) {
+                        if let call = callWithIosappMessage(message, account: account) {
                             calls.append(call)
                         }
                     }
@@ -123,8 +123,8 @@ func missedCalls(account: Account) -> Signal<[CallRecord], NoError> {
 }
 
 @available(iOSApplicationExtension 10.0, iOS 10.0, *)
-private func callWithTelegramMessage(_ telegramMessage: Message, account: Account) -> CallRecord? {
-    guard let author = telegramMessage.author, let user = telegramMessage.peers[author.id] as? TelegramUser else {
+private func callWithIosappMessage(_ telegramMessage: Message, account: Account) -> CallRecord? {
+    guard let author = telegramMessage.author, let user = telegramMessage.peers[author.id] as? IosappUser else {
         return nil
     }
     
@@ -153,7 +153,7 @@ private func callWithTelegramMessage(_ telegramMessage: Message, account: Accoun
     
     var duration: Int32?
     for media in telegramMessage.media {
-        if let action = media as? TelegramMediaAction, case let .phoneCall(_, _, callDuration, _) = action.action {
+        if let action = media as? IosappMediaAction, case let .phoneCall(_, _, callDuration, _) = action.action {
             duration = callDuration
         }
     }
@@ -162,8 +162,8 @@ private func callWithTelegramMessage(_ telegramMessage: Message, account: Accoun
 }
 
 @available(iOSApplicationExtension 10.0, iOS 10.0, *)
-private func messageWithTelegramMessage(_ telegramMessage: Message) -> INMessage? {
-    guard let author = telegramMessage.author, let user = telegramMessage.peers[author.id] as? TelegramUser, user.id.id._internalGetInt64Value() != 777000 else {
+private func messageWithIosappMessage(_ telegramMessage: Message) -> INMessage? {
+    guard let author = telegramMessage.author, let user = telegramMessage.peers[author.id] as? IosappUser, user.id.id._internalGetInt64Value() != 777000 else {
         return nil
     }
     
@@ -195,11 +195,11 @@ private func messageWithTelegramMessage(_ telegramMessage: Message) -> INMessage
     if #available(iOSApplicationExtension 11.0, iOS 11.0, *) {
         var messageType: INMessageType = .text
         loop: for media in telegramMessage.media {
-            if media is TelegramMediaImage {
+            if media is IosappMediaImage {
                 messageType = .mediaImage
                 break loop
             }
-            else if let file = media as? TelegramMediaFile {
+            else if let file = media as? IosappMediaFile {
                 if file.isVideo {
                     messageType = .mediaVideo
                     break loop
@@ -219,10 +219,10 @@ private func messageWithTelegramMessage(_ telegramMessage: Message) -> INMessage
                     messageType = .file
                     break loop
                 }
-            } else if media is TelegramMediaMap {
+            } else if media is IosappMediaMap {
                 messageType = .mediaLocation
                 break loop
-            } else if media is TelegramMediaContact {
+            } else if media is IosappMediaContact {
                 messageType = .mediaAddressCard
                 break loop
             }

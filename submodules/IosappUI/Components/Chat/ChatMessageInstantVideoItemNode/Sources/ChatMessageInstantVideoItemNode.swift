@@ -311,7 +311,7 @@ public class ChatMessageInstantVideoItemNode: ChatMessageItemView, ASGestureReco
                 if messagePeerId != item.context.account.peerId {
                     if messagePeerId.isGroupOrChannel && item.message.author != nil {
                         var isBroadcastChannel = false
-                        if let peer = item.message.peers[item.message.id.peerId] as? TelegramChannel, case .broadcast = peer.info {
+                        if let peer = item.message.peers[item.message.id.peerId] as? IosappChannel, case .broadcast = peer.info {
                             isBroadcastChannel = true
                         }
                         
@@ -353,28 +353,28 @@ public class ChatMessageInstantVideoItemNode: ChatMessageItemView, ASGestureReco
                 }
             } else if item.message.effectivelyIncoming(item.context.account.peerId) {
                 if let peer = item.message.peers[item.message.id.peerId] {
-                    if let channel = peer as? TelegramChannel {
+                    if let channel = peer as? IosappChannel {
                         if case .broadcast = channel.info {
                             needsShareButton = true
                         }
                     }
                 }
-                if !needsShareButton, let author = item.message.author as? TelegramUser, let _ = author.botInfo, !item.message.media.isEmpty {
+                if !needsShareButton, let author = item.message.author as? IosappUser, let _ = author.botInfo, !item.message.media.isEmpty {
                     needsShareButton = true
                 }
                 if !needsShareButton {
                     loop: for media in item.message.media {
-                        if media is TelegramMediaGame || media is TelegramMediaInvoice {
+                        if media is IosappMediaGame || media is IosappMediaInvoice {
                             needsShareButton = true
                             break loop
-                        } else if let media = media as? TelegramMediaWebpage, case .Loaded = media.content {
+                        } else if let media = media as? IosappMediaWebpage, case .Loaded = media.content {
                             needsShareButton = true
                             break loop
                         }
                     }
                 } else {
                     loop: for media in item.message.media {
-                        if media is TelegramMediaAction {
+                        if media is IosappMediaAction {
                             needsShareButton = false
                             break loop
                         }
@@ -420,7 +420,7 @@ public class ChatMessageInstantVideoItemNode: ChatMessageItemView, ASGestureReco
             
             var automaticDownload = true
             for media in item.message.media {
-                if let file = media as? TelegramMediaFile {
+                if let file = media as? IosappMediaFile {
                     automaticDownload = shouldDownloadMediaAutomatically(settings: item.controllerInteraction.automaticMediaDownloadSettings, peerType: item.associatedData.automaticDownloadPeerType, networkType: item.associatedData.automaticDownloadNetworkType, authorPeerId: item.message.author?.id, contactsPeerIds: item.associatedData.contactsPeerIds, media: file)
                 }
             }
@@ -469,7 +469,7 @@ public class ChatMessageInstantVideoItemNode: ChatMessageItemView, ASGestureReco
             for attribute in item.message.attributes {
                 if let attribute = attribute as? InlineBotMessageAttribute {
                     var inlineBotNameString: String?
-                    if let peerId = attribute.peerId, let bot = item.message.peers[peerId] as? TelegramUser {
+                    if let peerId = attribute.peerId, let bot = item.message.peers[peerId] as? IosappUser {
                         inlineBotNameString = bot.addressName
                     } else {
                         inlineBotNameString = attribute.title
@@ -1004,7 +1004,7 @@ public class ChatMessageInstantVideoItemNode: ChatMessageItemView, ASGestureReco
                 if let item = self.item, let forwardInfo = item.message.forwardInfo {
                     let performAction: () -> Void = {
                         if let sourceMessageId = forwardInfo.sourceMessageId {
-                            if !item.message.id.peerId.isReplies, let channel = forwardInfo.author as? TelegramChannel, channel.addressName == nil {
+                            if !item.message.id.peerId.isReplies, let channel = forwardInfo.author as? IosappChannel, channel.addressName == nil {
                                 if case let .broadcast(info) = channel.info, info.flags.contains(.hasDiscussionGroup) {
                                 } else if case .member = channel.participationStatus {
                                 } else {
@@ -1014,7 +1014,7 @@ public class ChatMessageInstantVideoItemNode: ChatMessageItemView, ASGestureReco
                             }
                             item.controllerInteraction.navigateToMessage(item.message.id, sourceMessageId, NavigateToMessageParams(timestamp: nil, quote: nil))
                         } else if let peer = forwardInfo.source ?? forwardInfo.author {
-                            item.controllerInteraction.openPeer(EnginePeer(peer), peer is TelegramUser ? .info(nil) : .chat(textInputState: nil, subject: nil, peekData: nil), nil, .default)
+                            item.controllerInteraction.openPeer(EnginePeer(peer), peer is IosappUser ? .info(nil) : .chat(textInputState: nil, subject: nil, peekData: nil), nil, .default)
                         } else if let _ = forwardInfo.authorSignature {
                             item.controllerInteraction.displayMessageTooltip(item.message.id, item.presentationData.strings.Conversation_ForwardAuthorHiddenTooltip, false, forwardInfoNode, nil)
                         }
@@ -1045,7 +1045,7 @@ public class ChatMessageInstantVideoItemNode: ChatMessageItemView, ASGestureReco
                 return
             }
             
-            if let channel = item.message.peers[item.message.id.peerId] as? TelegramChannel, case .broadcast = channel.info {
+            if let channel = item.message.peers[item.message.id.peerId] as? IosappChannel, case .broadcast = channel.info {
                 for attribute in item.message.attributes {
                     if let _ = attribute as? ReplyThreadMessageAttribute {
                         item.controllerInteraction.openMessageReplies(item.message.id, true, false)

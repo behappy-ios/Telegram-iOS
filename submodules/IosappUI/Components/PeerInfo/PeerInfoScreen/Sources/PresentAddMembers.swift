@@ -35,7 +35,7 @@ public func presentAddMembersImpl(context: AccountContext, updatedPresentationDa
         let presentationData = updatedPresentationData?.initial ?? context.sharedContext.currentPresentationData.with { $0 }
         
         var canCreateInviteLink = false
-        if let group = groupPeer as? TelegramGroup {
+        if let group = groupPeer as? IosappGroup {
             switch group.role {
             case .creator:
                 canCreateInviteLink = true
@@ -44,7 +44,7 @@ public func presentAddMembersImpl(context: AccountContext, updatedPresentationDa
             default:
                 break
             }
-        } else if let channel = groupPeer as? TelegramChannel, (channel.addressName?.isEmpty ?? true) {
+        } else if let channel = groupPeer as? IosappChannel, (channel.addressName?.isEmpty ?? true) {
             if channel.flags.contains(.isCreator) || (channel.adminRights?.rights.contains(.canInviteUsers) == true) {
                 canCreateInviteLink = true
             }
@@ -150,7 +150,7 @@ public func presentAddMembersImpl(context: AccountContext, updatedPresentationDa
         do {
             selectAddMemberDisposable.set((
                 combineLatest(queue: .mainQueue(),
-                    context.engine.data.get(TelegramEngine.EngineData.Item.Peer.ExportedInvitation(id: groupPeer.id)),
+                    context.engine.data.get(IosappEngine.EngineData.Item.Peer.ExportedInvitation(id: groupPeer.id)),
                     contactsController.result
                 )
             |> deliverOnMainQueue).start(next: { [weak contactsController] exportedInvitation, result in
@@ -174,7 +174,7 @@ public func presentAddMembersImpl(context: AccountContext, updatedPresentationDa
                             }
                         }
                         if !mappedPeerIds.isEmpty {
-                            let _ = (context.engine.data.get(EngineDataMap(mappedPeerIds.map(TelegramEngine.EngineData.Item.Peer.Peer.init(id:))))
+                            let _ = (context.engine.data.get(EngineDataMap(mappedPeerIds.map(IosappEngine.EngineData.Item.Peer.Peer.init(id:))))
                             |> deliverOnMainQueue).startStandalone(next: { maybePeers in
                                 let presentationData = context.sharedContext.currentPresentationData.with { $0 }
                                 let peers = maybePeers.compactMap { $0.value }
@@ -189,7 +189,7 @@ public func presentAddMembersImpl(context: AccountContext, updatedPresentationDa
                             })
                         }
                     } else {
-                        let failedPeers = failedPeerIds.compactMap { _, error -> TelegramForbiddenInvitePeer? in
+                        let failedPeers = failedPeerIds.compactMap { _, error -> IosappForbiddenInvitePeer? in
                             if case let .restricted(peer) = error {
                                 return peer
                             } else {

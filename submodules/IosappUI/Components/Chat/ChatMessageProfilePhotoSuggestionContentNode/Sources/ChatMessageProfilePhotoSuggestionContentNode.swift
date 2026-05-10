@@ -115,7 +115,7 @@ public class ChatMessageProfilePhotoSuggestionContentNode: ChatMessageBubbleCont
         var currentMedia: Media?
         if let item = item {
             mediaLoop: for media in item.message.media {
-                if let media = media as? TelegramMediaAction {
+                if let media = media as? IosappMediaAction {
                     switch media.action {
                     case let .suggestedProfilePhoto(image):
                         currentMedia = image
@@ -162,13 +162,13 @@ public class ChatMessageProfilePhotoSuggestionContentNode: ChatMessageBubbleCont
                             
                 let primaryTextColor = serviceMessageColorComponents(theme: item.presentationData.theme.theme, wallpaper: item.presentationData.theme.wallpaper).primaryText
                                 
-                var photo: TelegramMediaImage?
-                if let media = item.message.media.first(where: { $0 is TelegramMediaAction }) as? TelegramMediaAction, case let .suggestedProfilePhoto(image) = media.action {
+                var photo: IosappMediaImage?
+                if let media = item.message.media.first(where: { $0 is IosappMediaAction }) as? IosappMediaAction, case let .suggestedProfilePhoto(image) = media.action {
                     photo = image
                 }
                 
                 var mediaUpdated = true
-                if let photo = photo, let media = currentItem?.message.media.first(where: { $0 is TelegramMediaAction }) as? TelegramMediaAction, case let .suggestedProfilePhoto(maybeCurrentPhoto) = media.action, let currentPhoto = maybeCurrentPhoto {
+                if let photo = photo, let media = currentItem?.message.media.first(where: { $0 is IosappMediaAction }) as? IosappMediaAction, case let .suggestedProfilePhoto(maybeCurrentPhoto) = media.action, let currentPhoto = maybeCurrentPhoto {
                     mediaUpdated = !photo.isSemanticallyEqual(to: currentPhoto)
                 }
                 
@@ -218,7 +218,7 @@ public class ChatMessageProfilePhotoSuggestionContentNode: ChatMessageBubbleCont
                             }
                                                         
                             if let photo = photo, let video = photo.videoRepresentations.last, let id = photo.id?.id {
-                                let videoFileReference = FileMediaReference.message(message: MessageReference(item.message), media: TelegramMediaFile(fileId: MediaId(namespace: Namespaces.Media.LocalFile, id: 0), partialReference: nil, resource: video.resource, previewRepresentations: photo.representations, videoThumbnails: [], immediateThumbnailData: photo.immediateThumbnailData, mimeType: "video/mp4", size: nil, attributes: [.Animated, .Video(duration: 0, size: video.dimensions, flags: [], preloadSize: nil, coverTime: nil, videoCodec: nil)], alternativeRepresentations: []))
+                                let videoFileReference = FileMediaReference.message(message: MessageReference(item.message), media: IosappMediaFile(fileId: MediaId(namespace: Namespaces.Media.LocalFile, id: 0), partialReference: nil, resource: video.resource, previewRepresentations: photo.representations, videoThumbnails: [], immediateThumbnailData: photo.immediateThumbnailData, mimeType: "video/mp4", size: nil, attributes: [.Animated, .Video(duration: 0, size: video.dimensions, flags: [], preloadSize: nil, coverTime: nil, videoCodec: nil)], alternativeRepresentations: []))
                                 let videoContent = NativeVideoContent(id: .profileVideo(id, "action"), userLocation: .peer(item.message.id.peerId), fileReference: videoFileReference, streamVideo: isMediaStreamable(resource: video.resource) ? .conservative : .none, loopVideo: true, enableSound: false, fetchAutomatically: true, onlyFullSizeThumbnail: false, useLargeThumbnail: true, autoFetchFullSizeThumbnail: true, continuePlayingWithoutSoundOnLostAudioSession: false, placeholderColor: .clear, storeAfterDownload: nil)
                                 if videoContent.id != strongSelf.videoContent?.id {
                                     let mediaManager = item.context.sharedContext.mediaManager

@@ -76,7 +76,7 @@ final class InstantPageAudioNode: ASDisplayNode, InstantPageNode {
     private var isPlaying: Bool = false
     private var playbackState: SharedMediaPlayerItemPlaybackState?
     
-    init(context: AccountContext, strings: PresentationStrings, theme: InstantPageTheme, webPage: TelegramMediaWebpage, media: InstantPageMedia, openMedia: @escaping (InstantPageMedia) -> Void) {
+    init(context: AccountContext, strings: PresentationStrings, theme: InstantPageTheme, webPage: IosappMediaWebpage, media: InstantPageMedia, openMedia: @escaping (InstantPageMedia) -> Void) {
         self.context = context
         self.strings = strings
         self.theme = theme
@@ -139,7 +139,7 @@ final class InstantPageAudioNode: ASDisplayNode, InstantPageNode {
             }
         }
         
-        /*if let applicationContext = account.applicationContext as? TelegramApplicationContext, let (playlistId, itemId) = instantPageAudioPlaylistAndItemIds(webpage: webpage, media: self.media) {
+        /*if let applicationContext = account.applicationContext as? IosappApplicationContext, let (playlistId, itemId) = instantPageAudioPlaylistAndItemIds(webpage: webpage, media: self.media) {
             let playbackStatus: Signal<MediaPlayerPlaybackStatus?, NoError> = applicationContext.mediaManager.filteredPlaylistPlayerStateAndStatus(playlistId: playlistId, itemId: itemId)
                 |> mapToSignal { status -> Signal<MediaPlayerPlaybackStatus?, NoError> in
                     if let status = status, let playbackStatus = status.status {

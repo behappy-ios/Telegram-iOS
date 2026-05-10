@@ -61,7 +61,7 @@ private func actionForAttribute(attribute: StarGift.UniqueGift.Attribute, presen
         let isSelected = selectedAttributes.isEmpty || selectedAttributes.contains(attributeId)
         
         var entities: [MessageTextEntity] = []
-        var entityFiles: [Int64: TelegramMediaFile] = [:]
+        var entityFiles: [Int64: IosappMediaFile] = [:]
         entities = [
             MessageTextEntity(
                 range: 0..<1,

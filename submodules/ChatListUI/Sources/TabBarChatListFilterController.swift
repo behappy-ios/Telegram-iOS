@@ -77,16 +77,16 @@ public func chatListFilterItems(context: AccountContext) -> Signal<(Int, [(ChatL
                             }
                             
                             var isMuted = false
-                            if let notificationSettings = peerView.notificationSettings as? TelegramPeerNotificationSettings {
+                            if let notificationSettings = peerView.notificationSettings as? IosappPeerNotificationSettings {
                                 if case .muted = notificationSettings.muteState {
                                     isMuted = true
                                 } else if case .default = notificationSettings.muteState {
                                     if let peer = peerView.peer {
-                                        if peer is TelegramUser {
+                                        if peer is IosappUser {
                                             isMuted = !globalNotificationSettings.privateChats.enabled
-                                        } else if peer is TelegramGroup {
+                                        } else if peer is IosappGroup {
                                             isMuted = !globalNotificationSettings.groupChats.enabled
-                                        } else if let channel = peer as? TelegramChannel {
+                                        } else if let channel = peer as? IosappChannel {
                                             switch channel.info {
                                             case .group:
                                                 isMuted = !globalNotificationSettings.groupChats.enabled

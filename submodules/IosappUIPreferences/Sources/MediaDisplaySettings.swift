@@ -34,7 +34,7 @@ public struct MediaDisplaySettings: Codable, Equatable {
     }
 }
 
-public func updateMediaDisplaySettingsInteractively(accountManager: AccountManager<TelegramAccountManagerTypes>, _ f: @escaping (MediaDisplaySettings) -> MediaDisplaySettings) -> Signal<Void, NoError> {
+public func updateMediaDisplaySettingsInteractively(accountManager: AccountManager<IosappAccountManagerTypes>, _ f: @escaping (MediaDisplaySettings) -> MediaDisplaySettings) -> Signal<Void, NoError> {
     return accountManager.transaction { transaction -> Void in
         transaction.updateSharedData(ApplicationSpecificSharedDataKeys.mediaDisplaySettings, { entry in
             let currentSettings: MediaDisplaySettings

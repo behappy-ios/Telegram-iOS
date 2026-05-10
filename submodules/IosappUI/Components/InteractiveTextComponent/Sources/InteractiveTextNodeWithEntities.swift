@@ -14,10 +14,10 @@ import EmojiTextAttachmentView
 
 private final class InlineStickerItem: Hashable {
     let emoji: ChatTextInputTextCustomEmojiAttribute
-    let file: TelegramMediaFile?
+    let file: IosappMediaFile?
     let fontSize: CGFloat
     
-    init(emoji: ChatTextInputTextCustomEmojiAttribute, file: TelegramMediaFile?, fontSize: CGFloat) {
+    init(emoji: ChatTextInputTextCustomEmojiAttribute, file: IosappMediaFile?, fontSize: CGFloat) {
         self.emoji = emoji
         self.file = file
         self.fontSize = fontSize

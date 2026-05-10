@@ -54,7 +54,7 @@ final class PeerNameColorChatPreviewItem: ListViewItem, ItemListItem, ListItemCo
         let outgoing: Bool
         let peerId: EnginePeer.Id
         let author: String
-        let photo: [TelegramMediaImageRepresentation]
+        let photo: [IosappMediaImageRepresentation]
         let nameColor: PeerColor
         let backgroundEmojiId: Int64?
         let reply: (String, String, PeerColor)?
@@ -69,12 +69,12 @@ final class PeerNameColorChatPreviewItem: ListViewItem, ItemListItem, ListItemCo
     let sectionId: ItemListSectionId
     let fontSize: PresentationFontSize
     let chatBubbleCorners: PresentationChatBubbleCorners
-    let wallpaper: TelegramWallpaper
+    let wallpaper: IosappWallpaper
     let dateTimeFormat: PresentationDateTimeFormat
     let nameDisplayOrder: PresentationPersonNameOrder
     let messageItems: [MessageItem]
     
-    init(context: AccountContext, theme: PresentationTheme, componentTheme: PresentationTheme, strings: PresentationStrings, sectionId: ItemListSectionId, fontSize: PresentationFontSize, chatBubbleCorners: PresentationChatBubbleCorners, wallpaper: TelegramWallpaper, dateTimeFormat: PresentationDateTimeFormat, nameDisplayOrder: PresentationPersonNameOrder, messageItems: [MessageItem]) {
+    init(context: AccountContext, theme: PresentationTheme, componentTheme: PresentationTheme, strings: PresentationStrings, sectionId: ItemListSectionId, fontSize: PresentationFontSize, chatBubbleCorners: PresentationChatBubbleCorners, wallpaper: IosappWallpaper, dateTimeFormat: PresentationDateTimeFormat, nameDisplayOrder: PresentationPersonNameOrder, messageItems: [MessageItem]) {
         self.context = context
         self.theme = theme
         self.componentTheme = componentTheme
@@ -225,19 +225,19 @@ final class PeerNameColorChatPreviewItemNode: ListViewItemNode {
                 var peers = SimpleDictionary<PeerId, Peer>()
                 var messages = SimpleDictionary<MessageId, Message>()
                 
-                peers[authorPeerId] = TelegramUser(id: authorPeerId, accessHash: nil, firstName: messageItem.author, lastName: "", username: nil, phone: nil, photo: messageItem.photo, botInfo: nil, restrictionInfo: nil, flags: [], emojiStatus: nil, usernames: [], storiesHidden: nil, nameColor: messageItem.nameColor, backgroundEmojiId: messageItem.backgroundEmojiId, profileColor: nil, profileBackgroundEmojiId: nil, subscriberCount: nil, verificationIconFileId: nil)
+                peers[authorPeerId] = IosappUser(id: authorPeerId, accessHash: nil, firstName: messageItem.author, lastName: "", username: nil, phone: nil, photo: messageItem.photo, botInfo: nil, restrictionInfo: nil, flags: [], emojiStatus: nil, usernames: [], storiesHidden: nil, nameColor: messageItem.nameColor, backgroundEmojiId: messageItem.backgroundEmojiId, profileColor: nil, profileBackgroundEmojiId: nil, subscriberCount: nil, verificationIconFileId: nil)
                 
                 
                 let replyMessageId = MessageId(peerId: peerId, namespace: 0, id: 3)
                 if let (replyAuthor, text, replyColor) = messageItem.reply {
-                    peers[replyAuthorPeerId] = TelegramUser(id: authorPeerId, accessHash: nil, firstName: replyAuthor, lastName: "", username: nil, phone: nil, photo: [], botInfo: nil, restrictionInfo: nil, flags: [], emojiStatus: nil, usernames: [], storiesHidden: nil, nameColor: replyColor, backgroundEmojiId: messageItem.backgroundEmojiId, profileColor: nil, profileBackgroundEmojiId: nil, subscriberCount: nil, verificationIconFileId: nil)
+                    peers[replyAuthorPeerId] = IosappUser(id: authorPeerId, accessHash: nil, firstName: replyAuthor, lastName: "", username: nil, phone: nil, photo: [], botInfo: nil, restrictionInfo: nil, flags: [], emojiStatus: nil, usernames: [], storiesHidden: nil, nameColor: replyColor, backgroundEmojiId: messageItem.backgroundEmojiId, profileColor: nil, profileBackgroundEmojiId: nil, subscriberCount: nil, verificationIconFileId: nil)
                     
                     messages[replyMessageId] = Message(stableId: 3, stableVersion: 0, id: replyMessageId, globallyUniqueId: nil, groupingKey: nil, groupInfo: nil, threadId: nil, timestamp: 66000, flags: [.Incoming], tags: [], globalTags: [], localTags: [], customTags: [], forwardInfo: nil, author: peers[replyAuthorPeerId], text: text, attributes: [], media: [], peers: peers, associatedMessages: SimpleDictionary(), associatedMessageIds: [], associatedMedia: [:], associatedThreadInfo: nil, associatedStories: [:])
                 }
                 
                 var media: [Media] = []
                 if let (site, title, text) = messageItem.linkPreview, params.width > 320.0 {
-                    media.append(TelegramMediaWebpage(webpageId: MediaId(namespace: 0, id: 0), content: .Loaded(TelegramMediaWebpageLoadedContent(url: "", displayUrl: "", hash: 0, type: nil, websiteName: site, title: title, text: text, embedUrl: nil, embedType: nil, embedSize: nil, duration: nil, author: nil, isMediaLargeByDefault: nil, imageIsVideoCover: false, image: nil, file: nil, story: nil, attributes: [], instantPage: nil))))
+                    media.append(IosappMediaWebpage(webpageId: MediaId(namespace: 0, id: 0), content: .Loaded(IosappMediaWebpageLoadedContent(url: "", displayUrl: "", hash: 0, type: nil, websiteName: site, title: title, text: text, embedUrl: nil, embedType: nil, embedSize: nil, duration: nil, author: nil, isMediaLargeByDefault: nil, imageIsVideoCover: false, image: nil, file: nil, story: nil, attributes: [], instantPage: nil))))
                 }
                 
                 let message = Message(stableId: 1, stableVersion: 0, id: MessageId(peerId: peerId, namespace: 0, id: 1), globallyUniqueId: nil, groupingKey: nil, groupInfo: nil, threadId: nil, timestamp: 66000, flags: messageItem.outgoing ? [] : [.Incoming], tags: [], globalTags: [], localTags: [], customTags: [], forwardInfo: nil, author: peers[authorPeerId], text: messageItem.text, attributes: messageItem.reply != nil ? [ReplyMessageAttribute(messageId: replyMessageId, threadMessageId: nil, quote: nil, isQuote: false, innerSubject: nil)] : [], media: media, peers: peers, associatedMessages: messages, associatedMessageIds: [], associatedMedia: [:], associatedThreadInfo: nil, associatedStories: [:])

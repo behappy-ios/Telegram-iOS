@@ -155,7 +155,7 @@ public class ChatMessageWallpaperBubbleContentNode: ChatMessageBubbleContentNode
         var currentMedia: Media?
         if let item = item {
             mediaLoop: for media in item.message.media {
-                if let media = media as? TelegramMediaAction {
+                if let media = media as? IosappMediaAction {
                     switch media.action {
                     case let .suggestedProfilePhoto(image):
                         currentMedia = image
@@ -186,7 +186,7 @@ public class ChatMessageWallpaperBubbleContentNode: ChatMessageBubbleContentNode
         
         var canRemove = false
         if item.message.effectivelyIncoming(item.context.account.peerId) {
-            if let media = item.message.media.first(where: { $0 is TelegramMediaAction }) as? TelegramMediaAction, case let .setChatWallpaper(wallpaper, forBoth) = media.action {
+            if let media = item.message.media.first(where: { $0 is IosappMediaAction }) as? IosappMediaAction, case let .setChatWallpaper(wallpaper, forBoth) = media.action {
                 if forBoth, item.presentationData.theme.wallpaper.isBasicallyEqual(to: wallpaper) {
                     canRemove = true
                 }
@@ -247,15 +247,15 @@ public class ChatMessageWallpaperBubbleContentNode: ChatMessageBubbleContentNode
                             
                 let primaryTextColor = serviceMessageColorComponents(theme: item.presentationData.theme.theme, wallpaper: item.presentationData.theme.wallpaper).primaryText
                                 
-                var wallpaper: TelegramWallpaper?
+                var wallpaper: IosappWallpaper?
                 var forBoth = false
-                if let media = item.message.media.first(where: { $0 is TelegramMediaAction }) as? TelegramMediaAction, case let .setChatWallpaper(wallpaperValue, forBothValue) = media.action {
+                if let media = item.message.media.first(where: { $0 is IosappMediaAction }) as? IosappMediaAction, case let .setChatWallpaper(wallpaperValue, forBothValue) = media.action {
                     wallpaper = wallpaperValue
                     forBoth = forBothValue
                 }
                 
                 var mediaUpdated = true
-                if let wallpaper = wallpaper, let media = currentItem?.message.media.first(where: { $0 is TelegramMediaAction }) as? TelegramMediaAction, case let .setChatWallpaper(currentWallpaper, _) = media.action {
+                if let wallpaper = wallpaper, let media = currentItem?.message.media.first(where: { $0 is IosappMediaAction }) as? IosappMediaAction, case let .setChatWallpaper(currentWallpaper, _) = media.action {
                     mediaUpdated = wallpaper != currentWallpaper
                 }
                 
@@ -268,7 +268,7 @@ public class ChatMessageWallpaperBubbleContentNode: ChatMessageBubbleContentNode
                 let isGroupOrChannel = item.message.id.peerId.isGroupOrChannel
                 var isGroup = false
                 let messagePeer = item.message.peers[item.message.id.peerId]
-                if let channel = messagePeer as? TelegramChannel, case .group = channel.info {
+                if let channel = messagePeer as? IosappChannel, case .group = channel.info {
                     isGroup = true
                 }
                 
@@ -343,7 +343,7 @@ public class ChatMessageWallpaperBubbleContentNode: ChatMessageBubbleContentNode
                                 
                                 var mediaContent = media.content
                                 if case let .emoticon(emoticon) = mediaContent, let theme = item.associatedData.chatThemes.first(where: { $0.emoticon?.strippedEmoji == emoticon.strippedEmoji }) {
-                                    let themeSettings: TelegramThemeSettings?
+                                    let themeSettings: IosappThemeSettings?
                                     if let matching = theme.settings?.first(where: { $0.baseTheme == item.presentationData.theme.theme.referenceTheme.baseTheme }) {
                                         themeSettings = matching
                                     } else {

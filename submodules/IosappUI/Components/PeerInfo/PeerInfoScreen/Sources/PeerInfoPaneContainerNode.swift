@@ -123,7 +123,7 @@ private final class GiftsTabItemComponent: Component {
                     if let current = self.iconLayers[id] {
                         animationLayer = current
                     } else {
-                        var file: TelegramMediaFile?
+                        var file: IosappMediaFile?
                         switch icon.gift {
                         case let .generic(gift):
                             file = gift.file
@@ -264,7 +264,7 @@ final class PeerInfoPaneTabsContainerPaneNode: ASDisplayNode {
                 if let _ = self.iconLayers[id] {
                     
                 } else {
-                    var file: TelegramMediaFile?
+                    var file: IosappMediaFile?
                     switch icon.gift {
                     case let .generic(gift):
                         file = gift.file
@@ -462,7 +462,7 @@ private final class PeerInfoPendingPane {
                 if let cachedUserData = data.cachedData as? CachedUserData, cachedUserData.disallowedGifts == .All {
                     canGift = false
                 }
-                if let channel = peer as? TelegramChannel, case .broadcast = channel.info {
+                if let channel = peer as? IosappChannel, case .broadcast = channel.info {
                     if channel.hasPermission(.sendSomething) {
                         canManage = true
                     }
@@ -476,7 +476,7 @@ private final class PeerInfoPendingPane {
             if let peer = data.peer {
                 if peer.id == context.account.peerId {
                     canManage = true
-                } else if let channel = peer as? TelegramChannel {
+                } else if let channel = peer as? IosappChannel {
                     if channel.hasPermission(.editStories) {
                         canManage = true
                     }
@@ -493,7 +493,7 @@ private final class PeerInfoPendingPane {
                 scope = .botPreview(id: peerId)
                 
                 if let peer = data.peer {
-                    if let user = peer as? TelegramUser, let botInfo = user.botInfo, botInfo.flags.contains(.canEdit) {
+                    if let user = peer as? IosappUser, let botInfo = user.botInfo, botInfo.flags.contains(.canEdit) {
                         canManage = true
                     }
                 }
@@ -1249,7 +1249,7 @@ final class PeerInfoPaneContainerNode: ASDisplayNode, ASGestureRecognizerDelegat
         if let peer = data?.peer {
             if peer.id == self.context.account.peerId {
                 canManageTabs = true
-            } else if let channel = data?.peer as? TelegramChannel, case .broadcast = channel.info {
+            } else if let channel = data?.peer as? IosappChannel, case .broadcast = channel.info {
                 if channel.hasPermission(.changeInfo) {
                     canManageTabs = true
                 }

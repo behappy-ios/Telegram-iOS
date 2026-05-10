@@ -30,11 +30,11 @@ import BrowserUI
 import PeerMessagesMediaPlaylist
 
 func openChatMessageImpl(_ params: OpenChatMessageParams) -> Bool {
-    var story: TelegramMediaStory?
+    var story: IosappMediaStory?
     for media in params.message.media {
-        if let media = media as? TelegramMediaStory {
+        if let media = media as? IosappMediaStory {
             story = media
-        } else if let webpage = media as? TelegramMediaWebpage, case let .Loaded(content) = webpage.content, content.story != nil {
+        } else if let webpage = media as? IosappMediaWebpage, case let .Loaded(content) = webpage.content, content.story != nil {
             story = content.story
         }
     }
@@ -185,7 +185,7 @@ func openChatMessageImpl(_ params: OpenChatMessageParams) -> Bool {
                 params.navigationController?.pushViewController(controller)
                 return true
             case let .stickerPack(reference, previewIconFile):
-                var previewIconFile: TelegramMediaFile? = previewIconFile
+                var previewIconFile: IosappMediaFile? = previewIconFile
                 if let file = previewIconFile, !file.isValidForDisplay(chatPeerId: params.message.id.peerId) {
                     previewIconFile = nil
                 }
@@ -376,7 +376,7 @@ func openChatMessageImpl(_ params: OpenChatMessageParams) -> Bool {
                 params.blockInteraction.set(.single(true))
             
                 var presentInCurrent = false
-                if let channel = params.message.peers[params.message.id.peerId] as? TelegramChannel, case .broadcast = channel.info {
+                if let channel = params.message.peers[params.message.id.peerId] as? IosappChannel, case .broadcast = channel.info {
                     if let layout = params.navigationController?.validLayout, case .regular = layout.metrics.widthClass {   
                     } else {
                         presentInCurrent = true
@@ -418,12 +418,12 @@ func openChatMessageImpl(_ params: OpenChatMessageParams) -> Bool {
                 return true
             case let .other(otherMedia):
                 params.dismissInput()
-                if let contact = otherMedia as? TelegramMediaContact {
+                if let contact = otherMedia as? IosappMediaContact {
                     let paramsSignal: Signal<(EnginePeer?, Bool), NoError>
                     if let peerId = contact.peerId {
                         paramsSignal = params.context.engine.data.get(
-                            TelegramEngine.EngineData.Item.Peer.Peer(id: peerId),
-                            TelegramEngine.EngineData.Item.Peer.IsContact(id: peerId)
+                            IosappEngine.EngineData.Item.Peer.Peer(id: peerId),
+                            IosappEngine.EngineData.Item.Peer.IsContact(id: peerId)
                         )
                     } else {
                         paramsSignal = .single((nil, false))
@@ -484,13 +484,13 @@ func makeInstantPageControllerImpl(context: AccountContext, message: Message, so
     return makeInstantPageControllerImpl(context: context, webPage: webpage, anchor: anchor, sourceLocation: sourceLocation)
 }
 
-func makeInstantPageControllerImpl(context: AccountContext, webPage: TelegramMediaWebpage, anchor: String?, sourceLocation: InstantPageSourceLocation) -> ViewController {
+func makeInstantPageControllerImpl(context: AccountContext, webPage: IosappMediaWebpage, anchor: String?, sourceLocation: InstantPageSourceLocation) -> ViewController {
     return BrowserScreen(context: context, subject: .instantPage(webPage: webPage, anchor: anchor, sourceLocation: sourceLocation, preloadedResources: nil))
 }
 
 func openChatWallpaperImpl(context: AccountContext, message: Message, present: @escaping (ViewController, Any?) -> Void) {
     for media in message.media {
-        if let webpage = media as? TelegramMediaWebpage, case let .Loaded(content) = webpage.content {
+        if let webpage = media as? IosappMediaWebpage, case let .Loaded(content) = webpage.content {
             let _ = (context.sharedContext.resolveUrl(context: context, peerId: nil, url: content.url, skipUrlAuth: true)
             |> deliverOnMainQueue).startStandalone(next: { resolvedUrl in
                 if case let .wallpaper(parameter) = resolvedUrl {
@@ -501,7 +501,7 @@ func openChatWallpaperImpl(context: AccountContext, message: Message, present: @
                         case let .color(color):
                             source = .wallpaper(.color(color.argb), nil, [], nil, nil, message)
                         case let .gradient(colors, rotation):
-                            source = .wallpaper(.gradient(TelegramWallpaper.Gradient(id: nil, colors: colors, settings: WallpaperSettings(rotation: rotation))), nil, [], nil, rotation, message)
+                            source = .wallpaper(.gradient(IosappWallpaper.Gradient(id: nil, colors: colors, settings: WallpaperSettings(rotation: rotation))), nil, [], nil, rotation, message)
                     }
                     
                     let controller = WallpaperGalleryController(context: context, source: source)
@@ -514,11 +514,11 @@ func openChatWallpaperImpl(context: AccountContext, message: Message, present: @
 
 func openChatTheme(context: AccountContext, message: Message, pushController: @escaping (ViewController) -> Void, present: @escaping (ViewController, Any?) -> Void) {
     for media in message.media {
-        if let webpage = media as? TelegramMediaWebpage, case let .Loaded(content) = webpage.content {
+        if let webpage = media as? IosappMediaWebpage, case let .Loaded(content) = webpage.content {
             let _ = (context.sharedContext.resolveUrl(context: context, peerId: nil, url: content.url, skipUrlAuth: true)
             |> deliverOnMainQueue).startStandalone(next: { resolvedUrl in
-                var file: TelegramMediaFile?
-                var settings: TelegramThemeSettings?
+                var file: IosappMediaFile?
+                var settings: IosappThemeSettings?
                 let themeMimeType = "application/x-tgtheme-ios"
                 
                 for attribute in content.attributes {

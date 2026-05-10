@@ -891,7 +891,7 @@ public func privacyAndSecurityController(
         twoStepAuth.set(hasTwoStepAuthDataValue)
     }
 
-    let passkeysDataValue = Promise<[TelegramPasskey]?>(nil)
+    let passkeysDataValue = Promise<[IosappPasskey]?>(nil)
     let hasPasskeysDataValue = passkeysDataValue.get()
     |> mapToSignal { data -> Signal<Bool?, NoError> in
         if let data = data {
@@ -944,7 +944,7 @@ public func privacyAndSecurityController(
 
     let updateHasPasskeys: () -> Void = {
         let signal = context.engine.auth.passkeysData()
-        |> map { value -> [TelegramPasskey]? in
+        |> map { value -> [IosappPasskey]? in
             return value
         }
         |> deliverOnMainQueue
@@ -1133,7 +1133,7 @@ public func privacyAndSecurityController(
         }))
     }, openVoiceMessagePrivacy: {
         let signal = combineLatest(
-            context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: context.account.peerId)),
+            context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: context.account.peerId)),
             privacySettingsPromise.get()
         )
         |> take(1)
@@ -1237,7 +1237,7 @@ public func privacyAndSecurityController(
             }
         })
     }, openTwoStepVerification: { data in
-        let _ = (context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: context.account.peerId))
+        let _ = (context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: context.account.peerId))
         |> deliverOnMainQueue).start(next: { peer in
             if let data = data {
                 switch data {
@@ -1537,8 +1537,8 @@ public func privacyAndSecurityController(
         context.sharedContext.accountManager.accessChallengeData(),
         combineLatest(twoStepAuth.get(), twoStepAuthDataValue.get()),
         combineLatest(passkeys.get(), passkeysDataValue.get()),
-        context.engine.data.subscribe(TelegramEngine.EngineData.Item.Configuration.App()),
-        context.engine.data.subscribe(TelegramEngine.EngineData.Item.Peer.Peer(id: context.account.peerId)),
+        context.engine.data.subscribe(IosappEngine.EngineData.Item.Configuration.App()),
+        context.engine.data.subscribe(IosappEngine.EngineData.Item.Peer.Peer(id: context.account.peerId)),
         loginEmail
     )
     |> map { presentationData, state, privacySettings, noticeView, sharedData, recentPeers, blockedPeersState, activeWebsitesState, accessChallengeData, twoStepAuth, passkeys, appConfiguration, accountPeer, loginEmail -> (ItemListControllerState, (ItemListNodeState, Any)) in

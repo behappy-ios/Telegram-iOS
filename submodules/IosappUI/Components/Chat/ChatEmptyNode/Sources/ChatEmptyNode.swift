@@ -103,7 +103,7 @@ public final class ChatEmptyNodeGreetingChatContent: ASDisplayNode, ChatEmptyNod
     
     private var didSetupSticker = false
     private let disposable = MetaDisposable()
-    private var currentCustomStickerFile: TelegramMediaFile?
+    private var currentCustomStickerFile: IosappMediaFile?
         
     public init(context: AccountContext, interaction: ChatPanelInterfaceInteraction?) {
         self.context = context
@@ -163,7 +163,7 @@ public final class ChatEmptyNodeGreetingChatContent: ASDisplayNode, ChatEmptyNod
             self.currentStrings = interfaceState.strings
         }
         
-        var customStickerFile: TelegramMediaFile?
+        var customStickerFile: IosappMediaFile?
         
         let serviceColor = serviceMessageColorComponents(theme: interfaceState.theme, wallpaper: interfaceState.chatWallpaper)
         if case let .emptyChat(emptyChat) = subject, case let .customGreeting(stickerFile, title, text) = emptyChat {
@@ -199,14 +199,14 @@ public final class ChatEmptyNodeGreetingChatContent: ASDisplayNode, ChatEmptyNod
         if let item = self.stickerItem, previousCustomStickerFile == customStickerFile {
             self.stickerNode.updateLayout(item: item, size: stickerSize, isVisible: true, synchronousLoads: true)
         } else if !self.didSetupSticker || previousCustomStickerFile != customStickerFile {
-            let sticker: Signal<TelegramMediaFile?, NoError>
+            let sticker: Signal<IosappMediaFile?, NoError>
             if let customStickerFile {
                 sticker = .single(customStickerFile)
             } else if let preloadedSticker = interfaceState.greetingData?.sticker {
                 sticker = preloadedSticker
             } else {
                 sticker = self.context.engine.stickers.randomGreetingSticker()
-                |> map { item -> TelegramMediaFile? in
+                |> map { item -> IosappMediaFile? in
                     return item?.file
                 }
             }
@@ -389,12 +389,12 @@ public final class ChatEmptyNodeNearbyChatContent: ASDisplayNode, ChatEmptyNodeS
         if let item = self.stickerItem {
             self.stickerNode.updateLayout(item: item, size: stickerSize, isVisible: true, synchronousLoads: true)
         } else if !self.didSetupSticker {
-            let sticker: Signal<TelegramMediaFile?, NoError>
+            let sticker: Signal<IosappMediaFile?, NoError>
             if let preloadedSticker = interfaceState.greetingData?.sticker {
                 sticker = preloadedSticker
             } else {
                 sticker = self.context.engine.stickers.randomGreetingSticker()
-                |> map { item -> TelegramMediaFile? in
+                |> map { item -> IosappMediaFile? in
                     return item?.file
                 }
             }
@@ -504,7 +504,7 @@ private final class ChatEmptyNodeSecretChatContent: ASDisplayNode, ChatEmptyNode
             var title = " "
             var incoming = false
             if let renderedPeer = interfaceState.renderedPeer {
-                if let chatPeer = renderedPeer.peers[renderedPeer.peerId] as? TelegramSecretChat {
+                if let chatPeer = renderedPeer.peers[renderedPeer.peerId] as? IosappSecretChat {
                     if case .participant = chatPeer.role {
                         incoming = true
                     }
@@ -730,7 +730,7 @@ private final class ChatEmptyNodeCloudChatContent: ASDisplayNode, ChatEmptyNodeC
     private var currentTheme: PresentationTheme?
     private var currentStrings: PresentationStrings?
     
-    private var businessLink: TelegramBusinessChatLinks.Link?
+    private var businessLink: IosappBusinessChatLinks.Link?
     var shareBusinessLink: ((String) -> Void)?
     
     override init() {
@@ -1299,7 +1299,7 @@ public final class ChatEmptyNodePremiumRequiredChatContent: ASDisplayNode, ChatE
             let starsString = presentationStringsFormattedNumber(Int32(amount), interfaceState.dateTimeFormat.groupingSeparator)
             let rawText: String
             
-            if let channel = interfaceState.renderedPeer?.peer as? TelegramChannel, channel.isMonoForum {
+            if let channel = interfaceState.renderedPeer?.peer as? IosappChannel, channel.isMonoForum {
                 rawText = interfaceState.strings.Chat_EmptyStateMonoforumPaid_Text(peerTitle, " $ \(starsString)").string
             } else if self.isPremiumDisabled {
                 rawText = interfaceState.strings.Chat_EmptyStatePaidMessagingDisabled_Text(peerTitle, " $ \(starsString)").string
@@ -1315,7 +1315,7 @@ public final class ChatEmptyNodePremiumRequiredChatContent: ASDisplayNode, ChatE
             text = attributedString
             actionText = interfaceState.strings.Chat_EmptyStatePaidMessaging_Action
         } else {
-            if let channel = interfaceState.renderedPeer?.peer as? TelegramChannel, channel.isMonoForum {
+            if let channel = interfaceState.renderedPeer?.peer as? IosappChannel, channel.isMonoForum {
                 let rawText = interfaceState.strings.Chat_EmptyStateMonoforum_Text(peerTitle).string
                 text = parseMarkdownIntoAttributedString(rawText, attributes: attributes)
             } else {
@@ -1379,7 +1379,7 @@ public final class ChatEmptyNodePremiumRequiredChatContent: ASDisplayNode, ChatE
         
         let iconComponent: AnyComponent<Empty>
         do {
-            if let channel = interfaceState.renderedPeer?.peer as? TelegramChannel, channel.isMonoForum {
+            if let channel = interfaceState.renderedPeer?.peer as? IosappChannel, channel.isMonoForum {
                 if let view = self.icon.view, !(view is BundleIconComponent.View) {
                     view.removeFromSuperview()
                     self.icon = ComponentView()
@@ -1472,11 +1472,11 @@ private final class EmptyAttachedDescriptionNode: HighlightTrackingButtonNode {
     private struct Params: Equatable {
         var theme: PresentationTheme
         var strings: PresentationStrings
-        var chatWallpaper: TelegramWallpaper
+        var chatWallpaper: IosappWallpaper
         var peer: EnginePeer
         var constrainedSize: CGSize
         
-        init(theme: PresentationTheme, strings: PresentationStrings, chatWallpaper: TelegramWallpaper, peer: EnginePeer, constrainedSize: CGSize) {
+        init(theme: PresentationTheme, strings: PresentationStrings, chatWallpaper: IosappWallpaper, peer: EnginePeer, constrainedSize: CGSize) {
             self.theme = theme
             self.strings = strings
             self.chatWallpaper = chatWallpaper
@@ -1583,7 +1583,7 @@ private final class EmptyAttachedDescriptionNode: HighlightTrackingButtonNode {
     func update(
         theme: PresentationTheme,
         strings: PresentationStrings,
-        chatWallpaper: TelegramWallpaper,
+        chatWallpaper: IosappWallpaper,
         peer: EnginePeer,
         wallpaperBackgroundNode: WallpaperBackgroundNode?,
         constrainedSize: CGSize
@@ -1738,7 +1738,7 @@ public final class ChatEmptyNode: ASDisplayNode {
             case clearedHistory
             case topic
             case botInfo
-            case customGreeting(sticker: TelegramMediaFile?, title: String, text: String)
+            case customGreeting(sticker: IosappMediaFile?, title: String, text: String)
         }
         
         case emptyChat(EmptyType)
@@ -1845,15 +1845,15 @@ public final class ChatEmptyNode: ASDisplayNode {
             } else if let peer = interfaceState.renderedPeer?.peer, !isScheduledMessages {
                  if peer.id == self.context.account.peerId {
                     contentType = .cloud
-                } else if let _ = peer as? TelegramSecretChat {
+                } else if let _ = peer as? IosappSecretChat {
                     contentType = .secret
-                } else if let group = peer as? TelegramGroup, case .creator = group.role {
+                } else if let group = peer as? IosappGroup, case .creator = group.role {
                     contentType = .group
-                } else if let channel = peer as? TelegramChannel, case .group = channel.info, channel.flags.contains(.isCreator) && !channel.flags.contains(.isGigagroup) && !channel.isMonoForum {
+                } else if let channel = peer as? IosappChannel, case .group = channel.info, channel.flags.contains(.isCreator) && !channel.flags.contains(.isGigagroup) && !channel.isMonoForum {
                     contentType = .group
                 } else if let _ = interfaceState.peerNearbyData {
                     contentType = .peerNearby
-                } else if let peer = peer as? TelegramUser {
+                } else if let peer = peer as? IosappUser {
                     if let sendPaidMessageStars = interfaceState.sendPaidMessageStars, interfaceState.businessIntro == nil {
                         contentType = .starsRequired(sendPaidMessageStars.value)
                     } else if interfaceState.isPremiumRequiredForMessaging {
@@ -1868,8 +1868,8 @@ public final class ChatEmptyNode: ASDisplayNode {
                             }
                         }
                     }
-                } else if let channel = peer as? TelegramChannel, channel.isMonoForum {
-                    if let mainChannel = interfaceState.renderedPeer?.chatOrMonoforumMainPeer as? TelegramChannel, mainChannel.hasPermission(.manageDirect) {
+                } else if let channel = peer as? IosappChannel, channel.isMonoForum {
+                    if let mainChannel = interfaceState.renderedPeer?.chatOrMonoforumMainPeer as? IosappChannel, mainChannel.hasPermission(.manageDirect) {
                         contentType = .regular
                     } else {
                         contentType = .starsRequired(interfaceState.sendPaidMessageStars?.value)

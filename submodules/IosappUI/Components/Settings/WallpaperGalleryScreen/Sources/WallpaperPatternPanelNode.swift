@@ -40,7 +40,7 @@ private func sliderValueToIntensity(_ value: CGFloat, allowDark: Bool) -> Int32 
 
 private struct WallpaperPatternEntry: Comparable, Identifiable {
     let index: Int
-    let wallpaper: TelegramWallpaper
+    let wallpaper: IosappWallpaper
     let selected: Bool
     
     var stableId: Int64 {
@@ -65,18 +65,18 @@ private struct WallpaperPatternEntry: Comparable, Identifiable {
         return lhs.index < rhs.index
     }
     
-    func item(context: AccountContext, action: @escaping (TelegramWallpaper) -> Void) -> ListViewItem {
+    func item(context: AccountContext, action: @escaping (IosappWallpaper) -> Void) -> ListViewItem {
         return WallpaperPatternItem(context: context, wallpaper: self.wallpaper, selected: self.selected, action: action)
     }
 }
 
 private class WallpaperPatternItem: ListViewItem {
     let context: AccountContext
-    let wallpaper: TelegramWallpaper
+    let wallpaper: IosappWallpaper
     let selected: Bool
-    let action: (TelegramWallpaper) -> Void
+    let action: (IosappWallpaper) -> Void
     
-    public init(context: AccountContext, wallpaper: TelegramWallpaper, selected: Bool, action: @escaping (TelegramWallpaper) -> Void) {
+    public init(context: AccountContext, wallpaper: IosappWallpaper, selected: Bool, action: @escaping (IosappWallpaper) -> Void) {
         self.context = context
         self.wallpaper = wallpaper
         self.selected = selected
@@ -187,8 +187,8 @@ public final class WallpaperPatternPanelNode: ASDisplayNode {
     private var sliderView: TGPhotoEditorSliderView?
     
     private var disposable: Disposable?
-    public var wallpapers: [TelegramWallpaper] = []
-    private var currentWallpaper: TelegramWallpaper?
+    public var wallpapers: [IosappWallpaper] = []
+    private var currentWallpaper: IosappWallpaper?
     
     public var serviceBackgroundColor: UIColor = UIColor(rgb: 0x748698) {
         didSet {
@@ -224,7 +224,7 @@ public final class WallpaperPatternPanelNode: ASDisplayNode {
     
     private var validLayout: (CGSize, CGFloat)?
     
-    public var patternChanged: ((TelegramWallpaper?, Int32?, Bool) -> Void)?
+    public var patternChanged: ((IosappWallpaper?, Int32?, Bool) -> Void)?
 
     private let allowDark: Bool
 
@@ -257,7 +257,7 @@ public final class WallpaperPatternPanelNode: ASDisplayNode {
         self.addSubnode(self.titleNode)
         self.addSubnode(self.labelNode)
         self.disposable = ((telegramWallpapers(postbox: context.account.postbox, network: context.account.network)
-        |> map { wallpapers -> [TelegramWallpaper] in
+        |> map { wallpapers -> [IosappWallpaper] in
             var existingIds = Set<MediaId>()
 
             return wallpapers.filter { wallpaper in
@@ -354,7 +354,7 @@ public final class WallpaperPatternPanelNode: ASDisplayNode {
             var updatedWallpaper = wallpaper
             if case let .file(file) = updatedWallpaper {
                 let settings = WallpaperSettings(colors: backgroundColors.0, intensity: intensity, rotation: backgroundColors.1)
-                updatedWallpaper = .file(TelegramWallpaper.File(id: file.id, accessHash: file.accessHash, isCreator: file.isCreator, isDefault: file.isDefault, isPattern: updatedWallpaper.isPattern, isDark: file.isDark, slug: file.slug, file: file.file, settings: settings))
+                updatedWallpaper = .file(IosappWallpaper.File(id: file.id, accessHash: file.accessHash, isCreator: file.isCreator, isDefault: file.isDefault, isPattern: updatedWallpaper.isPattern, isDark: file.isDark, slug: file.slug, file: file.file, settings: settings))
             }
             
             var selected = false
@@ -417,8 +417,8 @@ public final class WallpaperPatternPanelNode: ASDisplayNode {
         }
     }
     
-    public func didAppear(initialWallpaper: TelegramWallpaper? = nil, intensity: Int32? = nil) {
-        let wallpaper: TelegramWallpaper?
+    public func didAppear(initialWallpaper: IosappWallpaper? = nil, intensity: Int32? = nil) {
+        let wallpaper: IosappWallpaper?
 
         if self.wallpapers.isEmpty {
             wallpaper = nil

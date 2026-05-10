@@ -87,7 +87,7 @@ private func parseDialogs(accountPeerId: PeerId, apiDialogs: [Api.Dialog], apiMe
                 let (flags, peer, topMessage, readInboxMaxId, readOutboxMaxId, unreadCount, unreadMentionsCount, unreadReactionsCount, unreadPollVoteCount, peerNotificationSettings, pts, ttlPeriod) = (dialogData.flags, dialogData.peer, dialogData.topMessage, dialogData.readInboxMaxId, dialogData.readOutboxMaxId, dialogData.unreadCount, dialogData.unreadMentionsCount, dialogData.unreadReactionsCount, dialogData.unreadPollVotesCount, dialogData.notifySettings, dialogData.pts, dialogData.ttlPeriod)
                 if let peer = peers.get(peer.peerId) {
                     var isExluded = false
-                    if let group = peer as? TelegramGroup {
+                    if let group = peer as? IosappGroup {
                         if group.flags.contains(.deactivated) {
                             isExluded = true
                         }
@@ -144,7 +144,7 @@ private func parseDialogs(accountPeerId: PeerId, apiDialogs: [Api.Dialog], apiMe
                     channelStates[peerId] = apiChannelPts
                 }
                 
-                notificationSettings[peerId] = TelegramPeerNotificationSettings(apiSettings: apiNotificationSettings)
+                notificationSettings[peerId] = IosappPeerNotificationSettings(apiSettings: apiNotificationSettings)
             case let .dialogFolder(dialogFolderData):
                 let (folder, unreadMutedPeersCount, unreadMutedMessagesCount) = (dialogFolderData.folder, dialogFolderData.unreadMutedPeersCount, dialogFolderData.unreadMutedMessagesCount)
                 switch folder {

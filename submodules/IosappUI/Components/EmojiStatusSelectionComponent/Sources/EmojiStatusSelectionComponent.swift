@@ -23,7 +23,7 @@ import IosappNotices
 
 private func randomGenericReactionEffect(context: AccountContext) -> Signal<String?, NoError> {
     return context.engine.stickers.loadedStickerPack(reference: .emojiGenericAnimations, forceActualized: false)
-    |> map { result -> TelegramMediaFile? in
+    |> map { result -> IosappMediaFile? in
         switch result {
         case let .result(_, items, _):
             return items.randomElement()?.file._parse()
@@ -304,8 +304,8 @@ public final class EmojiStatusSelectionController: ViewController {
             }
         }
         
-        private var emptyResultEmojis: [TelegramMediaFile] = []
-        private var stableEmptyResultEmoji: TelegramMediaFile?
+        private var emptyResultEmojis: [IosappMediaFile] = []
+        private var stableEmptyResultEmoji: IosappMediaFile?
         private let stableEmptyResultEmojiDisposable = MetaDisposable()
         
         private var previewItem: (groupId: AnyHashable, item: EmojiPagerContentComponent.Item)?
@@ -368,13 +368,13 @@ public final class EmojiStatusSelectionController: ViewController {
             self.layer.addSublayer(self.cloudLayer1)
             
             self.stableEmptyResultEmojiDisposable.set((self.context.engine.data.get(
-                TelegramEngine.EngineData.Item.Collections.FeaturedEmojiPacks()
+                IosappEngine.EngineData.Item.Collections.FeaturedEmojiPacks()
             )
             |> deliverOnMainQueue).start(next: { [weak self] featuredEmojiPacks in
                 guard let strongSelf = self else {
                     return
                 }
-                var filteredFiles: [TelegramMediaFile] = []
+                var filteredFiles: [IosappMediaFile] = []
                 let filterList: [String] = ["😖", "😫", "🫠", "😨", "❓"]
                 for featuredEmojiPack in featuredEmojiPacks {
                     for item in featuredEmojiPack.topItems {
@@ -442,7 +442,7 @@ public final class EmojiStatusSelectionController: ViewController {
                         }
                         
                         let _ = (strongSelf.context.engine.data.get(
-                            TelegramEngine.EngineData.Item.Collections.FeaturedEmojiPacks()
+                            IosappEngine.EngineData.Item.Collections.FeaturedEmojiPacks()
                         )
                         |> deliverOnMainQueue).start(next: { featuredEmojiPacks in
                             guard let strongSelf = self else {
@@ -506,7 +506,7 @@ public final class EmojiStatusSelectionController: ViewController {
                                     }
                                 }
                             
-                                let hasPremium = context.engine.data.subscribe(TelegramEngine.EngineData.Item.Peer.Peer(id: context.account.peerId))
+                                let hasPremium = context.engine.data.subscribe(IosappEngine.EngineData.Item.Peer.Peer(id: context.account.peerId))
                                 |> map { peer -> Bool in
                                     guard case let .user(user) = peer else {
                                         return false
@@ -524,7 +524,7 @@ public final class EmojiStatusSelectionController: ViewController {
                                     )
                                     |> take(1)
                                     |> map { view, availableReactions, hasPremium -> [EmojiPagerContentComponent.ItemGroup] in
-                                        var result: [(String, TelegramMediaFile.Accessor?, String)] = []
+                                        var result: [(String, IosappMediaFile.Accessor?, String)] = []
                                         
                                         var allEmoticons: [String: String] = [:]
                                         for keyword in keywords {
@@ -614,11 +614,11 @@ public final class EmojiStatusSelectionController: ViewController {
                                         continue
                                     }
                                     existingIds.insert(itemFile.fileId)
-                                    let animationData = EntityKeyboardAnimationData(file: TelegramMediaFile.Accessor(itemFile))
+                                    let animationData = EntityKeyboardAnimationData(file: IosappMediaFile.Accessor(itemFile))
                                     let item = EmojiPagerContentComponent.Item(
                                         animationData: animationData,
                                         content: .animation(animationData),
-                                        itemFile: TelegramMediaFile.Accessor(itemFile),
+                                        itemFile: IosappMediaFile.Accessor(itemFile),
                                         subgroupId: nil,
                                         icon: .none,
                                         tintMode: animationData.isTemplate ? .primary : .none
@@ -1432,8 +1432,8 @@ public final class EmojiStatusSelectionController: ViewController {
     
     public enum Mode {
         case statusSelection
-        case backgroundSelection(completion: (TelegramMediaFile?) -> Void)
-        case customStatusSelection(completion: (TelegramMediaFile?, Int32?) -> Void)
+        case backgroundSelection(completion: (IosappMediaFile?) -> Void)
+        case customStatusSelection(completion: (IosappMediaFile?, Int32?) -> Void)
         case quickReactionSelection(completion: () -> Void)
     }
     
@@ -1539,12 +1539,12 @@ private func generateParabollicMotionKeyframes(from sourcePoint: CGPoint, to tar
 }
 
 extension EmojiPagerContentComponent.Item {
-    var displayFile: TelegramMediaFile.Accessor? {
+    var displayFile: IosappMediaFile.Accessor? {
         if let file = self.itemFile {
             return file
         } else if let gift = self.itemGift {
             if let itemFile = gift.itemFile {
-                return TelegramMediaFile.Accessor(itemFile)
+                return IosappMediaFile.Accessor(itemFile)
             } else {
                 return nil
             }

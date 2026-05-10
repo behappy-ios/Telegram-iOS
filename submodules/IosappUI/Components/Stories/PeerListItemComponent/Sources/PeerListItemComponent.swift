@@ -150,12 +150,12 @@ public final class PeerListItemComponent: Component {
     
     public final class Reaction: Equatable {
         public let reaction: MessageReaction.Reaction
-        public let file: TelegramMediaFile?
+        public let file: IosappMediaFile?
         public let animationFileId: Int64?
         
         public init(
             reaction: MessageReaction.Reaction,
-            file: TelegramMediaFile?,
+            file: IosappMediaFile?,
             animationFileId: Int64?
         ) {
             self.reaction = reaction
@@ -425,7 +425,7 @@ public final class PeerListItemComponent: Component {
         private var reactionLayer: InlineStickerItemLayer?
         private var heartReactionIcon: UIImageView?
         private var iconFrame: CGRect?
-        private var file: TelegramMediaFile?
+        private var file: IosappMediaFile?
         private var fileDisposable: Disposable?
         
         private var imageButtonView: HighlightTrackingButton?
@@ -1326,9 +1326,9 @@ public final class PeerListItemComponent: Component {
                 } else if let message = component.message {
                     var selectedMedia: Media?
                     for media in message.media {
-                        if let image = media as? TelegramMediaImage {
+                        if let image = media as? IosappMediaImage {
                             selectedMedia = image
-                        } else if let file = media as? TelegramMediaFile {
+                        } else if let file = media as? IosappMediaFile {
                             selectedMedia = file
                         }
                     }
@@ -1341,9 +1341,9 @@ public final class PeerListItemComponent: Component {
             if let peer = component.peer, let mediaReference {
                 let contentImageSize = CGSize(width: 30.0, height: 42.0)
                 var dimensions: CGSize?
-                if let imageMedia = mediaReference.media as? TelegramMediaImage {
+                if let imageMedia = mediaReference.media as? IosappMediaImage {
                     dimensions = largestRepresentationForPhoto(imageMedia)?.dimensions.cgSize
-                } else if let imageMedia = mediaReference.media as? TelegramMediaFile {
+                } else if let imageMedia = mediaReference.media as? IosappMediaFile {
                     dimensions = imageMedia.dimensions?.cgSize
                 }
                 
@@ -1366,9 +1366,9 @@ public final class PeerListItemComponent: Component {
                     self.addSubview(imageButtonView)
                     
                     var imageSignal: Signal<(TransformImageArguments) -> DrawingContext?, NoError>?
-                    if let imageReference = mediaReference.concrete(TelegramMediaImage.self) {
+                    if let imageReference = mediaReference.concrete(IosappMediaImage.self) {
                         imageSignal = mediaGridMessagePhoto(account: component.context.account, userLocation: .peer(peer.id), photoReference: imageReference)
-                    } else if let fileReference = mediaReference.concrete(TelegramMediaFile.self) {
+                    } else if let fileReference = mediaReference.concrete(IosappMediaFile.self) {
                         imageSignal = mediaGridMessageVideo(postbox: component.context.account.postbox, userLocation: .peer(peer.id), videoReference: fileReference, autoFetchFullSizeThumbnail: true)
                     }
                     if let imageSignal {

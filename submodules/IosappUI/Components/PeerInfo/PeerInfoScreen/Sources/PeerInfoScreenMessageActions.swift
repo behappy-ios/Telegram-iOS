@@ -19,9 +19,9 @@ extension PeerInfoScreenNode {
                     var items: [ActionSheetItem] = []
                     var personalPeerName: String?
                     var isChannel = false
-                    if let user = peer as? TelegramUser {
+                    if let user = peer as? IosappUser {
                         personalPeerName = EnginePeer(user).compactDisplayTitle
-                    } else if let channel = peer as? TelegramChannel, case .broadcast = channel.info {
+                    } else if let channel = peer as? IosappChannel, case .broadcast = channel.info {
                         isChannel = true
                     }
                     
@@ -166,7 +166,7 @@ extension PeerInfoScreenNode {
 
                 strongSelf.controller?.present(UndoOverlayController(presentationData: presentationData, content: .forward(savedMessages: savedMessages, text: text), elevatedLayout: false, animateInAsReplacement: true, action: { action in
                     if savedMessages, let self, action == .info {
-                        let _ = (self.context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: self.context.account.peerId))
+                        let _ = (self.context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: self.context.account.peerId))
                         |> deliverOnMainQueue).start(next: { [weak self] peer in
                             guard let self, let peer else {
                                 return
@@ -192,7 +192,7 @@ extension PeerInfoScreenNode {
                         let presentationData = strongSelf.context.sharedContext.currentPresentationData.with { $0 }
                         strongSelf.controller?.present(UndoOverlayController(presentationData: presentationData, content: .forward(savedMessages: true, text: messageIds.count == 1 ? presentationData.strings.Conversation_ForwardTooltip_SavedMessages_One : presentationData.strings.Conversation_ForwardTooltip_SavedMessages_Many), elevatedLayout: false, animateInAsReplacement: true, action: { action in
                             if let self, action == .info {
-                                let _ = (self.context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: self.context.account.peerId))
+                                let _ = (self.context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: self.context.account.peerId))
                                 |> deliverOnMainQueue).start(next: { [weak self] peer in
                                     guard let self, let peer else {
                                         return

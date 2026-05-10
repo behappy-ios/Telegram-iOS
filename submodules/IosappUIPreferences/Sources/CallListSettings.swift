@@ -52,7 +52,7 @@ public struct CallListSettings: Codable, Equatable {
     }
 }
 
-public func updateCallListSettingsInteractively(accountManager: AccountManager<TelegramAccountManagerTypes>, _ f: @escaping (CallListSettings) -> CallListSettings) -> Signal<Void, NoError> {
+public func updateCallListSettingsInteractively(accountManager: AccountManager<IosappAccountManagerTypes>, _ f: @escaping (CallListSettings) -> CallListSettings) -> Signal<Void, NoError> {
     return accountManager.transaction { transaction -> Void in
         transaction.updateSharedData(ApplicationSpecificSharedDataKeys.callListSettings, { entry in
             let currentSettings: CallListSettings

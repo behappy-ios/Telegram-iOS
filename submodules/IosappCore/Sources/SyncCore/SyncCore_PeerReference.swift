@@ -57,15 +57,15 @@ public enum PeerReference: PostboxCoding, Hashable, Equatable {
     
     public init?(_ peer: Peer) {
         switch peer {
-            case let user as TelegramUser:
+            case let user as IosappUser:
                 if let accessHash = user.accessHash {
                     self = .user(id: user.id.id._internalGetInt64Value(), accessHash: accessHash.value)
                 } else {
                     return nil
                 }
-            case let group as TelegramGroup:
+            case let group as IosappGroup:
                 self = .group(id: group.id.id._internalGetInt64Value())
-            case let channel as TelegramChannel:
+            case let channel as IosappChannel:
                 if let accessHash = channel.accessHash {
                     self = .channel(id: channel.id.id._internalGetInt64Value(), accessHash: accessHash.value)
                 } else {
@@ -76,20 +76,20 @@ public enum PeerReference: PostboxCoding, Hashable, Equatable {
         }
     }
     
-    public init(flatBuffersObject: TelegramCore_PeerReference) throws {
+    public init(flatBuffersObject: IosappCore_PeerReference) throws {
         switch flatBuffersObject.valueType {
         case .peerreferenceUser:
-            guard let value = flatBuffersObject.value(type: TelegramCore_PeerReference_User.self) else {
+            guard let value = flatBuffersObject.value(type: IosappCore_PeerReference_User.self) else {
                 throw FlatBuffersError.missingRequiredField()
             }
             self = .user(id: value.id, accessHash: value.accessHash)
         case .peerreferenceGroup:
-            guard let value = flatBuffersObject.value(type: TelegramCore_PeerReference_Group.self) else {
+            guard let value = flatBuffersObject.value(type: IosappCore_PeerReference_Group.self) else {
                 throw FlatBuffersError.missingRequiredField()
             }
             self = .group(id: value.id)
         case .peerreferenceChannel:
-            guard let value = flatBuffersObject.value(type: TelegramCore_PeerReference_Channel.self) else {
+            guard let value = flatBuffersObject.value(type: IosappCore_PeerReference_Channel.self) else {
                 throw FlatBuffersError.missingRequiredField()
             }
             self = .channel(id: value.id, accessHash: value.accessHash)
@@ -101,22 +101,22 @@ public enum PeerReference: PostboxCoding, Hashable, Equatable {
     public func encodeToFlatBuffers(builder: inout FlatBufferBuilder) -> Offset {
         switch self {
         case let .user(id, accessHash):
-            let start = TelegramCore_PeerReference.startPeerReference(&builder)
-            TelegramCore_PeerReference_User.add(id: id, &builder)
-            TelegramCore_PeerReference_User.add(accessHash: accessHash, &builder)
-            let offset = TelegramCore_PeerReference_User.endPeerReference_User(&builder, start: start)
-            return TelegramCore_PeerReference.createPeerReference(&builder, valueType: .peerreferenceUser, valueOffset: offset)
+            let start = IosappCore_PeerReference.startPeerReference(&builder)
+            IosappCore_PeerReference_User.add(id: id, &builder)
+            IosappCore_PeerReference_User.add(accessHash: accessHash, &builder)
+            let offset = IosappCore_PeerReference_User.endPeerReference_User(&builder, start: start)
+            return IosappCore_PeerReference.createPeerReference(&builder, valueType: .peerreferenceUser, valueOffset: offset)
         case let .group(id):
-            let start = TelegramCore_PeerReference.startPeerReference(&builder)
-            TelegramCore_PeerReference_Group.add(id: id, &builder)
-            let offset = TelegramCore_PeerReference_Group.endPeerReference_Group(&builder, start: start)
-            return TelegramCore_PeerReference.createPeerReference(&builder, valueType: .peerreferenceGroup, valueOffset: offset)
+            let start = IosappCore_PeerReference.startPeerReference(&builder)
+            IosappCore_PeerReference_Group.add(id: id, &builder)
+            let offset = IosappCore_PeerReference_Group.endPeerReference_Group(&builder, start: start)
+            return IosappCore_PeerReference.createPeerReference(&builder, valueType: .peerreferenceGroup, valueOffset: offset)
         case let .channel(id, accessHash):
-            let start = TelegramCore_PeerReference.startPeerReference(&builder)
-            TelegramCore_PeerReference_Channel.add(id: id, &builder)
-            TelegramCore_PeerReference_Channel.add(accessHash: accessHash, &builder)
-            let offset = TelegramCore_PeerReference_Channel.endPeerReference_Channel(&builder, start: start)
-            return TelegramCore_PeerReference.createPeerReference(&builder, valueType: .peerreferenceChannel, valueOffset: offset)
+            let start = IosappCore_PeerReference.startPeerReference(&builder)
+            IosappCore_PeerReference_Channel.add(id: id, &builder)
+            IosappCore_PeerReference_Channel.add(accessHash: accessHash, &builder)
+            let offset = IosappCore_PeerReference_Channel.endPeerReference_Channel(&builder, start: start)
+            return IosappCore_PeerReference.createPeerReference(&builder, valueType: .peerreferenceChannel, valueOffset: offset)
         }
     }
 }

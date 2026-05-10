@@ -1286,7 +1286,7 @@ private final class StoryContainerScreenComponent: Component {
                 })
                 
                 self.stealthModeDisposable = (component.context.engine.data.subscribe(
-                    TelegramEngine.EngineData.Item.Configuration.StoryConfigurationState()
+                    IosappEngine.EngineData.Item.Configuration.StoryConfigurationState()
                 )
                 |> deliverOnMainQueue).start(next: { [weak self] state in
                     guard let self else {
@@ -1349,7 +1349,7 @@ private final class StoryContainerScreenComponent: Component {
                     )
                     
                     self.closeFriendsPromise.set(
-                        component.context.engine.data.get(TelegramEngine.EngineData.Item.Contacts.CloseFriends())
+                        component.context.engine.data.get(IosappEngine.EngineData.Item.Contacts.CloseFriends())
                     )
                     
                     self.blockedPeers = BlockedPeersContext(account: component.context.account, subject: .stories)

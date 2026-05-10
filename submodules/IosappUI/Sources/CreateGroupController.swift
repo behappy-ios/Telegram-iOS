@@ -43,7 +43,7 @@ private struct CreateGroupArguments {
     let done: () -> Void
     let changeProfilePhoto: () -> Void
     let changeLocation: () -> Void
-    let updateWithVenue: (TelegramMediaMap) -> Void
+    let updateWithVenue: (IosappMediaMap) -> Void
     let updateAutoDelete: () -> Void
     let updatePublicLinkText: (String) -> Void
     let openAuction: (String) -> Void
@@ -89,7 +89,7 @@ private enum CreateGroupEntry: ItemListNodeEntry {
     case changeLocation(PresentationTheme, String)
     case locationInfo(PresentationTheme, String)
     case venueHeader(PresentationTheme, String)
-    case venue(Int32, PresentationTheme, TelegramMediaMap)
+    case venue(Int32, PresentationTheme, IosappMediaMap)
     
     var section: ItemListSectionId {
         switch self {
@@ -407,12 +407,12 @@ private struct CreateGroupState: Equatable {
     var addressNameValidationStatus: AddressNameValidationStatus?
 }
 
-private func createGroupEntries(presentationData: PresentationData, state: CreateGroupState, peerIds: [PeerId], view: MultiplePeersView, venues: [TelegramMediaMap]?, globalAutoremoveTimeout: Int32, requestPeer: ReplyMarkupButtonRequestPeerType.Group?) -> [CreateGroupEntry] {
+private func createGroupEntries(presentationData: PresentationData, state: CreateGroupState, peerIds: [PeerId], view: MultiplePeersView, venues: [IosappMediaMap]?, globalAutoremoveTimeout: Int32, requestPeer: ReplyMarkupButtonRequestPeerType.Group?) -> [CreateGroupEntry] {
     var entries: [CreateGroupEntry] = []
     
     let groupInfoState = ItemListAvatarAndNameInfoItemState(editingName: state.editingName, updatingName: nil)
     
-    let peer = TelegramGroup(id: PeerId(namespace: .max, id: PeerId.Id._internalFromInt64Value(0)), title: state.editingName.composedTitle, photo: [], participantCount: 0, role: .creator(rank: nil), membership: .Member, flags: [], defaultBannedRights: nil, migrationReference: nil, creationDate: 0, version: 0)
+    let peer = IosappGroup(id: PeerId(namespace: .max, id: PeerId.Id._internalFromInt64Value(0)), title: state.editingName.composedTitle, photo: [], participantCount: 0, role: .creator(rank: nil), membership: .Member, flags: [], defaultBannedRights: nil, migrationReference: nil, creationDate: 0, version: 0)
     
     entries.append(.groupInfo(presentationData.theme, presentationData.strings, presentationData.dateTimeFormat, peer, groupInfoState, state.avatar))
     
@@ -487,8 +487,8 @@ private func createGroupEntries(presentationData: PresentationData, state: Creat
     }
     
     peers.sort(by: { lhs, rhs in
-        let lhsPresence = view.presences[lhs.id] as? TelegramUserPresence
-        let rhsPresence = view.presences[rhs.id] as? TelegramUserPresence
+        let lhsPresence = view.presences[lhs.id] as? IosappUserPresence
+        let rhsPresence = view.presences[rhs.id] as? IosappUserPresence
         if let lhsPresence = lhsPresence, let rhsPresence = rhsPresence {
             if lhsPresence.status < rhsPresence.status {
                 return false
@@ -570,9 +570,9 @@ public func createGroupControllerImpl(context: AccountContext, peerIds: [PeerId]
     
     if initialTitle == nil && peerIds.count > 0 && peerIds.count < 5 {
         let _ = (context.engine.data.get(
-            TelegramEngine.EngineData.Item.Peer.Peer(id: context.account.peerId),
+            IosappEngine.EngineData.Item.Peer.Peer(id: context.account.peerId),
             EngineDataList(
-                peerIds.map(TelegramEngine.EngineData.Item.Peer.Peer.init)
+                peerIds.map(IosappEngine.EngineData.Item.Peer.Peer.init)
             )
         )
         |> deliverOnMainQueue).start(next: { accountPeer, peers in
@@ -613,7 +613,7 @@ public func createGroupControllerImpl(context: AccountContext, peerIds: [PeerId]
     }
     
     let addressPromise = Promise<String?>(nil)
-    let venuesPromise = Promise<[TelegramMediaMap]?>(nil)
+    let venuesPromise = Promise<[IosappMediaMap]?>(nil)
     if case let .locatedGroup(latitude, longitude, address) = mode {
         if let address = address {
             addressPromise.set(.single(address))
@@ -625,9 +625,9 @@ public func createGroupControllerImpl(context: AccountContext, peerIds: [PeerId]
         }
         
         venuesPromise.set(nearbyVenues(context: context, latitude: latitude, longitude: longitude)
-        |> map { contextResult -> [TelegramMediaMap]? in
+        |> map { contextResult -> [IosappMediaMap]? in
             if let contextResult {
-                var resultVenues: [TelegramMediaMap] = []
+                var resultVenues: [IosappMediaMap] = []
                 for result in contextResult.results {
                     switch result.message {
                         case let .mapLocation(mapMedia, _):
@@ -659,7 +659,7 @@ public func createGroupControllerImpl(context: AccountContext, peerIds: [PeerId]
         
         if !creating && !title.isEmpty {
             willComplete(title, {
-                let _ = (context.engine.data.get(TelegramEngine.EngineData.Item.Configuration.GlobalAutoremoveTimeout())
+                let _ = (context.engine.data.get(IosappEngine.EngineData.Item.Configuration.GlobalAutoremoveTimeout())
                 |> deliverOnMainQueue).start(next: { maybeGlobalAutoremoveTimeout in
                     updateState { current in
                         var current = current
@@ -679,7 +679,7 @@ public func createGroupControllerImpl(context: AccountContext, peerIds: [PeerId]
                     case .supergroup:
                         createSignal = context.engine.peers.createSupergroup(title: title, description: nil, ttlPeriod: ttlPeriod)
                         |> map { peerId -> CreateGroupResult? in
-                            return CreateGroupResult(peerId: peerId, result: TelegramInvitePeersResult(forbiddenPeers: []))
+                            return CreateGroupResult(peerId: peerId, result: IosappInvitePeersResult(forbiddenPeers: []))
                         }
                         |> mapError { error -> CreateGroupError in
                             switch error {
@@ -708,7 +708,7 @@ public func createGroupControllerImpl(context: AccountContext, peerIds: [PeerId]
                             }
                             return context.engine.peers.createSupergroup(title: title, description: nil, location: (location.latitude, location.longitude, address))
                             |> map { peerId -> CreateGroupResult? in
-                                return CreateGroupResult(peerId: peerId, result: TelegramInvitePeersResult(forbiddenPeers: []))
+                                return CreateGroupResult(peerId: peerId, result: IosappInvitePeersResult(forbiddenPeers: []))
                             }
                             |> mapError { error -> CreateGroupError in
                                 switch error {
@@ -734,7 +734,7 @@ public func createGroupControllerImpl(context: AccountContext, peerIds: [PeerId]
                         let createGroupSignal: (Bool) -> Signal<CreateGroupResult?, CreateGroupError> = { isForum in
                             return context.engine.peers.createSupergroup(title: title, description: nil, isForum: isForum, ttlPeriod: ttlPeriod)
                             |> map { peerId -> CreateGroupResult? in
-                                return CreateGroupResult(peerId: peerId, result: TelegramInvitePeersResult(forbiddenPeers: []))
+                                return CreateGroupResult(peerId: peerId, result: IosappInvitePeersResult(forbiddenPeers: []))
                             }
                             |> mapError { error -> CreateGroupError in
                                 switch error {
@@ -776,7 +776,7 @@ public func createGroupControllerImpl(context: AccountContext, peerIds: [PeerId]
                             createSignal = createSignal
                             |> mapToSignal { result in
                                 if let result = result {
-                                    return context.engine.peers.updateChannelAdminRights(peerId: result.peerId, adminId: context.account.peerId, rights: TelegramChatAdminRights(rights: .canBeAnonymous), rank: nil)
+                                    return context.engine.peers.updateChannelAdminRights(peerId: result.peerId, adminId: context.account.peerId, rights: IosappChatAdminRights(rights: .canBeAnonymous), rank: nil)
                                     |> mapError { _ in
                                         return .generic
                                     }
@@ -840,14 +840,14 @@ public func createGroupControllerImpl(context: AccountContext, peerIds: [PeerId]
                                 if !result.result.forbiddenPeers.isEmpty {
                                     context.account.viewTracker.forceUpdateCachedPeerData(peerId: result.peerId)
                                     let _ = (context.engine.data.subscribe(
-                                        TelegramEngine.EngineData.Item.Peer.ExportedInvitation(id: result.peerId)
+                                        IosappEngine.EngineData.Item.Peer.ExportedInvitation(id: result.peerId)
                                     )
                                     |> filter { $0 != nil }
                                     |> take(1)
                                     |> timeout(1.0, queue: .mainQueue(), alternate: .single(nil))
                                     |> deliverOnMainQueue).start(next: { [weak controller] exportedInvitation in
                                         let _ = (context.engine.data.get(
-                                            TelegramEngine.EngineData.Item.Peer.Peer(id: result.peerId)
+                                            IosappEngine.EngineData.Item.Peer.Peer(id: result.peerId)
                                         )
                                         |> deliverOnMainQueue).start(next: { peer in
                                             if let peer, let exportedInvitation, let link = exportedInvitation.link {
@@ -898,8 +898,8 @@ public func createGroupControllerImpl(context: AccountContext, peerIds: [PeerId]
         }
         
         let _ = (context.engine.data.get(
-            TelegramEngine.EngineData.Item.Peer.Peer(id: context.account.peerId),
-            TelegramEngine.EngineData.Item.Configuration.SearchBots()
+            IosappEngine.EngineData.Item.Peer.Peer(id: context.account.peerId),
+            IosappEngine.EngineData.Item.Configuration.SearchBots()
         )
         |> deliverOnMainQueue).start(next: { peer, searchBotsConfiguration in
             let presentationData = context.sharedContext.currentPresentationData.with { $0 }
@@ -921,7 +921,7 @@ public func createGroupControllerImpl(context: AccountContext, peerIds: [PeerId]
                 if let data = image.jpegData(compressionQuality: 0.6) {
                     let resource = LocalFileMediaResource(fileId: Int64.random(in: Int64.min ... Int64.max))
                     context.account.postbox.mediaBox.storeResourceData(resource.id, data: data)
-                    let representation = TelegramMediaImageRepresentation(dimensions: PixelDimensions(width: 640, height: 640), resource: resource, progressiveSizes: [], immediateThumbnailData: nil, hasVideo: false, isPersonal: false)
+                    let representation = IosappMediaImageRepresentation(dimensions: PixelDimensions(width: 640, height: 640), resource: resource, progressiveSizes: [], immediateThumbnailData: nil, hasVideo: false, isPersonal: false)
                     uploadedAvatar.set(context.engine.peers.uploadedPeerPhoto(resource: resource))
                     uploadedVideoAvatar = nil
                     updateState { current in
@@ -936,7 +936,7 @@ public func createGroupControllerImpl(context: AccountContext, peerIds: [PeerId]
                 if let data = image.jpegData(compressionQuality: 0.6) {
                     let photoResource = LocalFileMediaResource(fileId: Int64.random(in: Int64.min ... Int64.max))
                     context.account.postbox.mediaBox.storeResourceData(photoResource.id, data: data)
-                    let representation = TelegramMediaImageRepresentation(dimensions: PixelDimensions(width: 640, height: 640), resource: photoResource, progressiveSizes: [], immediateThumbnailData: nil, hasVideo: false, isPersonal: false)
+                    let representation = IosappMediaImageRepresentation(dimensions: PixelDimensions(width: 640, height: 640), resource: photoResource, progressiveSizes: [], immediateThumbnailData: nil, hasVideo: false, isPersonal: false)
                     updateState { state in
                         var state = state
                         state.avatar = .image(representation, true)
@@ -948,7 +948,7 @@ public func createGroupControllerImpl(context: AccountContext, peerIds: [PeerId]
                         videoStartTimestamp = adjustments.videoStartValue - adjustments.trimStartValue
                     }
                     
-                    let signal = Signal<TelegramMediaResource?, UploadPeerPhotoError> { subscriber in
+                    let signal = Signal<IosappMediaResource?, UploadPeerPhotoError> { subscriber in
                         let entityRenderer: LegacyPaintEntityRenderer? = adjustments.flatMap { adjustments in
                             if let paintingData = adjustments.paintingData, paintingData.hasAnimation {
                                 return LegacyPaintEntityRenderer(postbox: context.account.postbox, adjustments: adjustments)
@@ -998,7 +998,7 @@ public func createGroupControllerImpl(context: AccountContext, peerIds: [PeerId]
                                 var value = stat()
                                 if stat(result.fileURL.path, &value) == 0 {
                                     if let data = try? Data(contentsOf: result.fileURL) {
-                                        let resource: TelegramMediaResource
+                                        let resource: IosappMediaResource
                                         if let liveUploadData = result.liveUploadData as? LegacyLiveUploadInterfaceResult {
                                             resource = LocalFileMediaResource(fileId: liveUploadData.id)
                                         } else {
@@ -1028,7 +1028,7 @@ public func createGroupControllerImpl(context: AccountContext, peerIds: [PeerId]
                     
                     let promise = Promise<UploadedPeerPhotoData?>()
                     promise.set(signal
-                    |> `catch` { _ -> Signal<TelegramMediaResource?, NoError> in
+                    |> `catch` { _ -> Signal<IosappMediaResource?, NoError> in
                         return .single(nil)
                     }
                     |> mapToSignal { resource -> Signal<UploadedPeerPhotoData?, NoError> in
@@ -1165,7 +1165,7 @@ public func createGroupControllerImpl(context: AccountContext, peerIds: [PeerId]
         })
         ensureItemVisibleImpl?(.info, true)
     }, updateAutoDelete: {
-        let _ = (context.engine.data.get(TelegramEngine.EngineData.Item.Configuration.GlobalAutoremoveTimeout())
+        let _ = (context.engine.data.get(IosappEngine.EngineData.Item.Configuration.GlobalAutoremoveTimeout())
         |> deliverOnMainQueue).start(next: { maybeGlobalAutoremoveTimeout in
             var subItems: [ContextMenuItem] = []
             
@@ -1287,7 +1287,7 @@ public func createGroupControllerImpl(context: AccountContext, peerIds: [PeerId]
         context.account.postbox.multiplePeersView(peerIds),
         .single(nil) |> then(addressPromise.get()),
         .single(nil) |> then(venuesPromise.get()),
-        context.engine.data.subscribe(TelegramEngine.EngineData.Item.Configuration.GlobalAutoremoveTimeout())
+        context.engine.data.subscribe(IosappEngine.EngineData.Item.Configuration.GlobalAutoremoveTimeout())
     )
     |> map { presentationData, state, view, address, venues, globalAutoremoveTimeout -> (ItemListControllerState, (ItemListNodeState, Any)) in
         let rightNavigationButton: ItemListNavigationButton

@@ -241,7 +241,7 @@ public func logoutOptionsController(context: AccountContext, navigationControlle
                     guard let peerId = peerId else {
                         return
                     }
-                    let _ = (context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: peerId))
+                    let _ = (context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: peerId))
                     |> deliverOnMainQueue).start(next: { peer in
                         guard let peer = peer else {
                             return

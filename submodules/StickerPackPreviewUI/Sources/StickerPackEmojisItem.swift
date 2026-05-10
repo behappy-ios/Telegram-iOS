@@ -193,7 +193,7 @@ final class StickerPackEmojisItemNode: GridItemNode {
         self.boundsChangeTrackerLayer =  boundsChangeTrackerLayer
     }
     
-    func targetItem(at point: CGPoint) -> (TelegramMediaFile, CALayer)? {
+    func targetItem(at point: CGPoint) -> (IosappMediaFile, CALayer)? {
         if let (item, _) = self.item(atPoint: point), let file = item.itemFile {
             let itemId = EmojiKeyboardItemLayer.Key(
                 groupId: 0,

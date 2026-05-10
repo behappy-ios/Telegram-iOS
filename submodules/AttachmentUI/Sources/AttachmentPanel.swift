@@ -206,8 +206,8 @@ private final class AttachButtonComponent: CombinedComponent {
         return { context in
             let name: String
             let imageName: String
-            var imageFile: TelegramMediaFile?
-            var animationFile: TelegramMediaFile?
+            var imageFile: IosappMediaFile?
+            var animationFile: IosappMediaFile?
             var botPeer: EnginePeer?
             
             let component = context.component
@@ -1295,7 +1295,7 @@ final class AttachmentPanel: ASDisplayNode, ASScrollViewDelegate, ASGestureRecog
             }
             
             let availableMessageEffects = strongSelf.context.availableMessageEffects |> take(1)
-            let hasPremium = strongSelf.context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: strongSelf.context.account.peerId))
+            let hasPremium = strongSelf.context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: strongSelf.context.account.peerId))
             |> map { peer -> Bool in
                 guard case let .user(user) = peer else {
                     return false
@@ -1314,13 +1314,13 @@ final class AttachmentPanel: ASDisplayNode, ASScrollViewDelegate, ASGestureRecog
                     return
                 }
                 var sendWhenOnlineAvailable = false
-                if let presence = peerView.peerPresences[peer.id] as? TelegramUserPresence, case let .present(until) = presence.status {
+                if let presence = peerView.peerPresences[peer.id] as? IosappUserPresence, case let .present(until) = presence.status {
                     let currentTime = Int32(CFAbsoluteTimeGetCurrent() + kCFAbsoluteTimeIntervalSince1970)
                     if currentTime > until {
                         sendWhenOnlineAvailable = true
                     }
                 }
-                if peer.id.isTelegramNotifications {
+                if peer.id.isIosappNotifications {
                     sendWhenOnlineAvailable = false
                 }
                 
@@ -1560,8 +1560,8 @@ final class AttachmentPanel: ASDisplayNode, ASScrollViewDelegate, ASGestureRecog
             |> map { view -> StarsAmount? in
                 if let data = view.cachedData as? CachedUserData {
                     return data.sendPaidMessageStars
-                } else if let channel = peerViewMainPeer(view) as? TelegramChannel {
-                    if channel.isMonoForum, let linkedMonoforumId = channel.linkedMonoforumId, let mainChannel = view.peers[linkedMonoforumId] as? TelegramChannel, mainChannel.hasPermission(.manageDirect) {
+                } else if let channel = peerViewMainPeer(view) as? IosappChannel {
+                    if channel.isMonoForum, let linkedMonoforumId = channel.linkedMonoforumId, let mainChannel = view.peers[linkedMonoforumId] as? IosappChannel, mainChannel.hasPermission(.manageDirect) {
                         return nil
                     } else if let cachedData = view.cachedData as? CachedChannelData, let sendPaidMessageStarsValue = cachedData.sendPaidMessageStars, sendPaidMessageStarsValue == .zero {
                         return nil

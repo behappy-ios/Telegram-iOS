@@ -14,7 +14,7 @@ import MultilineTextComponent
 final class AvatarEditorPreviewView: UIView {
     private let context: AccountContext
     private var disposable: Disposable?
-    private var files: [TelegramMediaFile] = []
+    private var files: [IosappMediaFile] = []
     private var currentIndex = 0
     private var currentBackgroundIndex = 0
     private var switchingToNext = false
@@ -45,7 +45,7 @@ final class AvatarEditorPreviewView: UIView {
                 return
             }
             if let view = views.views[stickersKey] as? OrderedItemListView {
-                var files: [TelegramMediaFile] = []
+                var files: [IosappMediaFile] = []
                 for item in view.items.prefix(8) {
                     if let mediaItem = item.contents.get(RecentMediaItem.self) {
                         let file = mediaItem.media._parse()

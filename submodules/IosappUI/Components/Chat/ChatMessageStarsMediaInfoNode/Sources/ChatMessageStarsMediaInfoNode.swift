@@ -179,7 +179,7 @@ public class ChatMessageStarsMediaInfoNode: ASDisplayNode {
         public let presentationData: ChatPresentationData
         public let context: AccountContext
         public let message: Message
-        public let media: TelegramMediaPaidContent
+        public let media: IosappMediaPaidContent
         public let constrainedSize: CGSize
         public let animationCache: AnimationCache?
         public let animationRenderer: MultiAnimationRenderer?
@@ -188,7 +188,7 @@ public class ChatMessageStarsMediaInfoNode: ASDisplayNode {
             presentationData: ChatPresentationData,
             context: AccountContext,
             message: Message,
-            media: TelegramMediaPaidContent,
+            media: IosappMediaPaidContent,
             constrainedSize: CGSize,
             animationCache: AnimationCache?,
             animationRenderer: MultiAnimationRenderer?
@@ -234,7 +234,7 @@ public class ChatMessageStarsMediaInfoNode: ASDisplayNode {
             let textFont = Font.regular(fontSize)
                         
             let text: NSMutableAttributedString
-            if let peer = arguments.message.peers[arguments.message.id.peerId] as? TelegramChannel, peer.flags.contains(.isCreator) || peer.adminRights != nil, arguments.message.forwardInfo == nil {
+            if let peer = arguments.message.peers[arguments.message.id.peerId] as? IosappChannel, peer.flags.contains(.isCreator) || peer.adminRights != nil, arguments.message.forwardInfo == nil {
                 let amountString = presentationStringsFormattedNumber(Int32(arguments.media.amount), arguments.presentationData.dateTimeFormat.groupingSeparator)
                 text = NSMutableAttributedString(string: "⭐️\(amountString)", font: textFont, textColor: .white)
             } else {

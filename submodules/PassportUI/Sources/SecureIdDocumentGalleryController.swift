@@ -21,7 +21,7 @@ struct SecureIdDocumentGalleryEntryLocation: Equatable {
 
 struct SecureIdDocumentGalleryEntry: Equatable {
     let index: Int32
-    let resource: TelegramMediaResource
+    let resource: IosappMediaResource
     let location: SecureIdDocumentGalleryEntryLocation
     let error: String
     
@@ -29,7 +29,7 @@ struct SecureIdDocumentGalleryEntry: Equatable {
         return lhs.index == rhs.index && lhs.resource.isEqual(to: rhs.resource) && lhs.location == rhs.location && lhs.error == rhs.error
     }
     
-    func item(context: AccountContext, theme: PresentationTheme, strings: PresentationStrings, secureIdContext: SecureIdAccessContext, delete: @escaping (TelegramMediaResource) -> Void) -> GalleryItem {
+    func item(context: AccountContext, theme: PresentationTheme, strings: PresentationStrings, secureIdContext: SecureIdAccessContext, delete: @escaping (IosappMediaResource) -> Void) -> GalleryItem {
         return SecureIdDocumentGalleryItem(context: context, theme: theme, strings: strings, secureIdContext: secureIdContext, itemId: self.index, resource: self.resource, caption: self.error, location: self.location, delete: {
             delete(self.resource)
         })
@@ -77,7 +77,7 @@ class SecureIdDocumentGalleryController: ViewController, StandalonePresentableCo
     
     private let replaceRootController: (ViewController, Promise<Bool>?) -> Void
     
-    var deleteResource: ((TelegramMediaResource) -> Void)?
+    var deleteResource: ((IosappMediaResource) -> Void)?
     
     init(context: AccountContext, secureIdContext: SecureIdAccessContext, entries: [SecureIdDocumentGalleryEntry], centralIndex: Int, replaceRootController: @escaping (ViewController, Promise<Bool>?) -> Void) {
         self.context = context
@@ -276,7 +276,7 @@ class SecureIdDocumentGalleryController: ViewController, StandalonePresentableCo
         }
     }
     
-    private func deleteItem(_ resource: TelegramMediaResource) {
+    private func deleteItem(_ resource: IosappMediaResource) {
         self.deleteResource?(resource)
         self.dismiss(forceAway: true)
     }

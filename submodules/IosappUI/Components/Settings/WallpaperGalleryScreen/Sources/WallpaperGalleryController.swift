@@ -24,9 +24,9 @@ public enum WallpaperListType {
 }
 
 public enum WallpaperListSource {
-    case list(wallpapers: [TelegramWallpaper], central: TelegramWallpaper, type: WallpaperListType)
-    case wallpaper(TelegramWallpaper, WallpaperPresentationOptions?, [UInt32], Int32?, Int32?, Message?)
-    case slug(String, TelegramMediaFile?, WallpaperPresentationOptions?, [UInt32], Int32?, Int32?, Message?)
+    case list(wallpapers: [IosappWallpaper], central: IosappWallpaper, type: WallpaperListType)
+    case wallpaper(IosappWallpaper, WallpaperPresentationOptions?, [UInt32], Int32?, Int32?, Message?)
+    case slug(String, IosappMediaFile?, WallpaperPresentationOptions?, [UInt32], Int32?, Int32?, Message?)
     case asset(PHAsset)
     case contextResult(ChatContextResult)
     case customColor(UInt32?)
@@ -49,7 +49,7 @@ private func areMessagesEqual(_ lhsMessage: Message?, _ rhsMessage: Message?) ->
 }
 
 public enum WallpaperGalleryEntry: Equatable {
-    case wallpaper(TelegramWallpaper, Message?)
+    case wallpaper(IosappWallpaper, Message?)
     case asset(PHAsset)
     case contextResult(ChatContextResult)
     
@@ -139,7 +139,7 @@ class WallpaperGalleryControllerNode: GalleryControllerNode {
     }
 }
 
-private func updatedFileWallpaper(wallpaper: TelegramWallpaper, colors: [UInt32], intensity: Int32?, rotation: Int32?) -> TelegramWallpaper {
+private func updatedFileWallpaper(wallpaper: IosappWallpaper, colors: [UInt32], intensity: Int32?, rotation: Int32?) -> IosappWallpaper {
     if case let .file(file) = wallpaper {
         return updatedFileWallpaper(id: file.id, accessHash: file.accessHash, slug: file.slug, file: file.file, colors: colors, intensity: intensity, rotation: rotation)
     } else {
@@ -147,7 +147,7 @@ private func updatedFileWallpaper(wallpaper: TelegramWallpaper, colors: [UInt32]
     }
 }
 
-private func updatedFileWallpaper(id: Int64? = nil, accessHash: Int64? = nil, slug: String, file: TelegramMediaFile, colors: [UInt32], intensity: Int32?, rotation: Int32?) -> TelegramWallpaper {
+private func updatedFileWallpaper(id: Int64? = nil, accessHash: Int64? = nil, slug: String, file: IosappMediaFile, colors: [UInt32], intensity: Int32?, rotation: Int32?) -> IosappWallpaper {
     var isPattern = ["image/png", "image/svg+xml", "application/x-tgwallpattern"].contains(file.mimeType)
     if let fileName = file.fileName, fileName.hasSuffix(".svgbg") {
         isPattern = true
@@ -162,7 +162,7 @@ private func updatedFileWallpaper(id: Int64? = nil, accessHash: Int64? = nil, sl
         intensityValue = 50
     }
     
-    return .file(TelegramWallpaper.File(id: id ?? 0, accessHash: accessHash ?? 0, isCreator: false, isDefault: false, isPattern: isPattern, isDark: false, slug: slug, file: file, settings: WallpaperSettings(colors: colorValues, intensity: intensityValue, rotation: rotation)))
+    return .file(IosappWallpaper.File(id: id ?? 0, accessHash: accessHash ?? 0, isCreator: false, isDefault: false, isPattern: isPattern, isDark: false, slug: slug, file: file, settings: WallpaperSettings(colors: colorValues, intensity: intensityValue, rotation: rotation)))
 }
 
 class WallpaperGalleryInteraction {
@@ -226,11 +226,11 @@ public class WallpaperGalleryController: ViewController {
     private var patternPanelNode: WallpaperPatternPanelNode?
     private var colorsPanelNode: WallpaperColorPanelNode?
 
-    private var patternInitialWallpaper: TelegramWallpaper?
+    private var patternInitialWallpaper: IosappWallpaper?
     private var patternPanelEnabled = false
     private var colorsPanelEnabled = false
 
-    private var savedPatternWallpaper: TelegramWallpaper?
+    private var savedPatternWallpaper: IosappWallpaper?
     private var savedPatternIntensity: Int32?
     
     public var requiredLevel: Int?
@@ -601,7 +601,7 @@ public class WallpaperGalleryController: ViewController {
                                         break
                                 }
                                 
-                                let completion: (TelegramWallpaper) -> Void = { wallpaper in
+                                let completion: (IosappWallpaper) -> Void = { wallpaper in
                                     let baseSettings = wallpaper.settings
                                     let updatedSettings = WallpaperSettings(blur: options.contains(.blur), motion: options.contains(.motion), colors: baseSettings?.colors ?? [], intensity: baseSettings?.intensity, rotation: baseSettings?.rotation)
                                     let wallpaper = wallpaper.withUpdatedSettings(updatedSettings)
@@ -649,7 +649,7 @@ public class WallpaperGalleryController: ViewController {
                                     }).start()
                                 }
                                 
-                                let applyWallpaper: (TelegramWallpaper) -> Void = { wallpaper in
+                                let applyWallpaper: (IosappWallpaper) -> Void = { wallpaper in
                                     if options.contains(.blur) {
                                         if let resource = resource {
                                             let representation = CachedBlurredWallpaperRepresentation()
@@ -809,7 +809,7 @@ public class WallpaperGalleryController: ViewController {
                         case let .file(file):
                             if !file.settings.colors.isEmpty {
                                 if file.settings.colors.count >= 2 {
-                                    strongSelf.updateEntries(wallpaper: .gradient(TelegramWallpaper.Gradient(id: nil, colors: file.settings.colors, settings: WallpaperSettings(rotation: file.settings.rotation))))
+                                    strongSelf.updateEntries(wallpaper: .gradient(IosappWallpaper.Gradient(id: nil, colors: file.settings.colors, settings: WallpaperSettings(rotation: file.settings.rotation))))
                                 } else {
                                     strongSelf.updateEntries(wallpaper: .color(file.settings.colors[0]))
                                 }
@@ -905,7 +905,7 @@ public class WallpaperGalleryController: ViewController {
         self.galleryNode.pager.transaction(self.updateTransaction(entries: entries, arguments: WallpaperGalleryItemArguments(colorPreview: preview, isColorsList: false, patternEnabled: self.patternPanelEnabled)))
     }
 
-    private func updateEntries(wallpaper: TelegramWallpaper, preview: Bool = false) {
+    private func updateEntries(wallpaper: IosappWallpaper, preview: Bool = false) {
         guard self.validLayout != nil, let centralEntryIndex = self.galleryNode.pager.centralItemNode()?.index else {
             return
         }
@@ -924,7 +924,7 @@ public class WallpaperGalleryController: ViewController {
         self.galleryNode.pager.transaction(self.updateCurrentEntryTransaction(entry: currentEntry, arguments: WallpaperGalleryItemArguments(colorPreview: preview, isColorsList: false, patternEnabled: self.patternPanelEnabled), index: centralEntryIndex))
     }
     
-    private func updateEntries(pattern: TelegramWallpaper?, intensity: Int32? = nil, preview: Bool = false) {
+    private func updateEntries(pattern: IosappWallpaper?, intensity: Int32? = nil, preview: Bool = false) {
         var updatedEntries: [WallpaperGalleryEntry] = []
         for entry in self.entries {
             var entryColors: [UInt32] = []
@@ -941,14 +941,14 @@ public class WallpaperGalleryController: ViewController {
             if !entryColors.isEmpty {
                 if let pattern = pattern, case let .file(file) = pattern {
                     let newSettings = WallpaperSettings(blur: file.settings.blur, motion: file.settings.motion, colors: entryColors, intensity: intensity)
-                    let newWallpaper = TelegramWallpaper.file(TelegramWallpaper.File(id: file.id, accessHash: file.accessHash, isCreator: file.isCreator, isDefault: file.isDefault, isPattern: pattern.isPattern, isDark: file.isDark, slug: file.slug, file: file.file, settings: newSettings))
+                    let newWallpaper = IosappWallpaper.file(IosappWallpaper.File(id: file.id, accessHash: file.accessHash, isCreator: file.isCreator, isDefault: file.isDefault, isPattern: pattern.isPattern, isDark: file.isDark, slug: file.slug, file: file.file, settings: newSettings))
                     updatedEntries.append(.wallpaper(newWallpaper, nil))
                 } else {
                     if entryColors.count == 1 {
-                        let newWallpaper = TelegramWallpaper.color(entryColors[0])
+                        let newWallpaper = IosappWallpaper.color(entryColors[0])
                         updatedEntries.append(.wallpaper(newWallpaper, nil))
                     } else {
-                        let newWallpaper = TelegramWallpaper.gradient(TelegramWallpaper.Gradient(id: nil, colors: entryColors, settings: WallpaperSettings(rotation: nil)))
+                        let newWallpaper = IosappWallpaper.gradient(IosappWallpaper.Gradient(id: nil, colors: entryColors, settings: WallpaperSettings(rotation: nil)))
                         updatedEntries.append(.wallpaper(newWallpaper, nil))
                     }
                 }
@@ -1010,7 +1010,7 @@ public class WallpaperGalleryController: ViewController {
                     case .color, .file, .gradient:
                         if let pattern = pattern, case let .file(file) = pattern {
                             let newSettings = WallpaperSettings(blur: file.settings.blur, motion: file.settings.motion, colors: colors, intensity: intensity)
-                            let newWallpaper = TelegramWallpaper.file(TelegramWallpaper.File(id: file.id, accessHash: file.accessHash, isCreator: file.isCreator, isDefault: file.isDefault, isPattern: pattern.isPattern, isDark: file.isDark, slug: file.slug, file: file.file, settings: newSettings))
+                            let newWallpaper = IosappWallpaper.file(IosappWallpaper.File(id: file.id, accessHash: file.accessHash, isCreator: file.isCreator, isDefault: file.isDefault, isPattern: pattern.isPattern, isDark: file.isDark, slug: file.slug, file: file.file, settings: newSettings))
 
                             strongSelf.savedPatternWallpaper = newWallpaper
                             strongSelf.savedPatternIntensity = intensity
@@ -1046,7 +1046,7 @@ public class WallpaperGalleryController: ViewController {
                     return
                 }
 
-                var wallpaper: TelegramWallpaper = .gradient(TelegramWallpaper.Gradient(id: nil, colors: colors.map { $0.rgb }, settings: WallpaperSettings(blur: false, motion: false, colors: [], intensity: nil, rotation: nil)))
+                var wallpaper: IosappWallpaper = .gradient(IosappWallpaper.Gradient(id: nil, colors: colors.map { $0.rgb }, settings: WallpaperSettings(blur: false, motion: false, colors: [], intensity: nil, rotation: nil)))
 
                 if case let .file(file) = currentWallpaper {
                     wallpaper = currentWallpaper.withUpdatedSettings(WallpaperSettings(blur: false, motion: false, colors: colors.map { $0.rgb }, intensity: file.settings.intensity, rotation: file.settings.rotation))

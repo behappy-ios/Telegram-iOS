@@ -40,14 +40,14 @@ public final class ConferenceCallE2EContext {
     private final class Impl {
         private let queue: Queue
 
-        private let engine: TelegramEngine
+        private let engine: IosappEngine
         private let callId: Int64
         private let accessHash: Int64
         private let userId: Int64
         private let reference: InternalGroupCallReference
         private let state: Atomic<ContextStateHolder>
-        private let initializeState: (TelegramKeyPair, Int64, Data) -> ConferenceCallE2EContextState?
-        private let keyPair: TelegramKeyPair
+        private let initializeState: (IosappKeyPair, Int64, Data) -> ConferenceCallE2EContextState?
+        private let keyPair: IosappKeyPair
 
         let e2eEncryptionKeyHashValue = ValuePromise<Data?>(nil)
         let blockchainParticipantsValue = ValuePromise<[BlockchainParticipant]>([])
@@ -69,7 +69,7 @@ public final class ConferenceCallE2EContext {
         
         private var pendingKickPeers: [EnginePeer.Id] = []
 
-        init(queue: Queue, engine: TelegramEngine, callId: Int64, accessHash: Int64, userId: Int64, reference: InternalGroupCallReference, state: Atomic<ContextStateHolder>, initializeState: @escaping (TelegramKeyPair, Int64, Data) -> ConferenceCallE2EContextState?, keyPair: TelegramKeyPair) {
+        init(queue: Queue, engine: IosappEngine, callId: Int64, accessHash: Int64, userId: Int64, reference: InternalGroupCallReference, state: Atomic<ContextStateHolder>, initializeState: @escaping (IosappKeyPair, Int64, Data) -> ConferenceCallE2EContextState?, keyPair: IosappKeyPair) {
             precondition(queue.isCurrent())
             precondition(Queue.mainQueue().isCurrent())
 
@@ -470,7 +470,7 @@ public final class ConferenceCallE2EContext {
         }
     }
 
-    public init(engine: TelegramEngine, callId: Int64, accessHash: Int64, userId: Int64, reference: InternalGroupCallReference, keyPair: TelegramKeyPair, initializeState: @escaping (TelegramKeyPair, Int64, Data) -> ConferenceCallE2EContextState?) {
+    public init(engine: IosappEngine, callId: Int64, accessHash: Int64, userId: Int64, reference: InternalGroupCallReference, keyPair: IosappKeyPair, initializeState: @escaping (IosappKeyPair, Int64, Data) -> ConferenceCallE2EContextState?) {
         let queue = Queue.mainQueue()
         let state = self.state
         self.impl = QueueLocalObject(queue: queue, generate: {

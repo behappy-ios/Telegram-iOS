@@ -70,7 +70,7 @@ final class TextProcessingTranslateContentComponent: Component {
         
         fileprivate(set) var emojify: Bool = false
         fileprivate(set) var isSourceTextExpanded: Bool = false
-        fileprivate(set) var style: TelegramComposeAIMessageMode.StyleId = .neutral
+        fileprivate(set) var style: IosappComposeAIMessageMode.StyleId = .neutral
         var displayStyleTooltip: Bool = false
         
         fileprivate(set) var isProcessing: Bool = false {
@@ -103,7 +103,7 @@ final class TextProcessingTranslateContentComponent: Component {
     let externalState: ExternalState
     let mode: Mode
     let copyAction: (() -> Void)?
-    let displayLanguageSelectionMenu: (UIView, String, TelegramComposeAIMessageMode.StyleId, Bool,  @escaping (String, TelegramComposeAIMessageMode.StyleId) -> Void) -> Void
+    let displayLanguageSelectionMenu: (UIView, String, IosappComposeAIMessageMode.StyleId, Bool,  @escaping (String, IosappComposeAIMessageMode.StyleId) -> Void) -> Void
     let present: (ViewController, Any?) -> Void
     let rootViewForTextSelection: () -> UIView?
 
@@ -116,7 +116,7 @@ final class TextProcessingTranslateContentComponent: Component {
         inputText: TextWithEntities,
         mode: Mode,
         copyAction: (() -> Void)?,
-        displayLanguageSelectionMenu: @escaping (UIView, String, TelegramComposeAIMessageMode.StyleId, Bool, @escaping (String, TelegramComposeAIMessageMode.StyleId) -> Void) -> Void,
+        displayLanguageSelectionMenu: @escaping (UIView, String, IosappComposeAIMessageMode.StyleId, Bool, @escaping (String, IosappComposeAIMessageMode.StyleId) -> Void) -> Void,
         present: @escaping (ViewController, Any?) -> Void,
         rootViewForTextSelection: @escaping () -> UIView?
     ) {
@@ -206,7 +206,7 @@ final class TextProcessingTranslateContentComponent: Component {
             }
             
             if let result = component.externalState.result, result.text == nil, self.processDisposable == nil {
-                let mappedMode: TelegramComposeAIMessageMode?
+                let mappedMode: IosappComposeAIMessageMode?
                 
                 switch component.mode {
                 case .translate:

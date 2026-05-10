@@ -18,9 +18,9 @@ public final class BirthdayPickerContentComponent: Component {
     public let theme: PresentationTheme
     public let strings: PresentationStrings
     public let settings: Signal<AccountPrivacySettings?, NoError>
-    public let value: TelegramBirthday
+    public let value: IosappBirthday
     public let canHideYear: Bool
-    public let updateValue: (TelegramBirthday) -> Void
+    public let updateValue: (IosappBirthday) -> Void
     public let dismiss: () -> Void
     public let openSettings: () -> Void
     public let requestHideYear: (ComponentTransition) -> Void
@@ -31,9 +31,9 @@ public final class BirthdayPickerContentComponent: Component {
         theme: PresentationTheme,
         strings: PresentationStrings,
         settings: Signal<AccountPrivacySettings?, NoError>,
-        value: TelegramBirthday,
+        value: IosappBirthday,
         canHideYear: Bool,
-        updateValue: @escaping (TelegramBirthday) -> Void,
+        updateValue: @escaping (IosappBirthday) -> Void,
         dismiss: @escaping () -> Void,
         openSettings: @escaping () -> Void,
         requestHideYear: @escaping (ComponentTransition) -> Void
@@ -119,7 +119,7 @@ public final class BirthdayPickerContentComponent: Component {
             if self.disposable == nil {
                 let peer: Signal<EnginePeer?, NoError>
                 if case let .suggest(peerId) = component.mode {
-                    peer = component.context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: peerId))
+                    peer = component.context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: peerId))
                 } else {
                     peer = .single(nil)
                 }
@@ -280,7 +280,7 @@ public final class BirthdayPickerContentComponent: Component {
                             guard let self, let component = self.component else {
                                 return
                             }
-                            component.updateValue(TelegramBirthday(day: component.value.day, month: component.value.month, year: nil))
+                            component.updateValue(IosappBirthday(day: component.value.day, month: component.value.month, year: nil))
                             component.requestHideYear(.spring(duration: 0.4).withUserData(BirthdayPickerComponent.TransitionHint(animate: true)))
                         }, animateScale: false)),
                         environment: {},

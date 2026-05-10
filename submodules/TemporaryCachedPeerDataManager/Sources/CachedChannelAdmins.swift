@@ -100,6 +100,6 @@ public func cachedChannelAdminRanksEntryId(peerId: PeerId) -> ItemCacheEntryId {
     return ItemCacheEntryId(collectionId: 100, key: CachedChannelAdminRanks.cacheKey(peerId: peerId))
 }
 
-func updateCachedChannelAdminRanks(engine: TelegramEngine, peerId: PeerId, ranks: Dictionary<PeerId, CachedChannelAdminRank>) -> Signal<Never, NoError> {
+func updateCachedChannelAdminRanks(engine: IosappEngine, peerId: PeerId, ranks: Dictionary<PeerId, CachedChannelAdminRank>) -> Signal<Never, NoError> {
     return engine.itemCache.put(collectionId: 100, id: CachedChannelAdminRanks.cacheKey(peerId: peerId), item: CachedChannelAdminRanks(ranks: ranks))
 }

@@ -117,7 +117,7 @@ func openWebAppImpl(
     }
             
     let _ = combineLatest(queue: Queue.mainQueue(),
-        context.engine.data.get(TelegramEngine.EngineData.Item.Peer.BotAppSettings(id: botPeer.id)),
+        context.engine.data.get(IosappEngine.EngineData.Item.Peer.BotAppSettings(id: botPeer.id)),
         ApplicationSpecificNotice.getBotGameNotice(accountManager: context.sharedContext.accountManager, peerId: botPeer.id),
         context.engine.messages.attachMenuBots(),
         context.engine.messages.getAttachMenuBot(botId: botPeer.id, cached: true)
@@ -148,7 +148,7 @@ func openWebAppImpl(
                 
                 var fullSize = false
                 var isFullscreen = false
-                if isTelegramMeLink(url), let internalUrl = parseFullInternalUrl(sharedContext: context.sharedContext, context: context, url: url), case .peer(_, .appStart) = internalUrl {
+                if isIosappMeLink(url), let internalUrl = parseFullInternalUrl(sharedContext: context.sharedContext, context: context, url: url), case .peer(_, .appStart) = internalUrl {
                     if url.contains("mode=fullscreen") {
                         isFullscreen = true
                         fullSize = true
@@ -462,7 +462,7 @@ public extension ChatControllerImpl {
             if let controller {
                 controller.push(peerController)
             } else {
-                ((context.sharedContext.mainWindow?.viewController as? TelegramRootControllerInterface)?.viewControllers.last as? ViewController)?.push(peerController)
+                ((context.sharedContext.mainWindow?.viewController as? IosappRootControllerInterface)?.viewControllers.last as? ViewController)?.push(peerController)
             }
         } else {
             activateSwitchInline(nil)
@@ -470,7 +470,7 @@ public extension ChatControllerImpl {
     }
     
     private static func botOpenPeer(context: AccountContext, peerId: EnginePeer.Id, navigation: ChatControllerInteractionNavigateToPeer, navigationController: NavigationController) {
-        let _ = (context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: peerId))
+        let _ = (context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: peerId))
         |> deliverOnMainQueue).startStandalone(next: { peer in
             guard let peer else {
                 return
@@ -650,7 +650,7 @@ public extension ChatControllerImpl {
                 |> `catch` { _ -> Signal<AttachMenuBot?, NoError> in
                     return .single(nil)
                 },
-                context.engine.data.get(TelegramEngine.EngineData.Item.Peer.BotAppSettings(id: botPeer.id))
+                context.engine.data.get(IosappEngine.EngineData.Item.Peer.BotAppSettings(id: botPeer.id))
             ).startStandalone(next: { [weak parentController, weak chatController] noticed, attachMenuBots, attachMenuBot, appSettings in
                 chatController?.chatDisplayNode.dismissInput()
                 

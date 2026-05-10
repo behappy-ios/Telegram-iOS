@@ -28,11 +28,11 @@ final class PeerNameColorProfilePreviewItem: ListViewItem, ItemListItem, ListIte
     let sectionId: ItemListSectionId
     let peer: EnginePeer?
     let subtitleString: String?
-    let files: [Int64: TelegramMediaFile]
+    let files: [Int64: IosappMediaFile]
     let nameDisplayOrder: PresentationPersonNameOrder
     let showBackground: Bool
     
-    init(context: AccountContext, theme: PresentationTheme, componentTheme: PresentationTheme, strings: PresentationStrings, topInset: CGFloat, bottomInset: CGFloat, sectionId: ItemListSectionId, peer: EnginePeer?, subtitleString: String? = nil, files: [Int64: TelegramMediaFile], nameDisplayOrder: PresentationPersonNameOrder, showBackground: Bool) {
+    init(context: AccountContext, theme: PresentationTheme, componentTheme: PresentationTheme, strings: PresentationStrings, topInset: CGFloat, bottomInset: CGFloat, sectionId: ItemListSectionId, peer: EnginePeer?, subtitleString: String? = nil, files: [Int64: IosappMediaFile], nameDisplayOrder: PresentationPersonNameOrder, showBackground: Bool) {
         self.context = context
         self.theme = theme
         self.componentTheme = componentTheme

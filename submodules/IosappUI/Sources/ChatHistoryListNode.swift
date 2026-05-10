@@ -362,7 +362,7 @@ private func extractAssociatedData(
     maxReadStoryId: Int32?,
     recommendedChannels: RecommendedChannels?,
     audioTranscriptionTrial: AudioTranscription.TrialState,
-    chatThemes: [TelegramTheme],
+    chatThemes: [IosappTheme],
     deviceContactsNumbers: Set<String>,
     isInline: Bool,
     showSensitiveContent: Bool,
@@ -395,7 +395,7 @@ private func extractAssociatedData(
         } else if peerId.namespace == Namespaces.Peer.CloudChannel {
             for entry in view.additionalData {
                 if case let .peer(_, value) = entry {
-                    if let channel = value as? TelegramChannel, case .group = channel.info {
+                    if let channel = value as? IosappChannel, case .group = channel.info {
                         automaticMediaDownloadPeerType = .group
                     }
                 } else if case let .cachedPeerData(dataPeerId, cachedData) = entry, dataPeerId == peerId {
@@ -673,7 +673,7 @@ public final class ChatHistoryListNodeImpl: ListViewImpl, ChatHistoryNode, ChatH
     
     private var messageReadMetricsTracker: MessageReadMetricsTracker?
     private var messageReadMetricsTrackerDisposable: Disposable?
-    private var messageReadMetricsTrackerPendingMetrics: [TelegramMessageReadMetric] = []
+    private var messageReadMetricsTrackerPendingMetrics: [IosappMessageReadMetric] = []
     private var messageReadMetricsTrackerPendingMetricTimer: Foundation.Timer?
     
     public private(set) var hasAnyMessages: Bool = false
@@ -707,14 +707,14 @@ public final class ChatHistoryListNodeImpl: ListViewImpl, ChatHistoryNode, ChatH
     var isSelectionGestureEnabled = true
 
     private var overscrollView: ComponentHostView<Empty>?
-    var nextChannelToRead: (peer: EnginePeer, threadData: (id: Int64, data: MessageHistoryThreadData)?, unreadCount: Int, location: TelegramEngine.NextUnreadChannelLocation)?
+    var nextChannelToRead: (peer: EnginePeer, threadData: (id: Int64, data: MessageHistoryThreadData)?, unreadCount: Int, location: IosappEngine.NextUnreadChannelLocation)?
     var offerNextChannelToRead: Bool = false
     var nextChannelToReadDisplayName: Bool = false
     private var currentOverscrollExpandProgress: CGFloat = 0.0
     private var freezeOverscrollControl: Bool = false
     private var freezeOverscrollControlProgress: Bool = false
     private var feedback: HapticFeedback?
-    var openNextChannelToRead: ((EnginePeer, (id: Int64, data: MessageHistoryThreadData)?, TelegramEngine.NextUnreadChannelLocation) -> Void)?
+    var openNextChannelToRead: ((EnginePeer, (id: Int64, data: MessageHistoryThreadData)?, IosappEngine.NextUnreadChannelLocation) -> Void)?
     private var contentInsetAnimator: DisplayLinkAnimator?
 
     private let adMessagesContext: AdMessagesHistoryContext?
@@ -824,7 +824,7 @@ public final class ChatHistoryListNodeImpl: ListViewImpl, ChatHistoryNode, ChatH
             } else {
                 if context.sharedContext.immediateExperimentalUISettings.fakeAds {
                     adMessages = context.engine.data.get(
-                        TelegramEngine.EngineData.Item.Peer.Peer(id: peerId)
+                        IosappEngine.EngineData.Item.Peer.Peer(id: peerId)
                     )
                     |> map { peer -> (interPostInterval: Int32?, messages: [Message], startDelay: Int32?, betweenDelay: Int32?) in
                         let fakeAdMessages: [Message] = (0 ..< 10).map { i -> Message in
@@ -839,7 +839,7 @@ public final class ChatHistoryListNodeImpl: ListViewImpl, ChatHistoryNode, ChatH
                                 messagePeers[peer.id] = peer._asPeer()
                             }
                             
-                            let author: Peer = TelegramChannel(
+                            let author: Peer = IosappChannel(
                                 id: PeerId(namespace: Namespaces.Peer.CloudChannel, id: PeerId.Id._internalFromInt64Value(1)),
                                 accessHash: nil,
                                 title: "Fake Ad",
@@ -848,7 +848,7 @@ public final class ChatHistoryListNodeImpl: ListViewImpl, ChatHistoryNode, ChatH
                                 creationDate: 0,
                                 version: 0,
                                 participationStatus: .left,
-                                info: .broadcast(TelegramChannelBroadcastInfo(flags: [])),
+                                info: .broadcast(IosappChannelBroadcastInfo(flags: [])),
                                 flags: [],
                                 restrictionInfo: nil,
                                 adminRights: nil,
@@ -1609,8 +1609,8 @@ public final class ChatHistoryListNodeImpl: ListViewImpl, ChatHistoryNode, ChatH
         let customChannelDiscussionReadState: Signal<MessageId?, NoError>
         if case let .peer(peerId) = chatLocation, peerId.namespace == Namespaces.Peer.CloudChannel {
             customChannelDiscussionReadState = context.engine.data.subscribe(
-                TelegramEngine.EngineData.Item.Peer.LinkedDiscussionPeerId(id: peerId),
-                TelegramEngine.EngineData.Item.Peer.Peer(id: peerId)
+                IosappEngine.EngineData.Item.Peer.LinkedDiscussionPeerId(id: peerId),
+                IosappEngine.EngineData.Item.Peer.Peer(id: peerId)
             )
             |> mapToSignal { linkedDiscussionPeerId, peer -> Signal<PeerId?, NoError> in
                 guard case let .channel(peer) = peer, case .broadcast = peer.info else {
@@ -1627,7 +1627,7 @@ public final class ChatHistoryListNodeImpl: ListViewImpl, ChatHistoryNode, ChatH
                     return .single(nil)
                 }
                 
-                return context.engine.data.subscribe(TelegramEngine.EngineData.Item.Messages.PeerReadCounters(id: discussionPeerId))
+                return context.engine.data.subscribe(IosappEngine.EngineData.Item.Messages.PeerReadCounters(id: discussionPeerId))
                 |> map { readCounters -> MessageId? in
                     guard let state = readCounters._asReadCounters() else {
                         return nil
@@ -1670,7 +1670,7 @@ public final class ChatHistoryListNodeImpl: ListViewImpl, ChatHistoryNode, ChatH
         let peerReactionSettings: Signal<EnginePeerCachedInfoItem<PeerReactionSettings>?, NoError>
         if let peerId = chatLocation.peerId {
             peerReactionSettings = self.context.engine.data.subscribe(
-                TelegramEngine.EngineData.Item.Peer.ReactionSettings(id: peerId)
+                IosappEngine.EngineData.Item.Peer.ReactionSettings(id: peerId)
             )
             |> map(Optional.init)
         } else {
@@ -1679,7 +1679,7 @@ public final class ChatHistoryListNodeImpl: ListViewImpl, ChatHistoryNode, ChatH
         
         let defaultReaction: Signal<(MessageReaction.Reaction?, Bool), NoError> = combineLatest(
             self.context.engine.data.subscribe(
-                TelegramEngine.EngineData.Item.Peer.Peer(id: context.account.peerId)
+                IosappEngine.EngineData.Item.Peer.Peer(id: context.account.peerId)
             ),
             peerReactionSettings,
             self.context.account.postbox.preferencesView(keys: [PreferencesKeys.reactionSettings])
@@ -1706,7 +1706,7 @@ public final class ChatHistoryListNodeImpl: ListViewImpl, ChatHistoryNode, ChatH
             return lhs.0 == rhs.0 && lhs.1 == rhs.1
         })
         
-        let accountPeer = context.engine.data.subscribe(TelegramEngine.EngineData.Item.Peer.Peer(id: context.account.peerId))
+        let accountPeer = context.engine.data.subscribe(IosappEngine.EngineData.Item.Peer.Peer(id: context.account.peerId))
         |> map { peer -> EnginePeer? in
             return peer
         }
@@ -1715,8 +1715,8 @@ public final class ChatHistoryListNodeImpl: ListViewImpl, ChatHistoryNode, ChatH
         let topicAuthorId: Signal<EnginePeer.Id?, NoError>
         if let peerId = chatLocation.peerId, let threadId = chatLocation.threadId {
             topicAuthorId = context.engine.data.subscribe(
-                TelegramEngine.EngineData.Item.Peer.Peer(id: peerId),
-                TelegramEngine.EngineData.Item.Peer.ThreadData(id: peerId, threadId: threadId)
+                IosappEngine.EngineData.Item.Peer.Peer(id: peerId),
+                IosappEngine.EngineData.Item.Peer.ThreadData(id: peerId, threadId: threadId)
             )
             |> map { peer, data -> EnginePeer.Id? in
                 guard let peer else {
@@ -1755,7 +1755,7 @@ public final class ChatHistoryListNodeImpl: ListViewImpl, ChatHistoryNode, ChatH
             self.allAdMessagesPromise.get()
         )
         
-        let contentSettings = self.context.engine.data.subscribe(TelegramEngine.EngineData.Item.Configuration.ContentSettings())
+        let contentSettings = self.context.engine.data.subscribe(IosappEngine.EngineData.Item.Configuration.ContentSettings())
         
         let maxReadStoryId: Signal<Int32?, NoError>
         if let peerId = self.chatLocation.peerId, peerId.namespace == Namespaces.Peer.CloudUser {
@@ -1782,7 +1782,7 @@ public final class ChatHistoryListNodeImpl: ListViewImpl, ChatHistoryNode, ChatH
             recommendedChannels = .single(nil)
         }
         
-        let audioTranscriptionTrial = self.context.engine.data.subscribe(TelegramEngine.EngineData.Item.Configuration.AudioTranscriptionTrial())
+        let audioTranscriptionTrial = self.context.engine.data.subscribe(IosappEngine.EngineData.Item.Configuration.AudioTranscriptionTrial())
         
         let chatThemes = self.context.engine.themes.getChatThemes(accountManager: self.context.sharedContext.accountManager)
         
@@ -1798,7 +1798,7 @@ public final class ChatHistoryListNodeImpl: ListViewImpl, ChatHistoryNode, ChatH
             }
             |> distinctUntilChanged,
             context.engine.data.subscribe(
-                TelegramEngine.EngineData.Item.Peer.Peer(id: context.account.peerId)
+                IosappEngine.EngineData.Item.Peer.Peer(id: context.account.peerId)
             )
         )
         |> map { setting, peer -> Bool in
@@ -2074,7 +2074,7 @@ public final class ChatHistoryListNodeImpl: ListViewImpl, ChatHistoryNode, ChatH
                         if !isCopyProtectionEnabled {
                             isCopyProtectionEnabled = peer.isCopyProtectionEnabled
                         }
-                        if let channel = peer as? TelegramChannel {
+                        if let channel = peer as? IosappChannel {
                             autoTranslate = channel.flags.contains(.autoTranslateEnabled)
                             if let boostLevel = channel.approximateBoostLevel, boostLevel >= premiumConfiguration.minGroupAudioTranscriptionLevel {
                                 audioTranscriptionProvidedByBoost = true
@@ -2325,7 +2325,7 @@ public final class ChatHistoryListNodeImpl: ListViewImpl, ChatHistoryNode, ChatH
                     var hadAd = false
                     for entry in previous.filteredEntries.reversed() {
                         if case let .MessageEntry(message, _, _, _, _, _) = entry {
-                            if let action = message.media.first(where: { $0 is TelegramMediaAction }) as? TelegramMediaAction, case .joinedChannel = action.action {
+                            if let action = message.media.first(where: { $0 is IosappMediaAction }) as? IosappMediaAction, case .joinedChannel = action.action {
                                 hadJoin = true
                                 break
                             } else if message.adAttribute != nil {
@@ -2338,7 +2338,7 @@ public final class ChatHistoryListNodeImpl: ListViewImpl, ChatHistoryNode, ChatH
                         for entry in processedView.filteredEntries.reversed() {
                             if case let .MessageEntry(message, _, _, _, _, _) = entry {
                                 if message.adAttribute == nil {
-                                    if let action = message.media.first(where: { $0 is TelegramMediaAction }) as? TelegramMediaAction, case .joinedChannel = action.action {
+                                    if let action = message.media.first(where: { $0 is IosappMediaAction }) as? IosappMediaAction, case .joinedChannel = action.action {
                                         updatedScrollPosition = .index(subject: MessageHistoryScrollToSubject(index: .message(message.index), quote: nil), position: .top(0.0), directionHint: .Up, animated: true, highlight: false, displayLink: false, setupReply: false)
                                     }
                                     break
@@ -2788,7 +2788,7 @@ public final class ChatHistoryListNodeImpl: ListViewImpl, ChatHistoryNode, ChatH
                             }
                             if !message.text.isEmpty {
                                 messageIdsToTranslate.append(message.id)
-                            } else if let _ = message.media.first(where: { $0 is TelegramMediaPoll }) {
+                            } else if let _ = message.media.first(where: { $0 is IosappMediaPoll }) {
                                 messageIdsToTranslate.append(message.id)
                             } else if let audioTranscription = message.attributes.first(where: { $0 is AudioTranscriptionMessageAttribute }) as? AudioTranscriptionMessageAttribute, !audioTranscription.text.isEmpty && !audioTranscription.isPending {
                                 messageIdsToTranslate.append(message.id)
@@ -2841,7 +2841,7 @@ public final class ChatHistoryListNodeImpl: ListViewImpl, ChatHistoryNode, ChatH
                     
                     switch historyView.filteredEntries[i] {
                     case let .MessageEntry(message, _, _, _, _, _):
-                        if let author = message.author as? TelegramUser {
+                        if let author = message.author as? IosappUser {
                             peerIdsWithRefreshStories.append(author.id)
                         }
                         
@@ -2886,14 +2886,14 @@ public final class ChatHistoryListNodeImpl: ListViewImpl, ChatHistoryNode, ChatH
                         }
                         
                         for media in message.media {
-                            if let _ = media as? TelegramMediaUnsupported {
+                            if let _ = media as? IosappMediaUnsupported {
                                 contentRequiredValidation = true
-                            } else if message.flags.contains(.Incoming), let media = media as? TelegramMediaMap, let liveBroadcastingTimeout = media.liveBroadcastingTimeout {
+                            } else if message.flags.contains(.Incoming), let media = media as? IosappMediaMap, let liveBroadcastingTimeout = media.liveBroadcastingTimeout {
                                 let timestamp = Int32(CFAbsoluteTimeGetCurrent() + kCFAbsoluteTimeIntervalSince1970)
                                 if liveBroadcastingTimeout == liveLocationIndefinitePeriod || message.timestamp + liveBroadcastingTimeout > timestamp {
                                     messageIdsWithLiveLocation.append(message.id)
                                 }
-                            } else if let telegramFile = media as? TelegramMediaFile {
+                            } else if let telegramFile = media as? IosappMediaFile {
                                 if telegramFile.isAnimatedSticker, (message.id.peerId.namespace == Namespaces.Peer.SecretChat || !telegramFile.previewRepresentations.isEmpty), let size = telegramFile.size, size > 0 && size <= 128 * 1024 {
                                     if message.id.peerId.namespace == Namespaces.Peer.SecretChat {
                                         if telegramFile.fileId.namespace == Namespaces.Media.CloudFile {
@@ -2912,22 +2912,22 @@ public final class ChatHistoryListNodeImpl: ListViewImpl, ChatHistoryNode, ChatH
                                     }
                                 }
                                 downloadableResourceIds.append((message.id, telegramFile.resource.id.stringRepresentation))
-                            } else if let image = media as? TelegramMediaImage {
+                            } else if let image = media as? IosappMediaImage {
                                 if let representation = image.representations.last {
                                     downloadableResourceIds.append((message.id, representation.resource.id.stringRepresentation))
                                 }
-                            } else if let invoice = media as? TelegramMediaInvoice, let extendedMedia = invoice.extendedMedia, case .preview = extendedMedia {
+                            } else if let invoice = media as? IosappMediaInvoice, let extendedMedia = invoice.extendedMedia, case .preview = extendedMedia {
                                 messageIdsWithInactiveExtendedMedia.insert(message.id)
-                                if invoice.version != TelegramMediaInvoice.lastVersion {
+                                if invoice.version != IosappMediaInvoice.lastVersion {
                                     contentRequiredValidation = true
                                 }
-                            } else if let paidContent = media as? TelegramMediaPaidContent, let extendedMedia = paidContent.extendedMedia.first, case .preview = extendedMedia {
+                            } else if let paidContent = media as? IosappMediaPaidContent, let extendedMedia = paidContent.extendedMedia.first, case .preview = extendedMedia {
                                 messageIdsWithInactiveExtendedMedia.insert(message.id)
-                            } else if let _ = media as? TelegramMediaStory {
+                            } else if let _ = media as? IosappMediaStory {
                                 storiesRequiredValidation = true
-                            } else if let webpage = media as? TelegramMediaWebpage, case let .Loaded(content) = webpage.content, let _ = content.story {
+                            } else if let webpage = media as? IosappMediaWebpage, case let .Loaded(content) = webpage.content, let _ = content.story {
                                 storiesRequiredValidation = true
-                            } else if let poll = media as? TelegramMediaPoll {
+                            } else if let poll = media as? IosappMediaPoll {
                                 if poll.results.hasUnseenVotes == true {
                                     hasUnseenReactionsOrPollVotes = true
                                 }
@@ -2964,7 +2964,7 @@ public final class ChatHistoryListNodeImpl: ListViewImpl, ChatHistoryNode, ChatH
                             allVisibleAnchorMessageIds.append((message.id, nodeIndex))
                         }
                     case let .MessageGroupEntry(_, messages, _):
-                        if let author = messages.first?.0.author as? TelegramUser {
+                        if let author = messages.first?.0.author as? IosappUser {
                             peerIdsWithRefreshStories.append(author.id)
                         }
                         
@@ -2981,13 +2981,13 @@ public final class ChatHistoryListNodeImpl: ListViewImpl, ChatHistoryNode, ChatH
                                 }
                             }
                             for media in message.media {
-                                if let telegramFile = media as? TelegramMediaFile {
+                                if let telegramFile = media as? IosappMediaFile {
                                     downloadableResourceIds.append((message.id, telegramFile.resource.id.stringRepresentation))
-                                } else if let image = media as? TelegramMediaImage {
+                                } else if let image = media as? IosappMediaImage {
                                     if let representation = image.representations.last {
                                         downloadableResourceIds.append((message.id, representation.resource.id.stringRepresentation))
                                     }
-                                } else if let poll = media as? TelegramMediaPoll {
+                                } else if let poll = media as? IosappMediaPoll {
                                     if poll.results.hasUnseenVotes == true {
                                         hasUnseenReactionsOrPollVotes = true
                                     }
@@ -3082,7 +3082,7 @@ public final class ChatHistoryListNodeImpl: ListViewImpl, ChatHistoryNode, ChatH
             }
             
             func addMediaToPrefetch(_ message: Message, _ media: Media, _ messages: inout [(Message, Media)]) -> Bool {
-                if media is TelegramMediaImage || media is TelegramMediaFile {
+                if media is IosappMediaImage || media is IosappMediaFile {
                     messages.append((message, media))
                 }
                 if messages.count >= 3 {
@@ -3366,10 +3366,10 @@ public final class ChatHistoryListNodeImpl: ListViewImpl, ChatHistoryNode, ChatH
         guard let historyView = self.historyView?.originalView else {
             return
         }
-        var channelPeer: TelegramChannel?
+        var channelPeer: IosappChannel?
         for entry in historyView.additionalData {
             if case let .peer(_, value) = entry {
-                if let channel = value as? TelegramChannel, case .broadcast = channel.info {
+                if let channel = value as? IosappChannel, case .broadcast = channel.info {
                     channelPeer = channel
                 }
             }
@@ -3680,7 +3680,7 @@ public final class ChatHistoryListNodeImpl: ListViewImpl, ChatHistoryNode, ChatH
                 if let firstEntry = transition.historyView.originalView.entries.first {
                     var isPeerJoined = false
                     for media in firstEntry.message.media {
-                        if let action = media as? TelegramMediaAction, action.action == .peerJoined {
+                        if let action = media as? IosappMediaAction, action.action == .peerJoined {
                             isPeerJoined = true
                             break
                         }
@@ -4032,7 +4032,7 @@ public final class ChatHistoryListNodeImpl: ListViewImpl, ChatHistoryNode, ChatH
                         } else if let firstEntry = historyView.originalView.entries.first {
                             var emptyType = ChatHistoryNodeLoadState.EmptyType.generic
                             for media in firstEntry.message.media {
-                                if let action = media as? TelegramMediaAction {
+                                if let action = media as? IosappMediaAction {
                                     if action.action == .peerJoined {
                                         emptyType = .joined
                                         break
@@ -4054,7 +4054,7 @@ public final class ChatHistoryListNodeImpl: ListViewImpl, ChatHistoryNode, ChatH
                                         case let .message(id, messages) where id == replyThreadMessage.effectiveTopId:
                                             if let message = messages.first {
                                                 for media in message.media {
-                                                    if let action = media as? TelegramMediaAction {
+                                                    if let action = media as? IosappMediaAction {
                                                         if case .topicCreated = action.action {
                                                             emptyType = .topic
                                                             break
@@ -4410,8 +4410,8 @@ public final class ChatHistoryListNodeImpl: ListViewImpl, ChatHistoryNode, ChatH
                     }
                 }
             case let .custom(fileId):
-                if let itemFile = item.message.associatedMedia[MediaId(namespace: Namespaces.Media.CloudFile, id: fileId)] as? TelegramMediaFile {
-                    let itemFile = TelegramMediaFile.Accessor(itemFile)
+                if let itemFile = item.message.associatedMedia[MediaId(namespace: Namespaces.Media.CloudFile, id: fileId)] as? IosappMediaFile {
+                    let itemFile = IosappMediaFile.Accessor(itemFile)
                     reactionItem = ReactionItem(
                         reaction: ReactionItem.Reaction(rawValue: updatedReaction),
                         appearAnimation: itemFile,
@@ -4908,7 +4908,7 @@ public final class ChatHistoryListNodeImpl: ListViewImpl, ChatHistoryNode, ChatH
                         if state.selecting != isSelected {
                             let messageIds = messages.filter { message -> Bool in
                                 for media in message.media {
-                                    if media is TelegramMediaAction {
+                                    if media is IosappMediaAction {
                                         return false
                                     }
                                 }

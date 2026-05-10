@@ -9,7 +9,7 @@ public func hasBirthdayToday(cachedData: CachedUserData) -> Bool {
     return false
 }
 
-public func hasBirthdayToday(birthday: TelegramBirthday) -> Bool {
+public func hasBirthdayToday(birthday: IosappBirthday) -> Bool {
     let today = Calendar.current.dateComponents(Set([.day, .month]), from: Date())
     if today.day == Int(birthday.day) && today.month == Int(birthday.month) {
         return true

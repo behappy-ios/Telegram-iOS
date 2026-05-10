@@ -583,7 +583,7 @@ public class BrowserScreen: ViewController, MinimizableController {
                         }
                         let _ = (self.context.engine.data.get(
                             EngineDataList(
-                                peerIds.map(TelegramEngine.EngineData.Item.Peer.Peer.init)
+                                peerIds.map(IosappEngine.EngineData.Item.Peer.Peer.init)
                             )
                         )
                         |> deliverOnMainQueue).startStandalone(next: { [weak self] peerList in
@@ -618,7 +618,7 @@ public class BrowserScreen: ViewController, MinimizableController {
 
                             self.controller?.present(UndoOverlayController(presentationData: presentationData, content: .forward(savedMessages: savedMessages, text: text), elevatedLayout: false, animateInAsReplacement: true, action: { [weak self] action in
                                 if savedMessages, let self, action == .info {
-                                    let _ = (self.context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: self.context.account.peerId))
+                                    let _ = (self.context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: self.context.account.peerId))
                                     |> deliverOnMainQueue).start(next: { [weak self] peer in
                                         guard let self, let peer else {
                                             return
@@ -962,7 +962,7 @@ public class BrowserScreen: ViewController, MinimizableController {
             let lastController = self.controller?.navigationController?.viewControllers.last as? ViewController
             lastController?.present(UndoOverlayController(presentationData: presentationData, content: .forward(savedMessages: true, text: presentationData.strings.WebBrowser_LinkAddedToBookmarks), elevatedLayout: false, animateInAsReplacement: true, action: { [weak self] action in
                 if let self, action == .info {
-                    let _ = (self.context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: self.context.account.peerId))
+                    let _ = (self.context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: self.context.account.peerId))
                         |> deliverOnMainQueue).start(next: { [weak self] peer in
                         guard let self, let peer else {
                             return
@@ -1474,7 +1474,7 @@ public class BrowserScreen: ViewController, MinimizableController {
     
     public enum Subject {
         case webPage(url: String)
-        case instantPage(webPage: TelegramMediaWebpage, anchor: String?, sourceLocation: InstantPageSourceLocation, preloadedResources: [Any]?)
+        case instantPage(webPage: IosappMediaWebpage, anchor: String?, sourceLocation: InstantPageSourceLocation, preloadedResources: [Any]?)
         case document(file: FileMediaReference, canShare: Bool)
         case pdfDocument(file: FileMediaReference, canShare: Bool)
         
@@ -1493,7 +1493,7 @@ public class BrowserScreen: ViewController, MinimizableController {
     private var preferredConfiguration: WKWebViewConfiguration?
     private var openPreviousOnClose = false
     
-    public var openDocument: (TelegramMediaFile, Bool) -> Void = { _, _ in }
+    public var openDocument: (IosappMediaFile, Bool) -> Void = { _, _ in }
     
     private var validLayout: ContainerViewLayout?
     

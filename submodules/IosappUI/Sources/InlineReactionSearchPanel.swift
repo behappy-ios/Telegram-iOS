@@ -22,10 +22,10 @@ import ComponentDisplayAdapters
 
 private final class InlineReactionSearchStickersNode: ASDisplayNode, ASScrollViewDelegate {
     private final class DisplayItem {
-        let file: TelegramMediaFile
+        let file: IosappMediaFile
         let frame: CGRect
         
-        init(file: TelegramMediaFile, frame: CGRect) {
+        init(file: IosappMediaFile, frame: CGRect) {
             self.file = file
             self.frame = frame
         }
@@ -37,7 +37,7 @@ private final class InlineReactionSearchStickersNode: ASDisplayNode, ASScrollVie
     private let peerId: PeerId?
     
     private let scrollNode: ASScrollNode
-    private var items: [TelegramMediaFile] = []
+    private var items: [IosappMediaFile] = []
     private var displayItems: [DisplayItem] = []
     private var topInset: CGFloat?
     private var itemNodes: [MediaId: HorizontalStickerGridItemNode] = [:]
@@ -49,7 +49,7 @@ private final class InlineReactionSearchStickersNode: ASDisplayNode, ASScrollVie
     
     private weak var peekController: PeekController?
     
-    var previewedStickerItem: TelegramMediaFile?
+    var previewedStickerItem: IosappMediaFile?
     
     var updateBackgroundOffset: ((CGFloat, Bool, ContainedViewLayoutTransition) -> Void)?
     var sendSticker: ((FileMediaReference, UIView, CGRect) -> Void)?
@@ -235,7 +235,7 @@ private final class InlineReactionSearchStickersNode: ASDisplayNode, ASScrollVie
                 return nil
             }, updateContent: { [weak self] content in
                 if let strongSelf = self {
-                    var item: TelegramMediaFile?
+                    var item: IosappMediaFile?
                     if let content = content as? StickerPreviewPeekContent, case let .pack(contentItem) = content.item {
                         item = contentItem
                     }
@@ -244,7 +244,7 @@ private final class InlineReactionSearchStickersNode: ASDisplayNode, ASScrollVie
         }))
     }
     
-    private func updatePreviewingItem(file: TelegramMediaFile?, animated: Bool) {
+    private func updatePreviewingItem(file: IosappMediaFile?, animated: Bool) {
         if self.previewedStickerItem?.fileId != file?.fileId {
             self.previewedStickerItem = file
             
@@ -301,7 +301,7 @@ private final class InlineReactionSearchStickersNode: ASDisplayNode, ASScrollVie
         self.scrollNode.view.contentSize = CGSize(width: size.width, height: max(contentHeight, size.height))
     }
     
-    func updateItems(items: [TelegramMediaFile]) {
+    func updateItems(items: [IosappMediaFile]) {
         self.items = items
         
         var previousBackgroundOffset: CGFloat?
@@ -556,7 +556,7 @@ final class InlineReactionSearchPanel: ChatInputContextPanelNode {
         self.choosingStickerDisposable?.dispose()
     }
     
-    func updateResults(results: [TelegramMediaFile], query: String?) {
+    func updateResults(results: [IosappMediaFile], query: String?) {
         self.query = query
         self.stickersNode.updateItems(items: results)
     }

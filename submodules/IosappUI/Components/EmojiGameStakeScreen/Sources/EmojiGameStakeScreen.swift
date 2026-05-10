@@ -89,7 +89,7 @@ private final class SheetContent: CombinedComponent {
             let textColor = theme.actionSheet.primaryTextColor
             let linkColor = theme.actionSheet.controlAccentColor
             let markdownAttributes = MarkdownAttributes(body: MarkdownAttributeSet(font: textFont, textColor: textColor), bold: MarkdownAttributeSet(font: boldTextFont, textColor: textColor), link: MarkdownAttributeSet(font: textFont, textColor: linkColor), linkAttribute: { contents in
-                return (TelegramTextAttributes.URL, contents)
+                return (IosappTextAttributes.URL, contents)
             })
            
             let description = description.update(
@@ -355,7 +355,7 @@ private final class SheetContent: CombinedComponent {
         
         var cachedChevronImage: (UIImage, PresentationTheme)?
 
-        var emojiFiles: [TelegramMediaFile]?
+        var emojiFiles: [IosappMediaFile]?
         var emojiFilesDisposable: Disposable?
         
         init(component: SheetContent) {
@@ -371,10 +371,10 @@ private final class SheetContent: CombinedComponent {
             super.init()
             
             self.emojiFilesDisposable = (self.context.engine.stickers.loadedStickerPack(reference: .dice("🎲"), forceActualized: false)
-            |> mapToSignal { stickerPack -> Signal<[TelegramMediaFile], NoError> in
+            |> mapToSignal { stickerPack -> Signal<[IosappMediaFile], NoError> in
                 switch stickerPack {
                     case let .result(_, items, _):
-                        var emojiStickers: [TelegramMediaFile] = []
+                        var emojiStickers: [IosappMediaFile] = []
                         for item in items {
                             emojiStickers.append(item.file._parse())
                         }
@@ -1232,14 +1232,14 @@ public final class AmountFieldComponent: Component {
 private final class ResultCellComponent: Component {
     let context: AccountContext
     let theme: PresentationTheme
-    let files: [TelegramMediaFile]?
+    let files: [IosappMediaFile]?
     let value: Int32
     let size: CGSize
     
     init(
         context: AccountContext,
         theme: PresentationTheme,
-        files: [TelegramMediaFile]?,
+        files: [IosappMediaFile]?,
         value: Int32,
         size: CGSize
     ) {

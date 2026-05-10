@@ -21,7 +21,7 @@ private protocol DeviceContactDataContext {
 
 private final class DeviceContactDataModernContext: DeviceContactDataContext {
     let queue: Queue
-    let accountManager: AccountManager<TelegramAccountManagerTypes>
+    let accountManager: AccountManager<IosappAccountManagerTypes>
     let store = CNContactStore()
     var updateHandle: NSObjectProtocol?
     var currentContacts: [DeviceContactStableId: DeviceContactBasicData] = [:]
@@ -29,7 +29,7 @@ private final class DeviceContactDataModernContext: DeviceContactDataContext {
     
     private var retrieveContactsDisposable: Disposable?
     
-    init(queue: Queue, accountManager: AccountManager<TelegramAccountManagerTypes>, updated: @escaping ([DeviceContactStableId: DeviceContactBasicData]) -> Void, appSpecificReferencesUpdated: @escaping ([PeerId: DeviceContactBasicDataWithReference]) -> Void) {
+    init(queue: Queue, accountManager: AccountManager<IosappAccountManagerTypes>, updated: @escaping ([DeviceContactStableId: DeviceContactBasicData]) -> Void, appSpecificReferencesUpdated: @escaping ([PeerId: DeviceContactBasicDataWithReference]) -> Void) {
         self.queue = queue
         self.accountManager = accountManager
         
@@ -127,19 +127,19 @@ private final class DeviceContactDataModernContext: DeviceContactDataContext {
                 
                 var contacts: [DeviceContactStableId: DeviceContactBasicData] = currentData.contacts
                 var telegramReferences: [PeerId: String] = currentData.telegramReferences
-                var reverseTelegramReferences: [String: Set<PeerId>] = [:]
+                var reverseIosappReferences: [String: Set<PeerId>] = [:]
                 for (peerId, id) in telegramReferences {
-                    if reverseTelegramReferences[id] == nil {
-                        reverseTelegramReferences[id] = Set()
+                    if reverseIosappReferences[id] == nil {
+                        reverseIosappReferences[id] = Set()
                     }
-                    reverseTelegramReferences[id]?.insert(peerId)
+                    reverseIosappReferences[id]?.insert(peerId)
                 }
                 
                 let visitor = ChangeVisitor(
                     onDropEverything: {
                         contacts.removeAll()
                         telegramReferences.removeAll()
-                        reverseTelegramReferences.removeAll()
+                        reverseIosappReferences.removeAll()
                     },
                     onAdd: { contact in
                         let stableIdAndContact = DeviceContactDataModernContext.parseContact(contact)
@@ -147,10 +147,10 @@ private final class DeviceContactDataModernContext: DeviceContactDataContext {
                         for address in contact.urlAddresses {
                             if address.label == "Telegram", let peerId = parseAppSpecificContactReference(address.value as String) {
                                 telegramReferences[peerId] = stableIdAndContact.0
-                                if reverseTelegramReferences[stableIdAndContact.0] == nil {
-                                    reverseTelegramReferences[stableIdAndContact.0] = Set()
+                                if reverseIosappReferences[stableIdAndContact.0] == nil {
+                                    reverseIosappReferences[stableIdAndContact.0] = Set()
                                 }
-                                reverseTelegramReferences[stableIdAndContact.0]?.insert(peerId)
+                                reverseIosappReferences[stableIdAndContact.0]?.insert(peerId)
                             }
                         }
                     },
@@ -161,20 +161,20 @@ private final class DeviceContactDataModernContext: DeviceContactDataContext {
                             if address.label == "Telegram", let peerId = parseAppSpecificContactReference(address.value as String) {
                                 telegramReferences[peerId] = stableIdAndContact.0
                                 telegramReferences[peerId] = stableIdAndContact.0
-                                if reverseTelegramReferences[stableIdAndContact.0] == nil {
-                                    reverseTelegramReferences[stableIdAndContact.0] = Set()
+                                if reverseIosappReferences[stableIdAndContact.0] == nil {
+                                    reverseIosappReferences[stableIdAndContact.0] = Set()
                                 }
-                                reverseTelegramReferences[stableIdAndContact.0]?.insert(peerId)
+                                reverseIosappReferences[stableIdAndContact.0]?.insert(peerId)
                             }
                         }
                     },
                     onDelete: { contactId in
                         contacts.removeValue(forKey: contactId)
-                        if let peerIds = reverseTelegramReferences[contactId] {
+                        if let peerIds = reverseIosappReferences[contactId] {
                             for peerId in peerIds {
                                 telegramReferences.removeValue(forKey: peerId)
                             }
-                            reverseTelegramReferences.removeValue(forKey: contactId)
+                            reverseIosappReferences.removeValue(forKey: contactId)
                         }
                     }
                 )
@@ -485,7 +485,7 @@ private final class BasicDataForNormalizedNumberContext {
 
 private final class DeviceContactDataManagerPrivateImpl {
     private let queue: Queue
-    private let accountManager: AccountManager<TelegramAccountManagerTypes>
+    private let accountManager: AccountManager<IosappAccountManagerTypes>
     
     private var accessInitialized = false
     
@@ -508,7 +508,7 @@ private final class DeviceContactDataManagerPrivateImpl {
     private let importableContactsSubscribers = Bag<([DeviceContactNormalizedPhoneNumber: ImportableDeviceContactData]) -> Void>()
     private let appSpecificReferencesSubscribers = Bag<([PeerId: DeviceContactBasicDataWithReference]) -> Void>()
     
-    init(queue: Queue, accountManager: AccountManager<TelegramAccountManagerTypes>) {
+    init(queue: Queue, accountManager: AccountManager<IosappAccountManagerTypes>) {
         self.queue = queue
         self.accountManager = accountManager
         self.accessDisposable = (DeviceAccess.authorizationStatus(subject: .contacts)
@@ -769,7 +769,7 @@ public final class DeviceContactDataManagerImpl: DeviceContactDataManager {
     private let queue = Queue()
     private let impl: QueueLocalObject<DeviceContactDataManagerPrivateImpl>
     
-    init(accountManager: AccountManager<TelegramAccountManagerTypes>) {
+    init(accountManager: AccountManager<IosappAccountManagerTypes>) {
         let queue = self.queue
         self.impl = QueueLocalObject(queue: queue, generate: {
             return DeviceContactDataManagerPrivateImpl(queue: queue, accountManager: accountManager)

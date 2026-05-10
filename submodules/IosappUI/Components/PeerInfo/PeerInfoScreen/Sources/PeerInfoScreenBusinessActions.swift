@@ -18,7 +18,7 @@ extension PeerInfoScreenNode {
             return
         }
         
-        var businessHours: TelegramBusinessHours?
+        var businessHours: IosappBusinessHours?
         if let cachedData = cachedData as? CachedUserData {
             businessHours = cachedData.businessHours
         }
@@ -98,7 +98,7 @@ extension PeerInfoScreenNode {
             return
         }
         
-        var businessLocation: TelegramBusinessLocation?
+        var businessLocation: IosappBusinessLocation?
         if let cachedData = cachedData as? CachedUserData {
             businessLocation = cachedData.businessLocation
         }

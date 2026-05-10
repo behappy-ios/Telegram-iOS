@@ -10,7 +10,7 @@ public final class AnimatedStickerComponent: Component {
     public struct Animation: Equatable {
         public enum Source: Equatable {
             case bundle(name: String)
-            case file(media: TelegramMediaFile)
+            case file(media: IosappMediaFile)
         }
         
         public var source: Source

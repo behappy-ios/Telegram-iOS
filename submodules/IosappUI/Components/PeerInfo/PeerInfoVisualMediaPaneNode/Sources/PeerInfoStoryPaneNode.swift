@@ -856,9 +856,9 @@ private final class ItemLayer: CALayer, SparseItemGridLayer {
             } else {
                 if let layer = displayItem.layer as? ItemLayer {
                     var selectedMedia: Media?
-                    if let image = item.story.media._asMedia() as? TelegramMediaImage {
+                    if let image = item.story.media._asMedia() as? IosappMediaImage {
                         selectedMedia = image
-                    } else if let file = item.story.media._asMedia() as? TelegramMediaFile {
+                    } else if let file = item.story.media._asMedia() as? IosappMediaFile {
                         selectedMedia = file
                     }
                     
@@ -1212,9 +1212,9 @@ private final class SparseItemGridBindingImpl: SparseItemGridBinding {
             layer.updateHasSpoiler(hasSpoiler: hasSpoiler)
             
             var selectedMedia: Media?
-            if let image = story.media._asMedia() as? TelegramMediaImage {
+            if let image = story.media._asMedia() as? IosappMediaImage {
                 selectedMedia = image
-            } else if let file = story.media._asMedia() as? TelegramMediaFile {
+            } else if let file = story.media._asMedia() as? IosappMediaFile {
                 selectedMedia = file
             }
             
@@ -1346,7 +1346,7 @@ private final class SparseItemGridBindingImpl: SparseItemGridBinding {
         
         var duration: Int32?
         var isMin: Bool = false
-        if let file = selectedMedia as? TelegramMediaFile, !file.isAnimated {
+        if let file = selectedMedia as? IosappMediaFile, !file.isAnimated {
             if let durationValue = file.duration {
                 duration = Int32(durationValue)
             }
@@ -1523,7 +1523,7 @@ public final class PeerInfoStoryPaneNode: ASDisplayNode, PeerInfoPaneNode, ASScr
     }
     
     private struct MapInfoData: Equatable {
-        var location: TelegramMediaMap
+        var location: IosappMediaMap
         var address: String?
         var distance: Double?
         var drivingTime: ExpectedTravelTime
@@ -1532,7 +1532,7 @@ public final class PeerInfoStoryPaneNode: ASDisplayNode, PeerInfoPaneNode, ASScr
         var hasEta: Bool
         
         init(
-            location: TelegramMediaMap,
+            location: IosappMediaMap,
             address: String?,
             distance: Double?,
             drivingTime: ExpectedTravelTime,
@@ -2410,7 +2410,7 @@ public final class PeerInfoStoryPaneNode: ASDisplayNode, PeerInfoPaneNode, ASScr
                 let subjectLocation = CLLocation(latitude: locationCoordinate.latitude, longitude: locationCoordinate.longitude)
                 let distance = userLocation.flatMap { subjectLocation.distance(from: $0) }
                 
-                let locationMap = TelegramMediaMap(latitude: locationCoordinate.latitude, longitude: locationCoordinate.longitude, heading: nil, accuracyRadius: nil, venue: nil, address: venue.address, liveBroadcastingTimeout: nil, liveProximityNotificationRadius: nil)
+                let locationMap = IosappMediaMap(latitude: locationCoordinate.latitude, longitude: locationCoordinate.longitude, heading: nil, accuracyRadius: nil, venue: nil, address: venue.address, liveBroadcastingTimeout: nil, liveProximityNotificationRadius: nil)
                 
                 let mapInfoData = MapInfoData(
                     location: locationMap,
@@ -2557,9 +2557,9 @@ public final class PeerInfoStoryPaneNode: ASDisplayNode, PeerInfoPaneNode, ASScr
                                 var imageSignal: Signal<UIImage?, NoError>?
                                 
                                 var selectedMedia: Media?
-                                if let image = story.media._asMedia() as? TelegramMediaImage {
+                                if let image = story.media._asMedia() as? IosappMediaImage {
                                     selectedMedia = image
-                                } else if let file = story.media._asMedia() as? TelegramMediaFile {
+                                } else if let file = story.media._asMedia() as? IosappMediaFile {
                                     selectedMedia = file
                                 }
                                 
@@ -2695,7 +2695,7 @@ public final class PeerInfoStoryPaneNode: ASDisplayNode, PeerInfoPaneNode, ASScr
                         return
                     }
                     let _ = (self.context.engine.data.get(
-                        TelegramEngine.EngineData.Item.Peer.Peer(id: peerId)
+                        IosappEngine.EngineData.Item.Peer.Peer(id: peerId)
                     )
                     |> deliverOnMainQueue).startStandalone(next: { [weak self] peer in
                         guard let self, let peer else {
@@ -2760,7 +2760,7 @@ public final class PeerInfoStoryPaneNode: ASDisplayNode, PeerInfoPaneNode, ASScr
                     }
                     
                     let _ = (self.context.engine.data.get(
-                        TelegramEngine.EngineData.Item.Peer.Peer(id: peerId)
+                        IosappEngine.EngineData.Item.Peer.Peer(id: peerId)
                     )
                     |> deliverOnMainQueue).startStandalone(next: { [weak self] peer in
                         guard let self else {
@@ -2771,7 +2771,7 @@ public final class PeerInfoStoryPaneNode: ASDisplayNode, PeerInfoPaneNode, ASScr
                         }
                         
                         let shareController = self.context.sharedContext.makeShareController(context: self.context, params: ShareControllerParams(
-                            subject: .media(.story(peer: peerReference, id: item.id, media: TelegramMediaStory(storyId: StoryId(peerId: peer.id, id: item.id), isMention: false)), nil),
+                            subject: .media(.story(peer: peerReference, id: item.id, media: IosappMediaStory(storyId: StoryId(peerId: peer.id, id: item.id), isMention: false)), nil),
                             externalShare: false
                         ))
                         self.parentController?.present(shareController, in: .window(.root))
@@ -5377,7 +5377,7 @@ public final class PeerInfoStoryPaneNode: ASDisplayNode, PeerInfoPaneNode, ASScr
             }
             
             guard let peer = await self.context.engine.data.get(
-                TelegramEngine.EngineData.Item.Peer.Peer(id: peerId)
+                IosappEngine.EngineData.Item.Peer.Peer(id: peerId)
             ).get() else {
                 return
             }
@@ -5405,7 +5405,7 @@ public final class PeerInfoStoryPaneNode: ASDisplayNode, PeerInfoPaneNode, ASScr
                     }
                     let _ = (self.context.engine.data.get(
                         EngineDataList(
-                            peerIds.map(TelegramEngine.EngineData.Item.Peer.Peer.init)
+                            peerIds.map(IosappEngine.EngineData.Item.Peer.Peer.init)
                         )
                     )
                     |> deliverOnMainQueue).startStandalone(next: { [weak self] peerList in
@@ -5435,7 +5435,7 @@ public final class PeerInfoStoryPaneNode: ASDisplayNode, PeerInfoPaneNode, ASScr
 
                         self.parentController?.present(UndoOverlayController(presentationData: presentationData, content: .forward(savedMessages: savedMessages, text: text), elevatedLayout: false, animateInAsReplacement: true, action: { [weak self] action in
                             if savedMessages, let self, action == .info {
-                                let _ = (self.context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: self.context.account.peerId))
+                                let _ = (self.context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: self.context.account.peerId))
                                 |> deliverOnMainQueue).start(next: { [weak self] peer in
                                     guard let self, let peer else {
                                         return

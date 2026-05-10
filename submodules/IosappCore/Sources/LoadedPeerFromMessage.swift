@@ -8,7 +8,7 @@ public func loadedPeerFromMessage(account: Account, peerId: PeerId, messageId: M
     let accountPeerId = account.peerId
     return account.postbox.transaction { transaction -> Signal<Peer?, NoError> in
         if let peer = transaction.getPeer(peerId) {
-            if let user = peer as? TelegramUser {
+            if let user = peer as? IosappUser {
                 if let accessHash = user.accessHash, accessHash.value != 0 {
                     return .single(user)
                 } else {

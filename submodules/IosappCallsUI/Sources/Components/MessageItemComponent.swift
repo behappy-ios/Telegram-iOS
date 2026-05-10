@@ -89,7 +89,7 @@ final class MessageItemComponent: Component {
         weak var standaloneReactionAnimation: StandaloneReactionAnimation?
         
         private var cachedEntities: [MessageTextEntity]?
-        private var entityFiles: [MediaId: TelegramMediaFile] = [:]
+        private var entityFiles: [MediaId: IosappMediaFile] = [:]
         
         private var component: MessageItemComponent?
         

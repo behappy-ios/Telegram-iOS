@@ -6,9 +6,9 @@ import IosappUIPreferences
 
 public final class ChatPresentationThemeData: Equatable {
     public let theme: PresentationTheme
-    public let wallpaper: TelegramWallpaper
+    public let wallpaper: IosappWallpaper
     
-    public init(theme: PresentationTheme, wallpaper: TelegramWallpaper) {
+    public init(theme: PresentationTheme, wallpaper: IosappWallpaper) {
         self.theme = theme
         self.wallpaper = wallpaper
     }

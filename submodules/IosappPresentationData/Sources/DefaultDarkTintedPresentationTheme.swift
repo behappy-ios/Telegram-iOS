@@ -38,7 +38,7 @@ private extension PresentationThemeBaseColor {
     }
 }
 
-public func customizeDefaultDarkTintedPresentationTheme(theme: PresentationTheme, editing: Bool, title: String?, accentColor: UIColor?, backgroundColors: [UInt32], bubbleColors: [UInt32], animateBubbleColors: Bool?, wallpaper forcedWallpaper: TelegramWallpaper? = nil, baseColor: PresentationThemeBaseColor? = nil) -> PresentationTheme {
+public func customizeDefaultDarkTintedPresentationTheme(theme: PresentationTheme, editing: Bool, title: String?, accentColor: UIColor?, backgroundColors: [UInt32], bubbleColors: [UInt32], animateBubbleColors: Bool?, wallpaper forcedWallpaper: IosappWallpaper? = nil, baseColor: PresentationThemeBaseColor? = nil) -> PresentationTheme {
     if (theme.referenceTheme != .nightAccent) {
         return theme
     }
@@ -72,7 +72,7 @@ public func customizeDefaultDarkTintedPresentationTheme(theme: PresentationTheme
     var inputBackgroundColor: UIColor?
     var buttonStrokeColor: UIColor?
     
-    var suggestedWallpaper: TelegramWallpaper?
+    var suggestedWallpaper: IosappWallpaper?
     
     var bubbleColors = bubbleColors
     if bubbleColors.isEmpty, editing {
@@ -257,12 +257,12 @@ public func customizeDefaultDarkTintedPresentationTheme(theme: PresentationTheme
         )
     }
     
-    var defaultWallpaper: TelegramWallpaper?
+    var defaultWallpaper: IosappWallpaper?
     if let forcedWallpaper = forcedWallpaper {
         defaultWallpaper = forcedWallpaper
     } else if !backgroundColors.isEmpty {
         if backgroundColors.count >= 2 {
-            defaultWallpaper = .gradient(TelegramWallpaper.Gradient(id: nil, colors: backgroundColors, settings: WallpaperSettings()))
+            defaultWallpaper = .gradient(IosappWallpaper.Gradient(id: nil, colors: backgroundColors, settings: WallpaperSettings()))
         } else {
             defaultWallpaper = .color(backgroundColors[0])
         }

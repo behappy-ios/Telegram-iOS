@@ -30,7 +30,7 @@ public class ChatMessageContactBubbleContentNode: ChatMessageBubbleContentNode {
     private let titleNode: TextNode
     private let textNode: TextNode
     
-    private var contact: TelegramMediaContact?
+    private var contact: IosappMediaContact?
     private var contactInfo : String?
     
     private let addButtonNode: ChatMessageAttachedContentButtonNode
@@ -99,9 +99,9 @@ public class ChatMessageContactBubbleContentNode: ChatMessageBubbleContentNode {
         let previousContactInfo = self.contactInfo
         
         return { item, layoutConstants, _, _, constrainedSize, _ in
-            var selectedContact: TelegramMediaContact?
+            var selectedContact: IosappMediaContact?
             for media in item.message.media {
-                if let media = media as? TelegramMediaContact {
+                if let media = media as? IosappMediaContact {
                     selectedContact = media;
                 }
             }
@@ -252,7 +252,7 @@ public class ChatMessageContactBubbleContentNode: ChatMessageBubbleContentNode {
                     } else if let attribute = attribute as? ViewCountMessageAttribute {
                         viewCount = attribute.count
                     } else if let attribute = attribute as? ReplyThreadMessageAttribute, case .peer = item.chatLocation {
-                        if let channel = item.message.peers[item.message.id.peerId] as? TelegramChannel, case .group = channel.info {
+                        if let channel = item.message.peers[item.message.id.peerId] as? IosappChannel, case .group = channel.info {
                             dateReplies = Int(attribute.count)
                         }
                     } else if let attribute = attribute as? PaidStarsMessageAttribute, item.message.id.peerId.namespace == Namespaces.Peer.CloudChannel {
@@ -487,7 +487,7 @@ public class ChatMessageContactBubbleContentNode: ChatMessageBubbleContentNode {
                                     file: item.message.associatedMedia[MediaId(
                                         namespace: Namespaces.Media.CloudFile,
                                         id: backgroundEmojiId
-                                    )] as? TelegramMediaFile
+                                    )] as? IosappMediaFile
                                 )
                             }
                             
@@ -555,9 +555,9 @@ public class ChatMessageContactBubbleContentNode: ChatMessageBubbleContentNode {
     @objc private func contactTap(_ recognizer: UITapGestureRecognizer) {
         if case .ended = recognizer.state {
             if let item = self.item {
-                var selectedContact: TelegramMediaContact?
+                var selectedContact: IosappMediaContact?
                 for media in item.message.media {
-                    if let media = media as? TelegramMediaContact {
+                    if let media = media as? IosappMediaContact {
                         selectedContact = media
                     }
                 }
@@ -578,9 +578,9 @@ public class ChatMessageContactBubbleContentNode: ChatMessageBubbleContentNode {
     
     @objc private func messageButtonPressed() {
         if let item = self.item {
-            var selectedContact: TelegramMediaContact?
+            var selectedContact: IosappMediaContact?
             for media in item.message.media {
-                if let media = media as? TelegramMediaContact {
+                if let media = media as? IosappMediaContact {
                     selectedContact = media
                 }
             }

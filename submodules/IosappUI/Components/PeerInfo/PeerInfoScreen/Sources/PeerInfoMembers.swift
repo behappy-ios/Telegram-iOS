@@ -13,7 +13,7 @@ enum PeerInfoMemberRole {
 
 enum PeerInfoMember: Equatable {
     case channelMember(participant: RenderedChannelParticipant, storyStats: PeerStoryStats?)
-    case legacyGroupMember(peer: RenderedPeer, role: PeerInfoMemberRole, invitedBy: PeerId?, presence: TelegramUserPresence?, storyStats: PeerStoryStats?, rank: String?)
+    case legacyGroupMember(peer: RenderedPeer, role: PeerInfoMemberRole, invitedBy: PeerId?, presence: IosappUserPresence?, storyStats: PeerStoryStats?, rank: String?)
     case account(peer: RenderedPeer)
     
     var id: PeerId {
@@ -38,10 +38,10 @@ enum PeerInfoMember: Equatable {
         }
     }
     
-    var presence: TelegramUserPresence? {
+    var presence: IosappUserPresence? {
         switch self {
         case let .channelMember(participant, _):
-            return participant.presences[participant.peer.id] as? TelegramUserPresence
+            return participant.presences[participant.peer.id] as? IosappUserPresence
         case let .legacyGroupMember(_, _, _, presence, _, _):
             return presence
         case .account:
@@ -195,7 +195,7 @@ private final class PeerInfoMembersContextImpl {
                     return
                 }
                 
-                if let channel = peerViewMainPeer(view) as? TelegramChannel {
+                if let channel = peerViewMainPeer(view) as? IosappChannel {
                     var canAddMembers = false
                     switch channel.info {
                     case .broadcast:
@@ -256,11 +256,11 @@ private final class PeerInfoMembersContextImpl {
                             invitedBy = invitedByValue
                             rank = rankValue
                         }
-                        unsortedMembers.append(.legacyGroupMember(peer: RenderedPeer(peer: peer), role: role, invitedBy: invitedBy, presence: view.peerPresences[participant.peerId] as? TelegramUserPresence, storyStats: view.memberStoryStats[participant.peerId], rank: rank))
+                        unsortedMembers.append(.legacyGroupMember(peer: RenderedPeer(peer: peer), role: role, invitedBy: invitedBy, presence: view.peerPresences[participant.peerId] as? IosappUserPresence, storyStats: view.memberStoryStats[participant.peerId], rank: rank))
                     }
                 }
                 
-                if let group = peerViewMainPeer(view) as? TelegramGroup {
+                if let group = peerViewMainPeer(view) as? IosappGroup {
                     var canAddMembers = false
                     switch group.role {
                         case .admin, .creator:
@@ -312,7 +312,7 @@ private final class PeerInfoMembersContextImpl {
         if self.removingMemberIds[memberId] == nil {
             let signal: Signal<Never, NoError>
             if self.peerId.namespace == Namespaces.Peer.CloudChannel {
-                signal = context.peerChannelMemberCategoriesContextsManager.updateMemberBannedRights(engine: self.context.engine, peerId: self.peerId, memberId: memberId, bannedRights: TelegramChatBannedRights(flags: [.banReadMessages], untilDate: Int32.max))
+                signal = context.peerChannelMemberCategoriesContextsManager.updateMemberBannedRights(engine: self.context.engine, peerId: self.peerId, memberId: memberId, bannedRights: IosappChatBannedRights(flags: [.banReadMessages], untilDate: Int32.max))
                 |> ignoreValues
             } else {
                 signal = self.context.engine.peers.removePeerMember(peerId: self.peerId, memberId: memberId)

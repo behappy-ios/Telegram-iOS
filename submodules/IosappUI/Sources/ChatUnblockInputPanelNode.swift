@@ -97,7 +97,7 @@ final class ChatUnblockInputPanelNode: ChatInputPanelNode {
         }
         
         let string: String
-        if let user = interfaceState.renderedPeer?.peer as? TelegramUser, user.botInfo != nil {
+        if let user = interfaceState.renderedPeer?.peer as? IosappUser, user.botInfo != nil {
             string = strings.Bot_Unblock
         } else {
             string = strings.Conversation_Unblock

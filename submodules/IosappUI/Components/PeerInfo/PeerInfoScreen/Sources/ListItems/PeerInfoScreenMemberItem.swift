@@ -149,9 +149,9 @@ private final class PeerInfoScreenMemberItemNode: PeerInfoScreenItemNode {
             case .member:
                 var canEditRank = false
                 if item.member.id == item.context.accountPeerId {
-                    if let channel = item.enclosingPeer as? TelegramChannel, channel.hasPermission(.editRank) {
+                    if let channel = item.enclosingPeer as? IosappChannel, channel.hasPermission(.editRank) {
                         canEditRank = true
-                    } else if let group = item.enclosingPeer as? TelegramGroup, !group.hasBannedPermission(.banEditRank) {
+                    } else if let group = item.enclosingPeer as? IosappGroup, !group.hasBannedPermission(.banEditRank) {
                         canEditRank = true
                     }
                 }
@@ -178,13 +178,13 @@ private final class PeerInfoScreenMemberItemNode: PeerInfoScreenItemNode {
         let actions = availableActionsForMemberOfPeer(accountPeerId: item.context.accountPeerId, peer: item.enclosingPeer, member: item.member)
         
         var options: [ItemListPeerItemRevealOption] = []
-        if actions.contains(.promote) && item.enclosingPeer is TelegramChannel {
+        if actions.contains(.promote) && item.enclosingPeer is IosappChannel {
             options.append(ItemListPeerItemRevealOption(type: .neutral, title: presentationData.strings.GroupInfo_ActionPromote, action: {
                 item.action?(.promote)
             }))
         }
         if actions.contains(.restrict) {
-            if item.enclosingPeer is TelegramChannel {
+            if item.enclosingPeer is IosappChannel {
                 options.append(ItemListPeerItemRevealOption(type: .warning, title: presentationData.strings.GroupInfo_ActionRestrict, action: {
                     item.action?(.restrict)
                 }))

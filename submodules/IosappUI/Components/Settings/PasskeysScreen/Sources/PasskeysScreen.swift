@@ -20,18 +20,18 @@ final class PasskeysScreenComponent: Component {
     
     let context: AccountContext
     let displaySkip: Bool
-    let initialPasskeysData: [TelegramPasskey]?
+    let initialPasskeysData: [IosappPasskey]?
     let forceCreate: Bool
-    let passkeysDataUpdated: ([TelegramPasskey]) -> Void
+    let passkeysDataUpdated: ([IosappPasskey]) -> Void
     let completion: () -> Void
     let cancel: () -> Void
     
     init(
         context: AccountContext,
         displaySkip: Bool,
-        initialPasskeysData: [TelegramPasskey]?,
+        initialPasskeysData: [IosappPasskey]?,
         forceCreate: Bool,
-        passkeysDataUpdated: @escaping ([TelegramPasskey]) -> Void,
+        passkeysDataUpdated: @escaping ([IosappPasskey]) -> Void,
         completion: @escaping () -> Void,
         cancel: @escaping () -> Void
     ) {
@@ -57,7 +57,7 @@ final class PasskeysScreenComponent: Component {
         private var environment: EnvironmentType?
         private weak var state: EmptyComponentState?
 
-        private var passkeysData: [TelegramPasskey]?
+        private var passkeysData: [IosappPasskey]?
         private var loadPasskeysDataDisposable: Disposable?
         
         override init(frame: CGRect) {
@@ -413,9 +413,9 @@ public final class PasskeysScreen: ViewControllerComponentContainer {
     public init(
         context: AccountContext,
         displaySkip: Bool,
-        initialPasskeysData: [TelegramPasskey]?,
+        initialPasskeysData: [IosappPasskey]?,
         forceCreate: Bool = false,
-        passkeysDataUpdated: @escaping ([TelegramPasskey]) -> Void,
+        passkeysDataUpdated: @escaping ([IosappPasskey]) -> Void,
         completion: @escaping () -> Void,
         cancel: @escaping () -> Void
     ) {

@@ -97,7 +97,7 @@ public final class InstantPagePresentationSettings: Codable, Equatable {
     }
 }
 
-public func updateInstantPagePresentationSettingsInteractively(accountManager: AccountManager<TelegramAccountManagerTypes>, _ f: @escaping (InstantPagePresentationSettings) -> InstantPagePresentationSettings) -> Signal<Void, NoError> {
+public func updateInstantPagePresentationSettingsInteractively(accountManager: AccountManager<IosappAccountManagerTypes>, _ f: @escaping (InstantPagePresentationSettings) -> InstantPagePresentationSettings) -> Signal<Void, NoError> {
     return accountManager.transaction { transaction -> Void in
         transaction.updateSharedData(ApplicationSpecificSharedDataKeys.instantPagePresentationSettings, { entry in
             let currentSettings: InstantPagePresentationSettings

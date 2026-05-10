@@ -177,7 +177,7 @@ public final class PeerInfoChatPaneNode: ASDisplayNode, PeerInfoPaneNode, ASScro
         
         let strings = self.presentationData.strings
         self.statusPromise.set(self.context.engine.data.subscribe(
-            TelegramEngine.EngineData.Item.Messages.MessageCount(peerId: peerId, threadId: threadId, tag: tag ?? [])
+            IosappEngine.EngineData.Item.Messages.MessageCount(peerId: peerId, threadId: threadId, tag: tag ?? [])
         )
         |> map { count in
             if let count {

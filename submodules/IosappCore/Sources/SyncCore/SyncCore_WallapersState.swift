@@ -3,13 +3,13 @@ import Postbox
 import SwiftSignalKit
 
 public struct WallpapersState: Codable, Equatable {
-    public var wallpapers: [TelegramWallpaper]
+    public var wallpapers: [IosappWallpaper]
 
     public static var `default`: WallpapersState {
         return WallpapersState(wallpapers: [])
     }
 
-    public init(wallpapers: [TelegramWallpaper]) {
+    public init(wallpapers: [IosappWallpaper]) {
         self.wallpapers = wallpapers
     }
 
@@ -18,7 +18,7 @@ public struct WallpapersState: Codable, Equatable {
 
         let wallpapersData = try container.decode([Data].self, forKey: "wallpapers")
         self.wallpapers = wallpapersData.map { data in
-            return (try! AdaptedPostboxDecoder().decode(TelegramWallpaperNativeCodable.self, from: data)).value
+            return (try! AdaptedPostboxDecoder().decode(IosappWallpaperNativeCodable.self, from: data)).value
         }
     }
 
@@ -26,7 +26,7 @@ public struct WallpapersState: Codable, Equatable {
         var container = encoder.container(keyedBy: StringCodingKey.self)
 
         let wallpapersData: [Data] = self.wallpapers.map { wallpaper in
-            return try! AdaptedPostboxEncoder().encode(TelegramWallpaperNativeCodable(wallpaper))
+            return try! AdaptedPostboxEncoder().encode(IosappWallpaperNativeCodable(wallpaper))
         }
 
         try container.encode(wallpapersData, forKey: "wallpapers")
@@ -34,7 +34,7 @@ public struct WallpapersState: Codable, Equatable {
 }
 
 public extension WallpapersState {
-    static func update(transaction: AccountManagerModifier<TelegramAccountManagerTypes>, _ f: (WallpapersState) -> WallpapersState) {
+    static func update(transaction: AccountManagerModifier<IosappAccountManagerTypes>, _ f: (WallpapersState) -> WallpapersState) {
         transaction.updateSharedData(SharedDataKeys.wallapersState, { current in
             let item = (transaction.getSharedData(SharedDataKeys.wallapersState)?.get(WallpapersState.self)) ?? WallpapersState(wallpapers: [])
             return PreferencesEntry(f(item))

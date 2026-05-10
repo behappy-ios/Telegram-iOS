@@ -43,7 +43,7 @@ public final class DrawingLinkEntity: DrawingEntity, Codable {
         
     public var url: String
     public var name: String
-    public var webpage: TelegramMediaWebpage?
+    public var webpage: IosappMediaWebpage?
     public var positionBelowText: Bool
     public var largeMedia: Bool?
     public var expandedSize: CGSize?
@@ -90,7 +90,7 @@ public final class DrawingLinkEntity: DrawingEntity, Codable {
     public init(
         url: String,
         name: String,
-        webpage: TelegramMediaWebpage?,
+        webpage: IosappMediaWebpage?,
         positionBelowText: Bool,
         largeMedia: Bool?,
         style: Style
@@ -121,7 +121,7 @@ public final class DrawingLinkEntity: DrawingEntity, Codable {
         self.style = try container.decode(Style.self, forKey: .style)
         
         if let webpageData = try container.decodeIfPresent(Data.self, forKey: .webpage) {
-            self.webpage = PostboxDecoder(buffer: MemoryBuffer(data: webpageData)).decodeRootObject() as? TelegramMediaWebpage
+            self.webpage = PostboxDecoder(buffer: MemoryBuffer(data: webpageData)).decodeRootObject() as? IosappMediaWebpage
         } else {
             self.webpage = nil
         }

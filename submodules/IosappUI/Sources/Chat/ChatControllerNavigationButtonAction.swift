@@ -140,8 +140,8 @@ extension ChatControllerImpl {
                 
                 let context = self.context
                 let _ = (self.context.engine.data.get(
-                    TelegramEngine.EngineData.Item.Peer.ParticipantCount(id: peerId),
-                    TelegramEngine.EngineData.Item.Peer.CanDeleteHistory(id: peerId)
+                    IosappEngine.EngineData.Item.Peer.ParticipantCount(id: peerId),
+                    IosappEngine.EngineData.Item.Peer.CanDeleteHistory(id: peerId)
                 )
                 |> map { participantCount, canDeleteHistory -> (isLargeGroupOrChannel: Bool, canClearChannel: Bool) in
                     if let participantCount = participantCount {
@@ -177,11 +177,11 @@ extension ChatControllerImpl {
                         canClearCache = false
                         canClearForMyself = .savedMessages
                         canClearForEveryone = nil
-                    } else if chatPeer is TelegramSecretChat {
+                    } else if chatPeer is IosappSecretChat {
                         canClearCache = false
                         canClearForMyself = .secretChat
                         canClearForEveryone = nil
-                    } else if let group = chatPeer as? TelegramGroup {
+                    } else if let group = chatPeer as? IosappGroup {
                         canClearCache = false
                         
                         switch group.role {
@@ -192,7 +192,7 @@ extension ChatControllerImpl {
                             canClearForMyself = .group
                             canClearForEveryone = nil
                         }
-                    } else if let channel = chatPeer as? TelegramChannel {
+                    } else if let channel = chatPeer as? IosappChannel {
                         if let username = channel.addressName, !username.isEmpty {
                             if isLargeGroupOrChannel {
                                 canClearCache = true
@@ -260,7 +260,7 @@ extension ChatControllerImpl {
                         canClearCache = false
                         canClearForMyself = .user
                         
-                        if let user = chatPeer as? TelegramUser, user.botInfo != nil {
+                        if let user = chatPeer as? IosappUser, user.botInfo != nil {
                             canClearForEveryone = nil
                         } else {
                             canClearForEveryone = .user
@@ -418,7 +418,7 @@ extension ChatControllerImpl {
                         guard var peer = peerView.peers[peerView.peerId] else {
                             return
                         }
-                        if let channel = peer as? TelegramChannel, channel.isMonoForum, let linkedMonoforumId = channel.linkedMonoforumId, let mainPeer = peerView.peers[linkedMonoforumId] as? TelegramChannel {
+                        if let channel = peer as? IosappChannel, channel.isMonoForum, let linkedMonoforumId = channel.linkedMonoforumId, let mainPeer = peerView.peers[linkedMonoforumId] as? IosappChannel {
                             peer = mainPeer
                             
                             guard let navigationController = self.effectiveNavigationController else {
@@ -476,7 +476,7 @@ extension ChatControllerImpl {
                         if #available(iOS 13.0, *) {
                             Task { @MainActor [weak self] in
                                 guard let peer = await context.engine.data.get(
-                                    TelegramEngine.EngineData.Item.Peer.Peer(id: PeerId(replyThreadMessage.threadId))
+                                    IosappEngine.EngineData.Item.Peer.Peer(id: PeerId(replyThreadMessage.threadId))
                                 ).get() else {
                                     return
                                 }
@@ -488,7 +488,7 @@ extension ChatControllerImpl {
                                 }
                             }
                         }
-                    } else if let channel = self.presentationInterfaceState.renderedPeer?.peer as? TelegramChannel, channel.isForumOrMonoForum, case let .replyThread(message) = self.chatLocation {
+                    } else if let channel = self.presentationInterfaceState.renderedPeer?.peer as? IosappChannel, channel.isForumOrMonoForum, case let .replyThread(message) = self.chatLocation {
                         if let infoController = self.context.sharedContext.makePeerInfoController(context: self.context, updatedPresentationData: self.updatedPresentationData, peer: channel, mode: .forumTopic(thread: message), avatarInitiallyExpanded: false, fromChat: true, requestsContext: self.contentData?.inviteRequestsContext) {
                             self.effectiveNavigationController?.pushViewController(infoController)
                         }

@@ -6,7 +6,7 @@ import IosappUIPreferences
 import Postbox
 import SwiftSignalKit
 
-public func selectDateFillStaticColor(theme: PresentationTheme, wallpaper: TelegramWallpaper) -> UIColor {
+public func selectDateFillStaticColor(theme: PresentationTheme, wallpaper: IosappWallpaper) -> UIColor {
     if case .color(0xffffff) = wallpaper {
         return theme.chat.serviceMessage.components.withDefaultWallpaper.dateFillStatic
     } else if case .builtin = wallpaper {
@@ -16,7 +16,7 @@ public func selectDateFillStaticColor(theme: PresentationTheme, wallpaper: Teleg
     }
 }
 
-public func selectReactionFillStaticColor(theme: PresentationTheme, wallpaper: TelegramWallpaper, isStars: Bool = false) -> UIColor {
+public func selectReactionFillStaticColor(theme: PresentationTheme, wallpaper: IosappWallpaper, isStars: Bool = false) -> UIColor {
     if isStars {
         return theme.chat.message.freeform.withoutWallpaper.reactionStarsInactiveBackground
     }
@@ -32,7 +32,7 @@ public func selectReactionFillStaticColor(theme: PresentationTheme, wallpaper: T
     }
 }
 
-public func dateFillNeedsBlur(theme: PresentationTheme, wallpaper: TelegramWallpaper) -> Bool {
+public func dateFillNeedsBlur(theme: PresentationTheme, wallpaper: IosappWallpaper) -> Bool {
     if !DeviceMetrics.performance.isGraphicallyCapable {
         return false
     }
@@ -56,7 +56,7 @@ public let defaultServiceBackgroundColor = UIColor(rgb: 0x000000, alpha: 0.2)
 public let defaultPresentationTheme = makeDefaultDayPresentationTheme(serviceBackgroundColor: defaultServiceBackgroundColor, day: false, preview: false)
 public let defaultDayAccentColor = UIColor(rgb: 0x0088ff)
 
-public func customizeDefaultDayTheme(theme: PresentationTheme, editing: Bool, title: String?, accentColor: UIColor?, outgoingAccentColor: UIColor?, backgroundColors: [UInt32], bubbleColors: [UInt32], animateBubbleColors: Bool?, wallpaper forcedWallpaper: TelegramWallpaper? = nil, serviceBackgroundColor: UIColor?) -> PresentationTheme {
+public func customizeDefaultDayTheme(theme: PresentationTheme, editing: Bool, title: String?, accentColor: UIColor?, outgoingAccentColor: UIColor?, backgroundColors: [UInt32], bubbleColors: [UInt32], animateBubbleColors: Bool?, wallpaper forcedWallpaper: IosappWallpaper? = nil, serviceBackgroundColor: UIColor?) -> PresentationTheme {
     if (theme.referenceTheme != .day && theme.referenceTheme != .dayClassic) {
         return theme
     }
@@ -70,7 +70,7 @@ public func customizeDefaultDayTheme(theme: PresentationTheme, editing: Bool, ti
     var actionSheet = theme.actionSheet
     
     var outgoingAccent: UIColor?
-    var suggestedWallpaper: TelegramWallpaper?
+    var suggestedWallpaper: IosappWallpaper?
     
     var bubbleColors = bubbleColors  
     if bubbleColors.isEmpty, editing {
@@ -92,10 +92,10 @@ public func customizeDefaultDayTheme(theme: PresentationTheme, editing: Bool, ti
                     }
                 }
 
-                suggestedWallpaper = .gradient(TelegramWallpaper.Gradient(id: nil, colors: defaultBuiltinWallpaperGradientColors.map(\.rgb), settings: WallpaperSettings()))
+                suggestedWallpaper = .gradient(IosappWallpaper.Gradient(id: nil, colors: defaultBuiltinWallpaperGradientColors.map(\.rgb), settings: WallpaperSettings()))
             } else {
                 bubbleColors = [UIColor(rgb: 0xe1ffc7).rgb]
-                suggestedWallpaper = .gradient(TelegramWallpaper.Gradient(id: nil, colors: defaultBuiltinWallpaperGradientColors.map(\.rgb), settings: WallpaperSettings()))
+                suggestedWallpaper = .gradient(IosappWallpaper.Gradient(id: nil, colors: defaultBuiltinWallpaperGradientColors.map(\.rgb), settings: WallpaperSettings()))
                 outgoingAccent = outgoingAccentColor
             }
         }
@@ -248,12 +248,12 @@ public func customizeDefaultDayTheme(theme: PresentationTheme, editing: Bool, ti
         }
     }
     
-    var defaultWallpaper: TelegramWallpaper?
+    var defaultWallpaper: IosappWallpaper?
     if let forcedWallpaper = forcedWallpaper {
         defaultWallpaper = forcedWallpaper
     } else if !backgroundColors.isEmpty {
         if backgroundColors.count >= 2 {
-            defaultWallpaper = .gradient(TelegramWallpaper.Gradient(id: nil, colors: backgroundColors, settings: WallpaperSettings()))
+            defaultWallpaper = .gradient(IosappWallpaper.Gradient(id: nil, colors: backgroundColors, settings: WallpaperSettings()))
         } else {
             defaultWallpaper = .color(backgroundColors[0])
         }
@@ -1005,7 +1005,7 @@ public func makeDefaultDayPresentationTheme(extendingThemeReference: Presentatio
         badgeTextColor: UIColor(rgb: 0xffffff)
     )
 
-    let defaultPatternWallpaper: TelegramWallpaper = defaultBuiltinWallpaper(data: .default, colors: defaultBuiltinWallpaperGradientColors.map(\.rgb))
+    let defaultPatternWallpaper: IosappWallpaper = defaultBuiltinWallpaper(data: .default, colors: defaultBuiltinWallpaperGradientColors.map(\.rgb))
 
     let chat = PresentationThemeChat(
         defaultWallpaper: day ? .color(0xffffff) : defaultPatternWallpaper,
@@ -1336,8 +1336,8 @@ static let \(name) = BuiltinWallpaperData(
     }
 }
 
-public func defaultBuiltinWallpaper(data: BuiltinWallpaperData, colors: [UInt32], intensity: Int32 = 50, rotation: Int32? = nil) -> TelegramWallpaper {
-    return .file(TelegramWallpaper.File(
+public func defaultBuiltinWallpaper(data: BuiltinWallpaperData, colors: [UInt32], intensity: Int32 = 50, rotation: Int32? = nil) -> IosappWallpaper {
+    return .file(IosappWallpaper.File(
         id: data.wallpaperId,
         accessHash: data.wallpaperAccessHash,
         isCreator: false,
@@ -1345,7 +1345,7 @@ public func defaultBuiltinWallpaper(data: BuiltinWallpaperData, colors: [UInt32]
         isPattern: true,
         isDark: false,
         slug: data.slug,
-        file: TelegramMediaFile(
+        file: IosappMediaFile(
             fileId: MediaId(namespace: Namespaces.Media.CloudFile, id: data.fileId),
             partialReference: nil,
             resource: CloudDocumentMediaResource(
@@ -1357,7 +1357,7 @@ public func defaultBuiltinWallpaper(data: BuiltinWallpaperData, colors: [UInt32]
                 fileName: "pattern.tgv"
             ),
             previewRepresentations: [
-                TelegramMediaImageRepresentation(
+                IosappMediaImageRepresentation(
                     dimensions: PixelDimensions(width: 155, height: 320),
                     resource: CloudDocumentSizeMediaResource(
                         datacenterId: 1,

@@ -603,15 +603,15 @@ final class LiveStreamSettingsScreenComponent: Component {
                             bold: MarkdownAttributeSet(font: footerBoldTextFont, textColor: footerTextColor),
                             link: MarkdownAttributeSet(font: footerTextFont, textColor: theme.list.itemAccentColor),
                             linkAttribute: { contents in
-                                return (TelegramTextAttributes.URL, contents)
+                                return (IosappTextAttributes.URL, contents)
                             }
                         )
                     ),
                     maximumNumberOfLines: 0,
                     highlightColor: presentationData.theme.list.itemAccentColor.withAlphaComponent(0.2),
                     highlightAction: { attributes in
-                        if let _ = attributes[NSAttributedString.Key(rawValue: TelegramTextAttributes.URL)] {
-                            return NSAttributedString.Key(rawValue: TelegramTextAttributes.URL)
+                        if let _ = attributes[NSAttributedString.Key(rawValue: IosappTextAttributes.URL)] {
+                            return NSAttributedString.Key(rawValue: IosappTextAttributes.URL)
                         } else {
                             return nil
                         }
@@ -1259,7 +1259,7 @@ public class LiveStreamSettingsScreen: ViewControllerComponentContainer {
                 var everyonePeerSignals: [Signal<EnginePeer?, NoError>] = []
                 if everyone.count < 3 {
                     for peerId in everyone {
-                        everyonePeerSignals.append(context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: peerId)))
+                        everyonePeerSignals.append(context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: peerId)))
                     }
                 }
                 
@@ -1270,7 +1270,7 @@ public class LiveStreamSettingsScreen: ViewControllerComponentContainer {
                 var contactsPeerSignals: [Signal<EnginePeer?, NoError>] = []
                 if contacts.count < 3 {
                     for peerId in contacts {
-                        contactsPeerSignals.append(context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: peerId)))
+                        contactsPeerSignals.append(context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: peerId)))
                     }
                 }
                 
@@ -1281,7 +1281,7 @@ public class LiveStreamSettingsScreen: ViewControllerComponentContainer {
                 var selectedPeerSignals: [Signal<EnginePeer?, NoError>] = []
                 if selected.count < 3 {
                     for peerId in selected {
-                        selectedPeerSignals.append(context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: peerId)))
+                        selectedPeerSignals.append(context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: peerId)))
                     }
                 }
                 return combineLatest(
@@ -1312,7 +1312,7 @@ public class LiveStreamSettingsScreen: ViewControllerComponentContainer {
             let adminedChannelsWithParticipants = adminedChannels
             |> mapToSignal { peers -> Signal<([EnginePeer], [EnginePeer.Id: Optional<Int>]), NoError> in
                 return context.engine.data.subscribe(
-                    EngineDataMap(peers.map(\.id).map(TelegramEngine.EngineData.Item.Peer.ParticipantCount.init))
+                    EngineDataMap(peers.map(\.id).map(IosappEngine.EngineData.Item.Peer.ParticipantCount.init))
                 )
                 |> map { participantCountMap -> ([EnginePeer], [EnginePeer.Id: Optional<Int>]) in
                     return (peers, participantCountMap)
@@ -1321,7 +1321,7 @@ public class LiveStreamSettingsScreen: ViewControllerComponentContainer {
         
             self.stateDisposable = combineLatest(
                 queue: Queue.mainQueue(),
-                context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: context.account.peerId)),
+                context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: context.account.peerId)),
                 adminedChannelsWithParticipants,
                 savedPeers,
                 closeFriends,

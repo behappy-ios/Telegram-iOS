@@ -83,7 +83,7 @@ private final class MediaGridLayer: SimpleLayer {
         var dimensions: CGSize?
         var signal: Signal<(TransformImageArguments) -> DrawingContext?, NoError>?
         for media in message.media {
-            if let file = media as? TelegramMediaFile, let representation = file.previewRepresentations.last {
+            if let file = media as? IosappMediaFile, let representation = file.previewRepresentations.last {
                 isVideo = file.isVideo
                 signal = chatWebpageSnippetFile(
                     account: context.account,
@@ -93,7 +93,7 @@ private final class MediaGridLayer: SimpleLayer {
                     automaticFetch: false
                 )
                 dimensions = representation.dimensions.cgSize
-            } else if let image = media as? TelegramMediaImage, let representation = image.representations.last {
+            } else if let image = media as? IosappMediaImage, let representation = image.representations.last {
                 signal = mediaGridMessagePhoto(
                     account: context.account,
                     userLocation: .peer(message.id.peerId),

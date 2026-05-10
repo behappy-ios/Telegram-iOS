@@ -70,7 +70,7 @@ private final class ChatSendAsPeerListContextItemNode: ASDisplayNode, ContextMen
             if peer.peer.id.namespace == Namespaces.Peer.CloudUser {
                 subtitle = presentationData.strings.VoiceChat_PersonalAccount
             } else if let subscribers = peer.subscribers {
-                if let peer = peer.peer as? TelegramChannel {
+                if let peer = peer.peer as? IosappChannel {
                     if case .broadcast = peer.info {
                         subtitle = presentationData.strings.Conversation_StatusSubscribers(subscribers)
                     } else {

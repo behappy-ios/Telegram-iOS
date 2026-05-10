@@ -15,14 +15,14 @@ import AccountContext
 
 final class HorizontalStickerGridItem: GridItem {
     let context: AccountContext
-    let file: TelegramMediaFile
+    let file: IosappMediaFile
     let theme: PresentationTheme
     let isPreviewed: (HorizontalStickerGridItem) -> Bool
     let sendSticker: (FileMediaReference, UIView, CGRect) -> Void
     
     let section: GridSection? = nil
     
-    init(context: AccountContext, file: TelegramMediaFile, theme: PresentationTheme, isPreviewed: @escaping (HorizontalStickerGridItem) -> Bool, sendSticker: @escaping (FileMediaReference, UIView, CGRect) -> Void) {
+    init(context: AccountContext, file: IosappMediaFile, theme: PresentationTheme, isPreviewed: @escaping (HorizontalStickerGridItem) -> Bool, sendSticker: @escaping (FileMediaReference, UIView, CGRect) -> Void) {
         self.context = context
         self.file = file
         self.theme = theme

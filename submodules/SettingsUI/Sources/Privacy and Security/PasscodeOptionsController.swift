@@ -487,8 +487,8 @@ public func passcodeEntryController(
 }
     
 public func passcodeEntryController(
-    accountManager: AccountManager<TelegramAccountManagerTypes>,
-    applicationBindings: TelegramApplicationBindings,
+    accountManager: AccountManager<IosappAccountManagerTypes>,
+    applicationBindings: IosappApplicationBindings,
     presentationData: PresentationData,
     updatedPresentationData: Signal<PresentationData, NoError>,
     statusBarHost: StatusBarHost?,

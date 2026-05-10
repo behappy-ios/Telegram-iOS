@@ -41,7 +41,7 @@ public func storyPreviewWithAddedReactions(
 ) -> Signal<(TransformImageArguments) -> DrawingContext?, NoError> {
     var reactionData: [Signal<(MessageReaction.Reaction, CGImage?), NoError>] = []
     
-    let loadFile: (MessageReaction.Reaction, TelegramMediaFile) -> Signal<(MessageReaction.Reaction, CGImage?), NoError> = { reaction, file in
+    let loadFile: (MessageReaction.Reaction, IosappMediaFile) -> Signal<(MessageReaction.Reaction, CGImage?), NoError> = { reaction, file in
         return Signal { subscriber in
             let isTemplate = !"".isEmpty
             return context.animationRenderer.loadFirstFrameAsImage(cache: context.animationCache, itemId: file.resource.id.stringRepresentation, size: CGSize(width: 128.0, height: 128.0), fetch: animationCacheFetchFile(postbox: context.account.postbox, userLocation: .other, userContentType: .sticker, resource: .media(media: .standalone(media: file), resource: file.resource), type: AnimationCacheAnimationType(file: file), keyframeOnly: true, customColor: isTemplate ? .white : nil), completion: { result in
@@ -105,7 +105,7 @@ public func storyPreviewWithAddedReactions(
     }
     
     if !customFileIds.isEmpty {
-        let customFiles = Promise<[Int64: TelegramMediaFile]>()
+        let customFiles = Promise<[Int64: IosappMediaFile]>()
         customFiles.set(context.engine.stickers.resolveInlineStickers(fileIds: customFileIds))
         
         for id in customFileIds {
@@ -242,7 +242,7 @@ final class StoryItemOverlaysView: UIView {
         
         private var directStickerView: ComponentView<Empty>?
         private var customEmojiView: EmojiTextAttachmentView?
-        private var file: TelegramMediaFile?
+        private var file: IosappMediaFile?
         private var counterText: AnimatedCountLabelView?
         
         private var reaction: MessageReaction.Reaction?
@@ -250,7 +250,7 @@ final class StoryItemOverlaysView: UIView {
         var requestUpdate: (() -> Void)?
         
         private var requestStickerDisposable: Disposable?
-        private var resolvedFile: TelegramMediaFile?
+        private var resolvedFile: IosappMediaFile?
         
         private var customEmojiLoadDisposable: Disposable?
         
@@ -307,7 +307,7 @@ final class StoryItemOverlaysView: UIView {
             flags: MediaArea.ReactionFlags,
             counter: Int,
             availableReactions: StoryAvailableReactions?,
-            entityFiles: [MediaId: TelegramMediaFile],
+            entityFiles: [MediaId: IosappMediaFile],
             synchronous: Bool,
             size: CGSize,
             isActive: Bool
@@ -332,7 +332,7 @@ final class StoryItemOverlaysView: UIView {
             let minSide = floor(min(200.0, min(size.width, size.height)) * 0.65)
             let itemSize = CGSize(width: minSide, height: minSide)
             
-            var file: TelegramMediaFile? = self.file
+            var file: IosappMediaFile? = self.file
             if self.file == nil {
                 switch reaction {
                 case .builtin:
@@ -545,7 +545,7 @@ final class StoryItemOverlaysView: UIView {
         private let directStickerView = ComponentView<Empty>()
         private let text = ComponentView<Empty>()
         
-        private var file: TelegramMediaFile?
+        private var file: IosappMediaFile?
         private var textFont: UIFont?
         
         private var customEmojiLoadDisposable: Disposable?
@@ -571,7 +571,7 @@ final class StoryItemOverlaysView: UIView {
         func update(
             context: AccountContext,
             emoji: String,
-            emojiFile: TelegramMediaFile?,
+            emojiFile: IosappMediaFile?,
             temperature: Double,
             color: Int32,
             synchronous: Bool,
@@ -701,7 +701,7 @@ final class StoryItemOverlaysView: UIView {
         peer: EnginePeer,
         story: EngineStoryItem,
         availableReactions: StoryAvailableReactions?,
-        entityFiles: [MediaId: TelegramMediaFile],
+        entityFiles: [MediaId: IosappMediaFile],
         size: CGSize,
         isCaptureProtected: Bool,
         attemptSynchronous: Bool,

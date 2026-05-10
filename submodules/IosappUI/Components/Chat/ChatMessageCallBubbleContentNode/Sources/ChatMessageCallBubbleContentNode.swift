@@ -116,7 +116,7 @@ public class ChatMessageCallBubbleContentNode: ChatMessageBubbleContentNode {
                 var isVideo = false
                 var updateConferenceTimerEndTimeout: Int32?
                 for media in item.message.media {
-                    if let action = media as? TelegramMediaAction, case let .phoneCall(_, discardReason, duration, isVideoValue) = action.action {
+                    if let action = media as? IosappMediaAction, case let .phoneCall(_, discardReason, duration, isVideoValue) = action.action {
                         isVideo = isVideoValue
                         callDuration = duration
                         if let discardReason = discardReason {
@@ -148,7 +148,7 @@ public class ChatMessageCallBubbleContentNode: ChatMessageBubbleContentNode {
                             }
                         }
                         break
-                    } else if let action = media as? TelegramMediaAction, case let .conferenceCall(conferenceCall) = action.action {
+                    } else if let action = media as? IosappMediaAction, case let .conferenceCall(conferenceCall) = action.action {
                         isVideo = conferenceCall.flags.contains(.isVideo)
                         callDuration = conferenceCall.duration
 
@@ -389,9 +389,9 @@ public class ChatMessageCallBubbleContentNode: ChatMessageBubbleContentNode {
         if let item = self.item {
             var isVideo = false
             for media in item.message.media {
-                if let action = media as? TelegramMediaAction, case let .phoneCall(_, _, _, isVideoValue) = action.action {
+                if let action = media as? IosappMediaAction, case let .phoneCall(_, _, _, isVideoValue) = action.action {
                     isVideo = isVideoValue
-                } else if let action = media as? TelegramMediaAction, case .conferenceCall = action.action {
+                } else if let action = media as? IosappMediaAction, case .conferenceCall = action.action {
                     item.controllerInteraction.openConferenceCall(item.message)
                     return
                 }
@@ -406,9 +406,9 @@ public class ChatMessageCallBubbleContentNode: ChatMessageBubbleContentNode {
         } else if self.bounds.contains(point), let item = self.item {
             var isVideo = false
             for media in item.message.media {
-                if let action = media as? TelegramMediaAction, case let .phoneCall(_, _, _, isVideoValue) = action.action {
+                if let action = media as? IosappMediaAction, case let .phoneCall(_, _, _, isVideoValue) = action.action {
                     isVideo = isVideoValue
-                } else if let action = media as? TelegramMediaAction, case .conferenceCall = action.action {
+                } else if let action = media as? IosappMediaAction, case .conferenceCall = action.action {
                     return ChatMessageBubbleContentTapAction(content: .conferenceCall(message: item.message))
                 }
             }

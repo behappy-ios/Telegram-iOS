@@ -11,13 +11,13 @@ final class AutomaticCacheEvictionContext {
         
         let queue: Queue
         let processingQueue: Queue
-        let accountManager: AccountManager<TelegramAccountManagerTypes>
+        let accountManager: AccountManager<IosappAccountManagerTypes>
         let postbox: Postbox
         
         var settingsDisposable: Disposable?
         var processDisposable: Disposable?
         
-        init(queue: Queue, accountManager: AccountManager<TelegramAccountManagerTypes>, postbox: Postbox) {
+        init(queue: Queue, accountManager: AccountManager<IosappAccountManagerTypes>, postbox: Postbox) {
             self.queue = queue
             self.processingQueue = Queue(name: "AutomaticCacheEviction-Processing", qos: .background)
             self.accountManager = accountManager
@@ -93,7 +93,7 @@ final class AutomaticCacheEvictionContext {
                     for peerId in peerIds {
                         if peerId.namespace == Namespaces.Peer.CloudChannel {
                             var category: CacheStorageSettings.PeerStorageCategory = .channels
-                            if let peer = transaction.getPeer(peerId) as? TelegramChannel, case .group = peer.info {
+                            if let peer = transaction.getPeer(peerId) as? IosappChannel, case .group = peer.info {
                                 category = .groups
                             }
                             channelCategoryMapping[peerId] = category
@@ -261,7 +261,7 @@ final class AutomaticCacheEvictionContext {
     private let queue: Queue
     private let impl: QueueLocalObject<Impl>
     
-    init(postbox: Postbox, accountManager: AccountManager<TelegramAccountManagerTypes>) {
+    init(postbox: Postbox, accountManager: AccountManager<IosappAccountManagerTypes>) {
         let queue = Queue(name: "AutomaticCacheEviction")
         self.queue = queue
         self.impl = QueueLocalObject(queue: queue, generate: {

@@ -93,7 +93,7 @@ func pushPeerNotificationSettings(postbox: Postbox, network: Network, peerId: Pe
     return postbox.transaction { transaction -> Signal<Void, NoError> in
         if let peer = transaction.getPeer(peerId), let inputPeer = apiInputPeer(peer) {
             var notificationPeerId = peerId
-            if peer is TelegramSecretChat, let associatedPeerId = peer.associatedPeerId {
+            if peer is IosappSecretChat, let associatedPeerId = peer.associatedPeerId {
                 notificationPeerId = associatedPeerId
             }
             
@@ -175,7 +175,7 @@ func pushPeerNotificationSettings(postbox: Postbox, network: Network, peerId: Pe
                     return .complete()
                 }
             } else {
-                if let notificationPeer = transaction.getPeer(notificationPeerId), let inputPeer = apiInputPeer(notificationPeer), let settings = settings as? TelegramPeerNotificationSettings {
+                if let notificationPeer = transaction.getPeer(notificationPeerId), let inputPeer = apiInputPeer(notificationPeer), let settings = settings as? IosappPeerNotificationSettings {
                     let showPreviews: Api.Bool?
                     switch settings.displayPreviews {
                     case .default:

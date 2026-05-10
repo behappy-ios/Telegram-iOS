@@ -19,14 +19,14 @@ public final class PremiumPeerShortcutComponent: Component {
     let context: AccountContext
     let theme: PresentationTheme
     let peer: EnginePeer
-    let icon: TelegramMediaFile?
+    let icon: IosappMediaFile?
     let iconPosition: IconPosition
 
     public init(
         context: AccountContext,
         theme: PresentationTheme,
         peer: EnginePeer,
-        icon: TelegramMediaFile? = nil,
+        icon: IosappMediaFile? = nil,
         iconPosition: IconPosition = .right
     ) {
         self.context = context

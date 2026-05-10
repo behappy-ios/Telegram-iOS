@@ -39,11 +39,11 @@ final class BotCheckoutWebInteractionControllerNode: ViewControllerTracingNode, 
         let webView: WKWebView
         switch intent {
             case .addPaymentMethod:
-                let js = "var TelegramWebviewProxyProto = function() {}; " +
-                    "TelegramWebviewProxyProto.prototype.postEvent = function(eventName, eventData) { " +
+                let js = "var IosappWebviewProxyProto = function() {}; " +
+                    "IosappWebviewProxyProto.prototype.postEvent = function(eventName, eventData) { " +
                     "window.webkit.messageHandlers.performAction.postMessage({'eventName': eventName, 'eventData': eventData}); " +
                     "}; " +
-                "var TelegramWebviewProxy = new TelegramWebviewProxyProto();"
+                "var IosappWebviewProxy = new IosappWebviewProxyProto();"
                 
                 let configuration = WKWebViewConfiguration()
                 let userController = WKUserContentController()

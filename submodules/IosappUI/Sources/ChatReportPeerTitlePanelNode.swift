@@ -64,9 +64,9 @@ private enum ChatReportPeerTitleButton: Equatable {
 
 private func peerButtons(_ state: ChatPresentationInterfaceState) -> [ChatReportPeerTitleButton] {
     var buttons: [ChatReportPeerTitleButton] = []
-    if let _ = state.renderedPeer?.chatMainPeer as? TelegramUser, state.isManagedBot {
+    if let _ = state.renderedPeer?.chatMainPeer as? IosappUser, state.isManagedBot {
         buttons.append(.setPhoto)
-    } else if let peer = state.renderedPeer?.chatMainPeer as? TelegramUser, let contactStatus = state.contactStatus, let peerStatusSettings = contactStatus.peerStatusSettings {
+    } else if let peer = state.renderedPeer?.chatMainPeer as? IosappUser, let contactStatus = state.contactStatus, let peerStatusSettings = contactStatus.peerStatusSettings {
         if peerStatusSettings.contains(.autoArchived) {
             if peerStatusSettings.contains(.canBlock) || peerStatusSettings.contains(.canReport) {
                 if peer.isDeleted {
@@ -107,7 +107,7 @@ private func peerButtons(_ state: ChatPresentationInterfaceState) -> [ChatReport
             }
         }
     } else if let peer = state.renderedPeer?.chatMainPeer {
-        if let channel = peer as? TelegramChannel, channel.isForumOrMonoForum {
+        if let channel = peer as? IosappChannel, channel.isForumOrMonoForum {
             if let threadData = state.threadData {
                 if threadData.isClosed {
                     var canManage = false
@@ -184,7 +184,7 @@ private final class ChatInfoTitlePanelInviteInfoNode: ASDisplayNode {
         return result
     }
     
-    func update(width: CGFloat, theme: PresentationTheme, strings: PresentationStrings, wallpaper: TelegramWallpaper, chatPeer: Peer, invitedBy: Peer, transition: ContainedViewLayoutTransition) -> CGFloat {
+    func update(width: CGFloat, theme: PresentationTheme, strings: PresentationStrings, wallpaper: IosappWallpaper, chatPeer: Peer, invitedBy: Peer, transition: ContainedViewLayoutTransition) -> CGFloat {
         let primaryTextColor = serviceMessageColorComponents(theme: theme, wallpaper: wallpaper).primaryText
         
         if self.theme !== theme {
@@ -198,7 +198,7 @@ private final class ChatInfoTitlePanelInviteInfoNode: ASDisplayNode {
         let sideInset: CGFloat = 16.0
         
         let stringAndRanges: PresentationStrings.FormattedString
-        if let channel = chatPeer as? TelegramChannel, case .broadcast = channel.info {
+        if let channel = chatPeer as? IosappChannel, case .broadcast = channel.info {
             stringAndRanges = strings.Conversation_NoticeInvitedByInChannel(EnginePeer(invitedBy).compactDisplayTitle)
         } else {
             stringAndRanges = strings.Conversation_NoticeInvitedByInGroup(EnginePeer(invitedBy).compactDisplayTitle)
@@ -283,7 +283,7 @@ private final class ChatInfoTitlePanelPeerNearbyInfoNode: ASDisplayNode {
         self.openPeersNearby()
     }
     
-    func update(width: CGFloat, theme: PresentationTheme, strings: PresentationStrings, wallpaper: TelegramWallpaper, chatPeer: Peer, distance: Int32, transition: ContainedViewLayoutTransition) -> CGFloat {
+    func update(width: CGFloat, theme: PresentationTheme, strings: PresentationStrings, wallpaper: IosappWallpaper, chatPeer: Peer, distance: Int32, transition: ContainedViewLayoutTransition) -> CGFloat {
         let primaryTextColor = serviceMessageColorComponents(theme: theme, wallpaper: wallpaper).primaryText
         
         if self.theme !== theme {
@@ -367,7 +367,7 @@ final class ChatReportPeerTitlePanelNode: ChatTitleAccessoryPanelNode {
     
     private var emojiStatusPackDisposable = MetaDisposable()
     private var emojiStatusFileId: Int64?
-    private var emojiStatusFileAndPackTitle = Promise<(TelegramMediaFile, LoadedStickerPack)?>()
+    private var emojiStatusFileAndPackTitle = Promise<(IosappMediaFile, LoadedStickerPack)?>()
     
     private var tapGestureRecognizer: UITapGestureRecognizer?
     
@@ -613,12 +613,12 @@ final class ChatReportPeerTitlePanelNode: ChatTitleAccessoryPanelNode {
         }
         
         var emojiStatus: PeerEmojiStatus?
-        if let user = interfaceState.renderedPeer?.peer as? TelegramUser, let emojiStatusValue = user.emojiStatus {
+        if let user = interfaceState.renderedPeer?.peer as? IosappUser, let emojiStatusValue = user.emojiStatus {
             if user.isFake || user.isScam { 
             } else {
                 emojiStatus = emojiStatusValue
             }
-        } else if let channel = interfaceState.renderedPeer?.peer as? TelegramChannel, let emojiStatusValue = channel.emojiStatus {
+        } else if let channel = interfaceState.renderedPeer?.peer as? IosappChannel, let emojiStatusValue = channel.emojiStatus {
             if channel.isFake || channel.isScam {
             } else {
                 emojiStatus = emojiStatusValue
@@ -643,7 +643,7 @@ final class ChatReportPeerTitlePanelNode: ChatTitleAccessoryPanelNode {
                                         return false
                                     }
                                 }
-                                |> mapToSignal { result -> Signal<(TelegramMediaFile, LoadedStickerPack)?, NoError> in
+                                |> mapToSignal { result -> Signal<(IosappMediaFile, LoadedStickerPack)?, NoError> in
                                     if case let .result(_, items, _) = result {
                                         return .single(items.first.flatMap { ($0.file._parse(), result) })
                                     } else {
@@ -676,14 +676,14 @@ final class ChatReportPeerTitlePanelNode: ChatTitleAccessoryPanelNode {
                 emojiStatusTextNode.textAlignment = .center
                 emojiStatusTextNode.linkHighlightInset = UIEdgeInsets(top: 0.0, left: 0.0, bottom: 0.0, right: -8.0)
                 emojiStatusTextNode.highlightAttributeAction = { attributes in
-                    if let _ = attributes[NSAttributedString.Key(rawValue: TelegramTextAttributes.URL)] {
-                        return NSAttributedString.Key(rawValue: TelegramTextAttributes.URL)
+                    if let _ = attributes[NSAttributedString.Key(rawValue: IosappTextAttributes.URL)] {
+                        return NSAttributedString.Key(rawValue: IosappTextAttributes.URL)
                     } else {
                         return nil
                     }
                 }
                 emojiStatusTextNode.tapAttributeAction = { [weak self] attributes, _ in
-                    if let _ = attributes[NSAttributedString.Key(rawValue: TelegramTextAttributes.URL)] as? String {
+                    if let _ = attributes[NSAttributedString.Key(rawValue: IosappTextAttributes.URL)] as? String {
                         self?.openPremiumEmojiStatusDemo()
                     }
                 }
@@ -697,7 +697,7 @@ final class ChatReportPeerTitlePanelNode: ChatTitleAccessoryPanelNode {
             
             let plainText = interfaceState.strings.Chat_PanelCustomStatusShortInfo("#").string
             let markdownAttributes = MarkdownAttributes(body: MarkdownAttributeSet(font: Font.regular(12.0), textColor: interfaceState.theme.rootController.navigationBar.secondaryTextColor), bold: MarkdownAttributeSet(font: Font.semibold(12.0), textColor: interfaceState.theme.rootController.navigationBar.secondaryTextColor), link: MarkdownAttributeSet(font: Font.regular(12.0), textColor: interfaceState.theme.rootController.navigationBar.accentTextColor), linkAttribute: { contents in
-                return (TelegramTextAttributes.URL, contents)
+                return (IosappTextAttributes.URL, contents)
             })
             let attributedString = parseMarkdownIntoAttributedString(plainText, attributes: markdownAttributes, textAlignment: .center).mutableCopy() as! NSMutableAttributedString
             if let range = attributedString.string.range(of: ">"), let chevronImage = self.cachedChevronImage?.0 {

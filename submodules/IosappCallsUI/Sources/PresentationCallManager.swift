@@ -50,7 +50,7 @@ public final class PresentationCallManagerImpl: PresentationCallManager {
     private let isMediaPlaying: () -> Bool
     private let resumeMediaPlayback: () -> Void
 
-    private let accountManager: AccountManager<TelegramAccountManagerTypes>
+    private let accountManager: AccountManager<IosappAccountManagerTypes>
     private let audioSession: ManagedAudioSession
     private let callKitIntegration: CallKitIntegration?
     
@@ -122,7 +122,7 @@ public final class PresentationCallManagerImpl: PresentationCallManager {
     }
     
     public init(
-        accountManager: AccountManager<TelegramAccountManagerTypes>,
+        accountManager: AccountManager<IosappAccountManagerTypes>,
         getDeviceAccessData: @escaping () -> (presentationData: PresentationData, present: (ViewController, Any?) -> Void, openSettings: () -> Void),
         isMediaPlaying: @escaping () -> Bool,
         resumeMediaPlayback: @escaping () -> Void,
@@ -203,8 +203,8 @@ public final class PresentationCallManagerImpl: PresentationCallManager {
             } else {
                 return combineLatest(ringingStatesByAccount.map { context, state, networkType -> Signal<(AccountContext, Peer, CallSessionRingingState, Bool, NetworkType)?, NoError> in
                     return context.engine.data.get(
-                        TelegramEngine.EngineData.Item.Peer.Peer(id: state.peerId),
-                        TelegramEngine.EngineData.Item.Peer.IsContact(id: state.peerId)
+                        IosappEngine.EngineData.Item.Peer.Peer(id: state.peerId),
+                        IosappEngine.EngineData.Item.Peer.IsContact(id: state.peerId)
                     )
                     |> map { peer, isContact -> (AccountContext, Peer, CallSessionRingingState, Bool, NetworkType)? in
                         if let peer = peer {
@@ -481,7 +481,7 @@ public final class PresentationCallManagerImpl: PresentationCallManager {
                     return postbox.transaction { transaction -> (Peer?, String?) in
                         var foundLocalId: String?
                         transaction.enumerateDeviceContactImportInfoItems({ _, value in
-                            if let value = value as? TelegramDeviceContactImportedData {
+                            if let value = value as? IosappDeviceContactImportedData {
                                 switch value {
                                 case let .imported(data, _, importedPeerId):
                                     if importedPeerId == peerId {
@@ -503,7 +503,7 @@ public final class PresentationCallManagerImpl: PresentationCallManager {
                         return
                     }
                     var phoneNumber: String?
-                    if let peer = peer as? TelegramUser, let phone = peer.phone {
+                    if let peer = peer as? IosappUser, let phone = peer.phone {
                         phoneNumber = formatPhoneNumber(context: context, number: phone)
                     }
                     strongSelf.callKitIntegration?.startCall(context: context, peerId: peerId, phoneNumber: phoneNumber, localContactId: localContactId, isVideo: isVideo, displayTitle: peer.debugDisplayTitle)
@@ -611,7 +611,7 @@ public final class PresentationCallManagerImpl: PresentationCallManager {
                 return .single(false)
             }
             
-            let areVideoCallsAvailable = context.engine.data.get(TelegramEngine.EngineData.Item.Peer.AreVideoCallsAvailable(id: peerId))
+            let areVideoCallsAvailable = context.engine.data.get(IosappEngine.EngineData.Item.Peer.AreVideoCallsAvailable(id: peerId))
             
             let request = areVideoCallsAvailable
             |> mapToSignal { areVideoCallsAvailable -> Signal<CallSessionInternalId, NoError> in
@@ -856,7 +856,7 @@ public final class PresentationCallManagerImpl: PresentationCallManager {
         
         return combineLatest(queue: .mainQueue(),
             accessEnabledSignal,
-            accountContext.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: peerId))
+            accountContext.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: peerId))
         )
         |> deliverOnMainQueue
         |> mapToSignal { [weak self, weak parentController] accessEnabled, peer -> Signal<Bool, NoError> in
@@ -1065,7 +1065,7 @@ public final class PresentationCallManagerImpl: PresentationCallManager {
         
         return combineLatest(queue: .mainQueue(),
             accessEnabledSignal,
-            accountContext.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: peerId))
+            accountContext.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: peerId))
         )
         |> deliverOnMainQueue
         |> mapToSignal { [weak self] accessEnabled, peer -> Signal<Bool, NoError> in
@@ -1141,8 +1141,8 @@ public final class PresentationCallManagerImpl: PresentationCallManager {
                 return
             }
             
-            let keyPair: TelegramKeyPair
-            guard let keyPairValue = TelegramE2EEncryptionProviderImpl.shared.generateKeyPair() else {
+            let keyPair: IosappKeyPair
+            guard let keyPairValue = IosappE2EEncryptionProviderImpl.shared.generateKeyPair() else {
                 return
             }
             keyPair = keyPairValue

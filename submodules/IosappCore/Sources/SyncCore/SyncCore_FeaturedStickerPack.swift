@@ -39,7 +39,7 @@ public final class FeaturedStickerPackItem: Codable {
 
         if let serializedInfoData = try container.decodeIfPresent(Data.self, forKey: "infd") {
             var byteBuffer = ByteBuffer(data: serializedInfoData)
-            self.info = StickerPackCollectionInfo.Accessor(FlatBuffers_getRoot(byteBuffer: &byteBuffer) as TelegramCore_StickerPackCollectionInfo, serializedInfoData)
+            self.info = StickerPackCollectionInfo.Accessor(FlatBuffers_getRoot(byteBuffer: &byteBuffer) as IosappCore_StickerPackCollectionInfo, serializedInfoData)
         } else {
             let infoData = try container.decode(AdaptedPostboxDecoder.RawObjectData.self, forKey: "i")
             self.info = StickerPackCollectionInfo.Accessor(StickerPackCollectionInfo(decoder: PostboxDecoder(buffer: MemoryBuffer(data: infoData.data))))

@@ -15,14 +15,14 @@ import RangeSet
 public final class WebEmbedVideoContent: UniversalVideoContent {
     public let id: AnyHashable
     let userLocation: MediaResourceUserLocation
-    let webPage: TelegramMediaWebpage
-    public let webpageContent: TelegramMediaWebpageLoadedContent
+    let webPage: IosappMediaWebpage
+    public let webpageContent: IosappMediaWebpageLoadedContent
     public let dimensions: CGSize
     public let duration: Double
     let forcedTimestamp: Int?
     let openUrl: (URL) -> Void
     
-    public init?(userLocation: MediaResourceUserLocation, webPage: TelegramMediaWebpage, webpageContent: TelegramMediaWebpageLoadedContent, forcedTimestamp: Int? = nil, openUrl: @escaping (URL) -> Void) {
+    public init?(userLocation: MediaResourceUserLocation, webPage: IosappMediaWebpage, webpageContent: IosappMediaWebpageLoadedContent, forcedTimestamp: Int? = nil, openUrl: @escaping (URL) -> Void) {
         guard let embedUrl = webpageContent.embedUrl else {
             return nil
         }
@@ -42,7 +42,7 @@ public final class WebEmbedVideoContent: UniversalVideoContent {
 }
  
 final class WebEmbedVideoContentNode: ASDisplayNode, UniversalVideoContentNode {
-    private let webpageContent: TelegramMediaWebpageLoadedContent
+    private let webpageContent: IosappMediaWebpageLoadedContent
     private let intrinsicDimensions: CGSize
     
     private let playbackCompletedListeners = Bag<() -> Void>()
@@ -78,7 +78,7 @@ final class WebEmbedVideoContentNode: ASDisplayNode, UniversalVideoContentNode {
         
     private var readyDisposable = MetaDisposable()
     
-    init(postbox: Postbox, audioSessionManager: ManagedAudioSession, userLocation: MediaResourceUserLocation, webPage: TelegramMediaWebpage, webpageContent: TelegramMediaWebpageLoadedContent, forcedTimestamp: Int? = nil, openUrl: @escaping (URL) -> Void) {
+    init(postbox: Postbox, audioSessionManager: ManagedAudioSession, userLocation: MediaResourceUserLocation, webPage: IosappMediaWebpage, webpageContent: IosappMediaWebpageLoadedContent, forcedTimestamp: Int? = nil, openUrl: @escaping (URL) -> Void) {
         self.webpageContent = webpageContent
         
         if let embedSize = webpageContent.embedSize {

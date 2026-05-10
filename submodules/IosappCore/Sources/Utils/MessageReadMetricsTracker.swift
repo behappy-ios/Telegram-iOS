@@ -90,7 +90,7 @@ public final class MessageReadMetricsTracker {
             self.lastTickTime = nil
         }
 
-        func buildMetric() -> TelegramMessageReadMetric? {
+        func buildMetric() -> IosappMessageReadMetric? {
             guard self.totalViewTimeMs >= kMinViewTimeMs else {
                 return nil
             }
@@ -102,7 +102,7 @@ public final class MessageReadMetricsTracker {
             if self.seenBottomPx > self.seenTopPx {
                 seenRangeRatio = min(1.0, max(0.0, Double((self.seenBottomPx - self.seenTopPx) / self.postHeightPx)))
             }
-            return TelegramMessageReadMetric(
+            return IosappMessageReadMetric(
                 id: self.viewId,
                 messageId: self.messageId,
                 timeInViewMs: self.totalViewTimeMs,
@@ -113,8 +113,8 @@ public final class MessageReadMetricsTracker {
         }
     }
     
-    private let pipe = ValuePipe<TelegramMessageReadMetric>()
-    public var completedMetrics: Signal<TelegramMessageReadMetric, NoError> {
+    private let pipe = ValuePipe<IosappMessageReadMetric>()
+    public var completedMetrics: Signal<IosappMessageReadMetric, NoError> {
         return self.pipe.signal()
     }
 

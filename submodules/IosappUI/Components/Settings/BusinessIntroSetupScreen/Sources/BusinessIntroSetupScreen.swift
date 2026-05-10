@@ -95,7 +95,7 @@ final class BusinessIntroSetupScreenComponent: Component {
         private var previousHadInputHeight: Bool = false
         private var recenterOnTag: NSObject?
         
-        private var stickerFile: TelegramMediaFile?
+        private var stickerFile: IosappMediaFile?
         
         private var stickerContent: EmojiPagerContentComponent?
         private var stickerContentDisposable: Disposable?
@@ -148,9 +148,9 @@ final class BusinessIntroSetupScreenComponent: Component {
             let title = self.titleInputState.text.string
             let text = self.textInputState.text.string
             
-            let intro: TelegramBusinessIntro?
+            let intro: IosappBusinessIntro?
             if !title.isEmpty || !text.isEmpty || self.stickerFile != nil {
-                intro = TelegramBusinessIntro(title: title, text: text, stickerFile: self.stickerFile)
+                intro = IosappBusinessIntro(title: title, text: text, stickerFile: self.stickerFile)
             } else {
                 intro = nil
             }
@@ -490,11 +490,11 @@ final class BusinessIntroSetupScreenComponent: Component {
                                             }
                                             existingIds.insert(itemFile.fileId)
                                             
-                                            let animationData = EntityKeyboardAnimationData(file: TelegramMediaFile.Accessor(itemFile))
+                                            let animationData = EntityKeyboardAnimationData(file: IosappMediaFile.Accessor(itemFile))
                                             let item = EmojiPagerContentComponent.Item(
                                                 animationData: animationData,
                                                 content: .animation(animationData),
-                                                itemFile: TelegramMediaFile.Accessor(itemFile),
+                                                itemFile: IosappMediaFile.Accessor(itemFile),
                                                 subgroupId: nil,
                                                 icon: .none,
                                                 tintMode: animationData.isTemplate ? .primary : .none
@@ -581,11 +581,11 @@ final class BusinessIntroSetupScreenComponent: Component {
                                             continue
                                         }
                                         existingIds.insert(itemFile.fileId)
-                                        let animationData = EntityKeyboardAnimationData(file: TelegramMediaFile.Accessor(itemFile))
+                                        let animationData = EntityKeyboardAnimationData(file: IosappMediaFile.Accessor(itemFile))
                                         let item = EmojiPagerContentComponent.Item(
                                             animationData: animationData,
                                             content: .animation(animationData),
-                                            itemFile: TelegramMediaFile.Accessor(itemFile),
+                                            itemFile: IosappMediaFile.Accessor(itemFile),
                                             subgroupId: nil,
                                             icon: itemFile.isPremiumSticker ? .premium : .none,
                                             tintMode: animationData.isTemplate ? .primary : .none
@@ -1163,9 +1163,9 @@ final class BusinessIntroSetupScreenComponent: Component {
 
 public final class BusinessIntroSetupScreen: ViewControllerComponentContainer {
     public final class InitialData: BusinessIntroSetupScreenInitialData {
-        fileprivate let intro: TelegramBusinessIntro?
+        fileprivate let intro: IosappBusinessIntro?
         
-        fileprivate init(intro: TelegramBusinessIntro?) {
+        fileprivate init(intro: IosappBusinessIntro?) {
             self.intro = intro
         }
     }
@@ -1220,10 +1220,10 @@ public final class BusinessIntroSetupScreen: ViewControllerComponentContainer {
     
     public static func initialData(context: AccountContext) -> Signal<BusinessIntroSetupScreenInitialData, NoError> {
         return context.engine.data.get(
-            TelegramEngine.EngineData.Item.Peer.BusinessIntro(id: context.account.peerId)
+            IosappEngine.EngineData.Item.Peer.BusinessIntro(id: context.account.peerId)
         )
         |> map { intro -> BusinessIntroSetupScreenInitialData in
-            let value: TelegramBusinessIntro?
+            let value: IosappBusinessIntro?
             switch intro {
             case let .known(intro):
                 value = intro

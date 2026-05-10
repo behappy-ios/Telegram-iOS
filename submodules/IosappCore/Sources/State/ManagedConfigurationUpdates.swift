@@ -5,7 +5,7 @@ import IosappApi
 import MtProtoKit
 
 
-func managedConfigurationUpdates(accountManager: AccountManager<TelegramAccountManagerTypes>, postbox: Postbox, network: Network) -> Signal<Void, NoError> {
+func managedConfigurationUpdates(accountManager: AccountManager<IosappAccountManagerTypes>, postbox: Postbox, network: Network) -> Signal<Void, NoError> {
     let poll = Signal<Void, NoError> { subscriber in
         return (combineLatest(
             network.request(Api.functions.help.getConfig()) |> retryRequest,

@@ -137,7 +137,7 @@ final class BrowserAddressListComponent: Component {
         
     final class View: UIView, UIScrollViewDelegate {
         struct State {
-            let recent: [TelegramMediaWebpage]
+            let recent: [IosappMediaWebpage]
             let isRecentExpanded: Bool
             let bookmarks: [Message]
         }
@@ -366,7 +366,7 @@ final class BrowserAddressListComponent: Component {
                             containerSize: itemFrame.size
                         )
                     } else {
-                        var webPage: TelegramMediaWebpage?
+                        var webPage: IosappMediaWebpage?
                         var itemMessage: Message?
                         
                         if section.id == 0 {
@@ -374,10 +374,10 @@ final class BrowserAddressListComponent: Component {
                         } else if section.id == 1 {
                             let message = state.bookmarks[i]
                             if let primaryUrl = getPrimaryUrl(message: message) {
-                                if let media = message.media.first(where: { $0 is TelegramMediaWebpage }) as? TelegramMediaWebpage {
+                                if let media = message.media.first(where: { $0 is IosappMediaWebpage }) as? IosappMediaWebpage {
                                     webPage = media
                                 } else {
-                                    webPage = TelegramMediaWebpage(webpageId: MediaId(namespace: 0, id: 0), content: .Loaded(TelegramMediaWebpageLoadedContent(url: primaryUrl, displayUrl: "", hash: 0, type: nil, websiteName: "", title: message.text, text: "", embedUrl: nil, embedType: nil, embedSize: nil, duration: nil, author: nil, isMediaLargeByDefault: nil, imageIsVideoCover: false, image: nil, file: nil, story: nil, attributes: [], instantPage: nil)))
+                                    webPage = IosappMediaWebpage(webpageId: MediaId(namespace: 0, id: 0), content: .Loaded(IosappMediaWebpageLoadedContent(url: primaryUrl, displayUrl: "", hash: 0, type: nil, websiteName: "", title: message.text, text: "", embedUrl: nil, embedType: nil, embedSize: nil, duration: nil, author: nil, isMediaLargeByDefault: nil, imageIsVideoCover: false, image: nil, file: nil, story: nil, attributes: [], instantPage: nil)))
                                 }
                                 itemMessage = message
                             } else {
@@ -567,7 +567,7 @@ final class BrowserAddressListComponent: Component {
                 component: AnyComponent(BrowserAddressListItemComponent(
                     context: component.context,
                     theme: component.theme,
-                    webPage: TelegramMediaWebpage(webpageId: EngineMedia.Id(namespace: 0, id: 0), content: .Loaded(TelegramMediaWebpageLoadedContent(url: "https://telegram.org", displayUrl: "https://telegram.org", hash: 0, type: nil, websiteName: "Telegram", title: "Telegram Telegram", text: "Telegram", embedUrl: nil, embedType: nil, embedSize: nil, duration: nil, author: nil, isMediaLargeByDefault: nil, imageIsVideoCover: false, image: nil, file: nil, story: nil, attributes: [], instantPage: nil))),
+                    webPage: IosappMediaWebpage(webpageId: EngineMedia.Id(namespace: 0, id: 0), content: .Loaded(IosappMediaWebpageLoadedContent(url: "https://telegram.org", displayUrl: "https://telegram.org", hash: 0, type: nil, websiteName: "Telegram", title: "Telegram Telegram", text: "Telegram", embedUrl: nil, embedType: nil, embedSize: nil, duration: nil, author: nil, isMediaLargeByDefault: nil, imageIsVideoCover: false, image: nil, file: nil, story: nil, attributes: [], instantPage: nil))),
                     message: nil,
                     hasNext: true,
                     insets: .zero,

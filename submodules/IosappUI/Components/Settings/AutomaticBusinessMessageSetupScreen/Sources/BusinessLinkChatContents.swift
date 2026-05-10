@@ -76,7 +76,7 @@ final class BusinessLinkChatContents: ChatCustomContentsProtocol {
     
     func businessLinkUpdate(message: String, entities: [MessageTextEntity], title: String?) {
         if case let .businessLinkSetup(link) = self.kind {
-            self.kind = .businessLinkSetup(link: TelegramBusinessChatLinks.Link(
+            self.kind = .businessLinkSetup(link: IosappBusinessChatLinks.Link(
                 url: link.url,
                 message: message,
                 entities: entities,

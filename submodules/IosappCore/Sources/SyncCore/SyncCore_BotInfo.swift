@@ -132,15 +132,15 @@ public struct BotVerifierSettings: PostboxCoding, Equatable {
 
 public final class BotInfo: PostboxCoding, Equatable {
     public let description: String
-    public let photo: TelegramMediaImage?
-    public let video: TelegramMediaFile?
+    public let photo: IosappMediaImage?
+    public let video: IosappMediaFile?
     public let commands: [BotCommand]
     public let menuButton: BotMenuButton
     public let privacyPolicyUrl: String?
     public let appSettings: BotAppSettings?
     public let verifierSettings: BotVerifierSettings?
     
-    public init(description: String, photo: TelegramMediaImage?, video: TelegramMediaFile?, commands: [BotCommand], menuButton: BotMenuButton, privacyPolicyUrl: String?, appSettings: BotAppSettings?, verifierSettings: BotVerifierSettings?) {
+    public init(description: String, photo: IosappMediaImage?, video: IosappMediaFile?, commands: [BotCommand], menuButton: BotMenuButton, privacyPolicyUrl: String?, appSettings: BotAppSettings?, verifierSettings: BotVerifierSettings?) {
         self.description = description
         self.photo = photo
         self.video = video
@@ -153,12 +153,12 @@ public final class BotInfo: PostboxCoding, Equatable {
     
     public init(decoder: PostboxDecoder) {
         self.description = decoder.decodeStringForKey("d", orElse: "")
-        if let photo = decoder.decodeObjectForKey("ph", decoder: { TelegramMediaImage(decoder: $0) }) as? TelegramMediaImage {
+        if let photo = decoder.decodeObjectForKey("ph", decoder: { IosappMediaImage(decoder: $0) }) as? IosappMediaImage {
             self.photo = photo
         } else {
             self.photo = nil
         }
-        if let video = decoder.decodeObjectForKey("vid", decoder: { TelegramMediaFile(decoder: $0) }) as? TelegramMediaFile {
+        if let video = decoder.decodeObjectForKey("vid", decoder: { IosappMediaFile(decoder: $0) }) as? IosappMediaFile {
             self.video = video
         } else {
             self.video = nil

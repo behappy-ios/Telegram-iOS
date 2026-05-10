@@ -552,14 +552,14 @@ public struct PeerReactionNotificationSettings: Codable, Equatable {
     }
 }
 
-public final class TelegramPeerNotificationSettings: PeerNotificationSettings, Codable, Equatable {
+public final class IosappPeerNotificationSettings: PeerNotificationSettings, Codable, Equatable {
     public let muteState: PeerMuteState
     public let messageSound: PeerMessageSound
     public let displayPreviews: PeerNotificationDisplayPreviews
     public let storySettings: PeerStoryNotificationSettings
     
-    public static var defaultSettings: TelegramPeerNotificationSettings {
-        return TelegramPeerNotificationSettings(muteState: .unmuted, messageSound: .default, displayPreviews: .default, storySettings: PeerStoryNotificationSettings.default)
+    public static var defaultSettings: IosappPeerNotificationSettings {
+        return IosappPeerNotificationSettings(muteState: .unmuted, messageSound: .default, displayPreviews: .default, storySettings: PeerStoryNotificationSettings.default)
     }
     
     public func isRemovedFromTotalUnreadCount(`default`: Bool) -> Bool {
@@ -621,30 +621,30 @@ public final class TelegramPeerNotificationSettings: PeerNotificationSettings, C
     }
     
     public func isEqual(to: PeerNotificationSettings) -> Bool {
-        if let to = to as? TelegramPeerNotificationSettings {
+        if let to = to as? IosappPeerNotificationSettings {
             return self == to
         } else {
             return false
         }
     }
     
-    public func withUpdatedMuteState(_ muteState: PeerMuteState) -> TelegramPeerNotificationSettings {
-        return TelegramPeerNotificationSettings(muteState: muteState, messageSound: self.messageSound, displayPreviews: self.displayPreviews, storySettings: self.storySettings)
+    public func withUpdatedMuteState(_ muteState: PeerMuteState) -> IosappPeerNotificationSettings {
+        return IosappPeerNotificationSettings(muteState: muteState, messageSound: self.messageSound, displayPreviews: self.displayPreviews, storySettings: self.storySettings)
     }
     
-    public func withUpdatedMessageSound(_ messageSound: PeerMessageSound) -> TelegramPeerNotificationSettings {
-        return TelegramPeerNotificationSettings(muteState: self.muteState, messageSound: messageSound, displayPreviews: self.displayPreviews, storySettings: self.storySettings)
+    public func withUpdatedMessageSound(_ messageSound: PeerMessageSound) -> IosappPeerNotificationSettings {
+        return IosappPeerNotificationSettings(muteState: self.muteState, messageSound: messageSound, displayPreviews: self.displayPreviews, storySettings: self.storySettings)
     }
     
-    public func withUpdatedDisplayPreviews(_ displayPreviews: PeerNotificationDisplayPreviews) -> TelegramPeerNotificationSettings {
-        return TelegramPeerNotificationSettings(muteState: self.muteState, messageSound: self.messageSound, displayPreviews: displayPreviews, storySettings: self.storySettings)
+    public func withUpdatedDisplayPreviews(_ displayPreviews: PeerNotificationDisplayPreviews) -> IosappPeerNotificationSettings {
+        return IosappPeerNotificationSettings(muteState: self.muteState, messageSound: self.messageSound, displayPreviews: displayPreviews, storySettings: self.storySettings)
     }
     
-    public func withUpdatedStorySettings(_ storySettings: PeerStoryNotificationSettings) -> TelegramPeerNotificationSettings {
-        return TelegramPeerNotificationSettings(muteState: self.muteState, messageSound: self.messageSound, displayPreviews: self.displayPreviews, storySettings: storySettings)
+    public func withUpdatedStorySettings(_ storySettings: PeerStoryNotificationSettings) -> IosappPeerNotificationSettings {
+        return IosappPeerNotificationSettings(muteState: self.muteState, messageSound: self.messageSound, displayPreviews: self.displayPreviews, storySettings: storySettings)
     }
     
-    public static func ==(lhs: TelegramPeerNotificationSettings, rhs: TelegramPeerNotificationSettings) -> Bool {
+    public static func ==(lhs: IosappPeerNotificationSettings, rhs: IosappPeerNotificationSettings) -> Bool {
         return lhs.muteState == rhs.muteState && lhs.messageSound == rhs.messageSound && lhs.displayPreviews == rhs.displayPreviews && lhs.storySettings == rhs.storySettings
     }
 }

@@ -111,7 +111,7 @@ public class ChatMessageShareButton: ASDisplayNode {
         var isReplies = false
         var isNavigate = false
         var replyCount = 0
-        if let channel = message.peers[message.id.peerId] as? TelegramChannel {
+        if let channel = message.peers[message.id.peerId] as? IosappChannel {
             if case .broadcast = channel.info {
                 for attribute in message.attributes {
                     if let attribute = attribute as? ReplyThreadMessageAttribute {

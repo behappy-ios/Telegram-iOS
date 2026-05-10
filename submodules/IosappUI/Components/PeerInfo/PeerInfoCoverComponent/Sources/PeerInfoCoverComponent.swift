@@ -125,7 +125,7 @@ public final class PeerInfoCoverComponent: Component {
     }
     public let context: AccountContext
     public let subject: Subject?
-    public let files: [Int64: TelegramMediaFile]
+    public let files: [Int64: IosappMediaFile]
     public let isDark: Bool
     public let avatarCenter: CGPoint
     public let avatarSize: CGSize
@@ -140,7 +140,7 @@ public final class PeerInfoCoverComponent: Component {
     public init(
         context: AccountContext,
         subject: Subject?,
-        files: [Int64: TelegramMediaFile],
+        files: [Int64: IosappMediaFile],
         isDark: Bool,
         avatarCenter: CGPoint,
         avatarSize: CGSize = CGSize(width: 100.0, height: 100.0),
@@ -225,7 +225,7 @@ public final class PeerInfoCoverComponent: Component {
         
         private var patternContentsTarget: PatternContentsTarget?
         private var avatarPatternContentLayers: [SimpleLayer] = []
-        private var patternFile: TelegramMediaFile?
+        private var patternFile: IosappMediaFile?
         private var patternFileDisposable: Disposable?
         private var patternImageDisposable: Disposable?
         

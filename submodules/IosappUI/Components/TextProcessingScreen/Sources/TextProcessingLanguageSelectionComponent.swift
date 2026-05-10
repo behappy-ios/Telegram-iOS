@@ -30,9 +30,9 @@ final class TextProcessingLanguageSelectionComponent: Component {
     let sourceView: UIView
     let topLanguages: [Language]
     let selectedLanguageCode: String
-    let currentStyle: TelegramComposeAIMessageMode.StyleId
+    let currentStyle: IosappComposeAIMessageMode.StyleId
     let displayStyles: [TextProcessingScreen.Style]?
-    let completion: (String, TelegramComposeAIMessageMode.StyleId) -> Void
+    let completion: (String, IosappComposeAIMessageMode.StyleId) -> Void
     let dismissed: () -> Void
     let inputHeight: CGFloat
 
@@ -43,9 +43,9 @@ final class TextProcessingLanguageSelectionComponent: Component {
         sourceView: UIView,
         topLanguages: [Language],
         selectedLanguageCode: String,
-        currentStyle: TelegramComposeAIMessageMode.StyleId,
+        currentStyle: IosappComposeAIMessageMode.StyleId,
         displayStyles: [TextProcessingScreen.Style]?,
-        completion: @escaping (String, TelegramComposeAIMessageMode.StyleId) -> Void,
+        completion: @escaping (String, IosappComposeAIMessageMode.StyleId) -> Void,
         dismissed: @escaping () -> Void,
         inputHeight: CGFloat
     ) {
@@ -160,7 +160,7 @@ final class TextProcessingLanguageSelectionComponent: Component {
         private let stylesBackground: GlassBackgroundView
         private let stylesScrollView: ScrollView
         private let stylesSelectionView: UIImageView
-        private var stylesItemViews: [TelegramComposeAIMessageMode.StyleId: ComponentView<Empty>] = [:]
+        private var stylesItemViews: [IosappComposeAIMessageMode.StyleId: ComponentView<Empty>] = [:]
         
         private var mainItems: [Language] = []
         private var mainTopItemCount: Int = 0
@@ -173,7 +173,7 @@ final class TextProcessingLanguageSelectionComponent: Component {
         private var ignoreScrolling: Bool = false
         
         private var updatedLanguage: String?
-        private var updatedStyle: TelegramComposeAIMessageMode.StyleId?
+        private var updatedStyle: IosappComposeAIMessageMode.StyleId?
 
         private var searchQuery: String = "" {
             didSet {
@@ -466,7 +466,7 @@ final class TextProcessingLanguageSelectionComponent: Component {
             var selectedStyleItemFrame: CGRect?
             let stylesSpacing: CGFloat = 8.0
             if let displayStyles = component.displayStyles {
-                var styleData: [(id: TelegramComposeAIMessageMode.StyleId, iconFileId: Int64?, iconFile: TelegramMediaFile?, title: String)] = []
+                var styleData: [(id: IosappComposeAIMessageMode.StyleId, iconFileId: Int64?, iconFile: IosappMediaFile?, title: String)] = []
                 styleData.append((.neutral, nil, nil, component.strings.TextProcessingStyle_Neutral))
                 for item in displayStyles {
                     styleData.append((item.id, item.emojiFileId, item.emojiFile, item.title))
@@ -845,7 +845,7 @@ private final class StyleItemComponent: Component {
     let context: AccountContext
     let theme: PresentationTheme
     let iconFileId: Int64?
-    let iconFile: TelegramMediaFile?
+    let iconFile: IosappMediaFile?
     let title: String
     let action: () -> Void
 
@@ -853,7 +853,7 @@ private final class StyleItemComponent: Component {
         context: AccountContext,
         theme: PresentationTheme,
         iconFileId: Int64?,
-        iconFile: TelegramMediaFile?,
+        iconFile: IosappMediaFile?,
         title: String,
         action: @escaping () -> Void
     ) {

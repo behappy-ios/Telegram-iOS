@@ -28,7 +28,7 @@ public class ChatMessageMapBubbleContentNode: ChatMessageBubbleContentNode {
     private var liveTimerNode: ChatMessageLiveLocationTimerNode?
     private var liveTextNode: ChatMessageLiveLocationTextNode?
     
-    private var media: TelegramMediaMap?
+    private var media: IosappMediaMap?
     
     private var timeoutTimer: (SwiftSignalKit.Timer, Int32)?
     
@@ -78,10 +78,10 @@ public class ChatMessageMapBubbleContentNode: ChatMessageBubbleContentNode {
         let previousMedia = self.media
         
         return { item, layoutConstants, preparePosition, _, constrainedSize, _ in
-            var selectedMedia: TelegramMediaMap?
+            var selectedMedia: IosappMediaMap?
             var activeLiveBroadcastingTimeout: Int32?
             for media in item.message.media {
-                if let telegramMap = media as? TelegramMediaMap {
+                if let telegramMap = media as? IosappMediaMap {
                     selectedMedia = telegramMap
                     if let liveBroadcastingTimeout = telegramMap.liveBroadcastingTimeout {
                         let timestamp = Int32(CFAbsoluteTimeGetCurrent() + kCFAbsoluteTimeIntervalSince1970)
@@ -89,7 +89,7 @@ public class ChatMessageMapBubbleContentNode: ChatMessageBubbleContentNode {
                             activeLiveBroadcastingTimeout = liveBroadcastingTimeout
                         }
                     }
-                } else if let poll = media as? TelegramMediaPoll, let telegramMap = poll.attachedMedia as? TelegramMediaMap {
+                } else if let poll = media as? IosappMediaPoll, let telegramMap = poll.attachedMedia as? IosappMediaMap {
                     selectedMedia = telegramMap
                 }
             }
@@ -205,7 +205,7 @@ public class ChatMessageMapBubbleContentNode: ChatMessageBubbleContentNode {
                     } else if let attribute = attribute as? ViewCountMessageAttribute {
                         viewCount = attribute.count
                     } else if let attribute = attribute as? ReplyThreadMessageAttribute, case .peer = item.chatLocation {
-                        if let channel = item.message.peers[item.message.id.peerId] as? TelegramChannel, case .group = channel.info {
+                        if let channel = item.message.peers[item.message.id.peerId] as? IosappChannel, case .group = channel.info {
                             dateReplies = Int(attribute.count)
                         }
                     } else if let attribute = attribute as? PaidStarsMessageAttribute, item.message.id.peerId.namespace == Namespaces.Peer.CloudChannel {

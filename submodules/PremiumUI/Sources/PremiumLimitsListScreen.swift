@@ -43,7 +43,7 @@ public class PremiumLimitsListScreen: ViewController {
                 
         var isPremium: Bool?
         var reactions: [AvailableReactions.Reaction]?
-        var stickers: [TelegramMediaFile]?
+        var stickers: [IosappMediaFile]?
         var appIcons: [PresentationAppIcon]?
         var disposable: Disposable?
         var promoConfiguration: PremiumPromoConfiguration?
@@ -98,7 +98,7 @@ public class PremiumLimitsListScreen: ViewController {
                 accountSpecificStickerOverrides = []
             }
             let stickerOverrideMessages = context.engine.data.get(
-                EngineDataMap(accountSpecificStickerOverrides.map(\.messageId).map(TelegramEngine.EngineData.Item.Messages.Message.init))
+                EngineDataMap(accountSpecificStickerOverrides.map(\.messageId).map(IosappEngine.EngineData.Item.Messages.Message.init))
             )
             
             self.appIcons = controller.context.sharedContext.applicationBindings.getAvailableAlternateIcons()
@@ -119,24 +119,24 @@ public class PremiumLimitsListScreen: ViewController {
                 }
                 |> take(1),
                 context.engine.data.get(
-                    TelegramEngine.EngineData.Item.Peer.Peer(id: context.account.peerId),
-                    TelegramEngine.EngineData.Item.Configuration.PremiumPromo()
+                    IosappEngine.EngineData.Item.Peer.Peer(id: context.account.peerId),
+                    IosappEngine.EngineData.Item.Configuration.PremiumPromo()
                 ),
                 stickerOverrideMessages
             )
-            |> map { items, data, stickerOverrideMessages -> ([TelegramMediaFile], Bool?, PremiumPromoConfiguration?) in
-                var stickerOverrides: [MessageReaction.Reaction: TelegramMediaFile] = [:]
+            |> map { items, data, stickerOverrideMessages -> ([IosappMediaFile], Bool?, PremiumPromoConfiguration?) in
+                var stickerOverrides: [MessageReaction.Reaction: IosappMediaFile] = [:]
                 for item in accountSpecificStickerOverrides {
                     if let maybeMessage = stickerOverrideMessages[item.messageId], let message = maybeMessage {
                         for media in message.media {
-                            if let file = media as? TelegramMediaFile, file.fileId == item.mediaId {
+                            if let file = media as? IosappMediaFile, file.fileId == item.mediaId {
                                 stickerOverrides[item.key] = file
                             }
                         }
                     }
                 }
                 
-                var result: [TelegramMediaFile.Accessor] = []
+                var result: [IosappMediaFile.Accessor] = []
                 if let items = items {
                     for item in items {
                         if let mediaItem = item.contents.get(RecentMediaItem.self) {
@@ -144,17 +144,17 @@ public class PremiumLimitsListScreen: ViewController {
                         }
                     }
                 }
-                return (result.map { file -> TelegramMediaFile in
+                return (result.map { file -> IosappMediaFile in
                     let file = file._parse()
-                    if let displayText = TelegramMediaFile.Accessor(file).stickerDisplayText {
+                    if let displayText = IosappMediaFile.Accessor(file).stickerDisplayText {
                         if let replacementFile = stickerOverrides[.builtin(displayText)], let dimensions = replacementFile.dimensions {
                             let _ = dimensions
-                            return TelegramMediaFile(
+                            return IosappMediaFile(
                                 fileId: file.fileId,
                                 partialReference: file.partialReference,
                                 resource: file.resource,
                                 previewRepresentations: file.previewRepresentations,
-                                videoThumbnails: [TelegramMediaFile.VideoThumbnail(dimensions: dimensions, resource: replacementFile.resource)],
+                                videoThumbnails: [IosappMediaFile.VideoThumbnail(dimensions: dimensions, resource: replacementFile.resource)],
                                 immediateThumbnailData: file.immediateThumbnailData,
                                 mimeType: file.mimeType,
                                 size: file.size,
@@ -384,7 +384,7 @@ public class PremiumLimitsListScreen: ViewController {
             let theme = self.presentationData.theme
             let strings = self.presentationData.strings
             
-            let videos: [String: TelegramMediaFile] = self.promoConfiguration?.videos ?? [:]
+            let videos: [String: IosappMediaFile] = self.promoConfiguration?.videos ?? [:]
             let stickers = self.stickers ?? []
             let appIcons = self.appIcons ?? []
             

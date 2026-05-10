@@ -16,7 +16,7 @@ public final class AuthorizationSequenceSplashController: ViewController {
         return self.displayNode as! AuthorizationSequenceSplashControllerNode
     }
     
-    private let accountManager: AccountManager<TelegramAccountManagerTypes>
+    private let accountManager: AccountManager<IosappAccountManagerTypes>
     private let account: UnauthorizedAccount
     private let theme: PresentationTheme
     
@@ -31,13 +31,13 @@ public final class AuthorizationSequenceSplashController: ViewController {
     
     private let startButton: SolidRoundedButtonNode
     
-    init(accountManager: AccountManager<TelegramAccountManagerTypes>, account: UnauthorizedAccount, theme: PresentationTheme) {
+    init(accountManager: AccountManager<IosappAccountManagerTypes>, account: UnauthorizedAccount, theme: PresentationTheme) {
         self.accountManager = accountManager
         self.account = account
         self.theme = theme
         
         self.suggestedLocalization.set(.single(nil)
-        |> then(TelegramEngineUnauthorized(account: self.account).localization.currentlySuggestedLocalization(extractKeys: ["Login.ContinueWithLocalization"])))
+        |> then(IosappEngineUnauthorized(account: self.account).localization.currentlySuggestedLocalization(extractKeys: ["Login.ContinueWithLocalization"])))
         let suggestedLocalization = self.suggestedLocalization
         
         let localizationSignal = SSignal(generator: { subscriber in
@@ -210,7 +210,7 @@ public final class AuthorizationSequenceSplashController: ViewController {
             }
             
             if let suggestedCode = suggestedCode {
-                _ = TelegramEngineUnauthorized(account: strongSelf.account).localization.markSuggestedLocalizationAsSeenInteractively(languageCode: suggestedCode).start()
+                _ = IosappEngineUnauthorized(account: strongSelf.account).localization.markSuggestedLocalizationAsSeenInteractively(languageCode: suggestedCode).start()
             }
             
             if currentCode == code {
@@ -222,7 +222,7 @@ public final class AuthorizationSequenceSplashController: ViewController {
             strongSelf.startButton.alpha = 0.6
             let accountManager = strongSelf.accountManager
             
-            strongSelf.activateLocalizationDisposable.set(TelegramEngineUnauthorized(account: strongSelf.account).localization.downloadAndApplyLocalization(accountManager: accountManager, languageCode: code).start(completed: {
+            strongSelf.activateLocalizationDisposable.set(IosappEngineUnauthorized(account: strongSelf.account).localization.downloadAndApplyLocalization(accountManager: accountManager, languageCode: code).start(completed: {
                 let _ = (accountManager.transaction { transaction -> PresentationStrings? in
                     let localizationSettings: LocalizationSettings?
                     if let current = transaction.getSharedData(SharedDataKeys.localizationSettings)?.get(LocalizationSettings.self) {

@@ -66,7 +66,7 @@ final class PeerInfoInteraction {
     let openPeerMention: (String, ChatControllerInteractionNavigateToPeer) -> Void
     let openBotApp: (AttachMenuBot) -> Void
     let openEditing: () -> Void
-    let updateBirthdate: (TelegramBirthday??) -> Void
+    let updateBirthdate: (IosappBirthday??) -> Void
     let updateIsEditingBirthdate: (Bool) -> Void
     let openBioPrivacy: () -> Void
     let openBirthdatePrivacy: () -> Void
@@ -143,7 +143,7 @@ final class PeerInfoInteraction {
         openPeerMention: @escaping (String, ChatControllerInteractionNavigateToPeer) -> Void,
         openBotApp: @escaping (AttachMenuBot) -> Void,
         openEditing: @escaping () -> Void,
-        updateBirthdate: @escaping (TelegramBirthday??) -> Void,
+        updateBirthdate: @escaping (IosappBirthday??) -> Void,
         updateIsEditingBirthdate: @escaping (Bool) -> Void,
         openBioPrivacy: @escaping () -> Void,
         openBirthdatePrivacy: @escaping () -> Void,

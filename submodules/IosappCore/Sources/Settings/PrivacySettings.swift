@@ -25,7 +25,7 @@ public final class SelectivePrivacyPeer: Equatable {
     public var userCount: Int {
         if let participantCount = self.participantCount {
             return Int(participantCount)
-        } else if let group = self.peer as? TelegramGroup {
+        } else if let group = self.peer as? IosappGroup {
             return group.participantCount
         } else {
             return 1
@@ -301,7 +301,7 @@ func updateGlobalMessageAutoremoveTimeoutSettings(transaction: Transaction, _ f:
     })
 }
 
-public struct TelegramDisallowedGifts: OptionSet, Codable {
+public struct IosappDisallowedGifts: OptionSet, Codable {
     public var rawValue: Int32
     
     public init() {
@@ -312,13 +312,13 @@ public struct TelegramDisallowedGifts: OptionSet, Codable {
         self.rawValue = rawValue
     }
     
-    public static let unlimited = TelegramDisallowedGifts(rawValue: 1 << 0)
-    public static let limited = TelegramDisallowedGifts(rawValue: 1 << 1)
-    public static let unique = TelegramDisallowedGifts(rawValue: 1 << 2)
-    public static let premium = TelegramDisallowedGifts(rawValue: 1 << 3)
-    public static let channel = TelegramDisallowedGifts(rawValue: 1 << 4)
+    public static let unlimited = IosappDisallowedGifts(rawValue: 1 << 0)
+    public static let limited = IosappDisallowedGifts(rawValue: 1 << 1)
+    public static let unique = IosappDisallowedGifts(rawValue: 1 << 2)
+    public static let premium = IosappDisallowedGifts(rawValue: 1 << 3)
+    public static let channel = IosappDisallowedGifts(rawValue: 1 << 4)
     
-    public static let All: TelegramDisallowedGifts = [
+    public static let All: IosappDisallowedGifts = [
         .unlimited,
         .limited,
         .unique,
@@ -328,7 +328,7 @@ public struct TelegramDisallowedGifts: OptionSet, Codable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: StringCodingKey.self)
         let value = try? container.decode(Int32.self, forKey: "v")
-        self = TelegramDisallowedGifts(rawValue: value ?? 0)
+        self = IosappDisallowedGifts(rawValue: value ?? 0)
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -337,9 +337,9 @@ public struct TelegramDisallowedGifts: OptionSet, Codable {
     }
 }
 
-extension TelegramDisallowedGifts {
+extension IosappDisallowedGifts {
     init(apiDisallowedGifts: Api.DisallowedGiftsSettings?) {
-        var disallowedGifts: TelegramDisallowedGifts = []
+        var disallowedGifts: IosappDisallowedGifts = []
         switch apiDisallowedGifts {
         case let .disallowedGiftsSettings(disallowedGiftsSettingsData):
             let giftFlags = disallowedGiftsSettingsData.flags
@@ -416,7 +416,7 @@ public struct GlobalPrivacySettings: Equatable, Codable {
     public var keepArchivedFolders: Bool
     public var hideReadTime: Bool
     public var nonContactChatsPrivacy: NonContactChatsPrivacy
-    public var disallowedGifts: TelegramDisallowedGifts
+    public var disallowedGifts: IosappDisallowedGifts
     public var displayGiftButton: Bool
 
     public init(
@@ -425,7 +425,7 @@ public struct GlobalPrivacySettings: Equatable, Codable {
         keepArchivedFolders: Bool,
         hideReadTime: Bool,
         nonContactChatsPrivacy: NonContactChatsPrivacy,
-        disallowedGifts: TelegramDisallowedGifts,
+        disallowedGifts: IosappDisallowedGifts,
         displayGiftButton: Bool
     ) {
         self.automaticallyArchiveAndMuteNonContacts = automaticallyArchiveAndMuteNonContacts

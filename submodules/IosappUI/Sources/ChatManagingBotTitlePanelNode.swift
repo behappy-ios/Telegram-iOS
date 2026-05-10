@@ -345,7 +345,7 @@ final class ChatManagingBotTitlePanelNode: ChatTitleAccessoryPanelNode {
                             case let .withBotApp(botAppStart):
                                 self.context.sharedContext.navigateToChatController(NavigateToChatControllerParams(navigationController: navigationController, context: self.context, chatLocation: .peer(peer), botAppStart: botAppStart))
                             case .info:
-                                let _ = (self.context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: peer.id))
+                                let _ = (self.context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: peer.id))
                                 |> deliverOnMainQueue).start(next: { [weak self] peer in
                                     guard let self, let peer, let chatController = interfaceInteraction.chatController() else {
                                         return

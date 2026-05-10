@@ -2,7 +2,7 @@ import Postbox
 import FlatBuffers
 import FlatSerialization
 
-private enum TelegramMediaWebpageAttributeTypes: Int32 {
+private enum IosappMediaWebpageAttributeTypes: Int32 {
     case unsupported
     case theme
     case stickerPack
@@ -11,26 +11,26 @@ private enum TelegramMediaWebpageAttributeTypes: Int32 {
     case giftAuction
 }
 
-public enum TelegramMediaWebpageAttribute: PostboxCoding, Equatable {
+public enum IosappMediaWebpageAttribute: PostboxCoding, Equatable {
     case unsupported
     case theme(TelegraMediaWebpageThemeAttribute)
-    case stickerPack(TelegramMediaWebpageStickerPackAttribute)
-    case starGift(TelegramMediaWebpageStarGiftAttribute)
-    case giftCollection(TelegramMediaWebpageGiftCollectionAttribute)
-    case giftAuction(TelegramMediaWebpageGiftAuctionAttribute)
+    case stickerPack(IosappMediaWebpageStickerPackAttribute)
+    case starGift(IosappMediaWebpageStarGiftAttribute)
+    case giftCollection(IosappMediaWebpageGiftCollectionAttribute)
+    case giftAuction(IosappMediaWebpageGiftAuctionAttribute)
     
     public init(decoder: PostboxDecoder) {
         switch decoder.decodeInt32ForKey("r", orElse: 0) {
-        case TelegramMediaWebpageAttributeTypes.theme.rawValue:
+        case IosappMediaWebpageAttributeTypes.theme.rawValue:
             self = .theme(decoder.decodeObjectForKey("a", decoder: { TelegraMediaWebpageThemeAttribute(decoder: $0) }) as! TelegraMediaWebpageThemeAttribute)
-        case TelegramMediaWebpageAttributeTypes.stickerPack.rawValue:
-            self = .stickerPack(decoder.decodeObjectForKey("a", decoder: { TelegramMediaWebpageStickerPackAttribute(decoder: $0) }) as! TelegramMediaWebpageStickerPackAttribute)
-        case TelegramMediaWebpageAttributeTypes.starGift.rawValue:
-            self = .starGift(decoder.decodeObjectForKey("a", decoder: { TelegramMediaWebpageStarGiftAttribute(decoder: $0) }) as! TelegramMediaWebpageStarGiftAttribute)
-        case TelegramMediaWebpageAttributeTypes.giftCollection.rawValue:
-            self = .giftCollection(decoder.decodeObjectForKey("a", decoder: { TelegramMediaWebpageGiftCollectionAttribute(decoder: $0) }) as! TelegramMediaWebpageGiftCollectionAttribute)
-        case TelegramMediaWebpageAttributeTypes.giftAuction.rawValue:
-            self = .giftAuction(decoder.decodeObjectForKey("a", decoder: { TelegramMediaWebpageGiftAuctionAttribute(decoder: $0) }) as! TelegramMediaWebpageGiftAuctionAttribute)
+        case IosappMediaWebpageAttributeTypes.stickerPack.rawValue:
+            self = .stickerPack(decoder.decodeObjectForKey("a", decoder: { IosappMediaWebpageStickerPackAttribute(decoder: $0) }) as! IosappMediaWebpageStickerPackAttribute)
+        case IosappMediaWebpageAttributeTypes.starGift.rawValue:
+            self = .starGift(decoder.decodeObjectForKey("a", decoder: { IosappMediaWebpageStarGiftAttribute(decoder: $0) }) as! IosappMediaWebpageStarGiftAttribute)
+        case IosappMediaWebpageAttributeTypes.giftCollection.rawValue:
+            self = .giftCollection(decoder.decodeObjectForKey("a", decoder: { IosappMediaWebpageGiftCollectionAttribute(decoder: $0) }) as! IosappMediaWebpageGiftCollectionAttribute)
+        case IosappMediaWebpageAttributeTypes.giftAuction.rawValue:
+            self = .giftAuction(decoder.decodeObjectForKey("a", decoder: { IosappMediaWebpageGiftAuctionAttribute(decoder: $0) }) as! IosappMediaWebpageGiftAuctionAttribute)
         default:
             self = .unsupported
         }
@@ -39,21 +39,21 @@ public enum TelegramMediaWebpageAttribute: PostboxCoding, Equatable {
     public func encode(_ encoder: PostboxEncoder) {
         switch self {
         case .unsupported:
-            encoder.encodeInt32(TelegramMediaWebpageAttributeTypes.unsupported.rawValue, forKey: "r")
+            encoder.encodeInt32(IosappMediaWebpageAttributeTypes.unsupported.rawValue, forKey: "r")
         case let .theme(attribute):
-            encoder.encodeInt32(TelegramMediaWebpageAttributeTypes.theme.rawValue, forKey: "r")
+            encoder.encodeInt32(IosappMediaWebpageAttributeTypes.theme.rawValue, forKey: "r")
             encoder.encodeObject(attribute, forKey: "a")
         case let .stickerPack(attribute):
-            encoder.encodeInt32(TelegramMediaWebpageAttributeTypes.stickerPack.rawValue, forKey: "r")
+            encoder.encodeInt32(IosappMediaWebpageAttributeTypes.stickerPack.rawValue, forKey: "r")
             encoder.encodeObject(attribute, forKey: "a")
         case let .starGift(attribute):
-            encoder.encodeInt32(TelegramMediaWebpageAttributeTypes.starGift.rawValue, forKey: "r")
+            encoder.encodeInt32(IosappMediaWebpageAttributeTypes.starGift.rawValue, forKey: "r")
             encoder.encodeObject(attribute, forKey: "a")
         case let .giftCollection(attribute):
-            encoder.encodeInt32(TelegramMediaWebpageAttributeTypes.giftCollection.rawValue, forKey: "r")
+            encoder.encodeInt32(IosappMediaWebpageAttributeTypes.giftCollection.rawValue, forKey: "r")
             encoder.encodeObject(attribute, forKey: "a")
         case let .giftAuction(attribute):
-            encoder.encodeInt32(TelegramMediaWebpageAttributeTypes.giftAuction.rawValue, forKey: "r")
+            encoder.encodeInt32(IosappMediaWebpageAttributeTypes.giftAuction.rawValue, forKey: "r")
             encoder.encodeObject(attribute, forKey: "a")
         }
     }
@@ -76,17 +76,17 @@ public final class TelegraMediaWebpageThemeAttribute: PostboxCoding, Equatable {
         return true
     }
     
-    public let files: [TelegramMediaFile]
-    public let settings: TelegramThemeSettings?
+    public let files: [IosappMediaFile]
+    public let settings: IosappThemeSettings?
     
-    public init(files: [TelegramMediaFile], settings: TelegramThemeSettings?) {
+    public init(files: [IosappMediaFile], settings: IosappThemeSettings?) {
         self.files = files
         self.settings = settings
     }
     
     public init(decoder: PostboxDecoder) {
         self.files = decoder.decodeObjectArrayForKey("files")
-        self.settings = decoder.decode(TelegramThemeSettings.self, forKey: "settings")
+        self.settings = decoder.decode(IosappThemeSettings.self, forKey: "settings")
     }
     
     public func encode(_ encoder: PostboxEncoder) {
@@ -99,7 +99,7 @@ public final class TelegraMediaWebpageThemeAttribute: PostboxCoding, Equatable {
     }
 }
 
-public final class TelegramMediaWebpageStickerPackAttribute: PostboxCoding, Equatable {
+public final class IosappMediaWebpageStickerPackAttribute: PostboxCoding, Equatable {
     public struct Flags: OptionSet {
         public var rawValue: Int32
         
@@ -115,7 +115,7 @@ public final class TelegramMediaWebpageStickerPackAttribute: PostboxCoding, Equa
         public static let isTemplate = Flags(rawValue: 1 << 1)
     }
     
-    public static func == (lhs: TelegramMediaWebpageStickerPackAttribute, rhs: TelegramMediaWebpageStickerPackAttribute) -> Bool {
+    public static func == (lhs: IosappMediaWebpageStickerPackAttribute, rhs: IosappMediaWebpageStickerPackAttribute) -> Bool {
         if lhs.flags != rhs.flags {
             return false
         }
@@ -132,9 +132,9 @@ public final class TelegramMediaWebpageStickerPackAttribute: PostboxCoding, Equa
     }
     
     public let flags: Flags
-    public let files: [TelegramMediaFile]
+    public let files: [IosappMediaFile]
     
-    public init(flags: Flags, files: [TelegramMediaFile]) {
+    public init(flags: Flags, files: [IosappMediaFile]) {
         self.flags = flags
         self.files = files
     }
@@ -150,8 +150,8 @@ public final class TelegramMediaWebpageStickerPackAttribute: PostboxCoding, Equa
     }
 }
 
-public final class TelegramMediaWebpageStarGiftAttribute: PostboxCoding, Equatable {
-    public static func == (lhs: TelegramMediaWebpageStarGiftAttribute, rhs: TelegramMediaWebpageStarGiftAttribute) -> Bool {
+public final class IosappMediaWebpageStarGiftAttribute: PostboxCoding, Equatable {
+    public static func == (lhs: IosappMediaWebpageStarGiftAttribute, rhs: IosappMediaWebpageStarGiftAttribute) -> Bool {
         if lhs.gift != rhs.gift {
             return false
         }
@@ -173,8 +173,8 @@ public final class TelegramMediaWebpageStarGiftAttribute: PostboxCoding, Equatab
     }
 }
 
-public final class TelegramMediaWebpageGiftCollectionAttribute: PostboxCoding, Equatable {
-    public static func == (lhs: TelegramMediaWebpageGiftCollectionAttribute, rhs: TelegramMediaWebpageGiftCollectionAttribute) -> Bool {
+public final class IosappMediaWebpageGiftCollectionAttribute: PostboxCoding, Equatable {
+    public static func == (lhs: IosappMediaWebpageGiftCollectionAttribute, rhs: IosappMediaWebpageGiftCollectionAttribute) -> Bool {
         if lhs.files.count != rhs.files.count {
             return false
         } else {
@@ -187,9 +187,9 @@ public final class TelegramMediaWebpageGiftCollectionAttribute: PostboxCoding, E
         return true
     }
     
-    public let files: [TelegramMediaFile]
+    public let files: [IosappMediaFile]
     
-    public init(files: [TelegramMediaFile]) {
+    public init(files: [IosappMediaFile]) {
         self.files = files
     }
     
@@ -202,8 +202,8 @@ public final class TelegramMediaWebpageGiftCollectionAttribute: PostboxCoding, E
     }
 }
 
-public final class TelegramMediaWebpageGiftAuctionAttribute: PostboxCoding, Equatable {
-    public static func == (lhs: TelegramMediaWebpageGiftAuctionAttribute, rhs: TelegramMediaWebpageGiftAuctionAttribute) -> Bool {
+public final class IosappMediaWebpageGiftAuctionAttribute: PostboxCoding, Equatable {
+    public static func == (lhs: IosappMediaWebpageGiftAuctionAttribute, rhs: IosappMediaWebpageGiftAuctionAttribute) -> Bool {
         if lhs.gift != rhs.gift {
             return false
         }
@@ -235,7 +235,7 @@ public final class TelegramMediaWebpageGiftAuctionAttribute: PostboxCoding, Equa
     }
 }
 
-public final class TelegramMediaWebpageLoadedContent: PostboxCoding, Equatable {
+public final class IosappMediaWebpageLoadedContent: PostboxCoding, Equatable {
     public let url: String
     public let displayUrl: String
     public let hash: Int32
@@ -251,10 +251,10 @@ public final class TelegramMediaWebpageLoadedContent: PostboxCoding, Equatable {
     public let isMediaLargeByDefault: Bool?
     public let imageIsVideoCover: Bool
     
-    public let image: TelegramMediaImage?
-    public let file: TelegramMediaFile?
-    public let story: TelegramMediaStory?
-    public let attributes: [TelegramMediaWebpageAttribute]
+    public let image: IosappMediaImage?
+    public let file: IosappMediaFile?
+    public let story: IosappMediaStory?
+    public let attributes: [IosappMediaWebpageAttribute]
     public let instantPage: InstantPage.Accessor?
     
     public init(
@@ -272,10 +272,10 @@ public final class TelegramMediaWebpageLoadedContent: PostboxCoding, Equatable {
         author: String?,
         isMediaLargeByDefault: Bool?,
         imageIsVideoCover: Bool,
-        image: TelegramMediaImage?,
-        file: TelegramMediaFile?,
-        story: TelegramMediaStory?,
-        attributes: [TelegramMediaWebpageAttribute],
+        image: IosappMediaImage?,
+        file: IosappMediaFile?,
+        story: IosappMediaStory?,
+        attributes: [IosappMediaWebpageAttribute],
         instantPage: InstantPage?
     ) {
         self.url = url
@@ -323,36 +323,36 @@ public final class TelegramMediaWebpageLoadedContent: PostboxCoding, Equatable {
         self.isMediaLargeByDefault = decoder.decodeOptionalBoolForKey("lbd")
         self.imageIsVideoCover = decoder.decodeBoolForKey("isvc", orElse: false)
         
-        if let image = decoder.decodeObjectForKey("im") as? TelegramMediaImage {
+        if let image = decoder.decodeObjectForKey("im") as? IosappMediaImage {
             self.image = image
         } else {
             self.image = nil
         }
         
-        if let file = decoder.decodeObjectForKey("fi") as? TelegramMediaFile {
+        if let file = decoder.decodeObjectForKey("fi") as? IosappMediaFile {
             self.file = file
         } else {
             self.file = nil
         }
         
-        if let story = decoder.decodeObjectForKey("stry") as? TelegramMediaStory {
+        if let story = decoder.decodeObjectForKey("stry") as? IosappMediaStory {
             self.story = story
         } else {
             self.story = nil
         }
         
-        var effectiveAttributes: [TelegramMediaWebpageAttribute] = []
-        if let attributes = decoder.decodeObjectArrayWithDecoderForKey("attr") as [TelegramMediaWebpageAttribute]? {
+        var effectiveAttributes: [IosappMediaWebpageAttribute] = []
+        if let attributes = decoder.decodeObjectArrayWithDecoderForKey("attr") as [IosappMediaWebpageAttribute]? {
             effectiveAttributes.append(contentsOf: attributes)
         }
-        if let legacyFiles = decoder.decodeOptionalObjectArrayWithDecoderForKey("fis") as [TelegramMediaFile]? {
+        if let legacyFiles = decoder.decodeOptionalObjectArrayWithDecoderForKey("fis") as [IosappMediaFile]? {
             effectiveAttributes.append(.theme(TelegraMediaWebpageThemeAttribute(files: legacyFiles, settings: nil)))
         }
         self.attributes = effectiveAttributes
         
         if let serializedInstantPageData = decoder.decodeDataForKey("ipd") {
             var byteBuffer = ByteBuffer(data: serializedInstantPageData)
-            self.instantPage = InstantPage.Accessor(FlatBuffers_getRoot(byteBuffer: &byteBuffer) as TelegramCore_InstantPage, serializedInstantPageData)
+            self.instantPage = InstantPage.Accessor(FlatBuffers_getRoot(byteBuffer: &byteBuffer) as IosappCore_InstantPage, serializedInstantPageData)
         } else if let instantPage = decoder.decodeObjectForKey("ip", decoder: { InstantPage(decoder: $0) }) as? InstantPage {
             self.instantPage = InstantPage.Accessor(instantPage)
         } else {
@@ -453,7 +453,7 @@ public final class TelegramMediaWebpageLoadedContent: PostboxCoding, Equatable {
     }
 }
 
-public func ==(lhs: TelegramMediaWebpageLoadedContent, rhs: TelegramMediaWebpageLoadedContent) -> Bool {
+public func ==(lhs: IosappMediaWebpageLoadedContent, rhs: IosappMediaWebpageLoadedContent) -> Bool {
     if lhs.url != rhs.url
     || lhs.displayUrl != rhs.displayUrl
     || lhs.hash != rhs.hash
@@ -518,9 +518,9 @@ public func ==(lhs: TelegramMediaWebpageLoadedContent, rhs: TelegramMediaWebpage
     return true
 }
 
-public enum TelegramMediaWebpageContent {
+public enum IosappMediaWebpageContent {
     case Pending(Int32, String?)
-    case Loaded(TelegramMediaWebpageLoadedContent)
+    case Loaded(IosappMediaWebpageLoadedContent)
     
     public var url: String? {
         switch self {
@@ -532,7 +532,7 @@ public enum TelegramMediaWebpageContent {
     }
 }
 
-public final class TelegramMediaWebpage: Media, Equatable {
+public final class IosappMediaWebpage: Media, Equatable {
     public var id: MediaId? {
         return self.webpageId
     }
@@ -555,9 +555,9 @@ public final class TelegramMediaWebpage: Media, Equatable {
     }
     
     public let webpageId: MediaId
-    public let content: TelegramMediaWebpageContent
+    public let content: IosappMediaWebpageContent
     
-    public init(webpageId: MediaId, content: TelegramMediaWebpageContent) {
+    public init(webpageId: MediaId, content: IosappMediaWebpageContent) {
         self.webpageId = webpageId
         self.content = content
     }
@@ -568,7 +568,7 @@ public final class TelegramMediaWebpage: Media, Equatable {
         if decoder.decodeInt32ForKey("ct", orElse: 0) == 0 {
             self.content = .Pending(decoder.decodeInt32ForKey("pendingDate", orElse: 0), decoder.decodeOptionalStringForKey("pendingUrl"))
         } else {
-            self.content = .Loaded(TelegramMediaWebpageLoadedContent(decoder: decoder))
+            self.content = .Loaded(IosappMediaWebpageLoadedContent(decoder: decoder))
         }
     }
     
@@ -597,7 +597,7 @@ public final class TelegramMediaWebpage: Media, Equatable {
     }
     
     public func isEqual(to other: Media) -> Bool {
-        if let other = other as? TelegramMediaWebpage, self.webpageId == other.webpageId {
+        if let other = other as? IosappMediaWebpage, self.webpageId == other.webpageId {
             return self == other
         }
         return false
@@ -607,7 +607,7 @@ public final class TelegramMediaWebpage: Media, Equatable {
         return self.isEqual(to: other)
     }
     
-    public static func ==(lhs: TelegramMediaWebpage, rhs: TelegramMediaWebpage) -> Bool {
+    public static func ==(lhs: IosappMediaWebpage, rhs: IosappMediaWebpage) -> Bool {
         if lhs.webpageId != rhs.webpageId {
             return false
         }

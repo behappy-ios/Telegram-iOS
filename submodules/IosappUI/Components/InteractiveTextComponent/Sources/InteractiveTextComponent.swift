@@ -1876,7 +1876,7 @@ open class InteractiveTextNode: ASDisplayNode, TextNodeProtocol, UIGestureRecogn
                 
                 if let range = line.range {
                     attributedString.enumerateAttributes(in: range, options: []) { attributes, range, _ in
-                        if attributes[NSAttributedString.Key(rawValue: "TelegramSpoiler")] != nil || attributes[NSAttributedString.Key(rawValue: "Attribute__Spoiler")] != nil {
+                        if attributes[NSAttributedString.Key(rawValue: "IosappSpoiler")] != nil || attributes[NSAttributedString.Key(rawValue: "Attribute__Spoiler")] != nil {
                             var ascent: CGFloat = 0.0
                             var descent: CGFloat = 0.0
                             CTLineGetTypographicBounds(line.line, &ascent, &descent, nil)
@@ -1917,12 +1917,12 @@ open class InteractiveTextNode: ASDisplayNode, TextNodeProtocol, UIGestureRecogn
                             line.underlines.append(InteractiveTextNodeStrikethrough(range: range, frame: CGRect(x: x, y: 0.0, width: abs(upperX - lowerX), height: line.frame.height), color: attributes[NSAttributedString.Key.underlineColor] as? UIColor, style: underlineStyle == NSUnderlineStyle.patternDot.rawValue ? .wavy : .single))
                         }
                         
-                        if let embeddedItem = (attributes[NSAttributedString.Key(rawValue: "TelegramEmbeddedItem")] as? AnyHashable ?? attributes[NSAttributedString.Key(rawValue: "Attribute__EmbeddedItem")] as? AnyHashable) {
+                        if let embeddedItem = (attributes[NSAttributedString.Key(rawValue: "IosappEmbeddedItem")] as? AnyHashable ?? attributes[NSAttributedString.Key(rawValue: "Attribute__EmbeddedItem")] as? AnyHashable) {
                             var ascent: CGFloat = 0.0
                             var descent: CGFloat = 0.0
                             CTLineGetTypographicBounds(line.line, &ascent, &descent, nil)
                             
-                            var isHiddenBySpoiler = attributes[NSAttributedString.Key(rawValue: "Attribute__Spoiler")] != nil || attributes[NSAttributedString.Key(rawValue: "TelegramSpoiler")] != nil
+                            var isHiddenBySpoiler = attributes[NSAttributedString.Key(rawValue: "Attribute__Spoiler")] != nil || attributes[NSAttributedString.Key(rawValue: "IosappSpoiler")] != nil
                             if displayContentsUnderSpoilers {
                                 isHiddenBySpoiler = false
                             }
@@ -2170,7 +2170,7 @@ open class InteractiveTextNode: ASDisplayNode, TextNodeProtocol, UIGestureRecogn
         if case .ended = recognizer.state {
             let point = recognizer.location(in: self.view)
             if let cachedLayout = self.cachedLayout, !cachedLayout.displayContentsUnderSpoilers, let (_, attributes) = self.attributesAtPoint(point) {
-                if attributes[NSAttributedString.Key(rawValue: "Attribute__Spoiler")] != nil || attributes[NSAttributedString.Key(rawValue: "TelegramSpoiler")] != nil {
+                if attributes[NSAttributedString.Key(rawValue: "Attribute__Spoiler")] != nil || attributes[NSAttributedString.Key(rawValue: "IosappSpoiler")] != nil {
                     self.requestDisplayContentsUnderSpoilers?(point)
                     return
                 }
@@ -2520,7 +2520,7 @@ final class TextContentItemLayer: SimpleLayer {
                             if attributes["Attribute__EmbeddedItem"] != nil {
                                 continue
                             }
-                            if hasHiddenSpoilers && (attributes["Attribute__Spoiler"] != nil || attributes["TelegramSpoiler"] != nil) {
+                            if hasHiddenSpoilers && (attributes["Attribute__Spoiler"] != nil || attributes["IosappSpoiler"] != nil) {
                                 continue
                             }
                             

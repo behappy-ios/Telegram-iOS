@@ -52,7 +52,7 @@ public class ChatMessageGiveawayBubbleContentNode: ChatMessageBubbleContentNode,
     private let badgeBackgroundNode: ASImageNode
     private let badgeTextNode: TextNodeWithEntities
     
-    private var giveaway: TelegramMediaGiveaway?
+    private var giveaway: IosappMediaGiveaway?
     
     private let buttonNode: ChatMessageAttachedContentButtonNode
     private let channelButtons: PeerButtonsStackNode
@@ -232,12 +232,12 @@ public class ChatMessageGiveawayBubbleContentNode: ChatMessageBubbleContentNode,
         let currentItem = self.item
         
         return { item, layoutConstants, _, _, constrainedSize, _ in
-            var giveaway: TelegramMediaGiveaway?
-            var giveawayResults: TelegramMediaGiveawayResults?
+            var giveaway: IosappMediaGiveaway?
+            var giveawayResults: IosappMediaGiveawayResults?
             for media in item.message.media {
-                if let media = media as? TelegramMediaGiveaway {
+                if let media = media as? IosappMediaGiveaway {
                     giveaway = media;
-                } else if let media = media as? TelegramMediaGiveawayResults {
+                } else if let media = media as? IosappMediaGiveawayResults {
                     giveawayResults = media
                 }
             }
@@ -400,7 +400,7 @@ public class ChatMessageGiveawayBubbleContentNode: ChatMessageBubbleContentNode,
             
             let author = item.message.forwardInfo?.author ?? item.message.author
             var isGroup = false
-            if let channel = author as? TelegramChannel, case .group = channel.info {
+            if let channel = author as? IosappChannel, case .group = channel.info {
                 isGroup = true
             }
             
@@ -522,7 +522,7 @@ public class ChatMessageGiveawayBubbleContentNode: ChatMessageBubbleContentNode,
                     } else if let attribute = attribute as? ViewCountMessageAttribute {
                         viewCount = attribute.count
                     } else if let attribute = attribute as? ReplyThreadMessageAttribute, case .peer = item.chatLocation {
-                        if let channel = item.message.peers[item.message.id.peerId] as? TelegramChannel, case .group = channel.info {
+                        if let channel = item.message.peers[item.message.id.peerId] as? IosappChannel, case .group = channel.info {
                             dateReplies = Int(attribute.count)
                         }
                     }
@@ -881,7 +881,7 @@ public class ChatMessageGiveawayBubbleContentNode: ChatMessageBubbleContentNode,
             return ChatMessageBubbleContentTapAction(content: .ignore)
         }
         if self.prizeTextNode.frame.contains(point), let item = self.item {
-            if let giveawayResults = item.message.media.first(where: { $0 is TelegramMediaGiveawayResults }) as? TelegramMediaGiveawayResults {
+            if let giveawayResults = item.message.media.first(where: { $0 is IosappMediaGiveawayResults }) as? IosappMediaGiveawayResults {
                 item.controllerInteraction.navigateToMessageStandalone(giveawayResults.launchMessageId)
                 return ChatMessageBubbleContentTapAction(content: .ignore)
             }

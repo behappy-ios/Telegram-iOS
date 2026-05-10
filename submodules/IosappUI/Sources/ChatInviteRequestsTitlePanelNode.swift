@@ -47,7 +47,7 @@ private final class ChatInfoTitlePanelPeerNearbyInfoNode: ASDisplayNode {
         self.openPeersNearby()
     }
     
-    func update(width: CGFloat, theme: PresentationTheme, strings: PresentationStrings, wallpaper: TelegramWallpaper, chatPeer: Peer, distance: Int32, transition: ContainedViewLayoutTransition) -> CGFloat {
+    func update(width: CGFloat, theme: PresentationTheme, strings: PresentationStrings, wallpaper: IosappWallpaper, chatPeer: Peer, distance: Int32, transition: ContainedViewLayoutTransition) -> CGFloat {
         let primaryTextColor = serviceMessageColorComponents(theme: theme, wallpaper: wallpaper).primaryText
         
         if self.theme !== theme {

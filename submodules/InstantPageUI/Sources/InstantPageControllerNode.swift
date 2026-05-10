@@ -35,7 +35,7 @@ final class InstantPageControllerNode: ASDisplayNode, ASScrollViewDelegate {
     private let pushController: (ViewController) -> Void
     private let openPeer: (EnginePeer) -> Void
     
-    private var webPage: (webPage: TelegramMediaWebpage, instantPage: InstantPage?)?
+    private var webPage: (webPage: IosappMediaWebpage, instantPage: InstantPage?)?
     private var initialAnchor: String?
     private var pendingAnchor: String?
     private var initialState: InstantPageStoredState?
@@ -149,7 +149,7 @@ final class InstantPageControllerNode: ASDisplayNode, ASScrollViewDelegate {
                 }, completed: { [weak self] peerIds in
                     let _ = (context.engine.data.get(
                         EngineDataList(
-                            peerIds.map(TelegramEngine.EngineData.Item.Peer.Peer.init)
+                            peerIds.map(IosappEngine.EngineData.Item.Peer.Peer.init)
                         )
                     )
                     |> deliverOnMainQueue).start(next: { [weak self] peerList in
@@ -183,7 +183,7 @@ final class InstantPageControllerNode: ASDisplayNode, ASScrollViewDelegate {
                             }
                             strongSelf.present(UndoOverlayController(presentationData: presentationData, content: .forward(savedMessages: savedMessages, text: text), elevatedLayout: false, animateInAsReplacement: true, action: { action in
                                 if savedMessages, let self, action == .info {
-                                    let _ = (self.context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: self.context.account.peerId))
+                                    let _ = (self.context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: self.context.account.peerId))
                                     |> deliverOnMainQueue).start(next: { [weak self] peer in
                                         guard let self, let peer else {
                                             return
@@ -341,7 +341,7 @@ final class InstantPageControllerNode: ASDisplayNode, ASScrollViewDelegate {
         self.scrollNode.view.addGestureRecognizer(recognizer)
     }
     
-    func updateWebPage(_ webPage: TelegramMediaWebpage?, anchor: String?, state: InstantPageStoredState? = nil) {
+    func updateWebPage(_ webPage: IosappMediaWebpage?, anchor: String?, state: InstantPageStoredState? = nil) {
         if self.webPage?.webPage != webPage {
             if self.webPage != nil && self.currentLayout != nil {
                 if let snaphotView = self.scrollNode.view.snapshotView(afterScreenUpdates: false) {
@@ -1023,12 +1023,12 @@ final class InstantPageControllerNode: ASDisplayNode, ASScrollViewDelegate {
     private func longPressMedia(_ media: InstantPageMedia) {
         let controller = makeContextMenuController(actions: [ContextMenuAction(content: .text(title: self.strings.Conversation_ContextMenuCopy, accessibilityLabel: self.strings.Conversation_ContextMenuCopy), action: { [weak self] in
             if let strongSelf = self, case let .image(image) = media.media {
-                let media = TelegramMediaImage(imageId: MediaId(namespace: 0, id: 0), representations: image.representations, immediateThumbnailData: image.immediateThumbnailData, reference: nil, partialReference: nil, flags: [])
+                let media = IosappMediaImage(imageId: MediaId(namespace: 0, id: 0), representations: image.representations, immediateThumbnailData: image.immediateThumbnailData, reference: nil, partialReference: nil, flags: [])
                 let _ = copyToPasteboard(context: strongSelf.context, postbox: strongSelf.context.account.postbox, userLocation: strongSelf.sourceLocation.userLocation, mediaReference: .standalone(media: media)).start()
             }
         }), ContextMenuAction(content: .text(title: self.strings.Conversation_LinkDialogSave, accessibilityLabel: self.strings.Conversation_LinkDialogSave), action: { [weak self] in
             if let strongSelf = self, case let .image(image) = media.media {
-                let media = TelegramMediaImage(imageId: MediaId(namespace: 0, id: 0), representations: image.representations, immediateThumbnailData: image.immediateThumbnailData, reference: nil, partialReference: nil, flags: [])
+                let media = IosappMediaImage(imageId: MediaId(namespace: 0, id: 0), representations: image.representations, immediateThumbnailData: image.immediateThumbnailData, reference: nil, partialReference: nil, flags: [])
                 let _ = saveToCameraRoll(context: strongSelf.context, postbox: strongSelf.context.account.postbox, userLocation: strongSelf.sourceLocation.userLocation, mediaReference: .standalone(media: media)).start()
             }
         }), ContextMenuAction(content: .text(title: self.strings.Conversation_ContextMenuShare, accessibilityLabel: self.strings.Conversation_ContextMenuShare), action: { [weak self] in
@@ -1369,7 +1369,7 @@ final class InstantPageControllerNode: ASDisplayNode, ASScrollViewDelegate {
                                         strongSelf.context.sharedContext.navigateToChatController(NavigateToChatControllerParams(navigationController: navigationController, context: strongSelf.context, chatLocation: .peer(peer), botAppStart: botAppStart))
                                     }
                                 case .info:
-                                    let _ = (strongSelf.context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: peer.id))
+                                    let _ = (strongSelf.context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: peer.id))
                                     |> deliverOnMainQueue).start(next: { peer in
                                         if let strongSelf = self, let peer = peer {
                                             if let controller = strongSelf.context.sharedContext.makePeerInfoController(context: strongSelf.context, updatedPresentationData: nil, peer: peer._asPeer(), mode: .generic, avatarInitiallyExpanded: false, fromChat: false, requestsContext: nil) {
@@ -1433,7 +1433,7 @@ final class InstantPageControllerNode: ASDisplayNode, ASScrollViewDelegate {
             }, openUrl: { _ in }, openPeer: { _ in
             }, showAll: false)
             
-            let peer = TelegramUser(id: PeerId(namespace: Namespaces.Peer.CloudUser, id: PeerId.Id._internalFromInt64Value(0)), accessHash: nil, firstName: "", lastName: nil, username: nil, phone: nil, photo: [], botInfo: nil, restrictionInfo: nil, flags: [], emojiStatus: nil, usernames: [], storiesHidden: nil, nameColor: nil, backgroundEmojiId: nil, profileColor: nil, profileBackgroundEmojiId: nil, subscriberCount: nil, verificationIconFileId: nil)
+            let peer = IosappUser(id: PeerId(namespace: Namespaces.Peer.CloudUser, id: PeerId.Id._internalFromInt64Value(0)), accessHash: nil, firstName: "", lastName: nil, username: nil, phone: nil, photo: [], botInfo: nil, restrictionInfo: nil, flags: [], emojiStatus: nil, usernames: [], storiesHidden: nil, nameColor: nil, backgroundEmojiId: nil, profileColor: nil, profileBackgroundEmojiId: nil, subscriberCount: nil, verificationIconFileId: nil)
             let message = Message(stableId: 0, stableVersion: 0, id: MessageId(peerId: peer.id, namespace: 0, id: 0), globallyUniqueId: nil, groupingKey: nil, groupInfo: nil, threadId: nil, timestamp: 0, flags: [], tags: [], globalTags: [], localTags: [], customTags: [], forwardInfo: nil, author: peer, text: "", attributes: [], media: [map], peers: SimpleDictionary(), associatedMessages: SimpleDictionary(), associatedMessageIds: [], associatedMedia: [:], associatedThreadInfo: nil, associatedStories: [:])
             
             let controller = LocationViewController(context: self.context, subject: EngineMessage(message), params: controllerParams)

@@ -46,10 +46,10 @@ private let blackColorImage: UIImage? = {
 }()
 
 public final class SettingsThemeWallpaperNode: ASDisplayNode {
-    public var wallpaper: TelegramWallpaper?
+    public var wallpaper: IosappWallpaper?
     private var arguments: PatternWallpaperArguments?
     
-    private var emojiFile: TelegramMediaFile?
+    private var emojiFile: IosappMediaFile?
     
     public let buttonNode = HighlightTrackingButtonNode()
     public let backgroundNode = ASImageNode()
@@ -151,7 +151,7 @@ public final class SettingsThemeWallpaperNode: ASDisplayNode {
         self.statusNode.backgroundNodeColor = color
     }
     
-    public func setWallpaper(context: AccountContext, theme: PresentationTheme? = nil, wallpaper: TelegramWallpaper, isEmpty: Bool = false, emojiFile: TelegramMediaFile? = nil, selected: Bool, size: CGSize, cornerRadius: CGFloat = 0.0, synchronousLoad: Bool = false) {
+    public func setWallpaper(context: AccountContext, theme: PresentationTheme? = nil, wallpaper: IosappWallpaper, isEmpty: Bool = false, emojiFile: IosappMediaFile? = nil, selected: Bool, size: CGSize, cornerRadius: CGFloat = 0.0, synchronousLoad: Bool = false) {
         self.buttonNode.frame = CGRect(origin: CGPoint(), size: size)
         self.backgroundNode.frame = CGRect(origin: CGPoint(), size: size)
         self.imageNode.frame = CGRect(origin: CGPoint(), size: size)

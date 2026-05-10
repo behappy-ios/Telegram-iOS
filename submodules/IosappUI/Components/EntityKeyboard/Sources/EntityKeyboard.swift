@@ -69,10 +69,10 @@ public final class EntityKeyboardComponent: Component {
     
     public struct GifSearchEmoji: Equatable {
         public var emoji: String
-        public var file: TelegramMediaFile
+        public var file: IosappMediaFile
         public var title: String
         
-        public init(emoji: String, file: TelegramMediaFile, title: String) {
+        public init(emoji: String, file: IosappMediaFile, title: String) {
             self.emoji = emoji
             self.file = file
             self.title = title

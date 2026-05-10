@@ -136,7 +136,7 @@ public final class CachedGroupData: CachedPeerData {
     public let flags: CachedGroupFlags
     public let hasScheduledMessages: Bool
     public let invitedBy: PeerId?
-    public let photo: TelegramMediaImage?
+    public let photo: IosappMediaImage?
     public let autoremoveTimeout: CachedPeerAutoremoveTimeout
     public let activeCall: CachedChannelData.ActiveCall?
     public let callJoinPeerId: PeerId?
@@ -180,7 +180,7 @@ public final class CachedGroupData: CachedPeerData {
         flags: CachedGroupFlags,
         hasScheduledMessages: Bool,
         invitedBy: PeerId?,
-        photo: TelegramMediaImage?,
+        photo: IosappMediaImage?,
         activeCall: CachedChannelData.ActiveCall?,
         autoremoveTimeout: CachedPeerAutoremoveTimeout,
         callJoinPeerId: PeerId?,
@@ -250,7 +250,7 @@ public final class CachedGroupData: CachedPeerData {
         
         self.invitedBy = decoder.decodeOptionalInt64ForKey("invBy").flatMap(PeerId.init)
         
-        if let photo = decoder.decodeObjectForKey("ph", decoder: { TelegramMediaImage(decoder: $0) }) as? TelegramMediaImage {
+        if let photo = decoder.decodeObjectForKey("ph", decoder: { IosappMediaImage(decoder: $0) }) as? IosappMediaImage {
             self.photo = photo
         } else {
             self.photo = nil
@@ -440,7 +440,7 @@ public final class CachedGroupData: CachedPeerData {
         return CachedGroupData(participants: self.participants, exportedInvitation: self.exportedInvitation, botInfos: self.botInfos, peerStatusSettings: self.peerStatusSettings, pinnedMessageId: self.pinnedMessageId, about: self.about, flags: self.flags, hasScheduledMessages: self.hasScheduledMessages, invitedBy: invitedBy, photo: self.photo, activeCall: self.activeCall, autoremoveTimeout: self.autoremoveTimeout, callJoinPeerId: self.callJoinPeerId, chatTheme: self.chatTheme, inviteRequestsPending: self.inviteRequestsPending, reactionSettings: self.reactionSettings)
     }
     
-    public func withUpdatedPhoto(_ photo: TelegramMediaImage?) -> CachedGroupData {
+    public func withUpdatedPhoto(_ photo: IosappMediaImage?) -> CachedGroupData {
         return CachedGroupData(participants: self.participants, exportedInvitation: self.exportedInvitation, botInfos: self.botInfos, peerStatusSettings: self.peerStatusSettings, pinnedMessageId: self.pinnedMessageId, about: self.about, flags: self.flags, hasScheduledMessages: self.hasScheduledMessages, invitedBy: self.invitedBy, photo: photo, activeCall: self.activeCall, autoremoveTimeout: self.autoremoveTimeout, callJoinPeerId: self.callJoinPeerId, chatTheme: self.chatTheme, inviteRequestsPending: self.inviteRequestsPending, reactionSettings: self.reactionSettings)
     }
     

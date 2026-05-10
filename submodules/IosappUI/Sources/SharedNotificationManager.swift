@@ -40,7 +40,7 @@ public final class SharedNotificationManager {
     private var inForeground: Bool = false
     private var inForegroundDisposable: Disposable?
     
-    private var accountManager: AccountManager<TelegramAccountManagerTypes>?
+    private var accountManager: AccountManager<IosappAccountManagerTypes>?
     private var accountsAndKeys: [(Account, Bool, MasterNotificationKey)]?
     private var accountsAndKeysDisposable: Disposable?
     

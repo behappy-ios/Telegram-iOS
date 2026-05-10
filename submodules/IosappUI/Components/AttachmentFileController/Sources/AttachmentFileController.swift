@@ -626,8 +626,8 @@ public func makeAttachmentFileControllerImpl(
         },
         send: { message in
             if message.id.namespace == Namespaces.Message.Local {
-                if let file = message.media.first(where: { $0 is TelegramMediaFile }) as? TelegramMediaFile {
-                    let _ = (context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: context.account.peerId))
+                if let file = message.media.first(where: { $0 is IosappMediaFile }) as? IosappMediaFile {
+                    let _ = (context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: context.account.peerId))
                     |> deliverOnMainQueue).start(next: { peer in
                         guard let peer, let peerReference = PeerReference(peer._asPeer()) else {
                             return
@@ -648,7 +648,7 @@ public func makeAttachmentFileControllerImpl(
                     return .single(result)
                 }
                 |> deliverOnMainQueue).startStandalone(next: { messages in
-                    if let message = messages.first, let file = message.media.first(where: { $0 is TelegramMediaFile }) as? TelegramMediaFile {
+                    if let message = messages.first, let file = message.media.first(where: { $0 is IosappMediaFile }) as? IosappMediaFile {
                         send([.message(message: MessageReference(message), media: file)], false, nil, nil)
                     }
                     dismissImpl?()
@@ -969,7 +969,7 @@ public func makeAttachmentFileControllerImpl(
                     }
                 }
                 let _ = combineLatest(queue: Queue.mainQueue(),
-                    context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: context.account.peerId)),
+                    context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: context.account.peerId)),
                     context.engine.messages.getMessagesLoadIfNecessary(remoteMessageIds, strategy: .cloud(skipLocal: true))
                     |> `catch` { _ in
                         return .single(.result([]))
@@ -996,7 +996,7 @@ public func makeAttachmentFileControllerImpl(
                             if message.id.namespace == Namespaces.Message.Cloud, let remoteMessage = messageMap[message.id] {
                                 message = remoteMessage
                             }
-                            if let file = message.media.first(where: { $0 is TelegramMediaFile}) as? TelegramMediaFile {
+                            if let file = message.media.first(where: { $0 is IosappMediaFile}) as? IosappMediaFile {
                                 if message.id.namespace == Namespaces.Message.Cloud {
                                     mediaReferences.append(.message(message: MessageReference(message), media: file))
                                 } else {

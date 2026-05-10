@@ -151,7 +151,7 @@ final class ChatBusinessLinkTitlePanelNode: ChatTitleAccessoryPanelNode {
     private let content = ComponentView<Empty>()
     
     private var theme: PresentationTheme?
-    private var link: TelegramBusinessChatLinks.Link?
+    private var link: IosappBusinessChatLinks.Link?
     
     init(context: AccountContext) {
         self.context = context

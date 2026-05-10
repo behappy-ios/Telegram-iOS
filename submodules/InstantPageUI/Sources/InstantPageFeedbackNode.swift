@@ -9,7 +9,7 @@ import AccountContext
 
 final class InstantPageFeedbackNode: ASDisplayNode, InstantPageNode {
     private let context: AccountContext
-    let webPage: TelegramMediaWebpage
+    let webPage: IosappMediaWebpage
     private let openUrl: (InstantPageUrlItem) -> Void
     
     private let highlightedBackgroundNode: ASDisplayNode
@@ -19,7 +19,7 @@ final class InstantPageFeedbackNode: ASDisplayNode, InstantPageNode {
     
     private let resolveDisposable = MetaDisposable()
     
-    init(context: AccountContext, strings: PresentationStrings, theme: InstantPageTheme, webPage: TelegramMediaWebpage, openUrl: @escaping (InstantPageUrlItem) -> Void) {
+    init(context: AccountContext, strings: PresentationStrings, theme: InstantPageTheme, webPage: IosappMediaWebpage, openUrl: @escaping (InstantPageUrlItem) -> Void) {
         self.context = context
         self.webPage = webPage
         self.openUrl = openUrl

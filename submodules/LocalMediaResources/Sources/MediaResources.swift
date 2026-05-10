@@ -96,7 +96,7 @@ public enum VideoLibraryMediaResourceConversion: PostboxCoding, Equatable {
     }
 }
 
-public final class VideoLibraryMediaResource: TelegramMediaResource {
+public final class VideoLibraryMediaResource: IosappMediaResource {
     public let localIdentifier: String
     public let conversion: VideoLibraryMediaResourceConversion
     
@@ -155,7 +155,7 @@ public struct LocalFileVideoMediaResourceId {
     }
 }
 
-public final class LocalFileVideoMediaResource: TelegramMediaResource {
+public final class LocalFileVideoMediaResource: IosappMediaResource {
     public var size: Int64? {
         return nil
     }
@@ -226,7 +226,7 @@ public struct LocalFileAudioMediaResourceId {
     }
 }
 
-public final class LocalFileAudioMediaResource: TelegramMediaResource {
+public final class LocalFileAudioMediaResource: IosappMediaResource {
     public var size: Int64? {
         return nil
     }
@@ -304,7 +304,7 @@ public enum MediaImageFormat: Int32 {
     case jxl
 }
 
-public class PhotoLibraryMediaResource: TelegramMediaResource {
+public class PhotoLibraryMediaResource: IosappMediaResource {
     public var size: Int64? {
         return nil
     }
@@ -409,7 +409,7 @@ public struct LocalFileGifMediaResourceId {
     }
 }
 
-public final class LocalFileGifMediaResource: TelegramMediaResource {
+public final class LocalFileGifMediaResource: IosappMediaResource {
     public var size: Int64? {
         return nil
     }
@@ -462,7 +462,7 @@ public struct BundleResourceId {
     }
 }
 
-public class BundleResource: TelegramMediaResource {
+public class BundleResource: IosappMediaResource {
     public var size: Int64? {
         return nil
     }

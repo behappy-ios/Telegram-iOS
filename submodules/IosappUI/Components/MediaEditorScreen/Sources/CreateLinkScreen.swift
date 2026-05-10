@@ -32,7 +32,7 @@ private final class SheetContent: CombinedComponent {
     let context: AccountContext
     let isEdit: Bool
     let link: String
-    let webpage: TelegramMediaWebpage?
+    let webpage: IosappMediaWebpage?
     let state: CreateLinkSheetComponent.State
     let dismiss: () -> Void
     
@@ -40,7 +40,7 @@ private final class SheetContent: CombinedComponent {
         context: AccountContext,
         isEdit: Bool,
         link: String,
-        webpage: TelegramMediaWebpage?,
+        webpage: IosappMediaWebpage?,
         state: CreateLinkSheetComponent.State,
         dismiss: @escaping () -> Void
     ) {
@@ -345,7 +345,7 @@ private final class CreateLinkSheetComponent: CombinedComponent {
             }
         }
         fileprivate var name: String = ""
-        fileprivate var webpage: TelegramMediaWebpage?
+        fileprivate var webpage: IosappMediaWebpage?
         fileprivate var isDark = false
         fileprivate var dismissed = false
         
@@ -474,7 +474,7 @@ private final class CreateLinkSheetComponent: CombinedComponent {
             
             let text = !self.name.isEmpty ? self.name : self.link
             
-            var effectiveMedia: TelegramMediaWebpage?
+            var effectiveMedia: IosappMediaWebpage?
             var webpageHasLargeMedia = false
             if let webpage = self.webpage, case let .Loaded(content) = webpage.content, !self.dismissed {
                 effectiveMedia = webpage
@@ -599,7 +599,7 @@ public final class CreateLinkScreen: ViewControllerComponentContainer {
     public struct Link: Equatable {
         let url: String
         let name: String?
-        let webpage: TelegramMediaWebpage?
+        let webpage: IosappMediaWebpage?
         let positionBelowText: Bool
         let largeMedia: Bool?
         let isDark: Bool
@@ -607,7 +607,7 @@ public final class CreateLinkScreen: ViewControllerComponentContainer {
         init(
             url: String,
             name: String?,
-            webpage: TelegramMediaWebpage?,
+            webpage: IosappMediaWebpage?,
             positionBelowText: Bool,
             largeMedia: Bool?,
             isDark: Bool
@@ -624,7 +624,7 @@ public final class CreateLinkScreen: ViewControllerComponentContainer {
     public struct Result {
         let url: String
         let name: String
-        let webpage: TelegramMediaWebpage?
+        let webpage: IosappMediaWebpage?
         let positionBelowText: Bool
         let largeMedia: Bool?
         let image: UIImage?
@@ -857,14 +857,14 @@ private final class LinkFieldComponent: Component {
 private final class LinkPreviewComponent: Component {
     typealias EnvironmentType = Empty
     
-    let webpage: TelegramMediaWebpage
+    let webpage: IosappMediaWebpage
     let theme: PresentationTheme
     let strings: PresentationStrings
     let presentLinkOptions: (ASDisplayNode) -> Void
     let dismiss: () -> Void
     
     init(
-        webpage: TelegramMediaWebpage,
+        webpage: IosappMediaWebpage,
         theme: PresentationTheme,
         strings: PresentationStrings,
         presentLinkOptions: @escaping (ASDisplayNode) -> Void,

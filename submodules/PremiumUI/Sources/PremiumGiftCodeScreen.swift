@@ -103,8 +103,8 @@ private final class PremiumGiftCodeSheetContent: CombinedComponent {
             
             self.disposable = (context.engine.data.get(
                 EngineDataMap(
-                    peerIds.map { peerId -> TelegramEngine.EngineData.Item.Peer.Peer in
-                        return TelegramEngine.EngineData.Item.Peer.Peer(id: peerId)
+                    peerIds.map { peerId -> IosappEngine.EngineData.Item.Peer.Peer in
+                        return IosappEngine.EngineData.Item.Peer.Peer(id: peerId)
                     }
                 )
             ) |> deliverOnMainQueue).startStrict(next: { [weak self] peers in
@@ -288,7 +288,7 @@ private final class PremiumGiftCodeSheetContent: CombinedComponent {
             let textColor = theme.actionSheet.primaryTextColor
             let linkColor = theme.actionSheet.controlAccentColor
             let markdownAttributes = MarkdownAttributes(body: MarkdownAttributeSet(font: textFont, textColor: textColor), bold: MarkdownAttributeSet(font: boldTextFont, textColor: textColor), link: MarkdownAttributeSet(font: textFont, textColor: linkColor), linkAttribute: { contents in
-                return (TelegramTextAttributes.URL, contents)
+                return (IosappTextAttributes.URL, contents)
             })
             let description = description.update(
                 component: BalancedTextComponent(
@@ -367,7 +367,7 @@ private final class PremiumGiftCodeSheetContent: CombinedComponent {
                     )
                 ))
             }
-            let giftTitle = strings.GiftLink_TelegramPremium(months)
+            let giftTitle = strings.GiftLink_IosappPremium(months)
             tableItems.append(.init(
                 id: "gift",
                 title: strings.GiftLink_Gift,
@@ -449,8 +449,8 @@ private final class PremiumGiftCodeSheetContent: CombinedComponent {
                     lineSpacing: 0.1,
                     highlightColor: linkColor.withAlphaComponent(0.2),
                     highlightAction: { attributes in
-                        if let _ = attributes[NSAttributedString.Key(rawValue: TelegramTextAttributes.URL)] {
-                            return NSAttributedString.Key(rawValue: TelegramTextAttributes.URL)
+                        if let _ = attributes[NSAttributedString.Key(rawValue: IosappTextAttributes.URL)] {
+                            return NSAttributedString.Key(rawValue: IosappTextAttributes.URL)
                         } else {
                             return nil
                         }

@@ -36,7 +36,7 @@ public final class RecentWebSearchQueryItem: Codable {
     }
 }
 
-func addRecentWebSearchQuery(engine: TelegramEngine, string: String) -> Signal<Never, NoError> {
+func addRecentWebSearchQuery(engine: IosappEngine, string: String) -> Signal<Never, NoError> {
     if let itemId = WebSearchRecentQueryItemId(string) {
         return engine.orderedLists.addOrMoveToFirstPosition(collectionId: ApplicationSpecificOrderedItemListCollectionId.webSearchRecentQueries, id: itemId.rawValue, item: RecentWebSearchQueryItem(), removeTailIfCountExceeds: 100)
     } else {
@@ -44,7 +44,7 @@ func addRecentWebSearchQuery(engine: TelegramEngine, string: String) -> Signal<N
     }
 }
 
-func removeRecentWebSearchQuery(engine: TelegramEngine, string: String) -> Signal<Never, NoError> {
+func removeRecentWebSearchQuery(engine: IosappEngine, string: String) -> Signal<Never, NoError> {
     if let itemId = WebSearchRecentQueryItemId(string) {
         return engine.orderedLists.removeItem(collectionId: ApplicationSpecificOrderedItemListCollectionId.webSearchRecentQueries, id: itemId.rawValue)
     } else {
@@ -52,12 +52,12 @@ func removeRecentWebSearchQuery(engine: TelegramEngine, string: String) -> Signa
     }
 }
 
-func clearRecentWebSearchQueries(engine: TelegramEngine) -> Signal<Never, NoError> {
+func clearRecentWebSearchQueries(engine: IosappEngine) -> Signal<Never, NoError> {
     return engine.orderedLists.clear(collectionId: ApplicationSpecificOrderedItemListCollectionId.webSearchRecentQueries)
 }
 
-func webSearchRecentQueries(engine: TelegramEngine) -> Signal<[String], NoError> {
-    return engine.data.subscribe(TelegramEngine.EngineData.Item.OrderedLists.ListItems(collectionId: ApplicationSpecificOrderedItemListCollectionId.webSearchRecentQueries))
+func webSearchRecentQueries(engine: IosappEngine) -> Signal<[String], NoError> {
+    return engine.data.subscribe(IosappEngine.EngineData.Item.OrderedLists.ListItems(collectionId: ApplicationSpecificOrderedItemListCollectionId.webSearchRecentQueries))
     |> map { items -> [String] in
         var result: [String] = []
         for item in items {

@@ -147,7 +147,7 @@ private func requestActivity(postbox: Postbox, network: Network, accountPeerId: 
             if peerId == accountPeerId {
                 return .complete()
             }
-            if let channel = peer as? TelegramChannel, case .broadcast = channel.info {
+            if let channel = peer as? IosappChannel, case .broadcast = channel.info {
                 if let activity = activity {
                     switch activity {
                     case .speakingInGroupCall:
@@ -157,8 +157,8 @@ private func requestActivity(postbox: Postbox, network: Network, accountPeerId: 
                     }
                 }
             }
-            if let _ = peer as? TelegramUser {
-                if let presence = transaction.getPeerPresence(peerId: peerId) as? TelegramUserPresence {
+            if let _ = peer as? IosappUser {
+                if let presence = transaction.getPeerPresence(peerId: peerId) as? IosappUserPresence {
                     switch presence.status {
                     case .none, .lastWeek, .lastMonth:
                         return .complete()
@@ -188,7 +188,7 @@ private func requestActivity(postbox: Postbox, network: Network, accountPeerId: 
                 |> mapToSignal { _ -> Signal<Void, NoError> in
                     return .complete()
                 }
-            } else if let peer = peer as? TelegramSecretChat, activity == .typingText {
+            } else if let peer = peer as? IosappSecretChat, activity == .typingText {
                 let _ = PeerId(peer.id.toInt64())
                 return network.request(Api.functions.messages.setEncryptedTyping(peer: .inputEncryptedChat(.init(chatId: Int32(peer.id.id._internalGetInt64Value()), accessHash: peer.accessHash)), typing: .boolTrue))
                 |> `catch` { _ -> Signal<Api.Bool, NoError> in

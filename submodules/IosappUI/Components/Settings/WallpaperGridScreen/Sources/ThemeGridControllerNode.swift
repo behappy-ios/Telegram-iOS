@@ -25,14 +25,14 @@ struct ThemeGridControllerNodeState: Equatable {
 }
 
 final class ThemeGridControllerInteraction {
-    let openWallpaper: (TelegramWallpaper) -> Void
+    let openWallpaper: (IosappWallpaper) -> Void
     let toggleWallpaperSelection: (ThemeGridControllerEntry.StableId, Bool) -> Void
     let deleteSelectedWallpapers: () -> Void
     let shareSelectedWallpapers: () -> Void
     var selectionState: (Bool, Set<ThemeGridControllerEntry.StableId>) = (false, Set())
     var removeWallpaper: () -> Void
     
-    init(openWallpaper: @escaping (TelegramWallpaper) -> Void, toggleWallpaperSelection: @escaping (ThemeGridControllerEntry.StableId, Bool) -> Void, deleteSelectedWallpapers: @escaping () -> Void, shareSelectedWallpapers: @escaping () -> Void, removeWallpaper: @escaping () -> Void) {
+    init(openWallpaper: @escaping (IosappWallpaper) -> Void, toggleWallpaperSelection: @escaping (ThemeGridControllerEntry.StableId, Bool) -> Void, deleteSelectedWallpapers: @escaping () -> Void, shareSelectedWallpapers: @escaping () -> Void, removeWallpaper: @escaping () -> Void) {
         self.openWallpaper = openWallpaper
         self.toggleWallpaperSelection = toggleWallpaperSelection
         self.deleteSelectedWallpapers = deleteSelectedWallpapers
@@ -53,9 +53,9 @@ struct ThemeGridControllerEntry: Comparable, Identifiable {
 
     var index: Int
     var theme: PresentationTheme?
-    var wallpaper: TelegramWallpaper
+    var wallpaper: IosappWallpaper
     var isEmpty: Bool = false
-    var emoji: TelegramMediaFile?
+    var emoji: IosappMediaFile?
     var channelMode: Bool = false
     var isEditable: Bool
     var isSelected: Bool
@@ -132,11 +132,11 @@ private func preparedThemeGridEntryTransition(context: AccountContext, from from
     return ThemeGridEntryTransition(deletions: deletions, insertions: insertions, updates: updates, isEmpty: !hasEditableItems, updateFirstIndexInSectionOffset: nil, stationaryItems: stationaryItems, scrollToItem: scrollToItem, synchronousLoad: synchronousLoad)
 }
 
-private func selectedWallpapers(entries: [ThemeGridControllerEntry]?, state: ThemeGridControllerNodeState) -> [TelegramWallpaper] {
+private func selectedWallpapers(entries: [ThemeGridControllerEntry]?, state: ThemeGridControllerNodeState) -> [IosappWallpaper] {
     guard let entries = entries, state.editing else {
         return []
     }
-    var wallpapers: [TelegramWallpaper] = []
+    var wallpapers: [IosappWallpaper] = []
     for entry in entries {
         if state.selectedIds.contains(entry.stableId) {
             wallpapers.append(entry.wallpaper)
@@ -147,7 +147,7 @@ private func selectedWallpapers(entries: [ThemeGridControllerEntry]?, state: The
 
 final class ThemeGridControllerNode: ASDisplayNode {
     private struct Wallpaper: Equatable {
-        var wallpaper: TelegramWallpaper
+        var wallpaper: IosappWallpaper
         var isLocal: Bool
     }
 
@@ -166,7 +166,7 @@ final class ThemeGridControllerNode: ASDisplayNode {
     
     let ready = ValuePromise<Bool>()
     private let wallpapersPromise = Promise<[Wallpaper]>()
-    private let themesPromise = Promise<[TelegramTheme]>()
+    private let themesPromise = Promise<[IosappTheme]>()
     
     private var backgroundNode: ASDisplayNode
     private var separatorNode: ASDisplayNode
@@ -209,7 +209,7 @@ final class ThemeGridControllerNode: ASDisplayNode {
     
     private var disposable: Disposable?
     
-    init(context: AccountContext, mode: ThemeGridController.Mode, presentationData: PresentationData, presentPreviewController: @escaping (WallpaperListSource) -> Void, presentGallery: @escaping () -> Void, presentColors: @escaping () -> Void, emptyStateUpdated: @escaping (Bool) -> Void, deleteWallpapers: @escaping ([TelegramWallpaper], @escaping () -> Void) -> Void, shareWallpapers: @escaping ([TelegramWallpaper]) -> Void, resetWallpapers: @escaping () -> Void, popViewController: @escaping () -> Void) {
+    init(context: AccountContext, mode: ThemeGridController.Mode, presentationData: PresentationData, presentPreviewController: @escaping (WallpaperListSource) -> Void, presentGallery: @escaping () -> Void, presentColors: @escaping () -> Void, emptyStateUpdated: @escaping (Bool) -> Void, deleteWallpapers: @escaping ([IosappWallpaper], @escaping () -> Void) -> Void, shareWallpapers: @escaping ([IosappWallpaper]) -> Void, resetWallpapers: @escaping () -> Void, popViewController: @escaping () -> Void) {
         self.context = context
         self.mode = mode
         self.presentationData = presentationData
@@ -409,7 +409,7 @@ final class ThemeGridControllerNode: ASDisplayNode {
             var index: Int = 0
             
             if !themes.isEmpty {
-                var selectedWallpaper: TelegramWallpaper?
+                var selectedWallpaper: IosappWallpaper?
                 if case let .peer(_, _, wallpaper, _, _) = mode {
                     selectedWallpaper = wallpaper
                 }
@@ -447,7 +447,7 @@ final class ThemeGridControllerNode: ASDisplayNode {
                 entries.insert(ThemeGridControllerEntry(index: 0, wallpaper: presentationData.chatWallpaper, emoji: nil, isEditable: false, isSelected: true), at: 0)
                 index += 1
                 
-                var defaultWallpaper: TelegramWallpaper?
+                var defaultWallpaper: IosappWallpaper?
                 if !presentationData.chatWallpaper.isBasicallyEqual(to: presentationData.theme.chat.defaultWallpaper) {
                     let entry = ThemeGridControllerEntry(index: 1, wallpaper: presentationData.theme.chat.defaultWallpaper, emoji: nil, isEditable: false, isSelected: false)
                     if !entries.contains(where: { $0.stableId == entry.stableId }) {
@@ -457,10 +457,10 @@ final class ThemeGridControllerNode: ASDisplayNode {
                     }
                 }
                 
-                var sortedWallpapers: [TelegramWallpaper] = []
+                var sortedWallpapers: [IosappWallpaper] = []
                 if presentationData.theme.overallDarkAppearance {
-                    var localWallpapers: [TelegramWallpaper] = []
-                    var darkWallpapers: [TelegramWallpaper] = []
+                    var localWallpapers: [IosappWallpaper] = []
+                    var darkWallpapers: [IosappWallpaper] = []
                     for wallpaper in wallpapers {
                         if wallpaper.isLocal {
                             localWallpapers.append(wallpaper.wallpaper)

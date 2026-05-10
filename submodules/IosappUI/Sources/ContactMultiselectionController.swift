@@ -137,7 +137,7 @@ class ContactMultiselectionControllerImpl: ViewController, ContactMultiselection
             }
         })
         
-        self.limitsConfigurationDisposable = (context.engine.data.get(TelegramEngine.EngineData.Item.Configuration.Limits())
+        self.limitsConfigurationDisposable = (context.engine.data.get(IosappEngine.EngineData.Item.Configuration.Limits())
         |> deliverOnMainQueue).startStrict(next: { [weak self] value in
             if let strongSelf = self {
                 strongSelf.limitsConfiguration = value._asLimits()
@@ -152,7 +152,7 @@ class ContactMultiselectionControllerImpl: ViewController, ContactMultiselection
             let additionalCategories = chatSelection.additionalCategories
             let _ = (self.context.engine.data.get(
                 EngineDataList(
-                    selectedChats.map(TelegramEngine.EngineData.Item.Peer.Peer.init)
+                    selectedChats.map(IosappEngine.EngineData.Item.Peer.Peer.init)
                 )
             )
             |> deliverOnMainQueue).startStandalone(next: { [weak self] peerList in
@@ -189,7 +189,7 @@ class ContactMultiselectionControllerImpl: ViewController, ContactMultiselection
                 
                 let _ = (self.context.engine.data.get(
                     EngineDataList(
-                        todayPeers.map(TelegramEngine.EngineData.Item.Peer.Peer.init)
+                        todayPeers.map(IosappEngine.EngineData.Item.Peer.Peer.init)
                     )
                 )
                 |> deliverOnMainQueue).startStandalone(next: { [weak self] peerList in

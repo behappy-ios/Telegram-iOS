@@ -65,7 +65,7 @@ private final class DeviceSpecificContactImportContexts {
             if context.reference != reference {
                 context.reference = reference
                 
-                let signal = TelegramEngine(account: account).data.subscribe(TelegramEngine.EngineData.Item.Peer.Peer(id: peerId))
+                let signal = IosappEngine(account: account).data.subscribe(IosappEngine.EngineData.Item.Peer.Peer(id: peerId))
                 |> map { peer -> String? in
                     if case let .user(user) = peer {
                         return user.phone
@@ -115,7 +115,7 @@ public final class AccountContextImpl: AccountContext {
         return self.sharedContextImpl
     }
     public let account: Account
-    public let engine: TelegramEngine
+    public let engine: IosappEngine
     
     public let fetchManager: FetchManager
     public let prefetchManager: PrefetchManager?
@@ -276,7 +276,7 @@ public final class AccountContextImpl: AccountContext {
     {
         self.sharedContextImpl = sharedContext
         self.account = account
-        self.engine = TelegramEngine(account: account)
+        self.engine = IosappEngine(account: account)
         
         self.imageCache = DirectMediaImageCache(account: account)
         
@@ -435,10 +435,10 @@ public final class AccountContextImpl: AccountContext {
             strongSelf.animatedEmojiStickersPromise.set(.single(stickers))
         })
         
-        self.userLimitsConfigurationDisposable = (self.engine.data.subscribe(TelegramEngine.EngineData.Item.Peer.Peer(id: account.peerId))
+        self.userLimitsConfigurationDisposable = (self.engine.data.subscribe(IosappEngine.EngineData.Item.Peer.Peer(id: account.peerId))
         |> mapToSignal { peer -> Signal<(Bool, EngineConfiguration.UserLimits), NoError> in
             let isPremium = peer?.isPremium ?? false
-            return self.engine.data.subscribe(TelegramEngine.EngineData.Item.Configuration.UserLimits(isPremium: isPremium))
+            return self.engine.data.subscribe(IosappEngine.EngineData.Item.Configuration.UserLimits(isPremium: isPremium))
             |> map { userLimits in
                 return (isPremium, userLimits)
             }
@@ -462,13 +462,13 @@ public final class AccountContextImpl: AccountContext {
             self.peerNameColors = PeerNameColors.with(availableReplyColors: availableReplyColors, availableProfileColors: availableProfileColors)
         })
         
-        self.audioTranscriptionTrialDisposable = (self.engine.data.subscribe(TelegramEngine.EngineData.Item.Peer.Peer(id: account.peerId))
+        self.audioTranscriptionTrialDisposable = (self.engine.data.subscribe(IosappEngine.EngineData.Item.Peer.Peer(id: account.peerId))
         |> mapToSignal { peer -> Signal<AudioTranscription.TrialState, NoError> in
             let isPremium = peer?.isPremium ?? false
             if isPremium {
                 return .single(AudioTranscription.TrialState(cooldownUntilTime: nil, remainingCount: 1))
             } else {
-                return self.engine.data.subscribe(TelegramEngine.EngineData.Item.Configuration.AudioTranscriptionTrial())
+                return self.engine.data.subscribe(IosappEngine.EngineData.Item.Configuration.AudioTranscriptionTrial())
             }
         }
         |> deliverOnMainQueue).startStrict(next: { [weak self] audioTranscriptionTrial in
@@ -641,12 +641,12 @@ public final class AccountContextImpl: AccountContext {
                 let dataInput: Signal<(EnginePeer?, EnginePeer?), NoError>
                 if case let .peer(currentPeerId) = currentCallType, let currentPeerId {
                     dataInput = self.engine.data.get(
-                        TelegramEngine.EngineData.Item.Peer.Peer(id: peerId),
-                        TelegramEngine.EngineData.Item.Peer.Peer(id: currentPeerId)
+                        IosappEngine.EngineData.Item.Peer.Peer(id: peerId),
+                        IosappEngine.EngineData.Item.Peer.Peer(id: currentPeerId)
                     )
                 } else {
                     dataInput = self.engine.data.get(
-                        TelegramEngine.EngineData.Item.Peer.Peer(id: peerId)
+                        IosappEngine.EngineData.Item.Peer.Peer(id: peerId)
                     )
                     |> map { peer -> (EnginePeer?, EnginePeer?) in
                         return (peer, nil)
@@ -728,7 +728,7 @@ public final class AccountContextImpl: AccountContext {
             let dataInput: Signal<EnginePeer?, NoError>
             if case let .peer(currentPeerId) = currentCallType, let currentPeerId {
                 dataInput = self.engine.data.get(
-                    TelegramEngine.EngineData.Item.Peer.Peer(id: currentPeerId)
+                    IosappEngine.EngineData.Item.Peer.Peer(id: currentPeerId)
                 )
             } else {
                 dataInput = .single(nil)
@@ -844,12 +844,12 @@ public final class AccountContextImpl: AccountContext {
                 let dataInput: Signal<(EnginePeer?, EnginePeer?), NoError>
                 if case let .peer(currentPeerId) = currentCallType, let currentPeerId {
                     dataInput = self.engine.data.get(
-                        TelegramEngine.EngineData.Item.Peer.Peer(id: peerId),
-                        TelegramEngine.EngineData.Item.Peer.Peer(id: currentPeerId)
+                        IosappEngine.EngineData.Item.Peer.Peer(id: peerId),
+                        IosappEngine.EngineData.Item.Peer.Peer(id: currentPeerId)
                     )
                 } else {
                     dataInput = self.engine.data.get(
-                        TelegramEngine.EngineData.Item.Peer.Peer(id: peerId)
+                        IosappEngine.EngineData.Item.Peer.Peer(id: peerId)
                     )
                     |> map { peer -> (EnginePeer?, EnginePeer?) in
                         return (peer, nil)

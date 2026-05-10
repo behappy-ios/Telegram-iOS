@@ -148,12 +148,12 @@ public func getChatWallpaperImage(context: AccountContext, peerId: EnginePeer.Id
         return themeSettings
     }
     
-    let peerWallpaper = context.account.postbox.transaction { transaction -> TelegramWallpaper? in
+    let peerWallpaper = context.account.postbox.transaction { transaction -> IosappWallpaper? in
         return (transaction.getPeerCachedData(peerId: peerId) as? CachedChannelData)?.wallpaper
     }
     
     return combineLatest(themeSettings, peerWallpaper)
-    |> mapToSignal { themeSettings, peerWallpaper -> Signal<(TelegramWallpaper?, TelegramWallpaper?), NoError> in
+    |> mapToSignal { themeSettings, peerWallpaper -> Signal<(IosappWallpaper?, IosappWallpaper?), NoError> in
         var currentColors = themeSettings.themeSpecificAccentColors[themeSettings.theme.index]
         if let colors = currentColors, colors.baseColor == .theme {
             currentColors = nil
@@ -161,7 +161,7 @@ public func getChatWallpaperImage(context: AccountContext, peerId: EnginePeer.Id
         
         let themeSpecificWallpaper = (themeSettings.themeSpecificChatWallpapers[coloredThemeIndex(reference: themeSettings.theme, accentColor: currentColors)] ?? themeSettings.themeSpecificChatWallpapers[themeSettings.theme.index])
         
-        let dayWallpaper: TelegramWallpaper
+        let dayWallpaper: IosappWallpaper
         if let themeSpecificWallpaper = themeSpecificWallpaper {
             dayWallpaper = themeSpecificWallpaper
         } else {
@@ -169,13 +169,13 @@ public func getChatWallpaperImage(context: AccountContext, peerId: EnginePeer.Id
             dayWallpaper = theme.chat.defaultWallpaper
         }
         
-        var nightWallpaper: TelegramWallpaper?
+        var nightWallpaper: IosappWallpaper?
         
         let automaticTheme = themeSettings.automaticThemeSwitchSetting.theme
         let effectiveColors = themeSettings.themeSpecificAccentColors[automaticTheme.index]
         let nightThemeSpecificWallpaper = (themeSettings.themeSpecificChatWallpapers[coloredThemeIndex(reference: automaticTheme, accentColor: effectiveColors)] ?? themeSettings.themeSpecificChatWallpapers[automaticTheme.index])
         
-        var preferredBaseTheme: TelegramBaseTheme?
+        var preferredBaseTheme: IosappBaseTheme?
         if let baseTheme = themeSettings.themePreferredBaseTheme[automaticTheme.index], [.night, .tinted].contains(baseTheme) {
             preferredBaseTheme = baseTheme
         } else {
@@ -204,11 +204,11 @@ public func getChatWallpaperImage(context: AccountContext, peerId: EnginePeer.Id
         if let peerWallpaper {
             if case let .emoticon(emoticon) = peerWallpaper {
                 return context.engine.themes.getChatThemes(accountManager: context.sharedContext.accountManager)
-                |> map { themes -> (TelegramWallpaper?, TelegramWallpaper?) in
+                |> map { themes -> (IosappWallpaper?, IosappWallpaper?) in
                     if let theme = themes.first(where: { $0.emoticon?.strippedEmoji == emoticon.strippedEmoji }) {
                         if let dayMatch = theme.settings?.first(where: { $0.baseTheme == .classic || $0.baseTheme == .day }) {
                             if let peerDayWallpaper = dayMatch.wallpaper {
-                                var peerNightWallpaper: TelegramWallpaper?
+                                var peerNightWallpaper: IosappWallpaper?
                                 if let nightMatch = theme.settings?.first(where: { $0.baseTheme == .night || $0.baseTheme == .tinted }) {
                                     peerNightWallpaper = nightMatch.wallpaper
                                 }

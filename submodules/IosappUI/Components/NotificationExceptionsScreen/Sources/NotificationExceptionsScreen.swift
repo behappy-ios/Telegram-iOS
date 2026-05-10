@@ -100,7 +100,7 @@ private enum NotificationsPeerCategoryEntry: ItemListNodeEntry {
   
     case exceptionsHeader(String)
     case addException(String)
-    case exception(Int32, PresentationDateTimeFormat, PresentationPersonNameOrder, EnginePeer, Int64, EngineMessageHistoryThread.Info, String, TelegramPeerNotificationSettings, Bool, Bool)
+    case exception(Int32, PresentationDateTimeFormat, PresentationPersonNameOrder, EnginePeer, Int64, EngineMessageHistoryThread.Info, String, IosappPeerNotificationSettings, Bool, Bool)
     case removeAllExceptions(String)
     
     var section: ItemListSectionId {
@@ -332,7 +332,7 @@ private func notificationsPeerCategoryEntries(peerId: EnginePeer.Id, notificatio
             }
         }
         existingThreadIds.insert(value.threadId)
-        entries.append(.exception(Int32(index), presentationData.dateTimeFormat, presentationData.nameDisplayOrder, .channel(TelegramChannel(id: peerId, accessHash: nil, title: "", username: nil, photo: [], creationDate: 0, version: 0, participationStatus: .member, info: .group(TelegramChannelGroupInfo(flags: [])), flags: [.isForum], restrictionInfo: nil, adminRights: nil, bannedRights: nil, defaultBannedRights: nil, usernames: [], storiesHidden: nil, nameColor: nil, backgroundEmojiId: nil, profileColor: nil, profileBackgroundEmojiId: nil, emojiStatus: nil, approximateBoostLevel: nil, subscriptionUntilDate: nil, verificationIconFileId: nil, sendPaidMessageStars: nil, linkedMonoforumId: nil)), value.threadId, value.info, title, value.notificationSettings._asNotificationSettings(), state.editing, state.revealedThreadId == value.threadId))
+        entries.append(.exception(Int32(index), presentationData.dateTimeFormat, presentationData.nameDisplayOrder, .channel(IosappChannel(id: peerId, accessHash: nil, title: "", username: nil, photo: [], creationDate: 0, version: 0, participationStatus: .member, info: .group(IosappChannelGroupInfo(flags: [])), flags: [.isForum], restrictionInfo: nil, adminRights: nil, bannedRights: nil, defaultBannedRights: nil, usernames: [], storiesHidden: nil, nameColor: nil, backgroundEmojiId: nil, profileColor: nil, profileBackgroundEmojiId: nil, emojiStatus: nil, approximateBoostLevel: nil, subscriptionUntilDate: nil, verificationIconFileId: nil, sendPaidMessageStars: nil, linkedMonoforumId: nil)), value.threadId, value.info, title, value.notificationSettings._asNotificationSettings(), state.editing, state.revealedThreadId == value.threadId))
         index += 1
     }
     
@@ -453,8 +453,8 @@ public func threadNotificationExceptionsScreen(context: AccountContext, peerId: 
     
     let presentThreadSettings: (EngineMessageHistoryThread.NotificationException, @escaping () -> Void) -> Void = { item, completion in
         let _ = (context.engine.data.get(
-            TelegramEngine.EngineData.Item.Peer.Peer(id: peerId),
-            TelegramEngine.EngineData.Item.NotificationSettings.Global()
+            IosappEngine.EngineData.Item.Peer.Peer(id: peerId),
+            IosappEngine.EngineData.Item.NotificationSettings.Global()
         )
         |> deliverOnMainQueue).start(next: { peer, globalSettings in
             completion()
@@ -531,7 +531,7 @@ public func threadNotificationExceptionsScreen(context: AccountContext, peerId: 
             guard let threadId = threadId else {
                 return
             }
-            let _ = (context.engine.data.get(TelegramEngine.EngineData.Item.Peer.ThreadData(id: peerId, threadId: threadId))
+            let _ = (context.engine.data.get(IosappEngine.EngineData.Item.Peer.ThreadData(id: peerId, threadId: threadId))
             |> deliverOnMainQueue).start(next: { threadData in
                 guard let threadData = threadData else {
                     return
@@ -590,8 +590,8 @@ public func threadNotificationExceptionsScreen(context: AccountContext, peerId: 
     let signal = combineLatest(queue: .mainQueue(),
         context.sharedContext.presentationData,
         context.engine.peers.notificationSoundList(),
-        context.engine.data.subscribe(TelegramEngine.EngineData.Item.Peer.Peer(id: peerId)),
-        context.engine.data.subscribe(TelegramEngine.EngineData.Item.Peer.NotificationSettings(id: peerId)),
+        context.engine.data.subscribe(IosappEngine.EngineData.Item.Peer.Peer(id: peerId)),
+        context.engine.data.subscribe(IosappEngine.EngineData.Item.Peer.NotificationSettings(id: peerId)),
         statePromise.get()
     )
     |> map { presentationData, notificationSoundList, peer, notificationSettings, state -> (ItemListControllerState, (ItemListNodeState, Any)) in

@@ -38,7 +38,7 @@ public struct GeneratedMediaStoreSettings: Codable, Equatable {
     }
 }
 
-public func updateGeneratedMediaStoreSettingsInteractively(accountManager: AccountManager<TelegramAccountManagerTypes>, _ f: @escaping (GeneratedMediaStoreSettings) -> GeneratedMediaStoreSettings) -> Signal<Void, NoError> {
+public func updateGeneratedMediaStoreSettingsInteractively(accountManager: AccountManager<IosappAccountManagerTypes>, _ f: @escaping (GeneratedMediaStoreSettings) -> GeneratedMediaStoreSettings) -> Signal<Void, NoError> {
     return accountManager.transaction { transaction -> Void in
         transaction.updateSharedData(ApplicationSpecificSharedDataKeys.generatedMediaStoreSettings, { entry in
             let currentSettings: GeneratedMediaStoreSettings

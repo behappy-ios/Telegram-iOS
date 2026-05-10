@@ -228,7 +228,7 @@ private final class QuickShareScreenComponent: Component {
                             var peers: [EnginePeer] = []
                             for entry in view.0.entries.reversed() {
                                 if case let .MessageEntry(entryData) = entry {
-                                    if let user = entryData.renderedPeer.chatMainPeer as? TelegramUser, user.isGenericUser && user.id != component.context.account.peerId && !user.id.isSecretChat {
+                                    if let user = entryData.renderedPeer.chatMainPeer as? IosappUser, user.isGenericUser && user.id != component.context.account.peerId && !user.id.isSecretChat {
                                         peers.append(EnginePeer(user))
                                     }
                                 }
@@ -240,7 +240,7 @@ private final class QuickShareScreenComponent: Component {
                 
                 self.disposable = combineLatest(queue: Queue.mainQueue(),
                     peers,
-                    component.context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: component.context.account.peerId))
+                    component.context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: component.context.account.peerId))
                 ).start(next: { [weak self] peers, accountPeer in
                     guard let self else {
                         return

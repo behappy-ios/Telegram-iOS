@@ -281,7 +281,7 @@ private func peerAllowedReactionListControllerEntries(
     var entries: [PeerAllowedReactionListControllerEntry] = []
     
     if let peer = peer, let availableReactions = availableReactions, let allowedReactions = state.updatedAllowedReactions, let mode = state.updatedMode {
-        if let channel = peer as? TelegramChannel, case .broadcast = channel.info {
+        if let channel = peer as? IosappChannel, case .broadcast = channel.info {
             entries.append(.allowSwitch(text: presentationData.strings.PeerInfo_AllowedReactions_AllowAllText, value: mode != .empty))
             
             entries.append(.itemsHeader(presentationData.strings.PeerInfo_AllowedReactions_ReactionListHeader))
@@ -301,7 +301,7 @@ private func peerAllowedReactionListControllerEntries(
             entries.append(.allowNone(text: presentationData.strings.PeerInfo_AllowedReactions_OptionNoReactions, isEnabled: mode == .empty))
             
             let allInfoText: String
-            if let peer = peer as? TelegramChannel, case .broadcast = peer.info {
+            if let peer = peer as? IosappChannel, case .broadcast = peer.info {
                 switch mode {
                 case .all:
                     allInfoText = presentationData.strings.PeerInfo_AllowedReactions_GroupOptionAllInfo
@@ -355,7 +355,7 @@ public func peerAllowedReactionListController(
     let _ = dismissImpl
     
     let actionsDisposable = DisposableSet()
-    actionsDisposable.add((combineLatest(context.engine.data.get(TelegramEngine.EngineData.Item.Peer.AllowedReactions(id: peerId)), context.engine.stickers.availableReactions() |> take(1))
+    actionsDisposable.add((combineLatest(context.engine.data.get(IosappEngine.EngineData.Item.Peer.AllowedReactions(id: peerId)), context.engine.stickers.availableReactions() |> take(1))
     |> deliverOnMainQueue).start(next: { allowedReactions, availableReactions in
         updateState { state in
             var state = state
@@ -506,8 +506,8 @@ public func peerAllowedReactionListController(
     controller.willDisappear = { _ in
         let _ = (combineLatest(
             context.engine.data.get(
-                TelegramEngine.EngineData.Item.Peer.Peer(id: peerId),
-                TelegramEngine.EngineData.Item.Peer.AllowedReactions(id: peerId)
+                IosappEngine.EngineData.Item.Peer.Peer(id: peerId),
+                IosappEngine.EngineData.Item.Peer.AllowedReactions(id: peerId)
             ),
             context.engine.stickers.availableReactions() |> take(1)
         )

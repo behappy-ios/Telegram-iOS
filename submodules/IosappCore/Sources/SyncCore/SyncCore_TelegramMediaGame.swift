@@ -1,20 +1,20 @@
 import Postbox
 
-public final class TelegramMediaGame: Media, Equatable {
+public final class IosappMediaGame: Media, Equatable {
     public let gameId: Int64
     public let accessHash: Int64
     public let name: String
     public let title: String
     public let description: String
-    public let image: TelegramMediaImage?
-    public let file: TelegramMediaFile?
+    public let image: IosappMediaImage?
+    public let file: IosappMediaFile?
     
     public var id: MediaId? {
         return MediaId(namespace: Namespaces.Media.CloudGame, id: self.gameId)
     }
     public let peerIds: [PeerId] = []
     
-    public init(gameId: Int64, accessHash: Int64, name: String, title: String, description: String, image: TelegramMediaImage?, file: TelegramMediaFile?) {
+    public init(gameId: Int64, accessHash: Int64, name: String, title: String, description: String, image: IosappMediaImage?, file: IosappMediaFile?) {
         self.gameId = gameId
         self.accessHash = accessHash
         self.name = name
@@ -30,8 +30,8 @@ public final class TelegramMediaGame: Media, Equatable {
         self.name = decoder.decodeStringForKey("n", orElse: "")
         self.title = decoder.decodeStringForKey("t", orElse: "")
         self.description = decoder.decodeStringForKey("d", orElse: "")
-        self.image = decoder.decodeObjectForKey("p") as? TelegramMediaImage
-        self.file = decoder.decodeObjectForKey("f") as? TelegramMediaFile
+        self.image = decoder.decodeObjectForKey("p") as? IosappMediaImage
+        self.file = decoder.decodeObjectForKey("f") as? IosappMediaFile
     }
     
     public func encode(_ encoder: PostboxEncoder) {
@@ -52,12 +52,12 @@ public final class TelegramMediaGame: Media, Equatable {
         }
     }
     
-    public static func ==(lhs: TelegramMediaGame, rhs: TelegramMediaGame) -> Bool {
+    public static func ==(lhs: IosappMediaGame, rhs: IosappMediaGame) -> Bool {
         return lhs.isEqual(to: rhs)
     }
     
     public func isEqual(to other: Media) -> Bool {
-        guard let other = other as? TelegramMediaGame else {
+        guard let other = other as? IosappMediaGame else {
             return false
         }
         

@@ -896,7 +896,7 @@ public final class ChatInterfaceState: Codable, Equatable {
         return decodedState
     }
 
-    public static func update(engine: TelegramEngine, peerId: EnginePeer.Id, threadId: Int64?, _ f: @escaping (ChatInterfaceState) -> ChatInterfaceState) -> Signal<Never, NoError> {
+    public static func update(engine: IosappEngine, peerId: EnginePeer.Id, threadId: Int64?, _ f: @escaping (ChatInterfaceState) -> ChatInterfaceState) -> Signal<Never, NoError> {
         return engine.peers.getOpaqueChatInterfaceState(peerId: peerId, threadId: threadId)
         |> mapToSignal { previousOpaqueState -> Signal<Never, NoError> in
             let previousState = previousOpaqueState.flatMap(ChatInterfaceState.parse)

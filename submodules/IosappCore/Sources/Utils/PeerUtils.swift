@@ -6,11 +6,11 @@ public let anonymousSavedMessagesId: Int64 = 2666000
 public extension Peer {
     var debugDisplayTitle: String {
         switch self {
-        case let user as TelegramUser:
+        case let user as IosappUser:
             return user.nameOrPhone
-        case let group as TelegramGroup:
+        case let group as IosappGroup:
             return group.title
-        case let channel as TelegramChannel:
+        case let channel as IosappChannel:
             return channel.title
         default:
             return ""
@@ -20,9 +20,9 @@ public extension Peer {
     func restrictionText(platform: String, contentSettings: ContentSettings) -> String? {
         var restrictionInfo: PeerAccessRestrictionInfo?
         switch self {
-        case let user as TelegramUser:
+        case let user as IosappUser:
             restrictionInfo = user.restrictionInfo
-        case let channel as TelegramChannel:
+        case let channel as IosappChannel:
             restrictionInfo = channel.restrictionInfo
         default:
             break
@@ -47,24 +47,24 @@ public extension Peer {
         
     var addressName: String? {
         switch self {
-        case let user as TelegramUser:
+        case let user as IosappUser:
             return user.usernames.first(where: { $0.isActive }).map { $0.username } ?? user.username
-        case _ as TelegramGroup:
+        case _ as IosappGroup:
             return nil
-        case let channel as TelegramChannel:
+        case let channel as IosappChannel:
             return channel.usernames.first(where: { $0.isActive }).map { $0.username } ?? channel.username
         default:
             return nil
         }
     }
     
-    var usernames: [TelegramPeerUsername] {
+    var usernames: [IosappPeerUsername] {
         switch self {
-        case let user as TelegramUser:
+        case let user as IosappUser:
             return user.usernames
-        case _ as TelegramGroup:
+        case _ as IosappGroup:
             return []
-        case let channel as TelegramChannel:
+        case let channel as IosappChannel:
             return channel.usernames
         default:
             return []
@@ -73,11 +73,11 @@ public extension Peer {
     
     var editableUsername: String? {
         switch self {
-        case let user as TelegramUser:
+        case let user as IosappUser:
             return user.usernames.first(where: { $0.flags.contains(.isEditable) }).map { $0.username } ?? user.username
-        case _ as TelegramGroup:
+        case _ as IosappGroup:
             return nil
-        case let channel as TelegramChannel:
+        case let channel as IosappChannel:
             return channel.usernames.first(where: { $0.flags.contains(.isEditable) }).map { $0.username } ?? channel.username
         default:
             return nil
@@ -86,7 +86,7 @@ public extension Peer {
     
     var displayLetters: [String] {
         switch self {
-        case let user as TelegramUser:
+        case let user as IosappUser:
             if let firstName = user.firstName, let lastName = user.lastName, !firstName.isEmpty && !lastName.isEmpty {
                 return [
                     String(firstName[..<firstName.index(after: firstName.startIndex)].uppercased()),
@@ -103,7 +103,7 @@ public extension Peer {
             }
             
             return []
-        case let group as TelegramGroup:
+        case let group as IosappGroup:
             if group.title.startIndex != group.title.endIndex {
                 return [
                     String(group.title[..<group.title.index(after: group.title.startIndex)].uppercased()),
@@ -111,7 +111,7 @@ public extension Peer {
             } else {
                 return []
             }
-        case let channel as TelegramChannel:
+        case let channel as IosappChannel:
             if channel.title.startIndex != channel.title.endIndex {
                 return [
                     String(channel.title[..<channel.title.index(after: channel.title.startIndex)].uppercased()),
@@ -124,28 +124,28 @@ public extension Peer {
         }
     }
     
-    var profileImageRepresentations: [TelegramMediaImageRepresentation] {
-        if let user = self as? TelegramUser {
+    var profileImageRepresentations: [IosappMediaImageRepresentation] {
+        if let user = self as? IosappUser {
             return user.photo
-        } else if let group = self as? TelegramGroup {
+        } else if let group = self as? IosappGroup {
             return group.photo
-        } else if let channel = self as? TelegramChannel {
+        } else if let channel = self as? IosappChannel {
             return channel.photo
         }
         return []
     }
     
-    var smallProfileImage: TelegramMediaImageRepresentation? {
+    var smallProfileImage: IosappMediaImageRepresentation? {
         return smallestImageRepresentation(self.profileImageRepresentations)
     }
     
-    var largeProfileImage: TelegramMediaImageRepresentation? {
+    var largeProfileImage: IosappMediaImageRepresentation? {
         return largestImageRepresentation(self.profileImageRepresentations)
     }
         
     var isDeleted: Bool {
         switch self {
-        case let user as TelegramUser:
+        case let user as IosappUser:
             return user.firstName == nil && user.lastName == nil
         default:
             return false
@@ -154,7 +154,7 @@ public extension Peer {
     
     var isGenericUser: Bool {
         switch self {
-        case let user as TelegramUser:
+        case let user as IosappUser:
             if user.isDeleted {
                 return false
             }
@@ -164,7 +164,7 @@ public extension Peer {
             if user.id.isRepliesOrVerificationCodes {
                 return false
             }
-            if user.id.isTelegramNotifications {
+            if user.id.isIosappNotifications {
                 return false
             }
             return true
@@ -175,9 +175,9 @@ public extension Peer {
     
     var isScam: Bool {
         switch self {
-        case let user as TelegramUser:
+        case let user as IosappUser:
             return user.flags.contains(.isScam)
-        case let channel as TelegramChannel:
+        case let channel as IosappChannel:
             return channel.flags.contains(.isScam)
         default:
             return false
@@ -186,9 +186,9 @@ public extension Peer {
     
     var isFake: Bool {
         switch self {
-        case let user as TelegramUser:
+        case let user as IosappUser:
             return user.flags.contains(.isFake)
-        case let channel as TelegramChannel:
+        case let channel as IosappChannel:
             return channel.flags.contains(.isFake)
         default:
             return false
@@ -197,9 +197,9 @@ public extension Peer {
         
     var isVerified: Bool {
         switch self {
-        case let user as TelegramUser:
+        case let user as IosappUser:
             return user.flags.contains(.isVerified)
-        case let channel as TelegramChannel:
+        case let channel as IosappChannel:
             return channel.flags.contains(.isVerified)
         default:
             return false
@@ -208,7 +208,7 @@ public extension Peer {
     
     var isPremium: Bool {
         switch self {
-        case let user as TelegramUser:
+        case let user as IosappUser:
             return user.flags.contains(.isPremium)
         default:
             return false
@@ -217,7 +217,7 @@ public extension Peer {
     
     var isSubscription: Bool {
         switch self {
-        case let channel as TelegramChannel:
+        case let channel as IosappChannel:
             return channel.subscriptionUntilDate != nil
         default:
             return false
@@ -226,7 +226,7 @@ public extension Peer {
     
     var isCloseFriend: Bool {
         switch self {
-        case let user as TelegramUser:
+        case let user as IosappUser:
             return user.flags.contains(.isCloseFriend)
         default:
             return false
@@ -235,9 +235,9 @@ public extension Peer {
     
     var isCopyProtectionEnabled: Bool {
         switch self {
-        case let group as TelegramGroup:
+        case let group as IosappGroup:
             return group.flags.contains(.copyProtectionEnabled)
-        case let channel as TelegramChannel:
+        case let channel as IosappChannel:
             return channel.flags.contains(.copyProtectionEnabled)
         default:
             return false
@@ -247,9 +247,9 @@ public extension Peer {
     func hasSensitiveContent(platform: String) -> Bool {
         var restrictionInfo: PeerAccessRestrictionInfo?
         switch self {
-        case let user as TelegramUser:
+        case let user as IosappUser:
             restrictionInfo = user.restrictionInfo
-        case let channel as TelegramChannel:
+        case let channel as IosappChannel:
             restrictionInfo = channel.restrictionInfo
         default:
             break
@@ -264,9 +264,9 @@ public extension Peer {
     }
     
     var isForum: Bool {
-        if let channel = self as? TelegramChannel {
+        if let channel = self as? IosappChannel {
             return channel.flags.contains(.isForum)
-        } else if let user = self as? TelegramUser, let botInfo = user.botInfo {
+        } else if let user = self as? IosappUser, let botInfo = user.botInfo {
             return botInfo.flags.contains(.hasForum)
         } else {
             return false
@@ -274,7 +274,7 @@ public extension Peer {
     }
     
     var isMonoForum: Bool {
-        if let channel = self as? TelegramChannel {
+        if let channel = self as? IosappChannel {
             return channel.flags.contains(.isMonoforum)
         } else {
             return false
@@ -282,9 +282,9 @@ public extension Peer {
     }
     
     var displayForumAsTabs: Bool {
-        if let channel = self as? TelegramChannel, isForum {
+        if let channel = self as? IosappChannel, isForum {
             return channel.flags.contains(.displayForumAsTabs)
-        } else if self is TelegramUser {
+        } else if self is IosappUser {
             return true
         } else {
             return false
@@ -292,9 +292,9 @@ public extension Peer {
     }
     
     var isForumOrMonoForum: Bool {
-        if let channel = self as? TelegramChannel {
+        if let channel = self as? IosappChannel {
             return channel.flags.contains(.isForum) || channel.flags.contains(.isMonoforum)
-        } else if let user = self as? TelegramUser, let botInfo = user.botInfo, botInfo.flags.contains(.hasForum) {
+        } else if let user = self as? IosappUser, let botInfo = user.botInfo, botInfo.flags.contains(.hasForum) {
             return true
         } else {
             return false
@@ -303,13 +303,13 @@ public extension Peer {
     
     var nameColor: PeerColor? {
         switch self {
-        case let user as TelegramUser:
+        case let user as IosappUser:
             if let nameColor = user.nameColor {
                 return nameColor
             } else {
                 return .preset(PeerNameColor(rawValue: Int32(self.id.id._internalGetInt64Value() % 7)))
             }
-        case let channel as TelegramChannel:
+        case let channel as IosappChannel:
             if let nameColor = channel.nameColor {
                 return .preset(nameColor)
             } else {
@@ -322,9 +322,9 @@ public extension Peer {
     
     var verificationIconFileId: Int64? {
         switch self {
-        case let user as TelegramUser:
+        case let user as IosappUser:
             return user.verificationIconFileId
-        case let channel as TelegramChannel:
+        case let channel as IosappChannel:
             return channel.verificationIconFileId
         default:
             return nil
@@ -333,9 +333,9 @@ public extension Peer {
     
     var profileColor: PeerNameColor? {
         switch self {
-        case let user as TelegramUser:
+        case let user as IosappUser:
             return user.profileColor
-        case let channel as TelegramChannel:
+        case let channel as IosappChannel:
             return channel.profileColor
         default:
             return nil
@@ -350,9 +350,9 @@ public extension Peer {
             break
         }
         switch self {
-        case let user as TelegramUser:
+        case let user as IosappUser:
             return user.profileColor
-        case let channel as TelegramChannel:
+        case let channel as IosappChannel:
             return channel.profileColor
         default:
             return nil
@@ -369,9 +369,9 @@ public extension Peer {
     
     var emojiStatus: PeerEmojiStatus? {
         switch self {
-        case let user as TelegramUser:
+        case let user as IosappUser:
             return user.emojiStatus
-        case let channel as TelegramChannel:
+        case let channel as IosappChannel:
             return channel.emojiStatus
         default:
             return nil
@@ -380,9 +380,9 @@ public extension Peer {
     
     var backgroundEmojiId: Int64? {
         switch self {
-        case let user as TelegramUser:
+        case let user as IosappUser:
             return user.backgroundEmojiId
-        case let channel as TelegramChannel:
+        case let channel as IosappChannel:
             return channel.backgroundEmojiId
         default:
             return nil
@@ -399,9 +399,9 @@ public extension Peer {
             }
         }
         switch self {
-        case let user as TelegramUser:
+        case let user as IosappUser:
             return user.profileBackgroundEmojiId
-        case let channel as TelegramChannel:
+        case let channel as IosappChannel:
             return channel.profileBackgroundEmojiId
         default:
             return nil
@@ -409,7 +409,7 @@ public extension Peer {
     }
 }
 
-public extension TelegramPeerUsername {
+public extension IosappPeerUsername {
     var isActive: Bool {
         return self.flags.contains(.isActive)
     }
@@ -456,7 +456,7 @@ public func peerDebugDisplayTitles(_ peers: [Peer]) -> String {
 
 public func messageMainPeer(_ message: EngineMessage) -> EnginePeer? {
     if let peer = message.peers[message.id.peerId] {
-        if let peer = peer as? TelegramSecretChat {
+        if let peer = peer as? IosappSecretChat {
             return message.peers[peer.regularPeerId].flatMap(EnginePeer.init)
         } else {
             return EnginePeer(peer)
@@ -468,7 +468,7 @@ public func messageMainPeer(_ message: EngineMessage) -> EnginePeer? {
 
 public func peerViewMainPeer(_ view: PeerView) -> Peer? {
     if let peer = view.peers[view.peerId] {
-        if let peer = peer as? TelegramSecretChat {
+        if let peer = peer as? IosappSecretChat {
             return view.peers[peer.regularPeerId]
         } else {
             return peer
@@ -480,7 +480,7 @@ public func peerViewMainPeer(_ view: PeerView) -> Peer? {
 
 public func peerViewMonoforumMainPeer(_ view: PeerView) -> Peer? {
     if let peer = peerViewMainPeer(view) {
-        if let channel = peer as? TelegramChannel, channel.flags.contains(.isMonoforum), let linkedMonoforumId = channel.linkedMonoforumId {
+        if let channel = peer as? IosappChannel, channel.flags.contains(.isMonoforum), let linkedMonoforumId = channel.linkedMonoforumId {
             return view.peers[linkedMonoforumId]
         } else {
             return nil
@@ -496,11 +496,11 @@ public extension RenderedPeer {
         let peerId = message.id.peerId
         if let peer = message.peers[peerId] {
             peers[peer.id] = peer
-            if let peer = peer as? TelegramSecretChat {
+            if let peer = peer as? IosappSecretChat {
                 if let regularPeer = message.peers[peer.regularPeerId] {
                     peers[regularPeer.id] = regularPeer
                 }
-            } else if let peer = peer as? TelegramChannel, peer.isMonoForum, let linkedMonoforumId = peer.linkedMonoforumId {
+            } else if let peer = peer as? IosappChannel, peer.isMonoForum, let linkedMonoforumId = peer.linkedMonoforumId {
                 if let regularPeer = message.peers[linkedMonoforumId] {
                     peers[regularPeer.id] = regularPeer
                 }
@@ -511,7 +511,7 @@ public extension RenderedPeer {
     
     var chatMainPeer: Peer? {
         if let peer = self.peers[self.peerId] {
-            if let peer = peer as? TelegramSecretChat {
+            if let peer = peer as? IosappSecretChat {
                 return self.peers[peer.regularPeerId]
             } else {
                 return peer
@@ -522,7 +522,7 @@ public extension RenderedPeer {
     }
     
     var chatOrMonoforumMainPeer: Peer? {
-        if let channel = self.peer as? TelegramChannel {
+        if let channel = self.peer as? IosappChannel {
             if channel.flags.contains(.isMonoforum), let linkedMonoforumId = channel.linkedMonoforumId {
                 return self.peers[linkedMonoforumId]
             } else {
@@ -535,7 +535,7 @@ public extension RenderedPeer {
 }
 
 public func isServicePeer(_ peer: Peer) -> Bool {
-    if let peer = peer as? TelegramUser {
+    if let peer = peer as? IosappUser {
         if peer.id.isReplies {
             return true
         }
@@ -548,7 +548,7 @@ public func isServicePeer(_ peer: Peer) -> Bool {
 }
 
 public extension PeerId {
-    var isTelegramNotifications: Bool {
+    var isIosappNotifications: Bool {
         if self.namespace == Namespaces.Peer.CloudUser {
             if self.id._internalGetInt64Value() == 777000 {
                 return true

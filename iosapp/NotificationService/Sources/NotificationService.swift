@@ -704,7 +704,7 @@ private struct NotificationContent: CustomStringConvertible {
     }
 }
 
-private func getCurrentRenderedTotalUnreadCount(accountManager: AccountManager<TelegramAccountManagerTypes>, postbox: Postbox) -> Signal<(Int32, RenderedTotalUnreadCountType), NoError> {
+private func getCurrentRenderedTotalUnreadCount(accountManager: AccountManager<IosappAccountManagerTypes>, postbox: Postbox) -> Signal<(Int32, RenderedTotalUnreadCountType), NoError> {
     let counters = postbox.transaction { transaction -> ChatListTotalUnreadState in
         return transaction.getTotalUnreadState(groupId: .root)
     }
@@ -732,7 +732,7 @@ private func getCurrentRenderedTotalUnreadCount(accountManager: AccountManager<T
 @available(iOSApplicationExtension 10.0, iOS 10.0, *)
 private final class NotificationServiceHandler {
     private let queue: Queue
-    private let accountManager: AccountManager<TelegramAccountManagerTypes>
+    private let accountManager: AccountManager<IosappAccountManagerTypes>
     private let encryptionParameters: ValueBoxEncryptionParameters
     private var stateManager: AccountStateManager?
 
@@ -776,7 +776,7 @@ private final class NotificationServiceHandler {
 
         let appVersion = (Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String) ?? "unknown"
 
-        self.accountManager = AccountManager<TelegramAccountManagerTypes>(basePath: rootPath + "/accounts-metadata", isTemporary: true, isReadOnly: false, useCaches: false, removeDatabaseOnError: false)
+        self.accountManager = AccountManager<IosappAccountManagerTypes>(basePath: rootPath + "/accounts-metadata", isTemporary: true, isReadOnly: false, useCaches: false, removeDatabaseOnError: false)
 
         let deviceSpecificEncryptionParameters = BuildConfig.deviceSpecificEncryptionParameters(rootPath, baseAppBundleId: baseAppBundleId)
         self.encryptionParameters = ValueBoxEncryptionParameters(forceEncryptionIfNoSet: false, key: ValueBoxEncryptionParameters.Key(data: deviceSpecificEncryptionParameters.key)!, salt: ValueBoxEncryptionParameters.Salt(data: deviceSpecificEncryptionParameters.salt)!)
@@ -972,7 +972,7 @@ private final class NotificationServiceHandler {
                     var messageId: MessageId.Id?
                     var storyId: Int32?
                     var mediaAttachment: Media?
-                    var downloadNotificationSound: (file: TelegramMediaFile, path: String, fileName: String)?
+                    var downloadNotificationSound: (file: IosappMediaFile, path: String, fileName: String)?
 
                     var interactionAuthorId: PeerId?
                     var topicTitle: String?
@@ -1340,7 +1340,7 @@ private final class NotificationServiceHandler {
                                 updateCurrentContent(content)
                                 
                                 let _ = (stateManager.postbox.transaction { transaction -> String? in
-                                    if let peer = transaction.getPeer(callData.fromId) as? TelegramUser {
+                                    if let peer = transaction.getPeer(callData.fromId) as? IosappUser {
                                         return peer.phone
                                     } else {
                                         return nil
@@ -1386,8 +1386,8 @@ private final class NotificationServiceHandler {
                                 let content = NotificationContent(isLockedMessage: nil)
                                 updateCurrentContent(content)
                                 
-                                let _ = (stateManager.postbox.transaction { transaction -> TelegramUser? in
-                                    return transaction.getPeer(groupCallData.fromId) as? TelegramUser
+                                let _ = (stateManager.postbox.transaction { transaction -> IosappUser? in
+                                    return transaction.getPeer(groupCallData.fromId) as? IosappUser
                                 }).start(next: { fromPeer in
                                     var voipPayload: [AnyHashable: Any] = [
                                         "group_call_id": "\(groupCallData.id)",
@@ -1453,19 +1453,19 @@ private final class NotificationServiceHandler {
                                         var fetchMediaSignal: Signal<Data?, NoError> = .single(nil)
                                         if let mediaAttachment {
                                             var contentType: MediaResourceUserContentType = .other
-                                            var fetchResource: TelegramMultipartFetchableResource?
-                                            if let image = mediaAttachment as? TelegramMediaImage, let representation = largestImageRepresentation(image.representations), let resource = representation.resource as? TelegramMultipartFetchableResource {
+                                            var fetchResource: IosappMultipartFetchableResource?
+                                            if let image = mediaAttachment as? IosappMediaImage, let representation = largestImageRepresentation(image.representations), let resource = representation.resource as? IosappMultipartFetchableResource {
                                                 fetchResource = resource
                                                 contentType = .image
-                                            } else if let file = mediaAttachment as? TelegramMediaFile {
+                                            } else if let file = mediaAttachment as? IosappMediaFile {
                                                 if file.isSticker {
-                                                    fetchResource = file.resource as? TelegramMultipartFetchableResource
+                                                    fetchResource = file.resource as? IosappMultipartFetchableResource
                                                     contentType = .other
                                                 } else if file.isVideo {
-                                                    fetchResource = file.previewRepresentations.first?.resource as? TelegramMultipartFetchableResource
+                                                    fetchResource = file.previewRepresentations.first?.resource as? IosappMultipartFetchableResource
                                                     contentType = .video
                                                 } else if file.isVoice {
-                                                    fetchResource = file.resource as? TelegramMultipartFetchableResource
+                                                    fetchResource = file.resource as? IosappMultipartFetchableResource
                                                     contentType = .audio
                                                 } else {
                                                     contentType = .file
@@ -1565,8 +1565,8 @@ private final class NotificationServiceHandler {
                                         
                                         var fetchNotificationSoundSignal: Signal<Data?, NoError> = .single(nil)
                                         if let (downloadNotificationSound, _, _) = downloadNotificationSound {
-                                            var fetchResource: TelegramMultipartFetchableResource?
-                                            fetchResource = downloadNotificationSound.resource as? TelegramMultipartFetchableResource
+                                            var fetchResource: IosappMultipartFetchableResource?
+                                            fetchResource = downloadNotificationSound.resource as? IosappMultipartFetchableResource
 
                                             if let resource = fetchResource {
                                                 if let path = strongSelf.stateManager?.postbox.mediaBox.completedResourcePath(resource), let data = try? Data(contentsOf: URL(fileURLWithPath: path)) {
@@ -1642,7 +1642,7 @@ private final class NotificationServiceHandler {
                                             var fetchSignals: [Signal<(Int64, String?), NoError>] = []
                                             
                                             for (_, file) in files {
-                                                if let resource = file.resource as? TelegramMultipartFetchableResource {
+                                                if let resource = file.resource as? IosappMultipartFetchableResource {
                                                     let fetchSignal: Signal<(Int64, String?), NoError>
                                                     if let path = stateManager.postbox.mediaBox.completedResourcePath(resource) {
                                                         fetchSignal = .single((file.fileId.id, path))
@@ -1808,7 +1808,7 @@ private final class NotificationServiceHandler {
                                                 
                                                 Logger.shared.log("NotificationService \(episode)", "mediaAttachment: \(String(describing: mediaAttachment)), mediaData: \(String(describing: mediaData?.count))")
 
-                                                if let image = mediaAttachment as? TelegramMediaImage, let resource = largestImageRepresentation(image.representations)?.resource {
+                                                if let image = mediaAttachment as? IosappMediaImage, let resource = largestImageRepresentation(image.representations)?.resource {
                                                     if let mediaData = mediaData {
                                                         stateManager.postbox.mediaBox.storeResourceData(resource.id, data: mediaData, synchronous: true)
                                                         if let messageId {
@@ -1820,7 +1820,7 @@ private final class NotificationServiceHandler {
                                                             content.attachments.append(attachment)
                                                         }
                                                     }
-                                                } else if let file = mediaAttachment as? TelegramMediaFile {
+                                                } else if let file = mediaAttachment as? IosappMediaFile {
                                                     if file.isStaticSticker {
                                                         let resource = file.resource
 
@@ -1947,13 +1947,13 @@ private final class NotificationServiceHandler {
                                         
                                         if let interactionAuthorId = interactionAuthorId {
                                             if inAppNotificationSettings.displayNameOnLockscreen, var peer = transaction.getPeer(interactionAuthorId) {
-                                                if let channel = peer as? TelegramChannel, channel.isMonoForum, let linkedMonoforumId = channel.linkedMonoforumId, let mainChannel = transaction.getPeer(linkedMonoforumId) {
+                                                if let channel = peer as? IosappChannel, channel.isMonoForum, let linkedMonoforumId = channel.linkedMonoforumId, let mainChannel = transaction.getPeer(linkedMonoforumId) {
                                                     peer = mainChannel
                                                 }
                                                 
                                                 var foundLocalId: String?
                                                 transaction.enumerateDeviceContactImportInfoItems({ _, value in
-                                                    if let value = value as? TelegramDeviceContactImportedData {
+                                                    if let value = value as? IosappDeviceContactImportedData {
                                                         switch value {
                                                         case let .imported(data, _, peerId):
                                                             if peerId == interactionAuthorId {
@@ -2012,7 +2012,7 @@ private final class NotificationServiceHandler {
                                                     var needsPrefix = false
                                                     if message.id.peerId.namespace == Namespaces.Peer.CloudGroup {
                                                         needsPrefix = true
-                                                    } else if let channel = message.peers[message.id.peerId] as? TelegramChannel {
+                                                    } else if let channel = message.peers[message.id.peerId] as? IosappChannel {
                                                         if case .group = channel.info {
                                                             needsPrefix = true
                                                         }
@@ -2100,9 +2100,9 @@ private final class NotificationServiceHandler {
                                                 if let storyItem = transaction.getStory(id: StoryId(peerId: peerId, id: storyId))?.get(Stories.StoredItem.self), case let .item(item) = storyItem, let media = item.media {
                                                     var resource: MediaResource?
                                                     var fetchSize: Int64?
-                                                    if let image = media as? TelegramMediaImage {
+                                                    if let image = media as? IosappMediaImage {
                                                         resource = largestImageRepresentation(image.representations)?.resource
-                                                    } else if let file = media as? TelegramMediaFile {
+                                                    } else if let file = media as? IosappMediaFile {
                                                         resource = file.resource
                                                         for attribute in file.attributes {
                                                             if case let .Video(_, _, _, preloadSize, _, _) = attribute {
@@ -2120,7 +2120,7 @@ private final class NotificationServiceHandler {
                                                 return nil
                                             }
                                             |> mapToSignal { resourceData -> Signal<Void, NoError> in
-                                                guard let (resource, _) = resourceData, let resourceValue = resource.resource as? TelegramMultipartFetchableResource else {
+                                                guard let (resource, _) = resourceData, let resourceValue = resource.resource as? IosappMultipartFetchableResource else {
                                                     return .single(Void())
                                                 }
                                                 
@@ -2176,8 +2176,8 @@ private final class NotificationServiceHandler {
                                         
                                         var fetchNotificationSoundSignal: Signal<Data?, NoError> = .single(nil)
                                         if let (downloadNotificationSound, _, _) = downloadNotificationSound {
-                                            var fetchResource: TelegramMultipartFetchableResource?
-                                            fetchResource = downloadNotificationSound.resource as? TelegramMultipartFetchableResource
+                                            var fetchResource: IosappMultipartFetchableResource?
+                                            fetchResource = downloadNotificationSound.resource as? IosappMultipartFetchableResource
 
                                             if let resource = fetchResource {
                                                 if let path = strongSelf.stateManager?.postbox.mediaBox.completedResourcePath(resource), let data = try? Data(contentsOf: URL(fileURLWithPath: path)) {
@@ -2288,13 +2288,13 @@ private final class NotificationServiceHandler {
                                         
                                         if let interactionAuthorId = interactionAuthorId {
                                             if inAppNotificationSettings.displayNameOnLockscreen, var peer = transaction.getPeer(interactionAuthorId) {
-                                                if let channel = peer as? TelegramChannel, channel.isMonoForum, let linkedMonoforumId = channel.linkedMonoforumId, let mainChannel = transaction.getPeer(linkedMonoforumId) {
+                                                if let channel = peer as? IosappChannel, channel.isMonoForum, let linkedMonoforumId = channel.linkedMonoforumId, let mainChannel = transaction.getPeer(linkedMonoforumId) {
                                                     peer = mainChannel
                                                 }
                                                 
                                                 var foundLocalId: String?
                                                 transaction.enumerateDeviceContactImportInfoItems({ _, value in
-                                                    if let value = value as? TelegramDeviceContactImportedData {
+                                                    if let value = value as? IosappDeviceContactImportedData {
                                                         switch value {
                                                         case let .imported(data, _, peerId):
                                                             if peerId == interactionAuthorId {

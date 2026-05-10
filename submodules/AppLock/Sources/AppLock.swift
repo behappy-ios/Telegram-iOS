@@ -72,8 +72,8 @@ public final class AppLockContextImpl: AppLockContext {
     private var disposable: Disposable?
     private var autolockTimeoutDisposable: Disposable?
     
-    private let applicationBindings: TelegramApplicationBindings
-    private let accountManager: AccountManager<TelegramAccountManagerTypes>
+    private let applicationBindings: IosappApplicationBindings
+    private let accountManager: AccountManager<IosappAccountManagerTypes>
     private let presentationDataSignal: Signal<PresentationData, NoError>
     private let window: Window1?
     private let rootController: UIViewController?
@@ -98,7 +98,7 @@ public final class AppLockContextImpl: AppLockContext {
     private var lastActiveTimestamp: Double?
     private var lastActiveValue: Bool = false
     
-    public init(rootPath: String, window: Window1?, rootController: UIViewController?, applicationBindings: TelegramApplicationBindings, accountManager: AccountManager<TelegramAccountManagerTypes>, presentationDataSignal: Signal<PresentationData, NoError>, lockIconInitialFrame: @escaping () -> CGRect?) {
+    public init(rootPath: String, window: Window1?, rootController: UIViewController?, applicationBindings: IosappApplicationBindings, accountManager: AccountManager<IosappAccountManagerTypes>, presentationDataSignal: Signal<PresentationData, NoError>, lockIconInitialFrame: @escaping () -> CGRect?) {
         assert(Queue.mainQueue().isCurrent())
         
         self.applicationBindings = applicationBindings

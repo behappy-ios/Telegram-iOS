@@ -51,7 +51,7 @@ public class PaneGifSearchForQueryResult {
 }
 
 public func paneGifSearchForQuery(context: AccountContext, query: String, offset: String?, incompleteResults: Bool = false, staleCachedResults: Bool = false, delayRequest: Bool = true, updateActivity: ((Bool) -> Void)?) -> Signal<PaneGifSearchForQueryResult?, NoError> {
-    let contextBot = context.engine.data.get(TelegramEngine.EngineData.Item.Configuration.SearchBots())
+    let contextBot = context.engine.data.get(IosappEngine.EngineData.Item.Configuration.SearchBots())
     |> mapToSignal { searchBots -> Signal<EnginePeer?, NoError> in
         let botName = searchBots.gifBotUsername ?? "gif"
         return context.engine.peers.resolvePeerByName(name: botName, referrer: nil)
@@ -89,8 +89,8 @@ public func paneGifSearchForQuery(context: AccountContext, query: String, offset
             for result in results {
                 switch result {
                 case let .externalReference(externalReference):
-                    var imageResource: TelegramMediaResource?
-                    var thumbnailResource: TelegramMediaResource?
+                    var imageResource: IosappMediaResource?
+                    var thumbnailResource: IosappMediaResource?
                     var thumbnailIsVideo: Bool = false
                     var uniqueId: Int64?
                     if let content = externalReference.content {
@@ -107,16 +107,16 @@ public func paneGifSearchForQuery(context: AccountContext, query: String, offset
                     }
                     
                     if externalReference.type == "gif", let resource = imageResource, let content = externalReference.content, let dimensions = content.dimensions {
-                        var previews: [TelegramMediaImageRepresentation] = []
-                        var videoThumbnails: [TelegramMediaFile.VideoThumbnail] = []
+                        var previews: [IosappMediaImageRepresentation] = []
+                        var videoThumbnails: [IosappMediaFile.VideoThumbnail] = []
                         if let thumbnailResource = thumbnailResource {
                             if thumbnailIsVideo {
-                                videoThumbnails.append(TelegramMediaFile.VideoThumbnail(
+                                videoThumbnails.append(IosappMediaFile.VideoThumbnail(
                                     dimensions: dimensions,
                                     resource: thumbnailResource
                                 ))
                             } else {
-                                previews.append(TelegramMediaImageRepresentation(
+                                previews.append(IosappMediaImageRepresentation(
                                     dimensions: dimensions,
                                     resource: thumbnailResource,
                                     progressiveSizes: [],
@@ -126,7 +126,7 @@ public func paneGifSearchForQuery(context: AccountContext, query: String, offset
                                 ))
                             }
                         }
-                        let file = TelegramMediaFile(fileId: MediaId(namespace: Namespaces.Media.LocalFile, id: uniqueId ?? 0), partialReference: nil, resource: resource, previewRepresentations: previews, videoThumbnails: videoThumbnails, immediateThumbnailData: nil, mimeType: "video/mp4", size: nil, attributes: [.Animated, .Video(duration: 0, size: dimensions, flags: [], preloadSize: nil, coverTime: nil, videoCodec: nil)], alternativeRepresentations: [])
+                        let file = IosappMediaFile(fileId: MediaId(namespace: Namespaces.Media.LocalFile, id: uniqueId ?? 0), partialReference: nil, resource: resource, previewRepresentations: previews, videoThumbnails: videoThumbnails, immediateThumbnailData: nil, mimeType: "video/mp4", size: nil, attributes: [.Animated, .Video(duration: 0, size: dimensions, flags: [], preloadSize: nil, coverTime: nil, videoCodec: nil)], alternativeRepresentations: [])
                         references.append(MultiplexedVideoNodeFile(file: FileMediaReference.standalone(media: file), contextResult: (collection, result)))
                     }
                 case let .internalReference(internalReference):
@@ -181,7 +181,7 @@ public final class GifContext {
         
         let hideBackground = gifInputInteraction.hideBackground
         
-        let hasRecentGifs = context.engine.data.subscribe(TelegramEngine.EngineData.Item.OrderedLists.ListItems(collectionId: Namespaces.OrderedItemList.CloudRecentGifs))
+        let hasRecentGifs = context.engine.data.subscribe(IosappEngine.EngineData.Item.OrderedLists.ListItems(collectionId: Namespaces.OrderedItemList.CloudRecentGifs))
         |> map { savedGifs -> Bool in
             return !savedGifs.isEmpty
         }
@@ -193,7 +193,7 @@ public final class GifContext {
         switch subject {
         case .recent:
             gifItems = combineLatest(
-                context.engine.data.subscribe(TelegramEngine.EngineData.Item.OrderedLists.ListItems(collectionId: Namespaces.OrderedItemList.CloudRecentGifs)),
+                context.engine.data.subscribe(IosappEngine.EngineData.Item.OrderedLists.ListItems(collectionId: Namespaces.OrderedItemList.CloudRecentGifs)),
                 searchCategories
             )
             |> map { savedGifs, searchCategories -> EntityKeyboardGifContent in
@@ -327,7 +327,7 @@ public final class GifContext {
         
         switch self.subject {
         case let .emojiSearch(query):
-            let hasRecentGifs = context.engine.data.subscribe(TelegramEngine.EngineData.Item.OrderedLists.ListItems(collectionId: Namespaces.OrderedItemList.CloudRecentGifs))
+            let hasRecentGifs = context.engine.data.subscribe(IosappEngine.EngineData.Item.OrderedLists.ListItems(collectionId: Namespaces.OrderedItemList.CloudRecentGifs))
             |> map { savedGifs -> Bool in
                 return !savedGifs.isEmpty
             }

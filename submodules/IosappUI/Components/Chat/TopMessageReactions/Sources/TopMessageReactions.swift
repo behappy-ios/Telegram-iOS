@@ -21,8 +21,8 @@ public func peerMessageAllowedReactions(context: AccountContext, message: Messag
     
     return combineLatest(
         context.engine.data.get(
-            TelegramEngine.EngineData.Item.Peer.Peer(id: message.id.peerId),
-            TelegramEngine.EngineData.Item.Peer.ReactionSettings(id: message.id.peerId)
+            IosappEngine.EngineData.Item.Peer.Peer(id: message.id.peerId),
+            IosappEngine.EngineData.Item.Peer.ReactionSettings(id: message.id.peerId)
         ),
         context.engine.stickers.availableReactions() |> take(1)
     )
@@ -76,8 +76,8 @@ public func peerMessageAllowedReactions(context: AccountContext, message: Messag
 }
 
 public func tagMessageReactions(context: AccountContext, subPeerId: EnginePeer.Id?) -> Signal<[ReactionItem], NoError> {
-    let topTags: Signal<([MessageReaction.Reaction], [Int64: TelegramMediaFile]), NoError> = context.engine.data.get(TelegramEngine.EngineData.Item.Messages.SavedMessageTagStats(peerId: context.account.peerId, threadId: subPeerId?.toInt64()))
-    |> mapToSignal { tagStats -> Signal<([MessageReaction.Reaction], [Int64: TelegramMediaFile]), NoError> in
+    let topTags: Signal<([MessageReaction.Reaction], [Int64: IosappMediaFile]), NoError> = context.engine.data.get(IosappEngine.EngineData.Item.Messages.SavedMessageTagStats(peerId: context.account.peerId, threadId: subPeerId?.toInt64()))
+    |> mapToSignal { tagStats -> Signal<([MessageReaction.Reaction], [Int64: IosappMediaFile]), NoError> in
         let reactions = tagStats.sorted(by: { lhs, rhs in
             if lhs.value != rhs.value {
                 return lhs.value > rhs.value
@@ -95,7 +95,7 @@ public func tagMessageReactions(context: AccountContext, subPeerId: EnginePeer.I
         }
         
         return context.engine.stickers.resolveInlineStickersLocal(fileIds: customFileIds)
-        |> map { files -> ([MessageReaction.Reaction], [Int64: TelegramMediaFile]) in
+        |> map { files -> ([MessageReaction.Reaction], [Int64: IosappMediaFile]) in
             return (reactions, files)
         }
     }
@@ -156,7 +156,7 @@ public func tagMessageReactions(context: AccountContext, subPeerId: EnginePeer.I
                 }
                 existingIds.insert(.custom(file.fileId.id))
                 
-                let itemFile = TelegramMediaFile.Accessor(file)
+                let itemFile = IosappMediaFile.Accessor(file)
                 result.append(ReactionItem(
                     reaction: ReactionItem.Reaction(rawValue: .custom(file.fileId.id)),
                     appearAnimation: itemFile,
@@ -286,8 +286,8 @@ public func topMessageReactions(context: AccountContext, message: Message, subPe
         }
     }
     
-    let allowedReactionsWithFiles: Signal<(reactions: AllowedReactions, files: [Int64: TelegramMediaFile], areStarsEnabled: Bool)?, NoError> = peerMessageAllowedReactions(context: context, message: message)
-    |> mapToSignal { allowedReactions, areStarsEnabled -> Signal<(reactions: AllowedReactions, files: [Int64: TelegramMediaFile], areStarsEnabled: Bool)?, NoError> in
+    let allowedReactionsWithFiles: Signal<(reactions: AllowedReactions, files: [Int64: IosappMediaFile], areStarsEnabled: Bool)?, NoError> = peerMessageAllowedReactions(context: context, message: message)
+    |> mapToSignal { allowedReactions, areStarsEnabled -> Signal<(reactions: AllowedReactions, files: [Int64: IosappMediaFile], areStarsEnabled: Bool)?, NoError> in
         guard let allowedReactions = allowedReactions else {
             return .single(nil)
         }
@@ -303,7 +303,7 @@ public func topMessageReactions(context: AccountContext, message: Message, subPe
                     return nil
                 }
             })
-            |> map { files -> (reactions: AllowedReactions, files: [Int64: TelegramMediaFile], areStarsEnabled: Bool) in
+            |> map { files -> (reactions: AllowedReactions, files: [Int64: IosappMediaFile], areStarsEnabled: Bool) in
                 return (.set(reactions), files, areStarsEnabled)
             }
         } else {
@@ -442,7 +442,7 @@ public func topMessageReactions(context: AccountContext, message: Message, subPe
                     break
                 case let .custom(fileId):
                     if let file = allowedReactionsAndFiles.files[fileId] {
-                        let file = TelegramMediaFile.Accessor(file)
+                        let file = IosappMediaFile.Accessor(file)
                         result.append(ReactionItem(
                             reaction: ReactionItem.Reaction(rawValue: .custom(file.fileId.id)),
                             appearAnimation: file,

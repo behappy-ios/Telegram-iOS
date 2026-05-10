@@ -79,12 +79,12 @@ final class InChatPrefetchManager {
             
             var automaticDownload: InteractiveMediaNodeAutodownloadMode = .none
             
-            if let telegramImage = media as? TelegramMediaImage {
+            if let telegramImage = media as? IosappMediaImage {
                 mediaResource = largestRepresentationForPhoto(telegramImage)?.resource
                 if shouldDownloadMediaAutomatically(settings: self.settings, peerType: options.peerType, networkType: options.networkType, authorPeerId: nil, contactsPeerIds: [], media: telegramImage) {
                     automaticDownload = .full
                 }
-            } else if let telegramFile = media as? TelegramMediaFile {
+            } else if let telegramFile = media as? IosappMediaFile {
                 mediaResource = telegramFile.resource
                 if shouldDownloadMediaAutomatically(settings: self.settings, peerType: options.peerType, networkType: options.networkType, authorPeerId: nil, contactsPeerIds: [], media: telegramFile) {
                     automaticDownload = .full
@@ -111,16 +111,16 @@ final class InChatPrefetchManager {
                 let priority: FetchManagerPriority = .foregroundPrefetch(direction: self.directionIsToLater ? .toLater : .toEarlier, localOrder: message.index)
                 
                 if case .full = automaticDownload {
-                    if let image = media as? TelegramMediaImage {
+                    if let image = media as? IosappMediaImage {
                         context.fetchDisposable.set(messageMediaImageInteractiveFetched(fetchManager: self.context.fetchManager, messageId: message.id, messageReference: MessageReference(message), image: image, resource: resource, userInitiated: false, priority: priority, storeToDownloadsPeerId: nil).startStrict())
-                    } else if let _ = media as? TelegramMediaWebFile {
+                    } else if let _ = media as? IosappMediaWebFile {
                         //strongSelf.fetchDisposable.set(chatMessageWebFileInteractiveFetched(account: context.account, image: image).startStrict())
-                    } else if let file = media as? TelegramMediaFile {
+                    } else if let file = media as? IosappMediaFile {
                         let fetchSignal = messageMediaFileInteractiveFetched(fetchManager: self.context.fetchManager, messageId: message.id, messageReference: MessageReference(message), file: file, userInitiated: false, priority: priority)
                         context.fetchDisposable.set(fetchSignal.startStrict())
                     }
                 } else if case .prefetch = automaticDownload, message.id.peerId.namespace != Namespaces.Peer.SecretChat {
-                    if let file = media as? TelegramMediaFile, let _ = file.size {
+                    if let file = media as? IosappMediaFile, let _ = file.size {
                         context.fetchDisposable.set(preloadVideoResource(postbox: self.context.account.postbox, userLocation: .peer(message.id.peerId), userContentType: MediaResourceUserContentType(file: file), resourceReference: FileMediaReference.message(message: MessageReference(message), media: file).resourceReference(file.resource), duration: 4.0).startStrict())
                     }
                 }

@@ -20,7 +20,7 @@ public final class EmojiStatusComponent: Component {
     public typealias EnvironmentType = Empty
     
     public enum AnimationContent: Equatable {
-        case file(file: TelegramMediaFile)
+        case file(file: IosappMediaFile)
         case customEmoji(fileId: Int64)
         
         public var fileId: MediaId {
@@ -56,7 +56,7 @@ public final class EmojiStatusComponent: Component {
     
     public let postbox: Postbox
     public let energyUsageSettings: EnergyUsageSettings
-    public let resolveInlineStickers: ([Int64]) -> Signal<[Int64: TelegramMediaFile], NoError>
+    public let resolveInlineStickers: ([Int64]) -> Signal<[Int64: IosappMediaFile], NoError>
     public let animationCache: AnimationCache
     public let animationRenderer: MultiAnimationRenderer
     public let content: Content
@@ -66,7 +66,7 @@ public final class EmojiStatusComponent: Component {
     public let isVisibleForAnimations: Bool
     public let useSharedAnimation: Bool
     public let action: (() -> Void)?
-    public let emojiFileUpdated: ((TelegramMediaFile?) -> Void)?
+    public let emojiFileUpdated: ((IosappMediaFile?) -> Void)?
     public let tag: AnyObject?
     
     public convenience init(
@@ -80,7 +80,7 @@ public final class EmojiStatusComponent: Component {
         isVisibleForAnimations: Bool,
         useSharedAnimation: Bool = false,
         action: (() -> Void)?,
-        emojiFileUpdated: ((TelegramMediaFile?) -> Void)? = nil,
+        emojiFileUpdated: ((IosappMediaFile?) -> Void)? = nil,
         tag: AnyObject? = nil
     ) {
         self.init(
@@ -106,7 +106,7 @@ public final class EmojiStatusComponent: Component {
     public init(
         postbox: Postbox,
         energyUsageSettings: EnergyUsageSettings,
-        resolveInlineStickers: @escaping ([Int64]) -> Signal<[Int64: TelegramMediaFile], NoError>,
+        resolveInlineStickers: @escaping ([Int64]) -> Signal<[Int64: IosappMediaFile], NoError>,
         animationCache: AnimationCache,
         animationRenderer: MultiAnimationRenderer,
         content: Content,
@@ -116,7 +116,7 @@ public final class EmojiStatusComponent: Component {
         isVisibleForAnimations: Bool,
         useSharedAnimation: Bool = false,
         action: (() -> Void)?,
-        emojiFileUpdated: ((TelegramMediaFile?) -> Void)? = nil,
+        emojiFileUpdated: ((IosappMediaFile?) -> Void)? = nil,
         tag: AnyObject? = nil
     ) {
         self.postbox = postbox
@@ -242,7 +242,7 @@ public final class EmojiStatusComponent: Component {
         private var lottieAnimationView: AnimationView?
         private let hierarchyTrackingLayer: HierarchyTrackingLayer
         
-        private var emojiFile: TelegramMediaFile?
+        private var emojiFile: IosappMediaFile?
         private var emojiFileDataProperties: AnimationFileProperties?
         private var emojiFileDisposable: Disposable?
         private var emojiFileDataPathDisposable: Disposable?

@@ -90,7 +90,7 @@ private final class ShareControllerAccountContextExtension: ShareControllerAccou
     let accountId: AccountRecordId
     let accountPeerId: EnginePeer.Id
     let stateManager: AccountStateManager
-    let engineData: TelegramEngine.EngineData
+    let engineData: IosappEngine.EngineData
     let animationCache: AnimationCache
     let animationRenderer: MultiAnimationRenderer
     let contentSettings: ContentSettings
@@ -105,7 +105,7 @@ private final class ShareControllerAccountContextExtension: ShareControllerAccou
         self.accountId = accountId
         self.accountPeerId = stateManager.accountPeerId
         self.stateManager = stateManager
-        self.engineData = TelegramEngine.EngineData(accountPeerId: stateManager.accountPeerId, postbox: stateManager.postbox)
+        self.engineData = IosappEngine.EngineData(accountPeerId: stateManager.accountPeerId, postbox: stateManager.postbox)
         let cacheStorageBox = stateManager.postbox.mediaBox.cacheStorageBox
         self.animationCache = DCTAnimationCacheImpl(basePath: stateManager.postbox.mediaBox.basePath + "/animation-cache", allocateTempFile: {
             return TempBox.shared.tempFile(fileName: "file").path
@@ -119,14 +119,14 @@ private final class ShareControllerAccountContextExtension: ShareControllerAccou
         self.appConfiguration = appConfiguration
     }
     
-    func resolveInlineStickers(fileIds: [Int64]) -> Signal<[Int64: TelegramMediaFile], NoError> {
+    func resolveInlineStickers(fileIds: [Int64]) -> Signal<[Int64: IosappMediaFile], NoError> {
         return _internal_resolveInlineStickers(postbox: self.stateManager.postbox, network: self.stateManager.network, fileIds: fileIds)
     }
 }
 
 public struct ShareRootControllerInitializationData {
     public let appBundleId: String
-    public let appBuildType: TelegramAppBuildType
+    public let appBuildType: IosappAppBuildType
     public let appGroupPath: String
     public let apiId: Int32
     public let apiHash: String
@@ -135,9 +135,9 @@ public struct ShareRootControllerInitializationData {
     public let appVersion: String
     public let bundleData: Data?
     public let useBetaFeatures: Bool
-    public let makeTempContext: (AccountManager<TelegramAccountManagerTypes>, AppLockContext, TelegramApplicationBindings, InitialPresentationDataAndSettings, NetworkInitializationArguments) -> Signal<AccountContext, NoError>
+    public let makeTempContext: (AccountManager<IosappAccountManagerTypes>, AppLockContext, IosappApplicationBindings, InitialPresentationDataAndSettings, NetworkInitializationArguments) -> Signal<AccountContext, NoError>
     
-    public init(appBundleId: String, appBuildType: TelegramAppBuildType, appGroupPath: String, apiId: Int32, apiHash: String, languagesCategory: String, encryptionParameters: (Data, Data), appVersion: String, bundleData: Data?, useBetaFeatures: Bool, makeTempContext: @escaping (AccountManager<TelegramAccountManagerTypes>, AppLockContext, TelegramApplicationBindings, InitialPresentationDataAndSettings, NetworkInitializationArguments) -> Signal<AccountContext, NoError>) {
+    public init(appBundleId: String, appBuildType: IosappAppBuildType, appGroupPath: String, apiId: Int32, apiHash: String, languagesCategory: String, encryptionParameters: (Data, Data), appVersion: String, bundleData: Data?, useBetaFeatures: Bool, makeTempContext: @escaping (AccountManager<IosappAccountManagerTypes>, AppLockContext, IosappApplicationBindings, InitialPresentationDataAndSettings, NetworkInitializationArguments) -> Signal<AccountContext, NoError>) {
         self.appBundleId = appBundleId
         self.appBuildType = appBuildType
         self.appGroupPath = appGroupPath
@@ -246,7 +246,7 @@ public class ShareRootControllerImpl {
             
             setupSharedLogger(rootPath: rootPath, path: logsPath)
             
-            let applicationBindings = TelegramApplicationBindings(isMainApp: false, appBundleId: self.initializationData.appBundleId, appBuildType: self.initializationData.appBuildType, containerPath: self.initializationData.appGroupPath, appSpecificScheme: "tg", openUrl: { [weak self] url in
+            let applicationBindings = IosappApplicationBindings(isMainApp: false, appBundleId: self.initializationData.appBundleId, appBuildType: self.initializationData.appBuildType, containerPath: self.initializationData.appGroupPath, appSpecificScheme: "tg", openUrl: { [weak self] url in
                 self?.openUrl(url)
             }, openUniversalUrl: { _, completion in
                 completion.completion(false)
@@ -276,7 +276,7 @@ public class ShareRootControllerImpl {
             }, forceOrientation: { _ in
             })
             
-            let accountManager = AccountManager<TelegramAccountManagerTypes>(basePath: rootPath + "/accounts-metadata", isTemporary: true, isReadOnly: false, useCaches: false, removeDatabaseOnError: false)
+            let accountManager = AccountManager<IosappAccountManagerTypes>(basePath: rootPath + "/accounts-metadata", isTemporary: true, isReadOnly: false, useCaches: false, removeDatabaseOnError: false)
             initializeAccountManagement()
             
             do {
@@ -482,10 +482,10 @@ public class ShareRootControllerImpl {
             |> mapToSignal { data -> Signal<(ShareControllerEnvironment, ShareControllerAccountContext, PostboxAccessChallengeData, [ShareControllerSwitchableAccount]), ShareAuthorizationError> in
                 let (environment, context, otherAccounts) = data
                 
-                let limitsConfigurationAndContentSettings = TelegramEngine.EngineData(accountPeerId: context.stateManager.accountPeerId, postbox: context.stateManager.postbox).get(
-                    TelegramEngine.EngineData.Item.Configuration.Limits(),
-                    TelegramEngine.EngineData.Item.Configuration.ContentSettings(),
-                    TelegramEngine.EngineData.Item.Configuration.App()
+                let limitsConfigurationAndContentSettings = IosappEngine.EngineData(accountPeerId: context.stateManager.accountPeerId, postbox: context.stateManager.postbox).get(
+                    IosappEngine.EngineData.Item.Configuration.Limits(),
+                    IosappEngine.EngineData.Item.Configuration.ContentSettings(),
+                    IosappEngine.EngineData.Item.Configuration.App()
                 )
                 
                 return combineLatest(accountManager.sharedData(keys: [ApplicationSpecificSharedDataKeys.presentationPasscodeSettings]), limitsConfigurationAndContentSettings, accountManager.accessChallengeData())
@@ -518,7 +518,7 @@ public class ShareRootControllerImpl {
                                         let controller = deviceContactInfoController(context: context, environment: environment, subject: .filter(peer: nil, contactId: nil, contactData: data, completion: { peer, contactData in
                                             let phone = contactData.basicData.phoneNumbers[0].value
                                             if let vCardData = contactData.serializedVCard() {
-                                                subscriber.putNext([.media(.media(.standalone(media: TelegramMediaContact(firstName: contactData.basicData.firstName, lastName: contactData.basicData.lastName, phoneNumber: phone, peerId: nil, vCardData: vCardData))))])
+                                                subscriber.putNext([.media(.media(.standalone(media: IosappMediaContact(firstName: contactData.basicData.firstName, lastName: contactData.basicData.lastName, phoneNumber: phone, peerId: nil, vCardData: vCardData))))])
                                             }
                                             subscriber.putCompletion()
                                         }), completed: nil, cancelled: {
@@ -721,7 +721,7 @@ public class ShareRootControllerImpl {
                                         
                                         var archivePathValue: String?
                                         let _ = archivePathValue
-                                        var otherEntries: [(SSZipEntry, String, TelegramEngine.HistoryImport.MediaType)] = []
+                                        var otherEntries: [(SSZipEntry, String, IosappEngine.HistoryImport.MediaType)] = []
                                         var mainFile: TempBoxFile?
                                         
                                         let appConfiguration = context.appConfiguration
@@ -789,7 +789,7 @@ public class ShareRootControllerImpl {
                                                     } else {
                                                         let entryFileName = (entryPath as NSString).lastPathComponent
                                                         if !entryFileName.isEmpty {
-                                                            let mediaType: TelegramEngine.HistoryImport.MediaType
+                                                            let mediaType: IosappEngine.HistoryImport.MediaType
                                                             let fullRange = NSRange(entryFileName.startIndex ..< entryFileName.endIndex, in: entryFileName)
                                                             if photoRegex.firstMatch(in: entryFileName, options: [], range: fullRange) != nil {
                                                                 mediaType = .photo
@@ -954,19 +954,19 @@ public class ShareRootControllerImpl {
 private func attemptChatImport(
     context: ShareControllerAccountContext,
     getExtensionContext: @escaping () -> NSExtensionContext?,
-    accountManager: AccountManager<TelegramAccountManagerTypes>,
+    accountManager: AccountManager<IosappAccountManagerTypes>,
     appLockContext: AppLockContext,
-    applicationBindings: TelegramApplicationBindings,
+    applicationBindings: IosappApplicationBindings,
     initialPresentationDataAndSettings: InitialPresentationDataAndSettings,
     networkInitializationArguments: NetworkInitializationArguments,
     presentationData: PresentationData,
-    makeTempContext: @escaping (AccountManager<TelegramAccountManagerTypes>, AppLockContext, TelegramApplicationBindings, InitialPresentationDataAndSettings, NetworkInitializationArguments) -> Signal<AccountContext, NoError>,
+    makeTempContext: @escaping (AccountManager<IosappAccountManagerTypes>, AppLockContext, IosappApplicationBindings, InitialPresentationDataAndSettings, NetworkInitializationArguments) -> Signal<AccountContext, NoError>,
     mainWindow: Window1,
     navigationController: NavigationController,
     archivePathValue: String?,
     mainFileHeader: String,
     mainFile: TempBoxFile,
-    otherEntries: [(SSZipEntry, String, TelegramEngine.HistoryImport.MediaType)],
+    otherEntries: [(SSZipEntry, String, IosappEngine.HistoryImport.MediaType)],
     beginShare: @escaping () -> Void
 ) {
     let _ = (makeTempContext(
@@ -980,7 +980,7 @@ private func attemptChatImport(
         context.account.resetStateManagement()
         context.account.shouldBeServiceTaskMaster.set(.single(.now))
         
-        let _ = (TelegramEngine.HistoryImport(postbox: context.account.stateManager.postbox, network: context.account.stateManager.network).getInfo(header: mainFileHeader)
+        let _ = (IosappEngine.HistoryImport(postbox: context.account.stateManager.postbox, network: context.account.stateManager.network).getInfo(header: mainFileHeader)
         |> deliverOnMainQueue).start(next: { [weak mainWindow] parseInfo in
             switch parseInfo {
             case let .group(groupTitle):

@@ -18,8 +18,8 @@ final class StickersResultPanelComponent: Component {
     let context: AccountContext
     let theme: PresentationTheme
     let strings: PresentationStrings
-    let files: [TelegramMediaFile]
-    let action: (TelegramMediaFile) -> Void
+    let files: [IosappMediaFile]
+    let action: (IosappMediaFile) -> Void
     let present: (ViewController) -> Void
     let presentInGlobalOverlay: (ViewController) -> Void
     
@@ -27,8 +27,8 @@ final class StickersResultPanelComponent: Component {
         context: AccountContext,
         theme: PresentationTheme,
         strings: PresentationStrings,
-        files: [TelegramMediaFile],
-        action: @escaping (TelegramMediaFile) -> Void,
+        files: [IosappMediaFile],
+        action: @escaping (IosappMediaFile) -> Void,
         present: @escaping (ViewController) -> Void,
         presentInGlobalOverlay: @escaping (ViewController) -> Void
     ) {
@@ -299,7 +299,7 @@ final class StickersResultPanelComponent: Component {
                 return nil
             }, updateContent: { [weak self] content in
                 if let self {
-                    var item: TelegramMediaFile?
+                    var item: IosappMediaFile?
                     if let content = content as? StickerPreviewPeekContent, case let .pack(contentItem) = content.item {
                         item = contentItem
                     }
@@ -319,7 +319,7 @@ final class StickersResultPanelComponent: Component {
             if case .ended = recognizer.state {
                 let location = recognizer.location(in: self.scrollView)
                 if self.scrollView.bounds.contains(location) {
-                    var closestFile: (file: TelegramMediaFile, distance: CGFloat)?
+                    var closestFile: (file: IosappMediaFile, distance: CGFloat)?
                     for (_, itemLayer) in self.visibleLayers {
                         guard let file = itemLayer.file else {
                             continue

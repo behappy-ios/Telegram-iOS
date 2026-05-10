@@ -381,7 +381,7 @@ private final class SheetContent: CombinedComponent {
         init(context: AccountContext, subject: ReportContentSubject) {
             super.init()
             
-            self.peerDisposable = (context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: subject.peerId))
+            self.peerDisposable = (context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: subject.peerId))
             |> deliverOnMainQueue).start(next: { [weak self] peer in
                 self?.peer = peer
                 self?.updated()

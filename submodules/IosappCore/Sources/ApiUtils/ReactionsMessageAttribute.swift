@@ -110,7 +110,7 @@ public func mergedMessageReactionsAndPeers(accountPeerId: EnginePeer.Id, account
                 return nil
             }
         }
-        if let channel = message.peers[message.id.peerId] as? TelegramChannel, case .broadcast = channel.info {
+        if let channel = message.peers[message.id.peerId] as? IosappChannel, case .broadcast = channel.info {
             recentPeers.removeAll()
         }
     }

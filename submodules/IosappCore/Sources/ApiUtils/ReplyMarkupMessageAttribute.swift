@@ -115,16 +115,16 @@ extension ReplyMarkupButton {
                     hasUsername: hasUsername.flatMap({ $0 == .boolTrue }),
                     isForum: forum.flatMap({ $0 == .boolTrue }),
                     botParticipant: (flags & (1 << 5)) != 0,
-                    userAdminRights: userAdminRights.flatMap(TelegramChatAdminRights.init(apiAdminRights:)),
-                    botAdminRights: botAdminRights.flatMap(TelegramChatAdminRights.init(apiAdminRights:))
+                    userAdminRights: userAdminRights.flatMap(IosappChatAdminRights.init(apiAdminRights:)),
+                    botAdminRights: botAdminRights.flatMap(IosappChatAdminRights.init(apiAdminRights:))
                 ))
             case let .requestPeerTypeBroadcast(requestPeerTypeBroadcastData):
                 let (flags, hasUsername, userAdminRights, botAdminRights) = (requestPeerTypeBroadcastData.flags, requestPeerTypeBroadcastData.hasUsername, requestPeerTypeBroadcastData.userAdminRights, requestPeerTypeBroadcastData.botAdminRights)
                 mappedPeerType = .channel(ReplyMarkupButtonRequestPeerType.Channel(
                     isCreator: (flags & (1 << 0)) != 0,
                     hasUsername: hasUsername.flatMap({ $0 == .boolTrue }),
-                    userAdminRights: userAdminRights.flatMap(TelegramChatAdminRights.init(apiAdminRights:)),
-                    botAdminRights: botAdminRights.flatMap(TelegramChatAdminRights.init(apiAdminRights:))
+                    userAdminRights: userAdminRights.flatMap(IosappChatAdminRights.init(apiAdminRights:)),
+                    botAdminRights: botAdminRights.flatMap(IosappChatAdminRights.init(apiAdminRights:))
                 ))
             case let .requestPeerTypeCreateBot(data):
                 mappedPeerType = .createBot(ReplyMarkupButtonRequestPeerType.CreateBot(
@@ -150,16 +150,16 @@ extension ReplyMarkupButton {
                     hasUsername: hasUsername.flatMap({ $0 == .boolTrue }),
                     isForum: forum.flatMap({ $0 == .boolTrue }),
                     botParticipant: (flags & (1 << 5)) != 0,
-                    userAdminRights: userAdminRights.flatMap(TelegramChatAdminRights.init(apiAdminRights:)),
-                    botAdminRights: botAdminRights.flatMap(TelegramChatAdminRights.init(apiAdminRights:))
+                    userAdminRights: userAdminRights.flatMap(IosappChatAdminRights.init(apiAdminRights:)),
+                    botAdminRights: botAdminRights.flatMap(IosappChatAdminRights.init(apiAdminRights:))
                 ))
             case let .requestPeerTypeBroadcast(requestPeerTypeBroadcastData):
                 let (flags, hasUsername, userAdminRights, botAdminRights) = (requestPeerTypeBroadcastData.flags, requestPeerTypeBroadcastData.hasUsername, requestPeerTypeBroadcastData.userAdminRights, requestPeerTypeBroadcastData.botAdminRights)
                 mappedPeerType = .channel(ReplyMarkupButtonRequestPeerType.Channel(
                     isCreator: (flags & (1 << 0)) != 0,
                     hasUsername: hasUsername.flatMap({ $0 == .boolTrue }),
-                    userAdminRights: userAdminRights.flatMap(TelegramChatAdminRights.init(apiAdminRights:)),
-                    botAdminRights: botAdminRights.flatMap(TelegramChatAdminRights.init(apiAdminRights:))
+                    userAdminRights: userAdminRights.flatMap(IosappChatAdminRights.init(apiAdminRights:)),
+                    botAdminRights: botAdminRights.flatMap(IosappChatAdminRights.init(apiAdminRights:))
                 ))
             case let .requestPeerTypeCreateBot(data):
                 mappedPeerType = .createBot(ReplyMarkupButtonRequestPeerType.CreateBot(

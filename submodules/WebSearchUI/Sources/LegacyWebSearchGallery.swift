@@ -23,8 +23,8 @@ class LegacyWebSearchItem: NSObject, TGMediaEditableItem, TGMediaSelectableItem 
     }
     
     let result: ChatContextResult
-    private(set) var thumbnailResource: TelegramMediaResource?
-    private(set) var imageResource: TelegramMediaResource?
+    private(set) var thumbnailResource: IosappMediaResource?
+    private(set) var imageResource: IosappMediaResource?
     let dimensions: CGSize
     let thumbnailImage: Signal<UIImage, NoError>
     let originalImage: Signal<UIImage, NoError>
@@ -38,7 +38,7 @@ class LegacyWebSearchItem: NSObject, TGMediaEditableItem, TGMediaSelectableItem 
         self.progress = .complete()
     }
     
-    init(result: ChatContextResult, thumbnailResource: TelegramMediaResource?, imageResource: TelegramMediaResource?, dimensions: CGSize, thumbnailImage: Signal<UIImage, NoError>, originalImage: Signal<UIImage, NoError>, progress: Signal<Float, NoError>) {
+    init(result: ChatContextResult, thumbnailResource: IosappMediaResource?, imageResource: IosappMediaResource?, dimensions: CGSize, thumbnailImage: Signal<UIImage, NoError>, originalImage: Signal<UIImage, NoError>, progress: Signal<Float, NoError>) {
         self.result = result
         self.thumbnailResource = thumbnailResource
         self.imageResource = imageResource
@@ -211,8 +211,8 @@ private class LegacyWebSearchGalleryItemView: TGModernGalleryImageItemView, TGMo
 
 func legacyWebSearchItem(account: Account, result: ChatContextResult) -> LegacyWebSearchItem? {
     var thumbnailDimensions: CGSize?
-    var thumbnailResource: TelegramMediaResource?
-    var imageResource: TelegramMediaResource?
+    var thumbnailResource: IosappMediaResource?
+    var imageResource: IosappMediaResource?
     var imageDimensions = CGSize()
     var immediateThumbnailData: Data?
     
@@ -258,12 +258,12 @@ func legacyWebSearchItem(account: Account, result: ChatContextResult) -> LegacyW
             }
         }
         
-        var representations: [TelegramMediaImageRepresentation] = []
+        var representations: [IosappMediaImageRepresentation] = []
         if let thumbnailResource = thumbnailResource, let thumbnailDimensions = thumbnailDimensions {
-            representations.append(TelegramMediaImageRepresentation(dimensions: PixelDimensions(thumbnailDimensions), resource: thumbnailResource, progressiveSizes: [], immediateThumbnailData: nil, hasVideo: false, isPersonal: false))
+            representations.append(IosappMediaImageRepresentation(dimensions: PixelDimensions(thumbnailDimensions), resource: thumbnailResource, progressiveSizes: [], immediateThumbnailData: nil, hasVideo: false, isPersonal: false))
         }
-        representations.append(TelegramMediaImageRepresentation(dimensions: PixelDimensions(imageDimensions), resource: imageResource, progressiveSizes: [], immediateThumbnailData: nil, hasVideo: false, isPersonal: false))
-        let tmpImage = TelegramMediaImage(imageId: EngineMedia.Id(namespace: 0, id: 0), representations: representations, immediateThumbnailData: immediateThumbnailData, reference: nil, partialReference: nil, flags: [])
+        representations.append(IosappMediaImageRepresentation(dimensions: PixelDimensions(imageDimensions), resource: imageResource, progressiveSizes: [], immediateThumbnailData: nil, hasVideo: false, isPersonal: false))
+        let tmpImage = IosappMediaImage(imageId: EngineMedia.Id(namespace: 0, id: 0), representations: representations, immediateThumbnailData: immediateThumbnailData, reference: nil, partialReference: nil, flags: [])
         thumbnailSignal = chatMessagePhotoDatas(postbox: account.postbox, userLocation: .other, photoReference: .standalone(media: tmpImage), autoFetchFullSize: false)
         |> mapToSignal { value -> Signal<UIImage, NoError> in
             let thumbnailData = value._0

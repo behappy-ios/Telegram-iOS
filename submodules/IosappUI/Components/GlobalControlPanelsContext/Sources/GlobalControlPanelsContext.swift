@@ -74,7 +74,7 @@ public final class GlobalControlPanelsContext {
         case premiumRestore(discount: Int32)
         case xmasPremiumGift
         case setupBirthday
-        case birthdayPremiumGift(peers: [EnginePeer], birthdays: [EnginePeer.Id: TelegramBirthday])
+        case birthdayPremiumGift(peers: [EnginePeer], birthdays: [EnginePeer.Id: IosappBirthday])
         case reviewLogin(newSessionReview: NewSessionReview, totalCount: Int)
         case premiumGrace
         case starsSubscriptionLowBalance(amount: StarsAmount, peers: [EnginePeer])
@@ -334,8 +334,8 @@ public final class GlobalControlPanelsContext {
                     twoStepData,
                     newSessionReviews(postbox: context.account.postbox),
                     context.engine.data.subscribe(
-                        TelegramEngine.EngineData.Item.Peer.Peer(id: context.account.peerId),
-                        TelegramEngine.EngineData.Item.Peer.Birthday(id: context.account.peerId)
+                        IosappEngine.EngineData.Item.Peer.Peer(id: context.account.peerId),
+                        IosappEngine.EngineData.Item.Peer.Birthday(id: context.account.peerId)
                     ),
                     context.account.stateManager.contactBirthdays,
                     starsSubscriptionsContextPromise.get(),
@@ -444,7 +444,7 @@ public final class GlobalControlPanelsContext {
                         }
                     } else if !todayBirthdayPeerIds.isEmpty {
                         return context.engine.data.get(
-                            EngineDataMap(todayBirthdayPeerIds.map(TelegramEngine.EngineData.Item.Peer.Peer.init(id:)))
+                            EngineDataMap(todayBirthdayPeerIds.map(IosappEngine.EngineData.Item.Peer.Peer.init(id:)))
                         )
                         |> map { result -> ChatListNotice? in
                             var todayBirthdayPeers: [EnginePeer] = []

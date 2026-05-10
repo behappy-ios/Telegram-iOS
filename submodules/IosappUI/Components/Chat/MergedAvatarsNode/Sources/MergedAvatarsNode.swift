@@ -11,7 +11,7 @@ import AccountContext
 
 private enum PeerAvatarReference: Equatable {
     case letters(PeerId, PeerColor?, [String])
-    case image(PeerReference, TelegramMediaImageRepresentation)
+    case image(PeerReference, IosappMediaImageRepresentation)
     
     var peerId: PeerId {
         switch self {

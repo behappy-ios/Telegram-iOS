@@ -106,14 +106,14 @@ func openResolvedUrlImpl(
         case let .botStart(peer, payload):
             openPeer(EnginePeer(peer), .withBotStartPayload(ChatControllerInitialBotStart(payload: payload, behavior: .interactive)))
         case let .groupBotStart(botPeerId, payload, adminRights, peerType):
-            let defaultAdminRights = Promise<(group: TelegramChatAdminRights?, channel: TelegramChatAdminRights?)?>(nil)
+            let defaultAdminRights = Promise<(group: IosappChatAdminRights?, channel: IosappChatAdminRights?)?>(nil)
             if adminRights == nil {
                 defaultAdminRights.set(
                     context.engine.peers.fetchAndUpdateCachedPeerData(peerId: botPeerId)
                     |> mapToSignal { _ in
                         return context.engine.data.get(
-                            TelegramEngine.EngineData.Item.Peer.BotGroupAdminRights(id: botPeerId),
-                            TelegramEngine.EngineData.Item.Peer.BotChannelAdminRights(id: botPeerId)
+                            IosappEngine.EngineData.Item.Peer.BotGroupAdminRights(id: botPeerId),
+                            IosappEngine.EngineData.Item.Peer.BotChannelAdminRights(id: botPeerId)
                         ) |> map { groupRights, channelRights in
                             return (groupRights, channelRights)
                         }
@@ -176,7 +176,7 @@ func openResolvedUrlImpl(
                                 } else {
                                     let _ = (context.engine.messages.requestStartBotInGroup(botPeerId: botPeerId, groupPeerId: peerId, payload: payload)
                                     |> deliverOnMainQueue).startStandalone(next: { result in
-                                        let _ = (context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: peerId))
+                                        let _ = (context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: peerId))
                                         |> deliverOnMainQueue).startStandalone(next: { peer in
                                             guard let peer = peer else {
                                                 return
@@ -349,12 +349,12 @@ func openResolvedUrlImpl(
                     case let .invite(invite):
                         if let subscriptionPricing = invite.subscriptionPricing, let subscriptionFormId = invite.subscriptionFormId, let starsContext = context.starsContext {
                             let inputData = Promise<BotCheckoutController.InputData?>()
-                            var photo: [TelegramMediaImageRepresentation] = []
+                            var photo: [IosappMediaImageRepresentation] = []
                             if let photoRepresentation = invite.photoRepresentation {
                                 photo.append(photoRepresentation)
                             }
-                            let channel = TelegramChannel(id: PeerId(namespace: Namespaces.Peer.CloudChannel, id: PeerId.Id._internalFromInt64Value(0)), accessHash: .genericPublic(0), title: invite.title, username: nil, photo: photo, creationDate: 0, version: 0, participationStatus: .left, info: .broadcast(TelegramChannelBroadcastInfo(flags: [])), flags: [], restrictionInfo: nil, adminRights: nil, bannedRights: nil, defaultBannedRights: nil, usernames: [], storiesHidden: nil, nameColor: invite.nameColor, backgroundEmojiId: nil, profileColor: nil, profileBackgroundEmojiId: nil, emojiStatus: nil, approximateBoostLevel: nil, subscriptionUntilDate: nil, verificationIconFileId: nil, sendPaidMessageStars: nil, linkedMonoforumId: nil)
-                            let invoice = TelegramMediaInvoice(title: "", description: "", photo: nil, receiptMessageId: nil, currency: "XTR", totalAmount: subscriptionPricing.amount.value, startParam: "", extendedMedia: nil, subscriptionPeriod: nil, flags: [], version: 0)
+                            let channel = IosappChannel(id: PeerId(namespace: Namespaces.Peer.CloudChannel, id: PeerId.Id._internalFromInt64Value(0)), accessHash: .genericPublic(0), title: invite.title, username: nil, photo: photo, creationDate: 0, version: 0, participationStatus: .left, info: .broadcast(IosappChannelBroadcastInfo(flags: [])), flags: [], restrictionInfo: nil, adminRights: nil, bannedRights: nil, defaultBannedRights: nil, usernames: [], storiesHidden: nil, nameColor: invite.nameColor, backgroundEmojiId: nil, profileColor: nil, profileBackgroundEmojiId: nil, emojiStatus: nil, approximateBoostLevel: nil, subscriptionUntilDate: nil, verificationIconFileId: nil, sendPaidMessageStars: nil, linkedMonoforumId: nil)
+                            let invoice = IosappMediaInvoice(title: "", description: "", photo: nil, receiptMessageId: nil, currency: "XTR", totalAmount: subscriptionPricing.amount.value, startParam: "", extendedMedia: nil, subscriptionPeriod: nil, flags: [], version: 0)
                             
                             inputData.set(.single(BotCheckoutController.InputData(
                                 form: BotPaymentForm(
@@ -612,7 +612,7 @@ func openResolvedUrlImpl(
                     /*let query = to.trimmingCharacters(in: CharacterSet(charactersIn: "0123456789").inverted)
                     let _ = (context.account.postbox.searchContacts(query: query)
                     |> deliverOnMainQueue).startStandalone(next: { (peers, _) in
-                        for case let peer as TelegramUser in peers {
+                        for case let peer as IosappUser in peers {
                             if peer.phone == query {
                                 context.sharedContext.applicationBindings.dismissNativeController()
                                 continueWithPeer(peer.id)
@@ -640,7 +640,7 @@ func openResolvedUrlImpl(
         case let .wallpaper(parameter):
             var controller: ViewController?
             
-            let signal: Signal<TelegramWallpaper, GetWallpaperError>
+            let signal: Signal<IosappWallpaper, GetWallpaperError>
             var options: WallpaperPresentationOptions?
             var colors: [UInt32] = []
             var intensity: Int32?
@@ -657,7 +657,7 @@ func openResolvedUrlImpl(
                 case let .color(color):
                     signal = .single(.color(color.argb))
                 case let .gradient(colors, rotation):
-                    signal = .single(.gradient(TelegramWallpaper.Gradient(id: nil, colors: colors, settings: WallpaperSettings(rotation: rotation))))
+                    signal = .single(.gradient(IosappWallpaper.Gradient(id: nil, colors: colors, settings: WallpaperSettings(rotation: rotation))))
             }
             
             let _ = (signal
@@ -671,8 +671,8 @@ func openResolvedUrlImpl(
             dismissInput()
         case let .theme(slug):
             let signal = getTheme(account: context.account, slug: slug)
-            |> mapToSignal { themeInfo -> Signal<(Data?, TelegramThemeSettings?, TelegramTheme), GetThemeError> in
-                return Signal<(Data?, TelegramThemeSettings?, TelegramTheme), GetThemeError> { subscriber in
+            |> mapToSignal { themeInfo -> Signal<(Data?, IosappThemeSettings?, IosappTheme), GetThemeError> in
+                return Signal<(Data?, IosappThemeSettings?, IosappTheme), GetThemeError> { subscriber in
                     let disposables = DisposableSet()
                     if let settings = themeInfo.settings?.first {
                         subscriber.putNext((nil, settings, themeInfo))
@@ -794,7 +794,7 @@ func openResolvedUrlImpl(
                     }
                 })
             } else {
-                if let rootController = context.sharedContext.mainWindow?.viewController as? TelegramRootControllerInterface {
+                if let rootController = context.sharedContext.mainWindow?.viewController as? IosappRootControllerInterface {
                     rootController.popToRoot(animated: true)
                     rootController.openContacts()
                     
@@ -817,7 +817,7 @@ func openResolvedUrlImpl(
                 }
             }
         case let .chats(section):
-            if let rootController = context.sharedContext.mainWindow?.viewController as? TelegramRootController {
+            if let rootController = context.sharedContext.mainWindow?.viewController as? IosappRootController {
                 rootController.popToRoot(animated: true)
                 rootController.openChats()
                 Queue.mainQueue().after(0.1) {
@@ -877,7 +877,7 @@ func openResolvedUrlImpl(
             let controller = createChannelController(context: context)
             navigationController?.pushViewController(controller)
         default:
-            if let rootController = context.sharedContext.mainWindow?.viewController as? TelegramRootController {
+            if let rootController = context.sharedContext.mainWindow?.viewController as? IosappRootController {
                 rootController.popToRoot(animated: true)
                 rootController.openRootCompose()
             }
@@ -892,7 +892,7 @@ func openResolvedUrlImpl(
             default:
                 mode = .photo
             }
-            if let rootController = context.sharedContext.mainWindow?.viewController as? TelegramRootControllerInterface {
+            if let rootController = context.sharedContext.mainWindow?.viewController as? IosappRootControllerInterface {
                 rootController.popToRoot(animated: true)
                 let coordinator = rootController.openStoryCamera(mode: mode, customTarget: nil, resumeLiveStream: false, transitionIn: nil, transitionedIn: {}, transitionOut: { _, _ in return nil })
                 coordinator?.animateIn()
@@ -903,7 +903,7 @@ func openResolvedUrlImpl(
             case let .path(path):
                 if let navigationController {
                     if path.isEmpty {
-                        if let rootController = context.sharedContext.mainWindow?.viewController as? TelegramRootController {
+                        if let rootController = context.sharedContext.mainWindow?.viewController as? IosappRootController {
                             rootController.openSettings(edit: false)
                         }
                         return
@@ -1056,7 +1056,7 @@ func openResolvedUrlImpl(
                 }
             }
         case let .joinVoiceChat(peerId, invite):
-            let _ = (context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: peerId))
+            let _ = (context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: peerId))
             |> deliverOnMainQueue).start(next: { peer in
                 guard let peer = peer else {
                     return
@@ -1162,7 +1162,7 @@ func openResolvedUrlImpl(
                         let target: Stories.PendingTarget = results.first!.target
                         externalState.storyTarget = target
                         
-                        if let rootController = context.sharedContext.mainWindow?.viewController as? TelegramRootControllerInterface {
+                        if let rootController = context.sharedContext.mainWindow?.viewController as? IosappRootControllerInterface {
                             rootController.popToRoot(animated: false)
                             rootController.proceedWithStoryUpload(target: target, results: results, existingMedia: nil, forwardInfo: nil, externalState: externalState, commit: commit)
                         }
@@ -1258,7 +1258,7 @@ func openResolvedUrlImpl(
                         }
                     } else {
                         if case let .chat(chatPeerId, _, _) = urlContext {
-                            let _ = (context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: chatPeerId))
+                            let _ = (context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: chatPeerId))
                             |> deliverOnMainQueue).start(next: { chatPeer in
                                 guard let navigationController = navigationController, let chatPeer else {
                                     return
@@ -1309,7 +1309,7 @@ func openResolvedUrlImpl(
                                     }
                                 } else {
                                     if case let .chat(chatPeerId, _, _) = urlContext {
-                                        let _ = (context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: chatPeerId))
+                                        let _ = (context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: chatPeerId))
                                         |> deliverOnMainQueue).start(next: { chatPeer in
                                             guard let navigationController = navigationController, let chatPeer else {
                                                 return
@@ -1591,7 +1591,7 @@ func openResolvedUrlImpl(
                                 }
                             },
                             openMessage: { messageId in
-                                let _ = (context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: messageId.peerId))
+                                let _ = (context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: messageId.peerId))
                                 |> deliverOnMainQueue).startStandalone(next: { peer in
                                     guard let peer else {
                                         return
@@ -1732,7 +1732,7 @@ func openResolvedUrlImpl(
         case let .storyFolder(peerId, id):
             Task { @MainActor [weak navigationController] in
                 guard let peer = await context.engine.data.get(
-                    TelegramEngine.EngineData.Item.Peer.Peer(id: peerId)
+                    IosappEngine.EngineData.Item.Peer.Peer(id: peerId)
                 ).get() else {
                     return
                 }
@@ -1753,7 +1753,7 @@ func openResolvedUrlImpl(
         case let .giftCollection(peerId, id):
             Task { @MainActor [weak navigationController] in
                 guard let peer = await context.engine.data.get(
-                    TelegramEngine.EngineData.Item.Peer.Peer(id: peerId)
+                    IosappEngine.EngineData.Item.Peer.Peer(id: peerId)
                 ).get() else {
                     return
                 }
@@ -1941,7 +1941,7 @@ func openResolvedUrlImpl(
         case let .createBot(parentBotId, username, title):
             Task { @MainActor in
                 guard let parentBot = await context.engine.data.get(
-                    TelegramEngine.EngineData.Item.Peer.Peer(id: parentBotId)
+                    IosappEngine.EngineData.Item.Peer.Peer(id: parentBotId)
                 ).get() else {
                     return
                 }

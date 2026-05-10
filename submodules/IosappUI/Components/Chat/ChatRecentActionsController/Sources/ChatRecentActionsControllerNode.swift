@@ -455,7 +455,7 @@ final class ChatRecentActionsControllerNode: ViewControllerTracingNode {
                         items.append(ActionSheetButtonItem(title: strongSelf.presentationData.strings.Conversation_LinkDialogOpen, color: .accent, action: { [weak actionSheet] in
                             actionSheet?.dismissAnimated()
                             if let strongSelf = self {
-                                let _ = (strongSelf.context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: peerId))
+                                let _ = (strongSelf.context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: peerId))
                                 |> deliverOnMainQueue).startStandalone(next: { peer in
                                     if let strongSelf = self, let peer = peer {
                                         strongSelf.openPeer(peer: peer)
@@ -889,7 +889,7 @@ final class ChatRecentActionsControllerNode: ViewControllerTracingNode {
                             let hasFilter: Bool = strongSelf.filter.events != .all || strongSelf.filter.query != nil
                             
                             var isSupergroup: Bool = false
-                            if let peer = strongSelf.peer as? TelegramChannel {
+                            if let peer = strongSelf.peer as? IosappChannel {
                                 switch peer.info {
                                 case .group:
                                     isSupergroup = true
@@ -938,7 +938,7 @@ final class ChatRecentActionsControllerNode: ViewControllerTracingNode {
             return
         }
         let text: String
-        if let channel = self.peer as? TelegramChannel, case .broadcast = channel.info {
+        if let channel = self.peer as? IosappChannel, case .broadcast = channel.info {
             text = self.presentationData.strings.Channel_AdminLog_InfoPanelChannelAlertText
         } else {
             text = self.presentationData.strings.Channel_AdminLog_InfoPanelAlertText
@@ -998,7 +998,7 @@ final class ChatRecentActionsControllerNode: ViewControllerTracingNode {
             let peerSignal: Signal<Peer?, NoError> = .single(peer._asPeer())
             self.navigationActionDisposable.set((peerSignal |> take(1) |> deliverOnMainQueue).startStrict(next: { [weak self] peer in
                 if let strongSelf = self, let peer = peer {
-                    if peer is TelegramChannel, let navigationController = strongSelf.getNavigationController() {
+                    if peer is IosappChannel, let navigationController = strongSelf.getNavigationController() {
                         strongSelf.context.sharedContext.navigateToChatController(NavigateToChatControllerParams(navigationController: navigationController, context: strongSelf.context, chatLocation: .peer(EnginePeer(peer)), peekData: peekData, animated: true))
                     } else {
                         if let infoController = strongSelf.context.sharedContext.makePeerInfoController(context: strongSelf.context, updatedPresentationData: nil, peer: peer, mode: .generic, avatarInitiallyExpanded: false, fromChat: false, requestsContext: nil) {
@@ -1078,7 +1078,7 @@ final class ChatRecentActionsControllerNode: ViewControllerTracingNode {
         
         if let author = message.author, let adminsState = self.adminsState {
             var canBan = author.id != self.context.account.peerId
-            if let channel = self.peer as? TelegramChannel {
+            if let channel = self.peer as? IosappChannel {
                 if !channel.hasPermission(.banMembers) {
                     canBan = false
                 }
@@ -1297,12 +1297,12 @@ final class ChatRecentActionsControllerNode: ViewControllerTracingNode {
                                 case let .invite(invite):
                                     if let subscriptionPricing = invite.subscriptionPricing, let subscriptionFormId = invite.subscriptionFormId, let starsContext = context.starsContext {
                                         let inputData = Promise<BotCheckoutController.InputData?>()
-                                        var photo: [TelegramMediaImageRepresentation] = []
+                                        var photo: [IosappMediaImageRepresentation] = []
                                         if let photoRepresentation = invite.photoRepresentation {
                                             photo.append(photoRepresentation)
                                         }
-                                        let channel = TelegramChannel(id: PeerId(namespace: Namespaces.Peer.CloudChannel, id: PeerId.Id._internalFromInt64Value(0)), accessHash: .genericPublic(0), title: invite.title, username: nil, photo: photo, creationDate: 0, version: 0, participationStatus: .left, info: .broadcast(TelegramChannelBroadcastInfo(flags: [])), flags: [], restrictionInfo: nil, adminRights: nil, bannedRights: nil, defaultBannedRights: nil, usernames: [], storiesHidden: nil, nameColor: invite.nameColor, backgroundEmojiId: nil, profileColor: nil, profileBackgroundEmojiId: nil, emojiStatus: nil, approximateBoostLevel: nil, subscriptionUntilDate: nil, verificationIconFileId: nil, sendPaidMessageStars: nil, linkedMonoforumId: nil)
-                                        let invoice = TelegramMediaInvoice(title: "", description: "", photo: nil, receiptMessageId: nil, currency: "XTR", totalAmount: subscriptionPricing.amount.value, startParam: "", extendedMedia: nil, subscriptionPeriod: nil, flags: [], version: 0)
+                                        let channel = IosappChannel(id: PeerId(namespace: Namespaces.Peer.CloudChannel, id: PeerId.Id._internalFromInt64Value(0)), accessHash: .genericPublic(0), title: invite.title, username: nil, photo: photo, creationDate: 0, version: 0, participationStatus: .left, info: .broadcast(IosappChannelBroadcastInfo(flags: [])), flags: [], restrictionInfo: nil, adminRights: nil, bannedRights: nil, defaultBannedRights: nil, usernames: [], storiesHidden: nil, nameColor: invite.nameColor, backgroundEmojiId: nil, profileColor: nil, profileBackgroundEmojiId: nil, emojiStatus: nil, approximateBoostLevel: nil, subscriptionUntilDate: nil, verificationIconFileId: nil, sendPaidMessageStars: nil, linkedMonoforumId: nil)
+                                        let invoice = IosappMediaInvoice(title: "", description: "", photo: nil, receiptMessageId: nil, currency: "XTR", totalAmount: subscriptionPricing.amount.value, startParam: "", extendedMedia: nil, subscriptionPeriod: nil, flags: [], version: 0)
                                         
                                         inputData.set(.single(BotCheckoutController.InputData(
                                             form: BotPaymentForm(

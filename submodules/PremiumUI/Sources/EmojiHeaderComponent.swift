@@ -20,7 +20,7 @@ class EmojiHeaderComponent: Component {
     let placeholderColor: UIColor
     let accentColor: UIColor
     let fileId: Int64
-    let file: TelegramMediaFile?
+    let file: IosappMediaFile?
     let isVisible: Bool
     let hasIdleAnimations: Bool
         
@@ -31,7 +31,7 @@ class EmojiHeaderComponent: Component {
         placeholderColor: UIColor,
         accentColor: UIColor,
         fileId: Int64,
-        file: TelegramMediaFile? = nil,
+        file: IosappMediaFile? = nil,
         isVisible: Bool,
         hasIdleAnimations: Bool
     ) {

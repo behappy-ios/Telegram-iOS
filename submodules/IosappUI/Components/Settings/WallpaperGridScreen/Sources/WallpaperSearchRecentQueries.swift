@@ -35,7 +35,7 @@ public final class RecentWallpaperSearchQueryItem: Codable {
     }
 }
 
-func addRecentWallpaperSearchQuery(engine: TelegramEngine, string: String) -> Signal<Never, NoError> {
+func addRecentWallpaperSearchQuery(engine: IosappEngine, string: String) -> Signal<Never, NoError> {
     if let itemId = WallpaperSearchRecentQueryItemId(string) {
         return engine.orderedLists.addOrMoveToFirstPosition(collectionId: ApplicationSpecificOrderedItemListCollectionId.wallpaperSearchRecentQueries, id: itemId.rawValue, item: RecentWallpaperSearchQueryItem(), removeTailIfCountExceeds: 100)
     } else {
@@ -43,7 +43,7 @@ func addRecentWallpaperSearchQuery(engine: TelegramEngine, string: String) -> Si
     }
 }
 
-func removeRecentWallpaperSearchQuery(engine: TelegramEngine, string: String) -> Signal<Never, NoError> {
+func removeRecentWallpaperSearchQuery(engine: IosappEngine, string: String) -> Signal<Never, NoError> {
     if let itemId = WallpaperSearchRecentQueryItemId(string) {
         return engine.orderedLists.removeItem(collectionId: ApplicationSpecificOrderedItemListCollectionId.wallpaperSearchRecentQueries, id: itemId.rawValue)
     } else {
@@ -51,12 +51,12 @@ func removeRecentWallpaperSearchQuery(engine: TelegramEngine, string: String) ->
     }
 }
 
-func clearRecentWallpaperSearchQueries(engine: TelegramEngine) -> Signal<Never, NoError> {
+func clearRecentWallpaperSearchQueries(engine: IosappEngine) -> Signal<Never, NoError> {
     return engine.orderedLists.clear(collectionId: ApplicationSpecificOrderedItemListCollectionId.wallpaperSearchRecentQueries)
 }
 
-func wallpaperSearchRecentQueries(engine: TelegramEngine) -> Signal<[String], NoError> {
-    return engine.data.subscribe(TelegramEngine.EngineData.Item.OrderedLists.ListItems(collectionId: ApplicationSpecificOrderedItemListCollectionId.wallpaperSearchRecentQueries))
+func wallpaperSearchRecentQueries(engine: IosappEngine) -> Signal<[String], NoError> {
+    return engine.data.subscribe(IosappEngine.EngineData.Item.OrderedLists.ListItems(collectionId: ApplicationSpecificOrderedItemListCollectionId.wallpaperSearchRecentQueries))
     |> map { items -> [String] in
         var result: [String] = []
         for item in items {

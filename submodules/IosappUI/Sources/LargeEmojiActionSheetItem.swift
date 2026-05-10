@@ -17,9 +17,9 @@ public final class LargeEmojiActionSheetItem: ActionSheetItem {
     let context: AccountContext
     let text: String
     let fitz: String?
-    let file: TelegramMediaFile
+    let file: IosappMediaFile
     
-    public init(context: AccountContext, text: String, fitz: String?, file: TelegramMediaFile) {
+    public init(context: AccountContext, text: String, fitz: String?, file: IosappMediaFile) {
         self.context = context
         self.text = text
         self.fitz = fitz
@@ -48,7 +48,7 @@ private final class LargeEmojiActionSheetItemNode: ActionSheetItemNode {
     
     private var setupTimestamp: Double?
     
-    init(theme: ActionSheetControllerTheme, context: AccountContext, text: String, fitz: String?, file: TelegramMediaFile) {
+    init(theme: ActionSheetControllerTheme, context: AccountContext, text: String, fitz: String?, file: IosappMediaFile) {
         self.theme = theme
         
         let textFont = Font.regular(floor(theme.baseFontSize * 13.0 / 17.0))

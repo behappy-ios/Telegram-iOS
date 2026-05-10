@@ -1023,7 +1023,7 @@ public final class Network: NSObject, MTRequestMessageServiceDelegate {
             return shouldKeepConnection || shouldExplicitelyKeepWorkerConnections || (continueInBackground && shouldKeepBackgroundDownloadConnections)
         }
         |> distinctUntilChanged
-        return Download(queue: self.queue, datacenterId: datacenterId, isMedia: isMedia, isCdn: isCdn, context: self.context, masterDatacenterId: self.datacenterId, usageInfo: usageCalculationInfo(basePath: self.basePath, category: (tag as? TelegramMediaResourceFetchTag)?.statsCategory), shouldKeepConnection: shouldKeepWorkerConnection, useRequestTimeoutTimers: self.useRequestTimeoutTimers)
+        return Download(queue: self.queue, datacenterId: datacenterId, isMedia: isMedia, isCdn: isCdn, context: self.context, masterDatacenterId: self.datacenterId, usageInfo: usageCalculationInfo(basePath: self.basePath, category: (tag as? IosappMediaResourceFetchTag)?.statsCategory), shouldKeepConnection: shouldKeepWorkerConnection, useRequestTimeoutTimers: self.useRequestTimeoutTimers)
     }
     
     private func worker(datacenterId: Int, isCdn: Bool, isMedia: Bool, tag: MediaResourceFetchTag?) -> Signal<Download, NoError> {

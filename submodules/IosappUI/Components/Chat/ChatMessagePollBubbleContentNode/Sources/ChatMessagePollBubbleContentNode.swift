@@ -490,7 +490,7 @@ private final class ChatMessagePollOptionNode: ASDisplayNode {
     private var currentRecentVoterPeerIds: [PeerId] = []
     private var fetchDisposable = MetaDisposable()
     
-    var option: TelegramMediaPollOption?
+    var option: IosappMediaPollOption?
     var forceSelected: Bool?
     private(set) var currentResult: ChatMessagePollOptionResult?
     private(set) var currentSelection: ChatMessagePollOptionSelection?
@@ -780,7 +780,7 @@ private final class ChatMessagePollOptionNode: ASDisplayNode {
         })
     }
 
-    static func asyncLayout(_ maybeNode: ChatMessagePollOptionNode?) -> (_ context: AccountContext, _ presentationData: ChatPresentationData, _ presentationContext: ChatPresentationContext, _ message: Message, _ poll: TelegramMediaPoll, _ option: TelegramMediaPollOption, _ translation: TranslationMessageAttribute.Additional?, _ optionResult: ChatMessagePollOptionResult?, _ forceSelected: Bool?, _ hasAnyMedia: Bool, _ constrainedWidth: CGFloat) -> (minimumWidth: CGFloat, layout: ((CGFloat) -> (CGSize, (Bool, Bool, Bool) -> ChatMessagePollOptionNode))) {
+    static func asyncLayout(_ maybeNode: ChatMessagePollOptionNode?) -> (_ context: AccountContext, _ presentationData: ChatPresentationData, _ presentationContext: ChatPresentationContext, _ message: Message, _ poll: IosappMediaPoll, _ option: IosappMediaPollOption, _ translation: TranslationMessageAttribute.Additional?, _ optionResult: ChatMessagePollOptionResult?, _ forceSelected: Bool?, _ hasAnyMedia: Bool, _ constrainedWidth: CGFloat) -> (minimumWidth: CGFloat, layout: ((CGFloat) -> (CGSize, (Bool, Bool, Bool) -> ChatMessagePollOptionNode))) {
         let makeTitleLayout = TextNodeWithEntities.asyncLayout(maybeNode?.titleNode)
         let currentResult = maybeNode?.currentResult
         let currentSelection = maybeNode?.currentSelection
@@ -1129,7 +1129,7 @@ private final class ChatMessagePollOptionNode: ASDisplayNode {
                     }
 
                     var isSticker = false
-                    if let media, var mediaFrame, let file = media as? TelegramMediaFile, file.isSticker || file.isCustomEmoji {
+                    if let media, var mediaFrame, let file = media as? IosappMediaFile, file.isSticker || file.isCustomEmoji {
                         isSticker = true
                         
                         if let dimensions = file.dimensions {
@@ -1189,17 +1189,17 @@ private final class ChatMessagePollOptionNode: ASDisplayNode {
                         let mediaReference = AnyMediaReference.message(message: MessageReference(message), media: media)
                         var imageSize = ChatMessagePollOptionNode.mediaSize
                         var isVideo = false
-                        if let image = media as? TelegramMediaImage, let largest = largestImageRepresentation(image.representations) {
+                        if let image = media as? IosappMediaImage, let largest = largestImageRepresentation(image.representations) {
                             imageSize = largest.dimensions.cgSize.aspectFilled(ChatMessagePollOptionNode.mediaSize)
-                            if previousMedia?.isEqual(to: media) != true, let photoReference = mediaReference.concrete(TelegramMediaImage.self) {
+                            if previousMedia?.isEqual(to: media) != true, let photoReference = mediaReference.concrete(IosappMediaImage.self) {
                                 mediaNode.setSignal(chatMessagePhoto(postbox: context.account.postbox, userLocation: .peer(message.id.peerId), photoReference: photoReference))
                                 updatedFetchSignal = messageMediaImageInteractiveFetched(context: context, message: message, image: image, resource: largest.resource, storeToDownloadsPeerId: nil)
                             }
-                        } else if let file = media as? TelegramMediaFile {
+                        } else if let file = media as? IosappMediaFile {
                             if let dimensions = file.dimensions {
                                 imageSize = dimensions.cgSize.aspectFilled(ChatMessagePollOptionNode.mediaSize)
                             }
-                            if let fileReference = mediaReference.concrete(TelegramMediaFile.self), previousMedia?.isEqual(to: media) != true {
+                            if let fileReference = mediaReference.concrete(IosappMediaFile.self), previousMedia?.isEqual(to: media) != true {
                                 if file.mimeType.hasPrefix("image/") {
                                     mediaNode.setSignal(instantPageImageFile(account: context.account, userLocation: .peer(message.id.peerId), fileReference: fileReference, fetched: true))
                                 } else {
@@ -1207,7 +1207,7 @@ private final class ChatMessagePollOptionNode: ASDisplayNode {
                                 }
                             }
                             isVideo = file.isVideo
-                        } else if let map = media as? TelegramMediaMap {
+                        } else if let map = media as? IosappMediaMap {
                             if previousMedia?.isEqual(to: media) != true {
                                 let resource = MapSnapshotMediaResource(latitude: map.latitude, longitude: map.longitude, width: Int32(ChatMessagePollOptionNode.mediaSize.width), height: Int32(ChatMessagePollOptionNode.mediaSize.height))
                                 mediaNode.setSignal(chatMapSnapshotImage(engine: context.engine, resource: resource))
@@ -1756,7 +1756,7 @@ private final class ChatMessagePollAddOptionNode: ASDisplayNode {
         }
         
         var isSticker = false
-        if let attachment = self.currentAttachment, let file = attachment.media?.media as? TelegramMediaFile, (file.isSticker || file.isCustomEmoji), let context = self.currentContext, let theme = self.currentTheme {
+        if let attachment = self.currentAttachment, let file = attachment.media?.media as? IosappMediaFile, (file.isSticker || file.isCustomEmoji), let context = self.currentContext, let theme = self.currentTheme {
             isSticker = true
             let animationLayer: InlineStickerItemLayer
             if let current = self.animationLayer {
@@ -1815,12 +1815,12 @@ private final class ChatMessagePollAddOptionNode: ASDisplayNode {
             }
             
             var isVideo = false
-            if let image = media.media as? TelegramMediaImage, let largest = largestImageRepresentation(image.representations), let photoReference = media.concrete(TelegramMediaImage.self) {
+            if let image = media.media as? IosappMediaImage, let largest = largestImageRepresentation(image.representations), let photoReference = media.concrete(IosappMediaImage.self) {
                 imageSize = largest.dimensions.cgSize.aspectFilled(imageNodeSize)
                 if updateMedia {
                     imageNode.setSignal(chatMessagePhoto(postbox: context.account.postbox, userLocation: .other, photoReference: photoReference))
                 }
-            } else if let file = media.media as? TelegramMediaFile, let fileReference = media.concrete(TelegramMediaFile.self) {
+            } else if let file = media.media as? IosappMediaFile, let fileReference = media.concrete(IosappMediaFile.self) {
                 if let dimensions = file.dimensions {
                     imageSize = dimensions.cgSize.aspectFilled(imageNodeSize)
                 }
@@ -1834,7 +1834,7 @@ private final class ChatMessagePollAddOptionNode: ASDisplayNode {
                     }
                     isVideo = true
                 }
-            } else if let map = media.media as? TelegramMediaMap {
+            } else if let map = media.media as? IosappMediaMap {
                 imageSize = imageNodeSize
                 if updateMedia {
                     let resource = MapSnapshotMediaResource(latitude: map.latitude, longitude: map.longitude, width: Int32(imageSize.width), height: Int32(imageSize.height))
@@ -1953,10 +1953,10 @@ public class ChatMessagePollBubbleContentNode: ChatMessageBubbleContentNode {
         }
         
         var requiresUpload: Bool {
-            if let image = self.media.media as? TelegramMediaImage, let largest = largestImageRepresentation(image.representations), !(largest.resource is CloudPhotoSizeMediaResource) {
+            if let image = self.media.media as? IosappMediaImage, let largest = largestImageRepresentation(image.representations), !(largest.resource is CloudPhotoSizeMediaResource) {
                 return true
             }
-            if let file = self.media.media as? TelegramMediaFile, !(file.resource is CloudDocumentMediaResource) {
+            if let file = self.media.media as? IosappMediaFile, !(file.resource is CloudDocumentMediaResource) {
                 return true
             }
             return false
@@ -1981,7 +1981,7 @@ public class ChatMessagePollBubbleContentNode: ChatMessageBubbleContentNode {
     private var shimmeringNodes: [ShimmeringLinkNode] = []
     private let temporaryHiddenMediaDisposable = MetaDisposable()
 
-    private var poll: TelegramMediaPoll?
+    private var poll: IosappMediaPoll?
     private var currentNewOptionText = NSAttributedString()
     private var currentNewOptionMedia: AttachedMedia?
     private var pendingNewOptionSubmissionText: String?
@@ -2262,7 +2262,7 @@ public class ChatMessagePollBubbleContentNode: ChatMessageBubbleContentNode {
         }
         media.progress = 0.0
         
-        if let image = media.media.media as? TelegramMediaImage, let largest = largestImageRepresentation(image.representations) {
+        if let image = media.media.media as? IosappMediaImage, let largest = largestImageRepresentation(image.representations) {
             media.uploadDisposable = (standaloneUploadedImage(
                 postbox: item.context.account.postbox,
                 network: item.context.account.network,
@@ -2280,7 +2280,7 @@ public class ChatMessagePollBubbleContentNode: ChatMessageBubbleContentNode {
                     media.progress = CGFloat(progress)
                 case let .result(result):
                     if case let .media(resultMedia) = result {
-                        if let resultImage = resultMedia.media as? TelegramMediaImage, let resultLargest = largestImageRepresentation(resultImage.representations) {
+                        if let resultImage = resultMedia.media as? IosappMediaImage, let resultLargest = largestImageRepresentation(resultImage.representations) {
                             item.context.account.postbox.mediaBox.moveResourceData(from: largest.resource.id, to: resultLargest.resource.id, synchronous: true)
                         }
                         media.media = resultMedia
@@ -2292,7 +2292,7 @@ public class ChatMessagePollBubbleContentNode: ChatMessageBubbleContentNode {
                 self.requestNewOptionLayoutUpdate()
                 self.updateSelection()
             })
-        } else if let file = media.media.media as? TelegramMediaFile {
+        } else if let file = media.media.media as? IosappMediaFile {
             media.uploadDisposable = (standaloneUploadedFile(
                 postbox: item.context.account.postbox,
                 network: item.context.account.network,
@@ -2313,7 +2313,7 @@ public class ChatMessagePollBubbleContentNode: ChatMessageBubbleContentNode {
                     media.progress = CGFloat(progress)
                 case let .result(result):
                     if case let .media(resultMedia) = result {
-                        if let resultFile = resultMedia.media as? TelegramMediaFile {
+                        if let resultFile = resultMedia.media as? IosappMediaFile {
                             item.context.account.postbox.mediaBox.moveResourceData(from: file.resource.id, to: resultFile.resource.id, synchronous: true)
                         }
                         media.media = resultMedia
@@ -2389,19 +2389,19 @@ public class ChatMessagePollBubbleContentNode: ChatMessageBubbleContentNode {
         let statusLayout = self.statusNode.asyncLayout()
         let makeAddOptionLayout = ChatMessagePollAddOptionNode.asyncLayout(self.addOptionNode)
 
-        var previousPoll: TelegramMediaPoll?
+        var previousPoll: IosappMediaPoll?
         let currentNewOptionText = self.currentNewOptionText
         let currentNewOptionAttachment = ChatMessagePollAddOptionNode.Attachment(media: self.currentNewOptionMedia?.media, progress: self.currentNewOptionMedia?.progress)
         let pendingNewOptionSubmissionText = self.pendingNewOptionSubmissionText
         if let item = self.item {
             for media in item.message.media {
-                if let media = media as? TelegramMediaPoll {
+                if let media = media as? IosappMediaPoll {
                     previousPoll = media
                 }
             }
         }
 
-        var previousOptionNodeLayouts: [Data: (_ contet: AccountContext, _ presentationData: ChatPresentationData, _ presentationContext: ChatPresentationContext, _ message: Message, _ poll: TelegramMediaPoll, _ option: TelegramMediaPollOption, _ translation: TranslationMessageAttribute.Additional?, _ optionResult: ChatMessagePollOptionResult?, _ forceSelected: Bool?, _ hasAnyMedia: Bool, _ constrainedWidth: CGFloat) -> (minimumWidth: CGFloat, layout: ((CGFloat) -> (CGSize, (Bool, Bool, Bool) -> ChatMessagePollOptionNode)))] = [:]
+        var previousOptionNodeLayouts: [Data: (_ contet: AccountContext, _ presentationData: ChatPresentationData, _ presentationContext: ChatPresentationContext, _ message: Message, _ poll: IosappMediaPoll, _ option: IosappMediaPollOption, _ translation: TranslationMessageAttribute.Additional?, _ optionResult: ChatMessagePollOptionResult?, _ forceSelected: Bool?, _ hasAnyMedia: Bool, _ constrainedWidth: CGFloat) -> (minimumWidth: CGFloat, layout: ((CGFloat) -> (CGSize, (Bool, Bool, Bool) -> ChatMessagePollOptionNode)))] = [:]
         for optionNode in self.optionNodes {
             if let option = optionNode.option {
                 previousOptionNodeLayouts[option.opaqueIdentifier] = ChatMessagePollOptionNode.asyncLayout(optionNode)
@@ -2418,7 +2418,7 @@ public class ChatMessagePollBubbleContentNode: ChatMessageBubbleContentNode {
 
                 let incoming = item.message.effectivelyIncoming(item.context.account.peerId)
                 var isBotChat: Bool = false
-                if let peer = item.message.peers[item.message.id.peerId] as? TelegramUser, peer.botInfo != nil {
+                if let peer = item.message.peers[item.message.id.peerId] as? IosappUser, peer.botInfo != nil {
                     isBotChat = true
                 }
 
@@ -2444,7 +2444,7 @@ public class ChatMessagePollBubbleContentNode: ChatMessageBubbleContentNode {
                     } else if let attribute = attribute as? ViewCountMessageAttribute {
                         viewCount = attribute.count
                     } else if let attribute = attribute as? ReplyThreadMessageAttribute, case .peer = item.chatLocation {
-                        if let channel = item.message.peers[item.message.id.peerId] as? TelegramChannel, case .group = channel.info {
+                        if let channel = item.message.peers[item.message.id.peerId] as? IosappChannel, case .group = channel.info {
                             dateReplies = Int(attribute.count)
                         }
                     } else if let attribute = attribute as? PaidStarsMessageAttribute, item.message.id.peerId.namespace == Namespaces.Peer.CloudChannel {
@@ -2517,9 +2517,9 @@ public class ChatMessagePollBubbleContentNode: ChatMessageBubbleContentNode {
                     ))
                 }
 
-                var poll: TelegramMediaPoll?
+                var poll: IosappMediaPoll?
                 for media in item.message.media {
-                    if let media = media as? TelegramMediaPoll {
+                    if let media = media as? IosappMediaPoll {
                         poll = media
                         break
                     }
@@ -2691,14 +2691,14 @@ public class ChatMessagePollBubbleContentNode: ChatMessageBubbleContentNode {
 
                 var pollOptionsFinalizeLayouts: [(hasResult: Bool, layout: (CGFloat) -> (CGSize, (Bool, Bool, Bool) -> ChatMessagePollOptionNode))] = []
                 var addOptionFinalizeLayout: ((CGFloat) -> (CGSize, (Bool, Bool) -> ChatMessagePollAddOptionNode))?
-                var orderedPollOptions: [(Int, TelegramMediaPollOption)] = []
+                var orderedPollOptions: [(Int, IosappMediaPollOption)] = []
                 if let poll = poll {
                     orderedPollOptions = resolvedOptionOrder(for: item)
 
                     var optionVoterCount: [Int: Int32] = [:]
                     var maxOptionVoterCount: Int32 = 0
                     var totalVoterCount: Int32 = 0
-                    let voters: [TelegramMediaPollOptionVoters]?
+                    let voters: [IosappMediaPollOptionVoters]?
                     if isClosed {
                         voters = poll.results.voters ?? []
                     } else {
@@ -2738,7 +2738,7 @@ public class ChatMessagePollBubbleContentNode: ChatMessageBubbleContentNode {
                     let hasAnyOptionMedia = orderedPollOptions.contains(where: { $0.1.media != nil })
 
                     for (i, option) in orderedPollOptions {
-                        let makeLayout: (_ context: AccountContext, _ presentationData: ChatPresentationData, _ presentationContext: ChatPresentationContext, _ message: Message, _ poll: TelegramMediaPoll, _ option: TelegramMediaPollOption, _ translation: TranslationMessageAttribute.Additional?, _ optionResult: ChatMessagePollOptionResult?, _ forceSelected: Bool?, _ hasAnyMedia: Bool, _ constrainedWidth: CGFloat) -> (minimumWidth: CGFloat, layout: ((CGFloat) -> (CGSize, (Bool, Bool, Bool) -> ChatMessagePollOptionNode)))
+                        let makeLayout: (_ context: AccountContext, _ presentationData: ChatPresentationData, _ presentationContext: ChatPresentationContext, _ message: Message, _ poll: IosappMediaPoll, _ option: IosappMediaPollOption, _ translation: TranslationMessageAttribute.Additional?, _ optionResult: ChatMessagePollOptionResult?, _ forceSelected: Bool?, _ hasAnyMedia: Bool, _ constrainedWidth: CGFloat) -> (minimumWidth: CGFloat, layout: ((CGFloat) -> (CGSize, (Bool, Bool, Bool) -> ChatMessagePollOptionNode)))
                         if let previous = previousOptionNodeLayouts[option.opaqueIdentifier] {
                             makeLayout = previous
                         } else {
@@ -3294,7 +3294,7 @@ public class ChatMessagePollBubbleContentNode: ChatMessageBubbleContentNode {
         }
 
         var isBotChat: Bool = false
-        if let peer = item.message.peers[item.message.id.peerId] as? TelegramUser, peer.botInfo != nil {
+        if let peer = item.message.peers[item.message.id.peerId] as? IosappUser, peer.botInfo != nil {
             isBotChat = true
         }
 
@@ -3428,26 +3428,26 @@ public class ChatMessagePollBubbleContentNode: ChatMessageBubbleContentNode {
     override public func tapActionAtPoint(_ point: CGPoint, gesture: TapLongTapOrDoubleTapGesture, isEstimating: Bool) -> ChatMessageBubbleContentTapAction {
         let textNodeFrame = self.textNode.textNode.frame
         if let (index, attributes) = self.textNode.textNode.attributesAtPoint(CGPoint(x: point.x - textNodeFrame.minX, y: point.y - textNodeFrame.minY)) {
-            if let url = attributes[NSAttributedString.Key(rawValue: TelegramTextAttributes.URL)] as? String {
+            if let url = attributes[NSAttributedString.Key(rawValue: IosappTextAttributes.URL)] as? String {
                 var concealed = true
-                if let (attributeText, fullText) = self.textNode.textNode.attributeSubstring(name: TelegramTextAttributes.URL, index: index) {
+                if let (attributeText, fullText) = self.textNode.textNode.attributeSubstring(name: IosappTextAttributes.URL, index: index) {
                     concealed = !doesUrlMatchText(url: url, text: attributeText, fullText: fullText)
                 }
                 return ChatMessageBubbleContentTapAction(content: .url(ChatMessageBubbleContentTapAction.Url(url: url, concealed: concealed)))
-            } else if let peerMention = attributes[NSAttributedString.Key(rawValue: TelegramTextAttributes.PeerMention)] as? TelegramPeerMention {
+            } else if let peerMention = attributes[NSAttributedString.Key(rawValue: IosappTextAttributes.PeerMention)] as? IosappPeerMention {
                 return ChatMessageBubbleContentTapAction(content: .peerMention(peerId: peerMention.peerId, mention: peerMention.mention, openProfile: false))
-            } else if let peerName = attributes[NSAttributedString.Key(rawValue: TelegramTextAttributes.PeerTextMention)] as? String {
+            } else if let peerName = attributes[NSAttributedString.Key(rawValue: IosappTextAttributes.PeerTextMention)] as? String {
                 return ChatMessageBubbleContentTapAction(content: .textMention(peerName))
-            } else if let botCommand = attributes[NSAttributedString.Key(rawValue: TelegramTextAttributes.BotCommand)] as? String {
+            } else if let botCommand = attributes[NSAttributedString.Key(rawValue: IosappTextAttributes.BotCommand)] as? String {
                 return ChatMessageBubbleContentTapAction(content: .botCommand(botCommand))
-            } else if let hashtag = attributes[NSAttributedString.Key(rawValue: TelegramTextAttributes.Hashtag)] as? TelegramHashtag {
+            } else if let hashtag = attributes[NSAttributedString.Key(rawValue: IosappTextAttributes.Hashtag)] as? IosappHashtag {
                 return ChatMessageBubbleContentTapAction(content: .hashtag(hashtag.peerName, hashtag.hashtag))
             } else {
                 return ChatMessageBubbleContentTapAction(content: .none)
             }
         } else {
             var isBotChat: Bool = false
-            if let item = self.item, let peer = item.message.peers[item.message.id.peerId] as? TelegramUser, peer.botInfo != nil {
+            if let item = self.item, let peer = item.message.peers[item.message.id.peerId] as? IosappUser, peer.botInfo != nil {
                 isBotChat = true
             }
 
@@ -3732,8 +3732,8 @@ private class DeadlineTimerNode: ASDisplayNode {
     }
 }
 
-private func resolvedOptionOrder(for item: ChatMessageBubbleContentItem) -> [(Int, TelegramMediaPollOption)] {
-    guard let poll = item.message.media.first(where: { $0 is TelegramMediaPoll }) as? TelegramMediaPoll else {
+private func resolvedOptionOrder(for item: ChatMessageBubbleContentItem) -> [(Int, IosappMediaPollOption)] {
+    guard let poll = item.message.media.first(where: { $0 is IosappMediaPoll }) as? IosappMediaPoll else {
         return []
     }
     let defaultOrderedOptions = Array(poll.options.enumerated()).map { ($0.offset, $0.element) }

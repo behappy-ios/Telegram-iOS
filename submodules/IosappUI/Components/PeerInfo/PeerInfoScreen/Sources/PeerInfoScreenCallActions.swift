@@ -45,11 +45,11 @@ extension PeerInfoScreenNode {
             return
         }
         
-        guard let peer = self.data?.peer as? TelegramUser, let cachedUserData = self.data?.cachedData as? CachedUserData else {
+        guard let peer = self.data?.peer as? IosappUser, let cachedUserData = self.data?.cachedData as? CachedUserData else {
             return
         }
         if cachedUserData.callsPrivate {
-            self.controller?.push(self.context.sharedContext.makeSendInviteLinkScreen(context: self.context, subject: .groupCall(.create), peers: [TelegramForbiddenInvitePeer(
+            self.controller?.push(self.context.sharedContext.makeSendInviteLinkScreen(context: self.context, subject: .groupCall(.create), peers: [IosappForbiddenInvitePeer(
                 peer: EnginePeer(peer),
                 canInviteWithPremium: false,
                 premiumRequiredToContact: false
@@ -128,7 +128,7 @@ extension PeerInfoScreenNode {
                     case .generic, .scheduledTooLate:
                         text = strongSelf.presentationData.strings.Login_UnknownError
                     case .anonymousNotAllowed:
-                        if let channel = strongSelf.data?.peer as? TelegramChannel, case .broadcast = channel.info {
+                        if let channel = strongSelf.data?.peer as? IosappChannel, case .broadcast = channel.info {
                             text = strongSelf.presentationData.strings.LiveStream_AnonymousDisabledAlertText
                         } else {
                             text = strongSelf.presentationData.strings.VoiceChat_AnonymousDisabledAlertText
@@ -165,10 +165,10 @@ extension PeerInfoScreenNode {
                 
                 var isGroup = false
                 for peer in peers {
-                    if peer.peer is TelegramGroup {
+                    if peer.peer is IosappGroup {
                         isGroup = true
                         break
-                    } else if let peer = peer.peer as? TelegramChannel, case .group = peer.info {
+                    } else if let peer = peer.peer as? IosappChannel, case .group = peer.info {
                         isGroup = true
                         break
                     }
@@ -183,7 +183,7 @@ extension PeerInfoScreenNode {
                     if peer.peer.id.namespace == Namespaces.Peer.CloudUser {
                         subtitle = strongSelf.presentationData.strings.VoiceChat_PersonalAccount
                     } else if let subscribers = peer.subscribers {
-                        if let peer = peer.peer as? TelegramChannel, case .broadcast = peer.info {
+                        if let peer = peer.peer as? IosappChannel, case .broadcast = peer.info {
                             subtitle = strongSelf.presentationData.strings.Conversation_StatusSubscribers(subscribers)
                         } else {
                             subtitle = strongSelf.presentationData.strings.Conversation_StatusMembers(subscribers)
@@ -290,7 +290,7 @@ extension PeerInfoScreenNode {
 
             let createVoiceChatTitle: String
             let scheduleVoiceChatTitle: String
-            if let channel = strongSelf.data?.peer as? TelegramChannel, case .broadcast = channel.info {
+            if let channel = strongSelf.data?.peer as? IosappChannel, case .broadcast = channel.info {
                 createVoiceChatTitle = strongSelf.presentationData.strings.ChannelInfo_CreateLiveStream
                 scheduleVoiceChatTitle = strongSelf.presentationData.strings.ChannelInfo_ScheduleLiveStream
             } else {
@@ -313,11 +313,11 @@ extension PeerInfoScreenNode {
             var credentialsPromise: Promise<GroupCallStreamCredentials>?
             var canCreateStream = false
             switch chatPeer {
-            case let group as TelegramGroup:
+            case let group as IosappGroup:
                 if case .creator = group.role {
                     canCreateStream = true
                 }
-            case let channel as TelegramChannel:
+            case let channel as IosappChannel:
                 if channel.hasPermission(.manageCalls) {
                     canCreateStream = true
                     credentialsPromise = Promise()

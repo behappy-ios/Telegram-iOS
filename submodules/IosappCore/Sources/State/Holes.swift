@@ -39,7 +39,7 @@ struct AccumulatedPeers {
     
     init(chats: [Api.Chat], users: [Api.User]) {
         for chat in chats {
-            if let groupOrChannel = parseTelegramGroupOrChannel(chat: chat) {
+            if let groupOrChannel = parseIosappGroupOrChannel(chat: chat) {
                 self.peers[groupOrChannel.id] = groupOrChannel
             }
         }
@@ -83,7 +83,7 @@ struct AccumulatedPeers {
         if let peer = self.peers[id] {
             return peer
         } else if let user = self.users[id] {
-            return TelegramUser(user: user)
+            return IosappUser(user: user)
         } else {
             return nil
         }
@@ -381,7 +381,7 @@ enum FetchMessageHistoryHoleThreadInput: CustomStringConvertible {
     func requestThreadId(accountPeerId: PeerId, peer: Peer) -> Int64? {
         switch self {
         case let .direct(peerId, threadId):
-            if let channel = peer as? TelegramChannel, channel.flags.contains(.isMonoforum) {
+            if let channel = peer as? IosappChannel, channel.flags.contains(.isMonoforum) {
                 return nil
             }
             if let threadId = threadId, peerId != accountPeerId {
@@ -399,7 +399,7 @@ enum FetchMessageHistoryHoleThreadInput: CustomStringConvertible {
         case let .direct(peerId, threadId):
             if let threadId, peerId == accountPeerId {
                 return PeerId(threadId)
-            } else if let threadId, let channel = peer as? TelegramChannel, channel.flags.contains(.isMonoforum) {
+            } else if let threadId, let channel = peer as? IosappChannel, channel.flags.contains(.isMonoforum) {
                 return PeerId(threadId)
             } else {
                 return nil

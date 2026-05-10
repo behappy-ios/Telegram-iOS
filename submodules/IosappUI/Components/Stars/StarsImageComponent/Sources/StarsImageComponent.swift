@@ -249,9 +249,9 @@ final class StarsParticlesView: UIView {
 public final class StarsImageComponent: Component {
     public enum Subject: Equatable {
         case none
-        case photo(TelegramMediaWebFile)
+        case photo(IosappMediaWebFile)
         case media([AnyMediaReference])
-        case extendedMedia([TelegramExtendedMedia])
+        case extendedMedia([IosappExtendedMedia])
         case transactionPeer(StarsContext.State.Transaction.Peer)
         case gift(Int32)
         case color(UIColor)
@@ -540,14 +540,14 @@ public final class StarsImageComponent: Component {
                     containerNode.view.addSubview(imageNode.view)
                     self.imageNode = imageNode
                 }
-                if let imageReference = media.first?.concrete(TelegramMediaImage.self) {
+                if let imageReference = media.first?.concrete(IosappMediaImage.self) {
                     if let imageDimensions = largestImageRepresentation(imageReference.media.representations)?.dimensions {
                         dimensions = imageDimensions.cgSize.aspectFilled(imageSize)
                     }
                     if isFirstTime {
                         imageNode.setSignal(chatMessagePhotoThumbnail(account: component.context.account, userLocation: .other, photoReference: imageReference, onlyFullSize: false, blurred: false))
                     }
-                } else if let fileReference = media.first?.concrete(TelegramMediaFile.self) {
+                } else if let fileReference = media.first?.concrete(IosappMediaFile.self) {
                     if let videoDimensions = fileReference.media.dimensions {
                         dimensions = videoDimensions.cgSize.aspectFilled(imageSize)
                     }
@@ -583,14 +583,14 @@ public final class StarsImageComponent: Component {
                         self.imageFrameNode = imageFrameNode
                     }
                     
-                    if let imageReference = media[1].concrete(TelegramMediaImage.self) {
+                    if let imageReference = media[1].concrete(IosappMediaImage.self) {
                         if let imageDimensions = largestImageRepresentation(imageReference.media.representations)?.dimensions {
                             secondDimensions = imageDimensions.cgSize.aspectFilled(imageSize)
                         }
                         if isFirstTime {
                             secondImageNode.setSignal(chatMessagePhotoThumbnail(account: component.context.account, userLocation: .other, photoReference: imageReference, onlyFullSize: false, blurred: false))
                         }
-                    } else if let fileReference = media[1].concrete(TelegramMediaFile.self) {
+                    } else if let fileReference = media[1].concrete(IosappMediaFile.self) {
                         if let videoDimensions = fileReference.media.dimensions {
                             secondDimensions = videoDimensions.cgSize.aspectFilled(imageSize)
                         }
@@ -641,10 +641,10 @@ public final class StarsImageComponent: Component {
                     self.dustNode = dustNode
                 }
                 
-                let media: TelegramMediaImage
+                let media: IosappMediaImage
                 switch extendedMedia.first {
                 case let .preview(imageDimensions, immediateThumbnailData, _):
-                    let thumbnailMedia = TelegramMediaImage(imageId: MediaId(namespace: 0, id: 0), representations: [], immediateThumbnailData: immediateThumbnailData, reference: nil, partialReference: nil, flags: [])
+                    let thumbnailMedia = IosappMediaImage(imageId: MediaId(namespace: 0, id: 0), representations: [], immediateThumbnailData: immediateThumbnailData, reference: nil, partialReference: nil, flags: [])
                     media = thumbnailMedia
                     if let imageDimensions {
                         dimensions = imageDimensions.cgSize.aspectFilled(imageSize)
@@ -683,10 +683,10 @@ public final class StarsImageComponent: Component {
                         self.imageFrameNode = imageFrameNode
                     }
                     
-                    let media: TelegramMediaImage
+                    let media: IosappMediaImage
                     switch extendedMedia[1] {
                     case let .preview(imageDimensions, immediateThumbnailData, _):
-                        let thumbnailMedia = TelegramMediaImage(imageId: MediaId(namespace: 0, id: 0), representations: [], immediateThumbnailData: immediateThumbnailData, reference: nil, partialReference: nil, flags: [])
+                        let thumbnailMedia = IosappMediaImage(imageId: MediaId(namespace: 0, id: 0), representations: [], immediateThumbnailData: immediateThumbnailData, reference: nil, partialReference: nil, flags: [])
                         media = thumbnailMedia
                         if let imageDimensions {
                             secondDimensions = imageDimensions.cgSize.aspectFilled(imageSize)

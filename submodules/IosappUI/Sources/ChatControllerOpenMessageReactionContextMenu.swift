@@ -43,17 +43,17 @@ extension ChatControllerImpl {
                 return
             }
             
-            let reactionFile: Signal<TelegramMediaFile?, NoError>
+            let reactionFile: Signal<IosappMediaFile?, NoError>
             switch value {
             case .builtin, .stars:
                 reactionFile = self.context.engine.stickers.availableReactions()
                 |> take(1)
-                |> map { availableReactions -> TelegramMediaFile? in
+                |> map { availableReactions -> IosappMediaFile? in
                     return availableReactions?.reactions.first(where: { $0.value == value })?.selectAnimation._parse()
                 }
             case let .custom(fileId):
                 reactionFile = self.context.engine.stickers.resolveInlineStickers(fileIds: [fileId])
-                |> map { files -> TelegramMediaFile? in
+                |> map { files -> IosappMediaFile? in
                     return files.values.first
                 }
             }
@@ -336,7 +336,7 @@ extension ChatControllerImpl {
                     }
                 }
                 
-                let reactionFile: TelegramMediaFile?
+                let reactionFile: IosappMediaFile?
                 switch value {
                 case .builtin, .stars:
                     reactionFile = availableReactions?.reactions.first(where: { $0.value == value })?.selectAnimation._parse()
@@ -379,7 +379,7 @@ extension ChatControllerImpl {
         guard let peerId = self.chatLocation.peerId else {
             return
         }
-        let _ = (self.context.engine.data.get(TelegramEngine.EngineData.Item.Peer.ReactionSettings(id: peerId))
+        let _ = (self.context.engine.data.get(IosappEngine.EngineData.Item.Peer.ReactionSettings(id: peerId))
         |> deliverOnMainQueue).startStandalone(next: { [weak self] reactionSettings in
             guard let self else {
                 return
@@ -493,11 +493,11 @@ extension ChatControllerImpl {
         })
     }
     
-    func displayOrUpdateSendStarsUndo(messageId: EngineMessage.Id, count: Int, privacy: TelegramPaidReactionPrivacy) {
+    func displayOrUpdateSendStarsUndo(messageId: EngineMessage.Id, count: Int, privacy: IosappPaidReactionPrivacy) {
         var privacyPeer: Signal<EnginePeer?, NoError> = .single(nil)
         if case let .peer(id) = privacy {
             privacyPeer = self.context.engine.data.get(
-                TelegramEngine.EngineData.Item.Peer.Peer(id: id)
+                IosappEngine.EngineData.Item.Peer.Peer(id: id)
             )
         }
         let _ = (privacyPeer

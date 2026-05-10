@@ -101,7 +101,7 @@ public class ChatMessageInteractiveInstantVideoNode: ASDisplayNode {
     
     private var item: ChatMessageBubbleContentItem?
     private var automaticDownload: Bool?
-    public var media: TelegramMediaFile?
+    public var media: IosappMediaFile?
     public var appliedForwardInfo: (Peer?, String?)?
         
     private let fetchDisposable = MetaDisposable()
@@ -303,17 +303,17 @@ public class ChatMessageInteractiveInstantVideoNode: ASDisplayNode {
             
             let updatedMessageId = item.message.id != currentItem?.message.id
             
-            var updatedFile: TelegramMediaFile?
+            var updatedFile: IosappMediaFile?
             var updatedMedia = false
             for media in item.message.media {
-                if let file = media as? TelegramMediaFile {
+                if let file = media as? IosappMediaFile {
                     updatedFile = file
                     if let previousFile = previousFile {
                         updatedMedia = previousFile.resource.id != file.resource.id
                     } else if previousFile == nil {
                         updatedMedia = true
                     }
-                } else if let webPage = media as? TelegramMediaWebpage, case let .Loaded(content) = webPage.content, let file = content.file {
+                } else if let webPage = media as? IosappMediaWebpage, case let .Loaded(content) = webPage.content, let file = content.file {
                     updatedFile = file
                     if let previousFile = previousFile {
                         updatedMedia = previousFile.resource.id != file.resource.id
@@ -357,7 +357,7 @@ public class ChatMessageInteractiveInstantVideoNode: ASDisplayNode {
                 for attribute in item.message.attributes {
                     if let attribute = attribute as? InlineBotMessageAttribute {
                         var inlineBotNameString: String?
-                        if let peerId = attribute.peerId, let bot = item.message.peers[peerId] as? TelegramUser {
+                        if let peerId = attribute.peerId, let bot = item.message.peers[peerId] as? IosappUser {
                             inlineBotNameString = bot.addressName
                         } else {
                             inlineBotNameString = attribute.title
@@ -538,7 +538,7 @@ public class ChatMessageInteractiveInstantVideoNode: ASDisplayNode {
                 } else if let attribute = attribute as? ViewCountMessageAttribute {
                     viewCount = attribute.count
                 } else if let attribute = attribute as? ReplyThreadMessageAttribute, case .peer = item.chatLocation {
-                    if let channel = item.message.peers[item.message.id.peerId] as? TelegramChannel, case .group = channel.info {
+                    if let channel = item.message.peers[item.message.id.peerId] as? IosappChannel, case .group = channel.info {
                         dateReplies = Int(attribute.count)
                     }
                 } else if let attribute = attribute as? PaidStarsMessageAttribute, item.message.id.peerId.namespace == Namespaces.Peer.CloudChannel {
@@ -1206,11 +1206,11 @@ public class ChatMessageInteractiveInstantVideoNode: ASDisplayNode {
 //            }
 //        }
         
-        var selectedMedia: TelegramMediaFile?
+        var selectedMedia: IosappMediaFile?
         for media in item.message.media {
-            if let file = media as? TelegramMediaFile {
+            if let file = media as? IosappMediaFile {
                 selectedMedia = file
-            } else if let webPage = media as? TelegramMediaWebpage, case let .Loaded(content) = webPage.content, let file = content.file {
+            } else if let webPage = media as? IosappMediaWebpage, case let .Loaded(content) = webPage.content, let file = content.file {
                 selectedMedia = file
             }
         }
@@ -1560,7 +1560,7 @@ public class ChatMessageInteractiveInstantVideoNode: ASDisplayNode {
                             if let forwardInfoNode = self.forwardInfoNode, forwardInfoNode.frame.contains(location) {
                                 if let item = self.item, let forwardInfo = item.message.forwardInfo {
                                     if let sourceMessageId = forwardInfo.sourceMessageId {
-                                        if !item.message.id.peerId.isReplies, let channel = forwardInfo.author as? TelegramChannel, channel.addressName == nil {
+                                        if !item.message.id.peerId.isReplies, let channel = forwardInfo.author as? IosappChannel, channel.addressName == nil {
                                             if case let .broadcast(info) = channel.info, info.flags.contains(.hasDiscussionGroup) {
                                             } else if case .member = channel.participationStatus {
                                             } else {
@@ -1571,7 +1571,7 @@ public class ChatMessageInteractiveInstantVideoNode: ASDisplayNode {
                                         item.controllerInteraction.navigateToMessage(item.message.id, sourceMessageId, NavigateToMessageParams(timestamp: nil, quote: nil))
                                         return
                                     } else if let peer = forwardInfo.source ?? forwardInfo.author {
-                                        item.controllerInteraction.openPeer(EnginePeer(peer), peer is TelegramUser ? .info(nil) : .chat(textInputState: nil, subject: nil, peekData: nil), nil, .default)
+                                        item.controllerInteraction.openPeer(EnginePeer(peer), peer is IosappUser ? .info(nil) : .chat(textInputState: nil, subject: nil, peekData: nil), nil, .default)
                                         return
                                     } else if let _ = forwardInfo.authorSignature {
                                         item.controllerInteraction.displayMessageTooltip(item.message.id, item.presentationData.strings.Conversation_ForwardAuthorHiddenTooltip, false, forwardInfoNode, nil)

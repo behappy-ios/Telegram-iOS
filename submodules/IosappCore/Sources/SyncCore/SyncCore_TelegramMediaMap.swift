@@ -120,7 +120,7 @@ public final class MapVenue: PostboxCoding, Equatable {
     }
 }
 
-public final class TelegramMediaMap: Media, Equatable {
+public final class IosappMediaMap: Media, Equatable {
     public let latitude: Double
     public let longitude: Double
     public let heading: Int32?
@@ -190,12 +190,12 @@ public final class TelegramMediaMap: Media, Equatable {
         }
     }
     
-    public static func ==(lhs: TelegramMediaMap, rhs: TelegramMediaMap) -> Bool {
+    public static func ==(lhs: IosappMediaMap, rhs: IosappMediaMap) -> Bool {
         return lhs.isEqual(to: rhs)
     }
     
     public func isEqual(to other: Media) -> Bool {
-        if let other = other as? TelegramMediaMap {
+        if let other = other as? IosappMediaMap {
             if self.latitude != other.latitude || self.longitude != other.longitude {
                 return false
             }

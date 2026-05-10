@@ -140,7 +140,7 @@ extension ChatControllerImpl {
     
     func openMediaMessageContext(message: EngineMessage) async {
         guard let peer = await self.context.engine.data.get(
-            TelegramEngine.EngineData.Item.Peer.Peer(id: message.id.peerId)
+            IosappEngine.EngineData.Item.Peer.Peer(id: message.id.peerId)
         ).get() else {
             return
         }

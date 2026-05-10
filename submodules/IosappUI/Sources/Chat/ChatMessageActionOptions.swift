@@ -149,18 +149,18 @@ private func chatForwardOptions(selfController: ChatControllerImpl, sourceView: 
             var isDice = false
             var isMusic = false
             for media in message.media {
-                if let media = media as? TelegramMediaFile, media.isMusic {
+                if let media = media as? IosappMediaFile, media.isMusic {
                     isMusic = true
                     if !message.text.isEmpty {
                         hasCaptions = true
                     }
-                } else if media is TelegramMediaDice {
+                } else if media is IosappMediaDice {
                     isDice = true
-                } else if media is TelegramMediaImage || media is TelegramMediaFile {
+                } else if media is IosappMediaImage || media is IosappMediaFile {
                     if !message.text.isEmpty {
                         hasCaptions = true
                     }
-                } else if media is TelegramMediaPaidContent {
+                } else if media is IosappMediaPaidContent {
                     hasPaid = true
                 }
             }
@@ -409,9 +409,9 @@ private func generateChatReplyOptionItems(selfController: ChatControllerImpl, ch
             
             var isAction = false
             for media in message.media {
-                if media is TelegramMediaAction || media is TelegramMediaExpiredContent {
+                if media is IosappMediaAction || media is IosappMediaExpiredContent {
                     isAction = true
-                } else if let story = media as? TelegramMediaStory {
+                } else if let story = media as? IosappMediaStory {
                     if story.isMention {
                         isAction = true
                     }
@@ -430,7 +430,7 @@ private func generateChatReplyOptionItems(selfController: ChatControllerImpl, ch
             if message.minAutoremoveOrClearTimeout == viewOnceTimeout {
                 canReplyInAnotherChat = false
             }
-            if let channel = message.peers[message.id.peerId] as? TelegramChannel, channel.isMonoForum {
+            if let channel = message.peers[message.id.peerId] as? IosappChannel, channel.isMonoForum {
                 canReplyInAnotherChat = false
             }
         }
@@ -563,7 +563,7 @@ func moveReplyMessageToAnotherChat(selfController: ChatControllerImpl, replySubj
             
             var suggestedPeers: [EnginePeer] = []
             if let message = await selfController.context.engine.data.get(
-                TelegramEngine.EngineData.Item.Messages.Message(id: replySubject.messageId)
+                IosappEngine.EngineData.Item.Messages.Message(id: replySubject.messageId)
             ).get(), case let .user(author) = message.author {
                 suggestedPeers.append(.user(author))
             }
@@ -907,7 +907,7 @@ private func chatLinkOptions(selfController: ChatControllerImpl, sourceView: UIV
         return ContextController.Items(id: AnyHashable(linkOptions.url), content: .list(items))
     }
     
-    var webpageCache: [String: TelegramMediaWebpage] = [:]
+    var webpageCache: [String: IosappMediaWebpage] = [:]
     chatController.performOpenURL = { [weak selfController] message, url, progress in
         guard let selfController else {
             return
@@ -991,7 +991,7 @@ func presentChatLinkOptions(selfController: ChatControllerImpl, sourceView: UIVi
 
 extension ChatControllerImpl {
     func presentSuggestPostOptions() {
-        guard let channel = self.presentationInterfaceState.renderedPeer?.chatOrMonoforumMainPeer as? TelegramChannel else {
+        guard let channel = self.presentationInterfaceState.renderedPeer?.chatOrMonoforumMainPeer as? IosappChannel else {
             return
         }
         guard let postSuggestionState = self.presentationInterfaceState.interfaceState.postSuggestionState else {
@@ -1001,8 +1001,8 @@ extension ChatControllerImpl {
         let subject: StarsWithdrawalScreenSubject
         if postSuggestionState.editingOriginalMessageId != nil {
             var isFromAdmin = false
-            if let channel = self.presentationInterfaceState.renderedPeer?.peer as? TelegramChannel, channel.isMonoForum {
-                if let linkedMonoforumId = channel.linkedMonoforumId, let mainChannel = self.presentationInterfaceState.renderedPeer?.peers[linkedMonoforumId] as? TelegramChannel, mainChannel.hasPermission(.manageDirect) {
+            if let channel = self.presentationInterfaceState.renderedPeer?.peer as? IosappChannel, channel.isMonoForum {
+                if let linkedMonoforumId = channel.linkedMonoforumId, let mainChannel = self.presentationInterfaceState.renderedPeer?.peers[linkedMonoforumId] as? IosappChannel, mainChannel.hasPermission(.manageDirect) {
                     isFromAdmin = true
                 }
             }
@@ -1060,8 +1060,8 @@ extension ChatControllerImpl {
             }
         } else {
             var isFromAdmin = false
-            if let channel = self.presentationInterfaceState.renderedPeer?.peer as? TelegramChannel, channel.isMonoForum {
-                if let linkedMonoforumId = channel.linkedMonoforumId, let mainChannel = self.presentationInterfaceState.renderedPeer?.peers[linkedMonoforumId] as? TelegramChannel, mainChannel.hasPermission(.manageDirect) {
+            if let channel = self.presentationInterfaceState.renderedPeer?.peer as? IosappChannel, channel.isMonoForum {
+                if let linkedMonoforumId = channel.linkedMonoforumId, let mainChannel = self.presentationInterfaceState.renderedPeer?.peers[linkedMonoforumId] as? IosappChannel, mainChannel.hasPermission(.manageDirect) {
                     isFromAdmin = true
                 }
             }

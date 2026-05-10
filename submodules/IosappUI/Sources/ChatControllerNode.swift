@@ -548,17 +548,17 @@ class ChatControllerNode: ASDisplayNode, ASScrollViewDelegate {
                         if hideNames || options.hideCaptions {
                             for media in message.media {
                                 if options.hideCaptions {
-                                    if media is TelegramMediaImage || media is TelegramMediaFile {
+                                    if media is IosappMediaImage || media is IosappMediaFile {
                                         messageText = ""
                                         break
                                     }
                                 }
-                                if let poll = media as? TelegramMediaPoll {
-                                    var updatedMedia = message.media.filter { !($0 is TelegramMediaPoll) }
-                                    updatedMedia.append(TelegramMediaPoll(pollId: poll.pollId, publicity: poll.publicity, kind: poll.kind, text: poll.text, textEntities: poll.textEntities, options: poll.options, correctAnswers: poll.correctAnswers, results: TelegramMediaPollResults(voters: nil, totalVoters: nil, recentVoters: [], solution: nil, hasUnseenVotes: false), isClosed: false, deadlineTimeout: nil, deadlineDate: nil, pollHash: poll.pollHash))
+                                if let poll = media as? IosappMediaPoll {
+                                    var updatedMedia = message.media.filter { !($0 is IosappMediaPoll) }
+                                    updatedMedia.append(IosappMediaPoll(pollId: poll.pollId, publicity: poll.publicity, kind: poll.kind, text: poll.text, textEntities: poll.textEntities, options: poll.options, correctAnswers: poll.correctAnswers, results: IosappMediaPollResults(voters: nil, totalVoters: nil, recentVoters: [], solution: nil, hasUnseenVotes: false), isClosed: false, deadlineTimeout: nil, deadlineDate: nil, pollHash: poll.pollHash))
                                     messageMedia = updatedMedia
                                 }
-                                if let _ = media as? TelegramMediaDice {
+                                if let _ = media as? IosappMediaDice {
                                     hasDice = true
                                 }
                             }
@@ -636,7 +636,7 @@ class ChatControllerNode: ASDisplayNode, ASScrollViewDelegate {
                     
                     let author: Peer
                     if link.isCentered {
-                        author = TelegramUser(id: EnginePeer.Id(namespace: Namespaces.Peer.CloudUser, id: EnginePeer.Id.Id._internalFromInt64Value(0)), accessHash: nil, firstName: "FirstName", lastName: nil, username: nil, phone: nil, photo: [], botInfo: nil, restrictionInfo: nil, flags: [], emojiStatus: nil, usernames: [], storiesHidden: nil, nameColor: .preset(.blue), backgroundEmojiId: nil, profileColor: nil, profileBackgroundEmojiId: nil, subscriberCount: nil, verificationIconFileId: nil)
+                        author = IosappUser(id: EnginePeer.Id(namespace: Namespaces.Peer.CloudUser, id: EnginePeer.Id.Id._internalFromInt64Value(0)), accessHash: nil, firstName: "FirstName", lastName: nil, username: nil, phone: nil, photo: [], botInfo: nil, restrictionInfo: nil, flags: [], emojiStatus: nil, usernames: [], storiesHidden: nil, nameColor: .preset(.blue), backgroundEmojiId: nil, profileColor: nil, profileBackgroundEmojiId: nil, subscriberCount: nil, verificationIconFileId: nil)
                     } else {
                         author = accountPeer
                     }
@@ -645,7 +645,7 @@ class ChatControllerNode: ASDisplayNode, ASScrollViewDelegate {
                     
                     var media: [Media] = []
                     if case let .Loaded(content) = options.webpage.content {
-                        media.append(TelegramMediaWebpage(webpageId: options.webpage.webpageId, content: .Loaded(content)))
+                        media.append(IosappMediaWebpage(webpageId: options.webpage.webpageId, content: .Loaded(content)))
                     }
                     
                     let associatedStories: [StoryId: CodableEntry] = stories
@@ -1484,7 +1484,7 @@ class ChatControllerNode: ASDisplayNode, ASScrollViewDelegate {
         var displayAdPanel = false
         if let _ = self.chatPresentationInterfaceState.adMessage {
             if let chatHistoryState = self.chatPresentationInterfaceState.chatHistoryState, case .loaded(false, _) = chatHistoryState {
-                if let user = chatPresentationInterfaceState.renderedPeer?.peer as? TelegramUser, user.botInfo != nil && !self.chatPresentationInterfaceState.peerIsBlocked && self.chatPresentationInterfaceState.hasAtLeast3Messages {
+                if let user = chatPresentationInterfaceState.renderedPeer?.peer as? IosappUser, user.botInfo != nil && !self.chatPresentationInterfaceState.peerIsBlocked && self.chatPresentationInterfaceState.hasAtLeast3Messages {
                     displayAdPanel = true
                 }
             }
@@ -1543,7 +1543,7 @@ class ChatControllerNode: ASDisplayNode, ASScrollViewDelegate {
         
         var displayFeePanel: (value: Int64, peer: EnginePeer)?
         if let chatHistoryState = self.chatPresentationInterfaceState.chatHistoryState, case .loaded(false, _) = chatHistoryState {
-            if let user = self.chatPresentationInterfaceState.renderedPeer?.peer as? TelegramUser, user.botInfo == nil {
+            if let user = self.chatPresentationInterfaceState.renderedPeer?.peer as? IosappUser, user.botInfo == nil {
                 if !self.chatPresentationInterfaceState.peerIsBlocked, let paidMessageStars = self.chatPresentationInterfaceState.contactStatus?.peerStatusSettings?.paidMessageStars, paidMessageStars.value > 0 {
                     displayFeePanel = (paidMessageStars.value, .user(user))
                 }
@@ -3034,7 +3034,7 @@ class ChatControllerNode: ASDisplayNode, ASScrollViewDelegate {
                 displayInlineSearch = true
             }
         }
-        if self.chatLocation.threadId == nil, let channel = self.chatPresentationInterfaceState.renderedPeer?.peer as? TelegramChannel, channel.isMonoForum, let linkedMonoforumId = channel.linkedMonoforumId, let mainChannel = self.chatPresentationInterfaceState.renderedPeer?.peers[linkedMonoforumId] as? TelegramChannel, mainChannel.hasPermission(.manageDirect) {
+        if self.chatLocation.threadId == nil, let channel = self.chatPresentationInterfaceState.renderedPeer?.peer as? IosappChannel, channel.isMonoForum, let linkedMonoforumId = channel.linkedMonoforumId, let mainChannel = self.chatPresentationInterfaceState.renderedPeer?.peers[linkedMonoforumId] as? IosappChannel, mainChannel.hasPermission(.manageDirect) {
             if self.chatPresentationInterfaceState.search != nil {
                 displayInlineSearch = true
             }
@@ -3085,7 +3085,7 @@ class ChatControllerNode: ASDisplayNode, ASScrollViewDelegate {
                 } else {
                     mappedContents = .empty
                 }
-            } else if self.chatLocation.threadId == nil, let channel = self.chatPresentationInterfaceState.renderedPeer?.peer as? TelegramChannel, channel.isMonoForum, let linkedMonoforumId = channel.linkedMonoforumId, let mainChannel = self.chatPresentationInterfaceState.renderedPeer?.peers[linkedMonoforumId] as? TelegramChannel, mainChannel.hasPermission(.manageDirect) {
+            } else if self.chatLocation.threadId == nil, let channel = self.chatPresentationInterfaceState.renderedPeer?.peer as? IosappChannel, channel.isMonoForum, let linkedMonoforumId = channel.linkedMonoforumId, let mainChannel = self.chatPresentationInterfaceState.renderedPeer?.peers[linkedMonoforumId] as? IosappChannel, mainChannel.hasPermission(.manageDirect) {
                 mappedContents = .monoforumChats(query: self.chatPresentationInterfaceState.search?.query ?? "")
             } else if case .peer(self.context.account.peerId) = self.chatPresentationInterfaceState.chatLocation {
                 mappedContents = .tag(MemoryBuffer())
@@ -3212,7 +3212,7 @@ class ChatControllerNode: ASDisplayNode, ASScrollViewDelegate {
                             self.controller?.updateChatPresentationInterfaceState(animated: true, interactive: true, { state in
                                 var state = state
                                 state = state.updatedDisplayHistoryFilterAsList(false)
-                                if let channel = state.renderedPeer?.peer as? TelegramChannel, channel.isMonoForum, let linkedMonoforumId = channel.linkedMonoforumId, let mainChannel = self.chatPresentationInterfaceState.renderedPeer?.peers[linkedMonoforumId] as? TelegramChannel, mainChannel.hasPermission(.manageDirect) {
+                                if let channel = state.renderedPeer?.peer as? IosappChannel, channel.isMonoForum, let linkedMonoforumId = channel.linkedMonoforumId, let mainChannel = self.chatPresentationInterfaceState.renderedPeer?.peers[linkedMonoforumId] as? IosappChannel, mainChannel.hasPermission(.manageDirect) {
                                     state = state.updatedSearch(nil)
                                 }
                                 return state
@@ -3224,7 +3224,7 @@ class ChatControllerNode: ASDisplayNode, ASScrollViewDelegate {
                             return
                         }
                         
-                        if let channel = self.chatPresentationInterfaceState.renderedPeer?.peer as? TelegramChannel, channel.isMonoForum {
+                        if let channel = self.chatPresentationInterfaceState.renderedPeer?.peer as? IosappChannel, channel.isMonoForum {
                             self.interfaceInteraction?.updateChatLocationThread(peer.id.toInt64(), nil)
                             
                             self.controller?.updateChatPresentationInterfaceState(animated: true, interactive: true, { current in
@@ -3652,7 +3652,7 @@ class ChatControllerNode: ASDisplayNode, ASScrollViewDelegate {
             } else if chatPresentationInterfaceState.isNotAccessible {
                 if case .replyThread = self.chatLocation {
                     restrictionText = chatPresentationInterfaceState.strings.CommentsGroup_ErrorAccessDenied
-                } else if let peer = chatPresentationInterfaceState.renderedPeer?.peer as? TelegramChannel, case .broadcast = peer.info {
+                } else if let peer = chatPresentationInterfaceState.renderedPeer?.peer as? IosappChannel, case .broadcast = peer.info {
                     restrictionText = chatPresentationInterfaceState.strings.Channel_ErrorAccessDenied
                 } else {
                     restrictionText = chatPresentationInterfaceState.strings.Group_ErrorAccessDenied
@@ -3869,7 +3869,7 @@ class ChatControllerNode: ASDisplayNode, ASScrollViewDelegate {
         case .none:
             break
         case .inputButtons:
-            if let peer = self.chatPresentationInterfaceState.renderedPeer?.peer as? TelegramUser, peer.botInfo != nil, self.chatPresentationInterfaceState.keyboardButtonsMessage?.visibleButtonKeyboardMarkup?.flags.contains(.persistent) == true {
+            if let peer = self.chatPresentationInterfaceState.renderedPeer?.peer as? IosappUser, peer.botInfo != nil, self.chatPresentationInterfaceState.keyboardButtonsMessage?.visibleButtonKeyboardMarkup?.flags.contains(.persistent) == true {
             } else {
                 self.interfaceInteraction?.updateInputModeAndDismissedButtonKeyboardMessageId({ state in
                     return (.none, state.keyboardButtonsMessage?.id ?? state.interfaceState.messageActionsState.closedButtonKeyboardMessageId)
@@ -4390,7 +4390,7 @@ class ChatControllerNode: ASDisplayNode, ASScrollViewDelegate {
                 }
             }
             
-            if let peer = self.chatPresentationInterfaceState.renderedPeer?.peer as? TelegramUser, peer.botInfo != nil, case .inputButtons = self.chatPresentationInterfaceState.inputMode, self.chatPresentationInterfaceState.keyboardButtonsMessage?.visibleButtonKeyboardMarkup?.flags.contains(.persistent) == true {
+            if let peer = self.chatPresentationInterfaceState.renderedPeer?.peer as? IosappUser, peer.botInfo != nil, case .inputButtons = self.chatPresentationInterfaceState.inputMode, self.chatPresentationInterfaceState.keyboardButtonsMessage?.visibleButtonKeyboardMarkup?.flags.contains(.persistent) == true {
                 enableGesture = false
             }
             
@@ -4646,7 +4646,7 @@ class ChatControllerNode: ASDisplayNode, ASScrollViewDelegate {
             let peerSpecificEmojiPack = (self.controller?.contentData?.state.peerView?.cachedData as? CachedChannelData)?.emojiPack
             
             var inlineStickers: [MediaId: Media] = [:]
-            var firstLockedPremiumEmoji: TelegramMediaFile?
+            var firstLockedPremiumEmoji: IosappMediaFile?
             var bubbleUpEmojiOrStickersetsById: [Int64: ItemCollectionId] = [:]
             effectiveInputText.enumerateAttribute(ChatTextInputAttributes.customEmoji, in: NSRange(location: 0, length: effectiveInputText.length), using: { value, _, _ in
                 if let value = value as? ChatTextInputTextCustomEmojiAttribute {
@@ -4753,12 +4753,12 @@ class ChatControllerNode: ASDisplayNode, ASScrollViewDelegate {
             let trimmedInputText = effectiveInputText.string.trimmingCharacters(in: .whitespacesAndNewlines)
             let peerId = effectivePresentationInterfaceState.chatLocation.peerId
             if peerId?.namespace != Namespaces.Peer.SecretChat, let interactiveEmojis = self.interactiveEmojis, interactiveEmojis.emojis.contains(trimmedInputText), effectiveInputText.attribute(ChatTextInputAttributes.customEmoji, at: 0, effectiveRange: nil) == nil {
-                messages.append(.message(text: "", attributes: [], inlineStickers: [:], mediaReference: AnyMediaReference.standalone(media: TelegramMediaDice(emoji: trimmedInputText)), threadId: self.chatLocation.threadId, replyToMessageId: self.chatPresentationInterfaceState.interfaceState.replyMessageSubject?.subjectModel, replyToStoryId: nil, localGroupingKey: nil, correlationId: nil, bubbleUpEmojiOrStickersets: []))
+                messages.append(.message(text: "", attributes: [], inlineStickers: [:], mediaReference: AnyMediaReference.standalone(media: IosappMediaDice(emoji: trimmedInputText)), threadId: self.chatLocation.threadId, replyToMessageId: self.chatPresentationInterfaceState.interfaceState.replyMessageSubject?.subjectModel, replyToStoryId: nil, localGroupingKey: nil, correlationId: nil, bubbleUpEmojiOrStickersets: []))
             } else {
                 let inputText = convertMarkdownToAttributes(effectiveInputText)
                 
                 var mediaReference: AnyMediaReference?
-                var webpage: TelegramMediaWebpage?
+                var webpage: IosappMediaWebpage?
                 if let urlPreview = self.chatPresentationInterfaceState.urlPreview {
                     if self.chatPresentationInterfaceState.interfaceState.composeDisableUrlPreviews.contains(urlPreview.url) {
                     } else {
@@ -4773,7 +4773,7 @@ class ChatControllerNode: ASDisplayNode, ASScrollViewDelegate {
                     } else {
                         if let message = self.historyNode.messageInCurrentHistoryView(editingOriginalMessageId) {
                             for media in message.media {
-                                if media is TelegramMediaFile || media is TelegramMediaImage {
+                                if media is IosappMediaFile || media is IosappMediaImage {
                                     mediaReference = .message(message: MessageReference(message), media: media)
                                 }
                             }
@@ -4940,7 +4940,7 @@ class ChatControllerNode: ASDisplayNode, ASScrollViewDelegate {
                 
                 var targetThreadId: Int64?
                 var clearMainThreadForward = false
-                if self.chatLocation.threadId == nil, let user = self.chatPresentationInterfaceState.renderedPeer?.peer as? TelegramUser, let botInfo = user.botInfo, botInfo.flags.contains(.hasForum), botInfo.flags.contains(.forumManagedByUser) {
+                if self.chatLocation.threadId == nil, let user = self.chatPresentationInterfaceState.renderedPeer?.peer as? IosappUser, let botInfo = user.botInfo, botInfo.flags.contains(.hasForum), botInfo.flags.contains(.forumManagedByUser) {
                     if let message = messages.first {
                         switch message {
                         case let .message(_, _, _, _, _, replyToMessageId, _, _, _, _):

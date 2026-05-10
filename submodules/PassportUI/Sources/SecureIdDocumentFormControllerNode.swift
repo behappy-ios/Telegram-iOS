@@ -2582,7 +2582,7 @@ final class SecureIdDocumentFormControllerNode: FormControllerNode<SecureIdDocum
         })
     }
     
-    func addDocuments(type: SecureIdAddFileTarget, resources: [TelegramMediaResource], recognizedData: SecureIdRecognizedDocumentData?, removeDocumentId: SecureIdVerificationDocumentId?) {
+    func addDocuments(type: SecureIdAddFileTarget, resources: [IosappMediaResource], recognizedData: SecureIdRecognizedDocumentData?, removeDocumentId: SecureIdVerificationDocumentId?) {
         guard var innerState = self.innerState else {
             return
         }

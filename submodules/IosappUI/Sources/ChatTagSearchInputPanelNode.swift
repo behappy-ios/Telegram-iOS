@@ -152,7 +152,7 @@ final class ChatTagSearchInputPanelNode: ChatInputPanelNode {
         
         if self.totalMessageCountDisposable == nil, let context = self.context, case let .peer(peerId) = params.interfaceState.chatLocation, peerId == context.account.peerId {
             self.totalMessageCountDisposable = (context.engine.data.subscribe(
-                TelegramEngine.EngineData.Item.Messages.MessageCount(
+                IosappEngine.EngineData.Item.Messages.MessageCount(
                     peerId: peerId,
                     threadId: nil,
                     tag: []
@@ -183,7 +183,7 @@ final class ChatTagSearchInputPanelNode: ChatInputPanelNode {
             if self.tagMessageCount?.disposable == nil {
                 if let context = self.context {
                     self.tagMessageCount?.disposable = (context.engine.data.subscribe(
-                        TelegramEngine.EngineData.Item.Messages.ReactionTagMessageCount(peerId: context.account.peerId, threadId: params.interfaceState.chatLocation.threadId, reaction: reaction)
+                        IosappEngine.EngineData.Item.Messages.ReactionTagMessageCount(peerId: context.account.peerId, threadId: params.interfaceState.chatLocation.threadId, reaction: reaction)
                     )
                     |> deliverOnMainQueue).startStrict(next: { [weak self] count in
                         guard let self else {
@@ -211,9 +211,9 @@ final class ChatTagSearchInputPanelNode: ChatInputPanelNode {
         var canSearchMembers = false
         if let search = params.interfaceState.search {
             if case .everything = search.domain {
-                if let _ = params.interfaceState.renderedPeer?.peer as? TelegramGroup {
+                if let _ = params.interfaceState.renderedPeer?.peer as? IosappGroup {
                     canSearchMembers = true
-                } else if let peer = params.interfaceState.renderedPeer?.peer as? TelegramChannel, case .group = peer.info, !peer.isMonoForum {
+                } else if let peer = params.interfaceState.renderedPeer?.peer as? IosappChannel, case .group = peer.info, !peer.isMonoForum {
                     canSearchMembers = true
                 }
             } else {
@@ -284,7 +284,7 @@ final class ChatTagSearchInputPanelNode: ChatInputPanelNode {
             canChangeListMode = true
         }
         
-        if let channel = params.interfaceState.renderedPeer?.peer as? TelegramChannel, channel.isMonoForum, params.interfaceState.chatLocation.threadId == nil, let linkedMonoforumId = channel.linkedMonoforumId, let mainChannel = params.interfaceState.renderedPeer?.peers[linkedMonoforumId] as? TelegramChannel, mainChannel.hasPermission(.sendSomething) {
+        if let channel = params.interfaceState.renderedPeer?.peer as? IosappChannel, channel.isMonoForum, params.interfaceState.chatLocation.threadId == nil, let linkedMonoforumId = channel.linkedMonoforumId, let mainChannel = params.interfaceState.renderedPeer?.peers[linkedMonoforumId] as? IosappChannel, mainChannel.hasPermission(.sendSomething) {
             canChangeListMode = false
         }
         

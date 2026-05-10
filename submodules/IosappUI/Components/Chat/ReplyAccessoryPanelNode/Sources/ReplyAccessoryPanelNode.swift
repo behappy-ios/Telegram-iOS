@@ -181,13 +181,13 @@ public final class ReplyAccessoryPanelNode: AccessoryPanelNode {
                 var isRoundImage = false
                 if let message = message, !message.containsSecretMedia {
                     for media in message.media {
-                        if let image = media as? TelegramMediaImage {
+                        if let image = media as? IosappMediaImage {
                             updatedMediaReference = .message(message: MessageReference(message), media: image)
                             if let representation = largestRepresentationForPhoto(image) {
                                 imageDimensions = representation.dimensions.cgSize
                             }
                             break
-                        } else if let file = media as? TelegramMediaFile {
+                        } else if let file = media as? IosappMediaFile {
                             updatedMediaReference = .message(message: MessageReference(message), media: file)
                             isRoundImage = file.isInstantVideo
                             if let representation = largestImageRepresentation(file.previewRepresentations), !file.isSticker && !file.isAnimatedSticker {
@@ -225,9 +225,9 @@ public final class ReplyAccessoryPanelNode: AccessoryPanelNode {
                 var updateImageSignal: Signal<(TransformImageArguments) -> DrawingContext?, NoError>?
                 if mediaUpdated {
                     if let updatedMediaReference = updatedMediaReference, imageDimensions != nil {
-                        if let imageReference = updatedMediaReference.concrete(TelegramMediaImage.self) {
+                        if let imageReference = updatedMediaReference.concrete(IosappMediaImage.self) {
                             updateImageSignal = chatMessagePhotoThumbnail(account: context.account, userLocation: (message?.id.peerId).flatMap(MediaResourceUserLocation.peer) ?? .other, photoReference: imageReference, blurred: hasSpoiler)
-                        } else if let fileReference = updatedMediaReference.concrete(TelegramMediaFile.self) {
+                        } else if let fileReference = updatedMediaReference.concrete(IosappMediaFile.self) {
                             if fileReference.media.isVideo {
                                 updateImageSignal = chatMessageVideoThumbnail(account: context.account, userLocation: (message?.id.peerId).flatMap(MediaResourceUserLocation.peer) ?? .other, fileReference: fileReference, blurred: hasSpoiler)
                             } else if let iconImageRepresentation = smallestImageRepresentation(fileReference.media.previewRepresentations) {
@@ -240,7 +240,7 @@ public final class ReplyAccessoryPanelNode: AccessoryPanelNode {
                 }
                 
                 var titleText: [CompositeTextNode.Component] = []
-                if let peer = message?.peers[strongSelf.messageId.peerId] as? TelegramChannel, case .broadcast = peer.info {
+                if let peer = message?.peers[strongSelf.messageId.peerId] as? IosappChannel, case .broadcast = peer.info {
                     let icon: UIImage?
                     icon = generateTintedImage(image: UIImage(bundleImageName: "Chat/Input/Accessory Panels/PanelTextChannelIcon"), color: theme.chat.inputPanel.panelControlAccentColor)
                     
@@ -284,9 +284,9 @@ public final class ReplyAccessoryPanelNode: AccessoryPanelNode {
                     }
                     
                     if strongSelf.messageId.peerId != strongSelf.chatPeerId {
-                        if let peer = message?.peers[strongSelf.messageId.peerId], (peer is TelegramChannel || peer is TelegramGroup) {
+                        if let peer = message?.peers[strongSelf.messageId.peerId], (peer is IosappChannel || peer is IosappGroup) {
                             let icon: UIImage?
-                            if let channel = peer as? TelegramChannel, case .broadcast = channel.info {
+                            if let channel = peer as? IosappChannel, case .broadcast = channel.info {
                                 icon = UIImage(bundleImageName: "Chat/Input/Accessory Panels/PanelTextChannelIcon")
                             } else {
                                 icon = UIImage(bundleImageName: "Chat/Input/Accessory Panels/PanelTextGroupIcon")
@@ -306,11 +306,11 @@ public final class ReplyAccessoryPanelNode: AccessoryPanelNode {
                     let quoteText = stringWithAppliedEntities(trimToLineCount(quote.text, lineCount: 1), entities: quote.entities, baseColor: textColor, linkColor: textColor, baseFont: textFont, linkFont: textFont, boldFont: textFont, italicFont: textFont, boldItalicFont: textFont, fixedFont: textFont, blockQuoteFont: textFont, underlineLinks: false, message: message)
                     
                     strongSelf.textNode.attributedText = quoteText
-                } else if case let .todoItem(todoItemId) = strongSelf.innerSubject, let todo = message?.media.first(where: { $0 is TelegramMediaTodo }) as? TelegramMediaTodo, let todoItem = todo.items.first(where: { $0.id == todoItemId }) {
+                } else if case let .todoItem(todoItemId) = strongSelf.innerSubject, let todo = message?.media.first(where: { $0 is IosappMediaTodo }) as? IosappMediaTodo, let todoItem = todo.items.first(where: { $0.id == todoItemId }) {
                     let textColor = strongSelf.theme.chat.inputPanel.primaryTextColor
                     let itemText = stringWithAppliedEntities(trimToLineCount(todoItem.text, lineCount: 1), entities: todoItem.entities, baseColor: textColor, linkColor: textColor, baseFont: textFont, linkFont: textFont, boldFont: textFont, italicFont: textFont, boldItalicFont: textFont, fixedFont: textFont, blockQuoteFont: textFont, underlineLinks: false, message: message)
                     strongSelf.textNode.attributedText = itemText
-                } else if case let .pollOption(pollOptionId) = strongSelf.innerSubject, let poll = message?.media.first(where: { $0 is TelegramMediaPoll }) as? TelegramMediaPoll, let pollOption = poll.options.first(where: { $0.opaqueIdentifier == pollOptionId }) {
+                } else if case let .pollOption(pollOptionId) = strongSelf.innerSubject, let poll = message?.media.first(where: { $0 is IosappMediaPoll }) as? IosappMediaPoll, let pollOption = poll.options.first(where: { $0.opaqueIdentifier == pollOptionId }) {
                     let textColor = strongSelf.theme.chat.inputPanel.primaryTextColor
                     let itemText = stringWithAppliedEntities(trimToLineCount(pollOption.text, lineCount: 1), entities: pollOption.entities, baseColor: textColor, linkColor: textColor, baseFont: textFont, linkFont: textFont, boldFont: textFont, italicFont: textFont, boldItalicFont: textFont, fixedFont: textFont, blockQuoteFont: textFont, underlineLinks: false, message: message)
                     strongSelf.textNode.attributedText = itemText

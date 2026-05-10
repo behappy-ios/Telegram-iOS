@@ -76,7 +76,7 @@ extension VideoChatScreenComponent.View {
             
             switch inviteType {
             case .invite:
-                let groupPeer = groupCall.accountContext.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: peerId))
+                let groupPeer = groupCall.accountContext.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: peerId))
                 let _ = (groupPeer
                 |> deliverOnMainQueue).start(next: { [weak self] groupPeer in
                     guard let self, let environment = self.environment, case let .group(groupCall) = self.currentCall, let groupPeer else {
@@ -339,8 +339,8 @@ extension VideoChatScreenComponent.View {
                         }
                         
                         let _ = (groupCall.accountContext.engine.data.get(
-                            TelegramEngine.EngineData.Item.Peer.Peer(id: callPeerId),
-                            TelegramEngine.EngineData.Item.Peer.ExportedInvitation(id: callPeerId)
+                            IosappEngine.EngineData.Item.Peer.Peer(id: callPeerId),
+                            IosappEngine.EngineData.Item.Peer.ExportedInvitation(id: callPeerId)
                         )
                         |> map { peer, exportedInvitation -> String? in
                             if let link = inviteLinks?.listenerLink {

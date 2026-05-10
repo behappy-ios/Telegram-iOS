@@ -701,7 +701,7 @@ private final class ActiveAuctionComponent: Component {
             let boldTextFont = Font.semibold(15.0)
             let textColor = subtitleTextColor
             let markdownAttributes = MarkdownAttributes(body: MarkdownAttributeSet(font: textFont, textColor: textColor), bold: MarkdownAttributeSet(font: boldTextFont, textColor: textColor), link: MarkdownAttributeSet(font: textFont, textColor: textColor), linkAttribute: { contents in
-                return (TelegramTextAttributes.URL, contents)
+                return (IosappTextAttributes.URL, contents)
             })
             let attributedString = parseMarkdownIntoAttributedString(subtitleText, attributes: markdownAttributes, textAlignment: .center).mutableCopy() as! NSMutableAttributedString
             if let range = attributedString.string.range(of: "#") {

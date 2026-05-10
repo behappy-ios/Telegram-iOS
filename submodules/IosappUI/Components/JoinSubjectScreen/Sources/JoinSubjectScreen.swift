@@ -500,7 +500,7 @@ private final class JoinSubjectScreenComponent: Component {
                     transition: transition,
                     component: AnyComponent(AvatarComponent(
                         context: component.context,
-                        peer: EnginePeer.legacyGroup(TelegramGroup(
+                        peer: EnginePeer.legacyGroup(IosappGroup(
                             id: EnginePeer.Id(namespace: Namespaces.Peer.CloudGroup, id: EnginePeer.Id.Id._internalFromInt64Value(1)),
                             title: group.title,
                             photo: group.image.flatMap { image in

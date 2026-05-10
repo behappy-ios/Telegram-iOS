@@ -39,7 +39,7 @@ func updateMessageThreadStats(transaction: Transaction, threadKey: MessageThread
 }
     
 private func updateMessageThreadStatsInternal(transaction: Transaction, threadKey: MessageThreadKey, removedCount: Int, addedMessagePeers: [ReplyThreadUserMessage], allowChannel: Bool) {
-    guard let channel = transaction.getPeer(threadKey.peerId) as? TelegramChannel else {
+    guard let channel = transaction.getPeer(threadKey.peerId) as? IosappChannel else {
         return
     }
     var isGroup = true

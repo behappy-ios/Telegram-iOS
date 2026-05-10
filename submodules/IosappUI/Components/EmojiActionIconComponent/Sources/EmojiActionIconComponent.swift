@@ -10,13 +10,13 @@ public final class EmojiActionIconComponent: Component {
     public let context: AccountContext
     public let color: UIColor
     public let fileId: Int64?
-    public let file: TelegramMediaFile?
+    public let file: IosappMediaFile?
     
     public init(
         context: AccountContext,
         color: UIColor,
         fileId: Int64?,
-        file: TelegramMediaFile?
+        file: IosappMediaFile?
     ) {
         self.context = context
         self.color = color

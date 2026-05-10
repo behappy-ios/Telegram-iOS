@@ -11,7 +11,7 @@ import CoreServices
 
 public enum WebpagePreviewResult: Equatable {
     public struct Result: Equatable {
-        public var webpage: TelegramMediaWebpage
+        public var webpage: IosappMediaWebpage
         public var sourceUrl: String
     }
     
@@ -45,7 +45,7 @@ public func normalizedWebpagePreviewUrl(url: String) -> String {
 
 public func webpagePreviewWithProgress(account: Account, urls: [String], webpageId: MediaId? = nil, forPeerId: PeerId? = nil) -> Signal<WebpagePreviewWithProgressResult, NoError> {
     return account.postbox.transaction { transaction -> Signal<WebpagePreviewWithProgressResult, NoError> in
-        if let webpageId = webpageId, let webpage = transaction.getMedia(webpageId) as? TelegramMediaWebpage, let url = webpage.content.url {
+        if let webpageId = webpageId, let webpage = transaction.getMedia(webpageId) as? IosappMediaWebpage, let url = webpage.content.url {
             var sourceUrl = url
             if urls.count == 1 {
                 sourceUrl = urls[0]
@@ -71,14 +71,14 @@ public func webpagePreviewWithProgress(account: Account, urls: [String], webpage
                             metadataProvider.startFetchingMetadata(for: url, completionHandler: { metadata, _ in
                                 if let metadata = metadata {
                                     let completeWithImage: (Data?) -> Void = { imageData in
-                                        var image: TelegramMediaImage?
+                                        var image: IosappMediaImage?
                                         if let imageData, let parsedImage = UIImage(data: imageData) {
                                             let resource = LocalFileMediaResource(fileId: Int64.random(in: Int64.min ... Int64.max))
                                             account.postbox.mediaBox.storeResourceData(resource.id, data: imageData)
-                                            image = TelegramMediaImage(
+                                            image = IosappMediaImage(
                                                 imageId: MediaId(namespace: Namespaces.Media.LocalImage, id: Int64.random(in: Int64.min ... Int64.max)),
                                                 representations: [
-                                                    TelegramMediaImageRepresentation(
+                                                    IosappMediaImageRepresentation(
                                                         dimensions: PixelDimensions(width: Int32(parsedImage.size.width), height: Int32(parsedImage.size.height)),
                                                         resource: resource,
                                                         progressiveSizes: [],
@@ -99,9 +99,9 @@ public func webpagePreviewWithProgress(account: Account, urls: [String], webpage
                                             webpageType = "photo"
                                         }
                                         
-                                        let webpage = TelegramMediaWebpage(
+                                        let webpage = IosappMediaWebpage(
                                             webpageId: MediaId(namespace: Namespaces.Media.LocalWebpage, id: Int64.random(in: Int64.min ... Int64.max)),
-                                            content: .Loaded(TelegramMediaWebpageLoadedContent(
+                                            content: .Loaded(IosappMediaWebpageLoadedContent(
                                                 url: sourceUrl,
                                                 displayUrl: metadata.url?.absoluteString ?? sourceUrl,
                                                 hash: 0,
@@ -218,16 +218,16 @@ public func webpagePreviewWithProgress(account: Account, urls: [String], webpage
     |> switchToLatest
 }
 
-public func actualizedWebpage(account: Account, webpage: TelegramMediaWebpage) -> Signal<TelegramMediaWebpage, NoError> {
+public func actualizedWebpage(account: Account, webpage: IosappMediaWebpage) -> Signal<IosappMediaWebpage, NoError> {
     if case let .Loaded(content) = webpage.content {
         return account.network.request(Api.functions.messages.getWebPage(url: content.url, hash: content.hash))
         |> map(Optional.init)
         |> `catch` { _ -> Signal<Api.messages.WebPage?, NoError> in
             return .single(nil)
         }
-        |> mapToSignal { result -> Signal<TelegramMediaWebpage, NoError> in
+        |> mapToSignal { result -> Signal<IosappMediaWebpage, NoError> in
             if let result = result {
-                return account.postbox.transaction { transaction -> Signal<TelegramMediaWebpage, NoError> in
+                return account.postbox.transaction { transaction -> Signal<IosappMediaWebpage, NoError> in
                     switch result {
                     case let .webPage(webPageData):
                         let (apiWebpage, chats, users) = (webPageData.webpage, webPageData.chats, webPageData.users)
@@ -237,7 +237,7 @@ public func actualizedWebpage(account: Account, webpage: TelegramMediaWebpage) -
                         if let updatedWebpage = telegramMediaWebpageFromApiWebpage(apiWebpage), case .Loaded = updatedWebpage.content, updatedWebpage.webpageId == webpage.webpageId {
                             return .single(updatedWebpage)
                         } else if case let .webPageNotModified(webPageNotModifiedData) = apiWebpage, let views = webPageNotModifiedData.cachedPageViews, case let .Loaded(content) = webpage.content {
-                            let updatedContent: TelegramMediaWebpageContent = .Loaded(TelegramMediaWebpageLoadedContent(
+                            let updatedContent: IosappMediaWebpageContent = .Loaded(IosappMediaWebpageLoadedContent(
                                 url: content.url,
                                 displayUrl: content.displayUrl,
                                 hash: content.hash,
@@ -258,7 +258,7 @@ public func actualizedWebpage(account: Account, webpage: TelegramMediaWebpage) -
                                 attributes: content.attributes,
                                 instantPage: (content.instantPage?._parse()).flatMap({ InstantPage(blocks: $0.blocks, media: $0.media, isComplete: $0.isComplete, rtl: $0.rtl, url: $0.url, views: views) })
                             ))
-                            let updatedWebpage = TelegramMediaWebpage(webpageId: webpage.webpageId, content: updatedContent)
+                            let updatedWebpage = IosappMediaWebpage(webpageId: webpage.webpageId, content: updatedContent)
                             updateMessageMedia(transaction: transaction, id: webpage.webpageId, media: updatedWebpage)
                             return .single(updatedWebpage)
                         }
@@ -275,18 +275,18 @@ public func actualizedWebpage(account: Account, webpage: TelegramMediaWebpage) -
     }
 }
 
-public func updatedRemoteWebpage(postbox: Postbox, network: Network, accountPeerId: EnginePeer.Id, webPage: WebpageReference) -> Signal<TelegramMediaWebpage?, NoError> {
+public func updatedRemoteWebpage(postbox: Postbox, network: Network, accountPeerId: EnginePeer.Id, webPage: WebpageReference) -> Signal<IosappMediaWebpage?, NoError> {
     if case let .webPage(id, url) = webPage.content {
         return network.request(Api.functions.messages.getWebPage(url: url, hash: 0))
         |> map(Optional.init)
         |> `catch` { _ -> Signal<Api.messages.WebPage?, NoError> in
             return .single(nil)
         }
-        |> mapToSignal { result -> Signal<TelegramMediaWebpage?, NoError> in
+        |> mapToSignal { result -> Signal<IosappMediaWebpage?, NoError> in
             if let result = result, case let .webPage(webPageData) = result, let updatedWebpage = telegramMediaWebpageFromApiWebpage(webPageData.webpage), case .Loaded = updatedWebpage.content {
                 let (chats, users) = (webPageData.chats, webPageData.users)
                 if updatedWebpage.webpageId.id == id {
-                    return postbox.transaction { transaction -> TelegramMediaWebpage? in
+                    return postbox.transaction { transaction -> IosappMediaWebpage? in
                         let parsedPeers = AccumulatedPeers(transaction: transaction, chats: chats, users: users)
                         updatePeers(transaction: transaction, accountPeerId: accountPeerId, peers: parsedPeers)
                         if transaction.getMedia(updatedWebpage.webpageId) != nil {

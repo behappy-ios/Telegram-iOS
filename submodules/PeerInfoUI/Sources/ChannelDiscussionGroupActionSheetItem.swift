@@ -69,7 +69,7 @@ private final class ChannelDiscussionGroupActionSheetItemNode: ActionSheetItemNo
         self.groupAvatarNode.setPeer(context: context, theme: (context.sharedContext.currentPresentationData.with { $0 }).theme, peer: EnginePeer(groupPeer))
         
         let text: PresentationStrings.FormattedString
-        if let channelPeer = channelPeer as? TelegramChannel, let addressName = channelPeer.addressName, !addressName.isEmpty {
+        if let channelPeer = channelPeer as? IosappChannel, let addressName = channelPeer.addressName, !addressName.isEmpty {
             text = strings.Channel_DiscussionGroup_PublicChannelLink(EnginePeer(groupPeer).displayTitle(strings: strings, displayOrder: nameDisplayOrder), EnginePeer(channelPeer).displayTitle(strings: strings, displayOrder: nameDisplayOrder))
         } else {
             text = strings.Channel_DiscussionGroup_PrivateChannelLink(EnginePeer(groupPeer).displayTitle(strings: strings, displayOrder: nameDisplayOrder), EnginePeer(channelPeer).displayTitle(strings: strings, displayOrder: nameDisplayOrder))

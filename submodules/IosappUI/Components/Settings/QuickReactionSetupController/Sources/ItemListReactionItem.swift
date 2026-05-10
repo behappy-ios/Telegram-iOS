@@ -104,7 +104,7 @@ public class ItemListReactionItemNode: ListViewItemNode, ItemListItemNode {
     
     private var item: ItemListReactionItem?
     private var fileDisposable: Disposable?
-    private var file: TelegramMediaFile?
+    private var file: IosappMediaFile?
     
     override public var canBeSelected: Bool {
         if let item = self.item, let _ = item.action {

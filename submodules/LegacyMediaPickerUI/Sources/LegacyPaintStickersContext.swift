@@ -83,7 +83,7 @@ private class LegacyPaintStickerEntity: LegacyPaintEntity {
     }
     
     let postbox: Postbox
-    let file: TelegramMediaFile?
+    let file: IosappMediaFile?
     let entity: DrawingStickerEntity
     let animated: Bool
     let durationPromise = Promise<Double>()

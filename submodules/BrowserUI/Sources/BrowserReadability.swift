@@ -8,12 +8,12 @@ import InstantPageUI
 public class Readability: NSObject, WKNavigationDelegate {
     private let url: URL
     let webView: WKWebView
-    private let completionHandler: ((_ webPage: (TelegramMediaWebpage, [Any]?)?, _ error: Error?) -> Void)
+    private let completionHandler: ((_ webPage: (IosappMediaWebpage, [Any]?)?, _ error: Error?) -> Void)
     private var hasRenderedReadabilityHTML = false
     
     private var subresources: [Any]?
     
-    init(url: URL, archiveData: Data, completionHandler: @escaping (_ webPage: (TelegramMediaWebpage, [Any]?)?, _ error: Error?) -> Void) {
+    init(url: URL, archiveData: Data, completionHandler: @escaping (_ webPage: (IosappMediaWebpage, [Any]?)?, _ error: Error?) -> Void) {
         self.url = url
         self.completionHandler = completionHandler
         
@@ -39,7 +39,7 @@ public class Readability: NSObject, WKNavigationDelegate {
         }
     }
     
-    private func initializeReadability(completion: @escaping (_ result: TelegramMediaWebpage?, _ error: Error?) -> Void) {
+    private func initializeReadability(completion: @escaping (_ result: IosappMediaWebpage?, _ error: Error?) -> Void) {
         guard let readabilityInitializationJS = loadFile(name: "ReaderMode", type: "js") else {
             return
         }
@@ -58,7 +58,7 @@ public class Readability: NSObject, WKNavigationDelegate {
         
     public func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         if !self.hasRenderedReadabilityHTML {
-            self.initializeReadability() { [weak self] (webPage: TelegramMediaWebpage?, error: Error?) in
+            self.initializeReadability() { [weak self] (webPage: IosappMediaWebpage?, error: Error?) in
                 guard let self else {
                     return
                 }
@@ -109,7 +109,7 @@ private func extractHtmlString(from webArchiveData: Data) -> (String, [Any]?)? {
     return nil
 }
 
-private func parseJson(_ input: [String: Any], url: String) -> TelegramMediaWebpage? {
+private func parseJson(_ input: [String: Any], url: String) -> IosappMediaWebpage? {
     let siteName = input["siteName"] as? String
     let title = input["title"] as? String
     let byline = input["byline"] as? String
@@ -121,10 +121,10 @@ private func parseJson(_ input: [String: Any], url: String) -> TelegramMediaWebp
     guard !blocks.isEmpty else {
         return nil
     }
-    return TelegramMediaWebpage(
+    return IosappMediaWebpage(
         webpageId: MediaId(namespace: 0, id: 0),
         content: .Loaded(
-            TelegramMediaWebpageLoadedContent(
+            IosappMediaWebpageLoadedContent(
                 url: url,
                 displayUrl: url,
                 hash: 0,
@@ -259,10 +259,10 @@ private func parseRichText(_ input: [Any], _ media: inout [MediaId: Media]) -> R
                         height = 0
                     }
                     let id = MediaId(namespace: Namespaces.Media.CloudFile, id: Int64(media.count))
-                    media[id] = TelegramMediaImage(
+                    media[id] = IosappMediaImage(
                         imageId: id,
                         representations: [
-                            TelegramMediaImageRepresentation(
+                            IosappMediaImageRepresentation(
                                 dimensions: PixelDimensions(width: width, height: height),
                                 resource: InstantPageExternalMediaResource(url: src),
                                 progressiveSizes: [],
@@ -647,10 +647,10 @@ private func parseImage(_ input: [String: Any], _ media: inout [MediaId: Media])
     }
     
     let id = MediaId(namespace: Namespaces.Media.CloudImage, id: Int64(media.count))
-    media[id] = TelegramMediaImage(
+    media[id] = IosappMediaImage(
         imageId: id,
         representations: [
-            TelegramMediaImageRepresentation(
+            IosappMediaImageRepresentation(
                 dimensions: PixelDimensions(width: width, height: height),
                 resource: InstantPageExternalMediaResource(url: src),
                 progressiveSizes: [],

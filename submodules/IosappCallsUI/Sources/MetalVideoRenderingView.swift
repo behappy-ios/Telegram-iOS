@@ -558,7 +558,7 @@ class MetalVideoRenderingContext {
 
         let mainBundle = Bundle(for: MetalVideoRenderingView.self)
 
-        guard let path = mainBundle.path(forResource: "TelegramCallsUIBundle", ofType: "bundle") else {
+        guard let path = mainBundle.path(forResource: "IosappCallsUIBundle", ofType: "bundle") else {
             return nil
         }
         guard let bundle = Bundle(path: path) else {

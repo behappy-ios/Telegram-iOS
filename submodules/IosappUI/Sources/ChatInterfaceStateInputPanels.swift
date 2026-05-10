@@ -149,7 +149,7 @@ func inputPanelForChatPresentationIntefaceState(_ chatPresentationInterfaceState
         }
     }
     
-    if chatPresentationInterfaceState.peerIsBlocked, let peer = chatPresentationInterfaceState.renderedPeer?.peer as? TelegramUser, peer.botInfo == nil {
+    if chatPresentationInterfaceState.peerIsBlocked, let peer = chatPresentationInterfaceState.renderedPeer?.peer as? IosappUser, peer.botInfo == nil {
         if let currentPanel = (currentPanel as? ChatUnblockInputPanelNode) ?? (currentSecondaryPanel as? ChatUnblockInputPanelNode) {
             currentPanel.chatControllerInteraction = chatControllerInteraction
             currentPanel.interfaceInteraction = interfaceInteraction
@@ -206,7 +206,7 @@ func inputPanelForChatPresentationIntefaceState(_ chatPresentationInterfaceState
             }
         }
         
-        if let secretChat = peer as? TelegramSecretChat {
+        if let secretChat = peer as? IosappSecretChat {
             switch secretChat.embeddedState {
                 case .handshake:
                     if let currentPanel = (currentPanel as? SecretChatHandshakeStatusInputPanelNode) ?? (currentSecondaryPanel as? SecretChatHandshakeStatusInputPanelNode) {
@@ -231,7 +231,7 @@ func inputPanelForChatPresentationIntefaceState(_ chatPresentationInterfaceState
                 case .active:
                     break
             }
-        } else if let channel = peer as? TelegramChannel {
+        } else if let channel = peer as? IosappChannel {
             var isMember: Bool = false
             switch channel.participationStatus {
             case .kicked:
@@ -255,7 +255,7 @@ func inputPanelForChatPresentationIntefaceState(_ chatPresentationInterfaceState
             }
             
             if channel.flags.contains(.isMonoforum) {
-                if let linkedMonoforumId = channel.linkedMonoforumId, let mainChannel = chatPresentationInterfaceState.renderedPeer?.peers[linkedMonoforumId] as? TelegramChannel, mainChannel.hasPermission(.manageDirect), case .peer = chatPresentationInterfaceState.chatLocation {
+                if let linkedMonoforumId = channel.linkedMonoforumId, let mainChannel = chatPresentationInterfaceState.renderedPeer?.peers[linkedMonoforumId] as? IosappChannel, mainChannel.hasPermission(.manageDirect), case .peer = chatPresentationInterfaceState.chatLocation {
                     if chatPresentationInterfaceState.interfaceState.editMessage != nil || chatPresentationInterfaceState.interfaceState.postSuggestionState != nil {
                         displayInputTextPanel = true
                     } else if chatPresentationInterfaceState.interfaceState.replyMessageSubject == nil {
@@ -393,7 +393,7 @@ func inputPanelForChatPresentationIntefaceState(_ chatPresentationInterfaceState
                     }
                 }
             }
-        } else if let group = peer as? TelegramGroup {
+        } else if let group = peer as? IosappGroup {
             switch group.membership {
             case .Removed, .Left:
                 if let currentPanel = (currentPanel as? DeleteChatInputPanelNode) ?? (currentSecondaryPanel as? DeleteChatInputPanelNode) {

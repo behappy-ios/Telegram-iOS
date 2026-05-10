@@ -62,7 +62,7 @@ private struct ParticipantRight: OptionSet {
     static let changeInfo = ParticipantRight(rawValue: 1 << 4)
 }
 
-private func rightsFromBannedRights(_ rights: TelegramChatBannedRightsFlags) -> (participantRights: ParticipantRight, mediaRights: MediaRight) {
+private func rightsFromBannedRights(_ rights: IosappChatBannedRightsFlags) -> (participantRights: ParticipantRight, mediaRights: MediaRight) {
     var participantResult: ParticipantRight = [
         .sendMessages,
         .addMembers,
@@ -125,8 +125,8 @@ private func rightsFromBannedRights(_ rights: TelegramChatBannedRightsFlags) -> 
     return (participantResult, mediaResult)
 }
 
-private func rightFlagsFromRights(participantRights: ParticipantRight, mediaRights: MediaRight) -> TelegramChatBannedRightsFlags {
-    var result: TelegramChatBannedRightsFlags = []
+private func rightFlagsFromRights(participantRights: ParticipantRight, mediaRights: MediaRight) -> IosappChatBannedRightsFlags {
+    var result: IosappChatBannedRightsFlags = []
     
     if !participantRights.contains(.sendMessages) {
         result.insert(.banSendText)
@@ -396,7 +396,7 @@ private final class AdminUserActionsSheetComponent: Component {
             var reportSpamPeers: [EnginePeer.Id] = []
             var deleteAllFromPeers: [EnginePeer.Id] = []
             var banPeers: [EnginePeer.Id] = []
-            var updateBannedRights: [EnginePeer.Id: TelegramChatBannedRights] = [:]
+            var updateBannedRights: [EnginePeer.Id: IosappChatBannedRights] = [:]
             
             for id in self.optionReportSelectedPeers.sorted() {
                 reportSpamPeers.append(id)
@@ -410,10 +410,10 @@ private final class AdminUserActionsSheetComponent: Component {
                     banPeers.append(id)
                 }
             } else {
-                var banFlags: TelegramChatBannedRightsFlags = []
+                var banFlags: IosappChatBannedRightsFlags = []
                 banFlags = rightFlagsFromRights(participantRights: self.participantRights, mediaRights: self.mediaRights)
                 
-                let bannedRights = TelegramChatBannedRights(flags: banFlags, untilDate: Int32.max)
+                let bannedRights = IosappChatBannedRights(flags: banFlags, untilDate: Int32.max)
                 for id in self.optionBanSelectedPeers.sorted() {
                     updateBannedRights[id] = bannedRights
                 }
@@ -1494,9 +1494,9 @@ public class AdminUserActionsSheet: ViewControllerComponentContainer {
         public let reportSpamPeers: [EnginePeer.Id]
         public let deleteAllFromPeers: [EnginePeer.Id]
         public let banPeers: [EnginePeer.Id]
-        public let updateBannedRights: [EnginePeer.Id: TelegramChatBannedRights]
+        public let updateBannedRights: [EnginePeer.Id: IosappChatBannedRights]
         
-        init(reportSpamPeers: [EnginePeer.Id], deleteAllFromPeers: [EnginePeer.Id], banPeers: [EnginePeer.Id], updateBannedRights: [EnginePeer.Id: TelegramChatBannedRights]) {
+        init(reportSpamPeers: [EnginePeer.Id], deleteAllFromPeers: [EnginePeer.Id], banPeers: [EnginePeer.Id], updateBannedRights: [EnginePeer.Id: IosappChatBannedRights]) {
             self.reportSpamPeers = reportSpamPeers
             self.deleteAllFromPeers = deleteAllFromPeers
             self.banPeers = banPeers

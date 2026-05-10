@@ -16,7 +16,7 @@ public extension EmojiPagerContentComponent {
         if premiumIfSavedMessages, let chatPeerId = chatPeerId, chatPeerId == context.account.peerId {
             hasPremium = .single(true)
         } else {
-            hasPremium = context.engine.data.subscribe(TelegramEngine.EngineData.Item.Peer.Peer(id: context.account.peerId))
+            hasPremium = context.engine.data.subscribe(IosappEngine.EngineData.Item.Peer.Peer(id: context.account.peerId))
             |> map { peer -> Bool in
                 guard case let .user(user) = peer else {
                     return false
@@ -97,7 +97,7 @@ public extension EmojiPagerContentComponent {
         if let chatPeerId = chatPeerId {
             peerSpecificPack = combineLatest(
                 context.engine.peers.peerSpecificEmojiPack(peerId: chatPeerId),
-                context.engine.data.subscribe(TelegramEngine.EngineData.Item.Peer.Peer(id: chatPeerId))
+                context.engine.data.subscribe(IosappEngine.EngineData.Item.Peer.Peer(id: chatPeerId))
             )
             |> map { packData, peer -> PeerSpecificPackData? in
                 guard let peer = peer else {
@@ -124,7 +124,7 @@ public extension EmojiPagerContentComponent {
             orderedItemListCollectionIds.append(Namespaces.OrderedItemList.LocalRecentEmoji)
         }
         
-        var iconStatusEmoji: Signal<[TelegramMediaFile], NoError> = .single([])
+        var iconStatusEmoji: Signal<[IosappMediaFile], NoError> = .single([])
         
         if case .status = subject {
             orderedItemListCollectionIds.append(Namespaces.OrderedItemList.CloudFeaturedStatusEmoji)
@@ -132,7 +132,7 @@ public extension EmojiPagerContentComponent {
             orderedItemListCollectionIds.append(Namespaces.OrderedItemList.CloudUniqueStarGifts)
             
             iconStatusEmoji = context.engine.stickers.loadedStickerPack(reference: .iconStatusEmoji, forceActualized: false)
-            |> map { result -> [TelegramMediaFile] in
+            |> map { result -> [IosappMediaFile] in
                 switch result {
                 case let .result(_, items, _):
                     return items.map({ $0.file._parse() })
@@ -146,7 +146,7 @@ public extension EmojiPagerContentComponent {
             orderedItemListCollectionIds.append(Namespaces.OrderedItemList.CloudDisabledChannelStatusEmoji)
             
             iconStatusEmoji = context.engine.stickers.loadedStickerPack(reference: .iconChannelStatusEmoji, forceActualized: false)
-            |> map { result -> [TelegramMediaFile] in
+            |> map { result -> [IosappMediaFile] in
                 switch result {
                 case let .result(_, items, _):
                     return items.map({ $0.file._parse() })
@@ -162,7 +162,7 @@ public extension EmojiPagerContentComponent {
             orderedItemListCollectionIds.append(Namespaces.OrderedItemList.CloudDefaultTagReactions)
         } else if case .topicIcon = subject {
             iconStatusEmoji = context.engine.stickers.loadedStickerPack(reference: .iconTopicEmoji, forceActualized: false)
-            |> map { result -> [TelegramMediaFile] in
+            |> map { result -> [IosappMediaFile] in
                 switch result {
                 case let .result(_, items, _):
                     return items.map({ $0.file._parse() })
@@ -443,11 +443,11 @@ public extension EmojiPagerContentComponent {
                     
                     let resultItem: EmojiPagerContentComponent.Item
                     
-                    let animationData = EntityKeyboardAnimationData(file: TelegramMediaFile.Accessor(file))
+                    let animationData = EntityKeyboardAnimationData(file: IosappMediaFile.Accessor(file))
                     resultItem = EmojiPagerContentComponent.Item(
                         animationData: animationData,
                         content: .animation(animationData),
-                        itemFile: TelegramMediaFile.Accessor(file),
+                        itemFile: IosappMediaFile.Accessor(file),
                         subgroupId: nil,
                         icon: .none,
                         tintMode: tintMode
@@ -502,11 +502,11 @@ public extension EmojiPagerContentComponent {
                     
                     let resultItem: EmojiPagerContentComponent.Item
                     
-                    let animationData = EntityKeyboardAnimationData(file: TelegramMediaFile.Accessor(file))
+                    let animationData = EntityKeyboardAnimationData(file: IosappMediaFile.Accessor(file))
                     resultItem = EmojiPagerContentComponent.Item(
                         animationData: animationData,
                         content: .animation(animationData),
-                        itemFile: TelegramMediaFile.Accessor(file),
+                        itemFile: IosappMediaFile.Accessor(file),
                         subgroupId: nil,
                         icon: .none,
                         tintMode: tintMode
@@ -685,11 +685,11 @@ public extension EmojiPagerContentComponent {
                     
                     let resultItem: EmojiPagerContentComponent.Item
                     
-                    let animationData = EntityKeyboardAnimationData(file: TelegramMediaFile.Accessor(file))
+                    let animationData = EntityKeyboardAnimationData(file: IosappMediaFile.Accessor(file))
                     resultItem = EmojiPagerContentComponent.Item(
                         animationData: animationData,
                         content: .animation(animationData),
-                        itemFile: TelegramMediaFile.Accessor(file),
+                        itemFile: IosappMediaFile.Accessor(file),
                         subgroupId: nil,
                         icon: .none,
                         tintMode: tintMode
@@ -943,7 +943,7 @@ public extension EmojiPagerContentComponent {
                                 continue
                             }
                             
-                            let animationFile: TelegramMediaFile.Accessor
+                            let animationFile: IosappMediaFile.Accessor
                             let icon: EmojiPagerContentComponent.Item.Icon
                             
                             switch item.content {
@@ -1231,11 +1231,11 @@ public extension EmojiPagerContentComponent {
                             tintMode = .primary
                         }
                         
-                        let animationData = EntityKeyboardAnimationData(file: TelegramMediaFile.Accessor(file))
+                        let animationData = EntityKeyboardAnimationData(file: IosappMediaFile.Accessor(file))
                         resultItem = EmojiPagerContentComponent.Item(
                             animationData: animationData,
                             content: .animation(animationData),
-                            itemFile: TelegramMediaFile.Accessor(file),
+                            itemFile: IosappMediaFile.Accessor(file),
                             subgroupId: nil,
                             icon: .none,
                             tintMode: tintMode
@@ -1664,7 +1664,7 @@ public extension EmojiPagerContentComponent {
         if let chatPeerId = chatPeerId {
             peerSpecificPack = combineLatest(
                 context.engine.peers.peerSpecificStickerPack(peerId: chatPeerId),
-                context.engine.data.subscribe(TelegramEngine.EngineData.Item.Peer.Peer(id: chatPeerId))
+                context.engine.data.subscribe(IosappEngine.EngineData.Item.Peer.Peer(id: chatPeerId))
             )
             |> map { packData, peer -> PeerSpecificPackData? in
                 guard let peer = peer else {
@@ -1724,7 +1724,7 @@ public extension EmojiPagerContentComponent {
             context.account.postbox.itemCollectionsView(orderedItemListCollectionIds: stickerOrderedItemListCollectionIds, namespaces: stickerNamespaces, aroundIndex: nil, count: 10000000),
             hasPremium(context: context, chatPeerId: chatPeerId, premiumIfSavedMessages: false),
             hasTrending ? context.account.viewTracker.featuredStickerPacks() : .single([]),
-            context.engine.data.get(TelegramEngine.EngineData.Item.ItemCache.Item(collectionId: Namespaces.CachedItemCollection.featuredStickersConfiguration, id: ValueBoxKey(length: 0))),
+            context.engine.data.get(IosappEngine.EngineData.Item.ItemCache.Item(collectionId: Namespaces.CachedItemCollection.featuredStickersConfiguration, id: ValueBoxKey(length: 0))),
             ApplicationSpecificNotice.dismissedTrendingStickerPacks(accountManager: context.sharedContext.accountManager),
             peerSpecificPack,
             searchCategories

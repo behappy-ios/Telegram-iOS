@@ -17,7 +17,7 @@ final class BusinessLinkListItemComponent: Component {
     let context: AccountContext
     let theme: PresentationTheme
     let strings: PresentationStrings
-    let link: TelegramBusinessChatLinks.Link
+    let link: IosappBusinessChatLinks.Link
     let action: () -> Void
     let deleteAction: () -> Void
     let shareAction: () -> Void
@@ -27,7 +27,7 @@ final class BusinessLinkListItemComponent: Component {
         context: AccountContext,
         theme: PresentationTheme,
         strings: PresentationStrings,
-        link: TelegramBusinessChatLinks.Link,
+        link: IosappBusinessChatLinks.Link,
         action: @escaping () -> Void,
         deleteAction: @escaping () -> Void,
         shareAction: @escaping () -> Void,

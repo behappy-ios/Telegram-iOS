@@ -338,7 +338,7 @@ final class InnerTextSelectionTipContainerNode: ASDisplayNode {
     
     private let text: String
     private var arguments: TextNodeWithEntities.Arguments?
-    private var file: TelegramMediaFile?
+    private var file: IosappMediaFile?
     private let targetSelectionIndex: Int?
     
     private var hapticFeedback: HapticFeedback?

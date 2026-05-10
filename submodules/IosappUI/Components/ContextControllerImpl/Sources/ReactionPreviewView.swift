@@ -9,11 +9,11 @@ import EmojiStatusComponent
 
 final class ReactionPreviewView: UIView {
     private let context: AccountContext
-    private let file: TelegramMediaFile
+    private let file: IosappMediaFile
     
     private let icon = ComponentView<Empty>()
 
-    init(context: AccountContext, file: TelegramMediaFile) {
+    init(context: AccountContext, file: IosappMediaFile) {
         self.context = context
         self.file = file
         

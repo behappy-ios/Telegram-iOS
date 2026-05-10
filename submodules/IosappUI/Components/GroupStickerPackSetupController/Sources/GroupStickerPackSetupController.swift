@@ -302,7 +302,7 @@ private func groupStickerPackSetupControllerEntries(context: AccountContext, pre
                     
                     let thumbnail: StickerPackItem?
                     if let thumbnailRep = info.thumbnail {
-                        thumbnail = StickerPackItem(index: ItemCollectionItemIndex(index: 0, id: 0), file: TelegramMediaFile(fileId: MediaId(namespace: 0, id: 0), partialReference: nil, resource: thumbnailRep.resource, previewRepresentations: [], videoThumbnails: [], immediateThumbnailData: info.immediateThumbnailData, mimeType: "", size: nil, attributes: [], alternativeRepresentations: []), indexKeys: [])
+                        thumbnail = StickerPackItem(index: ItemCollectionItemIndex(index: 0, id: 0), file: IosappMediaFile(fileId: MediaId(namespace: 0, id: 0), partialReference: nil, resource: thumbnailRep.resource, previewRepresentations: [], videoThumbnails: [], immediateThumbnailData: info.immediateThumbnailData, mimeType: "", size: nil, attributes: [], alternativeRepresentations: []), indexKeys: [])
                     } else {
                         thumbnail = entry.firstItem as? StickerPackItem
                     }
@@ -569,7 +569,7 @@ public func groupStickerPackSetupController(context: AccountContext, updatedPres
         presentControllerImpl?(StickerPackScreen(context: context, updatedPresentationData: updatedPresentationData, mainStickerPack: packReference, stickerPacks: [packReference], parentNavigationController: controller?.navigationController as? NavigationController), nil)
     }
     navigateToChatControllerImpl = { [weak controller] peerId in
-        let _ = (context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: peerId))
+        let _ = (context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: peerId))
         |> deliverOnMainQueue).start(next: { peer in
             guard let peer = peer else {
                 return

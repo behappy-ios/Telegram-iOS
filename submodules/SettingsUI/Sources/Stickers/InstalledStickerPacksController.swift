@@ -886,7 +886,7 @@ public func installedStickerPacksController(context: AccountContext, mode: Insta
             featured.set(context.account.viewTracker.featuredStickerPacks())
             archivedPromise.set(.single(archivedPacks) |> then(context.engine.stickers.archivedStickerPacks() |> map(Optional.init)))
             quickReaction = combineLatest(
-                context.engine.data.subscribe(TelegramEngine.EngineData.Item.Peer.Peer(id: context.account.peerId)),
+                context.engine.data.subscribe(IosappEngine.EngineData.Item.Peer.Peer(id: context.account.peerId)),
                 context.account.postbox.preferencesView(keys: [PreferencesKeys.reactionSettings])
             )
             |> map { peer, preferencesView -> MessageReaction.Reaction? in
@@ -1294,7 +1294,7 @@ public func installedStickerPacksController(context: AccountContext, mode: Insta
         (controller?.navigationController as? NavigationController)?.pushViewController(c)
     }
     navigateToChatControllerImpl = { [weak controller] peerId in
-        let _ = (context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: peerId))
+        let _ = (context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: peerId))
         |> deliverOnMainQueue).start(next: { peer in
             guard let peer = peer else {
                 return

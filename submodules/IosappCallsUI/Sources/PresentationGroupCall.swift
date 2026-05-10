@@ -222,7 +222,7 @@ private final class PendingConferenceInvitationContext {
         case privacy(peer: EnginePeer?)
     }
     
-    private let engine: TelegramEngine
+    private let engine: IosappEngine
     private var requestDisposable: Disposable?
     private var stateDisposable: Disposable?
     private(set) var messageId: EngineMessage.Id?
@@ -230,7 +230,7 @@ private final class PendingConferenceInvitationContext {
     private var hadMessage: Bool = false
     private var didNotifyEnded: Bool = false
     
-    init(engine: TelegramEngine, reference: InternalGroupCallReference, peerId: PeerId, isVideo: Bool, onStateUpdated: @escaping (State) -> Void, onEnded: @escaping (Bool) -> Void, onError: @escaping (InvitationError) -> Void) {
+    init(engine: IosappEngine, reference: InternalGroupCallReference, peerId: PeerId, isVideo: Bool, onStateUpdated: @escaping (State) -> Void, onEnded: @escaping (Bool) -> Void, onError: @escaping (InvitationError) -> Void) {
         self.engine = engine
         self.requestDisposable = ((engine.calls.inviteConferenceCallParticipant(reference: reference, peerId: peerId, isVideo: isVideo) |> deliverOnMainQueue).startStrict(next: { [weak self] messageId in
             guard let self else {
@@ -249,7 +249,7 @@ private final class PendingConferenceInvitationContext {
             let startTime = CFAbsoluteTimeGetCurrent()
             self.stateDisposable = (combineLatest(queue: .mainQueue(),
                 engine.data.subscribe(
-                    TelegramEngine.EngineData.Item.Messages.Message(id: messageId)
+                    IosappEngine.EngineData.Item.Messages.Message(id: messageId)
                 ),
                 timerSignal
             )
@@ -267,9 +267,9 @@ private final class PendingConferenceInvitationContext {
                     } else {
                         var isActive = false
                         var isAccepted = false
-                        var foundAction: TelegramMediaAction?
+                        var foundAction: IosappMediaAction?
                         for media in message.media {
-                            if let action = media as? TelegramMediaAction {
+                            if let action = media as? IosappMediaAction {
                                 foundAction = action
                                 break
                             }
@@ -547,7 +547,7 @@ public final class PresentationGroupCallImpl: PresentationGroupCall {
     public private(set) var hasScreencast: Bool
     private let isVideoEnabled: Bool
     
-    private let keyPair: TelegramKeyPair?
+    private let keyPair: IosappKeyPair?
     
     private var temporaryJoinTimestamp: Int32
     private var temporaryActivityTimestamp: Double?
@@ -857,7 +857,7 @@ public final class PresentationGroupCallImpl: PresentationGroupCall {
         joinAsPeerId: EnginePeer.Id?,
         isStream: Bool,
         streamPeerId: EnginePeer.Id?,
-        keyPair: TelegramKeyPair?,
+        keyPair: IosappKeyPair?,
         conferenceSourceId: CallSessionInternalId?,
         isConference: Bool,
         beginWithVideo: Bool,
@@ -1188,13 +1188,13 @@ public final class PresentationGroupCallImpl: PresentationGroupCall {
                     return
                 }
                 var canManageCall = false
-                if let peer = peer as? TelegramGroup {
+                if let peer = peer as? IosappGroup {
                     if case .creator = peer.role {
                         canManageCall = true
                     } else if case let .admin(rights, _) = peer.role, rights.rights.contains(.canManageCalls) {
                         canManageCall = true
                     }
-                } else if let peer = peer as? TelegramChannel {
+                } else if let peer = peer as? IosappChannel {
                     if peer.flags.contains(.isCreator) {
                         canManageCall = true
                     } else if (peer.adminRights?.rights.contains(.canManageCalls) == true) {
@@ -1300,8 +1300,8 @@ public final class PresentationGroupCallImpl: PresentationGroupCall {
         let myPeerId = self.joinAsPeerId
         let accountContext = self.accountContext
         let myPeerData = self.accountContext.engine.data.get(
-            TelegramEngine.EngineData.Item.Peer.Peer(id: myPeerId),
-            TelegramEngine.EngineData.Item.Peer.AboutText(id: myPeerId)
+            IosappEngine.EngineData.Item.Peer.Peer(id: myPeerId),
+            IosappEngine.EngineData.Item.Peer.AboutText(id: myPeerId)
         )
         |> map { peer, aboutText -> (EnginePeer, String?)? in
             guard let peer = peer else {
@@ -1505,7 +1505,7 @@ public final class PresentationGroupCallImpl: PresentationGroupCall {
                 |> runOn(.mainQueue())
             } else {
                 rawAdminIds = accountContext.engine.data.subscribe(
-                    TelegramEngine.EngineData.Item.Peer.LegacyGroupParticipants(id: peerId)
+                    IosappEngine.EngineData.Item.Peer.LegacyGroupParticipants(id: peerId)
                 )
                 |> map { participants -> Set<PeerId> in
                     guard case let .known(participants) = participants else {
@@ -1528,7 +1528,7 @@ public final class PresentationGroupCallImpl: PresentationGroupCall {
         
         let peer: Signal<EnginePeer?, NoError>
         if let peerId {
-            peer = accountContext.engine.data.subscribe(TelegramEngine.EngineData.Item.Peer.Peer(id: peerId))
+            peer = accountContext.engine.data.subscribe(IosappEngine.EngineData.Item.Peer.Peer(id: peerId))
         } else {
             peer = .single(nil)
         }
@@ -1582,8 +1582,8 @@ public final class PresentationGroupCallImpl: PresentationGroupCall {
         
         let myPeerId = self.joinAsPeerId
         let myPeerData = self.accountContext.engine.data.get(
-            TelegramEngine.EngineData.Item.Peer.Peer(id: myPeerId),
-            TelegramEngine.EngineData.Item.Peer.AboutText(id: myPeerId)
+            IosappEngine.EngineData.Item.Peer.Peer(id: myPeerId),
+            IosappEngine.EngineData.Item.Peer.AboutText(id: myPeerId)
         )
         |> map { peer, aboutText -> (EnginePeer, String?)? in
             guard let peer = peer else {
@@ -1985,7 +1985,7 @@ public final class PresentationGroupCallImpl: PresentationGroupCall {
                         |> runOn(.mainQueue())
                     } else {
                         peerAdminIds = self.accountContext.engine.data.get(
-                            TelegramEngine.EngineData.Item.Peer.LegacyGroupParticipants(id: peerId)
+                            IosappEngine.EngineData.Item.Peer.LegacyGroupParticipants(id: peerId)
                         )
                         |> map { participants -> [EnginePeer.Id] in
                             guard case let .known(participants) = participants else {
@@ -2329,7 +2329,7 @@ public final class PresentationGroupCallImpl: PresentationGroupCall {
                         |> runOn(.mainQueue())
                     } else {
                         rawAdminIds = accountContext.engine.data.subscribe(
-                            TelegramEngine.EngineData.Item.Peer.LegacyGroupParticipants(id: peerId)
+                            IosappEngine.EngineData.Item.Peer.LegacyGroupParticipants(id: peerId)
                         )
                         |> map { participants -> Set<PeerId> in
                             guard case let .known(participants) = participants else {
@@ -2352,7 +2352,7 @@ public final class PresentationGroupCallImpl: PresentationGroupCall {
                 
                 let peer: Signal<EnginePeer?, NoError>
                 if let peerId = peerId ?? self.streamPeerId {
-                    peer = accountContext.engine.data.subscribe(TelegramEngine.EngineData.Item.Peer.Peer(id: peerId))
+                    peer = accountContext.engine.data.subscribe(IosappEngine.EngineData.Item.Peer.Peer(id: peerId))
                 } else {
                     peer = .single(nil)
                 }
@@ -2745,9 +2745,9 @@ public final class PresentationGroupCallImpl: PresentationGroupCall {
                 self.memberEventsPipeDisposable.set((participantsContext.memberEvents
                 |> mapToSignal { event -> Signal<PresentationGroupCallMemberEvent, NoError> in
                     return engine.data.get(
-                        TelegramEngine.EngineData.Item.Peer.Peer(id: event.peerId),
-                        TelegramEngine.EngineData.Item.Peer.IsContact(id: event.peerId),
-                        TelegramEngine.EngineData.Item.Messages.ChatListIndex(id: event.peerId)
+                        IosappEngine.EngineData.Item.Peer.Peer(id: event.peerId),
+                        IosappEngine.EngineData.Item.Peer.IsContact(id: event.peerId),
+                        IosappEngine.EngineData.Item.Messages.ChatListIndex(id: event.peerId)
                     )
                     |> mapToSignal { peer, isContact, chatListIndex -> Signal<PresentationGroupCallMemberEvent, NoError> in
                         if let peer = peer {
@@ -2985,7 +2985,7 @@ public final class PresentationGroupCallImpl: PresentationGroupCall {
         if peerId == self.joinAsPeerId {
             return
         }
-        let _ = (self.accountContext.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: peerId))
+        let _ = (self.accountContext.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: peerId))
         |> deliverOnMainQueue).start(next: { [weak self] myPeer in
             guard let self, let myPeer = myPeer else {
                 return
@@ -3793,7 +3793,7 @@ public final class PresentationGroupCallImpl: PresentationGroupCall {
                     case let .privacy(peer):
                         if let peer {
                             if let currentInviteLinks = self.currentInviteLinks {
-                                let inviteLinkScreen = self.accountContext.sharedContext.makeSendInviteLinkScreen(context: self.accountContext, subject: .groupCall(.existing(link: currentInviteLinks.listenerLink)), peers: [TelegramForbiddenInvitePeer(peer: peer, canInviteWithPremium: false, premiumRequiredToContact: false)], theme: defaultDarkColorPresentationTheme)
+                                let inviteLinkScreen = self.accountContext.sharedContext.makeSendInviteLinkScreen(context: self.accountContext, subject: .groupCall(.existing(link: currentInviteLinks.listenerLink)), peers: [IosappForbiddenInvitePeer(peer: peer, canInviteWithPremium: false, premiumRequiredToContact: false)], theme: defaultDarkColorPresentationTheme)
                                 if let navigationController = self.accountContext.sharedContext.mainWindow?.viewController as? NavigationController {
                                     navigationController.pushViewController(inviteLinkScreen)
                                 }
@@ -4122,20 +4122,20 @@ public final class PresentationGroupCallImpl: PresentationGroupCall {
     }
 }
 
-public final class TelegramE2EEncryptionProviderImpl: TelegramE2EEncryptionProvider {
-    public static let shared = TelegramE2EEncryptionProviderImpl()
+public final class IosappE2EEncryptionProviderImpl: IosappE2EEncryptionProvider {
+    public static let shared = IosappE2EEncryptionProviderImpl()
     
-    public func generateKeyPair() -> TelegramKeyPair? {
+    public func generateKeyPair() -> IosappKeyPair? {
         guard let keyPair = TdKeyPair.generate() else {
             return nil
         }
-        guard let publicKey = TelegramPublicKey(data: keyPair.publicKey) else {
+        guard let publicKey = IosappPublicKey(data: keyPair.publicKey) else {
             return nil
         }
-        return TelegramKeyPair(id: keyPair.keyId, publicKey: publicKey)
+        return IosappKeyPair(id: keyPair.keyId, publicKey: publicKey)
     }
     
-    public func generateCallZeroBlock(keyPair: TelegramKeyPair, userId: Int64) -> Data? {
+    public func generateCallZeroBlock(keyPair: IosappKeyPair, userId: Int64) -> Data? {
         guard let keyPair = TdKeyPair(keyId: keyPair.id, publicKey: keyPair.publicKey.data) else {
             return nil
         }

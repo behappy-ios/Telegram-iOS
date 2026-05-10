@@ -58,8 +58,8 @@ public final class AuthorizationSequenceController: NavigationController, ASAuth
     }
     private var didSetReady = false
     
-    fileprivate var engine: TelegramEngineUnauthorized {
-        return TelegramEngineUnauthorized(account: self.account)
+    fileprivate var engine: IosappEngineUnauthorized {
+        return IosappEngineUnauthorized(account: self.account)
     }
     
     private var inAppPurchaseManager: InAppPurchaseManager!
@@ -423,7 +423,7 @@ public final class AuthorizationSequenceController: NavigationController, ASAuth
                             if let regex = try? NSRegularExpression(pattern: "\\#", options: []) {
                                 let matches = regex.matches(in: text.string, options: [], range: NSMakeRange(0, text.length))
                                 if let first = matches.first {
-                                    text.addAttribute(NSAttributedString.Key(rawValue: TelegramTextAttributes.Spoiler), value: true, range: NSRange(location: first.range.location, length: matches.count))
+                                    text.addAttribute(NSAttributedString.Key(rawValue: IosappTextAttributes.Spoiler), value: true, range: NSRange(location: first.range.location, length: matches.count))
                                 }
                             }
                             
@@ -561,7 +561,7 @@ public final class AuthorizationSequenceController: NavigationController, ASAuth
                                                     })]), on: .root, blockInteraction: false, completion: {})
                                                 })
                                             ], actionLayout: .vertical, dismissOnOutsideTap: true)
-                                            contentNode.textAttributeAction = (NSAttributedString.Key(rawValue: TelegramTextAttributes.URL), { value in
+                                            contentNode.textAttributeAction = (NSAttributedString.Key(rawValue: IosappTextAttributes.URL), { value in
                                                 if let value = value as? String {
                                                     strongSelf.openUrl(value)
                                                 }
@@ -1159,7 +1159,7 @@ public final class AuthorizationSequenceController: NavigationController, ASAuth
                     let avatarVideo: Signal<UploadedPeerPhotoData?, NoError>?
                     if let avatarAsset = avatarAsset as? AVAsset {
                         let engine = strongSelf.engine
-                        avatarVideo = Signal<TelegramMediaResource?, NoError> { subscriber in
+                        avatarVideo = Signal<IosappMediaResource?, NoError> { subscriber in
                             let entityRenderer: LegacyPaintEntityRenderer? = avatarAdjustments.flatMap { adjustments in
                                 if let paintingData = adjustments.paintingData, paintingData.hasAnimation {
                                     return LegacyPaintEntityRenderer(postbox: nil, adjustments: adjustments)

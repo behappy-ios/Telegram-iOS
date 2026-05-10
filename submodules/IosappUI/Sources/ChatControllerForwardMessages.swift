@@ -18,7 +18,7 @@ import ChatMessagePaymentAlertController
 extension ChatControllerImpl {
     func forwardMessages(messageIds: [MessageId], options: ChatInterfaceForwardOptionsState? = nil, resetCurrent: Bool = false) {
         let _ = (self.context.engine.data.get(EngineDataMap(
-            messageIds.map(TelegramEngine.EngineData.Item.Messages.Message.init)
+            messageIds.map(IosappEngine.EngineData.Item.Messages.Message.init)
         ))
         |> deliverOnMainQueue).startStandalone(next: { [weak self] messages in
             let sortedMessages = messages.values.compactMap { $0?._asMessage() }.sorted { lhs, rhs in
@@ -36,16 +36,16 @@ extension ChatControllerImpl {
             var hasTodo = false
             for message in messages {
                 for media in message.media {
-                    if let poll = media as? TelegramMediaPoll, case .public = poll.publicity {
+                    if let poll = media as? IosappMediaPoll, case .public = poll.publicity {
                         hasPublicPolls = true
                         if case .quiz = poll.kind {
                             hasPublicQuiz = true
                         }
                         filter.insert(.excludeChannels)
-                    } else if let _ = media as? TelegramMediaTodo {
+                    } else if let _ = media as? IosappMediaTodo {
                         hasTodo = true
                         filter.insert(.excludeChannels)
-                    } else if let _ = media as? TelegramMediaPaidContent {
+                    } else if let _ = media as? IosappMediaPaidContent {
                         filter.insert(.excludeSecretChats)
                     }
                 }
@@ -106,10 +106,10 @@ extension ChatControllerImpl {
                 
                 let _ = (context.engine.data.get(
                     EngineDataMap(
-                        peerIds.map(TelegramEngine.EngineData.Item.Peer.SendPaidMessageStars.init(id:))
+                        peerIds.map(IosappEngine.EngineData.Item.Peer.SendPaidMessageStars.init(id:))
                     ),
                     EngineDataList(
-                        peerIds.map(TelegramEngine.EngineData.Item.Peer.RenderedPeer.init(id:))
+                        peerIds.map(IosappEngine.EngineData.Item.Peer.RenderedPeer.init(id:))
                     )
                 )
                 |> deliverOnMainQueue).start(next: { [weak self, weak controller] sendPaidMessageStars, renderedPeers in
@@ -290,7 +290,7 @@ extension ChatControllerImpl {
                                     
                                     strongSelf.present(UndoOverlayController(presentationData: presentationData, content: .forward(savedMessages: savedMessages, text: text), elevatedLayout: false, position: savedMessages && messages.count > 0 ? .top : .bottom, animateInAsReplacement: true, action: { action in
                                         if savedMessages, let self, action == .info {
-                                            let _ = (self.context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: self.context.account.peerId))
+                                            let _ = (self.context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: self.context.account.peerId))
                                                      |> deliverOnMainQueue).start(next: { [weak self] peer in
                                                 guard let self, let peer else {
                                                     return
@@ -407,7 +407,7 @@ extension ChatControllerImpl {
                         let presentationData = strongSelf.context.sharedContext.currentPresentationData.with { $0 }
                         strongSelf.present(UndoOverlayController(presentationData: presentationData, content: .forward(savedMessages: true, text: messages.count == 1 ? presentationData.strings.Conversation_ForwardTooltip_SavedMessages_One : presentationData.strings.Conversation_ForwardTooltip_SavedMessages_Many), elevatedLayout: false, position: .top, animateInAsReplacement: true, action: { [weak self] value in
                             if case .info = value, let strongSelf = self {
-                                let _ = (strongSelf.context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: strongSelf.context.account.peerId))
+                                let _ = (strongSelf.context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: strongSelf.context.account.peerId))
                                 |> deliverOnMainQueue).startStandalone(next: { peer in
                                     guard let strongSelf = self, let peer = peer, let navigationController = strongSelf.effectiveNavigationController else {
                                         return

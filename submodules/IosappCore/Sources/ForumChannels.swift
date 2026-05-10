@@ -82,7 +82,7 @@ public struct MessageHistoryThreadData: Codable, Equatable {
     public var maxOutgoingReadId: Int32
     public var isClosed: Bool
     public var isHidden: Bool
-    public var notificationSettings: TelegramPeerNotificationSettings
+    public var notificationSettings: IosappPeerNotificationSettings
     public var isMessageFeeRemoved: Bool
     
     public init(
@@ -97,7 +97,7 @@ public struct MessageHistoryThreadData: Codable, Equatable {
         maxOutgoingReadId: Int32,
         isClosed: Bool,
         isHidden: Bool,
-        notificationSettings: TelegramPeerNotificationSettings,
+        notificationSettings: IosappPeerNotificationSettings,
         isMessageFeeRemoved: Bool
     ) {
         self.creationDate = creationDate
@@ -129,7 +129,7 @@ public struct MessageHistoryThreadData: Codable, Equatable {
         self.maxOutgoingReadId = try container.decode(Int32.self, forKey: .maxOutgoingReadId)
         self.isClosed = try container.decodeIfPresent(Bool.self, forKey: .isClosed) ?? false
         self.isHidden = try container.decodeIfPresent(Bool.self, forKey: .isHidden) ?? false
-        self.notificationSettings = try container.decode(TelegramPeerNotificationSettings.self, forKey: .notificationSettings)
+        self.notificationSettings = try container.decode(IosappPeerNotificationSettings.self, forKey: .notificationSettings)
         self.isMessageFeeRemoved = try container.decodeIfPresent(Bool.self, forKey: .isMessageFeeRemoved) ?? false
     }
     
@@ -693,7 +693,7 @@ public func _internal_fillSavedMessageHistory(accountPeerId: PeerId, postbox: Po
                     maxOutgoingReadId: 0,
                     isClosed: false,
                     isHidden: false,
-                    notificationSettings: TelegramPeerNotificationSettings.defaultSettings,
+                    notificationSettings: IosappPeerNotificationSettings.defaultSettings,
                     isMessageFeeRemoved: false
                 ),
                 topMessage: message.id.id,
@@ -736,7 +736,7 @@ func _internal_requestMessageHistoryThreads(accountPeerId: PeerId, postbox: Post
         var isSavedThreads = false
         if peer.id == accountPeerId {
             isSavedThreads = true
-        } else if let channel = peer as? TelegramChannel, channel.flags.contains(.isMonoforum) {
+        } else if let channel = peer as? IosappChannel, channel.flags.contains(.isMonoforum) {
             isSavedThreads = true
         }
         
@@ -815,7 +815,7 @@ func _internal_requestMessageHistoryThreads(accountPeerId: PeerId, postbox: Post
                                 maxOutgoingReadId: 0,
                                 isClosed: false,
                                 isHidden: false,
-                                notificationSettings: TelegramPeerNotificationSettings.defaultSettings,
+                                notificationSettings: IosappPeerNotificationSettings.defaultSettings,
                                 isMessageFeeRemoved: false
                             )
                             
@@ -838,7 +838,7 @@ func _internal_requestMessageHistoryThreads(accountPeerId: PeerId, postbox: Post
                             var threadPeer: Peer?
                             for user in users {
                                 if user.peerId == peer.peerId {
-                                    threadPeer = TelegramUser(user: user)
+                                    threadPeer = IosappUser(user: user)
                                     break
                                 }
                             }
@@ -872,7 +872,7 @@ func _internal_requestMessageHistoryThreads(accountPeerId: PeerId, postbox: Post
                                 maxOutgoingReadId: readOutboxMaxId,
                                 isClosed: false,
                                 isHidden: false,
-                                notificationSettings: TelegramPeerNotificationSettings.defaultSettings,
+                                notificationSettings: IosappPeerNotificationSettings.defaultSettings,
                                 isMessageFeeRemoved: (flags & (1 << 4)) != 0
                             )
                             
@@ -895,7 +895,7 @@ func _internal_requestMessageHistoryThreads(accountPeerId: PeerId, postbox: Post
                             var threadPeer: Peer?
                             for user in users {
                                 if user.peerId == peer.peerId {
-                                    threadPeer = TelegramUser(user: user)
+                                    threadPeer = IosappUser(user: user)
                                     break
                                 }
                             }
@@ -974,7 +974,7 @@ func _internal_requestMessageHistoryThreads(accountPeerId: PeerId, postbox: Post
                                 maxOutgoingReadId: 0,
                                 isClosed: false,
                                 isHidden: false,
-                                notificationSettings: TelegramPeerNotificationSettings.defaultSettings,
+                                notificationSettings: IosappPeerNotificationSettings.defaultSettings,
                                 isMessageFeeRemoved: false
                             )
 
@@ -997,7 +997,7 @@ func _internal_requestMessageHistoryThreads(accountPeerId: PeerId, postbox: Post
                             var threadPeer: Peer?
                             for user in users {
                                 if user.peerId == peer.peerId {
-                                    threadPeer = TelegramUser(user: user)
+                                    threadPeer = IosappUser(user: user)
                                     break
                                 }
                             }
@@ -1031,7 +1031,7 @@ func _internal_requestMessageHistoryThreads(accountPeerId: PeerId, postbox: Post
                                 maxOutgoingReadId: readOutboxMaxId,
                                 isClosed: false,
                                 isHidden: false,
-                                notificationSettings: TelegramPeerNotificationSettings.defaultSettings,
+                                notificationSettings: IosappPeerNotificationSettings.defaultSettings,
                                 isMessageFeeRemoved: (flags & (1 << 4)) != 0
                             )
 
@@ -1054,7 +1054,7 @@ func _internal_requestMessageHistoryThreads(accountPeerId: PeerId, postbox: Post
                             var threadPeer: Peer?
                             for user in users {
                                 if user.peerId == peer.peerId {
-                                    threadPeer = TelegramUser(user: user)
+                                    threadPeer = IosappUser(user: user)
                                     break
                                 }
                             }
@@ -1108,12 +1108,12 @@ func _internal_requestMessageHistoryThreads(accountPeerId: PeerId, postbox: Post
                 guard let peer = transaction.getPeer(peerId) else {
                     return nil
                 }
-                if let channel = peer as? TelegramChannel {
+                if let channel = peer as? IosappChannel {
                     if !channel.flags.contains(.isForum) {
                         return nil
                     }
                     return apiInputPeer(channel)
-                } else if let user = peer as? TelegramUser, let botInfo = user.botInfo, botInfo.flags.contains(.hasForum) {
+                } else if let user = peer as? IosappUser, let botInfo = user.botInfo, botInfo.flags.contains(.hasForum) {
                     return apiInputPeer(user)
                 } else {
                     return nil
@@ -1191,7 +1191,7 @@ func _internal_requestMessageHistoryThreads(accountPeerId: PeerId, postbox: Post
                                     maxOutgoingReadId: readOutboxMaxId,
                                     isClosed: (flags & (1 << 2)) != 0,
                                     isHidden: (flags & (1 << 6)) != 0,
-                                    notificationSettings: TelegramPeerNotificationSettings(apiSettings: notifySettings),
+                                    notificationSettings: IosappPeerNotificationSettings(apiSettings: notifySettings),
                                     isMessageFeeRemoved: false
                                 )
                                 
@@ -1294,7 +1294,7 @@ func applyLoadMessageHistoryThreadsResults(accountPeerId: PeerId, transaction: T
                 if message.id.peerId == result.peerId && message.threadId == item.threadId {
                     if case let .Id(messageId) = message.id {
                         for media in message.media {
-                            if let action = media as? TelegramMediaAction {
+                            if let action = media as? IosappMediaAction {
                                 if case .topicCreated = action.action {
                                     transaction.removeHole(peerId: messageId.peerId, threadId: item.threadId, namespace: Namespaces.Message.Cloud, space: .everywhere, range: 1 ... messageId.id)
                                 }
@@ -1360,7 +1360,7 @@ func _internal_forumChannelTopicNotificationExceptions(account: Account, id: Eng
                     switch peer {
                     case let .notifyForumTopic(notifyForumTopicData):
                         let topMsgId = notifyForumTopicData.topMsgId
-                        list.append((Int64(topMsgId), EnginePeer.NotificationSettings(TelegramPeerNotificationSettings(apiSettings: notifySettings))))
+                        list.append((Int64(topMsgId), EnginePeer.NotificationSettings(IosappPeerNotificationSettings(apiSettings: notifySettings))))
                     default:
                         break
                     }

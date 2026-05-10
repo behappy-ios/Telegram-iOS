@@ -24,14 +24,14 @@ private final class SendInviteLinkScreenComponent: Component {
     
     let context: AccountContext
     let subject: SendInviteLinkScreenSubject
-    let peers: [TelegramForbiddenInvitePeer]
+    let peers: [IosappForbiddenInvitePeer]
     let peerPresences: [EnginePeer.Id: EnginePeer.Presence]
     let sendPaidMessageStars: [EnginePeer.Id: StarsAmount]
     
     init(
         context: AccountContext,
         subject: SendInviteLinkScreenSubject,
-        peers: [TelegramForbiddenInvitePeer],
+        peers: [IosappForbiddenInvitePeer],
         peerPresences: [EnginePeer.Id: EnginePeer.Presence],
         sendPaidMessageStars: [EnginePeer.Id: StarsAmount]
     ) {
@@ -1171,13 +1171,13 @@ private final class SendInviteLinkScreenComponent: Component {
 
 public class SendInviteLinkScreen: ViewControllerComponentContainer {
     private let context: AccountContext
-    private let peers: [TelegramForbiddenInvitePeer]
+    private let peers: [IosappForbiddenInvitePeer]
     
     private var isDismissed: Bool = false
     
     private var presenceDisposable: Disposable?
     
-    public init(context: AccountContext, subject: SendInviteLinkScreenSubject, peers: [TelegramForbiddenInvitePeer], theme: PresentationTheme? = nil) {
+    public init(context: AccountContext, subject: SendInviteLinkScreenSubject, peers: [IosappForbiddenInvitePeer], theme: PresentationTheme? = nil) {
         self.context = context
         
         #if DEBUG && false
@@ -1204,14 +1204,14 @@ public class SendInviteLinkScreen: ViewControllerComponentContainer {
             }
             
             var nextPeerId: Int64 = 1
-            let makePeer: (Bool, Bool) -> TelegramForbiddenInvitePeer = { canInviteWithPremium, premiumRequiredToContact in
+            let makePeer: (Bool, Bool) -> IosappForbiddenInvitePeer = { canInviteWithPremium, premiumRequiredToContact in
                 guard case let .user(user) = peers[0].peer else {
                     preconditionFailure()
                 }
                 let id = nextPeerId
                 nextPeerId += 1
-                return TelegramForbiddenInvitePeer(
-                    peer: .user(TelegramUser(
+                return IosappForbiddenInvitePeer(
+                    peer: .user(IosappUser(
                         id: EnginePeer.Id(namespace: Namespaces.Peer.CloudUser, id: EnginePeer.Id.Id._internalFromInt64Value(id)),
                         accessHash: user.accessHash,
                         firstName: user.firstName,
@@ -1306,10 +1306,10 @@ public class SendInviteLinkScreen: ViewControllerComponentContainer {
         
         self.presenceDisposable = (context.engine.data.subscribe(
             EngineDataMap(
-                peers.map(\.peer.id).map(TelegramEngine.EngineData.Item.Peer.Presence.init(id:))
+                peers.map(\.peer.id).map(IosappEngine.EngineData.Item.Peer.Presence.init(id:))
             ),
             EngineDataMap(
-                peers.map(\.peer.id).map(TelegramEngine.EngineData.Item.Peer.SendPaidMessageStars.init(id:))
+                peers.map(\.peer.id).map(IosappEngine.EngineData.Item.Peer.SendPaidMessageStars.init(id:))
             )
         )
         |> deliverOnMainQueue).start(next: { [weak self] presences, sendPaidMessageStars in

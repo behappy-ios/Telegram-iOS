@@ -28,7 +28,7 @@ public final class GiftCompositionComponent: Component {
     }
     
     public enum Subject: Equatable {
-        case generic(TelegramMediaFile)
+        case generic(IosappMediaFile)
         case unique([StarGift.UniqueGift.Attribute]?, StarGift.UniqueGift)
         case preview([StarGift.UniqueGift.Attribute])
     }
@@ -113,7 +113,7 @@ public final class GiftCompositionComponent: Component {
         
         private var previewTimer: SwiftSignalKit.Timer?
         
-        private var currentFile: TelegramMediaFile?
+        private var currentFile: IosappMediaFile?
         private var previewModels: [StarGift.UniqueGift.Attribute] = []
         private var previewBackdrops: [StarGift.UniqueGift.Attribute] = []
         private var previewPatterns: [StarGift.UniqueGift.Attribute] = []
@@ -615,12 +615,12 @@ public final class GiftCompositionComponent: Component {
             self.component = component
             self.componentState = state
             
-            var animationFile: TelegramMediaFile?
+            var animationFile: IosappMediaFile?
             var backgroundColor: UIColor?
             var secondBackgroundColor: UIColor?
             var patternColor: UIColor?
-            var patternFile: TelegramMediaFile?
-            var files: [Int64: TelegramMediaFile] = [:]
+            var patternFile: IosappMediaFile?
+            var files: [Int64: IosappMediaFile] = [:]
                         
             var loop = false
             
@@ -851,7 +851,7 @@ public final class GiftCompositionComponent: Component {
             let iconSize = CGSize(width: 136.0, height: 136.0)
             
             if let (previewAttributes, mainGift) = uniqueSpinContext {
-                var mainModelFile: TelegramMediaFile?
+                var mainModelFile: IosappMediaFile?
                 for attribute in mainGift.attributes {
                     if case let .model(_, file, _, _) = attribute { mainModelFile = file; break }
                 }

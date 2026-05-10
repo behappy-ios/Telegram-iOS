@@ -80,7 +80,7 @@ public enum UserPresenceStatus: Comparable, PostboxCoding {
     }
 }
 
-public final class TelegramUserPresence: PeerPresence, Equatable {
+public final class IosappUserPresence: PeerPresence, Equatable {
     public let status: UserPresenceStatus
     public let lastActivity: Int32
     
@@ -99,12 +99,12 @@ public final class TelegramUserPresence: PeerPresence, Equatable {
         encoder.encodeInt32(self.lastActivity, forKey: "la")
     }
     
-    public static func ==(lhs: TelegramUserPresence, rhs: TelegramUserPresence) -> Bool {
+    public static func ==(lhs: IosappUserPresence, rhs: IosappUserPresence) -> Bool {
         return lhs.status == rhs.status && lhs.lastActivity == rhs.lastActivity
     }
     
     public func isEqual(to: PeerPresence) -> Bool {
-        if let to = to as? TelegramUserPresence {
+        if let to = to as? IosappUserPresence {
             return self == to
         } else {
             return false

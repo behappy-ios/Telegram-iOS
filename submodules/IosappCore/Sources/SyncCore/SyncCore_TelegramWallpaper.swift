@@ -71,10 +71,10 @@ public struct WallpaperSettings: Codable, Equatable {
     }
 }
 
-public struct TelegramWallpaperNativeCodable: Codable {
-    public let value: TelegramWallpaper
+public struct IosappWallpaperNativeCodable: Codable {
+    public let value: IosappWallpaper
 
-    public init(_ value: TelegramWallpaper) {
+    public init(_ value: IosappWallpaper) {
         self.value = value
     }
 
@@ -90,14 +90,14 @@ public struct TelegramWallpaperNativeCodable: Codable {
         case 2:
             let settings = try container.decode(WallpaperSettings.self, forKey: "settings")
             let representations = (try container.decode([AdaptedPostboxDecoder.RawObjectData].self, forKey: "i")).map { itemData in
-                return TelegramMediaImageRepresentation(decoder: PostboxDecoder(buffer: MemoryBuffer(data: itemData.data)))
+                return IosappMediaImageRepresentation(decoder: PostboxDecoder(buffer: MemoryBuffer(data: itemData.data)))
             }
             self.value = .image(representations, settings)
         case 3:
             let settings = try container.decode(WallpaperSettings.self, forKey: "settings")
             if let fileData = try container.decodeIfPresent(AdaptedPostboxDecoder.RawObjectData.self, forKey: "file") {
-                let file = TelegramMediaFile(decoder: PostboxDecoder(buffer: MemoryBuffer(data: fileData.data)))
-                self.value = .file(TelegramWallpaper.File(
+                let file = IosappMediaFile(decoder: PostboxDecoder(buffer: MemoryBuffer(data: fileData.data)))
+                self.value = .file(IosappWallpaper.File(
                     id: try container.decode(Int64.self, forKey: "id"),
                     accessHash: try container.decode(Int64.self, forKey: "accessHash"),
                     isCreator: try container.decode(Int32.self, forKey: "isCreator") != 0,
@@ -125,7 +125,7 @@ public struct TelegramWallpaperNativeCodable: Codable {
                 colors = (try container.decode([Int32].self, forKey: "colors")).map(UInt32.init(bitPattern:))
             }
             
-            self.value = .gradient(TelegramWallpaper.Gradient(
+            self.value = .gradient(IosappWallpaper.Gradient(
                 id: try container.decodeIfPresent(Int64.self, forKey: "id"),
                 colors: colors,
                 settings: settings
@@ -177,9 +177,9 @@ public struct TelegramWallpaperNativeCodable: Codable {
     }
 }
 
-public enum TelegramWallpaper: Equatable {
-    public static func emoticonWallpaper(emoticon: String) -> TelegramWallpaper {
-        return .file(File(id: -1, accessHash: -1, isCreator: false, isDefault: false, isPattern: false, isDark: false, slug: "", file: TelegramMediaFile(fileId: MediaId(namespace: 0, id: 0), partialReference: nil, resource: EmptyMediaResource(), previewRepresentations: [], videoThumbnails: [], immediateThumbnailData: nil, mimeType: "", size: nil, attributes: [], alternativeRepresentations: []), settings: WallpaperSettings(emoticon: emoticon)))
+public enum IosappWallpaper: Equatable {
+    public static func emoticonWallpaper(emoticon: String) -> IosappWallpaper {
+        return .file(File(id: -1, accessHash: -1, isCreator: false, isDefault: false, isPattern: false, isDark: false, slug: "", file: IosappMediaFile(fileId: MediaId(namespace: 0, id: 0), partialReference: nil, resource: EmptyMediaResource(), previewRepresentations: [], videoThumbnails: [], immediateThumbnailData: nil, mimeType: "", size: nil, attributes: [], alternativeRepresentations: []), settings: WallpaperSettings(emoticon: emoticon)))
     }
     
     public struct Gradient: Equatable {
@@ -206,7 +206,7 @@ public enum TelegramWallpaper: Equatable {
         public var isPattern: Bool
         public var isDark: Bool
         public var slug: String
-        public var file: TelegramMediaFile
+        public var file: IosappMediaFile
         public var settings: WallpaperSettings
 
         public init(
@@ -217,7 +217,7 @@ public enum TelegramWallpaper: Equatable {
             isPattern: Bool,
             isDark: Bool,
             slug: String,
-            file: TelegramMediaFile,
+            file: IosappMediaFile,
             settings: WallpaperSettings
         ) {
             self.id = id
@@ -266,7 +266,7 @@ public enum TelegramWallpaper: Equatable {
     case builtin(WallpaperSettings)
     case color(UInt32)
     case gradient(Gradient)
-    case image([TelegramMediaImageRepresentation], WallpaperSettings)
+    case image([IosappMediaImageRepresentation], WallpaperSettings)
     case file(File)
     case emoticon(String)
     
@@ -279,7 +279,7 @@ public enum TelegramWallpaper: Equatable {
         }
     }
     
-    public static func ==(lhs: TelegramWallpaper, rhs: TelegramWallpaper) -> Bool {
+    public static func ==(lhs: IosappWallpaper, rhs: IosappWallpaper) -> Bool {
         switch lhs {
             case let .builtin(settings):
                 if case .builtin(settings) = rhs {
@@ -320,7 +320,7 @@ public enum TelegramWallpaper: Equatable {
         }
     }
     
-    public func isBasicallyEqual(to wallpaper: TelegramWallpaper) -> Bool {
+    public func isBasicallyEqual(to wallpaper: IosappWallpaper) -> Bool {
         switch self {
             case .builtin:
                 if case .builtin = wallpaper {
@@ -374,7 +374,7 @@ public enum TelegramWallpaper: Equatable {
         }
     }
     
-    public func withUpdatedSettings(_ settings: WallpaperSettings) -> TelegramWallpaper {
+    public func withUpdatedSettings(_ settings: WallpaperSettings) -> IosappWallpaper {
         switch self {
         case .builtin:
             return .builtin(settings)

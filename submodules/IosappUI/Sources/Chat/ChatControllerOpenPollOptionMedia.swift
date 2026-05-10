@@ -33,7 +33,7 @@ extension ChatControllerImpl {
             return
         }
         
-        if let file = media as? TelegramMediaFile, file.isSticker || file.isCustomEmoji {
+        if let file = media as? IosappMediaFile, file.isSticker || file.isCustomEmoji {
             let _ = (self.context.engine.stickers.isStickerSaved(id: file.fileId)
             |> deliverOnMainQueue).start(next: { [weak self] isStarred in
                 guard let self else {

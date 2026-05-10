@@ -33,11 +33,11 @@ public enum ChatTitleContent: Equatable {
         public var peer: Peer?
         public var isContact: Bool
         public var isSavedMessages: Bool
-        public var notificationSettings: TelegramPeerNotificationSettings?
+        public var notificationSettings: IosappPeerNotificationSettings?
         public var peerPresences: [PeerId: PeerPresence]
         public var cachedData: CachedPeerData?
         
-        public init(peerId: PeerId, peer: Peer?, isContact: Bool, isSavedMessages: Bool, notificationSettings: TelegramPeerNotificationSettings?, peerPresences: [PeerId: PeerPresence], cachedData: CachedPeerData?) {
+        public init(peerId: PeerId, peer: Peer?, isContact: Bool, isSavedMessages: Bool, notificationSettings: IosappPeerNotificationSettings?, peerPresences: [PeerId: PeerPresence], cachedData: CachedPeerData?) {
             self.peerId = peerId
             self.peer = peer
             self.isContact = isContact
@@ -48,7 +48,7 @@ public enum ChatTitleContent: Equatable {
         }
         
         public init(peerView: PeerView) {
-            self.init(peerId: peerView.peerId, peer: peerViewMainPeer(peerView), isContact: peerView.peerIsContact, isSavedMessages: false, notificationSettings: peerView.notificationSettings as? TelegramPeerNotificationSettings, peerPresences: peerView.peerPresences, cachedData: peerView.cachedData)
+            self.init(peerId: peerView.peerId, peer: peerViewMainPeer(peerView), isContact: peerView.peerIsContact, isSavedMessages: false, notificationSettings: peerView.notificationSettings as? IosappPeerNotificationSettings, peerPresences: peerView.peerPresences, cachedData: peerView.cachedData)
         }
         
         public static func ==(lhs: PeerData, rhs: PeerData) -> Bool {
@@ -294,7 +294,7 @@ public final class ChatTitleView: UIView, NavigationBarTitleView {
                                 } else if peerView.peerId.isAnonymousSavedMessages {
                                     segments = [.text(0, NSAttributedString(string: self.strings.ChatList_AuthorHidden, font: titleFont, textColor: titleTheme.rootController.navigationBar.primaryTextColor))]
                                 } else {
-                                    if !peerView.isContact, let user = peer as? TelegramUser, !user.flags.contains(.isSupport), user.botInfo == nil, let phone = user.phone, !phone.isEmpty {
+                                    if !peerView.isContact, let user = peer as? IosappUser, !user.flags.contains(.isSupport), user.botInfo == nil, let phone = user.phone, !phone.isEmpty {
                                         segments = [.text(0, NSAttributedString(string: formatPhoneNumber(context: self.context, number: phone), font: titleFont, textColor: titleTheme.rootController.navigationBar.primaryTextColor))]
                                     } else {
                                         segments = [.text(0, NSAttributedString(string: EnginePeer(peer).displayTitle(strings: self.strings, displayOrder: self.nameDisplayOrder), font: titleFont, textColor: titleTheme.rootController.navigationBar.primaryTextColor))]
@@ -616,7 +616,7 @@ public final class ChatTitleView: UIView, NavigationBarTitleView {
                                 if peer.id == self.context.account.peerId || isScheduledMessages || peer.id.isRepliesOrVerificationCodes {
                                     let string = NSAttributedString(string: "", font: subtitleFont, textColor: titleTheme.rootController.navigationBar.secondaryTextColor)
                                     state = .info(string, .generic)
-                                } else if let user = peer as? TelegramUser {
+                                } else if let user = peer as? IosappUser {
                                     if user.isDeleted {
                                         state = .none
                                     } else if servicePeer {
@@ -639,12 +639,12 @@ public final class ChatTitleView: UIView, NavigationBarTitleView {
                                         state = .info(string, .generic)
                                     } else if let peer = peerView.peer {
                                         let timestamp = CFAbsoluteTimeGetCurrent() + NSTimeIntervalSince1970
-                                        let userPresence: TelegramUserPresence
-                                        if let presence = peerView.peerPresences[peer.id] as? TelegramUserPresence {
+                                        let userPresence: IosappUserPresence
+                                        if let presence = peerView.peerPresences[peer.id] as? IosappUserPresence {
                                             userPresence = presence
                                             self.presenceManager?.reset(presence: EnginePeer.Presence(presence))
                                         } else {
-                                            userPresence = TelegramUserPresence(status: .none, lastActivity: 0)
+                                            userPresence = IosappUserPresence(status: .none, lastActivity: 0)
                                         }
                                         let (string, activity) = stringAndActivityForUserPresence(strings: self.strings, dateTimeFormat: self.dateTimeFormat, presence: EnginePeer.Presence(userPresence), relativeTo: Int32(timestamp))
                                         let attributedString = NSAttributedString(string: string, font: subtitleFont, textColor: activity ? titleTheme.rootController.navigationBar.accentTextColor : titleTheme.rootController.navigationBar.secondaryTextColor)
@@ -653,12 +653,12 @@ public final class ChatTitleView: UIView, NavigationBarTitleView {
                                         let string = NSAttributedString(string: "", font: subtitleFont, textColor: titleTheme.rootController.navigationBar.secondaryTextColor)
                                         state = .info(string, .generic)
                                     }
-                                } else if let group = peer as? TelegramGroup {
+                                } else if let group = peer as? IosappGroup {
                                     var onlineCount = 0
                                     if let cachedGroupData = peerView.cachedData as? CachedGroupData, let participants = cachedGroupData.participants {
                                         let timestamp = CFAbsoluteTimeGetCurrent() + NSTimeIntervalSince1970
                                         for participant in participants.participants {
-                                            if let presence = peerView.peerPresences[participant.peerId] as? TelegramUserPresence {
+                                            if let presence = peerView.peerPresences[participant.peerId] as? IosappUserPresence {
                                                 let relativeStatus = relativeUserPresenceStatus(EnginePeer.Presence(presence), relativeTo: Int32(timestamp))
                                                 switch relativeStatus {
                                                 case .online:
@@ -679,7 +679,7 @@ public final class ChatTitleView: UIView, NavigationBarTitleView {
                                         let string = NSAttributedString(string: strings.Conversation_StatusMembers(Int32(group.participantCount)), font: subtitleFont, textColor: titleTheme.rootController.navigationBar.secondaryTextColor)
                                         state = .info(string, .generic)
                                     }
-                                } else if let channel = peer as? TelegramChannel {
+                                } else if let channel = peer as? IosappChannel {
                                     if channel.isForumOrMonoForum, customTitle != nil {
                                         let string = NSAttributedString(string: EnginePeer(peer).displayTitle(strings: self.strings, displayOrder: self.nameDisplayOrder), font: subtitleFont, textColor: titleTheme.rootController.navigationBar.secondaryTextColor)
                                         state = .info(string, .generic)

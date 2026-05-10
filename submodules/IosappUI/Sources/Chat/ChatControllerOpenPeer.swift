@@ -167,9 +167,9 @@ extension ChatControllerImpl {
                 if let peer = peer {
                     do {
                         var chatPeerId: PeerId?
-                        if let peer = self.presentationInterfaceState.renderedPeer?.chatMainPeer as? TelegramGroup {
+                        if let peer = self.presentationInterfaceState.renderedPeer?.chatMainPeer as? IosappGroup {
                             chatPeerId = peer.id
-                        } else if let peer = self.presentationInterfaceState.renderedPeer?.chatMainPeer as? TelegramChannel, case .group = peer.info, case .member = peer.participationStatus {
+                        } else if let peer = self.presentationInterfaceState.renderedPeer?.chatMainPeer as? IosappChannel, case .group = peer.info, case .member = peer.participationStatus {
                             chatPeerId = peer.id
                         }
                         
@@ -366,7 +366,7 @@ extension ChatControllerImpl {
             self?.beginMessageSearch("")
         })))
         
-        if let threadId = self.chatLocation.threadId, let peer = self.presentationInterfaceState.renderedPeer?.chatMainPeer, (peer is TelegramChannel || peer is TelegramGroup) {
+        if let threadId = self.chatLocation.threadId, let peer = self.presentationInterfaceState.renderedPeer?.chatMainPeer, (peer is IosappChannel || peer is IosappGroup) {
             items.append(.action(ContextMenuActionItem(text: strings.CreateTopic_EditTitle, icon: { theme in
                 return generateTintedImage(image: UIImage(bundleImageName: "Chat/Context Menu/Edit"), color: theme.contextMenu.primaryColor)
             }, action: { [weak self] action in
@@ -380,7 +380,7 @@ extension ChatControllerImpl {
                     }
                     
                     guard let threadData = await self.context.engine.data.get(
-                        TelegramEngine.EngineData.Item.Peer.ThreadData(id: peerId, threadId: threadId)
+                        IosappEngine.EngineData.Item.Peer.ThreadData(id: peerId, threadId: threadId)
                     ).get() else {
                         return
                     }

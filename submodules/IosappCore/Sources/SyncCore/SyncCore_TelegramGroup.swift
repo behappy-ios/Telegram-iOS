@@ -2,9 +2,9 @@ import Postbox
 import FlatBuffers
 import FlatSerialization
 
-public enum TelegramGroupRole: Equatable, PostboxCoding {
+public enum IosappGroupRole: Equatable, PostboxCoding {
     case creator(rank: String?)
-    case admin(TelegramChatAdminRights, rank: String?)
+    case admin(IosappChatAdminRights, rank: String?)
     case member
     
     public init(decoder: PostboxDecoder) {
@@ -12,7 +12,7 @@ public enum TelegramGroupRole: Equatable, PostboxCoding {
             case 0:
                 self = .creator(rank: decoder.decodeOptionalStringForKey("rank"))
             case 1:
-                self = .admin(decoder.decodeObjectForKey("r", decoder: { TelegramChatAdminRights(decoder: $0) }) as! TelegramChatAdminRights, rank: decoder.decodeOptionalStringForKey("rank"))
+                self = .admin(decoder.decodeObjectForKey("r", decoder: { IosappChatAdminRights(decoder: $0) }) as! IosappChatAdminRights, rank: decoder.decodeOptionalStringForKey("rank"))
             case 2:
                 self = .member
             default:
@@ -43,18 +43,18 @@ public enum TelegramGroupRole: Equatable, PostboxCoding {
         }
     }
     
-    public init(flatBuffersObject: TelegramCore_TelegramGroupRole) throws {
+    public init(flatBuffersObject: IosappCore_IosappGroupRole) throws {
         switch flatBuffersObject.valueType {
         case .telegramgrouproleCreator:
-            guard let creator = flatBuffersObject.value(type: TelegramCore_TelegramGroupRole_Creator.self) else {
+            guard let creator = flatBuffersObject.value(type: IosappCore_IosappGroupRole_Creator.self) else {
                 throw FlatBuffersError.missingRequiredField()
             }
             self = .creator(rank: creator.rank)
         case .telegramgrouproleAdmin:
-            guard let admin = flatBuffersObject.value(type: TelegramCore_TelegramGroupRole_Admin.self) else {
+            guard let admin = flatBuffersObject.value(type: IosappCore_IosappGroupRole_Admin.self) else {
                 throw FlatBuffersError.missingRequiredField()
             }
-            self = .admin(try TelegramChatAdminRights(flatBuffersObject: admin.rights), rank: admin.rank)
+            self = .admin(try IosappChatAdminRights(flatBuffersObject: admin.rights), rank: admin.rank)
         case .telegramgrouproleMember:
             self = .member
         case .none_:
@@ -64,48 +64,48 @@ public enum TelegramGroupRole: Equatable, PostboxCoding {
     
     public func encodeToFlatBuffers(builder: inout FlatBufferBuilder) -> Offset {
         let valueOffset: Offset
-        let valueType: TelegramCore_TelegramGroupRole_Value
+        let valueType: IosappCore_IosappGroupRole_Value
         
         switch self {
         case let .creator(rank):
             let rankOffset = rank.map { builder.create(string: $0) }
-            let start = TelegramCore_TelegramGroupRole_Creator.startTelegramGroupRole_Creator(&builder)
+            let start = IosappCore_IosappGroupRole_Creator.startIosappGroupRole_Creator(&builder)
             if let rankOffset {
-                TelegramCore_TelegramGroupRole_Creator.add(rank: rankOffset, &builder)
+                IosappCore_IosappGroupRole_Creator.add(rank: rankOffset, &builder)
             }
-            valueOffset = TelegramCore_TelegramGroupRole_Creator.endTelegramGroupRole_Creator(&builder, start: start)
+            valueOffset = IosappCore_IosappGroupRole_Creator.endIosappGroupRole_Creator(&builder, start: start)
             valueType = .telegramgrouproleCreator
         case let .admin(rights, rank):
             let rankOffset = rank.map { builder.create(string: $0) }
             let rightsOffset = rights.encodeToFlatBuffers(builder: &builder)
             
-            let start = TelegramCore_TelegramGroupRole_Admin.startTelegramGroupRole_Admin(&builder)
-            TelegramCore_TelegramGroupRole_Admin.add(rights: rightsOffset, &builder)
+            let start = IosappCore_IosappGroupRole_Admin.startIosappGroupRole_Admin(&builder)
+            IosappCore_IosappGroupRole_Admin.add(rights: rightsOffset, &builder)
             if let rankOffset {
-                TelegramCore_TelegramGroupRole_Admin.add(rank: rankOffset, &builder)
+                IosappCore_IosappGroupRole_Admin.add(rank: rankOffset, &builder)
             }
-            valueOffset = TelegramCore_TelegramGroupRole_Admin.endTelegramGroupRole_Admin(&builder, start: start)
+            valueOffset = IosappCore_IosappGroupRole_Admin.endIosappGroupRole_Admin(&builder, start: start)
             valueType = .telegramgrouproleAdmin
         case .member:
-            let start = TelegramCore_TelegramGroupRole_Member.startTelegramGroupRole_Member(&builder)
-            valueOffset = TelegramCore_TelegramGroupRole_Member.endTelegramGroupRole_Member(&builder, start: start)
+            let start = IosappCore_IosappGroupRole_Member.startIosappGroupRole_Member(&builder)
+            valueOffset = IosappCore_IosappGroupRole_Member.endIosappGroupRole_Member(&builder, start: start)
             valueType = .telegramgrouproleMember
         }
         
-        let start = TelegramCore_TelegramGroupRole.startTelegramGroupRole(&builder)
-        TelegramCore_TelegramGroupRole.add(value: valueOffset, &builder)
-        TelegramCore_TelegramGroupRole.add(valueType: valueType, &builder)
-        return TelegramCore_TelegramGroupRole.endTelegramGroupRole(&builder, start: start)
+        let start = IosappCore_IosappGroupRole.startIosappGroupRole(&builder)
+        IosappCore_IosappGroupRole.add(value: valueOffset, &builder)
+        IosappCore_IosappGroupRole.add(valueType: valueType, &builder)
+        return IosappCore_IosappGroupRole.endIosappGroupRole(&builder, start: start)
     }
 }
 
-public enum TelegramGroupMembership: Int32 {
+public enum IosappGroupMembership: Int32 {
     case Member
     case Left
     case Removed
 }
 
-public struct TelegramGroupFlags: OptionSet {
+public struct IosappGroupFlags: OptionSet {
     public var rawValue: Int32
     
     public init() {
@@ -116,14 +116,14 @@ public struct TelegramGroupFlags: OptionSet {
         self.rawValue = rawValue
     }
     
-    public static let deactivated = TelegramGroupFlags(rawValue: 1 << 1)
-    public static let hasVoiceChat = TelegramGroupFlags(rawValue: 1 << 2)
-    public static let hasActiveVoiceChat = TelegramGroupFlags(rawValue: 1 << 3)
-    public static let copyProtectionEnabled = TelegramGroupFlags(rawValue: 1 << 4)
-    public static let customRanksEnabled = TelegramGroupFlags(rawValue: 1 << 5)
+    public static let deactivated = IosappGroupFlags(rawValue: 1 << 1)
+    public static let hasVoiceChat = IosappGroupFlags(rawValue: 1 << 2)
+    public static let hasActiveVoiceChat = IosappGroupFlags(rawValue: 1 << 3)
+    public static let copyProtectionEnabled = IosappGroupFlags(rawValue: 1 << 4)
+    public static let customRanksEnabled = IosappGroupFlags(rawValue: 1 << 5)
 }
 
-public struct TelegramGroupToChannelMigrationReference: Equatable {
+public struct IosappGroupToChannelMigrationReference: Equatable {
     public let peerId: PeerId
     public let accessHash: Int64
     
@@ -132,29 +132,29 @@ public struct TelegramGroupToChannelMigrationReference: Equatable {
         self.accessHash = accessHash
     }
     
-    public init(flatBuffersObject: TelegramCore_TelegramGroupToChannelMigrationReference) throws {
+    public init(flatBuffersObject: IosappCore_IosappGroupToChannelMigrationReference) throws {
         self.peerId = PeerId(flatBuffersObject.peerId)
         self.accessHash = flatBuffersObject.accessHash
     }
     
     public func encodeToFlatBuffers(builder: inout FlatBufferBuilder) -> Offset {
-        let start = TelegramCore_TelegramGroupToChannelMigrationReference.startTelegramGroupToChannelMigrationReference(&builder)
-        TelegramCore_TelegramGroupToChannelMigrationReference.add(peerId: self.peerId.toInt64(), &builder)
-        TelegramCore_TelegramGroupToChannelMigrationReference.add(accessHash: self.accessHash, &builder)
-        return TelegramCore_TelegramGroupToChannelMigrationReference.endTelegramGroupToChannelMigrationReference(&builder, start: start)
+        let start = IosappCore_IosappGroupToChannelMigrationReference.startIosappGroupToChannelMigrationReference(&builder)
+        IosappCore_IosappGroupToChannelMigrationReference.add(peerId: self.peerId.toInt64(), &builder)
+        IosappCore_IosappGroupToChannelMigrationReference.add(accessHash: self.accessHash, &builder)
+        return IosappCore_IosappGroupToChannelMigrationReference.endIosappGroupToChannelMigrationReference(&builder, start: start)
     }
 }
 
-public final class TelegramGroup: Peer, Equatable {
+public final class IosappGroup: Peer, Equatable {
     public let id: PeerId
     public let title: String
-    public let photo: [TelegramMediaImageRepresentation]
+    public let photo: [IosappMediaImageRepresentation]
     public let participantCount: Int
-    public let role: TelegramGroupRole
-    public let membership: TelegramGroupMembership
-    public let flags: TelegramGroupFlags
-    public let defaultBannedRights: TelegramChatBannedRights?
-    public let migrationReference: TelegramGroupToChannelMigrationReference?
+    public let role: IosappGroupRole
+    public let membership: IosappGroupMembership
+    public let flags: IosappGroupFlags
+    public let defaultBannedRights: IosappChatBannedRights?
+    public let migrationReference: IosappGroupToChannelMigrationReference?
     public let creationDate: Int32
     public let version: Int
     
@@ -169,7 +169,7 @@ public final class TelegramGroup: Peer, Equatable {
     
     public var timeoutAttribute: UInt32? { return nil }
     
-    public init(id: PeerId, title: String, photo: [TelegramMediaImageRepresentation], participantCount: Int, role: TelegramGroupRole, membership: TelegramGroupMembership, flags: TelegramGroupFlags, defaultBannedRights: TelegramChatBannedRights?, migrationReference: TelegramGroupToChannelMigrationReference?, creationDate: Int32, version: Int) {
+    public init(id: PeerId, title: String, photo: [IosappMediaImageRepresentation], participantCount: Int, role: IosappGroupRole, membership: IosappGroupMembership, flags: IosappGroupFlags, defaultBannedRights: IosappChatBannedRights?, migrationReference: IosappGroupToChannelMigrationReference?, creationDate: Int32, version: Int) {
         self.id = id
         self.title = title
         self.photo = photo
@@ -188,20 +188,20 @@ public final class TelegramGroup: Peer, Equatable {
         self.title = decoder.decodeStringForKey("t", orElse: "")
         self.photo = decoder.decodeObjectArrayForKey("ph")
         self.participantCount = Int(decoder.decodeInt32ForKey("pc", orElse: 0))
-        if let role = decoder.decodeObjectForKey("rv", decoder: { TelegramGroupRole(decoder: $0) }) as? TelegramGroupRole {
+        if let role = decoder.decodeObjectForKey("rv", decoder: { IosappGroupRole(decoder: $0) }) as? IosappGroupRole {
             self.role = role
         } else if let roleValue = decoder.decodeOptionalInt32ForKey("r"), roleValue == 0 {
             self.role = .creator(rank: nil)
         } else {
             self.role = .member
         }
-        self.membership = TelegramGroupMembership(rawValue: decoder.decodeInt32ForKey("m", orElse: 0))!
-        self.flags = TelegramGroupFlags(rawValue: decoder.decodeInt32ForKey("f", orElse: 0))
-        self.defaultBannedRights = decoder.decodeObjectForKey("dbr", decoder: { TelegramChatBannedRights(decoder: $0) }) as? TelegramChatBannedRights
+        self.membership = IosappGroupMembership(rawValue: decoder.decodeInt32ForKey("m", orElse: 0))!
+        self.flags = IosappGroupFlags(rawValue: decoder.decodeInt32ForKey("f", orElse: 0))
+        self.defaultBannedRights = decoder.decodeObjectForKey("dbr", decoder: { IosappChatBannedRights(decoder: $0) }) as? IosappChatBannedRights
         let migrationPeerId: Int64? = decoder.decodeOptionalInt64ForKey("mr.i")
         let migrationAccessHash: Int64? = decoder.decodeOptionalInt64ForKey("mr.a")
         if let migrationPeerId = migrationPeerId, let migrationAccessHash = migrationAccessHash {
-            self.migrationReference = TelegramGroupToChannelMigrationReference(peerId: PeerId(migrationPeerId), accessHash: migrationAccessHash)
+            self.migrationReference = IosappGroupToChannelMigrationReference(peerId: PeerId(migrationPeerId), accessHash: migrationAccessHash)
         } else {
             self.migrationReference = nil
         }
@@ -214,8 +214,8 @@ public final class TelegramGroup: Peer, Equatable {
         builder.finish(offset: offset)
         let serializedData = builder.data
         var byteBuffer = ByteBuffer(data: serializedData)
-        let deserializedValue = FlatBuffers_getRoot(byteBuffer: &byteBuffer) as TelegramCore_TelegramGroup
-        let parsedValue = try! TelegramGroup(flatBuffersObject: deserializedValue)
+        let deserializedValue = FlatBuffers_getRoot(byteBuffer: &byteBuffer) as IosappCore_IosappGroup
+        let parsedValue = try! IosappGroup(flatBuffersObject: deserializedValue)
         assert(self == parsedValue)
         #endif
     }
@@ -244,23 +244,23 @@ public final class TelegramGroup: Peer, Equatable {
         encoder.encodeInt32(Int32(self.version), forKey: "v")
     }
 
-    public init(flatBuffersObject: TelegramCore_TelegramGroup) throws {
+    public init(flatBuffersObject: IosappCore_IosappGroup) throws {
         self.id = PeerId(flatBuffersObject.id)
         self.title = flatBuffersObject.title
-        self.photo = try (0 ..< flatBuffersObject.photoCount).map { try TelegramMediaImageRepresentation(flatBuffersObject: flatBuffersObject.photo(at: $0)!) }
+        self.photo = try (0 ..< flatBuffersObject.photoCount).map { try IosappMediaImageRepresentation(flatBuffersObject: flatBuffersObject.photo(at: $0)!) }
         self.participantCount = Int(flatBuffersObject.participantCount)
         
         guard let role = flatBuffersObject.role else {
             throw FlatBuffersError.missingRequiredField()
         }
-        self.role = try TelegramGroupRole(flatBuffersObject: role)
+        self.role = try IosappGroupRole(flatBuffersObject: role)
         
-        self.membership = TelegramGroupMembership(rawValue: flatBuffersObject.membership)!
-        self.flags = TelegramGroupFlags(rawValue: flatBuffersObject.flags)
-        self.defaultBannedRights = try flatBuffersObject.defaultBannedRights.flatMap { try TelegramChatBannedRights(flatBuffersObject: $0) }
+        self.membership = IosappGroupMembership(rawValue: flatBuffersObject.membership)!
+        self.flags = IosappGroupFlags(rawValue: flatBuffersObject.flags)
+        self.defaultBannedRights = try flatBuffersObject.defaultBannedRights.flatMap { try IosappChatBannedRights(flatBuffersObject: $0) }
         
         if let migrationReference = flatBuffersObject.migrationReference {
-            self.migrationReference = try TelegramGroupToChannelMigrationReference(flatBuffersObject: migrationReference)
+            self.migrationReference = try IosappGroupToChannelMigrationReference(flatBuffersObject: migrationReference)
         } else {
             self.migrationReference = nil
         }
@@ -280,38 +280,38 @@ public final class TelegramGroup: Peer, Equatable {
         
         let migrationReferenceOffset = self.migrationReference?.encodeToFlatBuffers(builder: &builder)
         
-        let start = TelegramCore_TelegramGroup.startTelegramGroup(&builder)
+        let start = IosappCore_IosappGroup.startIosappGroup(&builder)
         
-        TelegramCore_TelegramGroup.add(id: self.id.asFlatBuffersObject(), &builder)
-        TelegramCore_TelegramGroup.add(title: titleOffset, &builder)
-        TelegramCore_TelegramGroup.addVectorOf(photo: photoOffset, &builder)
-        TelegramCore_TelegramGroup.add(participantCount: Int32(self.participantCount), &builder)
-        TelegramCore_TelegramGroup.add(role: roleOffset, &builder)
-        TelegramCore_TelegramGroup.add(membership: self.membership.rawValue, &builder)
-        TelegramCore_TelegramGroup.add(flags: self.flags.rawValue, &builder)
+        IosappCore_IosappGroup.add(id: self.id.asFlatBuffersObject(), &builder)
+        IosappCore_IosappGroup.add(title: titleOffset, &builder)
+        IosappCore_IosappGroup.addVectorOf(photo: photoOffset, &builder)
+        IosappCore_IosappGroup.add(participantCount: Int32(self.participantCount), &builder)
+        IosappCore_IosappGroup.add(role: roleOffset, &builder)
+        IosappCore_IosappGroup.add(membership: self.membership.rawValue, &builder)
+        IosappCore_IosappGroup.add(flags: self.flags.rawValue, &builder)
         
         if let defaultBannedRightsOffset {
-            TelegramCore_TelegramGroup.add(defaultBannedRights: defaultBannedRightsOffset, &builder)
+            IosappCore_IosappGroup.add(defaultBannedRights: defaultBannedRightsOffset, &builder)
         }
         if let migrationReferenceOffset {
-            TelegramCore_TelegramGroup.add(migrationReference: migrationReferenceOffset, &builder)
+            IosappCore_IosappGroup.add(migrationReference: migrationReferenceOffset, &builder)
         }
         
-        TelegramCore_TelegramGroup.add(creationDate: self.creationDate, &builder)
-        TelegramCore_TelegramGroup.add(version: Int32(self.version), &builder)
+        IosappCore_IosappGroup.add(creationDate: self.creationDate, &builder)
+        IosappCore_IosappGroup.add(version: Int32(self.version), &builder)
         
-        return TelegramCore_TelegramGroup.endTelegramGroup(&builder, start: start)
+        return IosappCore_IosappGroup.endIosappGroup(&builder, start: start)
     }
     
     public func isEqual(_ other: Peer) -> Bool {
-        if let other = other as? TelegramGroup {
+        if let other = other as? IosappGroup {
             return self == other
         } else {
             return false
         }
     }
 
-    public static func ==(lhs: TelegramGroup, rhs: TelegramGroup) -> Bool {
+    public static func ==(lhs: IosappGroup, rhs: IosappGroup) -> Bool {
         if lhs.id != rhs.id {
             return false
         }
@@ -348,15 +348,15 @@ public final class TelegramGroup: Peer, Equatable {
         return true
     }
 
-    public func updateFlags(flags: TelegramGroupFlags, version: Int) -> TelegramGroup {
-        return TelegramGroup(id: self.id, title: self.title, photo: self.photo, participantCount: self.participantCount, role: self.role, membership: self.membership, flags: flags, defaultBannedRights: self.defaultBannedRights, migrationReference: self.migrationReference, creationDate: self.creationDate, version: version)
+    public func updateFlags(flags: IosappGroupFlags, version: Int) -> IosappGroup {
+        return IosappGroup(id: self.id, title: self.title, photo: self.photo, participantCount: self.participantCount, role: self.role, membership: self.membership, flags: flags, defaultBannedRights: self.defaultBannedRights, migrationReference: self.migrationReference, creationDate: self.creationDate, version: version)
     }
     
-    public func updateDefaultBannedRights(_ defaultBannedRights: TelegramChatBannedRights?, version: Int) -> TelegramGroup {
-        return TelegramGroup(id: self.id, title: self.title, photo: self.photo, participantCount: self.participantCount, role: self.role, membership: self.membership, flags: self.flags, defaultBannedRights: defaultBannedRights, migrationReference: self.migrationReference, creationDate: self.creationDate, version: version)
+    public func updateDefaultBannedRights(_ defaultBannedRights: IosappChatBannedRights?, version: Int) -> IosappGroup {
+        return IosappGroup(id: self.id, title: self.title, photo: self.photo, participantCount: self.participantCount, role: self.role, membership: self.membership, flags: self.flags, defaultBannedRights: defaultBannedRights, migrationReference: self.migrationReference, creationDate: self.creationDate, version: version)
     }
     
-    public func updateParticipantCount(_ participantCount: Int) -> TelegramGroup {
-        return TelegramGroup(id: self.id, title: self.title, photo: self.photo, participantCount: participantCount, role: self.role, membership: self.membership, flags: self.flags, defaultBannedRights: self.defaultBannedRights, migrationReference: self.migrationReference, creationDate: self.creationDate, version: version)
+    public func updateParticipantCount(_ participantCount: Int) -> IosappGroup {
+        return IosappGroup(id: self.id, title: self.title, photo: self.photo, participantCount: participantCount, role: self.role, membership: self.membership, flags: self.flags, defaultBannedRights: self.defaultBannedRights, migrationReference: self.migrationReference, creationDate: self.creationDate, version: version)
     }
 }

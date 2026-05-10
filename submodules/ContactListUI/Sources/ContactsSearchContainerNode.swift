@@ -404,12 +404,12 @@ public final class ContactsSearchContainerNode: SearchDisplayControllerContentNo
                         
                         if let foundRemoteContacts = foundPeers.foundRemoteContacts {
                             for peer in foundRemoteContacts.0 {
-                                if let user = peer.peer as? TelegramUser, user.flags.contains(.requirePremium) {
+                                if let user = peer.peer as? IosappUser, user.flags.contains(.requirePremium) {
                                     result.insert(user.id)
                                 }
                             }
                             for peer in foundRemoteContacts.1 {
-                                if let user = peer.peer as? TelegramUser, user.flags.contains(.requirePremium) {
+                                if let user = peer.peer as? IosappUser, user.flags.contains(.requirePremium) {
                                     result.insert(user.id)
                                 }
                             }
@@ -421,7 +421,7 @@ public final class ContactsSearchContainerNode: SearchDisplayControllerContentNo
                     |> mapToSignal { peerIds -> Signal<[EnginePeer.Id: Bool], NoError> in
                         return context.engine.data.subscribe(
                             EngineDataMap(
-                                peerIds.map(TelegramEngine.EngineData.Item.Peer.IsPremiumRequiredForMessaging.init(id:))
+                                peerIds.map(IosappEngine.EngineData.Item.Peer.IsPremiumRequiredForMessaging.init(id:))
                             )
                         )
                     }
@@ -499,14 +499,14 @@ public final class ContactsSearchContainerNode: SearchDisplayControllerContentNo
                     }
                     if let remotePeers = remotePeers {
                         for peer in remotePeers.0 {
-                            if !(peer.peer is TelegramUser) {
-                                if let channel = peer.peer as? TelegramChannel, case .broadcast = channel.info, categories.contains(.channels) {
+                            if !(peer.peer is IosappUser) {
+                                if let channel = peer.peer as? IosappChannel, case .broadcast = channel.info, categories.contains(.channels) {
                                 } else {
                                     continue
                                 }
                             }
 
-                            if let user = peer.peer as? TelegramUser {
+                            if let user = peer.peer as? IosappUser {
                                 if requirePhoneNumbers {
                                     let phone = user.phone ?? ""
                                     if phone.isEmpty {
@@ -534,21 +534,21 @@ public final class ContactsSearchContainerNode: SearchDisplayControllerContentNo
                                 }
                                 
                                 entries.append(.peer(index: index, theme: themeAndStrings.0, strings: themeAndStrings.1, peer: .peer(peer: peer.peer, isGlobal: true, participantCount: peer.subscribers), presence: nil, group: .global, enabled: enabled, requiresPremiumForMessaging: requiresPremiumForMessaging, displayCallIcons: displayCallIcons))
-                                if searchDeviceContacts, let user = peer.peer as? TelegramUser, let phone = user.phone {
+                                if searchDeviceContacts, let user = peer.peer as? IosappUser, let phone = user.phone {
                                     existingNormalizedPhoneNumbers.insert(DeviceContactNormalizedPhoneNumber(rawValue: formatPhoneNumber(phone)))
                                 }
                                 index += 1
                             }
                         }
                         for peer in remotePeers.1 {
-                            if !(peer.peer is TelegramUser) {
-                                if let channel = peer.peer as? TelegramChannel, case .broadcast = channel.info, categories.contains(.channels) {
+                            if !(peer.peer is IosappUser) {
+                                if let channel = peer.peer as? IosappChannel, case .broadcast = channel.info, categories.contains(.channels) {
                                 } else {
                                     continue
                                 }
                             }
                             
-                            if let user = peer.peer as? TelegramUser, requirePhoneNumbers {
+                            if let user = peer.peer as? IosappUser, requirePhoneNumbers {
                                 let phone = user.phone ?? ""
                                 if phone.isEmpty {
                                     continue
@@ -569,7 +569,7 @@ public final class ContactsSearchContainerNode: SearchDisplayControllerContentNo
                                 }
                                 
                                 entries.append(.peer(index: index, theme: themeAndStrings.0, strings: themeAndStrings.1, peer: .peer(peer: peer.peer, isGlobal: true, participantCount: peer.subscribers), presence: nil, group: .global, enabled: enabled, requiresPremiumForMessaging: requiresPremiumForMessaging, displayCallIcons: displayCallIcons))
-                                if searchDeviceContacts, let user = peer.peer as? TelegramUser, let phone = user.phone {
+                                if searchDeviceContacts, let user = peer.peer as? IosappUser, let phone = user.phone {
                                     existingNormalizedPhoneNumbers.insert(DeviceContactNormalizedPhoneNumber(rawValue: formatPhoneNumber(phone)))
                                 }
                                 index += 1

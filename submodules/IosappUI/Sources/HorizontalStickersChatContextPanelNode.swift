@@ -19,7 +19,7 @@ import ChatControllerInteraction
 import ChatInputContextPanelNode
 
 final class HorizontalStickersChatContextPanelInteraction {
-    var previewedStickerItem: TelegramMediaFile?
+    var previewedStickerItem: IosappMediaFile?
 }
 
 private func backgroundCenterImage(_ theme: PresentationTheme) -> UIImage? {
@@ -57,7 +57,7 @@ private func backgroundLeftImage(_ theme: PresentationTheme) -> UIImage? {
 
 private struct StickerEntry: Identifiable, Comparable {
     let index: Int
-    let file: TelegramMediaFile
+    let file: IosappMediaFile
     
     var stableId: MediaId {
         return self.file.fileId
@@ -266,7 +266,7 @@ final class HorizontalStickersChatContextPanelNode: ChatInputContextPanelNode {
                 return nil
             }, updateContent: { [weak self] content in
                 if let strongSelf = self {
-                    var file: TelegramMediaFile?
+                    var file: IosappMediaFile?
                     if let content = content as? StickerPreviewPeekContent, case let .pack(contentItem) = content.item {
                         file = contentItem
                     }
@@ -275,7 +275,7 @@ final class HorizontalStickersChatContextPanelNode: ChatInputContextPanelNode {
         }))
     }
     
-    func updateResults(_ results: [TelegramMediaFile]) {
+    func updateResults(_ results: [IosappMediaFile]) {
         let previousEntries = self.currentEntries
         var entries: [StickerEntry] = []
         for i in 0 ..< results.count {
@@ -365,7 +365,7 @@ final class HorizontalStickersChatContextPanelNode: ChatInputContextPanelNode {
         return super.hitTest(point, with: event)
     }
     
-    private func updatePreviewingItem(file: TelegramMediaFile?, animated: Bool) {
+    private func updatePreviewingItem(file: IosappMediaFile?, animated: Bool) {
         if self.stickersInteraction.previewedStickerItem?.fileId != file?.fileId {
             self.stickersInteraction.previewedStickerItem = file
             

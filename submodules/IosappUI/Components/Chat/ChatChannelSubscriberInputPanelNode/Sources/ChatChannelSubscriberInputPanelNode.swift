@@ -79,9 +79,9 @@ private func actionForPeer(context: AccountContext, peer: Peer, interfaceState: 
         return .openChat
     } else if case .pinnedMessages = interfaceState.subject {
         var canManagePin = false
-        if let channel = peer as? TelegramChannel {
+        if let channel = peer as? IosappChannel {
             canManagePin = channel.hasPermission(.pinMessages)
-        } else if let group = peer as? TelegramGroup {
+        } else if let group = peer as? IosappGroup {
             switch group.role {
                 case .creator, .admin:
                     canManagePin = true
@@ -92,7 +92,7 @@ private func actionForPeer(context: AccountContext, peer: Peer, interfaceState: 
                         canManagePin = true
                     }
             }
-        } else if let _ = peer as? TelegramUser, interfaceState.explicitelyCanPinMessages {
+        } else if let _ = peer as? IosappUser, interfaceState.explicitelyCanPinMessages {
             canManagePin = true
         }
         if canManagePin {
@@ -101,7 +101,7 @@ private func actionForPeer(context: AccountContext, peer: Peer, interfaceState: 
             return .hidePinnedMessages
         }
     } else {
-        if let channel = peer as? TelegramChannel {
+        if let channel = peer as? IosappChannel {
             if case .broadcast = channel.info, isJoining {
                 if isMuted {
                     return .unmuteNotifications
@@ -244,7 +244,7 @@ public final class ChatChannelSubscriberInputPanelNode: ChatInputPanelNode {
                 case .tooMuchUsers:
                     text = presentationInterfaceState.strings.Conversation_UsersTooMuchError
                 case .generic:
-                    if let channel = peer as? TelegramChannel, case .broadcast = channel.info {
+                    if let channel = peer as? IosappChannel, case .broadcast = channel.info {
                         text = presentationInterfaceState.strings.Channel_ErrorAccessDenied
                     } else {
                         text = presentationInterfaceState.strings.Group_ErrorAccessDenied
@@ -258,9 +258,9 @@ public final class ChatChannelSubscriberInputPanelNode: ChatInputPanelNode {
                 Queue.mainQueue().after(0.5) {
                     if let presentationInterfaceState = self.presentationInterfaceState, let peer = presentationInterfaceState.renderedPeer?.peer {
                         var canEditRank = false
-                        if let channel = peer as? TelegramChannel, case .group = channel.info, channel.hasPermission(.editRank) {
+                        if let channel = peer as? IosappChannel, case .group = channel.info, channel.hasPermission(.editRank) {
                             canEditRank = true
-                        } else if let group = peer as? TelegramGroup, !group.hasBannedPermission(.banEditRank) {
+                        } else if let group = peer as? IosappGroup, !group.hasBannedPermission(.banEditRank) {
                             canEditRank = true
                         }
                         if canEditRank {
@@ -419,7 +419,7 @@ public final class ChatChannelSubscriberInputPanelNode: ChatInputPanelNode {
         var displaySuggestPost = false
         var displayHelp = false
         
-        if let peer = interfaceState.renderedPeer?.peer as? TelegramChannel {
+        if let peer = interfaceState.renderedPeer?.peer as? IosappChannel {
             if case .broadcast = peer.info, interfaceState.starGiftsAvailable {
                 displayGift = true
             }

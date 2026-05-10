@@ -229,7 +229,7 @@ class ItemListWebsiteItemNode: ItemListRevealOptionsItemNode {
             
             let rightInset: CGFloat = params.rightInset
             
-            if let user = item.peer as? TelegramUser {
+            if let user = item.peer as? IosappUser {
                 titleAttributedString = NSAttributedString(string: EnginePeer(user).displayTitle(strings: item.presentationData.strings, displayOrder: item.nameDisplayOrder), font: titleFont, textColor: item.presentationData.theme.list.itemPrimaryTextColor)
             }
             

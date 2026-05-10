@@ -406,7 +406,7 @@ extension VideoChatScreenComponent.View {
                                 let context = currentCall.accountContext
                                 environment.controller()?.dismiss(completion: { [weak navigationController] in
                                     Queue.mainQueue().justDispatch {
-                                        let _ = (context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: context.account.peerId))
+                                        let _ = (context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: context.account.peerId))
                                         |> deliverOnMainQueue).start(next: { peer in
                                             guard let peer, let navigationController else {
                                                 return
@@ -625,10 +625,10 @@ extension VideoChatScreenComponent.View {
         var isGroup = false
         if let displayAsPeers = self.displayAsPeers {
             for peer in displayAsPeers {
-                if peer.peer is TelegramGroup {
+                if peer.peer is IosappGroup {
                     isGroup = true
                     break
-                } else if let peer = peer.peer as? TelegramChannel, case .group = peer.info {
+                } else if let peer = peer.peer as? IosappChannel, case .group = peer.info {
                     isGroup = true
                     break
                 }
@@ -645,7 +645,7 @@ extension VideoChatScreenComponent.View {
                 if peer.peer.id.namespace == Namespaces.Peer.CloudUser {
                     subtitle = environment.strings.VoiceChat_PersonalAccount
                 } else if let subscribers = peer.subscribers {
-                    if let peer = peer.peer as? TelegramChannel, case .broadcast = peer.info {
+                    if let peer = peer.peer as? IosappChannel, case .broadcast = peer.info {
                         subtitle = environment.strings.Conversation_StatusSubscribers(subscribers)
                     } else {
                         subtitle = environment.strings.Conversation_StatusMembers(subscribers)

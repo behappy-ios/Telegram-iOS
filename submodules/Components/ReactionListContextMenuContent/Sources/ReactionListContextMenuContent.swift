@@ -90,7 +90,7 @@ public final class ReactionListContextMenuContent: ContextControllerItemsContent
             var reactionLayer: InlineStickerItemLayer?
             
             private var iconFrame: CGRect?
-            private var file: TelegramMediaFile?
+            private var file: IosappMediaFile?
             private var fileDisposable: Disposable?
             
             private var theme: PresentationTheme?
@@ -381,7 +381,7 @@ public final class ReactionListContextMenuContent: ContextControllerItemsContent
             
             private var reactionLayer: InlineStickerItemLayer?
             private var iconFrame: CGRect?
-            private var file: TelegramMediaFile?
+            private var file: IosappMediaFile?
             private var fileDisposable: Disposable?
             
             let action: () -> Void

@@ -299,7 +299,7 @@ private final class StoryStatsPublicForwardsContextImpl {
                             let (count, forwards, nextOffset, chats, users) = (publicForwardsData.count, publicForwardsData.forwards, publicForwardsData.nextOffset, publicForwardsData.chats, publicForwardsData.users)
                             var peers: [PeerId: Peer] = [:]
                             for user in users {
-                                if let user = TelegramUser.merge(transaction.getPeer(user.peerId) as? TelegramUser, rhs: user) {
+                                if let user = IosappUser.merge(transaction.getPeer(user.peerId) as? IosappUser, rhs: user) {
                                     peers[user.id] = user
                                 }
                             }

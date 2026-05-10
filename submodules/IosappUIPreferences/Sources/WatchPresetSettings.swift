@@ -50,7 +50,7 @@ public struct WatchPresetSettings: Codable, Equatable {
     }
 }
 
-public func updateWatchPresetSettingsInteractively(accountManager: AccountManager<TelegramAccountManagerTypes>, _ f: @escaping (WatchPresetSettings) -> WatchPresetSettings) -> Signal<Void, NoError> {
+public func updateWatchPresetSettingsInteractively(accountManager: AccountManager<IosappAccountManagerTypes>, _ f: @escaping (WatchPresetSettings) -> WatchPresetSettings) -> Signal<Void, NoError> {
     return accountManager.transaction { transaction -> Void in
         transaction.updateSharedData(ApplicationSpecificSharedDataKeys.watchPresetSettings, { entry in
             let currentSettings: WatchPresetSettings

@@ -26,9 +26,9 @@ import AlertComponent
 func textStringForForwardedMessage(_ message: Message, strings: PresentationStrings) -> (text: String, entities: [MessageTextEntity], isMedia: Bool) {
     for media in message.media {
         switch media {
-        case _ as TelegramMediaImage:
+        case _ as IosappMediaImage:
             return (strings.Message_Photo, [], true)
-        case let file as TelegramMediaFile:
+        case let file as IosappMediaFile:
             if file.isVideoSticker || file.isAnimatedSticker {
                 return (strings.Message_Sticker, [], true)
             }
@@ -64,21 +64,21 @@ func textStringForForwardedMessage(_ message: Message, strings: PresentationStri
                 }
             }
             return (fileName, [], true)
-        case _ as TelegramMediaContact:
+        case _ as IosappMediaContact:
             return (strings.Message_Contact, [], true)
-        case let game as TelegramMediaGame:
+        case let game as IosappMediaGame:
             return (game.title, [], true)
-        case _ as TelegramMediaMap:
+        case _ as IosappMediaMap:
             return (strings.Message_Location, [], true)
-        case _ as TelegramMediaAction:
+        case _ as IosappMediaAction:
             return ("", [], true)
-        case _ as TelegramMediaPoll:
+        case _ as IosappMediaPoll:
             return (strings.ForwardedPolls(1), [], true)
-        case let todo as TelegramMediaTodo:
+        case let todo as IosappMediaTodo:
             return (todo.text, [], true)
-        case let dice as TelegramMediaDice:
+        case let dice as IosappMediaDice:
             return (dice.emoji, [], true)
-        case let invoice as TelegramMediaInvoice:
+        case let invoice as IosappMediaInvoice:
             return (invoice.title, [], true)
         default:
             break
@@ -325,7 +325,7 @@ public final class ForwardAccessoryPanelNode: AccessoryPanelNode {
                 case let .CustomEmoji(_, fileId):
                     let range = NSRange(location: entity.range.lowerBound, length: entity.range.upperBound - entity.range.lowerBound)
                     if range.lowerBound >= 0 && range.upperBound <= additionalText.length {
-                        additionalText.addAttribute(ChatTextInputAttributes.customEmoji, value: ChatTextInputTextCustomEmojiAttribute(interactivelySelectedFromPackId: nil, fileId: fileId, file: messages[0].associatedMedia[MediaId(namespace: Namespaces.Media.CloudFile, id: fileId)] as? TelegramMediaFile), range: range)
+                        additionalText.addAttribute(ChatTextInputAttributes.customEmoji, value: ChatTextInputTextCustomEmojiAttribute(interactivelySelectedFromPackId: nil, fileId: fileId, file: messages[0].associatedMedia[MediaId(namespace: Namespaces.Media.CloudFile, id: fileId)] as? IosappMediaFile), range: range)
                     }
                 default:
                     break

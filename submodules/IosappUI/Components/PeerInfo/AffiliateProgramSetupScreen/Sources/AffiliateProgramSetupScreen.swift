@@ -140,7 +140,7 @@ final class AffiliateProgramSetupScreenComponent: Component {
         private var isApplying: Bool = false
         private var applyDisposable: Disposable?
         
-        private var currentProgram: TelegramStarRefProgram?
+        private var currentProgram: IosappStarRefProgram?
         private var programEndTimer: Foundation.Timer?
         
         private var connectedStarBots: EngineConnectedStarRefBotsContext?
@@ -418,7 +418,7 @@ final class AffiliateProgramSetupScreenComponent: Component {
             }
             
             let _ = (component.context.engine.data.get(
-                TelegramEngine.EngineData.Item.Peer.Peer(id: component.initialContent.peerId)
+                IosappEngine.EngineData.Item.Peer.Peer(id: component.initialContent.peerId)
             )
             |> deliverOnMainQueue).startStandalone(next: { [weak self] targetPeer in
                 guard let self, let component = self.component else {
@@ -1494,8 +1494,8 @@ final class AffiliateProgramSetupScreenComponent: Component {
                                     }
                                     
                                     let _ = (component.context.engine.data.get(
-                                        TelegramEngine.EngineData.Item.Peer.Peer(id: item.peer.id),
-                                        TelegramEngine.EngineData.Item.Peer.Peer(id: component.initialContent.peerId)
+                                        IosappEngine.EngineData.Item.Peer.Peer(id: item.peer.id),
+                                        IosappEngine.EngineData.Item.Peer.Peer(id: component.initialContent.peerId)
                                     )
                                     |> deliverOnMainQueue).startStandalone(next: { [weak self] botPeer, targetPeer in
                                         guard let self, let component = self.component else {
@@ -1624,9 +1624,9 @@ final class AffiliateProgramSetupScreenComponent: Component {
 public class AffiliateProgramSetupScreen: ViewControllerComponentContainer {
     enum Mode {
         final class EditProgram {
-            let currentRefProgram: TelegramStarRefProgram?
+            let currentRefProgram: IosappStarRefProgram?
             
-            init(currentRefProgram: TelegramStarRefProgram?) {
+            init(currentRefProgram: IosappStarRefProgram?) {
                 self.currentRefProgram = currentRefProgram
             }
         }
@@ -1713,7 +1713,7 @@ public class AffiliateProgramSetupScreen: ViewControllerComponentContainer {
         switch mode {
         case .editProgram:
             return context.engine.data.get(
-                TelegramEngine.EngineData.Item.Peer.StarRefProgram(id: peerId)
+                IosappEngine.EngineData.Item.Peer.StarRefProgram(id: peerId)
             )
             |> map { starRefProgram in
                 return Content(

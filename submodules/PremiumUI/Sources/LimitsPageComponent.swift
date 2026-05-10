@@ -329,8 +329,8 @@ private final class LimitsListComponent: CombinedComponent {
             super.init()
             
             self.disposable = (context.engine.data.get(
-                TelegramEngine.EngineData.Item.Configuration.UserLimits(isPremium: false),
-                TelegramEngine.EngineData.Item.Configuration.UserLimits(isPremium: true)
+                IosappEngine.EngineData.Item.Configuration.UserLimits(isPremium: false),
+                IosappEngine.EngineData.Item.Configuration.UserLimits(isPremium: true)
             )
             |> deliverOnMainQueue).start(next: { [weak self] limits, premiumLimits in
                 if let strongSelf = self {

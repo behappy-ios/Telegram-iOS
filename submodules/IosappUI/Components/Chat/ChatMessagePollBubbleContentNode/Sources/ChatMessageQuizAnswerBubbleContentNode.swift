@@ -49,8 +49,8 @@ public final class ChatMessageQuizAnswerBubbleContentNode: ChatMessageBubbleCont
             var text: String = ""
             var entities: [MessageTextEntity] = []
             var mediaAndFlags: ([Media], ChatMessageAttachedContentNodeMediaFlags)? = nil
-            var solution: TelegramMediaPollResults.Solution?
-            if let poll = item.message.media.first(where: { $0 is TelegramMediaPoll }) as? TelegramMediaPoll, let solutionValue = poll.results.solution {
+            var solution: IosappMediaPollResults.Solution?
+            if let poll = item.message.media.first(where: { $0 is IosappMediaPoll }) as? IosappMediaPoll, let solutionValue = poll.results.solution {
                 text = solutionValue.text
                 entities = solutionValue.entities
                 mediaAndFlags = solutionValue.media.flatMap { ([$0], []) }

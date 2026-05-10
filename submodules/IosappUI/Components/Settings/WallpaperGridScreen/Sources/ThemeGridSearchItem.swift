@@ -65,8 +65,8 @@ final class ThemeGridSearchItemNode: GridItemNode {
             var updateImageSignal: Signal<(TransformImageArguments) -> DrawingContext?, NoError>?
             
             var thumbnailDimensions: CGSize?
-            var thumbnailResource: TelegramMediaResource?
-            var imageResource: TelegramMediaResource?
+            var thumbnailResource: IosappMediaResource?
+            var imageResource: IosappMediaResource?
             var imageDimensions: CGSize?
             var immediateThumbnailData: Data?
             switch item.result {
@@ -106,15 +106,15 @@ final class ThemeGridSearchItemNode: GridItemNode {
                 }
             }
             
-            var representations: [TelegramMediaImageRepresentation] = []
+            var representations: [IosappMediaImageRepresentation] = []
             if let thumbnailResource = thumbnailResource, let thumbnailDimensions = thumbnailDimensions {
-                representations.append(TelegramMediaImageRepresentation(dimensions: PixelDimensions(thumbnailDimensions), resource: thumbnailResource, progressiveSizes: [], immediateThumbnailData: nil, hasVideo: false, isPersonal: false))
+                representations.append(IosappMediaImageRepresentation(dimensions: PixelDimensions(thumbnailDimensions), resource: thumbnailResource, progressiveSizes: [], immediateThumbnailData: nil, hasVideo: false, isPersonal: false))
             }
             if let imageResource = imageResource, let imageDimensions = imageDimensions {
-                representations.append(TelegramMediaImageRepresentation(dimensions: PixelDimensions(imageDimensions), resource: imageResource, progressiveSizes: [], immediateThumbnailData: nil, hasVideo: false, isPersonal: false))
+                representations.append(IosappMediaImageRepresentation(dimensions: PixelDimensions(imageDimensions), resource: imageResource, progressiveSizes: [], immediateThumbnailData: nil, hasVideo: false, isPersonal: false))
             }
             if !representations.isEmpty {
-                let tmpImage = TelegramMediaImage(imageId: MediaId(namespace: 0, id: 0), representations: representations, immediateThumbnailData: immediateThumbnailData, reference: nil, partialReference: nil, flags: [])
+                let tmpImage = IosappMediaImage(imageId: MediaId(namespace: 0, id: 0), representations: representations, immediateThumbnailData: immediateThumbnailData, reference: nil, partialReference: nil, flags: [])
                 updateImageSignal =  mediaGridMessagePhoto(account: item.account, userLocation: .other, photoReference: .standalone(media: tmpImage), fullRepresentationSize: CGSize(width: 512, height: 512))
             } else {
                 updateImageSignal = .complete()

@@ -15,7 +15,7 @@ private func copyOrMoveResourceData(from fromResource: MediaResource, to toResou
 }
 
 func applyMediaResourceChanges(from: Media, to: Media, postbox: Postbox, force: Bool, skipPreviews: Bool = false) {
-    if let fromImage = from as? TelegramMediaImage, let toImage = to as? TelegramMediaImage {
+    if let fromImage = from as? IosappMediaImage, let toImage = to as? IosappMediaImage {
         let fromSmallestRepresentation = smallestImageRepresentation(fromImage.representations)
         if let fromSmallestRepresentation = fromSmallestRepresentation, let toSmallestRepresentation = smallestImageRepresentation(toImage.representations) {
             let leeway: Int32 = 4
@@ -34,7 +34,7 @@ func applyMediaResourceChanges(from: Media, to: Media, postbox: Postbox, force: 
         if let fromVideo = fromImage.video, let toVideo = toImage.video {
             applyMediaResourceChanges(from: fromVideo, to: toVideo, postbox: postbox, force: true)
         }
-    } else if let fromFile = from as? TelegramMediaFile, let toFile = to as? TelegramMediaFile {
+    } else if let fromFile = from as? IosappMediaFile, let toFile = to as? IosappMediaFile {
         if !skipPreviews {
             if let fromPreview = smallestImageRepresentation(fromFile.previewRepresentations), let toPreview = smallestImageRepresentation(toFile.previewRepresentations) {
                 copyOrMoveResourceData(from: fromPreview.resource, to: toPreview.resource, mediaBox: postbox.mediaBox)
@@ -52,7 +52,7 @@ func applyMediaResourceChanges(from: Media, to: Media, postbox: Postbox, force: 
         if (force || fromFile.size == toFile.size || fromFile.resource.size == toFile.resource.size) && fromFile.mimeType == toFile.mimeType {
             copyOrMoveResourceData(from: fromFile.resource, to: toFile.resource, mediaBox: postbox.mediaBox)
         }
-    } else if let fromPaidContent = from as? TelegramMediaPaidContent, let toPaidContent = to as? TelegramMediaPaidContent {
+    } else if let fromPaidContent = from as? IosappMediaPaidContent, let toPaidContent = to as? IosappMediaPaidContent {
         for (fromMedia, toMedia) in zip(fromPaidContent.extendedMedia, toPaidContent.extendedMedia) {
             if case let .full(fullFromMedia) = fromMedia, case let .full(fullToMedia) = toMedia {
                 applyMediaResourceChanges(from: fullFromMedia, to: fullToMedia, postbox: postbox, force: force)
@@ -129,8 +129,8 @@ func applyUpdateMessage(postbox: Postbox, stateManager: AccountStateManager, mes
         
         let channelPts = result.channelPts
         
-        var sentStickers: [TelegramMediaFile] = []
-        var sentGifs: [TelegramMediaFile] = []
+        var sentStickers: [IosappMediaFile] = []
+        var sentGifs: [IosappMediaFile] = []
         
         if let updatedTimestamp {
             transaction.offsetPendingMessagesTimestamps(lowerBound: message.id, excludeIds: Set([message.id]), timestamp: updatedTimestamp)
@@ -270,7 +270,7 @@ func applyUpdateMessage(postbox: Postbox, stateManager: AccountStateManager, mes
             
             if forwardInfo == nil {
                 inner: for media in media {
-                    if let file = media as? TelegramMediaFile {
+                    if let file = media as? IosappMediaFile {
                         for attribute in file.attributes {
                             switch attribute {
                             case let .Sticker(_, packReference, _):
@@ -303,7 +303,7 @@ func applyUpdateMessage(postbox: Postbox, stateManager: AccountStateManager, mes
             if currentMessage.id.peerId.namespace == Namespaces.Peer.CloudChannel, !currentMessage.flags.contains(.Incoming), !Namespaces.Message.allNonRegular.contains(currentMessage.id.namespace) {
                 let peerId = currentMessage.id.peerId
                 if let peer = transaction.getPeer(peerId) {
-                    if let peer = peer as? TelegramChannel {
+                    if let peer = peer as? IosappChannel {
                         inner: switch peer.info {
                         case let .group(info):
                             if info.flags.contains(.slowModeEnabled), peer.adminRights == nil && !peer.flags.contains(.isCreator) {
@@ -342,10 +342,10 @@ func applyUpdateMessage(postbox: Postbox, stateManager: AccountStateManager, mes
                 var storeMedia: Media?
                 var mediaCount = 0
                 for media in updatedMessage.media {
-                    if let image = media as? TelegramMediaImage {
+                    if let image = media as? IosappMediaImage {
                         storeMedia = image
                         mediaCount += 1
-                    } else if let file = media as? TelegramMediaFile {
+                    } else if let file = media as? IosappMediaFile {
                         storeMedia = file
                         mediaCount += 1
                     }
@@ -454,8 +454,8 @@ func applyUpdateGroupMessages(postbox: Postbox, stateManager: AccountStateManage
         
         let latestPreviousId = mapping.map({ $0.0.id }).max()
         
-        var sentStickers: [TelegramMediaFile] = []
-        var sentGifs: [TelegramMediaFile] = []
+        var sentStickers: [IosappMediaFile] = []
+        var sentGifs: [IosappMediaFile] = []
         
         var updatedGroupingKey: [Int64 : [MessageId]] = [:]
         for (message, _, updatedMessage) in mapping {
@@ -524,7 +524,7 @@ func applyUpdateGroupMessages(postbox: Postbox, stateManager: AccountStateManage
                 
                 if storeForwardInfo == nil {
                     inner: for media in message.media {
-                        if let file = media as? TelegramMediaFile {
+                        if let file = media as? IosappMediaFile {
                             for attribute in file.attributes {
                                 switch attribute {
                                 case let .Sticker(_, packReference, _):

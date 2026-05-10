@@ -60,16 +60,16 @@ public enum ReplyMarkupButtonRequestPeerType: Codable, Equatable {
         public var hasUsername: Bool?
         public var isForum: Bool?
         public var botParticipant: Bool
-        public var userAdminRights: TelegramChatAdminRights?
-        public var botAdminRights: TelegramChatAdminRights?
+        public var userAdminRights: IosappChatAdminRights?
+        public var botAdminRights: IosappChatAdminRights?
         
         public init(
             isCreator: Bool,
             hasUsername: Bool?,
             isForum: Bool?,
             botParticipant: Bool,
-            userAdminRights: TelegramChatAdminRights?,
-            botAdminRights: TelegramChatAdminRights?
+            userAdminRights: IosappChatAdminRights?,
+            botAdminRights: IosappChatAdminRights?
         ) {
             self.isCreator = isCreator
             self.hasUsername = hasUsername
@@ -86,8 +86,8 @@ public enum ReplyMarkupButtonRequestPeerType: Codable, Equatable {
             self.hasUsername = try container.decodeIfPresent(Bool.self, forKey: .hasUsername)
             self.isForum = try container.decodeIfPresent(Bool.self, forKey: .isForum)
             self.botParticipant = try container.decode(Bool.self, forKey: .botParticipant)
-            self.userAdminRights = try container.decodeIfPresent(TelegramChatAdminRights.self, forKey: .userAdminRights)
-            self.botAdminRights = try container.decodeIfPresent(TelegramChatAdminRights.self, forKey: .botAdminRights)
+            self.userAdminRights = try container.decodeIfPresent(IosappChatAdminRights.self, forKey: .userAdminRights)
+            self.botAdminRights = try container.decodeIfPresent(IosappChatAdminRights.self, forKey: .botAdminRights)
         }
         
         public func encode(to encoder: Encoder) throws {
@@ -112,14 +112,14 @@ public enum ReplyMarkupButtonRequestPeerType: Codable, Equatable {
         
         public var isCreator: Bool
         public var hasUsername: Bool?
-        public var userAdminRights: TelegramChatAdminRights?
-        public var botAdminRights: TelegramChatAdminRights?
+        public var userAdminRights: IosappChatAdminRights?
+        public var botAdminRights: IosappChatAdminRights?
         
         public init(
             isCreator: Bool,
             hasUsername: Bool?,
-            userAdminRights: TelegramChatAdminRights?,
-            botAdminRights: TelegramChatAdminRights?
+            userAdminRights: IosappChatAdminRights?,
+            botAdminRights: IosappChatAdminRights?
         ) {
             self.isCreator = isCreator
             self.hasUsername = hasUsername
@@ -132,8 +132,8 @@ public enum ReplyMarkupButtonRequestPeerType: Codable, Equatable {
             
             self.isCreator = try container.decode(Bool.self, forKey: .isCreator)
             self.hasUsername = try container.decodeIfPresent(Bool.self, forKey: .hasUsername)
-            self.userAdminRights = try container.decodeIfPresent(TelegramChatAdminRights.self, forKey: .userAdminRights)
-            self.botAdminRights = try container.decodeIfPresent(TelegramChatAdminRights.self, forKey: .botAdminRights)
+            self.userAdminRights = try container.decodeIfPresent(IosappChatAdminRights.self, forKey: .userAdminRights)
+            self.botAdminRights = try container.decodeIfPresent(IosappChatAdminRights.self, forKey: .botAdminRights)
         }
         
         public func encode(to encoder: Encoder) throws {

@@ -2,7 +2,7 @@ import Postbox
 import FlatBuffers
 import FlatSerialization
 
-public enum TelegramChannelParticipationStatus: Int32 {
+public enum IosappChannelParticipationStatus: Int32 {
     case member = 0
     case left = 1
     case kicked = 2
@@ -21,7 +21,7 @@ public enum TelegramChannelParticipationStatus: Int32 {
     }
 }
 
-public struct TelegramChannelBroadcastFlags: OptionSet {
+public struct IosappChannelBroadcastFlags: OptionSet {
     public var rawValue: Int32
     
     public init() {
@@ -32,25 +32,25 @@ public struct TelegramChannelBroadcastFlags: OptionSet {
         self.rawValue = rawValue
     }
     
-    public static let messagesShouldHaveSignatures = TelegramChannelBroadcastFlags(rawValue: 1 << 0)
-    public static let hasDiscussionGroup = TelegramChannelBroadcastFlags(rawValue: 1 << 1)
-    public static let messagesShouldHaveProfiles = TelegramChannelBroadcastFlags(rawValue: 1 << 2)
-    public static let hasMonoforum = TelegramChannelBroadcastFlags(rawValue: 1 << 3)
+    public static let messagesShouldHaveSignatures = IosappChannelBroadcastFlags(rawValue: 1 << 0)
+    public static let hasDiscussionGroup = IosappChannelBroadcastFlags(rawValue: 1 << 1)
+    public static let messagesShouldHaveProfiles = IosappChannelBroadcastFlags(rawValue: 1 << 2)
+    public static let hasMonoforum = IosappChannelBroadcastFlags(rawValue: 1 << 3)
 }
 
-public struct TelegramChannelBroadcastInfo: Equatable {
-    public let flags: TelegramChannelBroadcastFlags
+public struct IosappChannelBroadcastInfo: Equatable {
+    public let flags: IosappChannelBroadcastFlags
     
-    public init(flags: TelegramChannelBroadcastFlags) {
+    public init(flags: IosappChannelBroadcastFlags) {
         self.flags = flags
     }
     
-    public static func ==(lhs: TelegramChannelBroadcastInfo, rhs: TelegramChannelBroadcastInfo) -> Bool {
+    public static func ==(lhs: IosappChannelBroadcastInfo, rhs: IosappChannelBroadcastInfo) -> Bool {
         return lhs.flags == rhs.flags
     }
 }
 
-public struct TelegramChannelGroupFlags: OptionSet {
+public struct IosappChannelGroupFlags: OptionSet {
     public var rawValue: Int32
     
     public init() {
@@ -60,26 +60,26 @@ public struct TelegramChannelGroupFlags: OptionSet {
     public init(rawValue: Int32) {
         self.rawValue = rawValue
     }
-    public static let slowModeEnabled = TelegramChannelGroupFlags(rawValue: 1 << 0)
+    public static let slowModeEnabled = IosappChannelGroupFlags(rawValue: 1 << 0)
 }
 
-public struct TelegramChannelGroupInfo: Equatable {
-    public let flags: TelegramChannelGroupFlags
+public struct IosappChannelGroupInfo: Equatable {
+    public let flags: IosappChannelGroupFlags
     
-    public init(flags: TelegramChannelGroupFlags) {
+    public init(flags: IosappChannelGroupFlags) {
         self.flags = flags
     }
 
-    public static func ==(lhs: TelegramChannelGroupInfo, rhs: TelegramChannelGroupInfo) -> Bool {
+    public static func ==(lhs: IosappChannelGroupInfo, rhs: IosappChannelGroupInfo) -> Bool {
         return lhs.flags == rhs.flags
     }
 }
 
-public enum TelegramChannelInfo: Equatable {
-    case broadcast(TelegramChannelBroadcastInfo)
-    case group(TelegramChannelGroupInfo)
+public enum IosappChannelInfo: Equatable {
+    case broadcast(IosappChannelBroadcastInfo)
+    case group(IosappChannelGroupInfo)
     
-    public static func ==(lhs: TelegramChannelInfo, rhs: TelegramChannelInfo) -> Bool {
+    public static func ==(lhs: IosappChannelInfo, rhs: IosappChannelInfo) -> Bool {
         switch lhs {
             case let .broadcast(lhsInfo):
                 switch rhs {
@@ -109,57 +109,57 @@ public enum TelegramChannelInfo: Equatable {
         }
     }
     
-    fileprivate static func decode(decoder: PostboxDecoder) -> TelegramChannelInfo {
+    fileprivate static func decode(decoder: PostboxDecoder) -> IosappChannelInfo {
         let type: Int32 = decoder.decodeInt32ForKey("i.t", orElse: 0)
         if type == 0 {
-            return .broadcast(TelegramChannelBroadcastInfo(flags: TelegramChannelBroadcastFlags(rawValue: decoder.decodeInt32ForKey("i.f", orElse: 0))))
+            return .broadcast(IosappChannelBroadcastInfo(flags: IosappChannelBroadcastFlags(rawValue: decoder.decodeInt32ForKey("i.f", orElse: 0))))
         } else {
-            return .group(TelegramChannelGroupInfo(flags: TelegramChannelGroupFlags(rawValue: decoder.decodeInt32ForKey("i.f", orElse: 0))))
+            return .group(IosappChannelGroupInfo(flags: IosappChannelGroupFlags(rawValue: decoder.decodeInt32ForKey("i.f", orElse: 0))))
         }
     }
     
-    public init(flatBuffersObject: TelegramCore_TelegramChannelInfo) throws {
+    public init(flatBuffersObject: IosappCore_IosappChannelInfo) throws {
         switch flatBuffersObject.valueType {
         case .telegramchannelinfoBroadcast:
-            guard let value = flatBuffersObject.value(type: TelegramCore_TelegramChannelInfo_Broadcast.self) else {
+            guard let value = flatBuffersObject.value(type: IosappCore_IosappChannelInfo_Broadcast.self) else {
                 throw FlatBuffersError.missingRequiredField()
             }
-            self = .broadcast(TelegramChannelBroadcastInfo(flags: TelegramChannelBroadcastFlags(rawValue: value.flags)))
+            self = .broadcast(IosappChannelBroadcastInfo(flags: IosappChannelBroadcastFlags(rawValue: value.flags)))
         case .telegramchannelinfoGroup:
-            guard let value = flatBuffersObject.value(type: TelegramCore_TelegramChannelInfo_Group.self) else {
+            guard let value = flatBuffersObject.value(type: IosappCore_IosappChannelInfo_Group.self) else {
                 throw FlatBuffersError.missingRequiredField()
             }
-            self = .group(TelegramChannelGroupInfo(flags: TelegramChannelGroupFlags(rawValue: value.flags)))
+            self = .group(IosappChannelGroupInfo(flags: IosappChannelGroupFlags(rawValue: value.flags)))
         case .none_:
             throw FlatBuffersError.missingRequiredField()
         }
     }
     
     public func encodeToFlatBuffers(builder: inout FlatBufferBuilder) -> Offset {
-        let valueType: TelegramCore_TelegramChannelInfo_Value
+        let valueType: IosappCore_IosappChannelInfo_Value
         let valueOffset: Offset
         
         switch self {
         case let .broadcast(info):
             valueType = .telegramchannelinfoBroadcast
-            let start = TelegramCore_TelegramChannelInfo_Broadcast.startTelegramChannelInfo_Broadcast(&builder)
-            TelegramCore_TelegramChannelInfo_Broadcast.add(flags: info.flags.rawValue, &builder)
-            valueOffset = TelegramCore_TelegramChannelInfo_Broadcast.endTelegramChannelInfo_Broadcast(&builder, start: start)
+            let start = IosappCore_IosappChannelInfo_Broadcast.startIosappChannelInfo_Broadcast(&builder)
+            IosappCore_IosappChannelInfo_Broadcast.add(flags: info.flags.rawValue, &builder)
+            valueOffset = IosappCore_IosappChannelInfo_Broadcast.endIosappChannelInfo_Broadcast(&builder, start: start)
         case let .group(info):
             valueType = .telegramchannelinfoGroup
-            let start = TelegramCore_TelegramChannelInfo_Group.startTelegramChannelInfo_Group(&builder)
-            TelegramCore_TelegramChannelInfo_Group.add(flags: info.flags.rawValue, &builder)
-            valueOffset = TelegramCore_TelegramChannelInfo_Group.endTelegramChannelInfo_Group(&builder, start: start)
+            let start = IosappCore_IosappChannelInfo_Group.startIosappChannelInfo_Group(&builder)
+            IosappCore_IosappChannelInfo_Group.add(flags: info.flags.rawValue, &builder)
+            valueOffset = IosappCore_IosappChannelInfo_Group.endIosappChannelInfo_Group(&builder, start: start)
         }
         
-        let start = TelegramCore_TelegramChannelInfo.startTelegramChannelInfo(&builder)
-        TelegramCore_TelegramChannelInfo.add(valueType: valueType, &builder)
-        TelegramCore_TelegramChannelInfo.add(value: valueOffset, &builder)
-        return TelegramCore_TelegramChannelInfo.endTelegramChannelInfo(&builder, start: start)
+        let start = IosappCore_IosappChannelInfo.startIosappChannelInfo(&builder)
+        IosappCore_IosappChannelInfo.add(valueType: valueType, &builder)
+        IosappCore_IosappChannelInfo.add(value: valueOffset, &builder)
+        return IosappCore_IosappChannelInfo.endIosappChannelInfo(&builder, start: start)
     }
 }
 
-public struct TelegramChannelFlags: OptionSet {
+public struct IosappChannelFlags: OptionSet {
     public var rawValue: Int32
     
     public init() {
@@ -170,39 +170,39 @@ public struct TelegramChannelFlags: OptionSet {
         self.rawValue = rawValue
     }
     
-    public static let isVerified = TelegramChannelFlags(rawValue: 1 << 0)
-    public static let isCreator = TelegramChannelFlags(rawValue: 1 << 1)
-    public static let isScam = TelegramChannelFlags(rawValue: 1 << 2)
-    public static let hasGeo = TelegramChannelFlags(rawValue: 1 << 3)
-    public static let hasVoiceChat = TelegramChannelFlags(rawValue: 1 << 4)
-    public static let hasActiveVoiceChat = TelegramChannelFlags(rawValue: 1 << 5)
-    public static let isFake = TelegramChannelFlags(rawValue: 1 << 6)
-    public static let isGigagroup = TelegramChannelFlags(rawValue: 1 << 7)
-    public static let copyProtectionEnabled = TelegramChannelFlags(rawValue: 1 << 8)
-    public static let joinToSend = TelegramChannelFlags(rawValue: 1 << 9)
-    public static let requestToJoin = TelegramChannelFlags(rawValue: 1 << 10)
-    public static let isForum = TelegramChannelFlags(rawValue: 1 << 11)
-    public static let autoTranslateEnabled = TelegramChannelFlags(rawValue: 1 << 12)
-    public static let isMonoforum = TelegramChannelFlags(rawValue: 1 << 13)
-    public static let displayForumAsTabs = TelegramChannelFlags(rawValue: 1 << 14)
+    public static let isVerified = IosappChannelFlags(rawValue: 1 << 0)
+    public static let isCreator = IosappChannelFlags(rawValue: 1 << 1)
+    public static let isScam = IosappChannelFlags(rawValue: 1 << 2)
+    public static let hasGeo = IosappChannelFlags(rawValue: 1 << 3)
+    public static let hasVoiceChat = IosappChannelFlags(rawValue: 1 << 4)
+    public static let hasActiveVoiceChat = IosappChannelFlags(rawValue: 1 << 5)
+    public static let isFake = IosappChannelFlags(rawValue: 1 << 6)
+    public static let isGigagroup = IosappChannelFlags(rawValue: 1 << 7)
+    public static let copyProtectionEnabled = IosappChannelFlags(rawValue: 1 << 8)
+    public static let joinToSend = IosappChannelFlags(rawValue: 1 << 9)
+    public static let requestToJoin = IosappChannelFlags(rawValue: 1 << 10)
+    public static let isForum = IosappChannelFlags(rawValue: 1 << 11)
+    public static let autoTranslateEnabled = IosappChannelFlags(rawValue: 1 << 12)
+    public static let isMonoforum = IosappChannelFlags(rawValue: 1 << 13)
+    public static let displayForumAsTabs = IosappChannelFlags(rawValue: 1 << 14)
 }
 
-public final class TelegramChannel: Peer, Equatable {
+public final class IosappChannel: Peer, Equatable {
     public let id: PeerId
-    public let accessHash: TelegramPeerAccessHash?
+    public let accessHash: IosappPeerAccessHash?
     public let title: String
     public let username: String?
-    public let photo: [TelegramMediaImageRepresentation]
+    public let photo: [IosappMediaImageRepresentation]
     public let creationDate: Int32
     public let version: Int32
-    public let participationStatus: TelegramChannelParticipationStatus
-    public let info: TelegramChannelInfo
-    public let flags: TelegramChannelFlags
+    public let participationStatus: IosappChannelParticipationStatus
+    public let info: IosappChannelInfo
+    public let flags: IosappChannelFlags
     public let restrictionInfo: PeerAccessRestrictionInfo?
-    public let adminRights: TelegramChatAdminRights?
-    public let bannedRights: TelegramChatBannedRights?
-    public let defaultBannedRights: TelegramChatBannedRights?
-    public let usernames: [TelegramPeerUsername]
+    public let adminRights: IosappChatAdminRights?
+    public let bannedRights: IosappChatBannedRights?
+    public let defaultBannedRights: IosappChatBannedRights?
+    public let usernames: [IosappPeerUsername]
     public let storiesHidden: Bool?
     public let nameColor: PeerNameColor?
     public let backgroundEmojiId: Int64?
@@ -276,20 +276,20 @@ public final class TelegramChannel: Peer, Equatable {
     
     public init(
         id: PeerId,
-        accessHash: TelegramPeerAccessHash?,
+        accessHash: IosappPeerAccessHash?,
         title: String,
         username: String?,
-        photo: [TelegramMediaImageRepresentation],
+        photo: [IosappMediaImageRepresentation],
         creationDate: Int32,
         version: Int32,
-        participationStatus: TelegramChannelParticipationStatus,
-        info: TelegramChannelInfo,
-        flags: TelegramChannelFlags,
+        participationStatus: IosappChannelParticipationStatus,
+        info: IosappChannelInfo,
+        flags: IosappChannelFlags,
         restrictionInfo: PeerAccessRestrictionInfo?,
-        adminRights: TelegramChatAdminRights?,
-        bannedRights: TelegramChatBannedRights?,
-        defaultBannedRights: TelegramChatBannedRights?,
-        usernames: [TelegramPeerUsername],
+        adminRights: IosappChatAdminRights?,
+        bannedRights: IosappChatBannedRights?,
+        defaultBannedRights: IosappChatBannedRights?,
+        usernames: [IosappPeerUsername],
         storiesHidden: Bool?,
         nameColor: PeerNameColor?,
         backgroundEmojiId: Int64?,
@@ -348,13 +348,13 @@ public final class TelegramChannel: Peer, Equatable {
         self.photo = decoder.decodeObjectArrayForKey("ph")
         self.creationDate = decoder.decodeInt32ForKey("d", orElse: 0)
         self.version = decoder.decodeInt32ForKey("v", orElse: 0)
-        self.participationStatus = TelegramChannelParticipationStatus(rawValue: decoder.decodeInt32ForKey("ps", orElse: 0))
-        self.info = TelegramChannelInfo.decode(decoder: decoder)
-        self.flags = TelegramChannelFlags(rawValue: decoder.decodeInt32ForKey("fl", orElse: 0))
+        self.participationStatus = IosappChannelParticipationStatus(rawValue: decoder.decodeInt32ForKey("ps", orElse: 0))
+        self.info = IosappChannelInfo.decode(decoder: decoder)
+        self.flags = IosappChannelFlags(rawValue: decoder.decodeInt32ForKey("fl", orElse: 0))
         self.restrictionInfo = decoder.decodeObjectForKey("ri") as? PeerAccessRestrictionInfo
-        self.adminRights = decoder.decodeObjectForKey("ar", decoder: { TelegramChatAdminRights(decoder: $0) }) as? TelegramChatAdminRights
-        self.bannedRights = decoder.decodeObjectForKey("br", decoder: { TelegramChatBannedRights(decoder: $0) }) as? TelegramChatBannedRights
-        self.defaultBannedRights = decoder.decodeObjectForKey("dbr", decoder: { TelegramChatBannedRights(decoder: $0) }) as? TelegramChatBannedRights
+        self.adminRights = decoder.decodeObjectForKey("ar", decoder: { IosappChatAdminRights(decoder: $0) }) as? IosappChatAdminRights
+        self.bannedRights = decoder.decodeObjectForKey("br", decoder: { IosappChatBannedRights(decoder: $0) }) as? IosappChatBannedRights
+        self.defaultBannedRights = decoder.decodeObjectForKey("dbr", decoder: { IosappChatBannedRights(decoder: $0) }) as? IosappChatBannedRights
         self.usernames = decoder.decodeObjectArrayForKey("uns")
         self.storiesHidden = decoder.decodeOptionalBoolForKey("sth")
         self.nameColor = decoder.decodeOptionalInt32ForKey("nclr").flatMap { PeerNameColor(rawValue: $0) }
@@ -485,14 +485,14 @@ public final class TelegramChannel: Peer, Equatable {
     }
     
     public func isEqual(_ other: Peer) -> Bool {
-        guard let other = other as? TelegramChannel else {
+        guard let other = other as? IosappChannel else {
             return false
         }
         
         return self == other
     }
 
-    public static func ==(lhs: TelegramChannel, rhs: TelegramChannel) -> Bool {
+    public static func ==(lhs: IosappChannel, rhs: IosappChannel) -> Bool {
         if lhs.id != rhs.id || lhs.accessHash != rhs.accessHash || lhs.title != rhs.title || lhs.username != rhs.username || lhs.photo != rhs.photo {
             return false
         }
@@ -555,87 +555,87 @@ public final class TelegramChannel: Peer, Equatable {
         return true
     }
     
-    public func withUpdatedAddressName(_ addressName: String?) -> TelegramChannel {
-        return TelegramChannel(id: self.id, accessHash: self.accessHash, title: self.title, username: addressName, photo: self.photo, creationDate: self.creationDate, version: self.version, participationStatus: self.participationStatus, info: self.info, flags: self.flags, restrictionInfo: self.restrictionInfo, adminRights: self.adminRights, bannedRights: self.bannedRights, defaultBannedRights: self.defaultBannedRights, usernames: self.usernames, storiesHidden: self.storiesHidden, nameColor: self.nameColor, backgroundEmojiId: self.backgroundEmojiId, profileColor: self.profileColor, profileBackgroundEmojiId: self.profileBackgroundEmojiId, emojiStatus: self.emojiStatus, approximateBoostLevel: self.approximateBoostLevel, subscriptionUntilDate: self.subscriptionUntilDate, verificationIconFileId: self.verificationIconFileId, sendPaidMessageStars: self.sendPaidMessageStars, linkedMonoforumId: self.linkedMonoforumId)
+    public func withUpdatedAddressName(_ addressName: String?) -> IosappChannel {
+        return IosappChannel(id: self.id, accessHash: self.accessHash, title: self.title, username: addressName, photo: self.photo, creationDate: self.creationDate, version: self.version, participationStatus: self.participationStatus, info: self.info, flags: self.flags, restrictionInfo: self.restrictionInfo, adminRights: self.adminRights, bannedRights: self.bannedRights, defaultBannedRights: self.defaultBannedRights, usernames: self.usernames, storiesHidden: self.storiesHidden, nameColor: self.nameColor, backgroundEmojiId: self.backgroundEmojiId, profileColor: self.profileColor, profileBackgroundEmojiId: self.profileBackgroundEmojiId, emojiStatus: self.emojiStatus, approximateBoostLevel: self.approximateBoostLevel, subscriptionUntilDate: self.subscriptionUntilDate, verificationIconFileId: self.verificationIconFileId, sendPaidMessageStars: self.sendPaidMessageStars, linkedMonoforumId: self.linkedMonoforumId)
     }
     
-    public func withUpdatedAddressNames(_ addressNames: [TelegramPeerUsername]) -> TelegramChannel {
-        return TelegramChannel(id: self.id, accessHash: self.accessHash, title: self.title, username: self.username, photo: self.photo, creationDate: self.creationDate, version: self.version, participationStatus: self.participationStatus, info: self.info, flags: self.flags, restrictionInfo: self.restrictionInfo, adminRights: self.adminRights, bannedRights: self.bannedRights, defaultBannedRights: self.defaultBannedRights, usernames: addressNames, storiesHidden: self.storiesHidden, nameColor: self.nameColor, backgroundEmojiId: self.backgroundEmojiId, profileColor: self.profileColor, profileBackgroundEmojiId: self.profileBackgroundEmojiId, emojiStatus: self.emojiStatus, approximateBoostLevel: self.approximateBoostLevel, subscriptionUntilDate: self.subscriptionUntilDate, verificationIconFileId: self.verificationIconFileId, sendPaidMessageStars: self.sendPaidMessageStars, linkedMonoforumId: self.linkedMonoforumId)
+    public func withUpdatedAddressNames(_ addressNames: [IosappPeerUsername]) -> IosappChannel {
+        return IosappChannel(id: self.id, accessHash: self.accessHash, title: self.title, username: self.username, photo: self.photo, creationDate: self.creationDate, version: self.version, participationStatus: self.participationStatus, info: self.info, flags: self.flags, restrictionInfo: self.restrictionInfo, adminRights: self.adminRights, bannedRights: self.bannedRights, defaultBannedRights: self.defaultBannedRights, usernames: addressNames, storiesHidden: self.storiesHidden, nameColor: self.nameColor, backgroundEmojiId: self.backgroundEmojiId, profileColor: self.profileColor, profileBackgroundEmojiId: self.profileBackgroundEmojiId, emojiStatus: self.emojiStatus, approximateBoostLevel: self.approximateBoostLevel, subscriptionUntilDate: self.subscriptionUntilDate, verificationIconFileId: self.verificationIconFileId, sendPaidMessageStars: self.sendPaidMessageStars, linkedMonoforumId: self.linkedMonoforumId)
     }
     
-    public func withUpdatedDefaultBannedRights(_ defaultBannedRights: TelegramChatBannedRights?) -> TelegramChannel {
-        return TelegramChannel(id: self.id, accessHash: self.accessHash, title: self.title, username: self.username, photo: self.photo, creationDate: self.creationDate, version: self.version, participationStatus: self.participationStatus, info: self.info, flags: self.flags, restrictionInfo: self.restrictionInfo, adminRights: self.adminRights, bannedRights: self.bannedRights, defaultBannedRights: defaultBannedRights, usernames: self.usernames, storiesHidden: self.storiesHidden, nameColor: self.nameColor, backgroundEmojiId: self.backgroundEmojiId, profileColor: self.profileColor, profileBackgroundEmojiId: self.profileBackgroundEmojiId, emojiStatus: self.emojiStatus, approximateBoostLevel: self.approximateBoostLevel, subscriptionUntilDate: self.subscriptionUntilDate, verificationIconFileId: self.verificationIconFileId, sendPaidMessageStars: self.sendPaidMessageStars, linkedMonoforumId: self.linkedMonoforumId)
+    public func withUpdatedDefaultBannedRights(_ defaultBannedRights: IosappChatBannedRights?) -> IosappChannel {
+        return IosappChannel(id: self.id, accessHash: self.accessHash, title: self.title, username: self.username, photo: self.photo, creationDate: self.creationDate, version: self.version, participationStatus: self.participationStatus, info: self.info, flags: self.flags, restrictionInfo: self.restrictionInfo, adminRights: self.adminRights, bannedRights: self.bannedRights, defaultBannedRights: defaultBannedRights, usernames: self.usernames, storiesHidden: self.storiesHidden, nameColor: self.nameColor, backgroundEmojiId: self.backgroundEmojiId, profileColor: self.profileColor, profileBackgroundEmojiId: self.profileBackgroundEmojiId, emojiStatus: self.emojiStatus, approximateBoostLevel: self.approximateBoostLevel, subscriptionUntilDate: self.subscriptionUntilDate, verificationIconFileId: self.verificationIconFileId, sendPaidMessageStars: self.sendPaidMessageStars, linkedMonoforumId: self.linkedMonoforumId)
     }
     
-    public func withUpdatedFlags(_ flags: TelegramChannelFlags) -> TelegramChannel {
-        return TelegramChannel(id: self.id, accessHash: self.accessHash, title: self.title, username: self.username, photo: self.photo, creationDate: self.creationDate, version: self.version, participationStatus: self.participationStatus, info: self.info, flags: flags, restrictionInfo: self.restrictionInfo, adminRights: self.adminRights, bannedRights: self.bannedRights, defaultBannedRights: self.defaultBannedRights, usernames: self.usernames, storiesHidden: self.storiesHidden, nameColor: self.nameColor, backgroundEmojiId: self.backgroundEmojiId, profileColor: self.profileColor, profileBackgroundEmojiId: self.profileBackgroundEmojiId, emojiStatus: self.emojiStatus, approximateBoostLevel: self.approximateBoostLevel, subscriptionUntilDate: self.subscriptionUntilDate, verificationIconFileId: self.verificationIconFileId, sendPaidMessageStars: self.sendPaidMessageStars, linkedMonoforumId: self.linkedMonoforumId)
+    public func withUpdatedFlags(_ flags: IosappChannelFlags) -> IosappChannel {
+        return IosappChannel(id: self.id, accessHash: self.accessHash, title: self.title, username: self.username, photo: self.photo, creationDate: self.creationDate, version: self.version, participationStatus: self.participationStatus, info: self.info, flags: flags, restrictionInfo: self.restrictionInfo, adminRights: self.adminRights, bannedRights: self.bannedRights, defaultBannedRights: self.defaultBannedRights, usernames: self.usernames, storiesHidden: self.storiesHidden, nameColor: self.nameColor, backgroundEmojiId: self.backgroundEmojiId, profileColor: self.profileColor, profileBackgroundEmojiId: self.profileBackgroundEmojiId, emojiStatus: self.emojiStatus, approximateBoostLevel: self.approximateBoostLevel, subscriptionUntilDate: self.subscriptionUntilDate, verificationIconFileId: self.verificationIconFileId, sendPaidMessageStars: self.sendPaidMessageStars, linkedMonoforumId: self.linkedMonoforumId)
     }
     
-    public func withUpdatedInfo(_ info: TelegramChannelInfo) -> TelegramChannel {
-        return TelegramChannel(id: self.id, accessHash: self.accessHash, title: self.title, username: self.username, photo: self.photo, creationDate: self.creationDate, version: self.version, participationStatus: self.participationStatus, info: info, flags: self.flags, restrictionInfo: self.restrictionInfo, adminRights: self.adminRights, bannedRights: self.bannedRights, defaultBannedRights: self.defaultBannedRights, usernames: self.usernames, storiesHidden: self.storiesHidden, nameColor: self.nameColor, backgroundEmojiId: self.backgroundEmojiId, profileColor: self.profileColor, profileBackgroundEmojiId: self.profileBackgroundEmojiId, emojiStatus: self.emojiStatus, approximateBoostLevel: self.approximateBoostLevel, subscriptionUntilDate: self.subscriptionUntilDate, verificationIconFileId: self.verificationIconFileId, sendPaidMessageStars: self.sendPaidMessageStars, linkedMonoforumId: self.linkedMonoforumId)
+    public func withUpdatedInfo(_ info: IosappChannelInfo) -> IosappChannel {
+        return IosappChannel(id: self.id, accessHash: self.accessHash, title: self.title, username: self.username, photo: self.photo, creationDate: self.creationDate, version: self.version, participationStatus: self.participationStatus, info: info, flags: self.flags, restrictionInfo: self.restrictionInfo, adminRights: self.adminRights, bannedRights: self.bannedRights, defaultBannedRights: self.defaultBannedRights, usernames: self.usernames, storiesHidden: self.storiesHidden, nameColor: self.nameColor, backgroundEmojiId: self.backgroundEmojiId, profileColor: self.profileColor, profileBackgroundEmojiId: self.profileBackgroundEmojiId, emojiStatus: self.emojiStatus, approximateBoostLevel: self.approximateBoostLevel, subscriptionUntilDate: self.subscriptionUntilDate, verificationIconFileId: self.verificationIconFileId, sendPaidMessageStars: self.sendPaidMessageStars, linkedMonoforumId: self.linkedMonoforumId)
     }
     
-    public func withUpdatedSendPaidMessageStars(_ sendPaidMessageStars: StarsAmount?) -> TelegramChannel {
-        return TelegramChannel(id: self.id, accessHash: self.accessHash, title: self.title, username: self.username, photo: self.photo, creationDate: self.creationDate, version: self.version, participationStatus: self.participationStatus, info: self.info, flags: self.flags, restrictionInfo: self.restrictionInfo, adminRights: self.adminRights, bannedRights: self.bannedRights, defaultBannedRights: self.defaultBannedRights, usernames: self.usernames, storiesHidden: self.storiesHidden, nameColor: self.nameColor, backgroundEmojiId: self.backgroundEmojiId, profileColor: self.profileColor, profileBackgroundEmojiId: self.profileBackgroundEmojiId, emojiStatus: self.emojiStatus, approximateBoostLevel: self.approximateBoostLevel, subscriptionUntilDate: self.subscriptionUntilDate, verificationIconFileId: self.verificationIconFileId, sendPaidMessageStars: sendPaidMessageStars, linkedMonoforumId: self.linkedMonoforumId)
+    public func withUpdatedSendPaidMessageStars(_ sendPaidMessageStars: StarsAmount?) -> IosappChannel {
+        return IosappChannel(id: self.id, accessHash: self.accessHash, title: self.title, username: self.username, photo: self.photo, creationDate: self.creationDate, version: self.version, participationStatus: self.participationStatus, info: self.info, flags: self.flags, restrictionInfo: self.restrictionInfo, adminRights: self.adminRights, bannedRights: self.bannedRights, defaultBannedRights: self.defaultBannedRights, usernames: self.usernames, storiesHidden: self.storiesHidden, nameColor: self.nameColor, backgroundEmojiId: self.backgroundEmojiId, profileColor: self.profileColor, profileBackgroundEmojiId: self.profileBackgroundEmojiId, emojiStatus: self.emojiStatus, approximateBoostLevel: self.approximateBoostLevel, subscriptionUntilDate: self.subscriptionUntilDate, verificationIconFileId: self.verificationIconFileId, sendPaidMessageStars: sendPaidMessageStars, linkedMonoforumId: self.linkedMonoforumId)
     }
     
-    public func withUpdatedStoriesHidden(_ storiesHidden: Bool?) -> TelegramChannel {
-        return TelegramChannel(id: self.id, accessHash: self.accessHash, title: self.title, username: self.username, photo: self.photo, creationDate: self.creationDate, version: self.version, participationStatus: self.participationStatus, info: self.info, flags: self.flags, restrictionInfo: self.restrictionInfo, adminRights: self.adminRights, bannedRights: self.bannedRights, defaultBannedRights: self.defaultBannedRights, usernames: self.usernames, storiesHidden: storiesHidden, nameColor: self.nameColor, backgroundEmojiId: self.backgroundEmojiId, profileColor: self.profileColor, profileBackgroundEmojiId: self.profileBackgroundEmojiId, emojiStatus: self.emojiStatus, approximateBoostLevel: self.approximateBoostLevel, subscriptionUntilDate: self.subscriptionUntilDate, verificationIconFileId: self.verificationIconFileId, sendPaidMessageStars: self.sendPaidMessageStars, linkedMonoforumId: self.linkedMonoforumId)
+    public func withUpdatedStoriesHidden(_ storiesHidden: Bool?) -> IosappChannel {
+        return IosappChannel(id: self.id, accessHash: self.accessHash, title: self.title, username: self.username, photo: self.photo, creationDate: self.creationDate, version: self.version, participationStatus: self.participationStatus, info: self.info, flags: self.flags, restrictionInfo: self.restrictionInfo, adminRights: self.adminRights, bannedRights: self.bannedRights, defaultBannedRights: self.defaultBannedRights, usernames: self.usernames, storiesHidden: storiesHidden, nameColor: self.nameColor, backgroundEmojiId: self.backgroundEmojiId, profileColor: self.profileColor, profileBackgroundEmojiId: self.profileBackgroundEmojiId, emojiStatus: self.emojiStatus, approximateBoostLevel: self.approximateBoostLevel, subscriptionUntilDate: self.subscriptionUntilDate, verificationIconFileId: self.verificationIconFileId, sendPaidMessageStars: self.sendPaidMessageStars, linkedMonoforumId: self.linkedMonoforumId)
     }
     
-    public func withUpdatedNameColor(_ nameColor: PeerNameColor?) -> TelegramChannel {
-        return TelegramChannel(id: self.id, accessHash: self.accessHash, title: self.title, username: self.username, photo: self.photo, creationDate: self.creationDate, version: self.version, participationStatus: self.participationStatus, info: self.info, flags: self.flags, restrictionInfo: self.restrictionInfo, adminRights: self.adminRights, bannedRights: self.bannedRights, defaultBannedRights: self.defaultBannedRights, usernames: self.usernames, storiesHidden: self.storiesHidden, nameColor: nameColor, backgroundEmojiId: self.backgroundEmojiId, profileColor: self.profileColor, profileBackgroundEmojiId: self.profileBackgroundEmojiId, emojiStatus: self.emojiStatus, approximateBoostLevel: self.approximateBoostLevel, subscriptionUntilDate: self.subscriptionUntilDate, verificationIconFileId: self.verificationIconFileId, sendPaidMessageStars: self.sendPaidMessageStars, linkedMonoforumId: self.linkedMonoforumId)
+    public func withUpdatedNameColor(_ nameColor: PeerNameColor?) -> IosappChannel {
+        return IosappChannel(id: self.id, accessHash: self.accessHash, title: self.title, username: self.username, photo: self.photo, creationDate: self.creationDate, version: self.version, participationStatus: self.participationStatus, info: self.info, flags: self.flags, restrictionInfo: self.restrictionInfo, adminRights: self.adminRights, bannedRights: self.bannedRights, defaultBannedRights: self.defaultBannedRights, usernames: self.usernames, storiesHidden: self.storiesHidden, nameColor: nameColor, backgroundEmojiId: self.backgroundEmojiId, profileColor: self.profileColor, profileBackgroundEmojiId: self.profileBackgroundEmojiId, emojiStatus: self.emojiStatus, approximateBoostLevel: self.approximateBoostLevel, subscriptionUntilDate: self.subscriptionUntilDate, verificationIconFileId: self.verificationIconFileId, sendPaidMessageStars: self.sendPaidMessageStars, linkedMonoforumId: self.linkedMonoforumId)
     }
     
-    public func withUpdatedBackgroundEmojiId(_ backgroundEmojiId: Int64?) -> TelegramChannel {
-        return TelegramChannel(id: self.id, accessHash: self.accessHash, title: self.title, username: self.username, photo: self.photo, creationDate: self.creationDate, version: self.version, participationStatus: self.participationStatus, info: self.info, flags: self.flags, restrictionInfo: self.restrictionInfo, adminRights: self.adminRights, bannedRights: self.bannedRights, defaultBannedRights: self.defaultBannedRights, usernames: self.usernames, storiesHidden: self.storiesHidden, nameColor: self.nameColor, backgroundEmojiId: backgroundEmojiId, profileColor: self.profileColor, profileBackgroundEmojiId: self.profileBackgroundEmojiId, emojiStatus: self.emojiStatus, approximateBoostLevel: self.approximateBoostLevel, subscriptionUntilDate: self.subscriptionUntilDate, verificationIconFileId: self.verificationIconFileId, sendPaidMessageStars: self.sendPaidMessageStars, linkedMonoforumId: self.linkedMonoforumId)
+    public func withUpdatedBackgroundEmojiId(_ backgroundEmojiId: Int64?) -> IosappChannel {
+        return IosappChannel(id: self.id, accessHash: self.accessHash, title: self.title, username: self.username, photo: self.photo, creationDate: self.creationDate, version: self.version, participationStatus: self.participationStatus, info: self.info, flags: self.flags, restrictionInfo: self.restrictionInfo, adminRights: self.adminRights, bannedRights: self.bannedRights, defaultBannedRights: self.defaultBannedRights, usernames: self.usernames, storiesHidden: self.storiesHidden, nameColor: self.nameColor, backgroundEmojiId: backgroundEmojiId, profileColor: self.profileColor, profileBackgroundEmojiId: self.profileBackgroundEmojiId, emojiStatus: self.emojiStatus, approximateBoostLevel: self.approximateBoostLevel, subscriptionUntilDate: self.subscriptionUntilDate, verificationIconFileId: self.verificationIconFileId, sendPaidMessageStars: self.sendPaidMessageStars, linkedMonoforumId: self.linkedMonoforumId)
     }
     
-    public func withUpdatedProfileColor(_ profileColor: PeerNameColor?) -> TelegramChannel {
-        return TelegramChannel(id: self.id, accessHash: self.accessHash, title: self.title, username: self.username, photo: self.photo, creationDate: self.creationDate, version: self.version, participationStatus: self.participationStatus, info: self.info, flags: self.flags, restrictionInfo: self.restrictionInfo, adminRights: self.adminRights, bannedRights: self.bannedRights, defaultBannedRights: self.defaultBannedRights, usernames: self.usernames, storiesHidden: self.storiesHidden, nameColor: self.nameColor, backgroundEmojiId: self.backgroundEmojiId, profileColor: profileColor, profileBackgroundEmojiId: self.profileBackgroundEmojiId, emojiStatus: self.emojiStatus, approximateBoostLevel: self.approximateBoostLevel, subscriptionUntilDate: self.subscriptionUntilDate, verificationIconFileId: self.verificationIconFileId, sendPaidMessageStars: self.sendPaidMessageStars, linkedMonoforumId: self.linkedMonoforumId)
+    public func withUpdatedProfileColor(_ profileColor: PeerNameColor?) -> IosappChannel {
+        return IosappChannel(id: self.id, accessHash: self.accessHash, title: self.title, username: self.username, photo: self.photo, creationDate: self.creationDate, version: self.version, participationStatus: self.participationStatus, info: self.info, flags: self.flags, restrictionInfo: self.restrictionInfo, adminRights: self.adminRights, bannedRights: self.bannedRights, defaultBannedRights: self.defaultBannedRights, usernames: self.usernames, storiesHidden: self.storiesHidden, nameColor: self.nameColor, backgroundEmojiId: self.backgroundEmojiId, profileColor: profileColor, profileBackgroundEmojiId: self.profileBackgroundEmojiId, emojiStatus: self.emojiStatus, approximateBoostLevel: self.approximateBoostLevel, subscriptionUntilDate: self.subscriptionUntilDate, verificationIconFileId: self.verificationIconFileId, sendPaidMessageStars: self.sendPaidMessageStars, linkedMonoforumId: self.linkedMonoforumId)
     }
     
-    public func withUpdatedProfileBackgroundEmojiId(_ profileBackgroundEmojiId: Int64?) -> TelegramChannel {
-        return TelegramChannel(id: self.id, accessHash: self.accessHash, title: self.title, username: self.username, photo: self.photo, creationDate: self.creationDate, version: self.version, participationStatus: self.participationStatus, info: self.info, flags: self.flags, restrictionInfo: self.restrictionInfo, adminRights: self.adminRights, bannedRights: self.bannedRights, defaultBannedRights: self.defaultBannedRights, usernames: self.usernames, storiesHidden: self.storiesHidden, nameColor: self.nameColor, backgroundEmojiId: self.backgroundEmojiId, profileColor: self.profileColor, profileBackgroundEmojiId: profileBackgroundEmojiId, emojiStatus: self.emojiStatus, approximateBoostLevel: self.approximateBoostLevel, subscriptionUntilDate: self.subscriptionUntilDate, verificationIconFileId: self.verificationIconFileId, sendPaidMessageStars: self.sendPaidMessageStars, linkedMonoforumId: self.linkedMonoforumId)
+    public func withUpdatedProfileBackgroundEmojiId(_ profileBackgroundEmojiId: Int64?) -> IosappChannel {
+        return IosappChannel(id: self.id, accessHash: self.accessHash, title: self.title, username: self.username, photo: self.photo, creationDate: self.creationDate, version: self.version, participationStatus: self.participationStatus, info: self.info, flags: self.flags, restrictionInfo: self.restrictionInfo, adminRights: self.adminRights, bannedRights: self.bannedRights, defaultBannedRights: self.defaultBannedRights, usernames: self.usernames, storiesHidden: self.storiesHidden, nameColor: self.nameColor, backgroundEmojiId: self.backgroundEmojiId, profileColor: self.profileColor, profileBackgroundEmojiId: profileBackgroundEmojiId, emojiStatus: self.emojiStatus, approximateBoostLevel: self.approximateBoostLevel, subscriptionUntilDate: self.subscriptionUntilDate, verificationIconFileId: self.verificationIconFileId, sendPaidMessageStars: self.sendPaidMessageStars, linkedMonoforumId: self.linkedMonoforumId)
     }
     
-    public func withUpdatedEmojiStatus(_ emojiStatus: PeerEmojiStatus?) -> TelegramChannel {
-        return TelegramChannel(id: self.id, accessHash: self.accessHash, title: self.title, username: self.username, photo: self.photo, creationDate: self.creationDate, version: self.version, participationStatus: self.participationStatus, info: self.info, flags: self.flags, restrictionInfo: self.restrictionInfo, adminRights: self.adminRights, bannedRights: self.bannedRights, defaultBannedRights: self.defaultBannedRights, usernames: self.usernames, storiesHidden: self.storiesHidden, nameColor: self.nameColor, backgroundEmojiId: self.backgroundEmojiId, profileColor: self.profileColor, profileBackgroundEmojiId: self.profileBackgroundEmojiId, emojiStatus: emojiStatus, approximateBoostLevel: self.approximateBoostLevel, subscriptionUntilDate: self.subscriptionUntilDate, verificationIconFileId: self.verificationIconFileId, sendPaidMessageStars: self.sendPaidMessageStars, linkedMonoforumId: self.linkedMonoforumId)
+    public func withUpdatedEmojiStatus(_ emojiStatus: PeerEmojiStatus?) -> IosappChannel {
+        return IosappChannel(id: self.id, accessHash: self.accessHash, title: self.title, username: self.username, photo: self.photo, creationDate: self.creationDate, version: self.version, participationStatus: self.participationStatus, info: self.info, flags: self.flags, restrictionInfo: self.restrictionInfo, adminRights: self.adminRights, bannedRights: self.bannedRights, defaultBannedRights: self.defaultBannedRights, usernames: self.usernames, storiesHidden: self.storiesHidden, nameColor: self.nameColor, backgroundEmojiId: self.backgroundEmojiId, profileColor: self.profileColor, profileBackgroundEmojiId: self.profileBackgroundEmojiId, emojiStatus: emojiStatus, approximateBoostLevel: self.approximateBoostLevel, subscriptionUntilDate: self.subscriptionUntilDate, verificationIconFileId: self.verificationIconFileId, sendPaidMessageStars: self.sendPaidMessageStars, linkedMonoforumId: self.linkedMonoforumId)
     }
     
-    public func withUpdatedApproximateBoostLevel(_ approximateBoostLevel: Int32?) -> TelegramChannel {
-        return TelegramChannel(id: self.id, accessHash: self.accessHash, title: self.title, username: self.username, photo: self.photo, creationDate: self.creationDate, version: self.version, participationStatus: self.participationStatus, info: self.info, flags: self.flags, restrictionInfo: self.restrictionInfo, adminRights: self.adminRights, bannedRights: self.bannedRights, defaultBannedRights: self.defaultBannedRights, usernames: self.usernames, storiesHidden: self.storiesHidden, nameColor: self.nameColor, backgroundEmojiId: self.backgroundEmojiId, profileColor: self.profileColor, profileBackgroundEmojiId: self.profileBackgroundEmojiId, emojiStatus: self.emojiStatus, approximateBoostLevel: approximateBoostLevel, subscriptionUntilDate: self.subscriptionUntilDate, verificationIconFileId: self.verificationIconFileId, sendPaidMessageStars: self.sendPaidMessageStars, linkedMonoforumId: self.linkedMonoforumId)
+    public func withUpdatedApproximateBoostLevel(_ approximateBoostLevel: Int32?) -> IosappChannel {
+        return IosappChannel(id: self.id, accessHash: self.accessHash, title: self.title, username: self.username, photo: self.photo, creationDate: self.creationDate, version: self.version, participationStatus: self.participationStatus, info: self.info, flags: self.flags, restrictionInfo: self.restrictionInfo, adminRights: self.adminRights, bannedRights: self.bannedRights, defaultBannedRights: self.defaultBannedRights, usernames: self.usernames, storiesHidden: self.storiesHidden, nameColor: self.nameColor, backgroundEmojiId: self.backgroundEmojiId, profileColor: self.profileColor, profileBackgroundEmojiId: self.profileBackgroundEmojiId, emojiStatus: self.emojiStatus, approximateBoostLevel: approximateBoostLevel, subscriptionUntilDate: self.subscriptionUntilDate, verificationIconFileId: self.verificationIconFileId, sendPaidMessageStars: self.sendPaidMessageStars, linkedMonoforumId: self.linkedMonoforumId)
     }
     
-    public func withUpdatedSubscriptionUntilDate(_ subscriptionUntilDate: Int32?) -> TelegramChannel {
-        return TelegramChannel(id: self.id, accessHash: self.accessHash, title: self.title, username: self.username, photo: self.photo, creationDate: self.creationDate, version: self.version, participationStatus: self.participationStatus, info: self.info, flags: self.flags, restrictionInfo: self.restrictionInfo, adminRights: self.adminRights, bannedRights: self.bannedRights, defaultBannedRights: self.defaultBannedRights, usernames: self.usernames, storiesHidden: self.storiesHidden, nameColor: self.nameColor, backgroundEmojiId: self.backgroundEmojiId, profileColor: self.profileColor, profileBackgroundEmojiId: self.profileBackgroundEmojiId, emojiStatus: self.emojiStatus, approximateBoostLevel: self.approximateBoostLevel, subscriptionUntilDate: subscriptionUntilDate, verificationIconFileId: self.verificationIconFileId, sendPaidMessageStars: self.sendPaidMessageStars, linkedMonoforumId: self.linkedMonoforumId)
+    public func withUpdatedSubscriptionUntilDate(_ subscriptionUntilDate: Int32?) -> IosappChannel {
+        return IosappChannel(id: self.id, accessHash: self.accessHash, title: self.title, username: self.username, photo: self.photo, creationDate: self.creationDate, version: self.version, participationStatus: self.participationStatus, info: self.info, flags: self.flags, restrictionInfo: self.restrictionInfo, adminRights: self.adminRights, bannedRights: self.bannedRights, defaultBannedRights: self.defaultBannedRights, usernames: self.usernames, storiesHidden: self.storiesHidden, nameColor: self.nameColor, backgroundEmojiId: self.backgroundEmojiId, profileColor: self.profileColor, profileBackgroundEmojiId: self.profileBackgroundEmojiId, emojiStatus: self.emojiStatus, approximateBoostLevel: self.approximateBoostLevel, subscriptionUntilDate: subscriptionUntilDate, verificationIconFileId: self.verificationIconFileId, sendPaidMessageStars: self.sendPaidMessageStars, linkedMonoforumId: self.linkedMonoforumId)
     }
     
-    public func withUpdatedVerificationIconFileId(_ verificationIconFileId: Int64?) -> TelegramChannel {
-        return TelegramChannel(id: self.id, accessHash: self.accessHash, title: self.title, username: self.username, photo: self.photo, creationDate: self.creationDate, version: self.version, participationStatus: self.participationStatus, info: self.info, flags: self.flags, restrictionInfo: self.restrictionInfo, adminRights: self.adminRights, bannedRights: self.bannedRights, defaultBannedRights: self.defaultBannedRights, usernames: self.usernames, storiesHidden: self.storiesHidden, nameColor: self.nameColor, backgroundEmojiId: self.backgroundEmojiId, profileColor: self.profileColor, profileBackgroundEmojiId: self.profileBackgroundEmojiId, emojiStatus: self.emojiStatus, approximateBoostLevel: self.approximateBoostLevel, subscriptionUntilDate: self.subscriptionUntilDate, verificationIconFileId: verificationIconFileId, sendPaidMessageStars: self.sendPaidMessageStars, linkedMonoforumId: self.linkedMonoforumId)
+    public func withUpdatedVerificationIconFileId(_ verificationIconFileId: Int64?) -> IosappChannel {
+        return IosappChannel(id: self.id, accessHash: self.accessHash, title: self.title, username: self.username, photo: self.photo, creationDate: self.creationDate, version: self.version, participationStatus: self.participationStatus, info: self.info, flags: self.flags, restrictionInfo: self.restrictionInfo, adminRights: self.adminRights, bannedRights: self.bannedRights, defaultBannedRights: self.defaultBannedRights, usernames: self.usernames, storiesHidden: self.storiesHidden, nameColor: self.nameColor, backgroundEmojiId: self.backgroundEmojiId, profileColor: self.profileColor, profileBackgroundEmojiId: self.profileBackgroundEmojiId, emojiStatus: self.emojiStatus, approximateBoostLevel: self.approximateBoostLevel, subscriptionUntilDate: self.subscriptionUntilDate, verificationIconFileId: verificationIconFileId, sendPaidMessageStars: self.sendPaidMessageStars, linkedMonoforumId: self.linkedMonoforumId)
     }
     
-    public init(flatBuffersObject: TelegramCore_TelegramChannel) throws {
+    public init(flatBuffersObject: IosappCore_IosappChannel) throws {
         self.id = PeerId(flatBuffersObject: flatBuffersObject.id)
-        self.accessHash = try flatBuffersObject.accessHash.flatMap(TelegramPeerAccessHash.init)
+        self.accessHash = try flatBuffersObject.accessHash.flatMap(IosappPeerAccessHash.init)
         self.title = flatBuffersObject.title
         self.username = flatBuffersObject.username
-        self.photo = try (0 ..< flatBuffersObject.photoCount).map { try TelegramMediaImageRepresentation(flatBuffersObject: flatBuffersObject.photo(at: $0)!) }
+        self.photo = try (0 ..< flatBuffersObject.photoCount).map { try IosappMediaImageRepresentation(flatBuffersObject: flatBuffersObject.photo(at: $0)!) }
         self.creationDate = flatBuffersObject.creationDate
         self.version = flatBuffersObject.version
-        self.participationStatus = TelegramChannelParticipationStatus(rawValue: flatBuffersObject.participationStatus)
+        self.participationStatus = IosappChannelParticipationStatus(rawValue: flatBuffersObject.participationStatus)
         
         guard let infoObj = flatBuffersObject.info else {
             throw FlatBuffersError.missingRequiredField()
         }
-        self.info = try TelegramChannelInfo(flatBuffersObject: infoObj)
+        self.info = try IosappChannelInfo(flatBuffersObject: infoObj)
         
-        self.flags = TelegramChannelFlags(rawValue: flatBuffersObject.flags)
+        self.flags = IosappChannelFlags(rawValue: flatBuffersObject.flags)
         self.restrictionInfo = try flatBuffersObject.restrictionInfo.flatMap { try PeerAccessRestrictionInfo(flatBuffersObject: $0) }
-        self.adminRights = try flatBuffersObject.adminRights.flatMap { try TelegramChatAdminRights(flatBuffersObject: $0) }
-        self.bannedRights = try flatBuffersObject.bannedRights.flatMap { try TelegramChatBannedRights(flatBuffersObject: $0) }
-        self.defaultBannedRights = try flatBuffersObject.defaultBannedRights.map { try TelegramChatBannedRights(flatBuffersObject: $0) }
-        self.usernames = try (0 ..< flatBuffersObject.usernamesCount).map { try TelegramPeerUsername(flatBuffersObject: flatBuffersObject.usernames(at: $0)!) }
+        self.adminRights = try flatBuffersObject.adminRights.flatMap { try IosappChatAdminRights(flatBuffersObject: $0) }
+        self.bannedRights = try flatBuffersObject.bannedRights.flatMap { try IosappChatBannedRights(flatBuffersObject: $0) }
+        self.defaultBannedRights = try flatBuffersObject.defaultBannedRights.map { try IosappChatBannedRights(flatBuffersObject: $0) }
+        self.usernames = try (0 ..< flatBuffersObject.usernamesCount).map { try IosappPeerUsername(flatBuffersObject: flatBuffersObject.usernames(at: $0)!) }
         self.storiesHidden = flatBuffersObject.storiesHidden?.value
         self.nameColor = try flatBuffersObject.nameColor.flatMap(PeerNameColor.init(flatBuffersObject:))
         self.backgroundEmojiId = flatBuffersObject.backgroundEmojiId == Int64.min ? nil : flatBuffersObject.backgroundEmojiId
@@ -672,59 +672,59 @@ public final class TelegramChannel: Peer, Equatable {
         let emojiStatusOffset = self.emojiStatus?.encodeToFlatBuffers(builder: &builder)
         let sendPaidMessageStarsOffset = self.sendPaidMessageStars?.encodeToFlatBuffers(builder: &builder)
         
-        let start = TelegramCore_TelegramChannel.startTelegramChannel(&builder)
+        let start = IosappCore_IosappChannel.startIosappChannel(&builder)
         
-        TelegramCore_TelegramChannel.add(id: self.id.asFlatBuffersObject(), &builder)
+        IosappCore_IosappChannel.add(id: self.id.asFlatBuffersObject(), &builder)
         if let accessHashOffset {
-            TelegramCore_TelegramChannel.add(accessHash: accessHashOffset, &builder)
+            IosappCore_IosappChannel.add(accessHash: accessHashOffset, &builder)
         }
-        TelegramCore_TelegramChannel.add(title: titleOffset, &builder)
+        IosappCore_IosappChannel.add(title: titleOffset, &builder)
         if let usernameOffset {
-            TelegramCore_TelegramChannel.add(username: usernameOffset, &builder)
+            IosappCore_IosappChannel.add(username: usernameOffset, &builder)
         }
-        TelegramCore_TelegramChannel.addVectorOf(photo: photoOffset, &builder)
-        TelegramCore_TelegramChannel.add(creationDate: self.creationDate, &builder)
-        TelegramCore_TelegramChannel.add(version: self.version, &builder)
-        TelegramCore_TelegramChannel.add(participationStatus: self.participationStatus.rawValue, &builder)
-        TelegramCore_TelegramChannel.add(info: infoOffset, &builder)
-        TelegramCore_TelegramChannel.add(flags: self.flags.rawValue, &builder)
+        IosappCore_IosappChannel.addVectorOf(photo: photoOffset, &builder)
+        IosappCore_IosappChannel.add(creationDate: self.creationDate, &builder)
+        IosappCore_IosappChannel.add(version: self.version, &builder)
+        IosappCore_IosappChannel.add(participationStatus: self.participationStatus.rawValue, &builder)
+        IosappCore_IosappChannel.add(info: infoOffset, &builder)
+        IosappCore_IosappChannel.add(flags: self.flags.rawValue, &builder)
         
         if let restrictionInfoOffset {
-            TelegramCore_TelegramChannel.add(restrictionInfo: restrictionInfoOffset, &builder)
+            IosappCore_IosappChannel.add(restrictionInfo: restrictionInfoOffset, &builder)
         }
         if let adminRightsOffset {
-            TelegramCore_TelegramChannel.add(adminRights: adminRightsOffset, &builder)
+            IosappCore_IosappChannel.add(adminRights: adminRightsOffset, &builder)
         }
         if let bannedRightsOffset {
-            TelegramCore_TelegramChannel.add(bannedRights: bannedRightsOffset, &builder)
+            IosappCore_IosappChannel.add(bannedRights: bannedRightsOffset, &builder)
         }
         if let defaultBannedRightsOffset {
-            TelegramCore_TelegramChannel.add(defaultBannedRights: defaultBannedRightsOffset, &builder)
+            IosappCore_IosappChannel.add(defaultBannedRights: defaultBannedRightsOffset, &builder)
         }
         
-        TelegramCore_TelegramChannel.addVectorOf(usernames: usernamesOffset, &builder)
+        IosappCore_IosappChannel.addVectorOf(usernames: usernamesOffset, &builder)
         
         if let storiesHidden = self.storiesHidden {
-            TelegramCore_TelegramChannel.add(storiesHidden: TelegramCore_OptionalBool(value: storiesHidden), &builder)
+            IosappCore_IosappChannel.add(storiesHidden: IosappCore_OptionalBool(value: storiesHidden), &builder)
         }
         if let nameColorOffset {
-            TelegramCore_TelegramChannel.add(nameColor: nameColorOffset, &builder)
+            IosappCore_IosappChannel.add(nameColor: nameColorOffset, &builder)
         }
-        TelegramCore_TelegramChannel.add(backgroundEmojiId: self.backgroundEmojiId ?? Int64.min, &builder)
+        IosappCore_IosappChannel.add(backgroundEmojiId: self.backgroundEmojiId ?? Int64.min, &builder)
         if let profileColorOffset {
-            TelegramCore_TelegramChannel.add(profileColor: profileColorOffset, &builder)
+            IosappCore_IosappChannel.add(profileColor: profileColorOffset, &builder)
         }
-        TelegramCore_TelegramChannel.add(profileBackgroundEmojiId: self.profileBackgroundEmojiId ?? Int64.min, &builder)
+        IosappCore_IosappChannel.add(profileBackgroundEmojiId: self.profileBackgroundEmojiId ?? Int64.min, &builder)
         if let emojiStatusOffset {
-            TelegramCore_TelegramChannel.add(emojiStatus: emojiStatusOffset, &builder)
+            IosappCore_IosappChannel.add(emojiStatus: emojiStatusOffset, &builder)
         }
-        TelegramCore_TelegramChannel.add(approximateBoostLevel: self.approximateBoostLevel ?? Int32.min, &builder)
-        TelegramCore_TelegramChannel.add(subscriptionUntilDate: self.subscriptionUntilDate ?? Int32.min, &builder)
-        TelegramCore_TelegramChannel.add(verificationIconFileId: self.verificationIconFileId ?? Int64.min, &builder)
+        IosappCore_IosappChannel.add(approximateBoostLevel: self.approximateBoostLevel ?? Int32.min, &builder)
+        IosappCore_IosappChannel.add(subscriptionUntilDate: self.subscriptionUntilDate ?? Int32.min, &builder)
+        IosappCore_IosappChannel.add(verificationIconFileId: self.verificationIconFileId ?? Int64.min, &builder)
         if let sendPaidMessageStarsOffset {
-            TelegramCore_TelegramChannel.add(sendPaidMessageStars: sendPaidMessageStarsOffset, &builder)
+            IosappCore_IosappChannel.add(sendPaidMessageStars: sendPaidMessageStarsOffset, &builder)
         }
         
-        return TelegramCore_TelegramChannel.endTelegramChannel(&builder, start: start)
+        return IosappCore_IosappChannel.endIosappChannel(&builder, start: start)
     }
 }

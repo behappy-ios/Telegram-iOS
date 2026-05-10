@@ -22,7 +22,7 @@ internal func _internal_updateIsPremiumRequiredToContact(account: Account, peerI
                             inputUsers.append(inputUser)
                             ids.append(id)
                         }
-                    } else if let peer = peer as? TelegramUser, peer.flags.contains(.requirePremium) || peer.flags.contains(.requireStars), !peer.flags.contains(.mutualContact) {
+                    } else if let peer = peer as? IosappUser, peer.flags.contains(.requirePremium) || peer.flags.contains(.requireStars), !peer.flags.contains(.mutualContact) {
                         inputUsers.append(inputUser)
                         ids.append(id)
                     }

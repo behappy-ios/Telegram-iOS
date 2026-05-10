@@ -174,12 +174,12 @@ private class MediaEditorComposerStaticEntity: MediaEditorComposerEntity {
 
 final class MediaEditorComposerStickerEntity: MediaEditorComposerEntity {
     public enum Content {
-        case file(TelegramMediaFile)
-        case video(TelegramMediaFile)
+        case file(IosappMediaFile)
+        case video(IosappMediaFile)
         case image(UIImage)
         case animatedImage([UIImage], Double)
         
-        var file: TelegramMediaFile? {
+        var file: IosappMediaFile? {
             if case let .file(file) = self {
                 return file
             }

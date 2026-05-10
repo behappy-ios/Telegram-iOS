@@ -155,7 +155,7 @@ public class ChatMessageBirthdateSuggestionContentNode: ChatMessageBubbleContent
                 var month: Int32 = 1
                 var year: Int32?
                 
-                if let action = item.message.media.first(where: { $0 is TelegramMediaAction }) as? TelegramMediaAction, case let .suggestedBirthday(birthday) = action.action {
+                if let action = item.message.media.first(where: { $0 is IosappMediaAction }) as? IosappMediaAction, case let .suggestedBirthday(birthday) = action.action {
                     day = birthday.day
                     month = birthday.month
                     year = birthday.year

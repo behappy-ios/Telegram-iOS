@@ -68,7 +68,7 @@ public final class BotCheckoutController: ViewController {
             |> mapToSignal { paymentForm -> Signal<InputData, FetchError> in
                 let botPeer: Signal<EnginePeer?, FetchError>
                 if let paymentBotId = paymentForm.paymentBotId {
-                    botPeer = context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: paymentBotId))
+                    botPeer = context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: paymentBotId))
                     |> castError(FetchError.self)
                 } else {
                     botPeer = .single(nil)
@@ -116,7 +116,7 @@ public final class BotCheckoutController: ViewController {
     }
     
     private let context: AccountContext
-    private let invoice: TelegramMediaInvoice
+    private let invoice: IosappMediaInvoice
     private let source: BotPaymentInvoiceSource
     private let completed: (String, EngineMessage.Id?) -> Void
     private let pending: () -> Void
@@ -129,7 +129,7 @@ public final class BotCheckoutController: ViewController {
 
     private let inputData: Promise<BotCheckoutController.InputData?>
     
-    public init(context: AccountContext, invoice: TelegramMediaInvoice, source: BotPaymentInvoiceSource, inputData: Promise<BotCheckoutController.InputData?>, completed: @escaping (String, EngineMessage.Id?) -> Void, pending: @escaping () -> Void = {}, cancelled: @escaping () -> Void = {}, failed: @escaping () -> Void = {}) {
+    public init(context: AccountContext, invoice: IosappMediaInvoice, source: BotPaymentInvoiceSource, inputData: Promise<BotCheckoutController.InputData?>, completed: @escaping (String, EngineMessage.Id?) -> Void, pending: @escaping () -> Void = {}, cancelled: @escaping () -> Void = {}, failed: @escaping () -> Void = {}) {
         self.context = context
         self.invoice = invoice
         self.source = source

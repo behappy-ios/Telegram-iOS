@@ -19,13 +19,13 @@ private final class PrefetchMediaContext {
 
 public enum PrefetchMediaItem {
     case chatHistory(ChatHistoryPreloadMediaItem)
-    case animatedEmojiSticker(TelegramMediaFile)
+    case animatedEmojiSticker(IosappMediaFile)
 }
 
 private final class PrefetchManagerInnerImpl {
     private let queue: Queue
     private let account: Account
-    private let engine: TelegramEngine
+    private let engine: IosappEngine
     private let fetchManager: FetchManager
     
     private var listDisposable: Disposable?
@@ -33,9 +33,9 @@ private final class PrefetchManagerInnerImpl {
     private var contexts: [EngineMedia.Id: PrefetchMediaContext] = [:]
 
     private let preloadGreetingStickerDisposable = MetaDisposable()
-    fileprivate let preloadedGreetingStickerPromise = Promise<TelegramMediaFile?>(nil)
+    fileprivate let preloadedGreetingStickerPromise = Promise<IosappMediaFile?>(nil)
 
-    init(queue: Queue, sharedContext: SharedAccountContext, account: Account, engine: TelegramEngine, fetchManager: FetchManager) {
+    init(queue: Queue, sharedContext: SharedAccountContext, account: Account, engine: IosappEngine, fetchManager: FetchManager) {
         self.queue = queue
         self.account = account
         self.engine = engine
@@ -58,7 +58,7 @@ private final class PrefetchManagerInnerImpl {
             return view.values[PreferencesKeys.appConfiguration]?.get(AppConfiguration.self) ?? .defaultValue
         }
         
-        let orderedPreloadMedia = combineLatest(account.viewTracker.orderedPreloadMedia, TelegramEngine(account: account).stickers.loadedStickerPack(reference: .animatedEmoji, forceActualized: false), appConfiguration)
+        let orderedPreloadMedia = combineLatest(account.viewTracker.orderedPreloadMedia, IosappEngine(account: account).stickers.loadedStickerPack(reference: .animatedEmoji, forceActualized: false), appConfiguration)
         |> map { orderedPreloadMedia, stickerPack, appConfiguration -> [PrefetchMediaItem] in
             let emojiSounds = AnimatedEmojiSoundsConfiguration.with(appConfiguration: appConfiguration, account: account)
             let chatHistoryMediaItems = orderedPreloadMedia.map { PrefetchMediaItem.chatHistory($0) }
@@ -127,25 +127,25 @@ private final class PrefetchManagerInnerImpl {
                     let peerType: MediaAutoDownloadPeerType
                     if mediaItem.media.authorIsContact {
                         peerType = .contact
-                    } else if let channel = mediaItem.media.peer as? TelegramChannel {
+                    } else if let channel = mediaItem.media.peer as? IosappChannel {
                         if case .group = channel.info {
                             peerType = .group
                         } else {
                             peerType = .channel
                         }
-                    } else if mediaItem.media.peer is TelegramGroup {
+                    } else if mediaItem.media.peer is IosappGroup {
                         peerType = .group
                     } else {
                         peerType = .otherPrivate
                     }
                     var mediaResource: EngineMediaResource?
                     
-                    if let telegramImage = mediaItem.media.media as? TelegramMediaImage {
+                    if let telegramImage = mediaItem.media.media as? IosappMediaImage {
                         mediaResource = (largestRepresentationForPhoto(telegramImage)?.resource).flatMap(EngineMediaResource.init)
                         if shouldDownloadMediaAutomatically(settings: automaticDownloadSettings, peerType: peerType, networkType: networkType, authorPeerId: nil, contactsPeerIds: [], media: telegramImage) {
                             automaticDownload = .full
                         }
-                    } else if let telegramFile = mediaItem.media.media as? TelegramMediaFile {
+                    } else if let telegramFile = mediaItem.media.media as? IosappMediaFile {
                         mediaResource = EngineMediaResource(telegramFile.resource)
                         if shouldDownloadMediaAutomatically(settings: automaticDownloadSettings, peerType: peerType, networkType: networkType, authorPeerId: nil, contactsPeerIds: [], media: telegramFile) {
                             automaticDownload = .full
@@ -174,16 +174,16 @@ private final class PrefetchManagerInnerImpl {
                         let priority: FetchManagerPriority = .backgroundPrefetch(locationOrder: mediaItem.preloadIndex, localOrder: mediaItem.media.index)
                         
                         if case .full = automaticDownload {
-                            if let image = media as? TelegramMediaImage {
+                            if let image = media as? IosappMediaImage {
                                 context.fetchDisposable.set(messageMediaImageInteractiveFetched(fetchManager: self.fetchManager, messageId: mediaItem.media.index.id, messageReference: MessageReference(peer: mediaItem.media.peer, author: nil, id: mediaItem.media.index.id, timestamp: mediaItem.media.index.timestamp, incoming: true, secret: false, threadId: nil), image: image, resource: resource._asResource(), userInitiated: false, priority: priority, storeToDownloadsPeerId: nil).startStrict())
-                            } else if let _ = media as? TelegramMediaWebFile {
+                            } else if let _ = media as? IosappMediaWebFile {
                                 //strongSelf.fetchDisposable.set(chatMessageWebFileInteractiveFetched(account: context.account, image: image).startStrict())
-                            } else if let file = media as? TelegramMediaFile {
+                            } else if let file = media as? IosappMediaFile {
                                 let fetchSignal = messageMediaFileInteractiveFetched(fetchManager: self.fetchManager, messageId: mediaItem.media.index.id, messageReference: MessageReference(peer: mediaItem.media.peer, author: nil, id: mediaItem.media.index.id, timestamp: mediaItem.media.index.timestamp, incoming: true, secret: false, threadId: nil), file: file, userInitiated: false, priority: priority)
                                 context.fetchDisposable.set(fetchSignal.startStrict())
                             }
                         } else if case .prefetch = automaticDownload, mediaItem.media.peer.id.namespace != Namespaces.Peer.SecretChat {
-                            if let file = media as? TelegramMediaFile, let _ = file.size {
+                            if let file = media as? IosappMediaFile, let _ = file.size {
                                 context.fetchDisposable.set(preloadVideoResource(postbox: self.account.postbox, userLocation: .peer(mediaItem.media.index.id.peerId), userContentType: MediaResourceUserContentType(file: file), resourceReference: FileMediaReference.message(message: MessageReference(peer: mediaItem.media.peer, author: nil, id: mediaItem.media.index.id, timestamp: mediaItem.media.index.timestamp, incoming: true, secret: false, threadId: nil), media: file).resourceReference(file.resource), duration: 4.0).startStrict())
                             }
                         }
@@ -271,7 +271,7 @@ final class PrefetchManagerImpl: PrefetchManager {
     private let impl: QueueLocalObject<PrefetchManagerInnerImpl>
     private let uuid = Atomic<UUID>(value: UUID())
     
-    init(sharedContext: SharedAccountContext, account: Account, engine: TelegramEngine, fetchManager: FetchManager) {
+    init(sharedContext: SharedAccountContext, account: Account, engine: IosappEngine, fetchManager: FetchManager) {
         let queue = Queue.mainQueue()
         self.queue = queue
         self.impl = QueueLocalObject(queue: queue, generate: {
@@ -280,7 +280,7 @@ final class PrefetchManagerImpl: PrefetchManager {
     }
     
     var preloadedGreetingSticker: ChatGreetingData {
-        let signal: Signal<TelegramMediaFile?, NoError> = Signal { subscriber in
+        let signal: Signal<IosappMediaFile?, NoError> = Signal { subscriber in
             let disposable = MetaDisposable()
             self.impl.with { impl in
                 disposable.set((impl.preloadedGreetingStickerPromise.get() |> take(1)).start(next: { file in

@@ -684,7 +684,7 @@ final class SecureIdAuthControllerNode: ViewControllerTracingNode {
         var currentValue: SecureIdValueWithContext?
         switch type {
             case .phone:
-                if let peer = form.encryptedFormData?.accountPeer as? TelegramUser, let phone = peer.phone, !phone.isEmpty {
+                if let peer = form.encryptedFormData?.accountPeer as? IosappUser, let phone = peer.phone, !phone.isEmpty {
                     immediatelyAvailableValue = .phone(SecureIdPhoneValue(phone: phone))
                 }
                 currentValue = findValue(formData.values, key: .phone)?.1
@@ -936,7 +936,7 @@ final class SecureIdAuthControllerNode: ViewControllerTracingNode {
                     deleteField(.phone)
                 } else {
                     var immediatelyAvailableValue: SecureIdValue?
-                    if let peer = list.accountPeer as? TelegramUser, let phone = peer.phone, !phone.isEmpty {
+                    if let peer = list.accountPeer as? IosappUser, let phone = peer.phone, !phone.isEmpty {
                         immediatelyAvailableValue = .phone(SecureIdPhoneValue(phone: phone))
                     }
                     self.interaction.push(SecureIdPlaintextFormController(context: self.context, secureIdContext: secureIdContext, type: .phone, immediatelyAvailableValue: immediatelyAvailableValue, updatedValue: { value in

@@ -1838,7 +1838,7 @@ public final class StoryItemSetContainerComponent: Component {
                                     peer: component.slice.effectivePeer,
                                     storyItem: item.storyItem,
                                     myReaction: item.storyItem.myReaction.flatMap { value -> StoryFooterPanelComponent.MyReaction? in
-                                        var centerAnimation: TelegramMediaFile?
+                                        var centerAnimation: IosappMediaFile?
                                         var animationFileId: Int64?
                                         
                                         switch value {
@@ -3181,7 +3181,7 @@ public final class StoryItemSetContainerComponent: Component {
                         },
                         attachmentButtonMode: !displayAttachmentAction ? nil : .attach,
                         myReaction: component.slice.item.storyItem.myReaction.flatMap { value -> MessageInputPanelComponent.MyReaction? in
-                            var centerAnimation: TelegramMediaFile?
+                            var centerAnimation: IosappMediaFile?
                             var animationFileId: Int64?
                             
                             switch value {
@@ -3670,9 +3670,9 @@ public final class StoryItemSetContainerComponent: Component {
                                     return
                                 }
                                 let _ = (component.context.engine.data.get(
-                                    TelegramEngine.EngineData.Item.Peer.IsContact(id: peer.id),
-                                    TelegramEngine.EngineData.Item.Peer.IsBlocked(id: peer.id),
-                                    TelegramEngine.EngineData.Item.Peer.IsBlockedFromStories(id: peer.id)
+                                    IosappEngine.EngineData.Item.Peer.IsContact(id: peer.id),
+                                    IosappEngine.EngineData.Item.Peer.IsBlocked(id: peer.id),
+                                    IosappEngine.EngineData.Item.Peer.IsBlockedFromStories(id: peer.id)
                                 ) |> deliverOnMainQueue).startStandalone(next: { [weak self] isContact, maybeIsBlocked, maybeIsBlockedFromStories in
                                     let presentationData = component.context.sharedContext.currentPresentationData.with({ $0 }).withUpdated(theme: component.theme)
                                     var itemList: [ContextMenuItem] = []
@@ -4925,7 +4925,7 @@ public final class StoryItemSetContainerComponent: Component {
                                         return
                                     }
                                     
-                                    var animation: TelegramMediaFile?
+                                    var animation: IosappMediaFile?
                                     for reaction in availableReactions.reactions {
                                         if reaction.value == updateReaction.reaction {
                                             animation = reaction.centerAnimation?._parse()
@@ -6224,9 +6224,9 @@ public final class StoryItemSetContainerComponent: Component {
             
             var hasLinkedStickers = false
             let media = component.slice.item.storyItem.media._asMedia()
-            if let image = media as? TelegramMediaImage {
+            if let image = media as? IosappMediaImage {
                 hasLinkedStickers = image.flags.contains(.hasStickers)
-            } else if let file = media as? TelegramMediaFile {
+            } else if let file = media as? IosappMediaFile {
                 hasLinkedStickers = file.hasLinkedStickers
             }
             
@@ -6479,9 +6479,9 @@ public final class StoryItemSetContainerComponent: Component {
                                     var imageSignal: Signal<UIImage?, NoError>?
                                     
                                     var selectedMedia: Media?
-                                    if let image = story.media._asMedia() as? TelegramMediaImage {
+                                    if let image = story.media._asMedia() as? IosappMediaImage {
                                         selectedMedia = image
-                                    } else if let file = story.media._asMedia() as? TelegramMediaFile {
+                                    } else if let file = story.media._asMedia() as? IosappMediaFile {
                                         selectedMedia = file
                                     }
                                     
@@ -7136,11 +7136,11 @@ public final class StoryItemSetContainerComponent: Component {
             let _ = (combineLatest(
                 queue: Queue.mainQueue(),
                 component.context.engine.data.get(
-                    TelegramEngine.EngineData.Item.Peer.NotificationSettings(id: component.slice.effectivePeer.id),
-                    TelegramEngine.EngineData.Item.NotificationSettings.Global(),
-                    TelegramEngine.EngineData.Item.Contacts.Top(),
-                    TelegramEngine.EngineData.Item.Peer.IsContact(id: component.slice.effectivePeer.id),
-                    TelegramEngine.EngineData.Item.Peer.Peer(id: component.context.account.peerId)
+                    IosappEngine.EngineData.Item.Peer.NotificationSettings(id: component.slice.effectivePeer.id),
+                    IosappEngine.EngineData.Item.NotificationSettings.Global(),
+                    IosappEngine.EngineData.Item.Contacts.Top(),
+                    IosappEngine.EngineData.Item.Peer.IsContact(id: component.slice.effectivePeer.id),
+                    IosappEngine.EngineData.Item.Peer.Peer(id: component.context.account.peerId)
                 ),
                 translationSettings,
                 baseRatePromise.get()
@@ -7547,7 +7547,7 @@ public final class StoryItemSetContainerComponent: Component {
             })
         }
         
-        private func performMusicAction(file: TelegramMediaFile, sourceView: UIView, gesture: ContextGesture?) {
+        private func performMusicAction(file: IosappMediaFile, sourceView: UIView, gesture: ContextGesture?) {
             guard let component = self.component, let controller = component.controller(), let peer = PeerReference(component.slice.peer._asPeer()) else {
                 return
             }
@@ -7602,7 +7602,7 @@ public final class StoryItemSetContainerComponent: Component {
                                             guard let self, let component = self.component, case .undo = action else {
                                                 return false
                                             }
-                                            let _ = (component.context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: component.context.account.peerId))
+                                            let _ = (component.context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: component.context.account.peerId))
                                             |> deliverOnMainQueue).start(next: { [weak self] peer in
                                                 guard let self, let component = self.component, let peer else {
                                                     return

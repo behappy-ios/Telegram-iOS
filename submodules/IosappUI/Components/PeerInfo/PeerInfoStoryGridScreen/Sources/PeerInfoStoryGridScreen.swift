@@ -237,7 +237,7 @@ final class PeerInfoStoryGridScreenComponent: Component {
                 return
             }
             
-            let _ = (component.context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: component.peerId))
+            let _ = (component.context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: component.peerId))
             |> deliverOnMainQueue).start(next: { [weak self] peer in
                 guard let self, let component = self.component, let peer else {
                     return
@@ -309,7 +309,7 @@ final class PeerInfoStoryGridScreenComponent: Component {
             guard let component = self.component else {
                 return
             }
-            if let rootController = component.context.sharedContext.mainWindow?.viewController as? TelegramRootControllerInterface {
+            if let rootController = component.context.sharedContext.mainWindow?.viewController as? IosappRootControllerInterface {
                 let coordinator = rootController.openStoryCamera(mode: .photo, customTarget: nil, resumeLiveStream: false, transitionIn: nil, transitionedIn: {}, transitionOut: { _, _ in return nil })
                 coordinator?.animateIn()
             }
@@ -390,7 +390,7 @@ final class PeerInfoStoryGridScreenComponent: Component {
                                 return
                             }
                             
-                            let _ = (component.context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: component.peerId))
+                            let _ = (component.context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: component.peerId))
                             |> deliverOnMainQueue).start(next: { [weak self] peer in
                                 guard let self, let peer else {
                                     return

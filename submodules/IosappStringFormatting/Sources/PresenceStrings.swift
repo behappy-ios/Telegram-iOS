@@ -178,7 +178,7 @@ public func stringForCompactDate(timestamp: Int32, strings: PresentationStrings,
     return "\(shortStringForDayOfWeek(strings: strings, day: timeinfo.tm_wday)) \(timeinfo.tm_mday) \(monthAtIndex(Int(timeinfo.tm_mon), strings: strings))"
 }
 
-public func stringForCompactBirthday(_ birthday: TelegramBirthday, strings: PresentationStrings, showAge: Bool = false) -> String {
+public func stringForCompactBirthday(_ birthday: IosappBirthday, strings: PresentationStrings, showAge: Bool = false) -> String {
     var components: [String] = []
     components.append("\(birthday.day)")
     components.append(monthAtIndex(Int(birthday.month) - 1, strings: strings))
@@ -203,7 +203,7 @@ public func stringForCompactBirthday(_ birthday: TelegramBirthday, strings: Pres
     return components.joined(separator: " ")
 }
 
-public func ageForBirthday(_ birthday: TelegramBirthday) -> Int? {
+public func ageForBirthday(_ birthday: IosappBirthday) -> Int? {
     guard let year = birthday.year else {
         return nil
     }
@@ -652,7 +652,7 @@ public func peerStatusExpirationString(statusTimestamp: Int32, relativeTo timest
     }
 }
 
-public func userPresenceStringRefreshTimeout(_ presence: TelegramUserPresence, relativeTo timestamp: Int32) -> Double {
+public func userPresenceStringRefreshTimeout(_ presence: IosappUserPresence, relativeTo timestamp: Int32) -> Double {
     switch presence.status {
     case let .present(statusTimestamp):
         if statusTimestamp >= timestamp {

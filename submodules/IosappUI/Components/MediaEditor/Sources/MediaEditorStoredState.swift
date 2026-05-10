@@ -110,21 +110,21 @@ public final class MediaEditorStoredState: Codable {
     }
 }
 
-public func mediaEditorStoredState(engine: TelegramEngine) -> Signal<MediaEditorStoredState?, NoError> {
+public func mediaEditorStoredState(engine: IosappEngine) -> Signal<MediaEditorStoredState?, NoError> {
     let key = EngineDataBuffer(length: 4)
     key.setInt32(0, value: 0)
     
-    return engine.data.get(TelegramEngine.EngineData.Item.ItemCache.Item(collectionId: ApplicationSpecificItemCacheCollectionId.mediaEditorState, id: key))
+    return engine.data.get(IosappEngine.EngineData.Item.ItemCache.Item(collectionId: ApplicationSpecificItemCacheCollectionId.mediaEditorState, id: key))
     |> map { entry -> MediaEditorStoredState? in
         return entry?.get(MediaEditorStoredState.self)
     }
 }
 
-public func updateMediaEditorStoredStateInteractively(engine: TelegramEngine, _ f: @escaping (MediaEditorStoredState?) -> MediaEditorStoredState?) -> Signal<Never, NoError> {
+public func updateMediaEditorStoredStateInteractively(engine: IosappEngine, _ f: @escaping (MediaEditorStoredState?) -> MediaEditorStoredState?) -> Signal<Never, NoError> {
     let key = EngineDataBuffer(length: 4)
     key.setInt32(0, value: 0)
     
-    return engine.data.get(TelegramEngine.EngineData.Item.ItemCache.Item(collectionId: ApplicationSpecificItemCacheCollectionId.mediaEditorState, id: key))
+    return engine.data.get(IosappEngine.EngineData.Item.ItemCache.Item(collectionId: ApplicationSpecificItemCacheCollectionId.mediaEditorState, id: key))
     |> map { entry -> MediaEditorStoredState? in
         return entry?.get(MediaEditorStoredState.self)
     }

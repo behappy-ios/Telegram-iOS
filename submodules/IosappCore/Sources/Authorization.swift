@@ -15,7 +15,7 @@ public enum AuthorizationCodeRequestError {
     case appOutdated
 }
 
-func switchToAuthorizedAccount(transaction: AccountManagerModifier<TelegramAccountManagerTypes>, account: UnauthorizedAccount, isSupportUser: Bool) {
+func switchToAuthorizedAccount(transaction: AccountManagerModifier<IosappAccountManagerTypes>, account: UnauthorizedAccount, isSupportUser: Bool) {
     let nextSortOrder = (transaction.getRecords().map({ record -> Int32 in
         for attribute in record.attributes {
             if case let .sortOrder(sortOrder) = attribute {
@@ -25,7 +25,7 @@ func switchToAuthorizedAccount(transaction: AccountManagerModifier<TelegramAccou
         return 0
     }).max() ?? 0) + 1
     transaction.updateRecord(account.id, { _ in
-        var attributes: [TelegramAccountManagerTypes.Attribute] = [
+        var attributes: [IosappAccountManagerTypes.Attribute] = [
             .environment(AccountEnvironmentAttribute(environment: account.testingEnvironment ? .test : .production)),
             .sortOrder(AccountSortOrderAttribute(order: nextSortOrder))
         ]
@@ -81,7 +81,7 @@ public enum SendAuthorizationCodeResult {
     case loggedIn
 }
 
-func storeFutureLoginToken(accountManager: AccountManager<TelegramAccountManagerTypes>, token: Data) {
+func storeFutureLoginToken(accountManager: AccountManager<IosappAccountManagerTypes>, token: Data) {
     let _ = (accountManager.transaction { transaction -> Void in
         var tokens = transaction.getStoredLoginTokens()
         
@@ -141,7 +141,7 @@ func sendFirebaseAuthorizationCode(network: Network, phoneNumber: String, apiId:
     }
 }
 
-public func sendAuthorizationCode(accountManager: AccountManager<TelegramAccountManagerTypes>, account: UnauthorizedAccount, phoneNumber: String, apiId: Int32, apiHash: String, pushNotificationConfiguration: AuthorizationCodePushNotificationConfiguration?, firebaseSecretStream: Signal<[String: String], NoError>, syncContacts: Bool, disableAuthTokens: Bool = false, forcedPasswordSetupNotice: @escaping (Int32) -> (NoticeEntryKey, CodableEntry)?) -> Signal<SendAuthorizationCodeResult, AuthorizationCodeRequestError> {
+public func sendAuthorizationCode(accountManager: AccountManager<IosappAccountManagerTypes>, account: UnauthorizedAccount, phoneNumber: String, apiId: Int32, apiHash: String, pushNotificationConfiguration: AuthorizationCodePushNotificationConfiguration?, firebaseSecretStream: Signal<[String: String], NoError>, syncContacts: Bool, disableAuthTokens: Bool = false, forcedPasswordSetupNotice: @escaping (Int32) -> (NoticeEntryKey, CodableEntry)?) -> Signal<SendAuthorizationCodeResult, AuthorizationCodeRequestError> {
     var cloudValue: [Data] = []
     if let list = NSUbiquitousKeyValueStore.default.object(forKey: "T_SLTokens") as? [String] {
         cloudValue = list.compactMap { string -> Data? in
@@ -371,7 +371,7 @@ public func sendAuthorizationCode(accountManager: AccountManager<TelegramAccount
                                 storeFutureLoginToken(accountManager: accountManager, token: futureAuthToken.makeData())
                             }
 
-                            let user = TelegramUser(user: apiUser)
+                            let user = IosappUser(user: apiUser)
                             var isSupportUser = false
                             if let phone = user.phone, phone.hasPrefix("42"), phone.count <= 5 {
                                 isSupportUser = true
@@ -406,7 +406,7 @@ enum ResendAuthorizationCodeReason: String {
     case firebaseSendCodeError = "FIREBASE_SEND_CODE_ERROR"
 }
 
-private func internalResendAuthorizationCode(accountManager: AccountManager<TelegramAccountManagerTypes>, account: UnauthorizedAccount, number: String, apiId: Int32, apiHash: String, hash: String, syncContacts: Bool, firebaseSecretStream: Signal<[String: String], NoError>, reason: ResendAuthorizationCodeReason?) -> Signal<SendAuthorizationCodeResult, AuthorizationCodeRequestError> {
+private func internalResendAuthorizationCode(accountManager: AccountManager<IosappAccountManagerTypes>, account: UnauthorizedAccount, number: String, apiId: Int32, apiHash: String, hash: String, syncContacts: Bool, firebaseSecretStream: Signal<[String: String], NoError>, reason: ResendAuthorizationCodeReason?) -> Signal<SendAuthorizationCodeResult, AuthorizationCodeRequestError> {
     var flags: Int32 = 0
     var mappedReason: String?
     if let reason {
@@ -539,7 +539,7 @@ private func internalResendAuthorizationCode(accountManager: AccountManager<Tele
     }
 }
 
-public func resendAuthorizationCode(accountManager: AccountManager<TelegramAccountManagerTypes>, account: UnauthorizedAccount, apiId: Int32, apiHash: String, firebaseSecretStream: Signal<[String: String], NoError>) -> Signal<Void, AuthorizationCodeRequestError> {
+public func resendAuthorizationCode(accountManager: AccountManager<IosappAccountManagerTypes>, account: UnauthorizedAccount, apiId: Int32, apiHash: String, firebaseSecretStream: Signal<[String: String], NoError>) -> Signal<Void, AuthorizationCodeRequestError> {
     return account.postbox.transaction { transaction -> Signal<Void, AuthorizationCodeRequestError> in
         if let state = transaction.getState() as? UnauthorizedAccountState {
             switch state.contents {
@@ -1014,7 +1014,7 @@ public func resetLoginEmail(account: UnauthorizedAccount, phoneNumber: String, p
     |> ignoreValues
 }
 
-public func authorizeWithCode(accountManager: AccountManager<TelegramAccountManagerTypes>, account: UnauthorizedAccount, code: AuthorizationCode, termsOfService: UnauthorizedAccountTermsOfService?, forcedPasswordSetupNotice: @escaping (Int32) -> (NoticeEntryKey, CodableEntry)?) -> Signal<AuthorizeWithCodeResult, AuthorizationCodeVerificationError> {
+public func authorizeWithCode(accountManager: AccountManager<IosappAccountManagerTypes>, account: UnauthorizedAccount, code: AuthorizationCode, termsOfService: UnauthorizedAccountTermsOfService?, forcedPasswordSetupNotice: @escaping (Int32) -> (NoticeEntryKey, CodableEntry)?) -> Signal<AuthorizeWithCodeResult, AuthorizationCodeVerificationError> {
     return account.postbox.transaction { transaction -> Signal<AuthorizeWithCodeResult, AuthorizationCodeVerificationError> in
         if let state = transaction.getState() as? UnauthorizedAccountState {
             switch state.contents {
@@ -1095,7 +1095,7 @@ public func authorizeWithCode(accountManager: AccountManager<TelegramAccountMana
                                             storeFutureLoginToken(accountManager: accountManager, token: futureAuthToken.makeData())
                                         }
 
-                                        let user = TelegramUser(user: apiUser)
+                                        let user = IosappUser(user: apiUser)
                                         var isSupportUser = false
                                         if let phone = user.phone, phone.hasPrefix("42") {
                                             isSupportUser = true
@@ -1145,7 +1145,7 @@ public enum AuthorizationPasswordVerificationError {
     case generic
 }
 
-public func authorizeWithPassword(accountManager: AccountManager<TelegramAccountManagerTypes>, account: UnauthorizedAccount, password: String, syncContacts: Bool) -> Signal<Void, AuthorizationPasswordVerificationError> {
+public func authorizeWithPassword(accountManager: AccountManager<IosappAccountManagerTypes>, account: UnauthorizedAccount, password: String, syncContacts: Bool) -> Signal<Void, AuthorizationPasswordVerificationError> {
     return verifyPassword(account, password: password)
     |> `catch` { error -> Signal<Api.auth.Authorization, AuthorizationPasswordVerificationError> in
         if error.errorDescription.hasPrefix("FLOOD_WAIT") {
@@ -1165,7 +1165,7 @@ public func authorizeWithPassword(accountManager: AccountManager<TelegramAccount
                     storeFutureLoginToken(accountManager: accountManager, token: futureAuthToken.makeData())
                 }
 
-                let user = TelegramUser(user: apiUser)
+                let user = IosappUser(user: apiUser)
                 let state = AuthorizedAccountState(isTestingEnvironment: account.testingEnvironment, masterDatacenterId: account.masterDatacenterId, peerId: user.id, state: nil, invalidatedChannels: [])
                 /*transaction.updatePeersInternal([user], update: { current, peer -> Peer? in
                  return peer
@@ -1214,7 +1214,7 @@ public final class AuthorizeWithPasskeyResult {
     }
 }
 
-public func authorizeWithPasskey(accountManager: AccountManager<TelegramAccountManagerTypes>, account: UnauthorizedAccount, passkey: AuthorizationPasskeyData, foreignDatacenter: (id: Int, authKeyId: Int64)?, forcedPasswordSetupNotice: @escaping (Int32) -> (NoticeEntryKey, CodableEntry)?, syncContacts: Bool) -> Signal<AuthorizeWithPasskeyResult, AuthorizationCodeVerificationError> {
+public func authorizeWithPasskey(accountManager: AccountManager<IosappAccountManagerTypes>, account: UnauthorizedAccount, passkey: AuthorizationPasskeyData, foreignDatacenter: (id: Int, authKeyId: Int64)?, forcedPasswordSetupNotice: @escaping (Int32) -> (NoticeEntryKey, CodableEntry)?, syncContacts: Bool) -> Signal<AuthorizeWithPasskeyResult, AuthorizationCodeVerificationError> {
     let userHandle = passkey.userHandle.components(separatedBy: ":")
     var targetDatacenterId: Int?
     if foreignDatacenter == nil && userHandle.count >= 2 {
@@ -1294,7 +1294,7 @@ public func authorizeWithPasskey(accountManager: AccountManager<TelegramAccountM
                         storeFutureLoginToken(accountManager: accountManager, token: futureAuthToken.makeData())
                     }
 
-                    let user = TelegramUser(user: apiUser)
+                    let user = IosappUser(user: apiUser)
                     var isSupportUser = false
                     if let phone = user.phone, phone.hasPrefix("42") {
                         isSupportUser = true
@@ -1362,7 +1362,7 @@ public final class RecoveredAccountData {
     }
 }
 
-public func loginWithRecoveredAccountData(accountManager: AccountManager<TelegramAccountManagerTypes>, account: UnauthorizedAccount, recoveredAccountData: RecoveredAccountData, syncContacts: Bool) -> Signal<Never, NoError> {
+public func loginWithRecoveredAccountData(accountManager: AccountManager<IosappAccountManagerTypes>, account: UnauthorizedAccount, recoveredAccountData: RecoveredAccountData, syncContacts: Bool) -> Signal<Never, NoError> {
     return account.postbox.transaction { transaction -> Signal<Void, NoError> in
         switch recoveredAccountData.authorization {
         case let .authorization(authorizationData):
@@ -1371,7 +1371,7 @@ public func loginWithRecoveredAccountData(accountManager: AccountManager<Telegra
                 storeFutureLoginToken(accountManager: accountManager, token: futureAuthToken.makeData())
             }
 
-            let user = TelegramUser(user: apiUser)
+            let user = IosappUser(user: apiUser)
             var isSupportUser = false
             if let phone = user.phone, phone.hasPrefix("42") {
                 isSupportUser = true
@@ -1499,7 +1499,7 @@ public enum SignUpError {
     case invalidLastName
 }
 
-public func signUpWithName(accountManager: AccountManager<TelegramAccountManagerTypes>, account: UnauthorizedAccount, firstName: String, lastName: String, avatarData: Data?, avatarVideo: Signal<UploadedPeerPhotoData?, NoError>?, videoStartTimestamp: Double?, disableJoinNotifications: Bool = false, forcedPasswordSetupNotice: @escaping (Int32) -> (NoticeEntryKey, CodableEntry)?) -> Signal<Void, SignUpError> {
+public func signUpWithName(accountManager: AccountManager<IosappAccountManagerTypes>, account: UnauthorizedAccount, firstName: String, lastName: String, avatarData: Data?, avatarVideo: Signal<UploadedPeerPhotoData?, NoError>?, videoStartTimestamp: Double?, disableJoinNotifications: Bool = false, forcedPasswordSetupNotice: @escaping (Int32) -> (NoticeEntryKey, CodableEntry)?) -> Signal<Void, SignUpError> {
     return account.postbox.transaction { transaction -> Signal<Void, SignUpError> in
         if let state = transaction.getState() as? UnauthorizedAccountState, case let .signUp(number, codeHash, _, _, _, syncContacts) = state.contents {
             var flags: Int32 = 0
@@ -1528,7 +1528,7 @@ public func signUpWithName(accountManager: AccountManager<TelegramAccountManager
                         storeFutureLoginToken(accountManager: accountManager, token: futureAuthToken.makeData())
                     }
 
-                    let user = TelegramUser(user: apiUser)
+                    let user = IosappUser(user: apiUser)
                     var isSupportUser = false
                     if let phone = user.phone, phone.hasPrefix("42") {
                         isSupportUser = true
@@ -1629,7 +1629,7 @@ public enum TestLoginAndDeleteAccountError {
 
 public func test_loginAndDeleteAccount(
     rootPath: String,
-    accountManager: AccountManager<TelegramAccountManagerTypes>,
+    accountManager: AccountManager<IosappAccountManagerTypes>,
     networkArguments: NetworkInitializationArguments,
     encryptionParameters: ValueBoxEncryptionParameters,
     phoneNumber: String,

@@ -29,15 +29,15 @@ private let messageFixedFont = UIFont(name: "Menlo-Regular", size: 16.0) ?? UIFo
 public final class ChatBotInfoItem: ListViewItem {
     fileprivate let title: String
     fileprivate let text: String
-    fileprivate let photo: TelegramMediaImage?
-    fileprivate let video: TelegramMediaFile?
+    fileprivate let photo: IosappMediaImage?
+    fileprivate let video: IosappMediaFile?
     fileprivate let peer: EnginePeer?
     fileprivate let managedByBot: EnginePeer?
     fileprivate let controllerInteraction: ChatControllerInteraction
     fileprivate let presentationData: ChatPresentationData
     fileprivate let context: AccountContext
     
-    public init(title: String, text: String, photo: TelegramMediaImage?, video: TelegramMediaFile?, peer: EnginePeer?, managedByBot: EnginePeer?, controllerInteraction: ChatControllerInteraction, presentationData: ChatPresentationData, context: AccountContext) {
+    public init(title: String, text: String, photo: IosappMediaImage?, video: IosappMediaFile?, peer: EnginePeer?, managedByBot: EnginePeer?, controllerInteraction: ChatControllerInteraction, presentationData: ChatPresentationData, context: AccountContext) {
         self.title = title
         self.text = text
         self.photo = photo
@@ -144,7 +144,7 @@ public final class ChatBotInfoItemNode: ListViewItemNode {
         self.fetchDisposable.dispose()
     }
     
-    private func setup(context: AccountContext, videoFile: TelegramMediaFile?) {
+    private func setup(context: AccountContext, videoFile: IosappMediaFile?) {
         guard self.videoNode == nil, let file = videoFile else {
             return
         }
@@ -265,7 +265,7 @@ public final class ChatBotInfoItemNode: ListViewItemNode {
                     bold: MarkdownAttributeSet(font: messageBoldFont, textColor: item.presentationData.theme.theme.chat.message.infoPrimaryTextColor),
                     link: MarkdownAttributeSet(font: messageFont, textColor: item.presentationData.theme.theme.chat.message.incoming.accentTextColor),
                     linkAttribute: { url in
-                        return (TelegramTextAttributes.URL, url)
+                        return (IosappTextAttributes.URL, url)
                     }
                 ))
                 textSpacing = 16.0
@@ -474,11 +474,11 @@ public final class ChatBotInfoItemNode: ListViewItemNode {
                 let textNodeFrame = self.textNode.frame
                 if let (index, attributes) = self.textNode.attributesAtPoint(CGPoint(x: point.x - self.offsetContainer.frame.minX - textNodeFrame.minX, y: point.y - self.offsetContainer.frame.minY - textNodeFrame.minY)) {
                     let possibleNames: [String] = [
-                        TelegramTextAttributes.URL,
-                        TelegramTextAttributes.PeerMention,
-                        TelegramTextAttributes.PeerTextMention,
-                        TelegramTextAttributes.BotCommand,
-                        TelegramTextAttributes.Hashtag
+                        IosappTextAttributes.URL,
+                        IosappTextAttributes.PeerMention,
+                        IosappTextAttributes.PeerTextMention,
+                        IosappTextAttributes.BotCommand,
+                        IosappTextAttributes.Hashtag
                     ]
                     for name in possibleNames {
                         if let _ = attributes[NSAttributedString.Key(rawValue: name)] {
@@ -512,7 +512,7 @@ public final class ChatBotInfoItemNode: ListViewItemNode {
     public func tapActionAtPoint(_ point: CGPoint, gesture: TapLongTapOrDoubleTapGesture, isEstimating: Bool) -> ChatMessageBubbleContentTapAction {
         let textNodeFrame = self.textNode.frame
         if let (index, attributes) = self.textNode.attributesAtPoint(CGPoint(x: point.x - self.offsetContainer.frame.minX - textNodeFrame.minX, y: point.y - self.offsetContainer.frame.minY - textNodeFrame.minY)) {
-            if let url = attributes[NSAttributedString.Key(rawValue: TelegramTextAttributes.URL)] as? String {
+            if let url = attributes[NSAttributedString.Key(rawValue: IosappTextAttributes.URL)] as? String {
                 if url.isEmpty {
                     if let item = self.item, item.managedByBot != nil, case .tap = gesture {
                         return ChatMessageBubbleContentTapAction(content: .custom({ [weak self] in
@@ -527,17 +527,17 @@ public final class ChatBotInfoItemNode: ListViewItemNode {
                 }
                 
                 var concealed = true
-                if let (attributeText, fullText) = self.textNode.attributeSubstring(name: TelegramTextAttributes.URL, index: index) {
+                if let (attributeText, fullText) = self.textNode.attributeSubstring(name: IosappTextAttributes.URL, index: index) {
                     concealed = !doesUrlMatchText(url: url, text: attributeText, fullText: fullText)
                 }
                 return ChatMessageBubbleContentTapAction(content: .url(ChatMessageBubbleContentTapAction.Url(url: url, concealed: concealed)))
-            } else if let peerMention = attributes[NSAttributedString.Key(rawValue: TelegramTextAttributes.PeerMention)] as? TelegramPeerMention {
+            } else if let peerMention = attributes[NSAttributedString.Key(rawValue: IosappTextAttributes.PeerMention)] as? IosappPeerMention {
                 return ChatMessageBubbleContentTapAction(content: .peerMention(peerId: peerMention.peerId, mention: peerMention.mention, openProfile: false))
-            } else if let peerName = attributes[NSAttributedString.Key(rawValue: TelegramTextAttributes.PeerTextMention)] as? String {
+            } else if let peerName = attributes[NSAttributedString.Key(rawValue: IosappTextAttributes.PeerTextMention)] as? String {
                 return ChatMessageBubbleContentTapAction(content: .textMention(peerName))
-            } else if let botCommand = attributes[NSAttributedString.Key(rawValue: TelegramTextAttributes.BotCommand)] as? String {
+            } else if let botCommand = attributes[NSAttributedString.Key(rawValue: IosappTextAttributes.BotCommand)] as? String {
                 return ChatMessageBubbleContentTapAction(content: .botCommand(botCommand))
-            } else if let hashtag = attributes[NSAttributedString.Key(rawValue: TelegramTextAttributes.Hashtag)] as? TelegramHashtag {
+            } else if let hashtag = attributes[NSAttributedString.Key(rawValue: IosappTextAttributes.Hashtag)] as? IosappHashtag {
                 return ChatMessageBubbleContentTapAction(content: .hashtag(hashtag.peerName, hashtag.hashtag))
             } else {
                 return ChatMessageBubbleContentTapAction(content: .none)
@@ -561,7 +561,7 @@ public final class ChatBotInfoItemNode: ListViewItemNode {
                             self.item?.controllerInteraction.openUrl(ChatControllerInteraction.OpenUrl(url: url.url, concealed: url.concealed, progress: tapAction.activate?()))
                         case let .peerMention(peerId, _, _):
                             if let item = self.item {
-                                let _ = (item.context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: peerId))
+                                let _ = (item.context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: peerId))
                                 |> deliverOnMainQueue).startStandalone(next: { [weak self] peer in
                                     if let peer = peer {
                                         self?.item?.controllerInteraction.openPeer(peer, .chat(textInputState: nil, subject: nil, peekData: nil), nil, .default)

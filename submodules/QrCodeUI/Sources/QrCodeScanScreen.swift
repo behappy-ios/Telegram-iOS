@@ -466,7 +466,7 @@ private final class QrCodeScanScreenNode: ViewControllerTracingNode, ASScrollVie
         text = text.replacingOccurrences(of: " [", with: "   [").replacingOccurrences(of: ") ", with: ")   ")
         
         let attributedText = NSMutableAttributedString(attributedString: parseMarkdownIntoAttributedString(text, attributes: MarkdownAttributes(body: MarkdownAttributeSet(font: textFont, textColor: .white), bold: MarkdownAttributeSet(font: boldFont, textColor: .white), link: MarkdownAttributeSet(font: boldFont, textColor: .white), linkAttribute: { contents in
-            return (TelegramTextAttributes.URL, contents)
+            return (IosappTextAttributes.URL, contents)
         })))
         
         self.textNode = ImmediateTextNode()
@@ -613,7 +613,7 @@ private final class QrCodeScanScreenNode: ViewControllerTracingNode, ASScrollVie
                     switch gesture {
                         case .tap:
                             if let (_, attributes) = self.textNode.attributesAtPoint(location) {
-                                if let url = attributes[NSAttributedString.Key(rawValue: TelegramTextAttributes.URL)] as? String {
+                                if let url = attributes[NSAttributedString.Key(rawValue: IosappTextAttributes.URL)] as? String {
                                     switch url {
                                     case "desktop":
                                         self.context.sharedContext.openExternalUrl(context: self.context, urlContext: .generic, url: "https://behappy.rest", forceExternal: true, presentationData: self.context.sharedContext.currentPresentationData.with { $0 }, navigationController: nil, dismissInput: {})

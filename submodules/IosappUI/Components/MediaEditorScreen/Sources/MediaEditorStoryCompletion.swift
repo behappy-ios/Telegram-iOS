@@ -98,7 +98,7 @@ extension MediaEditorScreenImpl {
             mediaAreas = self.initialMediaAreas ?? []
         }
         
-        var stickers: [TelegramMediaFile] = []
+        var stickers: [IosappMediaFile] = []
         for entity in codableEntities {
             switch entity {
             case let .sticker(stickerEntity):
@@ -612,7 +612,7 @@ extension MediaEditorScreenImpl {
         let itemMediaEditor = setupMediaEditorForItem(item: item)
             
         var mediaAreas: [MediaArea] = []
-        var stickers: [TelegramMediaFile] = []
+        var stickers: [IosappMediaFile] = []
         
         if let entities = item.values?.entities {
             for entity in entities {
@@ -721,7 +721,7 @@ extension MediaEditorScreenImpl {
         caption = convertMarkdownToAttributes(caption)
         
         var mediaAreas: [MediaArea] = []
-        var stickers: [TelegramMediaFile] = []
+        var stickers: [IosappMediaFile] = []
         
         if let entities = item.values?.entities {
             for entity in entities {
@@ -822,7 +822,7 @@ extension MediaEditorScreenImpl {
         )
     }
 
-    private func extractStickersFromEntity(_ entity: CodableDrawingEntity, into stickers: inout [TelegramMediaFile]) {
+    private func extractStickersFromEntity(_ entity: CodableDrawingEntity, into stickers: inout [IosappMediaFile]) {
         switch entity {
         case let .sticker(stickerEntity):
             if case let .file(file, fileType) = stickerEntity.content, case .sticker = fileType {
@@ -841,7 +841,7 @@ extension MediaEditorScreenImpl {
         }
     }
 
-    private func createEmptyResult(randomId: Int64, music: TelegramMediaFile? = nil) -> MediaEditorScreenImpl.Result {
+    private func createEmptyResult(randomId: Int64, music: IosappMediaFile? = nil) -> MediaEditorScreenImpl.Result {
         let emptyImage = UIImage()
         return MediaEditorScreenImpl.Result(
             media: .image(

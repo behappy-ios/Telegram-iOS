@@ -317,7 +317,7 @@ public final class SharedWakeupManager {
                 return .single([:])
             }
             let signals: [Signal<[PendingStoryUploadKey: PendingStoryUploadStatus], NoError>] = accounts.map { accountId, account in
-                return TelegramEngine(account: account).messages.pendingStoryUploadStatuses()
+                return IosappEngine(account: account).messages.pendingStoryUploadStatuses()
                 |> map { pendingStoryUploadStatuses in
                     var result: [PendingStoryUploadKey: PendingStoryUploadStatus] = [:]
                     result.reserveCapacity(pendingStoryUploadStatuses.count)
@@ -481,7 +481,7 @@ public final class SharedWakeupManager {
                 continue
             }
             Logger.shared.log("Wakeup", "BG task external cancel: deleting \(messageIds.count) messages in account \(accountId.int64)")
-            let _ = TelegramEngine(account: account).messages.deleteMessagesInteractively(messageIds: messageIds, type: .forLocalPeer).startStandalone()
+            let _ = IosappEngine(account: account).messages.deleteMessagesInteractively(messageIds: messageIds, type: .forLocalPeer).startStandalone()
         }
     }
     
@@ -513,7 +513,7 @@ public final class SharedWakeupManager {
                 continue
             }
             Logger.shared.log("Wakeup", "Story BG task external cancel: cancelling \(stableIds.count) stories in account \(accountId.int64)")
-            let engineMessages = TelegramEngine(account: account).messages
+            let engineMessages = IosappEngine(account: account).messages
             for stableId in stableIds {
                 engineMessages.cancelStoryUpload(stableId: stableId)
             }

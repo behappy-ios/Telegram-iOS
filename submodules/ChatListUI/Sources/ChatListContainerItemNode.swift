@@ -233,7 +233,7 @@ final class ChatListContainerItemNode: ASDisplayNode {
         
         if case let .forum(peerId) = location {
             self.peerDataDisposable = (context.engine.data.subscribe(
-                TelegramEngine.EngineData.Item.Peer.StatusSettings(id: peerId)
+                IosappEngine.EngineData.Item.Peer.StatusSettings(id: peerId)
             )
             |> deliverOnMainQueue).startStrict(next: { [weak self] statusSettings in
                 guard let self else {

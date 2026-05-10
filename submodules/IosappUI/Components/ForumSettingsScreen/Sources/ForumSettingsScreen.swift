@@ -190,7 +190,7 @@ final class ForumSettingsScreenComponent: Component {
                             }
                             navigationController.setViewControllers(viewControllers, animated: false)
                             
-                            if let baseController = navigationController as? TelegramRootControllerInterface, let chatListController = baseController.getChatsController() as? ChatListController {
+                            if let baseController = navigationController as? IosappRootControllerInterface, let chatListController = baseController.getChatsController() as? ChatListController {
                                 chatListController.resetForumStackIfOpen()
                             }
                         }
@@ -258,7 +258,7 @@ final class ForumSettingsScreenComponent: Component {
                                         }
                                         navigationController.setViewControllers(viewControllers, animated: false)
                                         
-                                        if let baseController = navigationController as? TelegramRootControllerInterface, let chatListController = baseController.getChatsController() as? ChatListController {
+                                        if let baseController = navigationController as? IosappRootControllerInterface, let chatListController = baseController.getChatsController() as? ChatListController {
                                             chatListController.resetForumStackIfOpen()
                                         }
                                     }
@@ -294,7 +294,7 @@ final class ForumSettingsScreenComponent: Component {
                 
                 self.peerDisposable = (self.peerIdPromise.get()
                 |> mapToSignal { peerId in
-                    component.context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: peerId))
+                    component.context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: peerId))
                 }
                 |> deliverOnMainQueue).start(next: { [weak self] peer in
                     guard let self else {

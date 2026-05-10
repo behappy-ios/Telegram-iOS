@@ -306,7 +306,7 @@ final class NewContactScreenComponent: Component {
                 bold: MarkdownAttributeSet(font: Font.semibold(13.0), textColor: environment.theme.list.freeTextColor),
                 link: MarkdownAttributeSet(font: Font.regular(13.0), textColor: environment.theme.list.itemAccentColor),
                 linkAttribute: { contents in
-                    return (TelegramTextAttributes.URL, contents)
+                    return (IosappTextAttributes.URL, contents)
                 }
             )
             
@@ -519,7 +519,7 @@ final class NewContactScreenComponent: Component {
                                                  return
                                              }
                                              if let peer {
-                                                 self.resolvedPeerDisposable.set((component.context.engine.data.get(TelegramEngine.EngineData.Item.Peer.IsContact(id: peer.id)) |> deliverOnMainQueue).start(next: { [weak self] isContact in
+                                                 self.resolvedPeerDisposable.set((component.context.engine.data.get(IosappEngine.EngineData.Item.Peer.IsContact(id: peer.id)) |> deliverOnMainQueue).start(next: { [weak self] isContact in
                                                      guard let self else {
                                                          return
                                                      }
@@ -572,8 +572,8 @@ final class NewContactScreenComponent: Component {
                         highlightColor: environment.theme.list.itemAccentColor.withAlphaComponent(0.1),
                         highlightInset: UIEdgeInsets(top: 0.0, left: 0.0, bottom: 0.0, right: -8.0),
                         highlightAction: { attributes in
-                            if let _ = attributes[NSAttributedString.Key(rawValue: TelegramTextAttributes.URL)] {
-                                return NSAttributedString.Key(rawValue: TelegramTextAttributes.URL)
+                            if let _ = attributes[NSAttributedString.Key(rawValue: IosappTextAttributes.URL)] {
+                                return NSAttributedString.Key(rawValue: IosappTextAttributes.URL)
                             } else {
                                 return nil
                             }

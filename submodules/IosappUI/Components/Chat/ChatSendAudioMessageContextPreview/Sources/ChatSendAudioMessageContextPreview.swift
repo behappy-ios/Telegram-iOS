@@ -82,17 +82,17 @@ public final class ChatSendContactMessageContextPreview: UIView, ChatSendMessage
     }
 
     public func update(containerSize: CGSize, transition: ComponentTransition) -> CGSize {
-        var contactsMedia: [TelegramMediaContact] = []
+        var contactsMedia: [IosappMediaContact] = []
         for peer in self.contactPeers {
             switch peer {
             case let .peer(contact, _, _):
-                guard let contact = contact as? TelegramUser, let phoneNumber = contact.phone else {
+                guard let contact = contact as? IosappUser, let phoneNumber = contact.phone else {
                     continue
                 }
                 let contactData = DeviceContactExtendedData(basicData: DeviceContactBasicData(firstName: contact.firstName ?? "", lastName: contact.lastName ?? "", phoneNumbers: [DeviceContactPhoneNumberData(label: "_$!<Mobile>!$_", value: phoneNumber)]), middleName: "", prefix: "", suffix: "", organization: "", jobTitle: "", department: "", emailAddresses: [], urls: [], addresses: [], birthdayDate: nil, socialProfiles: [], instantMessagingProfiles: [], note: "")
                 
                 let phone = contactData.basicData.phoneNumbers[0].value
-                contactsMedia.append(TelegramMediaContact(firstName: contactData.basicData.firstName, lastName: contactData.basicData.lastName, phoneNumber: phone, peerId: contact.id, vCardData: nil))
+                contactsMedia.append(IosappMediaContact(firstName: contactData.basicData.firstName, lastName: contactData.basicData.lastName, phoneNumber: phone, peerId: contact.id, vCardData: nil))
             case let .deviceContact(_, basicData):
                 guard !basicData.phoneNumbers.isEmpty else {
                     continue
@@ -100,7 +100,7 @@ public final class ChatSendContactMessageContextPreview: UIView, ChatSendMessage
                 let contactData = DeviceContactExtendedData(basicData: basicData, middleName: "", prefix: "", suffix: "", organization: "", jobTitle: "", department: "", emailAddresses: [], urls: [], addresses: [], birthdayDate: nil, socialProfiles: [], instantMessagingProfiles: [], note: "")
                 
                 let phone = contactData.basicData.phoneNumbers[0].value
-                contactsMedia.append(TelegramMediaContact(firstName: contactData.basicData.firstName, lastName: contactData.basicData.lastName, phoneNumber: phone, peerId: nil, vCardData: nil))
+                contactsMedia.append(IosappMediaContact(firstName: contactData.basicData.firstName, lastName: contactData.basicData.lastName, phoneNumber: phone, peerId: nil, vCardData: nil))
             }
         }
         
@@ -258,8 +258,8 @@ public final class ChatSendAudioMessageContextPreview: UIView, ChatSendMessageCo
     }
 
     public func update(containerSize: CGSize, transition: ComponentTransition) -> CGSize {
-        let voiceAttributes: [TelegramMediaFileAttribute] = [.Audio(isVoice: true, duration: 23, title: nil, performer: nil, waveform: self.waveform.makeBitstream())]
-        let voiceMedia = TelegramMediaFile(fileId: MediaId(namespace: 0, id: 0), partialReference: nil, resource: LocalFileMediaResource(fileId: 0), previewRepresentations: [], videoThumbnails: [], immediateThumbnailData: nil, mimeType: "audio/ogg", size: 0, attributes: voiceAttributes, alternativeRepresentations: [])
+        let voiceAttributes: [IosappMediaFileAttribute] = [.Audio(isVoice: true, duration: 23, title: nil, performer: nil, waveform: self.waveform.makeBitstream())]
+        let voiceMedia = IosappMediaFile(fileId: MediaId(namespace: 0, id: 0), partialReference: nil, resource: LocalFileMediaResource(fileId: 0), previewRepresentations: [], videoThumbnails: [], immediateThumbnailData: nil, mimeType: "audio/ogg", size: 0, attributes: voiceAttributes, alternativeRepresentations: [])
         
         let message = Message(stableId: 1, stableVersion: 0, id: MessageId(peerId: self.context.account.peerId, namespace: 0, id: 1), globallyUniqueId: nil, groupingKey: nil, groupInfo: nil, threadId: nil, timestamp: 0, flags: [.Incoming], tags: [], globalTags: [], localTags: [], customTags: [], forwardInfo: nil, author: nil, text: "", attributes: [], media: [voiceMedia], peers: SimpleDictionary(), associatedMessages: SimpleDictionary(), associatedMessageIds: [], associatedMedia: [:], associatedThreadInfo: nil, associatedStories: [:])
         

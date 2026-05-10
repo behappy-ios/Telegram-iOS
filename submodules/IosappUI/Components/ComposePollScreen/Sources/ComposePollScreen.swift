@@ -47,8 +47,8 @@ public final class ComposedPoll {
         }
     }
     
-    public let publicity: TelegramMediaPollPublicity
-    public let kind: TelegramMediaPollKind
+    public let publicity: IosappMediaPollPublicity
+    public let kind: IosappMediaPollKind
     
     public let openAnswers: Bool
     public let revotingDisabled: Bool
@@ -58,16 +58,16 @@ public final class ComposedPoll {
     public let text: Text
     public let description: Text
     public let media: AnyMediaReference?
-    public let options: [TelegramMediaPollOption]
+    public let options: [IosappMediaPollOption]
     public let correctAnswers: [Data]?
-    public let results: TelegramMediaPollResults
+    public let results: IosappMediaPollResults
     public let deadlineTimeout: Int32?
     public let deadlineDate: Int32?
-    public let usedCustomEmojiFiles: [Int64: TelegramMediaFile]
+    public let usedCustomEmojiFiles: [Int64: IosappMediaFile]
 
     public init(
-        publicity: TelegramMediaPollPublicity,
-        kind: TelegramMediaPollKind,
+        publicity: IosappMediaPollPublicity,
+        kind: IosappMediaPollKind,
         openAnswers: Bool,
         revotingDisabled: Bool,
         shuffleAnswers: Bool,
@@ -75,12 +75,12 @@ public final class ComposedPoll {
         text: Text,
         description: Text,
         media: AnyMediaReference?,
-        options: [TelegramMediaPollOption],
+        options: [IosappMediaPollOption],
         correctAnswers: [Data]?,
-        results: TelegramMediaPollResults,
+        results: IosappMediaPollResults,
         deadlineTimeout: Int32?,
         deadlineDate: Int32?,
-        usedCustomEmojiFiles: [Int64: TelegramMediaFile]
+        usedCustomEmojiFiles: [Int64: IosappMediaFile]
     ) {
         self.publicity = publicity
         self.kind = kind
@@ -140,10 +140,10 @@ final class ComposePollScreenComponent: Component {
         }
         
         var requiresUpload: Bool {
-            if let image = self.media.media as? TelegramMediaImage, let largest = largestImageRepresentation(image.representations), !(largest.resource is CloudPhotoSizeMediaResource) {
+            if let image = self.media.media as? IosappMediaImage, let largest = largestImageRepresentation(image.representations), !(largest.resource is CloudPhotoSizeMediaResource) {
                 return true
             }
-            if let file = self.media.media as? TelegramMediaFile, !(file.resource is CloudDocumentMediaResource) {
+            if let file = self.media.media as? IosappMediaFile, !(file.resource is CloudDocumentMediaResource) {
                 return true
             }
             return false
@@ -491,14 +491,14 @@ final class ComposePollScreenComponent: Component {
                 return .questionNeeded
             }
             
-            let mappedKind: TelegramMediaPollKind
+            let mappedKind: IosappMediaPollKind
             if self.isQuiz {
                 mappedKind = .quiz(multipleAnswers: self.effectiveIsMultiAnswer)
             } else {
                 mappedKind = .poll(multipleAnswers: self.effectiveIsMultiAnswer)
             }
             
-            var mappedOptions: [TelegramMediaPollOption] = []
+            var mappedOptions: [IosappMediaPollOption] = []
             var selectedQuizOptions: [Data] = []
             for pollOption in self.pollOptions {
                 if pollOption.textInputState.text.length == 0 {
@@ -522,7 +522,7 @@ final class ComposePollScreenComponent: Component {
                     return .isUploading
                 }
                 
-                mappedOptions.append(TelegramMediaPollOption(
+                mappedOptions.append(IosappMediaPollOption(
                     text: pollOption.textInputState.text.string,
                     entities: entities,
                     opaqueIdentifier: optionData,
@@ -584,7 +584,7 @@ final class ComposePollScreenComponent: Component {
                 }
             }
             
-            let usedCustomEmojiFiles: [Int64: TelegramMediaFile] = [:]
+            let usedCustomEmojiFiles: [Int64: IosappMediaFile] = [:]
             
             var deadlineTimeout: Int32?
             var deadlineDate: Int32?
@@ -613,12 +613,12 @@ final class ComposePollScreenComponent: Component {
                 media: self.pollDescriptionMedia?.media,
                 options: mappedOptions,
                 correctAnswers: mappedCorrectAnswers,
-                results: TelegramMediaPollResults(
+                results: IosappMediaPollResults(
                     voters: nil,
                     totalVoters: nil,
                     recentVoters: [],
                     solution: mappedSolution.flatMap { mappedSolution in
-                        return TelegramMediaPollResults.Solution(
+                        return IosappMediaPollResults.Solution(
                             text: mappedSolution.0,
                             entities: mappedSolution.1,
                             media: mappedSolution.2?.media
@@ -943,7 +943,7 @@ final class ComposePollScreenComponent: Component {
             }
             media.progress = 0.0
             
-            if let image = media.media.media as? TelegramMediaImage, let largest = largestImageRepresentation(image.representations) {
+            if let image = media.media.media as? IosappMediaImage, let largest = largestImageRepresentation(image.representations) {
                 media.uploadDisposable = (standaloneUploadedImage(
                     postbox: component.context.account.postbox,
                     network: component.context.account.network,
@@ -963,7 +963,7 @@ final class ComposePollScreenComponent: Component {
                     case let .result(result):
                         switch result {
                         case let .media(resultMedia):
-                            if let resultImage = resultMedia.media as? TelegramMediaImage, let resultLargest = largestImageRepresentation(resultImage.representations) {
+                            if let resultImage = resultMedia.media as? IosappMediaImage, let resultLargest = largestImageRepresentation(resultImage.representations) {
                                 component.context.account.postbox.mediaBox.moveResourceData(from: largest.resource.id, to: resultLargest.resource.id, synchronous: true)
                             }
                             
@@ -979,7 +979,7 @@ final class ComposePollScreenComponent: Component {
                     }
                 })
             }
-            if let file = media.media.media as? TelegramMediaFile {
+            if let file = media.media.media as? IosappMediaFile {
                 media.uploadDisposable = (standaloneUploadedFile(
                     postbox: component.context.account.postbox,
                     network: component.context.account.network,
@@ -1002,7 +1002,7 @@ final class ComposePollScreenComponent: Component {
                     case let .result(result):
                         switch result {
                         case let .media(resultMedia):
-                            if let resultFile = resultMedia.media as? TelegramMediaFile {
+                            if let resultFile = resultMedia.media as? IosappMediaFile {
                                 component.context.account.postbox.mediaBox.moveResourceData(from: file.resource.id, to: resultFile.resource.id, synchronous: true)
                             }
                             media.media = resultMedia
@@ -1030,7 +1030,7 @@ final class ComposePollScreenComponent: Component {
             } else {
                 let presentationData = component.context.sharedContext.currentPresentationData.with { $0 }
                 
-                if let file = media.media.media as? TelegramMediaFile, file.isSticker || file.isCustomEmoji {
+                if let file = media.media.media as? IosappMediaFile, file.isSticker || file.isCustomEmoji {
                     var items: [ContextMenuItem] = []
                     
                     items.append(.action(ContextMenuActionItem(text: presentationData.strings.CreatePoll_Media_Replace, icon: { theme in
@@ -1099,7 +1099,7 @@ final class ComposePollScreenComponent: Component {
                     
                     let source: ContextContentSource
                     
-                    if let _ = media.media.media as? TelegramMediaMap {
+                    if let _ = media.media.media as? IosappMediaMap {
                         let controller = LocationViewController(
                             context: component.context,
                             subject: EngineMessage(message),
@@ -2418,7 +2418,7 @@ final class ComposePollScreenComponent: Component {
             
             for (_, suggestionTextInputState) in textInputStates {
                 var hasTrackingView = suggestionTextInputState.hasTrackingView
-                if let currentEmojiSuggestion = suggestionTextInputState.currentEmojiSuggestion, let value = currentEmojiSuggestion.value as? [TelegramMediaFile], value.isEmpty {
+                if let currentEmojiSuggestion = suggestionTextInputState.currentEmojiSuggestion, let value = currentEmojiSuggestion.value as? [IosappMediaFile], value.isEmpty {
                     hasTrackingView = false
                 }
                 if !suggestionTextInputState.isEditing {
@@ -2442,7 +2442,7 @@ final class ComposePollScreenComponent: Component {
                 }
             }
             
-            if let (suggestionTextInputView, suggestionTextInputState) = textInputStates.first(where: { $0.state.isEditing && $0.state.currentEmojiSuggestion != nil }), let emojiSuggestion = suggestionTextInputState.currentEmojiSuggestion, let value = emojiSuggestion.value as? [TelegramMediaFile] {
+            if let (suggestionTextInputView, suggestionTextInputState) = textInputStates.first(where: { $0.state.isEditing && $0.state.currentEmojiSuggestion != nil }), let emojiSuggestion = suggestionTextInputState.currentEmojiSuggestion, let value = emojiSuggestion.value as? [IosappMediaFile] {
                 let currentEmojiSuggestionView: ComponentHostView<Empty>
                 if let current = self.currentEmojiSuggestionView {
                     currentEmojiSuggestionView = current

@@ -344,7 +344,7 @@ private final class GiftAuctionViewSheetContent: CombinedComponent {
                         }
                         let _ = (self.context.engine.data.get(
                             EngineDataList(
-                                peerIds.map(TelegramEngine.EngineData.Item.Peer.Peer.init)
+                                peerIds.map(IosappEngine.EngineData.Item.Peer.Peer.init)
                             )
                         )
                         |> deliverOnMainQueue).startStandalone(next: { [weak self, weak controller] peerList in
@@ -380,7 +380,7 @@ private final class GiftAuctionViewSheetContent: CombinedComponent {
 
                             controller?.present(UndoOverlayController(presentationData: presentationData, content: .forward(savedMessages: savedMessages, text: text), elevatedLayout: false, animateInAsReplacement: false, action: { [weak self, weak controller] action in
                                 if let self, savedMessages, action == .info {
-                                    let _ = (self.context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: self.context.account.peerId))
+                                    let _ = (self.context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: self.context.account.peerId))
                                     |> deliverOnMainQueue).start(next: { [weak self, weak controller] peer in
                                         guard let peer else {
                                             return
@@ -818,7 +818,7 @@ private final class GiftAuctionViewSheetContent: CombinedComponent {
             let textColor = UIColor.white
             let linkColor = UIColor.white
             let markdownAttributes = MarkdownAttributes(body: MarkdownAttributeSet(font: textFont, textColor: textColor), bold: MarkdownAttributeSet(font: boldTextFont, textColor: textColor), link: MarkdownAttributeSet(font: textFont, textColor: linkColor), linkAttribute: { contents in
-                return (TelegramTextAttributes.URL, contents)
+                return (IosappTextAttributes.URL, contents)
             })
             
             if state.cachedChevronImage == nil || state.cachedChevronImage?.1 !== environment.theme {

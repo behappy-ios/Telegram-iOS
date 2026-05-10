@@ -4,7 +4,7 @@ import IosappApi
 import SwiftSignalKit
 
 
-public func updateAutodownloadSettingsInteractively(accountManager: AccountManager<TelegramAccountManagerTypes>, _ f: @escaping (AutodownloadSettings) -> AutodownloadSettings) -> Signal<Void, NoError> {
+public func updateAutodownloadSettingsInteractively(accountManager: AccountManager<IosappAccountManagerTypes>, _ f: @escaping (AutodownloadSettings) -> AutodownloadSettings) -> Signal<Void, NoError> {
     return accountManager.transaction { transaction -> Void in
         transaction.updateSharedData(SharedDataKeys.autodownloadSettings, { entry in
             let currentSettings: AutodownloadSettings

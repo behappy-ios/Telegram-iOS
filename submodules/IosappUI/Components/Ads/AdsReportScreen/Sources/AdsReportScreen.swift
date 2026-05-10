@@ -211,15 +211,15 @@ private final class SheetPageContent: CombinedComponent {
                                 bold: MarkdownAttributeSet(font: Font.semibold(presentationData.listsFontSize.itemListBaseHeaderFontSize), textColor: theme.list.freeTextColor),
                                 link: MarkdownAttributeSet(font: Font.regular(presentationData.listsFontSize.itemListBaseHeaderFontSize), textColor: theme.list.itemAccentColor),
                                 linkAttribute: { contents in
-                                    return (TelegramTextAttributes.URL, contents)
+                                    return (IosappTextAttributes.URL, contents)
                                 }
                             )
                         ),
                         maximumNumberOfLines: 0,
                         highlightColor: theme.list.itemAccentColor.withAlphaComponent(0.2),
                         highlightAction: { attributes in
-                            if let _ = attributes[NSAttributedString.Key(rawValue: TelegramTextAttributes.URL)] {
-                                return NSAttributedString.Key(rawValue: TelegramTextAttributes.URL)
+                            if let _ = attributes[NSAttributedString.Key(rawValue: IosappTextAttributes.URL)] {
+                                return NSAttributedString.Key(rawValue: IosappTextAttributes.URL)
                             } else {
                                 return nil
                             }

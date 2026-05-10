@@ -60,9 +60,9 @@ public func ageVerificationAvailability(context: AccountContext) -> Signal<AgeVe
         }
         
         return context.account.viewTracker.aroundMessageHistoryViewForLocation(.peer(peerId: peer.id, threadId: nil), index: .lowerBound, anchorIndex: .lowerBound, count: 5, fixedCombinedReadStates: nil)
-        |> mapToSignal { view -> Signal<(TelegramMediaFile, EngineMessage)?, NoError> in
+        |> mapToSignal { view -> Signal<(IosappMediaFile, EngineMessage)?, NoError> in
             if !view.0.isLoading {
-                if let message = view.0.entries.last?.message, let file = message.media.first(where: { $0 is TelegramMediaFile }) as? TelegramMediaFile {
+                if let message = view.0.entries.last?.message, let file = message.media.first(where: { $0 is IosappMediaFile }) as? IosappMediaFile {
                     return .single((file, EngineMessage(message)))
                 } else {
                     return .single(nil)

@@ -328,8 +328,8 @@ private final class GiftViewSheetContent: CombinedComponent {
                     |> distinctUntilChanged
                     |> mapToSignal { peerIds in
                         return context.engine.data.get(EngineDataMap(
-                            peerIds.map { peerId -> TelegramEngine.EngineData.Item.Peer.Peer in
-                                return TelegramEngine.EngineData.Item.Peer.Peer(id: peerId)
+                            peerIds.map { peerId -> IosappEngine.EngineData.Item.Peer.Peer in
+                                return IosappEngine.EngineData.Item.Peer.Peer(id: peerId)
                             }
                         ))
                     },
@@ -499,7 +499,7 @@ private final class GiftViewSheetContent: CombinedComponent {
                 return
             }
             
-            var animationFile: TelegramMediaFile?
+            var animationFile: IosappMediaFile?
             switch arguments.gift {
             case let .generic(gift):
                 animationFile = gift.file
@@ -550,7 +550,7 @@ private final class GiftViewSheetContent: CombinedComponent {
                             elevatedLayout: !(lastController is ChatController),
                             action: { [weak navigationController] action in
                                 if case .undo = action, let navigationController, let giftsPeerId {
-                                    let _ = (self.context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: giftsPeerId))
+                                    let _ = (self.context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: giftsPeerId))
                                     |> deliverOnMainQueue).start(next: { [weak navigationController] peer in
                                         guard let peer, let navigationController else {
                                             return
@@ -749,10 +749,10 @@ private final class GiftViewSheetContent: CombinedComponent {
                         let updatedAttributes = uniqueGift.attributes.filter { $0.attributeType != .originalInfo }
                         self.subject = .profileGift(peerId, gift.withGift(.unique(uniqueGift.withAttributes(updatedAttributes))))
                     case let .message(message):
-                        if let action = message.media.first(where: { $0 is TelegramMediaAction }) as? TelegramMediaAction, case let .starGiftUnique(gift, isUpgrade, isTransferred, savedToProfile, canExportDate, transferStars, isRefunded, isPrepaidUpgrade, peerId, senderId, savedId, resaleAmount, canTransferDate, canResaleDate, _, assigned, fromOffer, canCraftAt, isCrafted) = action.action, case let .unique(uniqueGift) = gift {
+                        if let action = message.media.first(where: { $0 is IosappMediaAction }) as? IosappMediaAction, case let .starGiftUnique(gift, isUpgrade, isTransferred, savedToProfile, canExportDate, transferStars, isRefunded, isPrepaidUpgrade, peerId, senderId, savedId, resaleAmount, canTransferDate, canResaleDate, _, assigned, fromOffer, canCraftAt, isCrafted) = action.action, case let .unique(uniqueGift) = gift {
                             let updatedAttributes = uniqueGift.attributes.filter { $0.attributeType != .originalInfo }
                             let updatedMedia: [Media] = [
-                                TelegramMediaAction(
+                                IosappMediaAction(
                                     action: .starGiftUnique(
                                         gift: .unique(uniqueGift.withAttributes(updatedAttributes)),
                                         isUpgrade: isUpgrade,
@@ -946,7 +946,7 @@ private final class GiftViewSheetContent: CombinedComponent {
                         }
                         let _ = (self.context.engine.data.get(
                             EngineDataList(
-                                peerIds.map(TelegramEngine.EngineData.Item.Peer.Peer.init)
+                                peerIds.map(IosappEngine.EngineData.Item.Peer.Peer.init)
                             )
                         )
                         |> deliverOnMainQueue).startStandalone(next: { [weak self, weak controller] peerList in
@@ -982,7 +982,7 @@ private final class GiftViewSheetContent: CombinedComponent {
 
                             controller?.present(UndoOverlayController(presentationData: presentationData, content: .forward(savedMessages: savedMessages, text: text), elevatedLayout: false, animateInAsReplacement: false, action: { [weak self, weak controller] action in
                                 if let self, savedMessages, action == .info {
-                                    let _ = (self.context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: self.context.account.peerId))
+                                    let _ = (self.context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: self.context.account.peerId))
                                     |> deliverOnMainQueue).start(next: { [weak self, weak controller] peer in
                                         guard let peer else {
                                             return
@@ -1055,7 +1055,7 @@ private final class GiftViewSheetContent: CombinedComponent {
                     |> deliverOnMainQueue
                     |> take(1)).start(next: { [weak navigationController] themePeerId in
                         if let themePeerId, themePeerId != peer.id {
-                            let _ = (context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: themePeerId))
+                            let _ = (context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: themePeerId))
                             |> deliverOnMainQueue).start(next: { [weak navigationController] peer in
                                 guard let peer else {
                                     proceed()
@@ -1439,7 +1439,7 @@ private final class GiftViewSheetContent: CombinedComponent {
                 return
             }
             let _ = (self.context.engine.data.get(
-                TelegramEngine.EngineData.Item.Peer.Peer(id: messageId.peerId)
+                IosappEngine.EngineData.Item.Peer.Peer(id: messageId.peerId)
             )
             |> deliverOnMainQueue).start(next: { [weak self, weak navigationController] peer in
                 guard let self, let navigationController, let peer else {
@@ -1532,7 +1532,7 @@ private final class GiftViewSheetContent: CombinedComponent {
             let link = "https://t.me/nft/\(gift.slug)"
             
             let _ = (self.context.engine.data.get(
-                TelegramEngine.EngineData.Item.Peer.Peer(id: arguments.peerId ?? context.account.peerId)
+                IosappEngine.EngineData.Item.Peer.Peer(id: arguments.peerId ?? context.account.peerId)
             )
             |> deliverOnMainQueue).start(next: { [weak self] peer in
                 guard let self, let controller = self.getController() as? GiftViewScreen else {
@@ -1647,7 +1647,7 @@ private final class GiftViewSheetContent: CombinedComponent {
                         guard let self,  case let .peerId(peerId) = uniqueGift.owner else {
                             return
                         }
-                        let _ = (self.context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: peerId))
+                        let _ = (self.context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: peerId))
                         |> deliverOnMainQueue).start(next: { [weak self] peer in
                             guard let self, let peer else {
                                 return
@@ -1873,7 +1873,7 @@ private final class GiftViewSheetContent: CombinedComponent {
                         return
                     }
                     
-                    var animationFile: TelegramMediaFile?
+                    var animationFile: IosappMediaFile?
                     for attribute in uniqueGift.attributes {
                         if case let .model(_, file, _, _) = attribute {
                             animationFile = file
@@ -1908,7 +1908,7 @@ private final class GiftViewSheetContent: CombinedComponent {
                             navigationController.setViewControllers(controllers, animated: true)
                             
                             Queue.mainQueue().after(0.5, {
-                                let _ = (context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: recipientPeerId))
+                                let _ = (context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: recipientPeerId))
                                 |> deliverOnMainQueue).start(next: { [weak navigationController] peer in
                                     if let peer, let lastController = navigationController?.viewControllers.last as? ViewController, let animationFile {
                                         let resultController = UndoOverlayController(
@@ -2218,7 +2218,7 @@ private final class GiftViewSheetContent: CombinedComponent {
                     }
                     
                     let navigationController = controller?.navigationController as? NavigationController
-                    let _ = (self.context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: peerId))
+                    let _ = (self.context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: peerId))
                     |> deliverOnMainQueue).start(next: { [weak self, weak navigationController] peer in
                         guard let self, let peer else {
                             return
@@ -2241,7 +2241,7 @@ private final class GiftViewSheetContent: CombinedComponent {
                                     elevatedLayout: !(lastController is ChatController),
                                     action: { [weak navigationController] action in
                                         if case .undo = action, let navigationController {
-                                            let _ = (self.context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: peerId))
+                                            let _ = (self.context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: peerId))
                                             |> deliverOnMainQueue).start(next: { [weak navigationController] peer in
                                                 guard let peer, let navigationController else {
                                                     return
@@ -2318,7 +2318,7 @@ private final class GiftViewSheetContent: CombinedComponent {
                 return
             }
             let presentationData = self.context.sharedContext.currentPresentationData.with { $0 }
-            let _ = (self.context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: ownerPeerId))
+            let _ = (self.context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: ownerPeerId))
             |> deliverOnMainQueue).start(next: { [weak self] peer in
                 guard let self, let peer else {
                     return
@@ -2328,7 +2328,7 @@ private final class GiftViewSheetContent: CombinedComponent {
                         return
                     }
                     
-                    let _ = (self.context.engine.data.get(TelegramEngine.EngineData.Item.Peer.SendPaidMessageStars(id: peer.id))
+                    let _ = (self.context.engine.data.get(IosappEngine.EngineData.Item.Peer.SendPaidMessageStars(id: peer.id))
                     |> deliverOnMainQueue).start(next: { [weak self, weak controller] sendPaidMessageStars in
                         guard let self else {
                             return
@@ -2521,7 +2521,7 @@ private final class GiftViewSheetContent: CombinedComponent {
             
             var titleString: String
             var subtitleString: String?
-            var animationFile: TelegramMediaFile?
+            var animationFile: IosappMediaFile?
             let stars: Int64
             let convertStars: Int64?
             let text: String?
@@ -2561,7 +2561,7 @@ private final class GiftViewSheetContent: CombinedComponent {
                 titleString = strings.Gift_View_UnavailableTitle
             } else if let arguments = subject.arguments {
                 if let toPeerId = arguments.auctionToPeerId {
-                    isSelfGift = arguments.messageId?.peerId.isTelegramNotifications == true && toPeerId == component.context.account.peerId
+                    isSelfGift = arguments.messageId?.peerId.isIosappNotifications == true && toPeerId == component.context.account.peerId
                 } else {
                     isSelfGift = arguments.messageId?.peerId == component.context.account.peerId
                 }
@@ -3359,7 +3359,7 @@ private final class GiftViewSheetContent: CombinedComponent {
                     let subtitleAttributedString = parseMarkdownIntoAttributedString(
                         subtitleString,
                         attributes: MarkdownAttributes(body: MarkdownAttributeSet(font: textFont, textColor: textColor), bold: MarkdownAttributeSet(font: textFont, textColor: textColor), link: MarkdownAttributeSet(font: textFont, textColor: theme.actionSheet.controlAccentColor), linkAttribute: { contents in
-                            return (TelegramTextAttributes.URL, contents)
+                            return (IosappTextAttributes.URL, contents)
                         }),
                         textAlignment: .center
                     )
@@ -3371,14 +3371,14 @@ private final class GiftViewSheetContent: CombinedComponent {
                             maximumNumberOfLines: 1,
                             highlightColor: theme.actionSheet.controlAccentColor.withAlphaComponent(0.1),
                             highlightAction: { attributes in
-                                if let _ = attributes[NSAttributedString.Key(rawValue: TelegramTextAttributes.URL)] {
-                                    return NSAttributedString.Key(rawValue: TelegramTextAttributes.URL)
+                                if let _ = attributes[NSAttributedString.Key(rawValue: IosappTextAttributes.URL)] {
+                                    return NSAttributedString.Key(rawValue: IosappTextAttributes.URL)
                                 } else {
                                     return nil
                                 }
                             },
                             tapAction: { [weak state] attributes, _ in
-                                if let _ = attributes[NSAttributedString.Key(rawValue: TelegramTextAttributes.URL)] as? String, let peer = releasedByPeer {
+                                if let _ = attributes[NSAttributedString.Key(rawValue: IosappTextAttributes.URL)] as? String, let peer = releasedByPeer {
                                     state?.openPeer(peer)
                                 }
                             }
@@ -3507,7 +3507,7 @@ private final class GiftViewSheetContent: CombinedComponent {
                         textColor = soldOut ? theme.list.itemDestructiveColor : theme.list.itemPrimaryTextColor
                     }
                     let markdownAttributes = MarkdownAttributes(body: MarkdownAttributeSet(font: textFont, textColor: useDescriptionTint ? .white : textColor), bold: MarkdownAttributeSet(font: textFont, textColor: useDescriptionTint ? .white : textColor), link: MarkdownAttributeSet(font: textFont, textColor: linkColor), linkAttribute: { contents in
-                        return (TelegramTextAttributes.URL, contents)
+                        return (IosappTextAttributes.URL, contents)
                     })
                     
                     descriptionText = descriptionText.replacingOccurrences(of: " >]", with: "\u{00A0}>]")
@@ -3592,14 +3592,14 @@ private final class GiftViewSheetContent: CombinedComponent {
                                 highlightColor: linkColor.withAlphaComponent(0.1),
                                 highlightInset: UIEdgeInsets(top: 0.0, left: 0.0, bottom: 0.0, right: -8.0),
                                 highlightAction: { attributes in
-                                    if !hasDescriptionButton, let _ = attributes[NSAttributedString.Key(rawValue: TelegramTextAttributes.URL)] {
-                                        return NSAttributedString.Key(rawValue: TelegramTextAttributes.URL)
+                                    if !hasDescriptionButton, let _ = attributes[NSAttributedString.Key(rawValue: IosappTextAttributes.URL)] {
+                                        return NSAttributedString.Key(rawValue: IosappTextAttributes.URL)
                                     } else {
                                         return nil
                                     }
                                 },
                                 tapAction: { [weak state] attributes, _ in
-                                    if !hasDescriptionButton, let _ = attributes[NSAttributedString.Key(rawValue: TelegramTextAttributes.URL)] as? String {
+                                    if !hasDescriptionButton, let _ = attributes[NSAttributedString.Key(rawValue: IosappTextAttributes.URL)] as? String {
                                         state?.openStarsIntro()
                                     }
                                 }
@@ -4095,7 +4095,7 @@ private final class GiftViewSheetContent: CombinedComponent {
                         var descriptionText = strings.Gift_View_TonGiftAddressInfo
                          
                         let markdownAttributes = MarkdownAttributes(body: MarkdownAttributeSet(font: textFont, textColor: textColor), bold: MarkdownAttributeSet(font: textFont, textColor: textColor), link: MarkdownAttributeSet(font: textFont, textColor: linkColor), linkAttribute: { contents in
-                            return (TelegramTextAttributes.URL, contents)
+                            return (IosappTextAttributes.URL, contents)
                         })
                         
                         descriptionText = descriptionText.replacingOccurrences(of: " >]", with: "\u{00A0}>]")
@@ -4115,14 +4115,14 @@ private final class GiftViewSheetContent: CombinedComponent {
                                 highlightColor: linkColor.withAlphaComponent(0.1),
                                 highlightInset: UIEdgeInsets(top: 0.0, left: 0.0, bottom: 0.0, right: -8.0),
                                 highlightAction: { attributes in
-                                    if let _ = attributes[NSAttributedString.Key(rawValue: TelegramTextAttributes.URL)] {
-                                        return NSAttributedString.Key(rawValue: TelegramTextAttributes.URL)
+                                    if let _ = attributes[NSAttributedString.Key(rawValue: IosappTextAttributes.URL)] {
+                                        return NSAttributedString.Key(rawValue: IosappTextAttributes.URL)
                                     } else {
                                         return nil
                                     }
                                 },
                                 tapAction: { [weak state] attributes, _ in
-                                    if let _ = attributes[NSAttributedString.Key(rawValue: TelegramTextAttributes.URL)] as? String {
+                                    if let _ = attributes[NSAttributedString.Key(rawValue: IosappTextAttributes.URL)] as? String {
                                         state?.openAddress(addressToOpen)
                                     }
                                 }
@@ -4226,12 +4226,12 @@ private final class GiftViewSheetContent: CombinedComponent {
                                     string.replaceCharacters(in: format.ranges[format.ranges.count - 1].range, with: attributedText)
                                     if let senderPeerId {
                                         string.addAttribute(.foregroundColor, value: tableLinkColor, range: format.ranges[0].range)
-                                        string.addAttribute(NSAttributedString.Key(rawValue: TelegramTextAttributes.PeerMention), value: TelegramPeerMention(peerId: senderPeerId, mention: ""), range: format.ranges[0].range)
+                                        string.addAttribute(NSAttributedString.Key(rawValue: IosappTextAttributes.PeerMention), value: IosappPeerMention(peerId: senderPeerId, mention: ""), range: format.ranges[0].range)
                                         string.addAttribute(.foregroundColor, value: tableLinkColor, range: format.ranges[1].range)
-                                        string.addAttribute(NSAttributedString.Key(rawValue: TelegramTextAttributes.PeerMention), value: TelegramPeerMention(peerId: recipientPeerId, mention: ""), range: format.ranges[1].range)
+                                        string.addAttribute(NSAttributedString.Key(rawValue: IosappTextAttributes.PeerMention), value: IosappPeerMention(peerId: recipientPeerId, mention: ""), range: format.ranges[1].range)
                                     } else {
                                         string.addAttribute(.foregroundColor, value: tableLinkColor, range: format.ranges[0].range)
-                                        string.addAttribute(NSAttributedString.Key(rawValue: TelegramTextAttributes.PeerMention), value: TelegramPeerMention(peerId: recipientPeerId, mention: ""), range: format.ranges[0].range)
+                                        string.addAttribute(NSAttributedString.Key(rawValue: IosappTextAttributes.PeerMention), value: IosappPeerMention(peerId: recipientPeerId, mention: ""), range: format.ranges[0].range)
                                     }
                                     value = string
                                 } else {
@@ -4239,12 +4239,12 @@ private final class GiftViewSheetContent: CombinedComponent {
                                     let string = NSMutableAttributedString(string: format.string, font: tableFont, textColor: tableTextColor)
                                     if let senderPeerId {
                                         string.addAttribute(.foregroundColor, value: tableLinkColor, range: format.ranges[0].range)
-                                        string.addAttribute(NSAttributedString.Key(rawValue: TelegramTextAttributes.PeerMention), value: TelegramPeerMention(peerId: senderPeerId, mention: ""), range: format.ranges[0].range)
+                                        string.addAttribute(NSAttributedString.Key(rawValue: IosappTextAttributes.PeerMention), value: IosappPeerMention(peerId: senderPeerId, mention: ""), range: format.ranges[0].range)
                                         string.addAttribute(.foregroundColor, value: tableLinkColor, range: format.ranges[1].range)
-                                        string.addAttribute(NSAttributedString.Key(rawValue: TelegramTextAttributes.PeerMention), value: TelegramPeerMention(peerId: recipientPeerId, mention: ""), range: format.ranges[1].range)
+                                        string.addAttribute(NSAttributedString.Key(rawValue: IosappTextAttributes.PeerMention), value: IosappPeerMention(peerId: recipientPeerId, mention: ""), range: format.ranges[1].range)
                                     } else {
                                         string.addAttribute(.foregroundColor, value: tableLinkColor, range: format.ranges[0].range)
-                                        string.addAttribute(NSAttributedString.Key(rawValue: TelegramTextAttributes.PeerMention), value: TelegramPeerMention(peerId: recipientPeerId, mention: ""), range: format.ranges[0].range)
+                                        string.addAttribute(NSAttributedString.Key(rawValue: IosappTextAttributes.PeerMention), value: IosappPeerMention(peerId: recipientPeerId, mention: ""), range: format.ranges[0].range)
                                     }
                                     
                                     value = string
@@ -4277,8 +4277,8 @@ private final class GiftViewSheetContent: CombinedComponent {
                                             handleSpoilers: true,
                                             maxWidth: id == "originalInfo" ? context.availableSize.width - sideInset * 2.0 - 68.0 : nil,
                                             highlightAction: { attributes in
-                                                if let _ = attributes[NSAttributedString.Key(rawValue: TelegramTextAttributes.PeerMention)] {
-                                                    return NSAttributedString.Key(rawValue: TelegramTextAttributes.PeerMention)
+                                                if let _ = attributes[NSAttributedString.Key(rawValue: IosappTextAttributes.PeerMention)] {
+                                                    return NSAttributedString.Key(rawValue: IosappTextAttributes.PeerMention)
                                                 } else {
                                                     return nil
                                                 }
@@ -4287,7 +4287,7 @@ private final class GiftViewSheetContent: CombinedComponent {
                                                 guard let state else {
                                                     return
                                                 }
-                                                if let mention = attributes[NSAttributedString.Key(rawValue: TelegramTextAttributes.PeerMention)] as? TelegramPeerMention, let peer = state.peerMap[mention.peerId] {
+                                                if let mention = attributes[NSAttributedString.Key(rawValue: IosappTextAttributes.PeerMention)] as? IosappPeerMention, let peer = state.peerMap[mention.peerId] {
                                                     state.openPeer(peer)
                                                 }
                                             }
@@ -4659,7 +4659,7 @@ private final class GiftViewSheetContent: CombinedComponent {
                 }
                 
                 let markdownAttributes = MarkdownAttributes(body: MarkdownAttributeSet(font: textFont, textColor: textColor), bold: MarkdownAttributeSet(font: textFont, textColor: textColor), link: MarkdownAttributeSet(font: textFont, textColor: linkColor), linkAttribute: { contents in
-                    return (TelegramTextAttributes.URL, contents)
+                    return (IosappTextAttributes.URL, contents)
                 })
                 
                 descriptionText = descriptionText.replacingOccurrences(of: " >]", with: "\u{00A0}>]")
@@ -4683,14 +4683,14 @@ private final class GiftViewSheetContent: CombinedComponent {
                         highlightColor: linkColor.withAlphaComponent(0.1),
                         highlightInset: UIEdgeInsets(top: 0.0, left: 0.0, bottom: 0.0, right: -8.0),
                         highlightAction: { attributes in
-                            if let _ = attributes[NSAttributedString.Key(rawValue: TelegramTextAttributes.URL)] {
-                                return NSAttributedString.Key(rawValue: TelegramTextAttributes.URL)
+                            if let _ = attributes[NSAttributedString.Key(rawValue: IosappTextAttributes.URL)] {
+                                return NSAttributedString.Key(rawValue: IosappTextAttributes.URL)
                             } else {
                                 return nil
                             }
                         },
                         tapAction: { [weak state] attributes, _ in
-                            if let _ = attributes[NSAttributedString.Key(rawValue: TelegramTextAttributes.URL)] as? String {
+                            if let _ = attributes[NSAttributedString.Key(rawValue: IosappTextAttributes.URL)] as? String {
                                 if isChatTheme, let controller = controller() as? GiftViewScreen {
                                     state?.dismiss(animated: true)
                                     controller.openChatTheme?()
@@ -5057,7 +5057,7 @@ private final class GiftViewSheetContent: CombinedComponent {
             } else if upgraded, let arguments = subject.arguments, let upgradeMessageIdId = arguments.upgradeMessageId, let originalMessageId = arguments.messageId, !arguments.upgradeSeparate {
                 var delay = false
                 var peerId: EnginePeer.Id = originalMessageId.peerId
-                if peerId.isTelegramNotifications {
+                if peerId.isIosappNotifications {
                     peerId = component.context.account.peerId
                     delay = true
                 }
@@ -5432,7 +5432,7 @@ final class GiftViewSheetComponent: CombinedComponent {
             let controller = environment.controller
             
             var headerContent: AnyComponent<Empty>?
-            if let arguments = context.component.subject.arguments, case .unique = arguments.gift, let fromPeerId = arguments.fromPeerId, var fromPeerName = arguments.fromPeerName, arguments.fromPeerId != context.component.context.account.peerId && !(arguments.fromPeerId?.isTelegramNotifications ?? false) {
+            if let arguments = context.component.subject.arguments, case .unique = arguments.gift, let fromPeerId = arguments.fromPeerId, var fromPeerName = arguments.fromPeerName, arguments.fromPeerId != context.component.context.account.peerId && !(arguments.fromPeerId?.isIosappNotifications ?? false) {
                 var showSenderInfo = false
                 if arguments.incoming {
                     showSenderInfo = true
@@ -5452,7 +5452,7 @@ final class GiftViewSheetComponent: CombinedComponent {
                     headerContent = AnyComponent(
                         PlainButtonComponent(content: AnyComponent(HeaderContentComponent(attributedText: attributedString)), action: {
                             if let controller = controller(), let navigationController = controller.navigationController as? NavigationController {
-                                let _ = (context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: fromPeerId))
+                                let _ = (context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: fromPeerId))
                                          |> deliverOnMainQueue).start(next: { [weak navigationController] peer in
                                     guard let peer, let navigationController else {
                                         return
@@ -5618,7 +5618,7 @@ public class GiftViewScreen: ViewControllerComponentContainer {
         )? {
             switch self {
             case let .message(message):
-                if let action = message.media.first(where: { $0 is TelegramMediaAction }) as? TelegramMediaAction {
+                if let action = message.media.first(where: { $0 is IosappMediaAction }) as? IosappMediaAction {
                     switch action.action {
                     case let .starGift(gift, convertStars, text, entities, nameHidden, savedToProfile, converted, upgraded, canUpgrade, upgradeStars, isRefunded, _, upgradeMessageId, peerId, senderId, savedId, prepaidUpgradeHash, giftMessageId, upgradeSeparate, _, toPeerId, number):
                         var reference: StarGiftReference

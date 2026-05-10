@@ -3,7 +3,7 @@ import IosappApi
 import MtProtoKit
 import Foundation
 
-public func smallestVideoRepresentation(_ representations: [TelegramMediaImage.VideoRepresentation]) -> TelegramMediaImage.VideoRepresentation? {
+public func smallestVideoRepresentation(_ representations: [IosappMediaImage.VideoRepresentation]) -> IosappMediaImage.VideoRepresentation? {
     if representations.count == 0 {
         return nil
     } else {
@@ -22,7 +22,7 @@ public func smallestVideoRepresentation(_ representations: [TelegramMediaImage.V
     }
 }
 
-public func smallestImageRepresentation(_ representations: [TelegramMediaImageRepresentation]) -> TelegramMediaImageRepresentation? {
+public func smallestImageRepresentation(_ representations: [IosappMediaImageRepresentation]) -> IosappMediaImageRepresentation? {
     if representations.count == 0 {
         return nil
     } else {
@@ -41,7 +41,7 @@ public func smallestImageRepresentation(_ representations: [TelegramMediaImageRe
     }
 }
 
-public func largestImageRepresentation(_ representations: [TelegramMediaImageRepresentation]) -> TelegramMediaImageRepresentation? {
+public func largestImageRepresentation(_ representations: [IosappMediaImageRepresentation]) -> IosappMediaImageRepresentation? {
     if representations.count == 0 {
         return nil
     } else {
@@ -60,7 +60,7 @@ public func largestImageRepresentation(_ representations: [TelegramMediaImageRep
     }
 }
 
-public func imageRepresentationLargerThan(_ representations: [TelegramMediaImageRepresentation], size: PixelDimensions) -> TelegramMediaImageRepresentation? {
+public func imageRepresentationLargerThan(_ representations: [IosappMediaImageRepresentation], size: PixelDimensions) -> IosappMediaImageRepresentation? {
     if representations.count == 0 {
         return nil
     } else {
@@ -88,7 +88,7 @@ public func imageRepresentationLargerThan(_ representations: [TelegramMediaImage
     }
 }
 
-public func progressiveImageRepresentation(_ representations: [TelegramMediaImageRepresentation]) -> TelegramMediaImageRepresentation? {
+public func progressiveImageRepresentation(_ representations: [IosappMediaImageRepresentation]) -> IosappMediaImageRepresentation? {
     for representation in representations {
         if representation.progressiveSizes.count > 1 {
             return representation

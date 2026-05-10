@@ -171,7 +171,7 @@ private final class DemoSheetContent: CombinedComponent {
             
             super.init()
             
-            self.disposable = (self.context.engine.data.get(TelegramEngine.EngineData.Item.Configuration.PremiumPromo())
+            self.disposable = (self.context.engine.data.get(IosappEngine.EngineData.Item.Configuration.PremiumPromo())
             |> deliverOnMainQueue).start(next: { [weak self] promoConfiguration in
                 guard let self else {
                     return

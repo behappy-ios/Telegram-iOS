@@ -285,7 +285,7 @@ public func messageTextWithAttributes(message: EngineMessage) -> NSAttributedStr
             
             let currentDict = updatedString.attributes(at: range.lowerBound, effectiveRange: nil)
             var updatedAttributes: [NSAttributedString.Key: Any] = currentDict
-            updatedAttributes[ChatTextInputAttributes.customEmoji] = ChatTextInputTextCustomEmojiAttribute(interactivelySelectedFromPackId: nil, fileId: fileId, file: message.associatedMedia[MediaId(namespace: Namespaces.Media.CloudFile, id: fileId)] as? TelegramMediaFile)
+            updatedAttributes[ChatTextInputAttributes.customEmoji] = ChatTextInputTextCustomEmojiAttribute(interactivelySelectedFromPackId: nil, fileId: fileId, file: message.associatedMedia[MediaId(namespace: Namespaces.Media.CloudFile, id: fileId)] as? IosappMediaFile)
             
             let insertString = NSAttributedString(string: updatedString.attributedSubstring(from: range).string, attributes: updatedAttributes)
             updatedString.replaceCharacters(in: range, with: insertString)
@@ -422,9 +422,9 @@ public func mediaContentKind(_ media: EngineMedia, message: EngineMessage? = nil
                 return .image
             }
         case let .full(media):
-            if media is TelegramMediaImage {
+            if media is IosappMediaImage {
                 return .image
-            } else if media is TelegramMediaFile {
+            } else if media is IosappMediaFile {
                 return .video
             } else {
                 return nil

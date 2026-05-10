@@ -49,7 +49,7 @@ public class ChatMessageStickerItemNode: ChatMessageItemView {
     private var deliveryFailedNode: ChatMessageDeliveryFailedNode?
     private var shareButtonNode: ChatMessageShareButton?
 
-    public var telegramFile: TelegramMediaFile?
+    public var telegramFile: IosappMediaFile?
     private let fetchDisposable = MetaDisposable()
     
     private var suggestedPostInfoNode: ChatMessageSuggestedPostInfoNode?
@@ -303,7 +303,7 @@ public class ChatMessageStickerItemNode: ChatMessageItemView {
         }
         
         for media in item.message.media {
-            if let telegramFile = media as? TelegramMediaFile {
+            if let telegramFile = media as? IosappMediaFile {
                 if self.telegramFile != telegramFile {
                     let signal = chatMessageSticker(account: item.context.account, userLocation: .peer(item.message.id.peerId), file: telegramFile, small: false, onlyFullSize: self.telegramFile != nil, synchronousLoad: synchronousLoad)
                     self.telegramFile = telegramFile
@@ -471,7 +471,7 @@ public class ChatMessageStickerItemNode: ChatMessageItemView {
             case let .peer(peerId):
                 if !peerId.isRepliesOrSavedMessages(accountPeerId: item.context.account.peerId) {
                     if peerId.isGroupOrChannel && item.message.author != nil {
-                        if let peer = item.message.peers[item.message.id.peerId] as? TelegramChannel, case let .broadcast(info) = peer.info {
+                        if let peer = item.message.peers[item.message.id.peerId] as? IosappChannel, case let .broadcast(info) = peer.info {
                             if info.flags.contains(.messagesShouldHaveProfiles) {
                                 hasAvatar = incoming
                             }
@@ -491,7 +491,7 @@ public class ChatMessageStickerItemNode: ChatMessageItemView {
                     if replyThreadMessage.peerId.isGroupOrChannel && item.message.author != nil {
                         var isBroadcastChannel = false
                         var isMonoforum = false
-                        if let peer = item.message.peers[item.message.id.peerId] as? TelegramChannel {
+                        if let peer = item.message.peers[item.message.id.peerId] as? IosappChannel {
                             if case .broadcast = peer.info {
                                 isBroadcastChannel = true
                             }
@@ -535,28 +535,28 @@ public class ChatMessageStickerItemNode: ChatMessageItemView {
                 }
             } else if item.message.effectivelyIncoming(item.context.account.peerId) {
                 if let peer = item.message.peers[item.message.id.peerId] {
-                    if let channel = peer as? TelegramChannel {
+                    if let channel = peer as? IosappChannel {
                         if case .broadcast = channel.info {
                             needsShareButton = true
                         }
                     }
                 }
-                if !needsShareButton, let author = item.message.author as? TelegramUser, let _ = author.botInfo, !item.message.media.isEmpty {
+                if !needsShareButton, let author = item.message.author as? IosappUser, let _ = author.botInfo, !item.message.media.isEmpty {
                     needsShareButton = true
                 }
                 if !needsShareButton {
                     loop: for media in item.message.media {
-                        if media is TelegramMediaGame || media is TelegramMediaInvoice {
+                        if media is IosappMediaGame || media is IosappMediaInvoice {
                             needsShareButton = true
                             break loop
-                        } else if let media = media as? TelegramMediaWebpage, case .Loaded = media.content {
+                        } else if let media = media as? IosappMediaWebpage, case .Loaded = media.content {
                             needsShareButton = true
                             break loop
                         }
                     }
                 } else {
                     loop: for media in item.message.media {
-                        if media is TelegramMediaAction {
+                        if media is IosappMediaAction {
                             needsShareButton = false
                             break loop
                         }
@@ -629,7 +629,7 @@ public class ChatMessageStickerItemNode: ChatMessageItemView {
                 } else if let attribute = attribute as? ViewCountMessageAttribute {
                     viewCount = attribute.count
                 } else if let attribute = attribute as? ReplyThreadMessageAttribute, case .peer = item.chatLocation {
-                    if let channel = item.message.peers[item.message.id.peerId] as? TelegramChannel, case .group = channel.info {
+                    if let channel = item.message.peers[item.message.id.peerId] as? IosappChannel, case .group = channel.info {
                         dateReplies = Int(attribute.count)
                     }
                 } else if let attribute = attribute as? PaidStarsMessageAttribute, item.message.id.peerId.namespace == Namespaces.Peer.CloudChannel {
@@ -711,7 +711,7 @@ public class ChatMessageStickerItemNode: ChatMessageItemView {
             for attribute in item.message.attributes {
                 if let attribute = attribute as? InlineBotMessageAttribute {
                     var inlineBotNameString: String?
-                    if let peerId = attribute.peerId, let bot = item.message.peers[peerId] as? TelegramUser {
+                    if let peerId = attribute.peerId, let bot = item.message.peers[peerId] as? IosappUser {
                         inlineBotNameString = bot.addressName
                     } else {
                         inlineBotNameString = attribute.title
@@ -862,7 +862,7 @@ public class ChatMessageStickerItemNode: ChatMessageItemView {
                 actionButtonsFinalize = buttonsLayout
             } else if incoming, let attribute = item.message.attributes.first(where: { $0 is SuggestedPostMessageAttribute }) as? SuggestedPostMessageAttribute, attribute.state == nil {
                 var canApprove = true
-                if let peer = item.message.peers[item.message.id.peerId] as? TelegramChannel, peer.isMonoForum, let linkedMonoforumId = peer.linkedMonoforumId, let mainChannel = item.message.peers[linkedMonoforumId] as? TelegramChannel, mainChannel.hasPermission(.manageDirect), !mainChannel.hasPermission(.sendSomething) {
+                if let peer = item.message.peers[item.message.id.peerId] as? IosappChannel, peer.isMonoForum, let linkedMonoforumId = peer.linkedMonoforumId, let mainChannel = item.message.peers[linkedMonoforumId] as? IosappChannel, mainChannel.hasPermission(.manageDirect), !mainChannel.hasPermission(.sendSomething) {
                     canApprove = false
                 }
                 
@@ -1580,7 +1580,7 @@ public class ChatMessageStickerItemNode: ChatMessageItemView {
                     if let item = self.item, let forwardInfo = item.message.forwardInfo {
                         let performAction: () -> Void = {
                             if let sourceMessageId = forwardInfo.sourceMessageId {
-                                if !item.message.id.peerId.isReplies, let channel = forwardInfo.author as? TelegramChannel, channel.addressName == nil {
+                                if !item.message.id.peerId.isReplies, let channel = forwardInfo.author as? IosappChannel, channel.addressName == nil {
                                     if case let .broadcast(info) = channel.info, info.flags.contains(.hasDiscussionGroup) {
                                     } else if case .member = channel.participationStatus {
                                     } else {
@@ -1590,7 +1590,7 @@ public class ChatMessageStickerItemNode: ChatMessageItemView {
                                 }
                                 item.controllerInteraction.navigateToMessage(item.message.id, sourceMessageId, NavigateToMessageParams(timestamp: nil, quote: nil))
                             } else if let peer = forwardInfo.source ?? forwardInfo.author {
-                                item.controllerInteraction.openPeer(EnginePeer(peer), peer is TelegramUser ? .info(nil) : .chat(textInputState: nil, subject: nil, peekData: nil), nil, .default)
+                                item.controllerInteraction.openPeer(EnginePeer(peer), peer is IosappUser ? .info(nil) : .chat(textInputState: nil, subject: nil, peekData: nil), nil, .default)
                             } else if let _ = forwardInfo.authorSignature {
                                 item.controllerInteraction.displayMessageTooltip(item.message.id, item.presentationData.strings.Conversation_ForwardAuthorHiddenTooltip, false, forwardInfoNode, nil)
                             }
@@ -1628,7 +1628,7 @@ public class ChatMessageStickerItemNode: ChatMessageItemView {
                 return
             }
             
-            if let channel = item.message.peers[item.message.id.peerId] as? TelegramChannel, case .broadcast = channel.info {
+            if let channel = item.message.peers[item.message.id.peerId] as? IosappChannel, case .broadcast = channel.info {
                 for attribute in item.message.attributes {
                     if let _ = attribute as? ReplyThreadMessageAttribute {
                         item.controllerInteraction.openMessageReplies(item.message.id, true, false)

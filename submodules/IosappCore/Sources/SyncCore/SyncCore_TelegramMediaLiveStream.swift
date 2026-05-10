@@ -1,7 +1,7 @@
 import Foundation
 import Postbox
 
-public final class TelegramMediaLiveStream: Media, Equatable {
+public final class IosappMediaLiveStream: Media, Equatable {
     public enum Kind: Int32 {
         case rtmp = 0
         case rtc = 1
@@ -31,12 +31,12 @@ public final class TelegramMediaLiveStream: Media, Equatable {
         encoder.encodeInt32(self.kind.rawValue, forKey: "k")
     }
     
-    public static func ==(lhs: TelegramMediaLiveStream, rhs: TelegramMediaLiveStream) -> Bool {
+    public static func ==(lhs: IosappMediaLiveStream, rhs: IosappMediaLiveStream) -> Bool {
         return lhs.isEqual(to: rhs)
     }
     
     public func isEqual(to other: Media) -> Bool {
-        guard let other = other as? TelegramMediaLiveStream else {
+        guard let other = other as? IosappMediaLiveStream else {
             return false
         }
         

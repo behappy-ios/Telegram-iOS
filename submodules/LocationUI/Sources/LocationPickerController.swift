@@ -21,7 +21,7 @@ public enum LocationPickerMode {
 class LocationPickerInteraction {
     let sendLocation: (CLLocationCoordinate2D, String?, MapGeoAddress?) -> Void
     let sendLiveLocation: (CLLocationCoordinate2D) -> Void
-    let sendVenue: (TelegramMediaMap, Int64?, String?) -> Void
+    let sendVenue: (IosappMediaMap, Int64?, String?) -> Void
     let toggleMapModeSelection: () -> Void
     let updateMapMode: (LocationMapMode) -> Void
     let goToUserLocation: () -> Void
@@ -34,7 +34,7 @@ class LocationPickerInteraction {
     let openHomeWorkInfo: () -> Void
     let showPlacesInThisArea: () -> Void
     
-    init(sendLocation: @escaping (CLLocationCoordinate2D, String?, MapGeoAddress?) -> Void, sendLiveLocation: @escaping (CLLocationCoordinate2D) -> Void, sendVenue: @escaping (TelegramMediaMap, Int64?, String?) -> Void, toggleMapModeSelection: @escaping () -> Void, updateMapMode: @escaping (LocationMapMode) -> Void, goToUserLocation: @escaping () -> Void, goToCoordinate: @escaping (CLLocationCoordinate2D, Bool) -> Void, openSearch: @escaping () -> Void, updateSearchQuery: @escaping (String) -> Void, dismissSearch: @escaping () -> Void, dismissInput: @escaping () -> Void, updateSendActionHighlight: @escaping (Bool) -> Void, openHomeWorkInfo: @escaping () -> Void, showPlacesInThisArea: @escaping ()-> Void) {
+    init(sendLocation: @escaping (CLLocationCoordinate2D, String?, MapGeoAddress?) -> Void, sendLiveLocation: @escaping (CLLocationCoordinate2D) -> Void, sendVenue: @escaping (IosappMediaMap, Int64?, String?) -> Void, toggleMapModeSelection: @escaping () -> Void, updateMapMode: @escaping (LocationMapMode) -> Void, goToUserLocation: @escaping () -> Void, goToCoordinate: @escaping (CLLocationCoordinate2D, Bool) -> Void, openSearch: @escaping () -> Void, updateSearchQuery: @escaping (String) -> Void, dismissSearch: @escaping () -> Void, dismissInput: @escaping () -> Void, updateSendActionHighlight: @escaping (Bool) -> Void, openHomeWorkInfo: @escaping () -> Void, showPlacesInThisArea: @escaping ()-> Void) {
         self.sendLocation = sendLocation
         self.sendLiveLocation = sendLiveLocation
         self.sendVenue = sendVenue
@@ -73,7 +73,7 @@ public final class LocationPickerController: ViewController, AttachmentContainab
     private let mode: LocationPickerMode
     let source: Source
     let initialLocation: CLLocationCoordinate2D?
-    private let completion: (TelegramMediaMap, Int64?, String?, String?, String?) -> Void
+    private let completion: (IosappMediaMap, Int64?, String?, String?, String?) -> Void
     private var presentationData: PresentationData
     private var presentationDataDisposable: Disposable?
     let updatedPresentationData: (initial: PresentationData, signal: Signal<PresentationData, NoError>)?
@@ -104,7 +104,7 @@ public final class LocationPickerController: ViewController, AttachmentContainab
         case legacy
     }
     
-    public init(context: AccountContext, style: Style = .legacy, updatedPresentationData: (initial: PresentationData, signal: Signal<PresentationData, NoError>)? = nil, mode: LocationPickerMode, source: Source = .generic, initialLocation: CLLocationCoordinate2D? = nil, completion: @escaping (TelegramMediaMap, Int64?, String?, String?, String?) -> Void) {
+    public init(context: AccountContext, style: Style = .legacy, updatedPresentationData: (initial: PresentationData, signal: Signal<PresentationData, NoError>)? = nil, mode: LocationPickerMode, source: Source = .generic, initialLocation: CLLocationCoordinate2D? = nil, completion: @escaping (IosappMediaMap, Int64?, String?, String?, String?) -> Void) {
         self.context = context
         self.style = style
         self.mode = mode
@@ -151,7 +151,7 @@ public final class LocationPickerController: ViewController, AttachmentContainab
                 return
             }
             strongSelf.completion(
-                TelegramMediaMap(
+                IosappMediaMap(
                     latitude: coordinate.latitude,
                     longitude: coordinate.longitude,
                     heading: nil,
@@ -191,7 +191,7 @@ public final class LocationPickerController: ViewController, AttachmentContainab
                         return
                     }
                     controller.dismissAnimated()
-                    self.completion(TelegramMediaMap(coordinate: coordinate, liveBroadcastingTimeout: period), nil, nil, nil, nil)
+                    self.completion(IosappMediaMap(coordinate: coordinate, liveBroadcastingTimeout: period), nil, nil, nil, nil)
                     self.dismiss()
                 }
                 
@@ -224,7 +224,7 @@ public final class LocationPickerController: ViewController, AttachmentContainab
             }
             let venueType = venue.venue?.type ?? ""
             if ["home", "work"].contains(venueType) {
-                completion(TelegramMediaMap(latitude: venue.latitude, longitude: venue.longitude, heading: nil, accuracyRadius: nil, venue: nil, liveBroadcastingTimeout: nil, liveProximityNotificationRadius: nil), nil, nil, nil, nil)
+                completion(IosappMediaMap(latitude: venue.latitude, longitude: venue.longitude, heading: nil, accuracyRadius: nil, venue: nil, liveBroadcastingTimeout: nil, liveProximityNotificationRadius: nil), nil, nil, nil, nil)
             } else {
                 completion(venue, queryId, resultId, venue.venue?.address, nil)
             }
@@ -449,7 +449,7 @@ public func storyLocationPickerController(
     context: AccountContext,
     location: CLLocationCoordinate2D?,
     dismissed: @escaping () -> Void,
-    completion: @escaping (TelegramMediaMap, Int64?, String?, String?, String?) -> Void
+    completion: @escaping (IosappMediaMap, Int64?, String?, String?, String?) -> Void
 ) -> ViewController {
     let presentationData = context.sharedContext.currentPresentationData.with({ $0 }).withUpdated(theme: defaultDarkColorPresentationTheme)
     let updatedPresentationData: (PresentationData, Signal<PresentationData, NoError>) = (presentationData, .single(presentationData))

@@ -68,7 +68,7 @@ private struct EmojisChatInputContextPanelEntry: Comparable, Identifiable {
     let theme: PresentationTheme
     let symbol: String
     let text: String
-    let file: TelegramMediaFile?
+    let file: IosappMediaFile?
     
     var stableId: EmojisChatInputContextPanelEntryStableId {
         if let file = self.file {
@@ -90,7 +90,7 @@ private struct EmojisChatInputContextPanelEntry: Comparable, Identifiable {
         return lhs.index < rhs.index
     }
     
-    func item(context: AccountContext, animationCache: AnimationCache, animationRenderer: MultiAnimationRenderer, emojiSelected: @escaping (String, TelegramMediaFile?) -> Void) -> ListViewItem {
+    func item(context: AccountContext, animationCache: AnimationCache, animationRenderer: MultiAnimationRenderer, emojiSelected: @escaping (String, IosappMediaFile?) -> Void) -> ListViewItem {
         return EmojisChatInputPanelItem(context: context, theme: self.theme, symbol: self.symbol, text: self.text, file: self.file, animationCache: animationCache, animationRenderer: animationRenderer, emojiSelected: emojiSelected)
     }
 }
@@ -101,7 +101,7 @@ private struct EmojisChatInputContextPanelTransition {
     let updates: [ListViewUpdateItem]
 }
 
-private func preparedTransition(from fromEntries: [EmojisChatInputContextPanelEntry], to toEntries: [EmojisChatInputContextPanelEntry], context: AccountContext, animationCache: AnimationCache, animationRenderer: MultiAnimationRenderer, emojiSelected: @escaping (String, TelegramMediaFile?) -> Void) -> EmojisChatInputContextPanelTransition {
+private func preparedTransition(from fromEntries: [EmojisChatInputContextPanelEntry], to toEntries: [EmojisChatInputContextPanelEntry], context: AccountContext, animationCache: AnimationCache, animationRenderer: MultiAnimationRenderer, emojiSelected: @escaping (String, IosappMediaFile?) -> Void) -> EmojisChatInputContextPanelTransition {
     let (deleteIndices, indicesAndItems, updateIndices) = mergeListsStableWithUpdates(leftList: fromEntries, rightList: toEntries)
     
     let deletions = deleteIndices.map { ListViewDeleteItem(index: $0, directionHint: nil) }
@@ -212,7 +212,7 @@ final class EmojisChatInputContextPanelNode: ChatInputContextPanelNode {
             return nil
         }
         
-        var maybeFile: TelegramMediaFile?
+        var maybeFile: IosappMediaFile?
         var maybeItemLayer: CALayer?
         
         self.listView.forEachItemNode { itemNode in
@@ -260,7 +260,7 @@ final class EmojisChatInputContextPanelNode: ChatInputContextPanelNode {
         let _ = context
         let _ = accountPeerId
         
-        return context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: accountPeerId))
+        return context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: accountPeerId))
         |> map { peer -> Bool in
             var hasPremium = false
             if case let .user(user) = peer, user.isPremium {
@@ -294,7 +294,7 @@ final class EmojisChatInputContextPanelNode: ChatInputContextPanelNode {
             if let interaction = strongSelf.interfaceInteraction {
                 let _ = interaction
                 
-                let sendEmoji: (TelegramMediaFile) -> Void = { file in
+                let sendEmoji: (IosappMediaFile) -> Void = { file in
                     guard let self else {
                         return
                     }
@@ -324,7 +324,7 @@ final class EmojisChatInputContextPanelNode: ChatInputContextPanelNode {
                         controller.controllerInteraction?.sendEmoji(text, emojiAttribute, true)
                     }
                 }
-                let setStatus: (TelegramMediaFile) -> Void = { file in
+                let setStatus: (IosappMediaFile) -> Void = { file in
                     guard let self else {
                         return
                     }
@@ -348,7 +348,7 @@ final class EmojisChatInputContextPanelNode: ChatInputContextPanelNode {
                     //strongSelf.currentUndoOverlayController = controller
                     controller.controllerInteraction?.presentController(undoController, nil)
                 }
-                let copyEmoji: (TelegramMediaFile) -> Void = { file in
+                let copyEmoji: (IosappMediaFile) -> Void = { file in
                     var text = "."
                     var emojiAttribute: ChatTextInputTextCustomEmojiAttribute?
                     loop: for attribute in file.attributes {
@@ -444,7 +444,7 @@ final class EmojisChatInputContextPanelNode: ChatInputContextPanelNode {
         }
     }
     
-    func updateResults(_ results: [(String, TelegramMediaFile?, String)]) {
+    func updateResults(_ results: [(String, IosappMediaFile?, String)]) {
         var entries: [EmojisChatInputContextPanelEntry] = []
         var index = 0
         var stableIds = Set<EmojisChatInputContextPanelEntryStableId>()

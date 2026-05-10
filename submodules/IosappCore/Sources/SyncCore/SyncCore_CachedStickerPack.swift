@@ -19,7 +19,7 @@ public final class CachedStickerPack: Codable {
 
         if let serializedInfoData = try container.decodeIfPresent(Data.self, forKey: "ind") {
             var byteBuffer = ByteBuffer(data: serializedInfoData)
-            self.info = StickerPackCollectionInfo.Accessor(FlatBuffers_getRoot(byteBuffer: &byteBuffer) as TelegramCore_StickerPackCollectionInfo, serializedInfoData)
+            self.info = StickerPackCollectionInfo.Accessor(FlatBuffers_getRoot(byteBuffer: &byteBuffer) as IosappCore_StickerPackCollectionInfo, serializedInfoData)
         } else if let infoData = try container.decodeIfPresent(AdaptedPostboxDecoder.RawObjectData.self, forKey: "in") {
             let info = StickerPackCollectionInfo(decoder: PostboxDecoder(buffer: MemoryBuffer(data: infoData.data)))
             self.info = StickerPackCollectionInfo.Accessor(info)

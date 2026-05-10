@@ -653,10 +653,10 @@ private final class CreateBotSheetComponent: Component {
                         text = environment.strings.CreateBot_UsernameStatus_Taken
                     case .limitExceeded:
                         let isPremium = (await component.context.engine.data.get(
-                            TelegramEngine.EngineData.Item.Peer.Peer(id: component.context.account.peerId)
+                            IosappEngine.EngineData.Item.Peer.Peer(id: component.context.account.peerId)
                         ).get())?.isPremium ?? false
                         let limits = await component.context.engine.data.get(
-                            TelegramEngine.EngineData.Item.Configuration.UserLimits(isPremium: isPremium)
+                            IosappEngine.EngineData.Item.Configuration.UserLimits(isPremium: isPremium)
                         ).get()
                         text = environment.strings.CreateBot_UsernameStatus_LimitExceeded(Int32(limits.maxBotsCreated))
                     }
@@ -821,7 +821,7 @@ public class CreateBotScreen: ViewControllerComponentContainer {
         self.context = context
         
         guard let parentPeer = await context.engine.data.get(
-            TelegramEngine.EngineData.Item.Peer.Peer(id: parentBot)
+            IosappEngine.EngineData.Item.Peer.Peer(id: parentBot)
         ).get() else {
             return nil
         }

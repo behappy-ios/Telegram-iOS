@@ -115,7 +115,7 @@ public class ChatMessageStoryMentionContentNode: ChatMessageBubbleContentNode {
         var currentMedia: Media?
         if let item = item {
             mediaLoop: for media in item.message.media {
-                if let media = media as? TelegramMediaStory {
+                if let media = media as? IosappMediaStory {
                     currentMedia = media
                 }
             }
@@ -158,7 +158,7 @@ public class ChatMessageStoryMentionContentNode: ChatMessageBubbleContentNode {
                                 
                 var story: Stories.Item?
                 
-                let storyMedia: TelegramMediaStory? = item.message.media.first(where: { $0 is TelegramMediaStory }) as? TelegramMediaStory
+                let storyMedia: IosappMediaStory? = item.message.media.first(where: { $0 is IosappMediaStory }) as? IosappMediaStory
                 var selectedMedia: Media?
                 
                 if let storyMedia, let storyItem = item.message.associatedStories[storyMedia.storyId], !storyItem.data.isEmpty, case let .item(storyValue) = storyItem.get(Stories.StoredItem.self) {
@@ -167,7 +167,7 @@ public class ChatMessageStoryMentionContentNode: ChatMessageBubbleContentNode {
                 }
                 
                 var mediaUpdated = false
-                if let selectedMedia, let currentItem, let storyMedia = currentItem.message.media.first(where: { $0 is TelegramMediaStory }) as? TelegramMediaStory, let storyItem = currentItem.message.associatedStories[storyMedia.storyId], !storyItem.data.isEmpty, case let .item(storyValue) = storyItem.get(Stories.StoredItem.self) {
+                if let selectedMedia, let currentItem, let storyMedia = currentItem.message.media.first(where: { $0 is IosappMediaStory }) as? IosappMediaStory, let storyItem = currentItem.message.associatedStories[storyMedia.storyId], !storyItem.data.isEmpty, case let .item(storyValue) = storyItem.get(Stories.StoredItem.self) {
                     if let currentMedia = storyValue.media {
                         mediaUpdated = !selectedMedia.isSemanticallyEqual(to: currentMedia)
                     } else {
@@ -241,7 +241,7 @@ public class ChatMessageStoryMentionContentNode: ChatMessageBubbleContentNode {
                                         apply()
                                         
                                         strongSelf.imageNode.frame = imageFrame
-                                    } else if let photo = selectedMedia as? TelegramMediaImage {
+                                    } else if let photo = selectedMedia as? IosappMediaImage {
                                         let maxImageSize = photo.representations.last?.dimensions.cgSize ?? imageFrame.size
                                         let boundingImageSize = maxImageSize.aspectFilled(imageFrame.size)
                                         
@@ -255,7 +255,7 @@ public class ChatMessageStoryMentionContentNode: ChatMessageBubbleContentNode {
                                         apply()
                                         
                                         strongSelf.imageNode.frame = imageFrame
-                                    } else if let file = selectedMedia as? TelegramMediaFile {
+                                    } else if let file = selectedMedia as? IosappMediaFile {
                                         let maxImageSize = file.dimensions?.cgSize ?? imageFrame.size
                                         let boundingImageSize = maxImageSize.aspectFilled(imageFrame.size)
                                         

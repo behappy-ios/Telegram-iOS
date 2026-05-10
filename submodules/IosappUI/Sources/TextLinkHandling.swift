@@ -35,7 +35,7 @@ func handleTextLinkActionImpl(context: AccountContext, peerId: EnginePeer.Id?, n
                 case .info:
                     let peerSignal: Signal<EnginePeer?, NoError>
                     peerSignal = context.engine.data.get(
-                        TelegramEngine.EngineData.Item.Peer.Peer(id: peer.id)
+                        IosappEngine.EngineData.Item.Peer.Peer(id: peer.id)
                     )
                     navigateDisposable.set((peerSignal |> take(1) |> deliverOnMainQueue).start(next: { peer in
                         if let controller = controller, let peer = peer {

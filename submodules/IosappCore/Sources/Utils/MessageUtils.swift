@@ -83,7 +83,7 @@ public extension Message {
             return true
         }
         for attribute in self.attributes {
-            if let attribute = attribute as? InlineBotMessageAttribute, let peerId = attribute.peerId, let bot = self.peers[peerId] as? TelegramUser, bot.isScam {
+            if let attribute = attribute as? InlineBotMessageAttribute, let peerId = attribute.peerId, let bot = self.peers[peerId] as? IosappUser, bot.isScam {
                return true
             }
         }
@@ -98,7 +98,7 @@ public extension Message {
             return true
         }
         for attribute in self.attributes {
-            if let attribute = attribute as? InlineBotMessageAttribute, let peerId = attribute.peerId, let bot = self.peers[peerId] as? TelegramUser, bot.isFake {
+            if let attribute = attribute as? InlineBotMessageAttribute, let peerId = attribute.peerId, let bot = self.peers[peerId] as? IosappUser, bot.isFake {
                return true
             }
         }
@@ -229,13 +229,13 @@ func locallyRenderedMessage(message: StoreMessage, peers: [PeerId: Peer], associ
     if let peer = peers[id.peerId] {
         messagePeers[peer.id] = peer
         
-        if let group = peer as? TelegramGroup, let migrationReference = group.migrationReference {
+        if let group = peer as? IosappGroup, let migrationReference = group.migrationReference {
             if let channelPeer = peers[migrationReference.peerId] {
                 messagePeers[channelPeer.id] = channelPeer
             }
         }
         
-        if let channel = peer as? TelegramChannel, channel.isMonoForum, let linkedMonoforumId = channel.linkedMonoforumId {
+        if let channel = peer as? IosappChannel, channel.isMonoForum, let linkedMonoforumId = channel.linkedMonoforumId {
             if let channelPeer = peers[linkedMonoforumId] {
                 messagePeers[channelPeer.id] = channelPeer
             }
@@ -297,7 +297,7 @@ func locallyRenderedMessage(message: StoreMessage, peers: AccumulatedPeers, asso
     if let peer = peers.get(id.peerId) {
         messagePeers[peer.id] = peer
         
-        if let group = peer as? TelegramGroup, let migrationReference = group.migrationReference {
+        if let group = peer as? IosappGroup, let migrationReference = group.migrationReference {
             if let channelPeer = peers.get(migrationReference.peerId) {
                 messagePeers[channelPeer.id] = channelPeer
             }
@@ -356,13 +356,13 @@ public extension Message {
                 return false
             }
         } else if self.author?.id == accountPeerId {
-            if let channel = self.peers[self.id.peerId] as? TelegramChannel, case .broadcast = channel.info {
+            if let channel = self.peers[self.id.peerId] as? IosappChannel, case .broadcast = channel.info {
                 return true
             }
             return false
         } else if self.flags.contains(.Incoming) {
             return true
-        } else if let channel = self.peers[self.id.peerId] as? TelegramChannel, case .broadcast = channel.info {
+        } else if let channel = self.peers[self.id.peerId] as? IosappChannel, case .broadcast = channel.info {
             return true
         } else {
             return false
@@ -382,9 +382,9 @@ public extension Message {
     func isCopyProtected() -> Bool {
         if self.flags.contains(.CopyProtected) {
             return true
-        } else if let group = self.peers[self.id.peerId] as? TelegramGroup, group.flags.contains(.copyProtectionEnabled) {
+        } else if let group = self.peers[self.id.peerId] as? IosappGroup, group.flags.contains(.copyProtectionEnabled) {
             return true
-        } else if let channel = self.peers[self.id.peerId] as? TelegramChannel, channel.flags.contains(.copyProtectionEnabled) {
+        } else if let channel = self.peers[self.id.peerId] as? IosappChannel, channel.flags.contains(.copyProtectionEnabled) {
             return true
         } else {
             return false
@@ -423,9 +423,9 @@ public extension Message {
         
         for media in self.media {
             switch media {
-            case _ as TelegramMediaImage:
+            case _ as IosappMediaImage:
                 return nil
-            case let file as TelegramMediaFile:
+            case let file as IosappMediaFile:
                 return file.duration
             default:
                 break
@@ -568,8 +568,8 @@ public extension Message {
         return nil
     }
     
-    var paidContent: TelegramMediaPaidContent? {
-        return self.media.first(where: { $0 is TelegramMediaPaidContent }) as? TelegramMediaPaidContent
+    var paidContent: IosappMediaPaidContent? {
+        return self.media.first(where: { $0 is IosappMediaPaidContent }) as? IosappMediaPaidContent
     }
     
     var authorSignatureAttribute: AuthorSignatureMessageAttribute? {

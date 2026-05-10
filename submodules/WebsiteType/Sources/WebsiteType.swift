@@ -24,7 +24,7 @@ public enum InstantPageType {
     case album
 }
 
-public func instantPageType(of webpage: TelegramMediaWebpageLoadedContent) -> InstantPageType {
+public func instantPageType(of webpage: IosappMediaWebpageLoadedContent) -> InstantPageType {
     if let type = webpage.type, type == "telegram_album" {
         return .album
     }
@@ -37,7 +37,7 @@ public func instantPageType(of webpage: TelegramMediaWebpageLoadedContent) -> In
     }
 }
 
-public func defaultWebpageImageSizeIsSmall(webpage: TelegramMediaWebpageLoadedContent) -> Bool {
+public func defaultWebpageImageSizeIsSmall(webpage: IosappMediaWebpageLoadedContent) -> Bool {
     let type = websiteType(of: webpage.websiteName)
     
     let mainMedia: Media?
@@ -48,7 +48,7 @@ public func defaultWebpageImageSizeIsSmall(webpage: TelegramMediaWebpageLoadedCo
         mainMedia = webpage.story ?? webpage.file ?? webpage.image
     }
     
-    if let image = mainMedia as? TelegramMediaImage {
+    if let image = mainMedia as? IosappMediaImage {
         if let type = webpage.type, (["photo", "video", "embed", "gif", "document", "telegram_album"] as [String]).contains(type) {
         } else if let type = webpage.type, (["article"] as [String]).contains(type) {
             return true

@@ -35,7 +35,7 @@ public final class RecentHashtagSearchQueryItem: Codable {
     }
 }
 
-func addRecentHashtagSearchQuery(engine: TelegramEngine, string: String) -> Signal<Never, NoError> {
+func addRecentHashtagSearchQuery(engine: IosappEngine, string: String) -> Signal<Never, NoError> {
     if let itemId = HashtagSearchRecentQueryItemId(string) {
         return engine.orderedLists.addOrMoveToFirstPosition(collectionId: ApplicationSpecificOrderedItemListCollectionId.hashtagSearchRecentQueries, id: itemId.rawValue, item: RecentHashtagSearchQueryItem(), removeTailIfCountExceeds: 100)
     } else {
@@ -43,7 +43,7 @@ func addRecentHashtagSearchQuery(engine: TelegramEngine, string: String) -> Sign
     }
 }
 
-func removeRecentHashtagSearchQuery(engine: TelegramEngine, string: String) -> Signal<Never, NoError> {
+func removeRecentHashtagSearchQuery(engine: IosappEngine, string: String) -> Signal<Never, NoError> {
     if let itemId = HashtagSearchRecentQueryItemId(string) {
         return engine.orderedLists.removeItem(collectionId: ApplicationSpecificOrderedItemListCollectionId.hashtagSearchRecentQueries, id: itemId.rawValue)
     } else {
@@ -51,12 +51,12 @@ func removeRecentHashtagSearchQuery(engine: TelegramEngine, string: String) -> S
     }
 }
 
-func clearRecentHashtagSearchQueries(engine: TelegramEngine) -> Signal<Never, NoError> {
+func clearRecentHashtagSearchQueries(engine: IosappEngine) -> Signal<Never, NoError> {
     return engine.orderedLists.clear(collectionId: ApplicationSpecificOrderedItemListCollectionId.hashtagSearchRecentQueries)
 }
 
-func hashtagSearchRecentQueries(engine: TelegramEngine) -> Signal<[String], NoError> {
-    return engine.data.subscribe(TelegramEngine.EngineData.Item.OrderedLists.ListItems(collectionId: ApplicationSpecificOrderedItemListCollectionId.hashtagSearchRecentQueries))
+func hashtagSearchRecentQueries(engine: IosappEngine) -> Signal<[String], NoError> {
+    return engine.data.subscribe(IosappEngine.EngineData.Item.OrderedLists.ListItems(collectionId: ApplicationSpecificOrderedItemListCollectionId.hashtagSearchRecentQueries))
     |> map { items -> [String] in
         var result: [String] = []
         for item in items {

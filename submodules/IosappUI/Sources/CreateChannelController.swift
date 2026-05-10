@@ -282,7 +282,7 @@ private func CreateChannelEntries(presentationData: PresentationData, state: Cre
     
     let groupInfoState = ItemListAvatarAndNameInfoItemState(editingName: state.editingName, updatingName: nil)
     
-    let peer = TelegramGroup(id: PeerId(namespace: .max, id: PeerId.Id._internalFromInt64Value(0)), title: state.editingName.composedTitle, photo: [], participantCount: 0, role: .creator(rank: nil), membership: .Member, flags: [], defaultBannedRights: nil, migrationReference: nil, creationDate: 0, version: 0)
+    let peer = IosappGroup(id: PeerId(namespace: .max, id: PeerId.Id._internalFromInt64Value(0)), title: state.editingName.composedTitle, photo: [], participantCount: 0, role: .creator(rank: nil), membership: .Member, flags: [], defaultBannedRights: nil, migrationReference: nil, creationDate: 0, version: 0)
     
     entries.append(.channelInfo(presentationData.theme, presentationData.strings, presentationData.dateTimeFormat, peer, groupInfoState, state.avatar))
     
@@ -479,8 +479,8 @@ public func createChannelController(context: AccountContext, mode: CreateChannel
         }
         
         let _ = (context.engine.data.get(
-            TelegramEngine.EngineData.Item.Peer.Peer(id: context.account.peerId),
-            TelegramEngine.EngineData.Item.Configuration.SearchBots()
+            IosappEngine.EngineData.Item.Peer.Peer(id: context.account.peerId),
+            IosappEngine.EngineData.Item.Configuration.SearchBots()
         )
         |> deliverOnMainQueue).start(next: { peer, searchBotsConfiguration in
             let presentationData = context.sharedContext.currentPresentationData.with { $0 }
@@ -502,7 +502,7 @@ public func createChannelController(context: AccountContext, mode: CreateChannel
                 if let data = image.jpegData(compressionQuality: 0.6) {
                     let resource = LocalFileMediaResource(fileId: Int64.random(in: Int64.min ... Int64.max))
                     context.account.postbox.mediaBox.storeResourceData(resource.id, data: data)
-                    let representation = TelegramMediaImageRepresentation(dimensions: PixelDimensions(width: 640, height: 640), resource: resource, progressiveSizes: [], immediateThumbnailData: nil, hasVideo: false, isPersonal: false)
+                    let representation = IosappMediaImageRepresentation(dimensions: PixelDimensions(width: 640, height: 640), resource: resource, progressiveSizes: [], immediateThumbnailData: nil, hasVideo: false, isPersonal: false)
                     uploadedAvatar.set(context.engine.peers.uploadedPeerPhoto(resource: resource))
                     uploadedVideoAvatar = nil
                     updateState { current in
@@ -517,7 +517,7 @@ public func createChannelController(context: AccountContext, mode: CreateChannel
                 if let data = image.jpegData(compressionQuality: 0.6) {
                     let photoResource = LocalFileMediaResource(fileId: Int64.random(in: Int64.min ... Int64.max))
                     context.account.postbox.mediaBox.storeResourceData(photoResource.id, data: data)
-                    let representation = TelegramMediaImageRepresentation(dimensions: PixelDimensions(width: 640, height: 640), resource: photoResource, progressiveSizes: [], immediateThumbnailData: nil, hasVideo: false, isPersonal: false)
+                    let representation = IosappMediaImageRepresentation(dimensions: PixelDimensions(width: 640, height: 640), resource: photoResource, progressiveSizes: [], immediateThumbnailData: nil, hasVideo: false, isPersonal: false)
                     updateState { state in
                         var state = state
                         state.avatar = .image(representation, true)
@@ -529,7 +529,7 @@ public func createChannelController(context: AccountContext, mode: CreateChannel
                         videoStartTimestamp = adjustments.videoStartValue - adjustments.trimStartValue
                     }
                     
-                    let signal = Signal<TelegramMediaResource?, UploadPeerPhotoError> { subscriber in
+                    let signal = Signal<IosappMediaResource?, UploadPeerPhotoError> { subscriber in
                         let entityRenderer: LegacyPaintEntityRenderer? = adjustments.flatMap { adjustments in
                             if let paintingData = adjustments.paintingData, paintingData.hasAnimation {
                                 return LegacyPaintEntityRenderer(postbox: context.account.postbox, adjustments: adjustments)
@@ -579,7 +579,7 @@ public func createChannelController(context: AccountContext, mode: CreateChannel
                                 var value = stat()
                                 if stat(result.fileURL.path, &value) == 0 {
                                     if let data = try? Data(contentsOf: result.fileURL) {
-                                        let resource: TelegramMediaResource
+                                        let resource: IosappMediaResource
                                         if let liveUploadData = result.liveUploadData as? LegacyLiveUploadInterfaceResult {
                                             resource = LocalFileMediaResource(fileId: liveUploadData.id)
                                         } else {
@@ -609,7 +609,7 @@ public func createChannelController(context: AccountContext, mode: CreateChannel
                     
                     let promise = Promise<UploadedPeerPhotoData?>()
                     promise.set(signal
-                    |> `catch` { _ -> Signal<TelegramMediaResource?, NoError> in
+                    |> `catch` { _ -> Signal<IosappMediaResource?, NoError> in
                         return .single(nil)
                     }
                     |> mapToSignal { resource -> Signal<UploadedPeerPhotoData?, NoError> in

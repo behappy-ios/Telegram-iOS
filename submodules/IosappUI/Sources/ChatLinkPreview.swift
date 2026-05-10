@@ -12,7 +12,7 @@ final class InteractiveChatLinkPreviewsResult {
     }
 }
 
-func interactiveChatLinkPreviewsEnabled(accountManager: AccountManager<TelegramAccountManagerTypes>, displayAlert: @escaping (InteractiveChatLinkPreviewsResult) -> Void) -> Signal<Bool, NoError> {
+func interactiveChatLinkPreviewsEnabled(accountManager: AccountManager<IosappAccountManagerTypes>, displayAlert: @escaping (InteractiveChatLinkPreviewsResult) -> Void) -> Signal<Bool, NoError> {
     return ApplicationSpecificNotice.getSecretChatLinkPreviews(accountManager: accountManager)
     |> mapToSignal { value -> Signal<Bool, NoError> in
         if let value = value {

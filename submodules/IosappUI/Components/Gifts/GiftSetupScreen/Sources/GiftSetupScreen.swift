@@ -496,7 +496,7 @@ private final class GiftSetupScreenComponent: Component {
                     
             var finalPrice: Int64
             var perUserLimit: Int32?
-            var giftFile: TelegramMediaFile?
+            var giftFile: IosappMediaFile?
             let source: BotPaymentInvoiceSource
             switch component.subject {
             case let .premium(product):
@@ -953,12 +953,12 @@ private final class GiftSetupScreenComponent: Component {
                 
                 let _ = combineLatest(queue: Queue.mainQueue(),
                     component.context.engine.data.get(EngineDataMap(
-                        peerIds.map { peerId -> TelegramEngine.EngineData.Item.Peer.Peer in
-                            return TelegramEngine.EngineData.Item.Peer.Peer(id: peerId)
+                        peerIds.map { peerId -> IosappEngine.EngineData.Item.Peer.Peer in
+                            return IosappEngine.EngineData.Item.Peer.Peer(id: peerId)
                         }
                     )),
                     component.context.engine.data.get(
-                        TelegramEngine.EngineData.Item.Peer.SendPaidMessageStars(id: component.peerId)
+                        IosappEngine.EngineData.Item.Peer.SendPaidMessageStars(id: component.peerId)
                     )
                 ).start(next: { [weak self] peers, sendPaidMessageStars in
                     guard let self else {
@@ -1162,7 +1162,7 @@ private final class GiftSetupScreenComponent: Component {
                 bold: MarkdownAttributeSet(font: Font.semibold(13.0), textColor: environment.theme.list.freeTextColor),
                 link: MarkdownAttributeSet(font: Font.regular(13.0), textColor: environment.theme.list.itemAccentColor),
                 linkAttribute: { contents in
-                    return (TelegramTextAttributes.URL, contents)
+                    return (IosappTextAttributes.URL, contents)
                 }
             )
                         
@@ -1489,8 +1489,8 @@ private final class GiftSetupScreenComponent: Component {
                                 highlightColor: theme.list.itemAccentColor.withAlphaComponent(0.1),
                                 highlightInset: UIEdgeInsets(top: 0.0, left: 0.0, bottom: 0.0, right: -8.0),
                                 highlightAction: { attributes in
-                                    if let _ = attributes[NSAttributedString.Key(rawValue: TelegramTextAttributes.URL)] {
-                                        return NSAttributedString.Key(rawValue: TelegramTextAttributes.URL)
+                                    if let _ = attributes[NSAttributedString.Key(rawValue: IosappTextAttributes.URL)] {
+                                        return NSAttributedString.Key(rawValue: IosappTextAttributes.URL)
                                     } else {
                                         return nil
                                     }
@@ -1591,8 +1591,8 @@ private final class GiftSetupScreenComponent: Component {
                                 highlightColor: theme.list.itemAccentColor.withAlphaComponent(0.1),
                                 highlightInset: UIEdgeInsets(top: 0.0, left: 0.0, bottom: 0.0, right: -8.0),
                                 highlightAction: { attributes in
-                                    if let _ = attributes[NSAttributedString.Key(rawValue: TelegramTextAttributes.URL)] {
-                                        return NSAttributedString.Key(rawValue: TelegramTextAttributes.URL)
+                                    if let _ = attributes[NSAttributedString.Key(rawValue: IosappTextAttributes.URL)] {
+                                        return NSAttributedString.Key(rawValue: IosappTextAttributes.URL)
                                     } else {
                                         return nil
                                     }
@@ -1779,8 +1779,8 @@ private final class GiftSetupScreenComponent: Component {
                             highlightColor: theme.list.itemAccentColor.withAlphaComponent(0.1),
                             highlightInset: UIEdgeInsets(top: 0.0, left: 0.0, bottom: 0.0, right: -8.0),
                             highlightAction: { attributes in
-                                if let _ = attributes[NSAttributedString.Key(rawValue: TelegramTextAttributes.URL)] {
-                                    return NSAttributedString.Key(rawValue: TelegramTextAttributes.URL)
+                                if let _ = attributes[NSAttributedString.Key(rawValue: IosappTextAttributes.URL)] {
+                                    return NSAttributedString.Key(rawValue: IosappTextAttributes.URL)
                                 } else {
                                     return nil
                                 }

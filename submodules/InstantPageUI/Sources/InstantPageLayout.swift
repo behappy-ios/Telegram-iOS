@@ -47,7 +47,7 @@ private func setupStyleStack(_ stack: InstantPageTextStyleStack, theme: InstantP
     }
 }
 
-public func layoutInstantPageBlock(webpage: TelegramMediaWebpage, userLocation: MediaResourceUserLocation, rtl: Bool, block: InstantPageBlock, boundingWidth: CGFloat, horizontalInset: CGFloat, safeInset: CGFloat, isCover: Bool, previousItems: [InstantPageItem], fillToSize: CGSize?, media: [EngineMedia.Id: EngineMedia], mediaIndexCounter: inout Int, embedIndexCounter: inout Int, detailsIndexCounter: inout Int, theme: InstantPageTheme, strings: PresentationStrings, dateTimeFormat: PresentationDateTimeFormat, webEmbedHeights: [Int : CGFloat] = [:], excludeCaptions: Bool) -> InstantPageLayout {
+public func layoutInstantPageBlock(webpage: IosappMediaWebpage, userLocation: MediaResourceUserLocation, rtl: Bool, block: InstantPageBlock, boundingWidth: CGFloat, horizontalInset: CGFloat, safeInset: CGFloat, isCover: Bool, previousItems: [InstantPageItem], fillToSize: CGSize?, media: [EngineMedia.Id: EngineMedia], mediaIndexCounter: inout Int, embedIndexCounter: inout Int, detailsIndexCounter: inout Int, theme: InstantPageTheme, strings: PresentationStrings, dateTimeFormat: PresentationDateTimeFormat, webEmbedHeights: [Int : CGFloat] = [:], excludeCaptions: Bool) -> InstantPageLayout {
    
     let layoutCaption: (InstantPageCaption, CGSize) -> ([InstantPageItem], CGSize) = { caption, contentSize in
         var items: [InstantPageItem] = []
@@ -501,7 +501,7 @@ public func layoutInstantPageBlock(webpage: TelegramMediaWebpage, userLocation: 
             var items: [InstantPageItem] = []
             
             if !author.isEmpty {
-                let avatar: TelegramMediaImage? = avatarId.flatMap { id -> TelegramMediaImage? in
+                let avatar: IosappMediaImage? = avatarId.flatMap { id -> IosappMediaImage? in
                     if case let .image(image) = media[id] {
                         return image
                     } else {
@@ -632,10 +632,10 @@ public func layoutInstantPageBlock(webpage: TelegramMediaWebpage, userLocation: 
             let frame = CGRect(origin: CGPoint(x: floor((boundingWidth - size.width) / 2.0), y: 0.0), size: size)
             let item: InstantPageItem
             if let url = url, let coverId = coverId, case let .image(image) = media[coverId] {
-                let loadedContent = TelegramMediaWebpageLoadedContent(url: url, displayUrl: url, hash: 0, type: "video", websiteName: nil, title: nil, text: nil, embedUrl: url, embedType: "video", embedSize: PixelDimensions(size), duration: nil, author: nil, isMediaLargeByDefault: nil, imageIsVideoCover: false, image: image, file: nil, story: nil, attributes: [], instantPage: nil)
-                let content = TelegramMediaWebpageContent.Loaded(loadedContent)
+                let loadedContent = IosappMediaWebpageLoadedContent(url: url, displayUrl: url, hash: 0, type: "video", websiteName: nil, title: nil, text: nil, embedUrl: url, embedType: "video", embedSize: PixelDimensions(size), duration: nil, author: nil, isMediaLargeByDefault: nil, imageIsVideoCover: false, image: image, file: nil, story: nil, attributes: [], instantPage: nil)
+                let content = IosappMediaWebpageContent.Loaded(loadedContent)
                 
-                item = InstantPageImageItem(frame: frame, webPage: webpage, media: InstantPageMedia(index: embedIndex, media: .webpage(TelegramMediaWebpage(webpageId: EngineMedia.Id(namespace: Namespaces.Media.LocalWebpage, id: -1), content: content)), url: nil, caption: nil, credit: nil), attributes: [], interactive: true, roundCorners: false, fit: false)
+                item = InstantPageImageItem(frame: frame, webPage: webpage, media: InstantPageMedia(index: embedIndex, media: .webpage(IosappMediaWebpage(webpageId: EngineMedia.Id(namespace: Namespaces.Media.LocalWebpage, id: -1), content: content)), url: nil, caption: nil, credit: nil), attributes: [], interactive: true, roundCorners: false, fit: false)
 
             } else {
                 item = InstantPageWebEmbedItem(frame: frame, url: url, html: html, enableScrolling: allowScrolling)
@@ -768,7 +768,7 @@ public func layoutInstantPageBlock(webpage: TelegramMediaWebpage, userLocation: 
             contentSize.height += backgroundItem.frame.height
             
             for (i, article) in articles.enumerated() {
-                var cover: TelegramMediaImage?
+                var cover: IosappMediaImage?
                 if let coverId = article.photoId {
                     if case let .image(image) = media[coverId] {
                         cover = image
@@ -822,7 +822,7 @@ public func layoutInstantPageBlock(webpage: TelegramMediaWebpage, userLocation: 
                 }
             }
             
-            let map = TelegramMediaMap(latitude: latitude, longitude: longitude, heading: nil, accuracyRadius: nil, venue: nil, liveBroadcastingTimeout: nil, liveProximityNotificationRadius: nil)
+            let map = IosappMediaMap(latitude: latitude, longitude: longitude, heading: nil, accuracyRadius: nil, venue: nil, liveBroadcastingTimeout: nil, liveProximityNotificationRadius: nil)
             let attributes: [InstantPageImageAttribute] = [InstantPageMapAttribute(zoom: zoom, dimensions: dimensions.cgSize)]
             
             var contentSize = CGSize(width: boundingWidth - safeInset * 2.0, height: 0.0)
@@ -842,8 +842,8 @@ public func layoutInstantPageBlock(webpage: TelegramMediaWebpage, userLocation: 
     }
 }
 
-public func instantPageLayoutForWebPage(_ webPage: TelegramMediaWebpage, instantPage: InstantPage?, userLocation: MediaResourceUserLocation, boundingWidth: CGFloat, safeInset: CGFloat, strings: PresentationStrings, theme: InstantPageTheme, dateTimeFormat: PresentationDateTimeFormat, webEmbedHeights: [Int : CGFloat] = [:]) -> InstantPageLayout {
-    var maybeLoadedContent: TelegramMediaWebpageLoadedContent?
+public func instantPageLayoutForWebPage(_ webPage: IosappMediaWebpage, instantPage: InstantPage?, userLocation: MediaResourceUserLocation, boundingWidth: CGFloat, safeInset: CGFloat, strings: PresentationStrings, theme: InstantPageTheme, dateTimeFormat: PresentationDateTimeFormat, webEmbedHeights: [Int : CGFloat] = [:]) -> InstantPageLayout {
+    var maybeLoadedContent: IosappMediaWebpageLoadedContent?
     if case let .Loaded(content) = webPage.content {
         maybeLoadedContent = content
     }

@@ -36,41 +36,41 @@ public enum FlatBuffersError: Error {
 }
 
 public extension PeerId {
-    init(_ id: TelegramCore_PeerId) {
+    init(_ id: IosappCore_PeerId) {
         self.init(namespace: PeerId.Namespace._internalFromInt32Value(id.namespace), id: PeerId.Id._internalFromInt64Value(id.id))
     }
 
-    func asFlatBuffersObject() -> TelegramCore_PeerId {
-        return TelegramCore_PeerId(namespace: self.namespace._internalGetInt32Value(), id: self.id._internalGetInt64Value())
+    func asFlatBuffersObject() -> IosappCore_PeerId {
+        return IosappCore_PeerId(namespace: self.namespace._internalGetInt32Value(), id: self.id._internalGetInt64Value())
     }
 }
 
 public extension MediaId {
-    init(_ id: TelegramCore_MediaId) {
+    init(_ id: IosappCore_MediaId) {
         self.init(namespace: id.namespace, id: id.id)
     }
 
-    func asFlatBuffersObject() -> TelegramCore_MediaId {
-        return TelegramCore_MediaId(namespace: self.namespace, id: self.id)
+    func asFlatBuffersObject() -> IosappCore_MediaId {
+        return IosappCore_MediaId(namespace: self.namespace, id: self.id)
     }
 }
 
 public extension PixelDimensions {
-    init(_ dimensions: TelegramCore_PixelDimensions) {
+    init(_ dimensions: IosappCore_PixelDimensions) {
         self.init(width: dimensions.width, height: dimensions.height)
     }
 
-    func asFlatBuffersObject() -> TelegramCore_PixelDimensions {
-        return TelegramCore_PixelDimensions(width: self.width, height: self.height)
+    func asFlatBuffersObject() -> IosappCore_PixelDimensions {
+        return IosappCore_PixelDimensions(width: self.width, height: self.height)
     }
 }
 
 public extension ItemCollectionId {
-    init(_ id: TelegramCore_ItemCollectionId) {
+    init(_ id: IosappCore_ItemCollectionId) {
         self.init(namespace: id.namespace, id: id.id)
     }
 
-    func asFlatBuffersObject() -> TelegramCore_ItemCollectionId {
-        return TelegramCore_ItemCollectionId(namespace: self.namespace, id: self.id)
+    func asFlatBuffersObject() -> IosappCore_ItemCollectionId {
+        return IosappCore_ItemCollectionId(namespace: self.namespace, id: self.id)
     }
 }

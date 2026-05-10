@@ -150,8 +150,8 @@ public final class ChatAvatarNavigationNode: ASDisplayNode {
                     return
                 }
                 let cachedPeerData = peerView.cachedData as? CachedUserData
-                var personalPhoto: TelegramMediaImage?
-                var profilePhoto: TelegramMediaImage?
+                var personalPhoto: IosappMediaImage?
+                var profilePhoto: IosappMediaImage?
                 var isKnown = false
                 
                 if let cachedPeerData = cachedPeerData {

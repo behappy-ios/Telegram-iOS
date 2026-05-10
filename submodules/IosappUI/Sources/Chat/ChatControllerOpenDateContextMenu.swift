@@ -111,7 +111,7 @@ extension ChatControllerImpl: EKEventEditViewDelegate {
                         let text = self.presentationData.strings.Conversation_DateReminderSet.replacingOccurrences(of: "[", with: "**").replacingOccurrences(of: "]()", with: "**")
                         self.present(UndoOverlayController(presentationData: self.presentationData, content: .forward(savedMessages: true, text: text), elevatedLayout: false, animateInAsReplacement: false, action: { [weak self] action in
                             if let self, action == .info {
-                                let _ = (self.context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: self.context.account.peerId))
+                                let _ = (self.context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: self.context.account.peerId))
                                     |> deliverOnMainQueue).start(next: { [weak self] peer in
                                     guard let self, let peer else {
                                         return

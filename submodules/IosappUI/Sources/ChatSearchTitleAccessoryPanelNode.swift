@@ -62,9 +62,9 @@ final class ChatSearchTitleAccessoryPanelNode: ChatTitleAccessoryPanelNode, Chat
         let reaction: MessageReaction.Reaction
         let count: Int
         let title: String?
-        let file: TelegramMediaFile
+        let file: IosappMediaFile
         
-        init(reaction: MessageReaction.Reaction, count: Int, title: String?, file: TelegramMediaFile) {
+        init(reaction: MessageReaction.Reaction, count: Int, title: String?, file: IosappMediaFile) {
             self.reaction = reaction
             self.count = count
             self.title = title
@@ -473,11 +473,11 @@ final class ChatSearchTitleAccessoryPanelNode: ChatTitleAccessoryPanelNode, Chat
         
         self.scrollView.disablesInteractiveTransitionGestureRecognizer = true
         
-        let tagsAndFiles: Signal<([MessageReaction.Reaction: Int], [Int64: TelegramMediaFile]), NoError> = context.engine.data.subscribe(
-            TelegramEngine.EngineData.Item.Messages.SavedMessageTagStats(peerId: context.account.peerId, threadId: chatLocation.threadId)
+        let tagsAndFiles: Signal<([MessageReaction.Reaction: Int], [Int64: IosappMediaFile]), NoError> = context.engine.data.subscribe(
+            IosappEngine.EngineData.Item.Messages.SavedMessageTagStats(peerId: context.account.peerId, threadId: chatLocation.threadId)
         )
         |> distinctUntilChanged
-        |> mapToSignal { tags -> Signal<([MessageReaction.Reaction: Int], [Int64: TelegramMediaFile]), NoError> in
+        |> mapToSignal { tags -> Signal<([MessageReaction.Reaction: Int], [Int64: IosappMediaFile]), NoError> in
             var customFileIds: [Int64] = []
             for (reaction, _) in tags {
                 switch reaction {
@@ -764,17 +764,17 @@ final class ChatSearchTitleAccessoryPanelNode: ChatTitleAccessoryPanelNode, Chat
         
         let optionTitle = hasTitle ? presentationData.strings.Chat_EditTagTitle_TitleEdit : presentationData.strings.Chat_EditTagTitle_TitleSet
         
-        let reactionFile: Signal<TelegramMediaFile?, NoError>
+        let reactionFile: Signal<IosappMediaFile?, NoError>
         switch reaction {
         case .builtin, .stars:
             reactionFile = self.context.engine.stickers.availableReactions()
             |> take(1)
-            |> map { availableReactions -> TelegramMediaFile? in
+            |> map { availableReactions -> IosappMediaFile? in
                 return availableReactions?.reactions.first(where: { $0.value == reaction })?.selectAnimation._parse()
             }
         case let .custom(fileId):
             reactionFile = self.context.engine.stickers.resolveInlineStickers(fileIds: [fileId])
-            |> map { files -> TelegramMediaFile? in
+            |> map { files -> IosappMediaFile? in
                 return files.values.first
             }
         }

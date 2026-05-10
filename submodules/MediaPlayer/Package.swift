@@ -4,13 +4,13 @@
 import PackageDescription
 
 let package = Package(
-    name: "TelegramMediaPlayer",
+    name: "IosappMediaPlayer",
     platforms: [.macOS(.v10_13)],
     products: [
         // Products define the executables and libraries a package produces, and make them visible to other packages.
         .library(
-            name: "TelegramMediaPlayer",
-            targets: ["TelegramMediaPlayer"]),
+            name: "IosappMediaPlayer",
+            targets: ["IosappMediaPlayer"]),
     ],
     dependencies: [
         .package(name: "IosappCore", path: "../IosappCore"),
@@ -27,7 +27,7 @@ let package = Package(
         // Targets are the basic building blocks of a package. A target can define a module or a test suite.
         // Targets can depend on other targets in this package, and on products in packages this package depends on.
         .target(
-            name: "TelegramMediaPlayer",
+            name: "IosappMediaPlayer",
             dependencies: [.product(name: "IosappCore", package: "IosappCore", condition: nil),
                            .product(name: "Postbox", package: "Postbox", condition: nil),
                            .product(name: "FFMpegBinding", package: "FFMpegBinding", condition: nil),

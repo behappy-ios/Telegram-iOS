@@ -19,7 +19,7 @@ extension PeerInfoScreenNode {
             return
         }
         
-        var birthday: TelegramBirthday?
+        var birthday: IosappBirthday?
         if let cachedData = cachedData as? CachedUserData {
             birthday = cachedData.birthday
         }

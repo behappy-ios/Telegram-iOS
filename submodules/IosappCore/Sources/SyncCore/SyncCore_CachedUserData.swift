@@ -55,12 +55,12 @@ public enum CachedPeerAutoremoveTimeout: Equatable, PostboxCoding {
 
 public enum CachedPeerProfilePhoto: Equatable, PostboxCoding {
     case unknown
-    case known(TelegramMediaImage?)
+    case known(IosappMediaImage?)
     
     public init(decoder: PostboxDecoder) {
         switch decoder.decodeInt32ForKey("_v", orElse: 0) {
         case 1:
-            self = .known(decoder.decodeObjectForKey("v", decoder: { TelegramMediaImage(decoder: $0) }) as? TelegramMediaImage)
+            self = .known(decoder.decodeObjectForKey("v", decoder: { IosappMediaImage(decoder: $0) }) as? IosappMediaImage)
         default:
             self = .unknown
         }
@@ -81,14 +81,14 @@ public enum CachedPeerProfilePhoto: Equatable, PostboxCoding {
     }
 }
 
-public enum CachedTelegramBusinessIntro: Equatable, PostboxCoding {
+public enum CachedIosappBusinessIntro: Equatable, PostboxCoding {
     case unknown
-    case known(TelegramBusinessIntro?)
+    case known(IosappBusinessIntro?)
     
     public init(decoder: PostboxDecoder) {
         switch decoder.decodeInt32ForKey("_v", orElse: 0) {
         case 1:
-            self = .known(decoder.decodeCodable(TelegramBusinessIntro.self, forKey: "v"))
+            self = .known(decoder.decodeCodable(IosappBusinessIntro.self, forKey: "v"))
         default:
             self = .unknown
         }
@@ -109,7 +109,7 @@ public enum CachedTelegramBusinessIntro: Equatable, PostboxCoding {
     }
 }
 
-public final class TelegramPersonalChannel: Equatable, Codable {
+public final class IosappPersonalChannel: Equatable, Codable {
     public let peerId: PeerId
     public let subscriberCount: Int32?
     public let topMessageId: Int32?
@@ -120,7 +120,7 @@ public final class TelegramPersonalChannel: Equatable, Codable {
         self.topMessageId = topMessageId
     }
     
-    public static func ==(lhs: TelegramPersonalChannel, rhs: TelegramPersonalChannel) -> Bool {
+    public static func ==(lhs: IosappPersonalChannel, rhs: IosappPersonalChannel) -> Bool {
         if lhs === rhs {
             return true
         }
@@ -137,14 +137,14 @@ public final class TelegramPersonalChannel: Equatable, Codable {
     }
 }
 
-public enum CachedTelegramPersonalChannel: Codable, Equatable {
+public enum CachedIosappPersonalChannel: Codable, Equatable {
     private enum CodingKeys: String, CodingKey {
         case discriminator = "d"
         case value = "v"
     }
     
     case unknown
-    case known(TelegramPersonalChannel?)
+    case known(IosappPersonalChannel?)
     
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
@@ -153,7 +153,7 @@ public enum CachedTelegramPersonalChannel: Codable, Equatable {
         case 0:
             self = .unknown
         case 1:
-            self = .known(try container.decodeIfPresent(TelegramPersonalChannel.self, forKey: .value))
+            self = .known(try container.decodeIfPresent(IosappPersonalChannel.self, forKey: .value))
         default:
             self = .unknown
         }
@@ -264,14 +264,14 @@ public enum PeerNameColor: Hashable {
         }
     }
     
-    public init(flatBuffersObject: TelegramCore_PeerNameColor) throws {
+    public init(flatBuffersObject: IosappCore_PeerNameColor) throws {
         self.init(rawValue: flatBuffersObject.value)
     }
     
     public func encodeToFlatBuffers(builder: inout FlatBufferBuilder) -> Offset {
-        let start = TelegramCore_PeerNameColor.startPeerNameColor(&builder)
-        TelegramCore_PeerNameColor.add(value: self.rawValue, &builder)
-        return TelegramCore_PeerNameColor.endPeerNameColor(&builder, start: start)
+        let start = IosappCore_PeerNameColor.startPeerNameColor(&builder)
+        IosappCore_PeerNameColor.add(value: self.rawValue, &builder)
+        return IosappCore_PeerNameColor.endPeerNameColor(&builder, start: start)
     }
 }
 
@@ -336,7 +336,7 @@ public struct PeerCollectibleColor: Equatable, Codable {
         try container.encodeIfPresent(self.darkColors.flatMap { $0.map { Int32(bitPattern: $0) } }, forKey: .darkColors)
     }
     
-    public init(flatBuffersObject: TelegramCore_PeerCollectibleColor) throws {
+    public init(flatBuffersObject: IosappCore_PeerCollectibleColor) throws {
         self.collectibleId = flatBuffersObject.collectibleId
         self.giftEmojiFileId = flatBuffersObject.giftEmojiFileId
         self.backgroundEmojiId = flatBuffersObject.backgroundEmojiId
@@ -373,18 +373,18 @@ public struct PeerCollectibleColor: Equatable, Codable {
         let colorsOffset = builder.createVector(self.colors)
         let darkColorsOffset: Offset? = self.darkColors.map { builder.createVector($0) }
                
-        let start = TelegramCore_PeerCollectibleColor.startPeerCollectibleColor(&builder)
-        TelegramCore_PeerCollectibleColor.add(collectibleId: self.collectibleId, &builder)
-        TelegramCore_PeerCollectibleColor.add(giftEmojiFileId: self.giftEmojiFileId, &builder)
-        TelegramCore_PeerCollectibleColor.add(backgroundEmojiId: self.backgroundEmojiId, &builder)
-        TelegramCore_PeerCollectibleColor.add(accentColor: self.accentColor, &builder)
-        TelegramCore_PeerCollectibleColor.addVectorOf(colors: colorsOffset, &builder)
-        TelegramCore_PeerCollectibleColor.add(darkAccentColor: self.darkAccentColor ?? UInt32.min, &builder)
+        let start = IosappCore_PeerCollectibleColor.startPeerCollectibleColor(&builder)
+        IosappCore_PeerCollectibleColor.add(collectibleId: self.collectibleId, &builder)
+        IosappCore_PeerCollectibleColor.add(giftEmojiFileId: self.giftEmojiFileId, &builder)
+        IosappCore_PeerCollectibleColor.add(backgroundEmojiId: self.backgroundEmojiId, &builder)
+        IosappCore_PeerCollectibleColor.add(accentColor: self.accentColor, &builder)
+        IosappCore_PeerCollectibleColor.addVectorOf(colors: colorsOffset, &builder)
+        IosappCore_PeerCollectibleColor.add(darkAccentColor: self.darkAccentColor ?? UInt32.min, &builder)
         if let darkColorsOffset {
-            TelegramCore_PeerCollectibleColor.addVectorOf(darkColors: darkColorsOffset, &builder)
+            IosappCore_PeerCollectibleColor.addVectorOf(darkColors: darkColorsOffset, &builder)
         }
         
-        return TelegramCore_PeerCollectibleColor.endPeerCollectibleColor(&builder, start: start)
+        return IosappCore_PeerCollectibleColor.endPeerCollectibleColor(&builder, start: start)
     }
 }
 
@@ -451,16 +451,16 @@ public struct PeerEmojiStatus: Equatable, Codable {
             }
         }
 
-        public init(flatBuffersObject: TelegramCore_PeerEmojiStatusContent) throws {
+        public init(flatBuffersObject: IosappCore_PeerEmojiStatusContent) throws {
             switch flatBuffersObject.valueType {
             case .peeremojistatuscontentemoji:
-                guard let emoji = flatBuffersObject.value(type: TelegramCore_PeerEmojiStatusContentEmoji.self) else {
+                guard let emoji = flatBuffersObject.value(type: IosappCore_PeerEmojiStatusContentEmoji.self) else {
                     throw FlatBuffersError.missingRequiredField()
                 }
                 self = .emoji(fileId: emoji.fileId)
                 
             case .peeremojistatuscontentstargift:
-                guard let starGift = flatBuffersObject.value(type: TelegramCore_PeerEmojiStatusContentStarGift.self) else {
+                guard let starGift = flatBuffersObject.value(type: IosappCore_PeerEmojiStatusContentStarGift.self) else {
                     throw FlatBuffersError.missingRequiredField()
                 }
                 self = .starGift(
@@ -481,36 +481,36 @@ public struct PeerEmojiStatus: Equatable, Codable {
         }
 
         public func encodeToFlatBuffers(builder: inout FlatBufferBuilder) -> Offset {
-            let valueType: TelegramCore_PeerEmojiStatusContent_Value
+            let valueType: IosappCore_PeerEmojiStatusContent_Value
             let valueOffset: Offset
             
             switch self {
             case let .emoji(fileId):
                 valueType = .peeremojistatuscontentemoji
-                let start = TelegramCore_PeerEmojiStatusContentEmoji.startPeerEmojiStatusContentEmoji(&builder)
-                TelegramCore_PeerEmojiStatusContentEmoji.add(fileId: fileId, &builder)
-                valueOffset = TelegramCore_PeerEmojiStatusContentEmoji.endPeerEmojiStatusContentEmoji(&builder, start: start)
+                let start = IosappCore_PeerEmojiStatusContentEmoji.startPeerEmojiStatusContentEmoji(&builder)
+                IosappCore_PeerEmojiStatusContentEmoji.add(fileId: fileId, &builder)
+                valueOffset = IosappCore_PeerEmojiStatusContentEmoji.endPeerEmojiStatusContentEmoji(&builder, start: start)
             case let .starGift(id, fileId, title, slug, patternFileId, innerColor, outerColor, patternColor, textColor):
                 valueType = .peeremojistatuscontentstargift
                 let titleOffset = builder.create(string: title)
                 let slugOffset = builder.create(string: slug)
-                let start = TelegramCore_PeerEmojiStatusContentStarGift.startPeerEmojiStatusContentStarGift(&builder)
-                TelegramCore_PeerEmojiStatusContentStarGift.add(id: id, &builder)
-                TelegramCore_PeerEmojiStatusContentStarGift.add(fileId: fileId, &builder)
-                TelegramCore_PeerEmojiStatusContentStarGift.add(title: titleOffset, &builder)
-                TelegramCore_PeerEmojiStatusContentStarGift.add(slug: slugOffset, &builder)
-                TelegramCore_PeerEmojiStatusContentStarGift.add(patternFileId: patternFileId, &builder)
-                TelegramCore_PeerEmojiStatusContentStarGift.add(innerColor: innerColor, &builder)
-                TelegramCore_PeerEmojiStatusContentStarGift.add(outerColor: outerColor, &builder)
-                TelegramCore_PeerEmojiStatusContentStarGift.add(patternColor: patternColor, &builder)
-                TelegramCore_PeerEmojiStatusContentStarGift.add(textColor: textColor, &builder)
-                valueOffset = TelegramCore_PeerEmojiStatusContentStarGift.endPeerEmojiStatusContentStarGift(&builder, start: start)
+                let start = IosappCore_PeerEmojiStatusContentStarGift.startPeerEmojiStatusContentStarGift(&builder)
+                IosappCore_PeerEmojiStatusContentStarGift.add(id: id, &builder)
+                IosappCore_PeerEmojiStatusContentStarGift.add(fileId: fileId, &builder)
+                IosappCore_PeerEmojiStatusContentStarGift.add(title: titleOffset, &builder)
+                IosappCore_PeerEmojiStatusContentStarGift.add(slug: slugOffset, &builder)
+                IosappCore_PeerEmojiStatusContentStarGift.add(patternFileId: patternFileId, &builder)
+                IosappCore_PeerEmojiStatusContentStarGift.add(innerColor: innerColor, &builder)
+                IosappCore_PeerEmojiStatusContentStarGift.add(outerColor: outerColor, &builder)
+                IosappCore_PeerEmojiStatusContentStarGift.add(patternColor: patternColor, &builder)
+                IosappCore_PeerEmojiStatusContentStarGift.add(textColor: textColor, &builder)
+                valueOffset = IosappCore_PeerEmojiStatusContentStarGift.endPeerEmojiStatusContentStarGift(&builder, start: start)
             }
             
-            let start = TelegramCore_PeerEmojiStatusContent.startPeerEmojiStatusContent(&builder)
-            TelegramCore_PeerEmojiStatusContent.add(valueType: valueType, &builder)
-            TelegramCore_PeerEmojiStatusContent.add(value: valueOffset, &builder)
-            return TelegramCore_PeerEmojiStatusContent.endPeerEmojiStatusContent(&builder, start: start)
+            let start = IosappCore_PeerEmojiStatusContent.startPeerEmojiStatusContent(&builder)
+            IosappCore_PeerEmojiStatusContent.add(valueType: valueType, &builder)
+            IosappCore_PeerEmojiStatusContent.add(value: valueOffset, &builder)
+            return IosappCore_PeerEmojiStatusContent.endPeerEmojiStatusContent(&builder, start: start)
         }
     }
     public var content: Content
@@ -541,7 +541,7 @@ public struct PeerEmojiStatus: Equatable, Codable {
         try container.encodeIfPresent(self.expirationDate, forKey: .expirationDate)
     }
     
-    public init(flatBuffersObject: TelegramCore_PeerEmojiStatus) throws {
+    public init(flatBuffersObject: IosappCore_PeerEmojiStatus) throws {
         self.content = try Content(flatBuffersObject: flatBuffersObject.content)
         self.expirationDate = flatBuffersObject.expirationDate == Int32.min ? nil : flatBuffersObject.expirationDate
     }
@@ -549,10 +549,10 @@ public struct PeerEmojiStatus: Equatable, Codable {
     public func encodeToFlatBuffers(builder: inout FlatBufferBuilder) -> Offset {
         let contentOffset = self.content.encodeToFlatBuffers(builder: &builder)
         
-        let start = TelegramCore_PeerEmojiStatus.startPeerEmojiStatus(&builder)
-        TelegramCore_PeerEmojiStatus.add(content: contentOffset, &builder)
-        TelegramCore_PeerEmojiStatus.add(expirationDate: self.expirationDate ?? Int32.min, &builder)
-        return TelegramCore_PeerEmojiStatus.endPeerEmojiStatus(&builder, start: start)
+        let start = IosappCore_PeerEmojiStatus.startPeerEmojiStatus(&builder)
+        IosappCore_PeerEmojiStatus.add(content: contentOffset, &builder)
+        IosappCore_PeerEmojiStatus.add(expirationDate: self.expirationDate ?? Int32.min, &builder)
+        return IosappCore_PeerEmojiStatus.endPeerEmojiStatus(&builder, start: start)
     }
 }
 
@@ -672,7 +672,7 @@ public final class EditableBotInfo: PostboxCoding, Equatable {
     }
 }
 
-public final class TelegramBusinessHours: Equatable, Codable {
+public final class IosappBusinessHours: Equatable, Codable {
     public struct WorkingTimeInterval: Equatable, Codable {
         private enum CodingKeys: String, CodingKey {
             case startMinute
@@ -720,7 +720,7 @@ public final class TelegramBusinessHours: Equatable, Codable {
         self.weeklyTimeIntervals = weeklyTimeIntervals
     }
     
-    public static func ==(lhs: TelegramBusinessHours, rhs: TelegramBusinessHours) -> Bool {
+    public static func ==(lhs: IosappBusinessHours, rhs: IosappBusinessHours) -> Bool {
         if lhs.timezoneId != rhs.timezoneId {
             return false
         }
@@ -798,7 +798,7 @@ public final class TelegramBusinessHours: Equatable, Codable {
     }
 }
 
-public final class TelegramBusinessLocation: Equatable, Codable {
+public final class IosappBusinessLocation: Equatable, Codable {
     public struct Coordinates: Equatable, Codable {
         public let latitude: Double
         public let longitude: Double
@@ -817,7 +817,7 @@ public final class TelegramBusinessLocation: Equatable, Codable {
         self.coordinates = coordinates
     }
     
-    public static func ==(lhs: TelegramBusinessLocation, rhs: TelegramBusinessLocation) -> Bool {
+    public static func ==(lhs: IosappBusinessLocation, rhs: IosappBusinessLocation) -> Bool {
         if lhs.address != rhs.address {
             return false
         }
@@ -828,7 +828,7 @@ public final class TelegramBusinessLocation: Equatable, Codable {
     }
 }
 
-extension TelegramBusinessHours.WorkingTimeInterval {
+extension IosappBusinessHours.WorkingTimeInterval {
     init(apiInterval: Api.BusinessWeeklyOpen) {
         switch apiInterval {
         case let .businessWeeklyOpen(businessWeeklyOpenData):
@@ -842,12 +842,12 @@ extension TelegramBusinessHours.WorkingTimeInterval {
     }
 }
 
-extension TelegramBusinessHours {
+extension IosappBusinessHours {
     convenience init(apiWorkingHours: Api.BusinessWorkHours) {
         switch apiWorkingHours {
         case let .businessWorkHours(businessWorkHoursData):
             let (_, timezoneId, weeklyOpen) = (businessWorkHoursData.flags, businessWorkHoursData.timezoneId, businessWorkHoursData.weeklyOpen)
-            self.init(timezoneId: timezoneId, weeklyTimeIntervals: weeklyOpen.map(TelegramBusinessHours.WorkingTimeInterval.init(apiInterval:)))
+            self.init(timezoneId: timezoneId, weeklyTimeIntervals: weeklyOpen.map(IosappBusinessHours.WorkingTimeInterval.init(apiInterval:)))
         }
     }
     
@@ -856,7 +856,7 @@ extension TelegramBusinessHours {
     }
 }
 
-extension TelegramBusinessLocation.Coordinates {
+extension IosappBusinessLocation.Coordinates {
     init?(apiGeoPoint: Api.GeoPoint) {
         switch apiGeoPoint {
         case let .geoPoint(geoPointData):
@@ -872,7 +872,7 @@ extension TelegramBusinessLocation.Coordinates {
     }
 }
 
-extension TelegramBusinessLocation {
+extension IosappBusinessLocation {
     convenience init(apiLocation: Api.BusinessLocation) {
         switch apiLocation {
         case let .businessLocation(businessLocationData):
@@ -882,7 +882,7 @@ extension TelegramBusinessLocation {
     }
 }
 
-public final class TelegramBusinessChatLinks: Codable, Equatable {
+public final class IosappBusinessChatLinks: Codable, Equatable {
     public final class Link: Codable, Equatable {
         public let url: String
         public let message: String
@@ -927,7 +927,7 @@ public final class TelegramBusinessChatLinks: Codable, Equatable {
         self.links = links
     }
     
-    public static func ==(lhs: TelegramBusinessChatLinks, rhs: TelegramBusinessChatLinks) -> Bool {
+    public static func ==(lhs: IosappBusinessChatLinks, rhs: IosappBusinessChatLinks) -> Bool {
         if lhs === rhs {
             return true
         }
@@ -938,7 +938,7 @@ public final class TelegramBusinessChatLinks: Codable, Equatable {
     }
 }
 
-extension TelegramBusinessChatLinks.Link {
+extension IosappBusinessChatLinks.Link {
     convenience init(apiLink: Api.BusinessChatLink) {
         switch apiLink {
         case let .businessChatLink(businessChatLinkData):
@@ -948,13 +948,13 @@ extension TelegramBusinessChatLinks.Link {
     }
 }
 
-extension TelegramBusinessChatLinks {
-    static func fromApiLinks(apiLinks: Api.account.BusinessChatLinks) -> (result: TelegramBusinessChatLinks, users: [Api.User], chats: [Api.Chat]) {
+extension IosappBusinessChatLinks {
+    static func fromApiLinks(apiLinks: Api.account.BusinessChatLinks) -> (result: IosappBusinessChatLinks, users: [Api.User], chats: [Api.Chat]) {
         switch apiLinks {
         case let .businessChatLinks(businessChatLinksData):
             let (links, chats, users) = (businessChatLinksData.links, businessChatLinksData.chats, businessChatLinksData.users)
             return (
-                TelegramBusinessChatLinks(links: links.map(Link.init(apiLink:))),
+                IosappBusinessChatLinks(links: links.map(Link.init(apiLink:))),
                 users,
                 chats
             )
@@ -962,7 +962,7 @@ extension TelegramBusinessChatLinks {
     }
 }
 
-public final class TelegramStarRefProgram: Codable, Equatable {
+public final class IosappStarRefProgram: Codable, Equatable {
     public let botId: PeerId
     public let commissionPermille: Int32
     public let durationMonths: Int32?
@@ -977,7 +977,7 @@ public final class TelegramStarRefProgram: Codable, Equatable {
         self.dailyRevenuePerUser = dailyRevenuePerUser
     }
     
-    public static func ==(lhs: TelegramStarRefProgram, rhs: TelegramStarRefProgram) -> Bool {
+    public static func ==(lhs: IosappStarRefProgram, rhs: IosappStarRefProgram) -> Bool {
         if lhs.botId != rhs.botId {
             return false
         }
@@ -997,7 +997,7 @@ public final class TelegramStarRefProgram: Codable, Equatable {
     }
 }
 
-extension TelegramStarRefProgram {
+extension IosappStarRefProgram {
     convenience init(apiStarRefProgram: Api.StarRefProgram) {
         switch apiStarRefProgram {
         case let .starRefProgram(starRefProgramData):
@@ -1007,7 +1007,7 @@ extension TelegramStarRefProgram {
     }
 }
 
-public final class TelegramStarRating: Codable, Equatable {
+public final class IosappStarRating: Codable, Equatable {
     public let level: Int32
     public let currentLevelStars: Int64
     public let stars: Int64
@@ -1020,7 +1020,7 @@ public final class TelegramStarRating: Codable, Equatable {
         self.nextLevelStars = nextLevelStars
     }
     
-    public static func ==(lhs: TelegramStarRating, rhs: TelegramStarRating) -> Bool {
+    public static func ==(lhs: IosappStarRating, rhs: IosappStarRating) -> Bool {
         if lhs.level != rhs.level {
             return false
         }
@@ -1037,16 +1037,16 @@ public final class TelegramStarRating: Codable, Equatable {
     }
 }
 
-public final class TelegramStarPendingRating: Codable, Equatable {
-    public let rating: TelegramStarRating
+public final class IosappStarPendingRating: Codable, Equatable {
+    public let rating: IosappStarRating
     public let timestamp: Int32
     
-    public init(rating: TelegramStarRating, timestamp: Int32) {
+    public init(rating: IosappStarRating, timestamp: Int32) {
         self.rating = rating
         self.timestamp = timestamp
     }
     
-    public static func ==(lhs: TelegramStarPendingRating, rhs: TelegramStarPendingRating) -> Bool {
+    public static func ==(lhs: IosappStarPendingRating, rhs: IosappStarPendingRating) -> Bool {
         if lhs.rating != rhs.rating {
             return false
         }
@@ -1057,7 +1057,7 @@ public final class TelegramStarPendingRating: Codable, Equatable {
     }
 }
 
-public enum TelegramProfileTab: Int32, Codable, Hashable {
+public enum IosappProfileTab: Int32, Codable, Hashable {
     case files
     case gifs
     case gifts
@@ -1068,7 +1068,7 @@ public enum TelegramProfileTab: Int32, Codable, Hashable {
     case voice
 }
 
-extension TelegramProfileTab {
+extension IosappProfileTab {
     init(apiTab: Api.ProfileTab) {
         switch apiTab {
         case .profileTabFiles:
@@ -1112,7 +1112,7 @@ extension TelegramProfileTab {
     }
 }
 
-extension TelegramStarRating {
+extension IosappStarRating {
     convenience init(apiRating: Api.StarsRating) {
         switch apiRating {
         case let .starsRating(starsRatingData):
@@ -1277,28 +1277,28 @@ public final class CachedUserData: CachedPeerData {
     public let personalPhoto: CachedPeerProfilePhoto
     public let fallbackPhoto: CachedPeerProfilePhoto
     public let voiceMessagesAvailable: Bool
-    public let wallpaper: TelegramWallpaper?
+    public let wallpaper: IosappWallpaper?
     public let flags: CachedUserFlags
-    public let businessHours: TelegramBusinessHours?
-    public let businessLocation: TelegramBusinessLocation?
-    public let greetingMessage: TelegramBusinessGreetingMessage?
-    public let awayMessage: TelegramBusinessAwayMessage?
-    public let connectedBot: TelegramAccountConnectedBot?
-    public let businessIntro: CachedTelegramBusinessIntro
-    public let birthday: TelegramBirthday?
-    public let personalChannel: CachedTelegramPersonalChannel
+    public let businessHours: IosappBusinessHours?
+    public let businessLocation: IosappBusinessLocation?
+    public let greetingMessage: IosappBusinessGreetingMessage?
+    public let awayMessage: IosappBusinessAwayMessage?
+    public let connectedBot: IosappAccountConnectedBot?
+    public let businessIntro: CachedIosappBusinessIntro
+    public let birthday: IosappBirthday?
+    public let personalChannel: CachedIosappPersonalChannel
     public let botPreview: BotPreview?
     public let starGiftsCount: Int32?
-    public let starRefProgram: TelegramStarRefProgram?
+    public let starRefProgram: IosappStarRefProgram?
     public let verification: PeerVerification?
     public let sendPaidMessageStars: StarsAmount?
-    public let disallowedGifts: TelegramDisallowedGifts?
-    public let botGroupAdminRights: TelegramChatAdminRights?
-    public let botChannelAdminRights: TelegramChatAdminRights?
-    public let starRating: TelegramStarRating?
-    public let pendingStarRating: TelegramStarPendingRating?
-    public let mainProfileTab: TelegramProfileTab?
-    public let savedMusic: TelegramMediaFile?
+    public let disallowedGifts: IosappDisallowedGifts?
+    public let botGroupAdminRights: IosappChatAdminRights?
+    public let botChannelAdminRights: IosappChatAdminRights?
+    public let starRating: IosappStarRating?
+    public let pendingStarRating: IosappStarPendingRating?
+    public let mainProfileTab: IosappProfileTab?
+    public let savedMusic: IosappMediaFile?
     public let note: Note?
     public let myCopyProtectionEnableDate: Int32?
     public let botManagerId: PeerId?
@@ -1355,7 +1355,7 @@ public final class CachedUserData: CachedPeerData {
         self.botManagerId = nil
     }
 
-    public init(about: String?, botInfo: BotInfo?, editableBotInfo: EditableBotInfo?, peerStatusSettings: PeerStatusSettings?, pinnedMessageId: MessageId?, isBlocked: Bool, commonGroupCount: Int32, voiceCallsAvailable: Bool, videoCallsAvailable: Bool, callsPrivate: Bool, canPinMessages: Bool, hasScheduledMessages: Bool, autoremoveTimeout: CachedPeerAutoremoveTimeout, chatTheme: ChatTheme?, photo: CachedPeerProfilePhoto, personalPhoto: CachedPeerProfilePhoto, fallbackPhoto: CachedPeerProfilePhoto, voiceMessagesAvailable: Bool, wallpaper: TelegramWallpaper?, flags: CachedUserFlags, businessHours: TelegramBusinessHours?, businessLocation: TelegramBusinessLocation?, greetingMessage: TelegramBusinessGreetingMessage?, awayMessage: TelegramBusinessAwayMessage?, connectedBot: TelegramAccountConnectedBot?, businessIntro: CachedTelegramBusinessIntro, birthday: TelegramBirthday?, personalChannel: CachedTelegramPersonalChannel, botPreview: BotPreview?, starGiftsCount: Int32?, starRefProgram: TelegramStarRefProgram?, verification: PeerVerification?, sendPaidMessageStars: StarsAmount?, disallowedGifts: TelegramDisallowedGifts?, botGroupAdminRights: TelegramChatAdminRights?, botChannelAdminRights: TelegramChatAdminRights?, starRating: TelegramStarRating?, pendingStarRating: TelegramStarPendingRating?, mainProfileTab: TelegramProfileTab?, savedMusic: TelegramMediaFile?, note: Note?, myCopyProtectionEnableDate: Int32?, botManagerId: PeerId?) {
+    public init(about: String?, botInfo: BotInfo?, editableBotInfo: EditableBotInfo?, peerStatusSettings: PeerStatusSettings?, pinnedMessageId: MessageId?, isBlocked: Bool, commonGroupCount: Int32, voiceCallsAvailable: Bool, videoCallsAvailable: Bool, callsPrivate: Bool, canPinMessages: Bool, hasScheduledMessages: Bool, autoremoveTimeout: CachedPeerAutoremoveTimeout, chatTheme: ChatTheme?, photo: CachedPeerProfilePhoto, personalPhoto: CachedPeerProfilePhoto, fallbackPhoto: CachedPeerProfilePhoto, voiceMessagesAvailable: Bool, wallpaper: IosappWallpaper?, flags: CachedUserFlags, businessHours: IosappBusinessHours?, businessLocation: IosappBusinessLocation?, greetingMessage: IosappBusinessGreetingMessage?, awayMessage: IosappBusinessAwayMessage?, connectedBot: IosappAccountConnectedBot?, businessIntro: CachedIosappBusinessIntro, birthday: IosappBirthday?, personalChannel: CachedIosappPersonalChannel, botPreview: BotPreview?, starGiftsCount: Int32?, starRefProgram: IosappStarRefProgram?, verification: PeerVerification?, sendPaidMessageStars: StarsAmount?, disallowedGifts: IosappDisallowedGifts?, botGroupAdminRights: IosappChatAdminRights?, botChannelAdminRights: IosappChatAdminRights?, starRating: IosappStarRating?, pendingStarRating: IosappStarPendingRating?, mainProfileTab: IosappProfileTab?, savedMusic: IosappMediaFile?, note: Note?, myCopyProtectionEnableDate: Int32?, botManagerId: PeerId?) {
         self.about = about
         self.botInfo = botInfo
         self.editableBotInfo = editableBotInfo
@@ -1451,7 +1451,7 @@ public final class CachedUserData: CachedPeerData {
         self.fallbackPhoto = decoder.decodeObjectForKey("fphv", decoder: CachedPeerProfilePhoto.init(decoder:)) as? CachedPeerProfilePhoto ?? .unknown
         
         self.voiceMessagesAvailable = decoder.decodeInt32ForKey("vma", orElse: 0) != 0
-        self.wallpaper = decoder.decode(TelegramWallpaperNativeCodable.self, forKey: "wp")?.value
+        self.wallpaper = decoder.decode(IosappWallpaperNativeCodable.self, forKey: "wp")?.value
         self.flags = CachedUserFlags(rawValue: decoder.decodeInt32ForKey("fl", orElse: 0))
         
         self.peerIds = Set<PeerId>()
@@ -1462,38 +1462,38 @@ public final class CachedUserData: CachedPeerData {
         }
         self.messageIds = messageIds
         
-        self.businessHours = decoder.decodeCodable(TelegramBusinessHours.self, forKey: "bhrs")
-        self.businessLocation = decoder.decodeCodable(TelegramBusinessLocation.self, forKey: "bloc")
+        self.businessHours = decoder.decodeCodable(IosappBusinessHours.self, forKey: "bhrs")
+        self.businessLocation = decoder.decodeCodable(IosappBusinessLocation.self, forKey: "bloc")
         
-        self.greetingMessage = decoder.decodeCodable(TelegramBusinessGreetingMessage.self, forKey: "bgreet")
-        self.awayMessage = decoder.decodeCodable(TelegramBusinessAwayMessage.self, forKey: "baway")
-        self.connectedBot = decoder.decodeCodable(TelegramAccountConnectedBot.self, forKey: "bbot")
-        self.businessIntro = decoder.decodeObjectForKey("businessIntro", decoder: CachedTelegramBusinessIntro.init(decoder:)) as? CachedTelegramBusinessIntro ?? .unknown
+        self.greetingMessage = decoder.decodeCodable(IosappBusinessGreetingMessage.self, forKey: "bgreet")
+        self.awayMessage = decoder.decodeCodable(IosappBusinessAwayMessage.self, forKey: "baway")
+        self.connectedBot = decoder.decodeCodable(IosappAccountConnectedBot.self, forKey: "bbot")
+        self.businessIntro = decoder.decodeObjectForKey("businessIntro", decoder: CachedIosappBusinessIntro.init(decoder:)) as? CachedIosappBusinessIntro ?? .unknown
         
-        self.birthday = decoder.decodeCodable(TelegramBirthday.self, forKey: "bday")
-        self.personalChannel = decoder.decodeCodable(CachedTelegramPersonalChannel.self, forKey: "pchan") ?? .unknown
+        self.birthday = decoder.decodeCodable(IosappBirthday.self, forKey: "bday")
+        self.personalChannel = decoder.decodeCodable(CachedIosappPersonalChannel.self, forKey: "pchan") ?? .unknown
         
         self.botPreview = decoder.decodeCodable(BotPreview.self, forKey: "botPreview")
         
         self.starGiftsCount = decoder.decodeOptionalInt32ForKey("starGiftsCount")
         
-        self.starRefProgram = decoder.decodeCodable(TelegramStarRefProgram.self, forKey: "starRefProgram")
+        self.starRefProgram = decoder.decodeCodable(IosappStarRefProgram.self, forKey: "starRefProgram")
 
         self.verification = decoder.decodeCodable(PeerVerification.self, forKey: "verification")
         
         self.sendPaidMessageStars = decoder.decodeCodable(StarsAmount.self, forKey: "sendPaidMessageStars")
         
-        self.disallowedGifts = decoder.decodeOptionalInt32ForKey("disallowedGifts").flatMap { TelegramDisallowedGifts(rawValue: $0) }
+        self.disallowedGifts = decoder.decodeOptionalInt32ForKey("disallowedGifts").flatMap { IosappDisallowedGifts(rawValue: $0) }
         
-        self.botGroupAdminRights = decoder.decodeCodable(TelegramChatAdminRights.self, forKey: "botGroupAdminRights")
-        self.botChannelAdminRights = decoder.decodeCodable(TelegramChatAdminRights.self, forKey: "botChannelAdminRights")
+        self.botGroupAdminRights = decoder.decodeCodable(IosappChatAdminRights.self, forKey: "botGroupAdminRights")
+        self.botChannelAdminRights = decoder.decodeCodable(IosappChatAdminRights.self, forKey: "botChannelAdminRights")
         
-        self.starRating = decoder.decodeCodable(TelegramStarRating.self, forKey: "starRating")
-        self.pendingStarRating = decoder.decodeCodable(TelegramStarPendingRating.self, forKey: "pendingStarRating")
+        self.starRating = decoder.decodeCodable(IosappStarRating.self, forKey: "starRating")
+        self.pendingStarRating = decoder.decodeCodable(IosappStarPendingRating.self, forKey: "pendingStarRating")
         
-        self.mainProfileTab = decoder.decodeCodable(TelegramProfileTab.self, forKey: "mainProfileTab")
+        self.mainProfileTab = decoder.decodeCodable(IosappProfileTab.self, forKey: "mainProfileTab")
                 
-        if let savedMusic = decoder.decodeObjectForKey("savedMusic", decoder: { TelegramMediaFile(decoder: $0) }) as? TelegramMediaFile {
+        if let savedMusic = decoder.decodeObjectForKey("savedMusic", decoder: { IosappMediaFile(decoder: $0) }) as? IosappMediaFile {
             self.savedMusic = savedMusic
         } else {
             self.savedMusic = nil
@@ -1557,7 +1557,7 @@ public final class CachedUserData: CachedPeerData {
         encoder.encodeInt32(self.voiceMessagesAvailable ? 1 : 0, forKey: "vma")
         
         if let wallpaper = self.wallpaper {
-            encoder.encode(TelegramWallpaperNativeCodable(wallpaper), forKey: "wp")
+            encoder.encode(IosappWallpaperNativeCodable(wallpaper), forKey: "wp")
         } else {
             encoder.encodeNil(forKey: "wp")
         }
@@ -1850,7 +1850,7 @@ public final class CachedUserData: CachedPeerData {
         return CachedUserData(about: self.about, botInfo: self.botInfo, editableBotInfo: self.editableBotInfo, peerStatusSettings: self.peerStatusSettings, pinnedMessageId: self.pinnedMessageId, isBlocked: self.isBlocked, commonGroupCount: self.commonGroupCount, voiceCallsAvailable: self.voiceCallsAvailable, videoCallsAvailable: self.videoCallsAvailable, callsPrivate: self.callsPrivate, canPinMessages: self.canPinMessages, hasScheduledMessages: self.hasScheduledMessages, autoremoveTimeout: self.autoremoveTimeout, chatTheme: self.chatTheme, photo: self.photo, personalPhoto: self.personalPhoto, fallbackPhoto: self.fallbackPhoto, voiceMessagesAvailable: voiceMessagesAvailable, wallpaper: self.wallpaper, flags: self.flags, businessHours: self.businessHours, businessLocation: self.businessLocation, greetingMessage: self.greetingMessage, awayMessage: self.awayMessage, connectedBot: self.connectedBot, businessIntro: self.businessIntro, birthday: self.birthday, personalChannel: self.personalChannel, botPreview: self.botPreview, starGiftsCount: self.starGiftsCount, starRefProgram: self.starRefProgram, verification: self.verification, sendPaidMessageStars: self.sendPaidMessageStars, disallowedGifts: self.disallowedGifts, botGroupAdminRights: self.botGroupAdminRights, botChannelAdminRights: self.botChannelAdminRights, starRating: self.starRating, pendingStarRating: self.pendingStarRating, mainProfileTab: self.mainProfileTab, savedMusic: self.savedMusic, note: self.note, myCopyProtectionEnableDate: self.myCopyProtectionEnableDate, botManagerId: self.botManagerId)
     }
     
-    public func withUpdatedWallpaper(_ wallpaper: TelegramWallpaper?) -> CachedUserData {
+    public func withUpdatedWallpaper(_ wallpaper: IosappWallpaper?) -> CachedUserData {
         return CachedUserData(about: self.about, botInfo: self.botInfo, editableBotInfo: self.editableBotInfo, peerStatusSettings: self.peerStatusSettings, pinnedMessageId: self.pinnedMessageId, isBlocked: self.isBlocked, commonGroupCount: self.commonGroupCount, voiceCallsAvailable: self.voiceCallsAvailable, videoCallsAvailable: self.videoCallsAvailable, callsPrivate: self.callsPrivate, canPinMessages: self.canPinMessages, hasScheduledMessages: self.hasScheduledMessages, autoremoveTimeout: self.autoremoveTimeout, chatTheme: self.chatTheme, photo: self.photo, personalPhoto: self.personalPhoto, fallbackPhoto: self.fallbackPhoto, voiceMessagesAvailable: self.voiceMessagesAvailable, wallpaper: wallpaper, flags: self.flags, businessHours: self.businessHours, businessLocation: self.businessLocation, greetingMessage: self.greetingMessage, awayMessage: self.awayMessage, connectedBot: self.connectedBot, businessIntro: self.businessIntro, birthday: self.birthday, personalChannel: self.personalChannel, botPreview: self.botPreview, starGiftsCount: self.starGiftsCount, starRefProgram: self.starRefProgram, verification: self.verification, sendPaidMessageStars: self.sendPaidMessageStars, disallowedGifts: self.disallowedGifts, botGroupAdminRights: self.botGroupAdminRights, botChannelAdminRights: self.botChannelAdminRights, starRating: self.starRating, pendingStarRating: self.pendingStarRating, mainProfileTab: self.mainProfileTab, savedMusic: self.savedMusic, note: self.note, myCopyProtectionEnableDate: self.myCopyProtectionEnableDate, botManagerId: self.botManagerId)
     }
     
@@ -1858,35 +1858,35 @@ public final class CachedUserData: CachedPeerData {
         return CachedUserData(about: self.about, botInfo: self.botInfo, editableBotInfo: self.editableBotInfo, peerStatusSettings: self.peerStatusSettings, pinnedMessageId: self.pinnedMessageId, isBlocked: self.isBlocked, commonGroupCount: self.commonGroupCount, voiceCallsAvailable: self.voiceCallsAvailable, videoCallsAvailable: self.videoCallsAvailable, callsPrivate: self.callsPrivate, canPinMessages: self.canPinMessages, hasScheduledMessages: self.hasScheduledMessages, autoremoveTimeout: self.autoremoveTimeout, chatTheme: self.chatTheme, photo: self.photo, personalPhoto: self.personalPhoto, fallbackPhoto: self.fallbackPhoto, voiceMessagesAvailable: self.voiceMessagesAvailable, wallpaper: self.wallpaper, flags: flags, businessHours: self.businessHours, businessLocation: self.businessLocation, greetingMessage: self.greetingMessage, awayMessage: self.awayMessage, connectedBot: self.connectedBot, businessIntro: self.businessIntro, birthday: self.birthday, personalChannel: self.personalChannel, botPreview: self.botPreview, starGiftsCount: self.starGiftsCount, starRefProgram: self.starRefProgram, verification: self.verification, sendPaidMessageStars: self.sendPaidMessageStars, disallowedGifts: self.disallowedGifts, botGroupAdminRights: self.botGroupAdminRights, botChannelAdminRights: self.botChannelAdminRights, starRating: self.starRating, pendingStarRating: self.pendingStarRating, mainProfileTab: self.mainProfileTab, savedMusic: self.savedMusic, note: self.note, myCopyProtectionEnableDate: self.myCopyProtectionEnableDate, botManagerId: self.botManagerId)
     }
     
-    public func withUpdatedBusinessHours(_ businessHours: TelegramBusinessHours?) -> CachedUserData {
+    public func withUpdatedBusinessHours(_ businessHours: IosappBusinessHours?) -> CachedUserData {
         return CachedUserData(about: self.about, botInfo: self.botInfo, editableBotInfo: self.editableBotInfo, peerStatusSettings: self.peerStatusSettings, pinnedMessageId: self.pinnedMessageId, isBlocked: self.isBlocked, commonGroupCount: self.commonGroupCount, voiceCallsAvailable: self.voiceCallsAvailable, videoCallsAvailable: self.videoCallsAvailable, callsPrivate: self.callsPrivate, canPinMessages: self.canPinMessages, hasScheduledMessages: self.hasScheduledMessages, autoremoveTimeout: self.autoremoveTimeout, chatTheme: self.chatTheme, photo: self.photo, personalPhoto: self.personalPhoto, fallbackPhoto: self.fallbackPhoto, voiceMessagesAvailable: self.voiceMessagesAvailable, wallpaper: self.wallpaper, flags: self.flags, businessHours: businessHours, businessLocation: self.businessLocation, greetingMessage: self.greetingMessage, awayMessage: self.awayMessage, connectedBot: self.connectedBot, businessIntro: self.businessIntro, birthday: self.birthday, personalChannel: self.personalChannel, botPreview: self.botPreview, starGiftsCount: self.starGiftsCount, starRefProgram: self.starRefProgram, verification: self.verification, sendPaidMessageStars: self.sendPaidMessageStars, disallowedGifts: self.disallowedGifts, botGroupAdminRights: self.botGroupAdminRights, botChannelAdminRights: self.botChannelAdminRights, starRating: self.starRating, pendingStarRating: self.pendingStarRating, mainProfileTab: self.mainProfileTab, savedMusic: self.savedMusic, note: self.note, myCopyProtectionEnableDate: self.myCopyProtectionEnableDate, botManagerId: self.botManagerId)
     }
     
-    public func withUpdatedBusinessLocation(_ businessLocation: TelegramBusinessLocation?) -> CachedUserData {
+    public func withUpdatedBusinessLocation(_ businessLocation: IosappBusinessLocation?) -> CachedUserData {
         return CachedUserData(about: self.about, botInfo: self.botInfo, editableBotInfo: self.editableBotInfo, peerStatusSettings: self.peerStatusSettings, pinnedMessageId: self.pinnedMessageId, isBlocked: self.isBlocked, commonGroupCount: self.commonGroupCount, voiceCallsAvailable: self.voiceCallsAvailable, videoCallsAvailable: self.videoCallsAvailable, callsPrivate: self.callsPrivate, canPinMessages: self.canPinMessages, hasScheduledMessages: self.hasScheduledMessages, autoremoveTimeout: self.autoremoveTimeout, chatTheme: self.chatTheme, photo: self.photo, personalPhoto: self.personalPhoto, fallbackPhoto: self.fallbackPhoto, voiceMessagesAvailable: self.voiceMessagesAvailable, wallpaper: self.wallpaper, flags: self.flags, businessHours: self.businessHours, businessLocation: businessLocation, greetingMessage: self.greetingMessage, awayMessage: self.awayMessage, connectedBot: self.connectedBot, businessIntro: self.businessIntro, birthday: self.birthday, personalChannel: self.personalChannel, botPreview: self.botPreview, starGiftsCount: self.starGiftsCount, starRefProgram: self.starRefProgram, verification: self.verification, sendPaidMessageStars: self.sendPaidMessageStars, disallowedGifts: self.disallowedGifts, botGroupAdminRights: self.botGroupAdminRights, botChannelAdminRights: self.botChannelAdminRights, starRating: self.starRating, pendingStarRating: self.pendingStarRating, mainProfileTab: self.mainProfileTab, savedMusic: self.savedMusic, note: self.note, myCopyProtectionEnableDate: self.myCopyProtectionEnableDate, botManagerId: self.botManagerId)
     }
     
-    public func withUpdatedGreetingMessage(_ greetingMessage: TelegramBusinessGreetingMessage?) -> CachedUserData {
+    public func withUpdatedGreetingMessage(_ greetingMessage: IosappBusinessGreetingMessage?) -> CachedUserData {
         return CachedUserData(about: self.about, botInfo: self.botInfo, editableBotInfo: self.editableBotInfo, peerStatusSettings: self.peerStatusSettings, pinnedMessageId: self.pinnedMessageId, isBlocked: self.isBlocked, commonGroupCount: self.commonGroupCount, voiceCallsAvailable: self.voiceCallsAvailable, videoCallsAvailable: self.videoCallsAvailable, callsPrivate: self.callsPrivate, canPinMessages: self.canPinMessages, hasScheduledMessages: self.hasScheduledMessages, autoremoveTimeout: self.autoremoveTimeout, chatTheme: self.chatTheme, photo: self.photo, personalPhoto: self.personalPhoto, fallbackPhoto: self.fallbackPhoto, voiceMessagesAvailable: self.voiceMessagesAvailable, wallpaper: self.wallpaper, flags: self.flags, businessHours: self.businessHours, businessLocation: self.businessLocation, greetingMessage: greetingMessage, awayMessage: self.awayMessage, connectedBot: self.connectedBot, businessIntro: self.businessIntro, birthday: self.birthday, personalChannel: self.personalChannel, botPreview: self.botPreview, starGiftsCount: self.starGiftsCount, starRefProgram: self.starRefProgram, verification: self.verification, sendPaidMessageStars: self.sendPaidMessageStars, disallowedGifts: self.disallowedGifts, botGroupAdminRights: self.botGroupAdminRights, botChannelAdminRights: self.botChannelAdminRights, starRating: self.starRating, pendingStarRating: self.pendingStarRating, mainProfileTab: self.mainProfileTab, savedMusic: self.savedMusic, note: self.note, myCopyProtectionEnableDate: self.myCopyProtectionEnableDate, botManagerId: self.botManagerId)
     }
     
-    public func withUpdatedAwayMessage(_ awayMessage: TelegramBusinessAwayMessage?) -> CachedUserData {
+    public func withUpdatedAwayMessage(_ awayMessage: IosappBusinessAwayMessage?) -> CachedUserData {
         return CachedUserData(about: self.about, botInfo: self.botInfo, editableBotInfo: self.editableBotInfo, peerStatusSettings: self.peerStatusSettings, pinnedMessageId: self.pinnedMessageId, isBlocked: self.isBlocked, commonGroupCount: self.commonGroupCount, voiceCallsAvailable: self.voiceCallsAvailable, videoCallsAvailable: self.videoCallsAvailable, callsPrivate: self.callsPrivate, canPinMessages: self.canPinMessages, hasScheduledMessages: self.hasScheduledMessages, autoremoveTimeout: self.autoremoveTimeout, chatTheme: self.chatTheme, photo: self.photo, personalPhoto: self.personalPhoto, fallbackPhoto: self.fallbackPhoto, voiceMessagesAvailable: self.voiceMessagesAvailable, wallpaper: self.wallpaper, flags: self.flags, businessHours: self.businessHours, businessLocation: self.businessLocation, greetingMessage: self.greetingMessage, awayMessage: awayMessage, connectedBot: self.connectedBot, businessIntro: self.businessIntro, birthday: self.birthday, personalChannel: self.personalChannel, botPreview: self.botPreview, starGiftsCount: self.starGiftsCount, starRefProgram: self.starRefProgram, verification: self.verification, sendPaidMessageStars: self.sendPaidMessageStars, disallowedGifts: self.disallowedGifts, botGroupAdminRights: self.botGroupAdminRights, botChannelAdminRights: self.botChannelAdminRights, starRating: self.starRating, pendingStarRating: self.pendingStarRating, mainProfileTab: self.mainProfileTab, savedMusic: self.savedMusic, note: self.note, myCopyProtectionEnableDate: self.myCopyProtectionEnableDate, botManagerId: self.botManagerId)
     }
     
-    public func withUpdatedConnectedBot(_ connectedBot: TelegramAccountConnectedBot?) -> CachedUserData {
+    public func withUpdatedConnectedBot(_ connectedBot: IosappAccountConnectedBot?) -> CachedUserData {
         return CachedUserData(about: self.about, botInfo: self.botInfo, editableBotInfo: self.editableBotInfo, peerStatusSettings: self.peerStatusSettings, pinnedMessageId: self.pinnedMessageId, isBlocked: self.isBlocked, commonGroupCount: self.commonGroupCount, voiceCallsAvailable: self.voiceCallsAvailable, videoCallsAvailable: self.videoCallsAvailable, callsPrivate: self.callsPrivate, canPinMessages: self.canPinMessages, hasScheduledMessages: self.hasScheduledMessages, autoremoveTimeout: self.autoremoveTimeout, chatTheme: self.chatTheme, photo: self.photo, personalPhoto: self.personalPhoto, fallbackPhoto: self.fallbackPhoto, voiceMessagesAvailable: self.voiceMessagesAvailable, wallpaper: self.wallpaper, flags: self.flags, businessHours: self.businessHours, businessLocation: self.businessLocation, greetingMessage: self.greetingMessage, awayMessage: self.awayMessage, connectedBot: connectedBot, businessIntro: self.businessIntro, birthday: self.birthday, personalChannel: self.personalChannel, botPreview: self.botPreview, starGiftsCount: self.starGiftsCount, starRefProgram: self.starRefProgram, verification: self.verification, sendPaidMessageStars: self.sendPaidMessageStars, disallowedGifts: self.disallowedGifts, botGroupAdminRights: self.botGroupAdminRights, botChannelAdminRights: self.botChannelAdminRights, starRating: self.starRating, pendingStarRating: self.pendingStarRating, mainProfileTab: self.mainProfileTab, savedMusic: self.savedMusic, note: self.note, myCopyProtectionEnableDate: self.myCopyProtectionEnableDate, botManagerId: self.botManagerId)
     }
     
-    public func withUpdatedBusinessIntro(_ businessIntro: TelegramBusinessIntro?) -> CachedUserData {
+    public func withUpdatedBusinessIntro(_ businessIntro: IosappBusinessIntro?) -> CachedUserData {
         return CachedUserData(about: self.about, botInfo: self.botInfo, editableBotInfo: self.editableBotInfo, peerStatusSettings: self.peerStatusSettings, pinnedMessageId: self.pinnedMessageId, isBlocked: self.isBlocked, commonGroupCount: self.commonGroupCount, voiceCallsAvailable: self.voiceCallsAvailable, videoCallsAvailable: self.videoCallsAvailable, callsPrivate: self.callsPrivate, canPinMessages: self.canPinMessages, hasScheduledMessages: self.hasScheduledMessages, autoremoveTimeout: self.autoremoveTimeout, chatTheme: self.chatTheme, photo: self.photo, personalPhoto: self.personalPhoto, fallbackPhoto: self.fallbackPhoto, voiceMessagesAvailable: self.voiceMessagesAvailable, wallpaper: self.wallpaper, flags: self.flags, businessHours: self.businessHours, businessLocation: self.businessLocation, greetingMessage: self.greetingMessage, awayMessage: self.awayMessage, connectedBot: self.connectedBot, businessIntro: .known(businessIntro), birthday: self.birthday, personalChannel: self.personalChannel, botPreview: self.botPreview, starGiftsCount: self.starGiftsCount, starRefProgram: self.starRefProgram, verification: self.verification, sendPaidMessageStars: self.sendPaidMessageStars, disallowedGifts: self.disallowedGifts, botGroupAdminRights: self.botGroupAdminRights, botChannelAdminRights: self.botChannelAdminRights, starRating: self.starRating, pendingStarRating: self.pendingStarRating, mainProfileTab: self.mainProfileTab, savedMusic: self.savedMusic, note: self.note, myCopyProtectionEnableDate: self.myCopyProtectionEnableDate, botManagerId: self.botManagerId)
     }
     
-    public func withUpdatedBirthday(_ birthday: TelegramBirthday?) -> CachedUserData {
+    public func withUpdatedBirthday(_ birthday: IosappBirthday?) -> CachedUserData {
         return CachedUserData(about: self.about, botInfo: self.botInfo, editableBotInfo: self.editableBotInfo, peerStatusSettings: self.peerStatusSettings, pinnedMessageId: self.pinnedMessageId, isBlocked: self.isBlocked, commonGroupCount: self.commonGroupCount, voiceCallsAvailable: self.voiceCallsAvailable, videoCallsAvailable: self.videoCallsAvailable, callsPrivate: self.callsPrivate, canPinMessages: self.canPinMessages, hasScheduledMessages: self.hasScheduledMessages, autoremoveTimeout: self.autoremoveTimeout, chatTheme: self.chatTheme, photo: self.photo, personalPhoto: self.personalPhoto, fallbackPhoto: self.fallbackPhoto, voiceMessagesAvailable: self.voiceMessagesAvailable, wallpaper: self.wallpaper, flags: self.flags, businessHours: self.businessHours, businessLocation: self.businessLocation, greetingMessage: self.greetingMessage, awayMessage: self.awayMessage, connectedBot: self.connectedBot, businessIntro: self.businessIntro, birthday: birthday, personalChannel: self.personalChannel, botPreview: self.botPreview, starGiftsCount: self.starGiftsCount, starRefProgram: self.starRefProgram, verification: self.verification, sendPaidMessageStars: self.sendPaidMessageStars, disallowedGifts: self.disallowedGifts, botGroupAdminRights: self.botGroupAdminRights, botChannelAdminRights: self.botChannelAdminRights, starRating: self.starRating, pendingStarRating: self.pendingStarRating, mainProfileTab: self.mainProfileTab, savedMusic: self.savedMusic, note: self.note, myCopyProtectionEnableDate: self.myCopyProtectionEnableDate, botManagerId: self.botManagerId)
     }
     
-    public func withUpdatedPersonalChannel(_ personalChannel: TelegramPersonalChannel?) -> CachedUserData {
+    public func withUpdatedPersonalChannel(_ personalChannel: IosappPersonalChannel?) -> CachedUserData {
         return CachedUserData(about: self.about, botInfo: self.botInfo, editableBotInfo: self.editableBotInfo, peerStatusSettings: self.peerStatusSettings, pinnedMessageId: self.pinnedMessageId, isBlocked: self.isBlocked, commonGroupCount: self.commonGroupCount, voiceCallsAvailable: self.voiceCallsAvailable, videoCallsAvailable: self.videoCallsAvailable, callsPrivate: self.callsPrivate, canPinMessages: self.canPinMessages, hasScheduledMessages: self.hasScheduledMessages, autoremoveTimeout: self.autoremoveTimeout, chatTheme: self.chatTheme, photo: self.photo, personalPhoto: self.personalPhoto, fallbackPhoto: self.fallbackPhoto, voiceMessagesAvailable: self.voiceMessagesAvailable, wallpaper: self.wallpaper, flags: self.flags, businessHours: self.businessHours, businessLocation: self.businessLocation, greetingMessage: self.greetingMessage, awayMessage: self.awayMessage, connectedBot: self.connectedBot, businessIntro: self.businessIntro, birthday: self.birthday, personalChannel: .known(personalChannel), botPreview: self.botPreview, starGiftsCount: self.starGiftsCount, starRefProgram: self.starRefProgram, verification: self.verification, sendPaidMessageStars: self.sendPaidMessageStars, disallowedGifts: self.disallowedGifts, botGroupAdminRights: self.botGroupAdminRights, botChannelAdminRights: self.botChannelAdminRights, starRating: self.starRating, pendingStarRating: self.pendingStarRating, mainProfileTab: self.mainProfileTab, savedMusic: self.savedMusic, note: self.note, myCopyProtectionEnableDate: self.myCopyProtectionEnableDate, botManagerId: self.botManagerId)
     }
     
@@ -1898,7 +1898,7 @@ public final class CachedUserData: CachedPeerData {
         return CachedUserData(about: self.about, botInfo: self.botInfo, editableBotInfo: self.editableBotInfo, peerStatusSettings: self.peerStatusSettings, pinnedMessageId: self.pinnedMessageId, isBlocked: self.isBlocked, commonGroupCount: self.commonGroupCount, voiceCallsAvailable: self.voiceCallsAvailable, videoCallsAvailable: self.videoCallsAvailable, callsPrivate: self.callsPrivate, canPinMessages: self.canPinMessages, hasScheduledMessages: self.hasScheduledMessages, autoremoveTimeout: self.autoremoveTimeout, chatTheme: self.chatTheme, photo: self.photo, personalPhoto: self.personalPhoto, fallbackPhoto: self.fallbackPhoto, voiceMessagesAvailable: self.voiceMessagesAvailable, wallpaper: self.wallpaper, flags: self.flags, businessHours: self.businessHours, businessLocation: self.businessLocation, greetingMessage: self.greetingMessage, awayMessage: self.awayMessage, connectedBot: self.connectedBot, businessIntro: self.businessIntro, birthday: self.birthday, personalChannel: self.personalChannel, botPreview: self.botPreview, starGiftsCount: starGiftsCount, starRefProgram: self.starRefProgram, verification: self.verification, sendPaidMessageStars: self.sendPaidMessageStars, disallowedGifts: self.disallowedGifts, botGroupAdminRights: self.botGroupAdminRights, botChannelAdminRights: self.botChannelAdminRights, starRating: self.starRating, pendingStarRating: self.pendingStarRating, mainProfileTab: self.mainProfileTab, savedMusic: self.savedMusic, note: self.note, myCopyProtectionEnableDate: self.myCopyProtectionEnableDate, botManagerId: self.botManagerId)
     }
     
-    public func withUpdatedStarRefProgram(_ starRefProgram: TelegramStarRefProgram?) -> CachedUserData {
+    public func withUpdatedStarRefProgram(_ starRefProgram: IosappStarRefProgram?) -> CachedUserData {
         return CachedUserData(about: self.about, botInfo: self.botInfo, editableBotInfo: self.editableBotInfo, peerStatusSettings: self.peerStatusSettings, pinnedMessageId: self.pinnedMessageId, isBlocked: self.isBlocked, commonGroupCount: self.commonGroupCount, voiceCallsAvailable: self.voiceCallsAvailable, videoCallsAvailable: self.videoCallsAvailable, callsPrivate: self.callsPrivate, canPinMessages: self.canPinMessages, hasScheduledMessages: self.hasScheduledMessages, autoremoveTimeout: self.autoremoveTimeout, chatTheme: self.chatTheme, photo: self.photo, personalPhoto: self.personalPhoto, fallbackPhoto: self.fallbackPhoto, voiceMessagesAvailable: self.voiceMessagesAvailable, wallpaper: self.wallpaper, flags: self.flags, businessHours: self.businessHours, businessLocation: self.businessLocation, greetingMessage: self.greetingMessage, awayMessage: self.awayMessage, connectedBot: self.connectedBot, businessIntro: self.businessIntro, birthday: self.birthday, personalChannel: self.personalChannel, botPreview: self.botPreview, starGiftsCount: self.starGiftsCount, starRefProgram: starRefProgram, verification: self.verification, sendPaidMessageStars: self.sendPaidMessageStars, disallowedGifts: self.disallowedGifts, botGroupAdminRights: self.botGroupAdminRights, botChannelAdminRights: self.botChannelAdminRights, starRating: self.starRating, pendingStarRating: self.pendingStarRating, mainProfileTab: self.mainProfileTab, savedMusic: self.savedMusic, note: self.note, myCopyProtectionEnableDate: self.myCopyProtectionEnableDate, botManagerId: self.botManagerId)
     }
     
@@ -1910,31 +1910,31 @@ public final class CachedUserData: CachedPeerData {
         return CachedUserData(about: self.about, botInfo: self.botInfo, editableBotInfo: self.editableBotInfo, peerStatusSettings: self.peerStatusSettings, pinnedMessageId: self.pinnedMessageId, isBlocked: self.isBlocked, commonGroupCount: self.commonGroupCount, voiceCallsAvailable: self.voiceCallsAvailable, videoCallsAvailable: self.videoCallsAvailable, callsPrivate: self.callsPrivate, canPinMessages: self.canPinMessages, hasScheduledMessages: self.hasScheduledMessages, autoremoveTimeout: self.autoremoveTimeout, chatTheme: self.chatTheme, photo: self.photo, personalPhoto: self.personalPhoto, fallbackPhoto: self.fallbackPhoto, voiceMessagesAvailable: self.voiceMessagesAvailable, wallpaper: self.wallpaper, flags: self.flags, businessHours: self.businessHours, businessLocation: self.businessLocation, greetingMessage: self.greetingMessage, awayMessage: self.awayMessage, connectedBot: self.connectedBot, businessIntro: self.businessIntro, birthday: self.birthday, personalChannel: self.personalChannel, botPreview: self.botPreview, starGiftsCount: self.starGiftsCount, starRefProgram: self.starRefProgram, verification: self.verification, sendPaidMessageStars: sendPaidMessageStars, disallowedGifts: self.disallowedGifts, botGroupAdminRights: self.botGroupAdminRights, botChannelAdminRights: self.botChannelAdminRights, starRating: self.starRating, pendingStarRating: self.pendingStarRating, mainProfileTab: self.mainProfileTab, savedMusic: self.savedMusic, note: self.note, myCopyProtectionEnableDate: self.myCopyProtectionEnableDate, botManagerId: self.botManagerId)
     }
     
-    public func withUpdatedDisallowedGifts(_ disallowedGifts: TelegramDisallowedGifts) -> CachedUserData {
+    public func withUpdatedDisallowedGifts(_ disallowedGifts: IosappDisallowedGifts) -> CachedUserData {
         return CachedUserData(about: self.about, botInfo: self.botInfo, editableBotInfo: self.editableBotInfo, peerStatusSettings: self.peerStatusSettings, pinnedMessageId: self.pinnedMessageId, isBlocked: self.isBlocked, commonGroupCount: self.commonGroupCount, voiceCallsAvailable: self.voiceCallsAvailable, videoCallsAvailable: self.videoCallsAvailable, callsPrivate: self.callsPrivate, canPinMessages: self.canPinMessages, hasScheduledMessages: self.hasScheduledMessages, autoremoveTimeout: self.autoremoveTimeout, chatTheme: self.chatTheme, photo: self.photo, personalPhoto: self.personalPhoto, fallbackPhoto: self.fallbackPhoto, voiceMessagesAvailable: self.voiceMessagesAvailable, wallpaper: self.wallpaper, flags: self.flags, businessHours: self.businessHours, businessLocation: self.businessLocation, greetingMessage: self.greetingMessage, awayMessage: self.awayMessage, connectedBot: self.connectedBot, businessIntro: self.businessIntro, birthday: self.birthday, personalChannel: self.personalChannel, botPreview: self.botPreview, starGiftsCount: self.starGiftsCount, starRefProgram: self.starRefProgram, verification: self.verification, sendPaidMessageStars: self.sendPaidMessageStars, disallowedGifts: disallowedGifts, botGroupAdminRights: self.botGroupAdminRights, botChannelAdminRights: self.botChannelAdminRights, starRating: self.starRating, pendingStarRating: self.pendingStarRating, mainProfileTab: self.mainProfileTab, savedMusic: self.savedMusic, note: self.note, myCopyProtectionEnableDate: self.myCopyProtectionEnableDate, botManagerId: self.botManagerId)
     }
     
-    public func withUpdatedBotGroupAdminRights(_ botGroupAdminRights: TelegramChatAdminRights?) -> CachedUserData {
+    public func withUpdatedBotGroupAdminRights(_ botGroupAdminRights: IosappChatAdminRights?) -> CachedUserData {
         return CachedUserData(about: self.about, botInfo: self.botInfo, editableBotInfo: self.editableBotInfo, peerStatusSettings: self.peerStatusSettings, pinnedMessageId: self.pinnedMessageId, isBlocked: self.isBlocked, commonGroupCount: self.commonGroupCount, voiceCallsAvailable: self.voiceCallsAvailable, videoCallsAvailable: self.videoCallsAvailable, callsPrivate: self.callsPrivate, canPinMessages: self.canPinMessages, hasScheduledMessages: self.hasScheduledMessages, autoremoveTimeout: self.autoremoveTimeout, chatTheme: self.chatTheme, photo: self.photo, personalPhoto: self.personalPhoto, fallbackPhoto: self.fallbackPhoto, voiceMessagesAvailable: self.voiceMessagesAvailable, wallpaper: self.wallpaper, flags: self.flags, businessHours: self.businessHours, businessLocation: self.businessLocation, greetingMessage: self.greetingMessage, awayMessage: self.awayMessage, connectedBot: self.connectedBot, businessIntro: self.businessIntro, birthday: self.birthday, personalChannel: self.personalChannel, botPreview: self.botPreview, starGiftsCount: self.starGiftsCount, starRefProgram: self.starRefProgram, verification: self.verification, sendPaidMessageStars: self.sendPaidMessageStars, disallowedGifts: disallowedGifts, botGroupAdminRights: botGroupAdminRights, botChannelAdminRights: self.botChannelAdminRights, starRating: self.starRating, pendingStarRating: self.pendingStarRating, mainProfileTab: self.mainProfileTab, savedMusic: self.savedMusic, note: self.note, myCopyProtectionEnableDate: self.myCopyProtectionEnableDate, botManagerId: self.botManagerId)
     }
     
-    public func withUpdatedBotChannelAdminRights(_ botChannelAdminRights: TelegramChatAdminRights?) -> CachedUserData {
+    public func withUpdatedBotChannelAdminRights(_ botChannelAdminRights: IosappChatAdminRights?) -> CachedUserData {
         return CachedUserData(about: self.about, botInfo: self.botInfo, editableBotInfo: self.editableBotInfo, peerStatusSettings: self.peerStatusSettings, pinnedMessageId: self.pinnedMessageId, isBlocked: self.isBlocked, commonGroupCount: self.commonGroupCount, voiceCallsAvailable: self.voiceCallsAvailable, videoCallsAvailable: self.videoCallsAvailable, callsPrivate: self.callsPrivate, canPinMessages: self.canPinMessages, hasScheduledMessages: self.hasScheduledMessages, autoremoveTimeout: self.autoremoveTimeout, chatTheme: self.chatTheme, photo: self.photo, personalPhoto: self.personalPhoto, fallbackPhoto: self.fallbackPhoto, voiceMessagesAvailable: self.voiceMessagesAvailable, wallpaper: self.wallpaper, flags: self.flags, businessHours: self.businessHours, businessLocation: self.businessLocation, greetingMessage: self.greetingMessage, awayMessage: self.awayMessage, connectedBot: self.connectedBot, businessIntro: self.businessIntro, birthday: self.birthday, personalChannel: self.personalChannel, botPreview: self.botPreview, starGiftsCount: self.starGiftsCount, starRefProgram: self.starRefProgram, verification: self.verification, sendPaidMessageStars: self.sendPaidMessageStars, disallowedGifts: disallowedGifts, botGroupAdminRights: self.botGroupAdminRights, botChannelAdminRights: botChannelAdminRights, starRating: self.starRating, pendingStarRating: self.pendingStarRating, mainProfileTab: self.mainProfileTab, savedMusic: self.savedMusic, note: self.note, myCopyProtectionEnableDate: self.myCopyProtectionEnableDate, botManagerId: self.botManagerId)
     }
     
-    public func withUpdatedStarRating(_ starRating: TelegramStarRating?) -> CachedUserData {
+    public func withUpdatedStarRating(_ starRating: IosappStarRating?) -> CachedUserData {
         return CachedUserData(about: self.about, botInfo: self.botInfo, editableBotInfo: self.editableBotInfo, peerStatusSettings: self.peerStatusSettings, pinnedMessageId: self.pinnedMessageId, isBlocked: self.isBlocked, commonGroupCount: self.commonGroupCount, voiceCallsAvailable: self.voiceCallsAvailable, videoCallsAvailable: self.videoCallsAvailable, callsPrivate: self.callsPrivate, canPinMessages: self.canPinMessages, hasScheduledMessages: self.hasScheduledMessages, autoremoveTimeout: self.autoremoveTimeout, chatTheme: self.chatTheme, photo: self.photo, personalPhoto: self.personalPhoto, fallbackPhoto: self.fallbackPhoto, voiceMessagesAvailable: self.voiceMessagesAvailable, wallpaper: self.wallpaper, flags: self.flags, businessHours: self.businessHours, businessLocation: self.businessLocation, greetingMessage: self.greetingMessage, awayMessage: self.awayMessage, connectedBot: self.connectedBot, businessIntro: self.businessIntro, birthday: self.birthday, personalChannel: self.personalChannel, botPreview: self.botPreview, starGiftsCount: self.starGiftsCount, starRefProgram: self.starRefProgram, verification: self.verification, sendPaidMessageStars: self.sendPaidMessageStars, disallowedGifts: disallowedGifts, botGroupAdminRights: self.botGroupAdminRights, botChannelAdminRights: self.botChannelAdminRights, starRating: starRating, pendingStarRating: self.pendingStarRating, mainProfileTab: self.mainProfileTab, savedMusic: self.savedMusic, note: self.note, myCopyProtectionEnableDate: self.myCopyProtectionEnableDate, botManagerId: self.botManagerId)
     }
     
-    public func withUpdatedPendingStarRating(_ pendingStarRating: TelegramStarPendingRating?) -> CachedUserData {
+    public func withUpdatedPendingStarRating(_ pendingStarRating: IosappStarPendingRating?) -> CachedUserData {
         return CachedUserData(about: self.about, botInfo: self.botInfo, editableBotInfo: self.editableBotInfo, peerStatusSettings: self.peerStatusSettings, pinnedMessageId: self.pinnedMessageId, isBlocked: self.isBlocked, commonGroupCount: self.commonGroupCount, voiceCallsAvailable: self.voiceCallsAvailable, videoCallsAvailable: self.videoCallsAvailable, callsPrivate: self.callsPrivate, canPinMessages: self.canPinMessages, hasScheduledMessages: self.hasScheduledMessages, autoremoveTimeout: self.autoremoveTimeout, chatTheme: self.chatTheme, photo: self.photo, personalPhoto: self.personalPhoto, fallbackPhoto: self.fallbackPhoto, voiceMessagesAvailable: self.voiceMessagesAvailable, wallpaper: self.wallpaper, flags: self.flags, businessHours: self.businessHours, businessLocation: self.businessLocation, greetingMessage: self.greetingMessage, awayMessage: self.awayMessage, connectedBot: self.connectedBot, businessIntro: self.businessIntro, birthday: self.birthday, personalChannel: self.personalChannel, botPreview: self.botPreview, starGiftsCount: self.starGiftsCount, starRefProgram: self.starRefProgram, verification: self.verification, sendPaidMessageStars: self.sendPaidMessageStars, disallowedGifts: disallowedGifts, botGroupAdminRights: self.botGroupAdminRights, botChannelAdminRights: self.botChannelAdminRights, starRating: self.starRating, pendingStarRating: pendingStarRating, mainProfileTab: self.mainProfileTab, savedMusic: self.savedMusic, note: self.note, myCopyProtectionEnableDate: self.myCopyProtectionEnableDate, botManagerId: self.botManagerId)
     }
     
-    public func withUpdatedMainProfileTab(_ mainProfileTab: TelegramProfileTab?) -> CachedUserData {
+    public func withUpdatedMainProfileTab(_ mainProfileTab: IosappProfileTab?) -> CachedUserData {
         return CachedUserData(about: self.about, botInfo: self.botInfo, editableBotInfo: self.editableBotInfo, peerStatusSettings: self.peerStatusSettings, pinnedMessageId: self.pinnedMessageId, isBlocked: self.isBlocked, commonGroupCount: self.commonGroupCount, voiceCallsAvailable: self.voiceCallsAvailable, videoCallsAvailable: self.videoCallsAvailable, callsPrivate: self.callsPrivate, canPinMessages: self.canPinMessages, hasScheduledMessages: self.hasScheduledMessages, autoremoveTimeout: self.autoremoveTimeout, chatTheme: self.chatTheme, photo: self.photo, personalPhoto: self.personalPhoto, fallbackPhoto: self.fallbackPhoto, voiceMessagesAvailable: self.voiceMessagesAvailable, wallpaper: self.wallpaper, flags: self.flags, businessHours: self.businessHours, businessLocation: self.businessLocation, greetingMessage: self.greetingMessage, awayMessage: self.awayMessage, connectedBot: self.connectedBot, businessIntro: self.businessIntro, birthday: self.birthday, personalChannel: self.personalChannel, botPreview: self.botPreview, starGiftsCount: self.starGiftsCount, starRefProgram: self.starRefProgram, verification: self.verification, sendPaidMessageStars: self.sendPaidMessageStars, disallowedGifts: disallowedGifts, botGroupAdminRights: self.botGroupAdminRights, botChannelAdminRights: self.botChannelAdminRights, starRating: self.starRating, pendingStarRating: self.pendingStarRating, mainProfileTab: mainProfileTab, savedMusic: self.savedMusic, note: self.note, myCopyProtectionEnableDate: self.myCopyProtectionEnableDate, botManagerId: self.botManagerId)
     }
     
-    public func withUpdatedSavedMusic(_ savedMusic: TelegramMediaFile?) -> CachedUserData {
+    public func withUpdatedSavedMusic(_ savedMusic: IosappMediaFile?) -> CachedUserData {
         return CachedUserData(about: self.about, botInfo: self.botInfo, editableBotInfo: self.editableBotInfo, peerStatusSettings: self.peerStatusSettings, pinnedMessageId: self.pinnedMessageId, isBlocked: self.isBlocked, commonGroupCount: self.commonGroupCount, voiceCallsAvailable: self.voiceCallsAvailable, videoCallsAvailable: self.videoCallsAvailable, callsPrivate: self.callsPrivate, canPinMessages: self.canPinMessages, hasScheduledMessages: self.hasScheduledMessages, autoremoveTimeout: self.autoremoveTimeout, chatTheme: self.chatTheme, photo: self.photo, personalPhoto: self.personalPhoto, fallbackPhoto: self.fallbackPhoto, voiceMessagesAvailable: self.voiceMessagesAvailable, wallpaper: self.wallpaper, flags: self.flags, businessHours: self.businessHours, businessLocation: self.businessLocation, greetingMessage: self.greetingMessage, awayMessage: self.awayMessage, connectedBot: self.connectedBot, businessIntro: self.businessIntro, birthday: self.birthday, personalChannel: self.personalChannel, botPreview: self.botPreview, starGiftsCount: self.starGiftsCount, starRefProgram: self.starRefProgram, verification: self.verification, sendPaidMessageStars: self.sendPaidMessageStars, disallowedGifts: disallowedGifts, botGroupAdminRights: self.botGroupAdminRights, botChannelAdminRights: self.botChannelAdminRights, starRating: self.starRating, pendingStarRating: self.pendingStarRating, mainProfileTab: self.mainProfileTab, savedMusic: savedMusic, note: self.note, myCopyProtectionEnableDate: self.myCopyProtectionEnableDate, botManagerId: self.botManagerId)
     }
     
@@ -1956,12 +1956,12 @@ public enum AddBusinessChatLinkError {
     case tooManyLinks
 }
 
-func _internal_updateBusinessChatLinks(transaction: Transaction, _ f: ([TelegramBusinessChatLinks.Link]) -> [TelegramBusinessChatLinks.Link]) {
-    let current = transaction.getPreferencesEntry(key: PreferencesKeys.businessLinks())?.get(TelegramBusinessChatLinks.self)
-    transaction.setPreferencesEntry(key: PreferencesKeys.businessLinks(), value: PreferencesEntry(TelegramBusinessChatLinks(links: f(current?.links ?? []))))
+func _internal_updateBusinessChatLinks(transaction: Transaction, _ f: ([IosappBusinessChatLinks.Link]) -> [IosappBusinessChatLinks.Link]) {
+    let current = transaction.getPreferencesEntry(key: PreferencesKeys.businessLinks())?.get(IosappBusinessChatLinks.self)
+    transaction.setPreferencesEntry(key: PreferencesKeys.businessLinks(), value: PreferencesEntry(IosappBusinessChatLinks(links: f(current?.links ?? []))))
 }
 
-func _internal_createBusinessChatLink(account: Account, message: String, entities: [MessageTextEntity], title: String?) -> Signal<TelegramBusinessChatLinks.Link, AddBusinessChatLinkError> {
+func _internal_createBusinessChatLink(account: Account, message: String, entities: [MessageTextEntity], title: String?) -> Signal<IosappBusinessChatLinks.Link, AddBusinessChatLinkError> {
     var flags: Int32 = 0
     
     var apiEntities: [Api.MessageEntity]?
@@ -1982,9 +1982,9 @@ func _internal_createBusinessChatLink(account: Account, message: String, entitie
             return .generic
         }
     }
-    |> mapToSignal { result -> Signal<TelegramBusinessChatLinks.Link, AddBusinessChatLinkError> in
-        return account.postbox.transaction { transaction -> TelegramBusinessChatLinks.Link in
-            let link = TelegramBusinessChatLinks.Link(apiLink: result)
+    |> mapToSignal { result -> Signal<IosappBusinessChatLinks.Link, AddBusinessChatLinkError> in
+        return account.postbox.transaction { transaction -> IosappBusinessChatLinks.Link in
+            let link = IosappBusinessChatLinks.Link(apiLink: result)
             
             _internal_updateBusinessChatLinks(transaction: transaction, { list in
                 var list = list
@@ -2001,7 +2001,7 @@ func _internal_createBusinessChatLink(account: Account, message: String, entitie
     }
 }
 
-func _internal_editBusinessChatLink(account: Account, url: String, message: String, entities: [MessageTextEntity], title: String?) -> Signal<TelegramBusinessChatLinks.Link, AddBusinessChatLinkError> {
+func _internal_editBusinessChatLink(account: Account, url: String, message: String, entities: [MessageTextEntity], title: String?) -> Signal<IosappBusinessChatLinks.Link, AddBusinessChatLinkError> {
     var flags: Int32 = 0
     
     var apiEntities: [Api.MessageEntity]?
@@ -2018,9 +2018,9 @@ func _internal_editBusinessChatLink(account: Account, url: String, message: Stri
     |> mapError { _ -> AddBusinessChatLinkError in
         return .generic
     }
-    |> mapToSignal { result -> Signal<TelegramBusinessChatLinks.Link, AddBusinessChatLinkError> in
-        return account.postbox.transaction { transaction -> TelegramBusinessChatLinks.Link in
-            let link = TelegramBusinessChatLinks.Link(apiLink: result)
+    |> mapToSignal { result -> Signal<IosappBusinessChatLinks.Link, AddBusinessChatLinkError> in
+        return account.postbox.transaction { transaction -> IosappBusinessChatLinks.Link in
+            let link = IosappBusinessChatLinks.Link(apiLink: result)
             
             _internal_updateBusinessChatLinks(transaction: transaction, { list in
                 var list = list
@@ -2069,7 +2069,7 @@ func _internal_refreshBusinessChatLinks(postbox: Postbox, network: Network, acco
             return .complete()
         }
         return postbox.transaction { transaction in
-            let parsedResult = TelegramBusinessChatLinks.fromApiLinks(apiLinks: result)
+            let parsedResult = IosappBusinessChatLinks.fromApiLinks(apiLinks: result)
             let peers = AccumulatedPeers(transaction: transaction, chats: parsedResult.chats, users: parsedResult.users)
             updatePeers(transaction: transaction, accountPeerId: accountPeerId, peers: peers)
             

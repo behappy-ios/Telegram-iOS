@@ -35,9 +35,9 @@ private func generateCloseIcon() -> UIImage {
 private func textStringForForwardedMessage(_ message: EngineMessage, strings: PresentationStrings) -> (text: String, entities: [MessageTextEntity], isMedia: Bool) {
     for media in message.media {
         switch media {
-        case _ as TelegramMediaImage:
+        case _ as IosappMediaImage:
             return (strings.Message_Photo, [], true)
-        case let file as TelegramMediaFile:
+        case let file as IosappMediaFile:
             if file.isVideoSticker || file.isAnimatedSticker {
                 return (strings.Message_Sticker, [], true)
             }
@@ -73,21 +73,21 @@ private func textStringForForwardedMessage(_ message: EngineMessage, strings: Pr
                 }
             }
             return (fileName, [], true)
-        case _ as TelegramMediaContact:
+        case _ as IosappMediaContact:
             return (strings.Message_Contact, [], true)
-        case let game as TelegramMediaGame:
+        case let game as IosappMediaGame:
             return (game.title, [], true)
-        case _ as TelegramMediaMap:
+        case _ as IosappMediaMap:
             return (strings.Message_Location, [], true)
-        case _ as TelegramMediaAction:
+        case _ as IosappMediaAction:
             return ("", [], true)
-        case _ as TelegramMediaPoll:
+        case _ as IosappMediaPoll:
             return (strings.ForwardedPolls(1), [], true)
-        case let todo as TelegramMediaTodo:
+        case let todo as IosappMediaTodo:
             return (todo.text, [], true)
-        case let dice as TelegramMediaDice:
+        case let dice as IosappMediaDice:
             return (dice.emoji, [], true)
-        case let invoice as TelegramMediaInvoice:
+        case let invoice as IosappMediaInvoice:
             return (invoice.title, [], true)
         default:
             break
@@ -178,9 +178,9 @@ public final class ChatInputMessageAccessoryPanel: Component {
         
         public final class LinkPreview: Equatable {
             public let url: String
-            public let webpage: TelegramMediaWebpage
+            public let webpage: IosappMediaWebpage
             
-            public init(url: String, webpage: TelegramMediaWebpage) {
+            public init(url: String, webpage: IosappMediaWebpage) {
                 self.url = url
                 self.webpage = webpage
             }
@@ -366,7 +366,7 @@ public final class ChatInputMessageAccessoryPanel: Component {
                 if !messageIds.isEmpty {
                     self.contentDisposable = (component.context.engine.data.subscribe(
                         EngineDataList(messageIds.map { id in
-                            return TelegramEngine.EngineData.Item.Messages.Message(id: id)
+                            return IosappEngine.EngineData.Item.Messages.Message(id: id)
                         })
                     )
                     |> deliverOnMainQueue).startStrict(next: { [weak self] messages in
@@ -442,18 +442,18 @@ public final class ChatInputMessageAccessoryPanel: Component {
                 if !message._asMessage().containsSecretMedia {
                     var candidateMediaReference: AnyMediaReference?
                     for media in message.media {
-                        if media is TelegramMediaImage || media is TelegramMediaFile {
+                        if media is IosappMediaImage || media is IosappMediaFile {
                             candidateMediaReference = .message(message: MessageReference(message._asMessage()), media: media)
                             break
                         }
                     }
                     
-                    if let imageReference = candidateMediaReference?.concrete(TelegramMediaImage.self) {
+                    if let imageReference = candidateMediaReference?.concrete(IosappMediaImage.self) {
                         updatedMediaReference = imageReference.abstract
                         if let representation = largestRepresentationForPhoto(imageReference.media) {
                             imageDimensions = representation.dimensions.cgSize
                         }
-                    } else if let fileReference = candidateMediaReference?.concrete(TelegramMediaFile.self) {
+                    } else if let fileReference = candidateMediaReference?.concrete(IosappMediaFile.self) {
                         updatedMediaReference = fileReference.abstract
                         if !fileReference.media.isInstantVideo, let representation = largestImageRepresentation(fileReference.media.previewRepresentations), !fileReference.media.isSticker {
                             imageDimensions = representation.dimensions.cgSize
@@ -481,10 +481,10 @@ public final class ChatInputMessageAccessoryPanel: Component {
                 var updateImageSignal: Signal<(TransformImageArguments) -> DrawingContext?, NoError>?
                 let _ = updateImageSignal
                 if let updatedMediaReference = updatedMediaReference, imageDimensions != nil {
-                    if let imageReference = updatedMediaReference.concrete(TelegramMediaImage.self) {
+                    if let imageReference = updatedMediaReference.concrete(IosappMediaImage.self) {
                         updateImageSignal = chatMessagePhotoThumbnail(account: component.context.account, userLocation: MediaResourceUserLocation.peer(message.id.peerId), photoReference: imageReference, blurred: hasSpoiler)
                         isPhoto = true
-                    } else if let fileReference = updatedMediaReference.concrete(TelegramMediaFile.self) {
+                    } else if let fileReference = updatedMediaReference.concrete(IosappMediaFile.self) {
                         if fileReference.media.isVideo {
                             updateImageSignal = chatMessageVideoThumbnail(account: component.context.account, userLocation: MediaResourceUserLocation.peer(message.id.peerId), fileReference: fileReference, blurred: hasSpoiler)
                         } else if let iconImageRepresentation = smallestImageRepresentation(fileReference.media.previewRepresentations) {
@@ -557,7 +557,7 @@ public final class ChatInputMessageAccessoryPanel: Component {
                 }
                 titleText = [.text(NSAttributedString(string: titleStringValue, font: Font.medium(14.0), textColor: environment.theme.chat.inputPanel.panelControlAccentColor))]
             case let .reply(reply):
-                if let peer = self.messages.first?.peers[reply.id.peerId] as? TelegramChannel, case .broadcast = peer.info {
+                if let peer = self.messages.first?.peers[reply.id.peerId] as? IosappChannel, case .broadcast = peer.info {
                     let icon: UIImage?
                     icon = generateTintedImage(image: UIImage(bundleImageName: "Chat/Input/Accessory Panels/PanelTextChannelIcon"), color: environment.theme.chat.inputPanel.panelControlAccentColor)
                     
@@ -612,9 +612,9 @@ public final class ChatInputMessageAccessoryPanel: Component {
                     }
                     
                     if reply.id.peerId != component.chatPeerId {
-                        if let peer = self.messages.first?.peers[reply.id.peerId], (peer is TelegramChannel || peer is TelegramGroup) {
+                        if let peer = self.messages.first?.peers[reply.id.peerId], (peer is IosappChannel || peer is IosappGroup) {
                             let icon: UIImage?
-                            if let channel = peer as? TelegramChannel, case .broadcast = channel.info {
+                            if let channel = peer as? IosappChannel, case .broadcast = channel.info {
                                 icon = UIImage(bundleImageName: "Chat/Input/Accessory Panels/PanelTextChannelIcon")
                             } else {
                                 icon = UIImage(bundleImageName: "Chat/Input/Accessory Panels/PanelTextGroupIcon")
@@ -631,10 +631,10 @@ public final class ChatInputMessageAccessoryPanel: Component {
                         if let quote = reply.quote {
                             let textColor = environment.theme.chat.inputPanel.primaryTextColor
                             textString = stringWithAppliedEntities(trimToLineCount(quote.text, lineCount: 1), entities: quote.entities, baseColor: textColor, linkColor: textColor, baseFont: textFont, linkFont: textFont, boldFont: textFont, italicFont: textFont, boldItalicFont: textFont, fixedFont: textFont, blockQuoteFont: textFont, underlineLinks: false, message: message._asMessage())
-                        } else if case let .todoItem(todoItemId) = reply.innerSubject, let todo = message.media.first(where: { $0 is TelegramMediaTodo }) as? TelegramMediaTodo, let todoItem = todo.items.first(where: { $0.id == todoItemId }) {
+                        } else if case let .todoItem(todoItemId) = reply.innerSubject, let todo = message.media.first(where: { $0 is IosappMediaTodo }) as? IosappMediaTodo, let todoItem = todo.items.first(where: { $0.id == todoItemId }) {
                             let textColor = environment.theme.chat.inputPanel.primaryTextColor
                             textString = stringWithAppliedEntities(trimToLineCount(todoItem.text, lineCount: 1), entities: todoItem.entities, baseColor: textColor, linkColor: textColor, baseFont: textFont, linkFont: textFont, boldFont: textFont, italicFont: textFont, boldItalicFont: textFont, fixedFont: textFont, blockQuoteFont: textFont, underlineLinks: false, message: message._asMessage())
-                        } else if case let .pollOption(pollOptionId) = reply.innerSubject, let poll = message.media.first(where: { $0 is TelegramMediaPoll }) as? TelegramMediaPoll, let pollOption = poll.options.first(where: { $0.opaqueIdentifier == pollOptionId }) {
+                        } else if case let .pollOption(pollOptionId) = reply.innerSubject, let poll = message.media.first(where: { $0 is IosappMediaPoll }) as? IosappMediaPoll, let pollOption = poll.options.first(where: { $0.opaqueIdentifier == pollOptionId }) {
                             let textColor = environment.theme.chat.inputPanel.primaryTextColor
                             textString = stringWithAppliedEntities(trimToLineCount(pollOption.text, lineCount: 1), entities: pollOption.entities, baseColor: textColor, linkColor: textColor, baseFont: textFont, linkFont: textFont, boldFont: textFont, italicFont: textFont, boldItalicFont: textFont, fixedFont: textFont, blockQuoteFont: textFont, underlineLinks: false, message: message._asMessage())
                         }
@@ -672,7 +672,7 @@ public final class ChatInputMessageAccessoryPanel: Component {
                         case let .CustomEmoji(_, fileId):
                             let range = NSRange(location: entity.range.lowerBound, length: entity.range.upperBound - entity.range.lowerBound)
                             if range.lowerBound >= 0 && range.upperBound <= additionalText.length {
-                                additionalText.addAttribute(ChatTextInputAttributes.customEmoji, value: ChatTextInputTextCustomEmojiAttribute(interactivelySelectedFromPackId: nil, fileId: fileId, file: messages[0].associatedMedia[EngineMedia.Id(namespace: Namespaces.Media.CloudFile, id: fileId)] as? TelegramMediaFile), range: range)
+                                additionalText.addAttribute(ChatTextInputAttributes.customEmoji, value: ChatTextInputTextCustomEmojiAttribute(interactivelySelectedFromPackId: nil, fileId: fileId, file: messages[0].associatedMedia[EngineMedia.Id(namespace: Namespaces.Media.CloudFile, id: fileId)] as? IosappMediaFile), range: range)
                             }
                         default:
                             break

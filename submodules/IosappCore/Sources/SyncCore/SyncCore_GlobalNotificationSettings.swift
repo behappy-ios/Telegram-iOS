@@ -103,11 +103,11 @@ public struct GlobalNotificationSettings: Codable {
     
     func defaultIncludePeer(peer: Peer) -> Bool {
         let settings = self.effective
-        if peer is TelegramUser || peer is TelegramSecretChat {
+        if peer is IosappUser || peer is IosappSecretChat {
             return settings.privateChats.enabled
-        } else if peer is TelegramGroup {
+        } else if peer is IosappGroup {
             return settings.groupChats.enabled
-        } else if let channel = peer as? TelegramChannel {
+        } else if let channel = peer as? IosappChannel {
             switch channel.info {
             case .group:
                 return settings.groupChats.enabled

@@ -63,7 +63,7 @@ protocol BroadcastPartSource: AnyObject {
 
 final class NetworkBroadcastPartSource: BroadcastPartSource {
     private let queue: Queue
-    private let engine: TelegramEngine
+    private let engine: IosappEngine
     private let callId: Int64
     private let accessHash: Int64
     private let isExternalStream: Bool
@@ -73,7 +73,7 @@ final class NetworkBroadcastPartSource: BroadcastPartSource {
     private var debugDumpDirectory: EngineTempBox.Directory?
     #endif
     
-    init(queue: Queue, engine: TelegramEngine, callId: Int64, accessHash: Int64, isExternalStream: Bool) {
+    init(queue: Queue, engine: IosappEngine, callId: Int64, accessHash: Int64, isExternalStream: Bool) {
         self.queue = queue
         self.engine = engine
         self.callId = callId
@@ -232,12 +232,12 @@ public protocol OngoingGroupCallEncryptionContext: AnyObject {
 
 public final class OngoingGroupCallContext {
     public struct AudioStreamData {
-        public var engine: TelegramEngine
+        public var engine: IosappEngine
         public var callId: Int64
         public var accessHash: Int64
         public var isExternalStream: Bool
         
-        public init(engine: TelegramEngine, callId: Int64, accessHash: Int64, isExternalStream: Bool) {
+        public init(engine: IosappEngine, callId: Int64, accessHash: Int64, isExternalStream: Bool) {
             self.engine = engine
             self.callId = callId
             self.accessHash = accessHash
@@ -946,7 +946,7 @@ public final class OngoingGroupCallContext {
                     }
                     
                     if let callId = reportCallId, !statsLogPath.isEmpty, let data = try? Data(contentsOf: URL(fileURLWithPath: statsLogPath)), let dataString = String(data: data, encoding: .utf8), let account {
-                        let engine = TelegramEngine(account: account)
+                        let engine = IosappEngine(account: account)
                         let _ = engine.calls.saveCallDebugLog(callId: callId, log: dataString).start(next: { result in
                             switch result {
                             case .sendFullLog:

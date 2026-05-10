@@ -21,7 +21,7 @@ public final class GiftAvatarComponent: Component {
     let context: AccountContext
     let theme: PresentationTheme
     let peers: [EnginePeer]
-    let photo: TelegramMediaWebFile?
+    let photo: IosappMediaWebFile?
     let isVisible: Bool
     let hasIdleAnimations: Bool
     let hasScaleAnimation: Bool
@@ -35,7 +35,7 @@ public final class GiftAvatarComponent: Component {
         context: AccountContext,
         theme: PresentationTheme,
         peers: [EnginePeer],
-        photo: TelegramMediaWebFile? = nil,
+        photo: IosappMediaWebFile? = nil,
         isVisible: Bool,
         hasIdleAnimations: Bool,
         hasScaleAnimation: Bool = true,

@@ -20,7 +20,7 @@ final class TrendingTopItemNode: ASDisplayNode {
     private let imageNode: TransformImageNode
     private var animationNode: AnimatedStickerNode?
     private var placeholderNode: StickerShimmerEffectNode?
-    public private(set) var file: TelegramMediaFile? = nil
+    public private(set) var file: IosappMediaFile? = nil
     public private(set) var theme: PresentationTheme?
     private var listAppearance = false
     private var itemSize: CGSize?

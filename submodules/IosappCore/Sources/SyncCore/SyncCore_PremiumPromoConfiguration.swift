@@ -11,9 +11,9 @@ public struct PremiumPromoConfiguration: Codable, Equatable {
     
     private struct DictionaryPair: Codable {
         var key: String
-        var value: TelegramMediaFile
+        var value: IosappMediaFile
         
-        init(_ key: String, value: TelegramMediaFile) {
+        init(_ key: String, value: IosappMediaFile) {
             self.key = key
             self.value = value
         }
@@ -22,7 +22,7 @@ public struct PremiumPromoConfiguration: Codable, Equatable {
             let container = try decoder.container(keyedBy: StringCodingKey.self)
 
             self.key = try container.decode(String.self, forKey: "k")
-            self.value = try container.decode(TelegramMediaFile.self, forKey: "v")
+            self.value = try container.decode(IosappMediaFile.self, forKey: "v")
         }
 
         func encode(to encoder: Encoder) throws {
@@ -92,14 +92,14 @@ public struct PremiumPromoConfiguration: Codable, Equatable {
     
     public var status: String
     public var statusEntities: [MessageTextEntity]
-    public var videos: [String: TelegramMediaFile]
+    public var videos: [String: IosappMediaFile]
     public var premiumProductOptions: [PremiumProductOption]
     
     public static var defaultValue: PremiumPromoConfiguration {
         return PremiumPromoConfiguration(status: "", statusEntities: [], videos: [:], premiumProductOptions: [])
     }
     
-    init(status: String, statusEntities: [MessageTextEntity], videos: [String: TelegramMediaFile], premiumProductOptions: [PremiumProductOption]) {
+    init(status: String, statusEntities: [MessageTextEntity], videos: [String: IosappMediaFile], premiumProductOptions: [PremiumProductOption]) {
         self.status = status
         self.statusEntities = statusEntities
         self.videos = videos
@@ -112,7 +112,7 @@ public struct PremiumPromoConfiguration: Codable, Equatable {
         self.status = try container.decode(String.self, forKey: .status)
         self.statusEntities = try container.decode([MessageTextEntity].self, forKey: .statusEntities)
         
-        var videos: [String: TelegramMediaFile] = [:]
+        var videos: [String: IosappMediaFile] = [:]
         let pairs = try container.decode([DictionaryPair].self, forKey: .videos)
         for pair in pairs {
             videos[pair.key] = pair.value

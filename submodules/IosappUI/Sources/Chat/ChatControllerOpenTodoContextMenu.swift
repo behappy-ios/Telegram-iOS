@@ -24,7 +24,7 @@ private enum OptionsId: Hashable {
 
 extension ChatControllerImpl {
     func openTodoItemContextMenu(todoItemId: Int32, params: ChatControllerInteraction.LongTapParams) -> Void {
-        guard let message = params.message, let todo = message.media.first(where: { $0 is TelegramMediaTodo }) as? TelegramMediaTodo, let todoItem = todo.items.first(where: { $0.id == todoItemId }), let contentNode = params.contentNode else {
+        guard let message = params.message, let todo = message.media.first(where: { $0 is IosappMediaTodo }) as? IosappMediaTodo, let todoItem = todo.items.first(where: { $0.id == todoItemId }), let contentNode = params.contentNode else {
             return
         }
         
@@ -162,7 +162,7 @@ extension ChatControllerImpl {
                 isReplyThreadHead = message.id == replyThreadMessage.effectiveTopId
             }
             
-            if message.id.namespace == Namespaces.Message.Cloud, let channel = message.peers[message.id.peerId] as? TelegramChannel, !channel.isMonoForum, !isReplyThreadHead {
+            if message.id.namespace == Namespaces.Message.Cloud, let channel = message.peers[message.id.peerId] as? IosappChannel, !channel.isMonoForum, !isReplyThreadHead {
                 items.append(.action(ContextMenuActionItem(text: self.presentationData.strings.Conversation_ContextMenuCopyLink, icon: { theme in
                     return generateTintedImage(image: UIImage(bundleImageName: "Chat/Context Menu/Link"), color: theme.contextMenu.primaryColor)
                 }, action: { [weak self] _, f in

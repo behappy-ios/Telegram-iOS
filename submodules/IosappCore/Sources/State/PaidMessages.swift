@@ -151,7 +151,7 @@ func _internal_updateChannelPaidMessagesStars(account: Account, peerId: PeerId, 
             }
         }
         
-        if let channel = peer as? TelegramChannel, case let .broadcast(broadcastInfo) = channel.info {
+        if let channel = peer as? IosappChannel, case let .broadcast(broadcastInfo) = channel.info {
             var infoFlags = broadcastInfo.flags
             if broadcastMessagesAllowed {
                 infoFlags.insert(.hasMonoforum)
@@ -159,12 +159,12 @@ func _internal_updateChannelPaidMessagesStars(account: Account, peerId: PeerId, 
                 infoFlags.remove(.hasMonoforum)
             }
             let channel = channel
-                .withUpdatedInfo(.broadcast(TelegramChannelBroadcastInfo(flags: infoFlags)))
+                .withUpdatedInfo(.broadcast(IosappChannelBroadcastInfo(flags: infoFlags)))
             transaction.updatePeersInternal([channel], update: { _, channel in
                 return channel
             })
             
-            if let linkedMonoforumId = channel.linkedMonoforumId, let monoforumChannel = transaction.getPeer(linkedMonoforumId) as? TelegramChannel {
+            if let linkedMonoforumId = channel.linkedMonoforumId, let monoforumChannel = transaction.getPeer(linkedMonoforumId) as? IosappChannel {
                 let monoforumChannel = monoforumChannel
                     .withUpdatedSendPaidMessageStars(stars)
                 transaction.updatePeersInternal([monoforumChannel], update: { _, channel in

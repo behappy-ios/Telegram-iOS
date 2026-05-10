@@ -183,7 +183,7 @@ public class DrawingReactionEntityView: DrawingStickerEntityView {
                 return
             }
             
-            let continueWithAnimationFile: (TelegramMediaFile) -> Void = { [weak self] animation in
+            let continueWithAnimationFile: (IosappMediaFile) -> Void = { [weak self] animation in
                 guard let self else {
                     return
                 }
@@ -242,7 +242,7 @@ public class DrawingReactionEntityView: DrawingStickerEntityView {
                     guard let availableReactions else {
                         return
                     }
-                    var animation: TelegramMediaFile?
+                    var animation: IosappMediaFile?
                     for reaction in availableReactions.reactions {
                         if reaction.value == updateReaction.reaction {
                             animation = reaction.selectAnimation._parse()
@@ -271,7 +271,7 @@ public class DrawingReactionEntityView: DrawingStickerEntityView {
                     guard let availableReactions else {
                         return
                     }
-                    var animation: TelegramMediaFile?
+                    var animation: IosappMediaFile?
                     for reaction in availableReactions.reactions {
                         if reaction.value == updateReaction.reaction {
                             animation = reaction.selectAnimation._parse()

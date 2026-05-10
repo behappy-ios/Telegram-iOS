@@ -266,8 +266,8 @@ class GroupStickerPackCurrentItemNode: ItemListRevealOptionsItemNode {
             
             let rightInset: CGFloat = params.rightInset
             
-            var file: TelegramMediaFile?
-            var previousFile: TelegramMediaFile?
+            var file: IosappMediaFile?
+            var previousFile: IosappMediaFile?
             if let currentItem = currentItem, case let .found(_, topItem, _) = currentItem.content {
                 previousFile = topItem?.file._parse()
             }

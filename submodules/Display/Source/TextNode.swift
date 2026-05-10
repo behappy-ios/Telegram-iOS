@@ -1575,7 +1575,7 @@ open class TextNode: ASDisplayNode, TextNodeProtocol {
                 
                 if let lineRange = line.range {
                     attributedString.enumerateAttributes(in: lineRange, options: []) { attributes, range, _ in
-                        if attributes[NSAttributedString.Key(rawValue: "TelegramSpoiler")] != nil || attributes[NSAttributedString.Key(rawValue: "Attribute__Spoiler")] != nil {
+                        if attributes[NSAttributedString.Key(rawValue: "IosappSpoiler")] != nil || attributes[NSAttributedString.Key(rawValue: "Attribute__Spoiler")] != nil {
                             var ascent: CGFloat = 0.0
                             var descent: CGFloat = 0.0
                             CTLineGetTypographicBounds(line.line, &ascent, &descent, nil)
@@ -1612,8 +1612,8 @@ open class TextNode: ASDisplayNode, TextNodeProtocol {
                             line.strikethroughs.append(TextNodeStrikethrough(range: range, frame: CGRect(x: x, y: 0.0, width: abs(upperX - lowerX), height: line.frame.height), color: nil, style: .single))
                         }
                         
-                        if let embeddedItem = (attributes[NSAttributedString.Key(rawValue: "TelegramEmbeddedItem")] as? AnyHashable ?? attributes[NSAttributedString.Key(rawValue: "Attribute__EmbeddedItem")] as? AnyHashable) {
-                            if displayEmbeddedItemsUnderSpoilers || (attributes[NSAttributedString.Key(rawValue: "TelegramSpoiler")] == nil && attributes[NSAttributedString.Key(rawValue: "Attribute__Spoiler")] == nil) {
+                        if let embeddedItem = (attributes[NSAttributedString.Key(rawValue: "IosappEmbeddedItem")] as? AnyHashable ?? attributes[NSAttributedString.Key(rawValue: "Attribute__EmbeddedItem")] as? AnyHashable) {
+                            if displayEmbeddedItemsUnderSpoilers || (attributes[NSAttributedString.Key(rawValue: "IosappSpoiler")] == nil && attributes[NSAttributedString.Key(rawValue: "Attribute__Spoiler")] == nil) {
                                 var ascent: CGFloat = 0.0
                                 var descent: CGFloat = 0.0
                                 CTLineGetTypographicBounds(line.line, &ascent, &descent, nil)
@@ -2017,7 +2017,7 @@ open class TextNode: ASDisplayNode, TextNodeProtocol {
                 var headIndent: CGFloat = 0.0
                 if brokenLineRange.location >= 0 && brokenLineRange.length > 0 && brokenLineRange.location + brokenLineRange.length <= attributedString.length {
                     attributedString.enumerateAttributes(in: NSMakeRange(brokenLineRange.location, brokenLineRange.length), options: []) { attributes, range, _ in
-                        if attributes[NSAttributedString.Key(rawValue: "TelegramSpoiler")] != nil || attributes[NSAttributedString.Key(rawValue: "Attribute__Spoiler")] != nil {
+                        if attributes[NSAttributedString.Key(rawValue: "IosappSpoiler")] != nil || attributes[NSAttributedString.Key(rawValue: "Attribute__Spoiler")] != nil {
                             var ascent: CGFloat = 0.0
                             var descent: CGFloat = 0.0
                             CTLineGetTypographicBounds(coreTextLine, &ascent, &descent, nil)
@@ -2046,7 +2046,7 @@ open class TextNode: ASDisplayNode, TextNodeProtocol {
                             }
                             
                             addSpoiler(line: coreTextLine, ascent: ascent, descent: descent, startIndex: range.location, endIndex: range.location + range.length)
-                        } else if let _ = attributes[NSAttributedString.Key(rawValue: "TelegramBackground")] {
+                        } else if let _ = attributes[NSAttributedString.Key(rawValue: "IosappBackground")] {
                             let clampedEnd = max(range.location, min(brokenLineRange.location + brokenLineRange.length, range.location + range.length))
                             let lowerX = floor(CTLineGetOffsetForStringIndex(coreTextLine, range.location, nil))
                             let upperX = ceil(CTLineGetOffsetForStringIndex(coreTextLine, clampedEnd, nil))
@@ -2068,8 +2068,8 @@ open class TextNode: ASDisplayNode, TextNodeProtocol {
                             headIndent = paragraphStyle.headIndent
                         }
 
-                        if let embeddedItem = (attributes[NSAttributedString.Key(rawValue: "TelegramEmbeddedItem")] as? AnyHashable ?? attributes[NSAttributedString.Key(rawValue: "Attribute__EmbeddedItem")] as? AnyHashable) {
-                            if displayEmbeddedItemsUnderSpoilers || (attributes[NSAttributedString.Key(rawValue: "TelegramSpoiler")] == nil && attributes[NSAttributedString.Key(rawValue: "Attribute__Spoiler")] == nil) {
+                        if let embeddedItem = (attributes[NSAttributedString.Key(rawValue: "IosappEmbeddedItem")] as? AnyHashable ?? attributes[NSAttributedString.Key(rawValue: "Attribute__EmbeddedItem")] as? AnyHashable) {
+                            if displayEmbeddedItemsUnderSpoilers || (attributes[NSAttributedString.Key(rawValue: "IosappSpoiler")] == nil && attributes[NSAttributedString.Key(rawValue: "Attribute__Spoiler")] == nil) {
                                 var ascent: CGFloat = 0.0
                                 var descent: CGFloat = 0.0
                                 CTLineGetTypographicBounds(coreTextLine, &ascent, &descent, nil)
@@ -2147,7 +2147,7 @@ open class TextNode: ASDisplayNode, TextNodeProtocol {
                     
                     var headIndent: CGFloat = 0.0
                     attributedString.enumerateAttributes(in: NSMakeRange(lineRange.location, lineRange.length), options: []) { attributes, range, _ in
-                        if attributes[NSAttributedString.Key(rawValue: "TelegramSpoiler")] != nil || attributes[NSAttributedString.Key(rawValue: "Attribute__Spoiler")] != nil {
+                        if attributes[NSAttributedString.Key(rawValue: "IosappSpoiler")] != nil || attributes[NSAttributedString.Key(rawValue: "Attribute__Spoiler")] != nil {
                             var ascent: CGFloat = 0.0
                             var descent: CGFloat = 0.0
                             CTLineGetTypographicBounds(coreTextLine, &ascent, &descent, nil)
@@ -2176,7 +2176,7 @@ open class TextNode: ASDisplayNode, TextNodeProtocol {
                             }
                             
                             addSpoiler(line: coreTextLine, ascent: ascent, descent: descent, startIndex: range.location, endIndex: range.location + range.length)
-                        } else if let _ = attributes[NSAttributedString.Key(rawValue: "TelegramBackground")] {
+                        } else if let _ = attributes[NSAttributedString.Key(rawValue: "IosappBackground")] {
                             let clampedEnd = max(range.location, min(lineRange.location + lineRange.length, range.location + range.length))
                             let lowerX = floor(CTLineGetOffsetForStringIndex(coreTextLine, range.location, nil))
                             let upperX = ceil(CTLineGetOffsetForStringIndex(coreTextLine, clampedEnd, nil))
@@ -2198,8 +2198,8 @@ open class TextNode: ASDisplayNode, TextNodeProtocol {
                             headIndent = paragraphStyle.headIndent
                         }
 
-                        if let embeddedItem = (attributes[NSAttributedString.Key(rawValue: "TelegramEmbeddedItem")] as? AnyHashable ?? attributes[NSAttributedString.Key(rawValue: "Attribute__EmbeddedItem")] as? AnyHashable) {
-                            if displayEmbeddedItemsUnderSpoilers || (attributes[NSAttributedString.Key(rawValue: "TelegramSpoiler")] == nil && attributes[NSAttributedString.Key(rawValue: "Attribute__Spoiler")] == nil) {
+                        if let embeddedItem = (attributes[NSAttributedString.Key(rawValue: "IosappEmbeddedItem")] as? AnyHashable ?? attributes[NSAttributedString.Key(rawValue: "Attribute__EmbeddedItem")] as? AnyHashable) {
+                            if displayEmbeddedItemsUnderSpoilers || (attributes[NSAttributedString.Key(rawValue: "IosappSpoiler")] == nil && attributes[NSAttributedString.Key(rawValue: "Attribute__Spoiler")] == nil) {
                                 var ascent: CGFloat = 0.0
                                 var descent: CGFloat = 0.0
                                 CTLineGetTypographicBounds(coreTextLine, &ascent, &descent, nil)

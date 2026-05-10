@@ -9,7 +9,7 @@ import IosappUIPreferences
 import IosappNotices
 import AccountContext
 
-private let baseTelegramMePaths = ["telegram.me", "t.me", "telegram.dog"]
+private let baseIosappMePaths = ["telegram.me", "t.me", "telegram.dog"]
 private let baseTelegraPhPaths = [
     "telegra.ph/",
     "te.legra.ph/",
@@ -847,7 +847,7 @@ private func resolveInternalUrl(context: AccountContext, url: ParsedInternalUrl)
                 }
             case let .id(id):
                 if id.namespace == Namespaces.Peer.CloudChannel {
-                    resolvedPeer = context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: id))
+                    resolvedPeer = context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: id))
                     |> mapToSignal { peer -> Signal<ResolvePeerResult, NoError> in
                         let foundPeer: Signal<ResolvePeerResult, NoError>
                         if let peer = peer {
@@ -878,7 +878,7 @@ private func resolveInternalUrl(context: AccountContext, url: ParsedInternalUrl)
                                 return .single(.result(.peer(peer._asPeer(), .info(nil))))
                             case .direct:
                                 if case let .channel(channel) = peer, let monoforumId = channel.linkedMonoforumId {
-                                    return context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: monoforumId))
+                                    return context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: monoforumId))
                                     |> mapToSignal { peer -> Signal<EnginePeer?, NoError> in
                                         if let peer {
                                             return .single(peer)
@@ -886,7 +886,7 @@ private func resolveInternalUrl(context: AccountContext, url: ParsedInternalUrl)
                                             return context.engine.peers.fetchAndUpdateCachedPeerData(peerId: channel.id)
                                             |> mapToSignal { result -> Signal<EnginePeer?, NoError> in
                                                 if result {
-                                                    return context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: monoforumId))
+                                                    return context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: monoforumId))
                                                 } else {
                                                     return .single(nil)
                                                 }
@@ -1067,7 +1067,7 @@ private func resolveInternalUrl(context: AccountContext, url: ParsedInternalUrl)
                 }
             }
         case let .peerId(peerId):
-            return context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: peerId))
+            return context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: peerId))
             |> mapToSignal { peer -> Signal<ResolveInternalUrlResult, NoError> in
                 if let peer = peer {
                     return .single(.result(.peer(peer._asPeer(), .chat(textInputState: nil, subject: nil, peekData: nil))))
@@ -1085,7 +1085,7 @@ private func resolveInternalUrl(context: AccountContext, url: ParsedInternalUrl)
                 }
             })
         case let .privateMessage(messageId, threadId, subject):
-            return context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: messageId.peerId))
+            return context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: messageId.peerId))
             |> mapToSignal { peer -> Signal<ResolveInternalUrlResult, NoError> in
                 let foundPeer: Signal<EnginePeer?, NoError>
                 if let peer = peer {
@@ -1208,7 +1208,7 @@ private func resolveInternalUrl(context: AccountContext, url: ParsedInternalUrl)
         case let .invoice(slug):
             return .single(.progress) |> then(context.engine.payments.fetchBotPaymentInvoice(source: .slug(slug))
             |> map(Optional.init)
-            |> `catch` { _ -> Signal<TelegramMediaInvoice?, NoError> in
+            |> `catch` { _ -> Signal<IosappMediaInvoice?, NoError> in
                 return .single(nil)
             }
             |> map { invoice -> ResolveInternalUrlResult in
@@ -1341,9 +1341,9 @@ private func resolveInternalUrl(context: AccountContext, url: ParsedInternalUrl)
     }
 }
 
-public func isTelegramMeLink(_ url: String) -> Bool {
+public func isIosappMeLink(_ url: String) -> Bool {
     let schemes = ["http://", "https://", ""]
-    for basePath in baseTelegramMePaths {
+    for basePath in baseIosappMePaths {
         for scheme in schemes {
             let basePrefix = scheme + basePath + "/"
             if url.lowercased().hasPrefix(basePrefix) {
@@ -1369,7 +1369,7 @@ public func isTelegraPhLink(_ url: String) -> Bool {
 
 public func parseProxyUrl(sharedContext: SharedAccountContext, url: String) -> (host: String, port: Int32, username: String?, password: String?, secret: Data?)? {
     let schemes = ["http://", "https://", ""]
-    for basePath in baseTelegramMePaths {
+    for basePath in baseIosappMePaths {
         for scheme in schemes {
             let basePrefix = scheme + basePath + "/"
             if url.lowercased().hasPrefix(basePrefix) {
@@ -1390,7 +1390,7 @@ public func parseProxyUrl(sharedContext: SharedAccountContext, url: String) -> (
 
 public func parseStickerPackUrl(sharedContext: SharedAccountContext, url: String) -> String? {
     let schemes = ["http://", "https://", ""]
-    for basePath in baseTelegramMePaths {
+    for basePath in baseIosappMePaths {
         for scheme in schemes {
             let basePrefix = scheme + basePath + "/"
             if url.lowercased().hasPrefix(basePrefix) {
@@ -1411,7 +1411,7 @@ public func parseStickerPackUrl(sharedContext: SharedAccountContext, url: String
 
 public func parseWallpaperUrl(sharedContext: SharedAccountContext, url: String) -> WallpaperUrlParameter? {
     let schemes = ["http://", "https://", ""]
-    for basePath in baseTelegramMePaths {
+    for basePath in baseIosappMePaths {
         for scheme in schemes {
             let basePrefix = scheme + basePath + "/"
             if url.lowercased().hasPrefix(basePrefix) {
@@ -1432,7 +1432,7 @@ public func parseWallpaperUrl(sharedContext: SharedAccountContext, url: String) 
 
 public func parseAdUrl(sharedContext: SharedAccountContext, context: AccountContext, url: String) -> ParsedInternalUrl? {
     let schemes = ["http://", "https://", ""]
-    for basePath in baseTelegramMePaths {
+    for basePath in baseIosappMePaths {
         for scheme in schemes {
             let basePrefix = scheme + basePath + "/"
             if url.lowercased().hasPrefix(basePrefix) {
@@ -1453,7 +1453,7 @@ public func parseAdUrl(sharedContext: SharedAccountContext, context: AccountCont
 
 public func parseFullInternalUrl(sharedContext: SharedAccountContext, context: AccountContext, url: String) -> ParsedInternalUrl? {
     let schemes = ["http://", "https://", ""]
-    for basePath in baseTelegramMePaths {
+    for basePath in baseIosappMePaths {
         for scheme in schemes {
             let basePrefix = scheme + basePath + "/"
             if url.lowercased().hasPrefix(basePrefix) {
@@ -1495,7 +1495,7 @@ public func resolveUrlImpl(context: AccountContext, peerId: PeerId?, url: String
     
     return ApplicationSpecificNotice.getSecretChatLinkPreviews(accountManager: context.sharedContext.accountManager)
     |> mapToSignal { linkPreviews -> Signal<ResolveUrlResult, NoError> in
-        return context.engine.data.get(TelegramEngine.EngineData.Item.Configuration.App(), TelegramEngine.EngineData.Item.Configuration.Links())
+        return context.engine.data.get(IosappEngine.EngineData.Item.Configuration.App(), IosappEngine.EngineData.Item.Configuration.Links())
         |> mapToSignal { appConfiguration, linksConfiguration -> Signal<ResolveUrlResult, NoError> in
             let urlHandlingConfiguration = UrlHandlingConfiguration.with(appConfiguration: appConfiguration)
             
@@ -1530,7 +1530,7 @@ public func resolveUrlImpl(context: AccountContext, peerId: PeerId?, url: String
                 }
             }
             
-            for basePath in baseTelegramMePaths {
+            for basePath in baseIosappMePaths {
                 for scheme in schemes {
                     let basePrefix = scheme + basePath + "/"
                     var url = url

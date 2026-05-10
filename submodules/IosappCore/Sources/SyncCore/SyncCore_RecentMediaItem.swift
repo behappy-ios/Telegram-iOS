@@ -28,11 +28,11 @@ public struct RecentMediaItemId {
 }
 
 public final class RecentMediaItem: Codable, Equatable {
-    public let media: TelegramMediaFile.Accessor
+    public let media: IosappMediaFile.Accessor
     private let serializedFile: Data?
     
-    public init(_ media: TelegramMediaFile) {
-        self.media = TelegramMediaFile.Accessor(media)
+    public init(_ media: IosappMediaFile) {
+        self.media = IosappMediaFile.Accessor(media)
         self.serializedFile = nil
     }
     
@@ -42,11 +42,11 @@ public final class RecentMediaItem: Codable, Equatable {
         if let serializedFileData = try container.decodeIfPresent(Data.self, forKey: "md") {
             self.serializedFile = serializedFileData
             var byteBuffer = ByteBuffer(data: serializedFileData)
-            self.media = TelegramMediaFile.Accessor(FlatBuffers_getRoot(byteBuffer: &byteBuffer) as TelegramCore_TelegramMediaFile, serializedFileData)
+            self.media = IosappMediaFile.Accessor(FlatBuffers_getRoot(byteBuffer: &byteBuffer) as IosappCore_IosappMediaFile, serializedFileData)
         } else {
             let mediaData = try container.decode(AdaptedPostboxDecoder.RawObjectData.self, forKey: "m")
-            let media = TelegramMediaFile(decoder: PostboxDecoder(buffer: MemoryBuffer(data: mediaData.data)))
-            self.media = TelegramMediaFile.Accessor(media)
+            let media = IosappMediaFile(decoder: PostboxDecoder(buffer: MemoryBuffer(data: mediaData.data)))
+            self.media = IosappMediaFile.Accessor(media)
             self.serializedFile = nil
         }
     }
@@ -139,7 +139,7 @@ public struct RecentEmojiItemId {
 
 public final class RecentEmojiItem: Codable, Equatable {
     public enum Content: Equatable {
-        case file(TelegramMediaFile)
+        case file(IosappMediaFile)
         case text(String)
     }
     
@@ -153,7 +153,7 @@ public final class RecentEmojiItem: Codable, Equatable {
         let container = try decoder.container(keyedBy: StringCodingKey.self)
 
         if let mediaData = try container.decodeIfPresent(AdaptedPostboxDecoder.RawObjectData.self, forKey: "m") {
-            self.content = .file(TelegramMediaFile(decoder: PostboxDecoder(buffer: MemoryBuffer(data: mediaData.data))))
+            self.content = .file(IosappMediaFile(decoder: PostboxDecoder(buffer: MemoryBuffer(data: mediaData.data))))
         } else {
             self.content = .text(try container.decode(String.self, forKey: "s"))
         }
@@ -255,7 +255,7 @@ public struct RecentReactionItemId {
 
 public final class RecentReactionItem: Codable, Equatable {
     public enum Content: Equatable {
-        case custom(TelegramMediaFile.Accessor)
+        case custom(IosappMediaFile.Accessor)
         case builtin(String)
         case stars
     }
@@ -282,10 +282,10 @@ public final class RecentReactionItem: Codable, Equatable {
         
         if let mediaData = try container.decodeIfPresent(Data.self, forKey: "md") {
             var byteBuffer = ByteBuffer(data: mediaData)
-            let file = TelegramMediaFile.Accessor(FlatBuffers_getRoot(byteBuffer: &byteBuffer) as TelegramCore_TelegramMediaFile, mediaData)
+            let file = IosappMediaFile.Accessor(FlatBuffers_getRoot(byteBuffer: &byteBuffer) as IosappCore_IosappMediaFile, mediaData)
             self.content = .custom(file)
         } else if let mediaData = try container.decodeIfPresent(AdaptedPostboxDecoder.RawObjectData.self, forKey: "m") {
-            self.content = .custom(TelegramMediaFile.Accessor(TelegramMediaFile(decoder: PostboxDecoder(buffer: MemoryBuffer(data: mediaData.data)))))
+            self.content = .custom(IosappMediaFile.Accessor(IosappMediaFile(decoder: PostboxDecoder(buffer: MemoryBuffer(data: mediaData.data)))))
         } else if let _ = try container.decodeIfPresent(Int64.self, forKey: "star") {
             self.content = .stars
         } else {

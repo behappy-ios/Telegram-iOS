@@ -1,7 +1,7 @@
 import Foundation
 import Postbox
 
-public final class TelegramMediaPaidContent: Media, Equatable {
+public final class IosappMediaPaidContent: Media, Equatable {
     public var peerIds: [PeerId] = []
 
     public var id: MediaId? {
@@ -9,16 +9,16 @@ public final class TelegramMediaPaidContent: Media, Equatable {
     }
 
     public let amount: Int64
-    public let extendedMedia: [TelegramExtendedMedia]
+    public let extendedMedia: [IosappExtendedMedia]
         
-    public init(amount: Int64, extendedMedia: [TelegramExtendedMedia]) {
+    public init(amount: Int64, extendedMedia: [IosappExtendedMedia]) {
         self.amount = amount
         self.extendedMedia = extendedMedia
     }
     
     public init(decoder: PostboxDecoder) {
         self.amount = decoder.decodeInt64ForKey("a", orElse: 0)
-        self.extendedMedia = (try? decoder.decodeObjectArrayWithCustomDecoderForKey("m", decoder: { TelegramExtendedMedia(decoder: $0) })) ?? []
+        self.extendedMedia = (try? decoder.decodeObjectArrayWithCustomDecoderForKey("m", decoder: { IosappExtendedMedia(decoder: $0) })) ?? []
     }
     
     public func encode(_ encoder: PostboxEncoder) {
@@ -26,12 +26,12 @@ public final class TelegramMediaPaidContent: Media, Equatable {
         encoder.encodeObjectArray(self.extendedMedia, forKey: "m")
     }
     
-    public static func ==(lhs: TelegramMediaPaidContent, rhs: TelegramMediaPaidContent) -> Bool {
+    public static func ==(lhs: IosappMediaPaidContent, rhs: IosappMediaPaidContent) -> Bool {
         return lhs.isEqual(to: rhs)
     }
     
     public func isEqual(to other: Media) -> Bool {
-        guard let other = other as? TelegramMediaPaidContent else {
+        guard let other = other as? IosappMediaPaidContent else {
             return false
         }
         
@@ -50,8 +50,8 @@ public final class TelegramMediaPaidContent: Media, Equatable {
         return self.isEqual(to: other)
     }
     
-    public func withUpdatedExtendedMedia(_ extendedMedia: [TelegramExtendedMedia]) -> TelegramMediaPaidContent {
-        return TelegramMediaPaidContent(
+    public func withUpdatedExtendedMedia(_ extendedMedia: [IosappExtendedMedia]) -> IosappMediaPaidContent {
+        return IosappMediaPaidContent(
             amount: self.amount,
             extendedMedia: extendedMedia
         )

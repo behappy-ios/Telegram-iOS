@@ -1,10 +1,10 @@
 import Foundation
 
 public struct ImageRepresentationWithReference: Equatable {
-    public let representation: TelegramMediaImageRepresentation
+    public let representation: IosappMediaImageRepresentation
     public let reference: MediaResourceReference
     
-    public init(representation: TelegramMediaImageRepresentation, reference: MediaResourceReference) {
+    public init(representation: IosappMediaImageRepresentation, reference: MediaResourceReference) {
         self.representation = representation
         self.reference = reference
     }
@@ -12,10 +12,10 @@ public struct ImageRepresentationWithReference: Equatable {
 
 
 public struct VideoRepresentationWithReference: Equatable {
-    public let representation: TelegramMediaImage.VideoRepresentation
+    public let representation: IosappMediaImage.VideoRepresentation
     public let reference: MediaResourceReference
     
-    public init(representation: TelegramMediaImage.VideoRepresentation, reference: MediaResourceReference) {
+    public init(representation: IosappMediaImage.VideoRepresentation, reference: MediaResourceReference) {
         self.representation = representation
         self.reference = reference
     }

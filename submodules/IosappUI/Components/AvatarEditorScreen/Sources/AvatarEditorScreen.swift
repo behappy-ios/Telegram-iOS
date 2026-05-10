@@ -50,13 +50,13 @@ final class AvatarEditorScreenComponent: Component {
     let context: AccountContext
     let ready: Promise<Bool>
     let peerType: AvatarEditorScreen.PeerType
-    let markup: TelegramMediaImage.EmojiMarkup?
+    let markup: IosappMediaImage.EmojiMarkup?
     
     init(
         context: AccountContext,
         ready: Promise<Bool>,
         peerType: AvatarEditorScreen.PeerType,
-        markup: TelegramMediaImage.EmojiMarkup?
+        markup: IosappMediaImage.EmojiMarkup?
     ) {
         self.context = context
         self.ready = ready
@@ -82,7 +82,7 @@ final class AvatarEditorScreenComponent: Component {
         let ready: Promise<Bool>
         
         var selectedBackground: AvatarBackground
-        var selectedFile: TelegramMediaFile?
+        var selectedFile: IosappMediaFile?
         
         var keyboardContentId: AnyHashable = "emoji"
         var expanded: Bool = false
@@ -96,7 +96,7 @@ final class AvatarEditorScreenComponent: Component {
         
         private var fileDisposable: Disposable?
         
-        init(context: AccountContext, ready: Promise<Bool>, markup: TelegramMediaImage.EmojiMarkup?) {
+        init(context: AccountContext, ready: Promise<Bool>, markup: IosappMediaImage.EmojiMarkup?) {
             self.context = context
             self.ready = ready
          
@@ -117,7 +117,7 @@ final class AvatarEditorScreenComponent: Component {
                     })
                 case let .sticker(packReference, fileId):
                     self.fileDisposable = (context.engine.stickers.loadedStickerPack(reference: packReference, forceActualized: false)
-                    |> map { pack -> TelegramMediaFile? in
+                    |> map { pack -> IosappMediaFile? in
                         if case let .result(_, items, _) = pack, let item = items.first(where: { $0.file.fileId.id == fileId }) {
                             return item.file._parse()
                         }
@@ -309,7 +309,7 @@ final class AvatarEditorScreenComponent: Component {
                             |> map { view, stickers -> [EmojiPagerContentComponent.ItemGroup] in
                                 let hasPremium = true
                                 
-                                var emoji: [(String, TelegramMediaFile.Accessor?, String)] = []
+                                var emoji: [(String, IosappMediaFile.Accessor?, String)] = []
                                 
                                 var existingEmoticons = Set<String>()
                                 var allEmoticons: [String: String] = [:]
@@ -364,11 +364,11 @@ final class AvatarEditorScreenComponent: Component {
                                         }
                                         
                                         existingIds.insert(sticker.file.fileId)
-                                        let animationData = EntityKeyboardAnimationData(file: TelegramMediaFile.Accessor(sticker.file))
+                                        let animationData = EntityKeyboardAnimationData(file: IosappMediaFile.Accessor(sticker.file))
                                         let item = EmojiPagerContentComponent.Item(
                                             animationData: animationData,
                                             content: .animation(animationData),
-                                            itemFile: TelegramMediaFile.Accessor(sticker.file),
+                                            itemFile: IosappMediaFile.Accessor(sticker.file),
                                             subgroupId: nil,
                                             icon: .none,
                                             tintMode: .none
@@ -450,11 +450,11 @@ final class AvatarEditorScreenComponent: Component {
                                 continue
                             }
                             existingIds.insert(itemFile.fileId)
-                            let animationData = EntityKeyboardAnimationData(file: TelegramMediaFile.Accessor(itemFile))
+                            let animationData = EntityKeyboardAnimationData(file: IosappMediaFile.Accessor(itemFile))
                             let item = EmojiPagerContentComponent.Item(
                                 animationData: animationData,
                                 content: .animation(animationData),
-                                itemFile: TelegramMediaFile.Accessor(itemFile),
+                                itemFile: IosappMediaFile.Accessor(itemFile),
                                 subgroupId: nil,
                                 icon: .none,
                                 tintMode: animationData.isTemplate ? .primary : .none
@@ -1651,7 +1651,7 @@ public final class AvatarEditorScreen: ViewControllerComponentContainer {
         return signal
     }
     
-    public init(context: AccountContext, inputData: Signal<AvatarKeyboardInputData, NoError>, peerType: PeerType, markup: TelegramMediaImage.EmojiMarkup?) {
+    public init(context: AccountContext, inputData: Signal<AvatarKeyboardInputData, NoError>, peerType: PeerType, markup: IosappMediaImage.EmojiMarkup?) {
         self.context = context
         self.inputData = inputData
         

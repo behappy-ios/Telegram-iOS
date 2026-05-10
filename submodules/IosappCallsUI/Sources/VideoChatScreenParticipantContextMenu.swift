@@ -268,7 +268,7 @@ extension VideoChatScreenComponent.View {
                             let chatPeer: Signal<EnginePeer?, NoError>
                             if let peerId = groupCall.peerId {
                                 chatPeer = groupCall.accountContext.engine.data.get(
-                                    TelegramEngine.EngineData.Item.Peer.Peer(id: peerId)
+                                    IosappEngine.EngineData.Item.Peer.Peer(id: peerId)
                                 )
                             } else {
                                 chatPeer = .single(nil)
@@ -304,7 +304,7 @@ extension VideoChatScreenComponent.View {
                                         self.presentToast(icon: .animation("anim_banned"), text: environment.strings.VoiceChat_RemovedConferencePeerText(peer.displayTitle(strings: environment.strings, displayOrder: nameDisplayOrder)).string, duration: 3)
                                     } else {
                                         if let callPeerId = groupCall.peerId {
-                                            let _ = groupCall.accountContext.peerChannelMemberCategoriesContextsManager.updateMemberBannedRights(engine: groupCall.accountContext.engine, peerId: callPeerId, memberId: peer.id, bannedRights: TelegramChatBannedRights(flags: [.banReadMessages], untilDate: Int32.max)).start()
+                                            let _ = groupCall.accountContext.peerChannelMemberCategoriesContextsManager.updateMemberBannedRights(engine: groupCall.accountContext.engine, peerId: callPeerId, memberId: peer.id, bannedRights: IosappChatBannedRights(flags: [.banReadMessages], untilDate: Int32.max)).start()
                                             groupCall.removedPeer(peer.id)
                                         }
                                         
@@ -439,8 +439,8 @@ extension VideoChatScreenComponent.View {
         let peerId = callState.myPeerId
         
         let _ = (currentCall.accountContext.engine.data.get(
-            TelegramEngine.EngineData.Item.Peer.Peer(id: peerId),
-            TelegramEngine.EngineData.Item.Configuration.SearchBots()
+            IosappEngine.EngineData.Item.Peer.Peer(id: peerId),
+            IosappEngine.EngineData.Item.Configuration.SearchBots()
         )
         |> deliverOnMainQueue).start(next: { [weak self] peer, searchBotsConfiguration in
             guard let self, let currentCall = self.currentCall, let environment = self.environment else {
@@ -553,7 +553,7 @@ extension VideoChatScreenComponent.View {
         
         let resource = LocalFileMediaResource(fileId: Int64.random(in: Int64.min ... Int64.max))
         currentCall.accountContext.account.postbox.mediaBox.storeResourceData(resource.id, data: data)
-        let representation = TelegramMediaImageRepresentation(dimensions: PixelDimensions(width: 640, height: 640), resource: resource, progressiveSizes: [], immediateThumbnailData: nil, hasVideo: false, isPersonal: false)
+        let representation = IosappMediaImageRepresentation(dimensions: PixelDimensions(width: 640, height: 640), resource: resource, progressiveSizes: [], immediateThumbnailData: nil, hasVideo: false, isPersonal: false)
         
         self.currentUpdatingAvatar = (representation, 0.0)
 
@@ -595,7 +595,7 @@ extension VideoChatScreenComponent.View {
         
         let photoResource = LocalFileMediaResource(fileId: Int64.random(in: Int64.min ... Int64.max))
         currentCall.accountContext.account.postbox.mediaBox.storeResourceData(photoResource.id, data: data)
-        let representation = TelegramMediaImageRepresentation(dimensions: PixelDimensions(width: 640, height: 640), resource: photoResource, progressiveSizes: [], immediateThumbnailData: nil, hasVideo: false, isPersonal: false)
+        let representation = IosappMediaImageRepresentation(dimensions: PixelDimensions(width: 640, height: 640), resource: photoResource, progressiveSizes: [], immediateThumbnailData: nil, hasVideo: false, isPersonal: false)
         
         self.currentUpdatingAvatar = (representation, 0.0)
 
@@ -606,7 +606,7 @@ extension VideoChatScreenComponent.View {
 
         let context = currentCall.accountContext
         let account = context.account
-        let signal = Signal<TelegramMediaResource, UploadPeerPhotoError> { [weak self] subscriber in
+        let signal = Signal<IosappMediaResource, UploadPeerPhotoError> { [weak self] subscriber in
             let entityRenderer: LegacyPaintEntityRenderer? = adjustments.flatMap { adjustments in
                 if let paintingData = adjustments.paintingData, paintingData.hasAnimation {
                     return LegacyPaintEntityRenderer(postbox: account.postbox, adjustments: adjustments)
@@ -656,7 +656,7 @@ extension VideoChatScreenComponent.View {
                     var value = stat()
                     if stat(result.fileURL.path, &value) == 0 {
                         if let data = try? Data(contentsOf: result.fileURL) {
-                            let resource: TelegramMediaResource
+                            let resource: IosappMediaResource
                             if let liveUploadData = result.liveUploadData as? LegacyLiveUploadInterfaceResult {
                                 resource = LocalFileMediaResource(fileId: liveUploadData.id)
                             } else {

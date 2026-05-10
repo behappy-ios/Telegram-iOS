@@ -24,7 +24,7 @@ private struct ThemeSettingsThemeEntry: Comparable, Identifiable {
     let accentColor: PresentationThemeAccentColor?
     var selected: Bool
     let theme: PresentationTheme
-    let wallpaper: TelegramWallpaper?
+    let wallpaper: IosappWallpaper?
     
     var stableId: Int64 {
         return self.themeReference.generalThemeReference.index
@@ -72,11 +72,11 @@ private class ThemeSettingsThemeIconItem: ListViewItem {
     let selected: Bool
     let title: String
     let theme: PresentationTheme
-    let wallpaper: TelegramWallpaper?
+    let wallpaper: IosappWallpaper?
     let action: (PresentationThemeReference) -> Void
     let contextAction: ((PresentationThemeReference, ASDisplayNode, ContextGesture?) -> Void)?
     
-    public init(context: AccountContext, themeReference: PresentationThemeReference, accentColor: PresentationThemeAccentColor?, selected: Bool, title: String, theme: PresentationTheme, wallpaper: TelegramWallpaper?, action: @escaping (PresentationThemeReference) -> Void, contextAction: ((PresentationThemeReference, ASDisplayNode, ContextGesture?) -> Void)?) {
+    public init(context: AccountContext, themeReference: PresentationThemeReference, accentColor: PresentationThemeAccentColor?, selected: Bool, title: String, theme: PresentationTheme, wallpaper: IosappWallpaper?, action: @escaping (PresentationThemeReference) -> Void, contextAction: ((PresentationThemeReference, ASDisplayNode, ContextGesture?) -> Void)?) {
         self.context = context
         self.themeReference = themeReference
         self.accentColor = accentColor
@@ -381,14 +381,14 @@ public class ThemeSettingsThemeItem: ListViewItem, ItemListItem, ListItemCompone
     public let allThemes: [PresentationThemeReference]
     public let displayUnsupported: Bool
     public let themeSpecificAccentColors: [Int64: PresentationThemeAccentColor]
-    public let themeSpecificChatWallpapers: [Int64: TelegramWallpaper]
-    public let themePreferredBaseTheme: [Int64: TelegramBaseTheme]
+    public let themeSpecificChatWallpapers: [Int64: IosappWallpaper]
+    public let themePreferredBaseTheme: [Int64: IosappBaseTheme]
     public let currentTheme: PresentationThemeReference
     public let updatedTheme: (PresentationThemeReference) -> Void
     public let contextAction: ((PresentationThemeReference, ASDisplayNode, ContextGesture?) -> Void)?
     public let tag: ItemListItemTag?
 
-    public init(context: AccountContext, theme: PresentationTheme, strings: PresentationStrings, sectionId: ItemListSectionId, themes: [PresentationThemeReference], allThemes: [PresentationThemeReference], displayUnsupported: Bool, themeSpecificAccentColors: [Int64: PresentationThemeAccentColor], themeSpecificChatWallpapers: [Int64: TelegramWallpaper], themePreferredBaseTheme: [Int64: TelegramBaseTheme], currentTheme: PresentationThemeReference, updatedTheme: @escaping (PresentationThemeReference) -> Void, contextAction: ((PresentationThemeReference, ASDisplayNode, ContextGesture?) -> Void)?, tag: ItemListItemTag? = nil) {
+    public init(context: AccountContext, theme: PresentationTheme, strings: PresentationStrings, sectionId: ItemListSectionId, themes: [PresentationThemeReference], allThemes: [PresentationThemeReference], displayUnsupported: Bool, themeSpecificAccentColors: [Int64: PresentationThemeAccentColor], themeSpecificChatWallpapers: [Int64: IosappWallpaper], themePreferredBaseTheme: [Int64: IosappBaseTheme], currentTheme: PresentationThemeReference, updatedTheme: @escaping (PresentationThemeReference) -> Void, contextAction: ((PresentationThemeReference, ASDisplayNode, ContextGesture?) -> Void)?, tag: ItemListItemTag? = nil) {
         self.context = context
         self.theme = theme
         self.strings = strings
@@ -701,7 +701,7 @@ public class ThemeSettingsThemeItemNode: ListViewItemNode, ItemListItemNode {
                             accentColor = nil
                         }*/
 
-                        var themeWallpaper: TelegramWallpaper?
+                        var themeWallpaper: IosappWallpaper?
                         if case let .cloud(theme) = theme {
                             themeWallpaper = theme.resolvedWallpaper ?? theme.theme.settings?.first?.wallpaper
                         }

@@ -119,7 +119,7 @@ private enum ChannelVisibilityEntry: ItemListNodeEntry {
     case existingLinkPeerItem(Int32, PresentationTheme, PresentationStrings, PresentationDateTimeFormat, PresentationPersonNameOrder, EnginePeer, ItemListPeerItemEditing, Bool)
     
     case additionalLinkHeader(PresentationTheme, String)
-    case additionalLink(PresentationTheme, TelegramPeerUsername, Int32)
+    case additionalLink(PresentationTheme, IosappPeerUsername, Int32)
     case additionalLinkInfo(PresentationTheme, String)
     
     case joinToSendHeader(PresentationTheme, String)
@@ -893,7 +893,7 @@ private func channelVisibilityControllerEntries(presentationData: PresentationDa
         isInitialSetup = false
     }
     
-    if let peer = view.peers[view.peerId] as? TelegramChannel {
+    if let peer = view.peers[view.peerId] as? IosappChannel {
         var isGroup = false
         if case .group = peer.info {
             isGroup = true
@@ -1098,11 +1098,11 @@ private func channelVisibilityControllerEntries(presentationData: PresentationDa
                         
                         var usernames = peer.usernames
                         if let temporaryOrder = temporaryOrder {
-                            var usernamesMap: [String: TelegramPeerUsername] = [:]
+                            var usernamesMap: [String: IosappPeerUsername] = [:]
                             for username in usernames {
                                 usernamesMap[username.username] = username
                             }
-                            var sortedUsernames: [TelegramPeerUsername] = []
+                            var sortedUsernames: [IosappPeerUsername] = []
                             for username in temporaryOrder {
                                 if let username = usernamesMap[username] {
                                     sortedUsernames.append(username)
@@ -1166,7 +1166,7 @@ private func channelVisibilityControllerEntries(presentationData: PresentationDa
             entries.append(.forwardingDisabled(presentationData.theme, presentationData.strings.Group_Setup_ForwardingDisabled, !forwardingEnabled))
             entries.append(.forwardingInfo(presentationData.theme, forwardingEnabled ? (isGroup ? presentationData.strings.Group_Setup_ForwardingGroupInfo : presentationData.strings.Group_Setup_ForwardingChannelInfo) : (isGroup ? presentationData.strings.Group_Setup_ForwardingGroupInfoDisabled : presentationData.strings.Group_Setup_ForwardingChannelInfoDisabled)))
         }
-    } else if let peer = view.peers[view.peerId] as? TelegramGroup {
+    } else if let peer = view.peers[view.peerId] as? IosappGroup {
         if case .revokeNames = mode {
             let count = Int32(publicChannelsToRevoke?.count ?? 0)
             
@@ -1321,7 +1321,7 @@ private func channelVisibilityControllerEntries(presentationData: PresentationDa
     return entries
 }
 
-private func effectiveChannelType(mode: ChannelVisibilityControllerMode, state: ChannelVisibilityControllerState, peer: TelegramChannel, cachedData: CachedPeerData?) -> CurrentChannelType {
+private func effectiveChannelType(mode: ChannelVisibilityControllerMode, state: ChannelVisibilityControllerState, peer: IosappChannel, cachedData: CachedPeerData?) -> CurrentChannelType {
     let selectedType: CurrentChannelType
     if let current = state.selectedType {
         selectedType = current
@@ -1465,11 +1465,11 @@ public func channelVisibilityController(context: AccountContext, updatedPresenta
             let _ = combineLatest(
                 queue: Queue.mainQueue(),
                 adminedPublicChannels.get() |> filter { $0 != nil } |> take(1),
-                context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: context.account.peerId)),
-                context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: peerId)),
+                context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: context.account.peerId)),
+                context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: peerId)),
                 context.engine.data.get(
-                    TelegramEngine.EngineData.Item.Configuration.UserLimits(isPremium: false),
-                    TelegramEngine.EngineData.Item.Configuration.UserLimits(isPremium: true)
+                    IosappEngine.EngineData.Item.Configuration.UserLimits(isPremium: false),
+                    IosappEngine.EngineData.Item.Configuration.UserLimits(isPremium: true)
                 )
             ).start(next: { peers, accountPeer, peer, data in
                 let (limits, premiumLimits) = data
@@ -1579,7 +1579,7 @@ public func channelVisibilityController(context: AccountContext, updatedPresenta
         }, action: { _, f in
             f(.dismissWithoutContent)
             
-            let _ = (context.engine.data.get(TelegramEngine.EngineData.Item.Peer.ExportedInvitation(id: peerId))
+            let _ = (context.engine.data.get(IosappEngine.EngineData.Item.Peer.ExportedInvitation(id: peerId))
             |> deliverOnMainQueue).start(next: { exportedInvitation in
                 if let link = exportedInvitation?.link {
                     UIPasteboard.general.string = link
@@ -1597,13 +1597,13 @@ public func channelVisibilityController(context: AccountContext, updatedPresenta
         }, action: { _, f in
             f(.dismissWithoutContent)
             
-            let _ = (context.engine.data.get(TelegramEngine.EngineData.Item.Peer.ExportedInvitation(id: peerId))
+            let _ = (context.engine.data.get(IosappEngine.EngineData.Item.Peer.ExportedInvitation(id: peerId))
             |> deliverOnMainQueue).start(next: { invite in
                 if let invite = invite {
                     let _ = (context.account.postbox.loadedPeerWithId(peerId)
                     |> deliverOnMainQueue).start(next: { peer in
                         let isGroup: Bool
-                        if let peer = peer as? TelegramChannel, case .broadcast = peer.info {
+                        if let peer = peer as? IosappChannel, case .broadcast = peer.info {
                             isGroup = false
                         } else {
                             isGroup = true
@@ -1622,7 +1622,7 @@ public func channelVisibilityController(context: AccountContext, updatedPresenta
             let _ = (context.account.postbox.loadedPeerWithId(peerId)
             |> deliverOnMainQueue).start(next: { peer in
                 let isGroup: Bool
-                if let peer = peer as? TelegramChannel, case .broadcast = peer.info {
+                if let peer = peer as? IosappChannel, case .broadcast = peer.info {
                     isGroup = false
                 } else {
                     isGroup = true
@@ -1638,7 +1638,7 @@ public func channelVisibilityController(context: AccountContext, updatedPresenta
                         ActionSheetButtonItem(title: presentationData.strings.GroupInfo_InviteLink_RevokeLink, color: .destructive, action: {
                             dismissAction()
                             
-                            let _ = (context.engine.data.get(TelegramEngine.EngineData.Item.Peer.ExportedInvitation(id: peerId))
+                            let _ = (context.engine.data.get(IosappEngine.EngineData.Item.Peer.ExportedInvitation(id: peerId))
                             |> deliverOnMainQueue).start(next: { exportedInvitation in
                                 if let link = exportedInvitation?.link {
                                     var revoke = false
@@ -1689,7 +1689,7 @@ public func channelVisibilityController(context: AccountContext, updatedPresenta
         }
     }, activateLink: { name in
         dismissInputImpl?()
-        let _ = (context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: peerId))
+        let _ = (context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: peerId))
         |> deliverOnMainQueue).start(next: { peer in
             let isGroup: Bool
             if case let .channel(channel) = peer, case .broadcast = channel.info {
@@ -1731,7 +1731,7 @@ public func channelVisibilityController(context: AccountContext, updatedPresenta
         })
     }, deactivateLink: { name in
         dismissInputImpl?()
-        let _ = (context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: peerId))
+        let _ = (context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: peerId))
         |> deliverOnMainQueue).start(next: { peer in
             let isGroup: Bool
             if case let .channel(channel) = peer, case .broadcast = channel.info {
@@ -1772,7 +1772,7 @@ public func channelVisibilityController(context: AccountContext, updatedPresenta
     let previousUsernames = Atomic<[String]?>(value: nil)
     
     let mainLink = context.engine.data.subscribe(
-        TelegramEngine.EngineData.Item.Peer.ExportedInvitation(id: peerId)
+        IosappEngine.EngineData.Item.Peer.ExportedInvitation(id: peerId)
     )
     
     let importersState = Promise<PeerInvitationImportersState?>(nil)
@@ -1800,9 +1800,9 @@ public func channelVisibilityController(context: AccountContext, updatedPresenta
         importersContext,
         importersState.get(),
         context.engine.data.get(
-            TelegramEngine.EngineData.Item.Configuration.UserLimits(isPremium: false),
-            TelegramEngine.EngineData.Item.Configuration.UserLimits(isPremium: true),
-            TelegramEngine.EngineData.Item.Peer.Peer(id: context.account.peerId)
+            IosappEngine.EngineData.Item.Configuration.UserLimits(isPremium: false),
+            IosappEngine.EngineData.Item.Configuration.UserLimits(isPremium: true),
+            IosappEngine.EngineData.Item.Peer.Peer(id: context.account.peerId)
         ),
         temporaryOrder.get()
     )
@@ -1816,11 +1816,11 @@ public func channelVisibilityController(context: AccountContext, updatedPresenta
         var footerItem: ItemListControllerFooterItem?
         
         var isGroup = false
-        if let peer = peer as? TelegramChannel {
+        if let peer = peer as? IosappChannel {
             if case .group = peer.info {
                 isGroup = true
             }
-        } else if let _ = peer as? TelegramGroup {
+        } else if let _ = peer as? IosappGroup {
             isGroup = true
         }
         
@@ -1834,7 +1834,7 @@ public func channelVisibilityController(context: AccountContext, updatedPresenta
                 })
             }
         } else {
-            if let peer = peer as? TelegramChannel {
+            if let peer = peer as? IosappChannel {
                 var doneEnabled = true
                 if let selectedType = state.selectedType {
                     switch selectedType {
@@ -1942,7 +1942,7 @@ public func channelVisibilityController(context: AccountContext, updatedPresenta
                         }
                     }
                 })
-            } else if let peer = peer as? TelegramGroup {
+            } else if let peer = peer as? IosappGroup {
                 var doneEnabled = true
                 if let selectedType = state.selectedType {
                     switch selectedType {
@@ -2069,7 +2069,7 @@ public func channelVisibilityController(context: AccountContext, updatedPresenta
         let hasNamesToRevoke = publicChannelsToRevoke != nil && !publicChannelsToRevoke!.isEmpty
         let hadNamesToRevoke = previousHadNamesToRevoke.swap(hasNamesToRevoke)
         
-        if let peer = view.peers[view.peerId] as? TelegramChannel {
+        if let peer = view.peers[view.peerId] as? IosappChannel {
             let currentUsernames = peer.usernames.map { $0.username }
             let previousUsernames = previousUsernames.swap(currentUsernames)
             
@@ -2238,7 +2238,7 @@ public func channelVisibilityController(context: AccountContext, updatedPresenta
     })
     
     controller.setReorderCompleted({ (entries: [ChannelVisibilityEntry]) -> Void in
-        var currentUsernames: [TelegramPeerUsername] = []
+        var currentUsernames: [IosappPeerUsername] = []
         for entry in entries {
             switch entry {
             case let .additionalLink(_, username, _):
@@ -2299,7 +2299,7 @@ public func channelVisibilityController(context: AccountContext, updatedPresenta
                         }
                     })
                     if filteredPeerIds.isEmpty {
-                        let _ = (context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: peerId))
+                        let _ = (context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: peerId))
                         |> deliverOnMainQueue).start(next: { peer in
                             guard let peer = peer else {
                                 return
@@ -2310,7 +2310,7 @@ public func channelVisibilityController(context: AccountContext, updatedPresenta
                         selectionController.displayProgress = true
                         let _ = (context.engine.peers.addChannelMembers(peerId: peerId, memberIds: filteredPeerIds)
                         |> deliverOnMainQueue).start(error: { [weak selectionController] _ in
-                            let _ = (context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: peerId))
+                            let _ = (context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: peerId))
                             |> deliverOnMainQueue).start(next: { peer in
                                 guard let peer = peer else {
                                     return
@@ -2322,7 +2322,7 @@ public func channelVisibilityController(context: AccountContext, updatedPresenta
                                 context.sharedContext.navigateToChatController(NavigateToChatControllerParams(navigationController: navigationController, chatController: nil, context: context, chatLocation: .peer(peer), keepStack: .never, animated: true))
                             })
                         }, completed: { [weak selectionController] in
-                            let _ = (context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: peerId))
+                            let _ = (context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: peerId))
                             |> deliverOnMainQueue).start(next: { peer in
                                 guard let peer = peer else {
                                     return

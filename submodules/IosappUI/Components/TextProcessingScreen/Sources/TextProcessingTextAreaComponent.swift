@@ -193,14 +193,14 @@ final class TextProcessingTextAreaComponent: Component {
                 if let textView = self.text.view as? InteractiveTextComponent.View {
                     let textPoint = self.convert(point, to: textView.textNode.view)
                     if let attributes = textView.textNode.attributesAtPoint(textPoint, orNearest: false)?.1 {
-                        if attributes[NSAttributedString.Key(rawValue: "TelegramSpoiler")] != nil || attributes[NSAttributedString.Key(rawValue: "Attribute__Spoiler")] != nil {
+                        if attributes[NSAttributedString.Key(rawValue: "IosappSpoiler")] != nil || attributes[NSAttributedString.Key(rawValue: "Attribute__Spoiler")] != nil {
                             if !self.displayContentsUnderSpoilers.value {
                                 if let value = textView.textNode.view.hitTest(textPoint, with: event) {
                                     return value
                                 }
                             }
                         }
-                        if attributes[NSAttributedString.Key(rawValue: "TelegramBlockQuote")] != nil || attributes[NSAttributedString.Key(rawValue: "Attribute__Blockquote")] != nil {
+                        if attributes[NSAttributedString.Key(rawValue: "IosappBlockQuote")] != nil || attributes[NSAttributedString.Key(rawValue: "Attribute__Blockquote")] != nil {
                             if let value = textView.textNode.view.hitTest(textPoint, with: event) {
                                 return value
                             }

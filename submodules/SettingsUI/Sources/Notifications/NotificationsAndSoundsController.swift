@@ -807,7 +807,7 @@ public func notificationsAndSoundsController(context: AccountContext, exceptions
                             case Namespaces.Peer.CloudUser:
                                 users[key] = NotificationExceptionWrapper(settings: value, peer: EnginePeer(peer))
                             default:
-                                if let peer = peer as? TelegramChannel, case .broadcast = peer.info {
+                                if let peer = peer as? IosappChannel, case .broadcast = peer.info {
                                     channels[key] = NotificationExceptionWrapper(settings: value, peer: .channel(peer))
                                 } else {
                                     groups[key] = NotificationExceptionWrapper(settings: value, peer: EnginePeer(peer))
@@ -819,7 +819,7 @@ public func notificationsAndSoundsController(context: AccountContext, exceptions
                         case Namespaces.Peer.CloudUser:
                             users[key] = NotificationExceptionWrapper(settings: value, peer: EnginePeer(peer))
                         default:
-                            if let peer = peer as? TelegramChannel, case .broadcast = peer.info {
+                            if let peer = peer as? IosappChannel, case .broadcast = peer.info {
                                 channels[key] = NotificationExceptionWrapper(settings: value, peer: .channel(peer))
                             } else {
                                 groups[key] = NotificationExceptionWrapper(settings: value, peer: EnginePeer(peer))

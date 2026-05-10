@@ -28,7 +28,7 @@ final class PeerInfoBirthdayOverlay: ASDisplayNode {
         self.disposable?.dispose()
     }
     
-    func setup(size: CGSize, birthday: TelegramBirthday, sourceRect: CGRect?) {
+    func setup(size: CGSize, birthday: IosappBirthday, sourceRect: CGRect?) {
         self.setupAnimations(size: size, birthday: birthday, sourceRect: sourceRect)
         
         Queue.mainQueue().after(0.1) {
@@ -36,7 +36,7 @@ final class PeerInfoBirthdayOverlay: ASDisplayNode {
         }
     }
     
-    private func setupAnimations(size: CGSize, birthday: TelegramBirthday, sourceRect: CGRect?) {
+    private func setupAnimations(size: CGSize, birthday: IosappBirthday, sourceRect: CGRect?) {
         self.disposable = (combineLatest(
             self.context.engine.stickers.loadedStickerPack(reference: .animatedEmojiAnimations, forceActualized: false),
             self.context.engine.stickers.loadedStickerPack(reference: .name("FestiveFontEmoji"), forceActualized: false)
@@ -173,7 +173,7 @@ final class PeerInfoBirthdayOverlay: ASDisplayNode {
         }
     }
     
-    static func preloadBirthdayAnimations(context: AccountContext, birthday: TelegramBirthday) {
+    static func preloadBirthdayAnimations(context: AccountContext, birthday: IosappBirthday) {
         let preload = combineLatest(
             context.engine.stickers.loadedStickerPack(reference: .animatedEmojiAnimations, forceActualized: false),
             context.engine.stickers.loadedStickerPack(reference: .name("FestiveFontEmoji"), forceActualized: false)

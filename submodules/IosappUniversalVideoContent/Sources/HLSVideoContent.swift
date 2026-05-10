@@ -481,8 +481,8 @@ final class HLSServerSource: SharedHLSServer.Source {
             
             let location = MediaResourceStorageLocation(userLocation: userLocation, reference: file.resourceReference(file.media.resource))
             let params = MediaResourceFetchParameters(
-                tag: TelegramMediaResourceFetchTag(statsCategory: .video, userContentType: .video),
-                info: TelegramCloudMediaResourceFetchInfo(reference: file.resourceReference(file.media.resource), preferBackgroundReferenceRevalidation: true, continueInBackground: true),
+                tag: IosappMediaResourceFetchTag(statsCategory: .video, userContentType: .video),
+                info: IosappCloudMediaResourceFetchInfo(reference: file.resourceReference(file.media.resource), preferBackgroundReferenceRevalidation: true, continueInBackground: true),
                 location: location,
                 contentType: .video,
                 isRandomAccessAllowed: true

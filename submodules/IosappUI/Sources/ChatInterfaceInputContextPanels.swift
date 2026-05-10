@@ -47,9 +47,9 @@ func textInputContextPanel(context: AccountContext, chatPresentationInterfaceSta
     }
     
     var hasBannedInlineContent = false
-    if let channel = chatPresentationInterfaceState.renderedPeer?.peer as? TelegramChannel, channel.hasBannedPermission(.banSendInline) != nil {
+    if let channel = chatPresentationInterfaceState.renderedPeer?.peer as? IosappChannel, channel.hasBannedPermission(.banSendInline) != nil {
         hasBannedInlineContent = true
-    } else if let group = chatPresentationInterfaceState.renderedPeer?.peer as? TelegramGroup, group.hasBannedPermission(.banSendInline) {
+    } else if let group = chatPresentationInterfaceState.renderedPeer?.peer as? IosappGroup, group.hasBannedPermission(.banSendInline) {
         hasBannedInlineContent = true
     }
     
@@ -95,7 +95,7 @@ func textInputContextPanel(context: AccountContext, chatPresentationInterfaceSta
         }*/
     case let .hashtags(results, query):
         var peer: EnginePeer?
-        if let chatPeer = chatPresentationInterfaceState.renderedPeer?.peer as? TelegramChannel, chatPeer.addressName != nil {
+        if let chatPeer = chatPresentationInterfaceState.renderedPeer?.peer as? IosappChannel, chatPeer.addressName != nil {
             peer = EnginePeer(chatPeer)
         }
         if !results.isEmpty || (peer != nil && query.count >= 4) {
@@ -185,9 +185,9 @@ func inputContextPanelForChatPresentationIntefaceState(_ chatPresentationInterfa
     }
     
     var hasBannedInlineContent = false
-    if let channel = chatPresentationInterfaceState.renderedPeer?.peer as? TelegramChannel, channel.hasBannedPermission(.banSendInline) != nil {
+    if let channel = chatPresentationInterfaceState.renderedPeer?.peer as? IosappChannel, channel.hasBannedPermission(.banSendInline) != nil {
         hasBannedInlineContent = true
-    } else if let group = chatPresentationInterfaceState.renderedPeer?.peer as? TelegramGroup, group.hasBannedPermission(.banSendInline) {
+    } else if let group = chatPresentationInterfaceState.renderedPeer?.peer as? IosappGroup, group.hasBannedPermission(.banSendInline) {
         hasBannedInlineContent = true
     }
     

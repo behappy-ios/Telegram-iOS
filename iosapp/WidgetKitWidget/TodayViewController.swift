@@ -144,7 +144,7 @@ private func getCommonTimeline(friends: [Friend]?, in context: TimelineProviderC
                 var name: String = ""
                 var lastName: String?
                 
-                if let user = peer as? TelegramUser {
+                if let user = peer as? IosappUser {
                     if let firstName = user.firstName {
                         name = firstName
                         lastName = user.lastName
@@ -161,7 +161,7 @@ private func getCommonTimeline(friends: [Friend]?, in context: TimelineProviderC
                 
                 if let readState = transaction.getCombinedPeerReadState(peer.id), readState.count > 0 {
                     var isMuted = false
-                    if let notificationSettings = transaction.getPeerNotificationSettings(id: peer.id) as? TelegramPeerNotificationSettings {
+                    if let notificationSettings = transaction.getPeerNotificationSettings(id: peer.id) as? IosappPeerNotificationSettings {
                         isMuted = notificationSettings.isRemovedFromTotalUnreadCount(default: false)
                     }
                     badge = WidgetDataPeer.Badge(
@@ -178,7 +178,7 @@ private func getCommonTimeline(friends: [Friend]?, in context: TimelineProviderC
                 }
                 
                 var isForum = false
-                if let peer = peer as? TelegramChannel, peer.isForumOrMonoForum {
+                if let peer = peer as? IosappChannel, peer.isForumOrMonoForum {
                     isForum = true
                 }
                 

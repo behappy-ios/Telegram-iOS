@@ -98,9 +98,9 @@ public final class ChatMessageAccessibilityData {
         let isIncoming = item.message.effectivelyIncoming(item.context.account.peerId)
         var announceIncomingAuthors = false
         if let peer = item.message.peers[item.message.id.peerId] {
-            if peer is TelegramGroup {
+            if peer is IosappGroup {
                 announceIncomingAuthors = true
-            } else if let channel = peer as? TelegramChannel, case .group = channel.info {
+            } else if let channel = peer as? IosappChannel, case .group = channel.info {
                 announceIncomingAuthors = true
             }
         }
@@ -117,7 +117,7 @@ public final class ChatMessageAccessibilityData {
                 var text = messageText
                 
                 loop: for media in message.media {
-                    if let _ = media as? TelegramMediaImage {
+                    if let _ = media as? IosappMediaImage {
                         traits.insert(.image)
                         if isIncoming {
                             if announceIncomingAuthors, let authorName = authorName {
@@ -134,7 +134,7 @@ public final class ChatMessageAccessibilityData {
                             
                             text.append(item.presentationData.strings.VoiceOver_Chat_Caption(message.text).string)
                         }
-                    } else if let file = media as? TelegramMediaFile {
+                    } else if let file = media as? IosappMediaFile {
                         var isSpecialFile = false
                         
                         let isVideo = file.isInstantVideo
@@ -258,7 +258,7 @@ public final class ChatMessageAccessibilityData {
                             text.append(item.presentationData.strings.VoiceOver_Chat_Caption(message.text).string)
                         }
                         break loop
-                    } else if let webpage = media as? TelegramMediaWebpage, case let .Loaded(content) = webpage.content {
+                    } else if let webpage = media as? IosappMediaWebpage, case let .Loaded(content) = webpage.content {
                         var contentText = item.presentationData.strings.VoiceOver_Chat_PagePreview + ". "
                         if let title = content.title, !title.isEmpty {
                             contentText.append(item.presentationData.strings.VoiceOver_Chat_Title(title).string)
@@ -268,7 +268,7 @@ public final class ChatMessageAccessibilityData {
                             contentText.append(text)
                         }
                         text = "\(message.text)\n\(contentText)"
-                    } else if let contact = media as? TelegramMediaContact {
+                    } else if let contact = media as? IosappMediaContact {
                         if isIncoming {
                             if announceIncomingAuthors, let authorName = authorName {
                                 label = item.presentationData.strings.VoiceOver_Chat_ContactFrom(authorName).string
@@ -353,7 +353,7 @@ public final class ChatMessageAccessibilityData {
                             text.append(item.presentationData.strings.VoiceOver_Chat_ContactOrganization(organizationString).string)
                             text.append(".")
                         }
-                    } else if let poll = media as? TelegramMediaPoll {
+                    } else if let poll = media as? IosappMediaPoll {
                         if isIncoming {
                             if announceIncomingAuthors, let authorName = authorName {
                                 label = item.presentationData.strings.VoiceOver_Chat_AnonymousPollFrom(authorName).string
@@ -367,7 +367,7 @@ public final class ChatMessageAccessibilityData {
                         var optionVoterCount: [Int: Int32] = [:]
                         var maxOptionVoterCount: Int32 = 0
                         var totalVoterCount: Int32 = 0
-                        let voters: [TelegramMediaPollOptionVoters]?
+                        let voters: [IosappMediaPollOptionVoters]?
                         if poll.isClosed {
                             voters = poll.results.voters ?? []
                         } else {
@@ -586,10 +586,10 @@ public final class ChatMessageAccessibilityData {
         if isSelected == nil {
             var canReply = item.controllerInteraction.canSetupReply(item.message) == .reply
             for media in item.content.firstMessage.media {
-                if let _ = media as? TelegramMediaExpiredContent {
+                if let _ = media as? IosappMediaExpiredContent {
                     canReply = false
                 }
-                else if let media = media as? TelegramMediaAction {
+                else if let media = media as? IosappMediaAction {
                     if case .phoneCall = media.action {
                     } else if case .conferenceCall = media.action {
                     } else {
@@ -857,7 +857,7 @@ open class ChatMessageItemView: ListViewItemNode, ChatMessageItemNodeProtocol {
                 case .setupPoll:
                     break
                 case let .openUserProfile(peerId):
-                    let _ = (item.context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: peerId))
+                    let _ = (item.context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: peerId))
                     |> deliverOnMainQueue).startStandalone(next: { peer in
                         if let peer = peer {
                             item.controllerInteraction.openPeer(peer, .info(nil), nil, .default)

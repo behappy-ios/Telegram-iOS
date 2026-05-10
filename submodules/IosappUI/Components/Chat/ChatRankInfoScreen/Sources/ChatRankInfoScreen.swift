@@ -158,7 +158,7 @@ private final class ChatRankInfoSheetContent: CombinedComponent {
             
             let markdownAttributes = MarkdownAttributes(body: MarkdownAttributeSet(font: textFont, textColor: textColor), bold: MarkdownAttributeSet(font: boldTextFont, textColor: textColor), link: MarkdownAttributeSet(font: textFont, textColor: linkColor), linkAttribute: { contents in
                 if linkHasBackground {
-                    return ("TelegramBackground", NSUnderlineStyle.single.rawValue)
+                    return ("IosappBackground", NSUnderlineStyle.single.rawValue)
                 } else {
                     return nil
                 }
@@ -233,7 +233,7 @@ private final class ChatRankInfoSheetContent: CombinedComponent {
             
             let listItemParams = ListViewItemLayoutParams(width: previewWidth, leftInset: 0.0, rightInset: 0.0, availableHeight: 10000.0, isStandalone: true)
             
-            let emptyUser = TelegramUser(id: PeerId(namespace: Namespaces.Peer.CloudUser, id: ._internalFromInt64Value(0)), accessHash: nil, firstName: "A", lastName: "", username: "", phone: "", photo: [], botInfo: nil, restrictionInfo: nil, flags: [], emojiStatus: nil, usernames: [], storiesHidden: nil, nameColor: nil, backgroundEmojiId: nil, profileColor: nil, profileBackgroundEmojiId: nil, subscriberCount: nil, verificationIconFileId: nil)
+            let emptyUser = IosappUser(id: PeerId(namespace: Namespaces.Peer.CloudUser, id: ._internalFromInt64Value(0)), accessHash: nil, firstName: "A", lastName: "", username: "", phone: "", photo: [], botInfo: nil, restrictionInfo: nil, flags: [], emojiStatus: nil, usernames: [], storiesHidden: nil, nameColor: nil, backgroundEmojiId: nil, profileColor: nil, profileBackgroundEmojiId: nil, subscriberCount: nil, verificationIconFileId: nil)
             
             let memberMessageItem = RankChatPreviewItem.MessageItem(
                 peer: .user(emptyUser),

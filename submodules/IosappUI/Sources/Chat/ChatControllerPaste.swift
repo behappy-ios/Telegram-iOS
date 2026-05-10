@@ -105,12 +105,12 @@ extension ChatControllerImpl {
                 let resource = LocalFileMediaResource(fileId: Int64.random(in: Int64.min ... Int64.max))
                 strongSelf.context.account.postbox.mediaBox.storeResourceData(resource.id, data: data)
                 
-                var fileAttributes: [TelegramMediaFileAttribute] = []
+                var fileAttributes: [IosappMediaFileAttribute] = []
                 fileAttributes.append(.FileName(fileName: "sticker.webp"))
                 fileAttributes.append(.Sticker(displayText: "", packReference: nil, maskData: nil))
                 fileAttributes.append(.ImageSize(size: PixelDimensions(size)))
                 
-                let media = TelegramMediaFile(fileId: MediaId(namespace: Namespaces.Media.LocalFile, id: Int64.random(in: Int64.min ... Int64.max)), partialReference: nil, resource: resource, previewRepresentations: [], videoThumbnails: [], immediateThumbnailData: nil, mimeType: "image/webp", size: Int64(data.count), attributes: fileAttributes, alternativeRepresentations: [])
+                let media = IosappMediaFile(fileId: MediaId(namespace: Namespaces.Media.LocalFile, id: Int64.random(in: Int64.min ... Int64.max)), partialReference: nil, resource: resource, previewRepresentations: [], videoThumbnails: [], immediateThumbnailData: nil, mimeType: "image/webp", size: Int64(data.count), attributes: fileAttributes, alternativeRepresentations: [])
                 let message = EnqueueMessage.message(text: "", attributes: [], inlineStickers: [:], mediaReference: .standalone(media: media), threadId: strongSelf.chatLocation.threadId, replyToMessageId: nil, replyToStoryId: nil, localGroupingKey: nil, correlationId: nil, bubbleUpEmojiOrStickersets: [])
                 
                 strongSelf.presentPaidMessageAlertIfNeeded(completion: { [weak self] postpone in
@@ -133,7 +133,7 @@ extension ChatControllerImpl {
         }))
     }
     
-    func enqueueStickerFile(_ file: TelegramMediaFile) {
+    func enqueueStickerFile(_ file: IosappMediaFile) {
         let message = EnqueueMessage.message(text: "", attributes: [], inlineStickers: [:], mediaReference: .standalone(media: file), threadId: self.chatLocation.threadId, replyToMessageId: nil, replyToStoryId: nil, localGroupingKey: nil, correlationId: nil, bubbleUpEmojiOrStickersets: [])
         
         self.presentPaidMessageAlertIfNeeded(completion: { [weak self] postpone in
@@ -153,7 +153,7 @@ extension ChatControllerImpl {
             self.sendMessages([message].map { $0.withUpdatedReplyToMessageId(replyMessageSubject?.subjectModel) })
             
             Queue.mainQueue().after(3.0) {
-                if let message = self.chatDisplayNode.historyNode.lastVisbleMesssage(), let file = message.media.first(where: { $0 is TelegramMediaFile }) as? TelegramMediaFile, file.isSticker {
+                if let message = self.chatDisplayNode.historyNode.lastVisbleMesssage(), let file = message.media.first(where: { $0 is IosappMediaFile }) as? IosappMediaFile, file.isSticker {
                     self.context.engine.stickers.addRecentlyUsedSticker(fileReference: .message(message: MessageReference(message), media: file))
                 }
             }
@@ -243,17 +243,17 @@ extension ChatControllerImpl {
             }
             switch status {
             case .completed:
-                var fileAttributes: [TelegramMediaFileAttribute] = []
+                var fileAttributes: [IosappMediaFileAttribute] = []
                 fileAttributes.append(.FileName(fileName: "sticker.webm"))
                 fileAttributes.append(.Sticker(displayText: "", packReference: nil, maskData: nil))
                 fileAttributes.append(.Video(duration: animatedImage.duration, size: PixelDimensions(width: 512, height: 512), flags: [], preloadSize: nil, coverTime: nil, videoCodec: nil))
                 
-                let previewRepresentations: [TelegramMediaImageRepresentation] = []
+                let previewRepresentations: [IosappMediaImageRepresentation] = []
 
                 let resource = LocalFileMediaResource(fileId: Int64.random(in: Int64.min ... Int64.max))
                 self.context.account.postbox.mediaBox.copyResourceData(resource.id, fromTempPath: path)
                 
-                let file = TelegramMediaFile(fileId: MediaId(namespace: Namespaces.Media.LocalFile, id: Int64.random(in: Int64.min ... Int64.max)), partialReference: nil, resource: resource, previewRepresentations: previewRepresentations, videoThumbnails: [], immediateThumbnailData: nil, mimeType: "video/webm", size: 0, attributes: fileAttributes, alternativeRepresentations: [])
+                let file = IosappMediaFile(fileId: MediaId(namespace: Namespaces.Media.LocalFile, id: Int64.random(in: Int64.min ... Int64.max)), partialReference: nil, resource: resource, previewRepresentations: previewRepresentations, videoThumbnails: [], immediateThumbnailData: nil, mimeType: "video/webm", size: 0, attributes: fileAttributes, alternativeRepresentations: [])
                 self.enqueueStickerFile(file)
             default:
                 break

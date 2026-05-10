@@ -27,14 +27,14 @@ private final class SheetContent: Component {
     
     let context: AccountContext
     let peer: EnginePeer
-    let starRating: TelegramStarRating
-    let pendingStarRating: TelegramStarPendingRating?
+    let starRating: IosappStarRating
+    let pendingStarRating: IosappStarPendingRating?
     
     init(
         context: AccountContext,
         peer: EnginePeer,
-        starRating: TelegramStarRating,
-        pendingStarRating: TelegramStarPendingRating?
+        starRating: IosappStarRating,
+        pendingStarRating: IosappStarPendingRating?
     ) {
         self.context = context
         self.peer = peer
@@ -502,14 +502,14 @@ private final class ProfileLevelInfoSheetComponent: CombinedComponent {
     
     private let context: AccountContext
     private let peer: EnginePeer
-    private let starRating: TelegramStarRating
-    private let pendingStarRating: TelegramStarPendingRating?
+    private let starRating: IosappStarRating
+    private let pendingStarRating: IosappStarPendingRating?
     
     init(
         context: AccountContext,
         peer: EnginePeer,
-        starRating: TelegramStarRating,
-        pendingStarRating: TelegramStarPendingRating?
+        starRating: IosappStarRating,
+        pendingStarRating: IosappStarPendingRating?
     ) {
         self.context = context
         self.peer = peer
@@ -650,8 +650,8 @@ public final class ProfileLevelInfoScreen: ViewControllerComponentContainer {
     public init(
         context: AccountContext,
         peer: EnginePeer,
-        starRating: TelegramStarRating,
-        pendingStarRating: TelegramStarPendingRating?,
+        starRating: IosappStarRating,
+        pendingStarRating: IosappStarPendingRating?,
         customTheme: PresentationTheme?
     ) {
         self.context = context

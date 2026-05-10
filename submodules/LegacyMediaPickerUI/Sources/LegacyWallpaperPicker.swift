@@ -61,8 +61,8 @@ public class LegacyWallpaperItem: NSObject, TGMediaEditableItem, TGMediaSelectab
     
     let asset: PHAsset
     let screenImage: UIImage
-    private(set) var thumbnailResource: TelegramMediaResource?
-    private(set) var imageResource: TelegramMediaResource?
+    private(set) var thumbnailResource: IosappMediaResource?
+    private(set) var imageResource: IosappMediaResource?
     let dimensions: CGSize
 
     public init(asset: PHAsset, screenImage: UIImage, dimensions: CGSize) {

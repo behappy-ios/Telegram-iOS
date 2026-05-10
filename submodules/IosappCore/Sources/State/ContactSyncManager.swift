@@ -43,7 +43,7 @@ private final class ContactSyncManagerImpl {
     private var operations: [ContactSyncOperation] = []
     
     private var lastContactPresencesRequestTimestamp: Double?
-    private var reimportAttempts: [TelegramDeviceContactImportIdentifier: Double] = [:]
+    private var reimportAttempts: [IosappDeviceContactImportIdentifier: Double] = [:]
     
     private let importableContactsDisposable = MetaDisposable()
     private let significantStateUpdateCompletedDisposable = MetaDisposable()
@@ -232,24 +232,24 @@ private final class ContactSyncManagerImpl {
 }
 
 private struct PushDeviceContactsResult {
-    let addedReimportAttempts: [TelegramDeviceContactImportIdentifier: Double]
+    let addedReimportAttempts: [IosappDeviceContactImportIdentifier: Double]
 }
 
-private func pushDeviceContacts(accountPeerId: PeerId, postbox: Postbox, network: Network, importableContacts: [DeviceContactNormalizedPhoneNumber: ImportableDeviceContactData], reimportAttempts: [TelegramDeviceContactImportIdentifier: Double]) -> Signal<PushDeviceContactsResult, NoError> {
+private func pushDeviceContacts(accountPeerId: PeerId, postbox: Postbox, network: Network, importableContacts: [DeviceContactNormalizedPhoneNumber: ImportableDeviceContactData], reimportAttempts: [IosappDeviceContactImportIdentifier: Double]) -> Signal<PushDeviceContactsResult, NoError> {
     return postbox.transaction { transaction -> Signal<PushDeviceContactsResult, NoError> in
-        var noLongerImportedIdentifiers = Set<TelegramDeviceContactImportIdentifier>()
-        var updatedDataIdentifiers = Set<TelegramDeviceContactImportIdentifier>()
-        var addedIdentifiers = Set<TelegramDeviceContactImportIdentifier>()
-        var retryLaterIdentifiers = Set<TelegramDeviceContactImportIdentifier>()
+        var noLongerImportedIdentifiers = Set<IosappDeviceContactImportIdentifier>()
+        var updatedDataIdentifiers = Set<IosappDeviceContactImportIdentifier>()
+        var addedIdentifiers = Set<IosappDeviceContactImportIdentifier>()
+        var retryLaterIdentifiers = Set<IosappDeviceContactImportIdentifier>()
         
-        addedIdentifiers.formUnion(importableContacts.keys.map(TelegramDeviceContactImportIdentifier.phoneNumber))
+        addedIdentifiers.formUnion(importableContacts.keys.map(IosappDeviceContactImportIdentifier.phoneNumber))
         transaction.enumerateDeviceContactImportInfoItems({ key, value in
-            if let identifier = TelegramDeviceContactImportIdentifier(key: key) {
+            if let identifier = IosappDeviceContactImportIdentifier(key: key) {
                 addedIdentifiers.remove(identifier)
                 switch identifier {
                     case let .phoneNumber(number):
                         if let updatedData = importableContacts[number] {
-                            if let value = value as? TelegramDeviceContactImportedData {
+                            if let value = value as? IosappDeviceContactImportedData {
                                 switch value {
                                     case let .imported(data, _, _):
                                         if data != updatedData {
@@ -275,14 +275,14 @@ private func pushDeviceContacts(accountPeerId: PeerId, postbox: Postbox, network
             transaction.setDeviceContactImportInfo(identifier.key, value: nil)
         }
         
-        var orderedPushIdentifiers: [TelegramDeviceContactImportIdentifier] = []
+        var orderedPushIdentifiers: [IosappDeviceContactImportIdentifier] = []
         orderedPushIdentifiers.append(contentsOf: addedIdentifiers.sorted())
         orderedPushIdentifiers.append(contentsOf: updatedDataIdentifiers.sorted())
         orderedPushIdentifiers.append(contentsOf: retryLaterIdentifiers.sorted())
         
-        var currentContactDetails: [TelegramDeviceContactImportIdentifier: TelegramUser] = [:]
+        var currentContactDetails: [IosappDeviceContactImportIdentifier: IosappUser] = [:]
         for peerId in transaction.getContactPeerIds() {
-            if let user = transaction.getPeer(peerId) as? TelegramUser, let phone = user.phone, !phone.isEmpty {
+            if let user = transaction.getPeer(peerId) as? IosappUser, let phone = user.phone, !phone.isEmpty {
                 currentContactDetails[.phoneNumber(DeviceContactNormalizedPhoneNumber(rawValue: normalizedPhoneNumber(phone)))] = user
             }
         }
@@ -294,7 +294,7 @@ private func pushDeviceContacts(accountPeerId: PeerId, postbox: Postbox, network
                     if data.localIdentifiers.contains("5DFF1D6F-8C0A-48C9-800D-F4BEC59C0E50") {
                         assert(true)
                     }
-                    transaction.setDeviceContactImportInfo(orderedPushIdentifiers[i].key, value: TelegramDeviceContactImportedData.imported(data: data, importedByCount: 0, peerId: user.id))
+                    transaction.setDeviceContactImportInfo(orderedPushIdentifiers[i].key, value: IosappDeviceContactImportedData.imported(data: data, importedByCount: 0, peerId: user.id))
                     orderedPushIdentifiers.remove(at: i)
                     continue outer
                 }
@@ -334,7 +334,7 @@ private func pushDeviceContactData(accountPeerId: PeerId, postbox: Postbox, netw
             }
             |> mapToSignal { result -> Signal<PushDeviceContactsResult, NoError> in
                 return postbox.transaction { transaction -> PushDeviceContactsResult in
-                    var addedReimportAttempts: [TelegramDeviceContactImportIdentifier: Double] = intermediateResult.addedReimportAttempts
+                    var addedReimportAttempts: [IosappDeviceContactImportIdentifier: Double] = intermediateResult.addedReimportAttempts
                     if let result = result {
                         var addedContactPeerIds = Set<PeerId>()
                         var retryIndices = Set<Int>()
@@ -367,7 +367,7 @@ private func pushDeviceContactData(accountPeerId: PeerId, postbox: Postbox, netw
                         }
                         let timestamp = CFAbsoluteTimeGetCurrent()
                         for i in 0 ..< batch.count {
-                            let importedData: TelegramDeviceContactImportedData
+                            let importedData: IosappDeviceContactImportedData
                             if retryIndices.contains(i) {
                                 importedData = .retryLater
                                 addedReimportAttempts[.phoneNumber(batch[i].0)] = timestamp
@@ -377,7 +377,7 @@ private func pushDeviceContactData(accountPeerId: PeerId, postbox: Postbox, netw
                                 }
                                 importedData = .imported(data: batch[i].1, importedByCount: importedCounts[i] ?? 0, peerId: peerIdByClientId[Int64(i)])
                             }
-                            transaction.setDeviceContactImportInfo(TelegramDeviceContactImportIdentifier.phoneNumber(batch[i].0).key, value: importedData)
+                            transaction.setDeviceContactImportInfo(IosappDeviceContactImportIdentifier.phoneNumber(batch[i].0).key, value: importedData)
                         }
                         var contactPeerIds = transaction.getContactPeerIds()
                         contactPeerIds.formUnion(addedContactPeerIds)
@@ -386,7 +386,7 @@ private func pushDeviceContactData(accountPeerId: PeerId, postbox: Postbox, netw
                         let timestamp = CFAbsoluteTimeGetCurrent()
                         for (number, _) in batch {
                             addedReimportAttempts[.phoneNumber(number)] = timestamp
-                            transaction.setDeviceContactImportInfo(TelegramDeviceContactImportIdentifier.phoneNumber(number).key, value: TelegramDeviceContactImportedData.retryLater)
+                            transaction.setDeviceContactImportInfo(IosappDeviceContactImportIdentifier.phoneNumber(number).key, value: IosappDeviceContactImportedData.retryLater)
                         }
                     }
                     
@@ -410,7 +410,7 @@ private func updateContactPresences(postbox: Postbox, network: Network, accountP
                 switch status {
                     case let .contactStatus(contactStatusData):
                         let (userId, status) = (contactStatusData.userId, contactStatusData.status)
-                        peerPresences[PeerId(namespace: Namespaces.Peer.CloudUser, id: PeerId.Id._internalFromInt64Value(userId))] = TelegramUserPresence(apiStatus: status)
+                        peerPresences[PeerId(namespace: Namespaces.Peer.CloudUser, id: PeerId.Id._internalFromInt64Value(userId))] = IosappUserPresence(apiStatus: status)
                 }
             }
             updatePeerPresencesClean(transaction: transaction, accountPeerId: accountPeerId, peerPresences: peerPresences)

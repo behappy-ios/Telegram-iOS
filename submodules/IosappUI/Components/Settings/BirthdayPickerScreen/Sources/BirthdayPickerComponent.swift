@@ -30,14 +30,14 @@ public final class BirthdayPickerComponent: Component {
         
     public let theme: Theme
     public let strings: PresentationStrings
-    public let value: TelegramBirthday
-    public let valueUpdated: (TelegramBirthday) -> Void
+    public let value: IosappBirthday
+    public let valueUpdated: (IosappBirthday) -> Void
         
     public init(
         theme: Theme,
         strings: PresentationStrings,
-        value: TelegramBirthday,
-        valueUpdated: @escaping (TelegramBirthday) -> Void
+        value: IosappBirthday,
+        valueUpdated: @escaping (IosappBirthday) -> Void
     ) {
         self.theme = theme
         self.strings = strings
@@ -68,7 +68,7 @@ public final class BirthdayPickerComponent: Component {
         }
         
         private let calendar = Calendar(identifier: .gregorian)
-        private var value = TelegramBirthday(day: 1, month: 1, year: nil)
+        private var value = IosappBirthday(day: 1, month: 1, year: nil)
         private var minYear: Int32 = 1900
         private let maxYear: Int32
         
@@ -256,16 +256,16 @@ public final class BirthdayPickerComponent: Component {
     }
 }
 
-private extension TelegramBirthday {
-    func withUpdated(day: Int32) -> TelegramBirthday {
-        return TelegramBirthday(day: day, month: self.month, year: self.year)
+private extension IosappBirthday {
+    func withUpdated(day: Int32) -> IosappBirthday {
+        return IosappBirthday(day: day, month: self.month, year: self.year)
     }
     
-    func withUpdated(month: Int32) -> TelegramBirthday {
-        return TelegramBirthday(day: self.day, month: month, year: self.year)
+    func withUpdated(month: Int32) -> IosappBirthday {
+        return IosappBirthday(day: self.day, month: month, year: self.year)
     }
     
-    func withUpdated(year: Int32?) -> TelegramBirthday {
-        return TelegramBirthday(day: self.day, month: self.month, year: year)
+    func withUpdated(year: Int32?) -> IosappBirthday {
+        return IosappBirthday(day: self.day, month: self.month, year: year)
     }
 }

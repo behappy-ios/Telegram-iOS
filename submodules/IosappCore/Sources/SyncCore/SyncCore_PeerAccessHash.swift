@@ -2,7 +2,7 @@ import Foundation
 import FlatBuffers
 import FlatSerialization
 
-public enum TelegramPeerAccessHash: Hashable {
+public enum IosappPeerAccessHash: Hashable {
     case personal(Int64)
     case genericPublic(Int64)
     
@@ -15,15 +15,15 @@ public enum TelegramPeerAccessHash: Hashable {
         }
     }
     
-    public init(flatBuffersObject: TelegramCore_TelegramPeerAccessHash) throws {
+    public init(flatBuffersObject: IosappCore_IosappPeerAccessHash) throws {
         switch flatBuffersObject.valueType {
         case .telegrampeeraccesshashPersonal:
-            guard let personal = flatBuffersObject.value(type: TelegramCore_TelegramPeerAccessHash_Personal.self) else {
+            guard let personal = flatBuffersObject.value(type: IosappCore_IosappPeerAccessHash_Personal.self) else {
                 throw FlatBuffersError.missingRequiredField()
             }
             self = .personal(personal.accessHash)
         case .telegrampeeraccesshashGenericpublic:
-            guard let genericPublic = flatBuffersObject.value(type: TelegramCore_TelegramPeerAccessHash_GenericPublic.self) else {
+            guard let genericPublic = flatBuffersObject.value(type: IosappCore_IosappPeerAccessHash_GenericPublic.self) else {
                 throw FlatBuffersError.missingRequiredField()
             }
             self = .genericPublic(genericPublic.accessHash)
@@ -33,25 +33,25 @@ public enum TelegramPeerAccessHash: Hashable {
     }
     
     public func encodeToFlatBuffers(builder: inout FlatBufferBuilder) -> Offset {
-        let valueType: TelegramCore_TelegramPeerAccessHash_Value
+        let valueType: IosappCore_IosappPeerAccessHash_Value
         let valueOffset: Offset
         
         switch self {
         case let .personal(accessHash):
             valueType = .telegrampeeraccesshashPersonal
-            let start = TelegramCore_TelegramPeerAccessHash_Personal.startTelegramPeerAccessHash_Personal(&builder)
-            TelegramCore_TelegramPeerAccessHash_Personal.add(accessHash: accessHash, &builder)
-            valueOffset = TelegramCore_TelegramPeerAccessHash_Personal.endTelegramPeerAccessHash_Personal(&builder, start: start)
+            let start = IosappCore_IosappPeerAccessHash_Personal.startIosappPeerAccessHash_Personal(&builder)
+            IosappCore_IosappPeerAccessHash_Personal.add(accessHash: accessHash, &builder)
+            valueOffset = IosappCore_IosappPeerAccessHash_Personal.endIosappPeerAccessHash_Personal(&builder, start: start)
         case let .genericPublic(accessHash):
             valueType = .telegrampeeraccesshashGenericpublic
-            let start = TelegramCore_TelegramPeerAccessHash_GenericPublic.startTelegramPeerAccessHash_GenericPublic(&builder)
-            TelegramCore_TelegramPeerAccessHash_GenericPublic.add(accessHash: accessHash, &builder)
-            valueOffset = TelegramCore_TelegramPeerAccessHash_GenericPublic.endTelegramPeerAccessHash_GenericPublic(&builder, start: start)
+            let start = IosappCore_IosappPeerAccessHash_GenericPublic.startIosappPeerAccessHash_GenericPublic(&builder)
+            IosappCore_IosappPeerAccessHash_GenericPublic.add(accessHash: accessHash, &builder)
+            valueOffset = IosappCore_IosappPeerAccessHash_GenericPublic.endIosappPeerAccessHash_GenericPublic(&builder, start: start)
         }
         
-        let start = TelegramCore_TelegramPeerAccessHash.startTelegramPeerAccessHash(&builder)
-        TelegramCore_TelegramPeerAccessHash.add(valueType: valueType, &builder)
-        TelegramCore_TelegramPeerAccessHash.add(value: valueOffset, &builder)
-        return TelegramCore_TelegramPeerAccessHash.endTelegramPeerAccessHash(&builder, start: start)
+        let start = IosappCore_IosappPeerAccessHash.startIosappPeerAccessHash(&builder)
+        IosappCore_IosappPeerAccessHash.add(valueType: valueType, &builder)
+        IosappCore_IosappPeerAccessHash.add(value: valueOffset, &builder)
+        return IosappCore_IosappPeerAccessHash.endIosappPeerAccessHash(&builder, start: start)
     }
 }

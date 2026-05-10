@@ -22,7 +22,7 @@ final class VoiceChatPeerProfileNode: ASDisplayNode {
     private var peer: EnginePeer
     private var text: VoiceChatParticipantItem.ParticipantText
     private let customNode: ASDisplayNode?
-    private let additionalEntry: Signal<(TelegramMediaImageRepresentation, Float)?, NoError>
+    private let additionalEntry: Signal<(IosappMediaImageRepresentation, Float)?, NoError>
     
     private let backgroundImageNode: ASImageNode
     private let avatarListContainerNode: ASDisplayNode
@@ -35,7 +35,7 @@ final class VoiceChatPeerProfileNode: ASDisplayNode {
     
     private var appeared = false
     
-    init(context: AccountContext, size: CGSize, sourceSize: CGSize, peer: EnginePeer, text: VoiceChatParticipantItem.ParticipantText, customNode: ASDisplayNode? = nil, additionalEntry: Signal<(TelegramMediaImageRepresentation, Float)?, NoError>, requestDismiss: (() -> Void)?) {
+    init(context: AccountContext, size: CGSize, sourceSize: CGSize, peer: EnginePeer, text: VoiceChatParticipantItem.ParticipantText, customNode: ASDisplayNode? = nil, additionalEntry: Signal<(IosappMediaImageRepresentation, Float)?, NoError>, requestDismiss: (() -> Void)?) {
         self.context = context
         self.size = size
         self.peer = peer

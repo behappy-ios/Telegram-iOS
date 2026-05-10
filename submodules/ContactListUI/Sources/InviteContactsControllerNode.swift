@@ -56,7 +56,7 @@ private enum InviteContactsEntry: Comparable, Identifiable {
                 } else {
                     status = .none
                 }
-                let peer: EnginePeer = .user(TelegramUser(id: EnginePeer.Id(namespace: .max, id: EnginePeer.Id.Id._internalFromInt64Value(0)), accessHash: nil, firstName: contact.firstName, lastName: contact.lastName, username: nil, phone: nil, photo: [], botInfo: nil, restrictionInfo: nil, flags: [], emojiStatus: nil, usernames: [], storiesHidden: nil, nameColor: nil, backgroundEmojiId: nil, profileColor: nil, profileBackgroundEmojiId: nil, subscriberCount: nil, verificationIconFileId: nil))
+                let peer: EnginePeer = .user(IosappUser(id: EnginePeer.Id(namespace: .max, id: EnginePeer.Id.Id._internalFromInt64Value(0)), accessHash: nil, firstName: contact.firstName, lastName: contact.lastName, username: nil, phone: nil, photo: [], botInfo: nil, restrictionInfo: nil, flags: [], emojiStatus: nil, usernames: [], storiesHidden: nil, nameColor: nil, backgroundEmojiId: nil, profileColor: nil, profileBackgroundEmojiId: nil, subscriberCount: nil, verificationIconFileId: nil))
                 return ContactsPeerItem(presentationData: ItemListPresentationData(presentationData), sortOrder: nameSortOrder, displayOrder: nameDisplayOrder, context: context, peerMode: .peer, peer: .peer(peer: peer, chatPeer: peer), status: status, enabled: true, selection: selection, editing: ContactsPeerItemEditing(editable: false, editing: false, revealed: false), index: nil, header: ChatListSearchItemHeader(type: .contacts, theme: theme, strings: strings, actionTitle: nil, action: nil), action: { _ in
                     interaction.toggleContact(id)
                 })
@@ -341,7 +341,7 @@ final class InviteContactsControllerNode: ASDisplayNode {
         })
         
         let existingNumbers: Signal<(Set<String>, Set<EnginePeer.Id>), NoError> = context.engine.data.subscribe(
-            TelegramEngine.EngineData.Item.Contacts.List(includePresences: false)
+            IosappEngine.EngineData.Item.Contacts.List(includePresences: false)
         )
         |> map { view -> (Set<String>, Set<EnginePeer.Id>) in
             var existingNumbers = Set<String>()

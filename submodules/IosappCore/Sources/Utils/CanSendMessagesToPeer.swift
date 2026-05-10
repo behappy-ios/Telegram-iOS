@@ -7,13 +7,13 @@ private final class LinkHelperClass: NSObject {
 }
 
 public func canSendMessagesToPeer(_ peer: Peer, ignoreDefault: Bool = false) -> Bool {
-    if let peer = peer as? TelegramUser, peer.addressName == "replies" {
+    if let peer = peer as? IosappUser, peer.addressName == "replies" {
         return false
-    } else if peer is TelegramUser || peer is TelegramGroup {
+    } else if peer is IosappUser || peer is IosappGroup {
         return !peer.isDeleted
-    } else if let peer = peer as? TelegramSecretChat {
+    } else if let peer = peer as? IosappSecretChat {
         return peer.embeddedState == .active
-    } else if let peer = peer as? TelegramChannel {
+    } else if let peer = peer as? IosappChannel {
         return peer.hasPermission(.sendSomething, ignoreDefault: ignoreDefault)
     } else {
         return false

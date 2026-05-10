@@ -36,7 +36,7 @@ public func navigateToChatControllerImpl(_ params: NavigateToChatControllerParam
     if case let .peer(peer) = params.chatLocation, case let .channel(channel) = peer, channel.flags.contains(.isMonoforum) {
         if let linkedMonoforumId = channel.linkedMonoforumId {
             viewForumAsMessages = params.context.engine.data.get(
-                TelegramEngine.EngineData.Item.Peer.Peer(id: linkedMonoforumId)
+                IosappEngine.EngineData.Item.Peer.Peer(id: linkedMonoforumId)
             )
             |> map { peer -> Bool in
                 guard case let .channel(channel) = peer else {
@@ -66,7 +66,7 @@ public func navigateToChatControllerImpl(_ params: NavigateToChatControllerParam
         }
     } else if case let .peer(peer) = params.chatLocation, peer.id == params.context.account.peerId {
         viewForumAsMessages = params.context.engine.data.get(
-            TelegramEngine.EngineData.Item.Peer.DisplaySavedChatsAsTopics()
+            IosappEngine.EngineData.Item.Peer.DisplaySavedChatsAsTopics()
         )
         |> map { value in
             return !value
@@ -450,7 +450,7 @@ public func navigateToForumThreadImpl(context: AccountContext, peerId: EnginePee
 
 public func chatControllerForForumThreadImpl(context: AccountContext, peerId: EnginePeer.Id, threadId: Int64) -> Signal<ChatController, NoError> {
     return context.engine.data.get(
-        TelegramEngine.EngineData.Item.Peer.Peer(id: peerId)
+        IosappEngine.EngineData.Item.Peer.Peer(id: peerId)
     )
     |> deliverOnMainQueue
     |> mapToSignal { peer -> Signal<ChatController, NoError> in

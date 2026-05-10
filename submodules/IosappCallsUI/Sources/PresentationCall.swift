@@ -265,7 +265,7 @@ public final class PresentationCallImpl: PresentationCall {
             self.sessionStateDisposable = (combineLatest(queue: .mainQueue(),
                 isRinging,
                 context.engine.data.subscribe(
-                    TelegramEngine.EngineData.Item.Messages.Message(id: incomingConferenceSource)
+                    IosappEngine.EngineData.Item.Messages.Message(id: incomingConferenceSource)
                 )
             )
             |> deliverOnMainQueue).startStrict(next: { [weak self] isRinging, message in
@@ -275,9 +275,9 @@ public final class PresentationCallImpl: PresentationCall {
 
                 let state: CallSessionState
                 if let message {
-                    var foundAction: TelegramMediaAction?
+                    var foundAction: IosappMediaAction?
                     for media in message.media {
-                        if let action = media as? TelegramMediaAction {
+                        if let action = media as? IosappMediaAction {
                             foundAction = action
                             break
                         }
@@ -857,7 +857,7 @@ public final class PresentationCallImpl: PresentationCall {
                     guard let self else {
                         return
                     }
-                    let keyPair: TelegramKeyPair? = TelegramE2EEncryptionProviderImpl.shared.generateKeyPair()
+                    let keyPair: IosappKeyPair? = IosappE2EEncryptionProviderImpl.shared.generateKeyPair()
                     guard let keyPair, let groupCall else {
                         self.sessionStateDisposable?.dispose()
                         self.updateSessionState(
@@ -1044,7 +1044,7 @@ public final class PresentationCallImpl: PresentationCall {
                                     guard let self else {
                                         return
                                     }
-                                    let keyPair: TelegramKeyPair? = TelegramE2EEncryptionProviderImpl.shared.generateKeyPair()
+                                    let keyPair: IosappKeyPair? = IosappE2EEncryptionProviderImpl.shared.generateKeyPair()
                                     guard let keyPair, let groupCall else {
                                         self.sessionStateDisposable?.dispose()
                                         self.updateSessionState(

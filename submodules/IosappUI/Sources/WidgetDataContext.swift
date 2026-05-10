@@ -199,8 +199,8 @@ final class WidgetDataContext {
                     continue
                 }
                 
-                accountSignals.append(TelegramEngine(account: account).data.subscribe(EngineDataMap(
-                    peerIds.map(TelegramEngine.EngineData.Item.Messages.TopMessage.init)
+                accountSignals.append(IosappEngine(account: account).data.subscribe(EngineDataMap(
+                    peerIds.map(IosappEngine.EngineData.Item.Messages.TopMessage.init)
                 ))
                 |> map { topMessages -> [WidgetDataPeer] in
                     var result: [WidgetDataPeer] = []
@@ -215,7 +215,7 @@ final class WidgetDataContext {
                         var name: String = ""
                         var lastName: String?
                         
-                        if let user = peer as? TelegramUser {
+                        if let user = peer as? IosappUser {
                             if let firstName = user.firstName {
                                 name = firstName
                                 lastName = user.lastName
@@ -229,7 +229,7 @@ final class WidgetDataContext {
                         }
                         
                         var isForum = false
-                        if let peer = peer as? TelegramChannel, peer.isForumOrMonoForum {
+                        if let peer = peer as? IosappChannel, peer.isForumOrMonoForum {
                             isForum = true
                         }
                         

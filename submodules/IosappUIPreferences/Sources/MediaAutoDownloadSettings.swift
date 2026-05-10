@@ -469,7 +469,7 @@ private func presetsWithAutodownloadSettings(_ autodownloadSettings: Autodownloa
     return MediaAutoDownloadPresets(low: categoriesWithAutodownloadPreset(autodownloadSettings.lowPreset, preset: .low), medium: categoriesWithAutodownloadPreset(autodownloadSettings.mediumPreset, preset: .medium), high: categoriesWithAutodownloadPreset(autodownloadSettings.highPreset, preset: .high))
 }
 
-public func updateMediaDownloadSettingsInteractively(accountManager: AccountManager<TelegramAccountManagerTypes>, _ f: @escaping (MediaAutoDownloadSettings) -> MediaAutoDownloadSettings) -> Signal<Void, NoError> {
+public func updateMediaDownloadSettingsInteractively(accountManager: AccountManager<IosappAccountManagerTypes>, _ f: @escaping (MediaAutoDownloadSettings) -> MediaAutoDownloadSettings) -> Signal<Void, NoError> {
     return accountManager.transaction { transaction -> Void in
         transaction.updateSharedData(ApplicationSpecificSharedDataKeys.automaticMediaDownloadSettings, { entry in
             let currentSettings: MediaAutoDownloadSettings
@@ -524,9 +524,9 @@ private func categoryAndSizeForMedia(_ media: Media?, isStory: Bool, categories:
         return (categories.photo, 0)
     }
     
-    if media is TelegramMediaImage || media is TelegramMediaWebFile {
+    if media is IosappMediaImage || media is IosappMediaWebFile {
         return (categories.photo, 0)
-    } else if let file = media as? TelegramMediaFile {
+    } else if let file = media as? IosappMediaFile {
         for attribute in file.attributes {
             switch attribute {
                 case .Video:
@@ -571,7 +571,7 @@ public func shouldDownloadMediaAutomatically(settings: MediaAutoDownloadSettings
     if (networkType == .cellular && !settings.cellular.enabled) || (networkType == .wifi && !settings.wifi.enabled) {
         return false
     }
-    if let file = media as? TelegramMediaFile, file.isSticker {
+    if let file = media as? IosappMediaFile, file.isSticker {
         return true
     }
     
@@ -583,7 +583,7 @@ public func shouldDownloadMediaAutomatically(settings: MediaAutoDownloadSettings
     if let (category, size) = categoryAndSizeForMedia(media, isStory: isStory, categories: effectiveAutodownloadCategories(settings: settings, networkType: networkType)) {
         if let size = size {
             var sizeLimit = category.sizeLimit
-            if let file = media as? TelegramMediaFile, file.isVoice {
+            if let file = media as? IosappMediaFile, file.isVoice {
                 sizeLimit = max(2 * 1024 * 1024, sizeLimit)
             } else if !isAutodownloadEnabledForPeerType(peerType, category: category) {
                 return false

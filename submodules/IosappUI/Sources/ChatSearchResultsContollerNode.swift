@@ -216,7 +216,7 @@ class ChatSearchResultsControllerNode: ViewControllerTracingNode, ASScrollViewDe
             
             for message in searchResult.messages {
                 var peer = RenderedPeer(message: message)
-                if let group = message.peers[message.id.peerId] as? TelegramGroup, let migrationReference = group.migrationReference {
+                if let group = message.peers[message.id.peerId] as? IosappGroup, let migrationReference = group.migrationReference {
                     if let channelPeer = message.peers[migrationReference.peerId] {
                         peer = RenderedPeer(peer: channelPeer)
                     }
@@ -360,7 +360,7 @@ class ChatSearchResultsControllerNode: ViewControllerTracingNode, ASScrollViewDe
                 
                 for message in updatedResult.messages {
                     var peer = RenderedPeer(message: message)
-                    if let group = message.peers[message.id.peerId] as? TelegramGroup, let migrationReference = group.migrationReference {
+                    if let group = message.peers[message.id.peerId] as? IosappGroup, let migrationReference = group.migrationReference {
                         if let channelPeer = message.peers[migrationReference.peerId] {
                             peer = RenderedPeer(peer: channelPeer)
                         }

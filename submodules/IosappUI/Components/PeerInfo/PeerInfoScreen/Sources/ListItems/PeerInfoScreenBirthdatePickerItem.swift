@@ -10,13 +10,13 @@ import BirthdayPickerScreen
 
 final class PeerInfoScreenBirthdatePickerItem: PeerInfoScreenItem {
     let id: AnyHashable
-    let value: TelegramBirthday
-    let valueUpdated: (TelegramBirthday) -> Void
+    let value: IosappBirthday
+    let valueUpdated: (IosappBirthday) -> Void
     
     init(
         id: AnyHashable,
-        value: TelegramBirthday,
-        valueUpdated: @escaping (TelegramBirthday) -> Void
+        value: IosappBirthday,
+        valueUpdated: @escaping (IosappBirthday) -> Void
     ) {
         self.id = id
         self.value = value

@@ -69,10 +69,10 @@ public final class MessageInputPanelComponent: Component {
     
     public struct MyReaction: Equatable {
         public let reaction: MessageReaction.Reaction
-        public let file: TelegramMediaFile?
+        public let file: IosappMediaFile?
         public let animationFileId: Int64?
         
-        public init(reaction: MessageReaction.Reaction, file: TelegramMediaFile?, animationFileId: Int64?) {
+        public init(reaction: MessageReaction.Reaction, file: IosappMediaFile?, animationFileId: Int64?) {
             self.reaction = reaction
             self.file = file
             self.animationFileId = animationFileId
@@ -250,7 +250,7 @@ public final class MessageInputPanelComponent: Component {
     public let presentInGlobalOverlay: (ViewController) -> Void
     public let sendMessageAction: (SendActionTransition?) -> Void
     public let sendMessageOptionsAction: ((UIView, ContextGesture?) -> Void)?
-    public let sendStickerAction: (TelegramMediaFile) -> Void
+    public let sendStickerAction: (IosappMediaFile) -> Void
     public let setMediaRecordingActive: ((Bool, Bool, Bool, UIView?) -> Void)?
     public let lockMediaRecording: (() -> Void)?
     public let stopAndPreviewMediaRecording: (() -> Void)?
@@ -320,7 +320,7 @@ public final class MessageInputPanelComponent: Component {
         presentInGlobalOverlay: @escaping (ViewController) -> Void,
         sendMessageAction: @escaping (SendActionTransition?) -> Void,
         sendMessageOptionsAction: ((UIView, ContextGesture?) -> Void)?,
-        sendStickerAction: @escaping (TelegramMediaFile) -> Void,
+        sendStickerAction: @escaping (IosappMediaFile) -> Void,
         setMediaRecordingActive: ((Bool, Bool, Bool, UIView?) -> Void)?,
         lockMediaRecording: (() -> Void)?,
         stopAndPreviewMediaRecording: (() -> Void)?,
@@ -847,7 +847,7 @@ public final class MessageInputPanelComponent: Component {
             let contextQueryUpdates = contextQueryResultState(context: context, inputState: inputState, availableTypes: availableTypes, chatLocation: component.chatLocation, currentQueryStates: &self.contextQueryStates)
 
             if self.contextQueryPeer == nil, let peerId = component.chatLocation?.peerId {
-                let _ = (context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: peerId))
+                let _ = (context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: peerId))
                 |> deliverOnMainQueue).start(next: { [weak self] peer in
                     guard let self, let peer, case .channel = peer, peer.addressName != nil else {
                         return
@@ -2827,7 +2827,7 @@ public final class MessageInputPanelComponent: Component {
             }
             
             var hasTrackingView = self.textFieldExternalState.hasTrackingView
-            if let currentEmojiSuggestion = self.textFieldExternalState.currentEmojiSuggestion, let value = currentEmojiSuggestion.value as? [TelegramMediaFile], value.isEmpty {
+            if let currentEmojiSuggestion = self.textFieldExternalState.currentEmojiSuggestion, let value = currentEmojiSuggestion.value as? [IosappMediaFile], value.isEmpty {
                 hasTrackingView = false
             }
             if !self.textFieldExternalState.isEditing {
@@ -2864,7 +2864,7 @@ public final class MessageInputPanelComponent: Component {
                 }
             }
             
-            if let currentEmojiSuggestion = self.textFieldExternalState.currentEmojiSuggestion, let value = currentEmojiSuggestion.value as? [TelegramMediaFile] {
+            if let currentEmojiSuggestion = self.textFieldExternalState.currentEmojiSuggestion, let value = currentEmojiSuggestion.value as? [IosappMediaFile] {
                 let currentEmojiSuggestionView: ComponentHostView<Empty>
                 if let current = self.currentEmojiSuggestionView {
                     currentEmojiSuggestionView = current
@@ -2962,7 +2962,7 @@ public final class MessageInputPanelComponent: Component {
                 }
             }
             
-            if let currentEmojiSearch = self.textFieldExternalState.currentEmojiSearch, let value = currentEmojiSearch.value as? [TelegramMediaFile], !value.isEmpty {
+            if let currentEmojiSearch = self.textFieldExternalState.currentEmojiSearch, let value = currentEmojiSearch.value as? [IosappMediaFile], !value.isEmpty {
                 let currentEmojiSearchView: ComponentHostView<Empty>
                 if let current = self.currentEmojiSearchView {
                     currentEmojiSearchView = current

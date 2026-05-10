@@ -320,7 +320,7 @@ public final class ChatMessageSelectionInputPanelNode: ChatInputPanelNode {
     }
     
     @objc private func forwardButtonPressed() {
-        if let _ = self.presentationInterfaceState?.renderedPeer?.peer as? TelegramSecretChat {
+        if let _ = self.presentationInterfaceState?.renderedPeer?.peer as? IosappSecretChat {
             return
         }
         if let actions = self.actions, actions.isCopyProtected {
@@ -331,7 +331,7 @@ public final class ChatMessageSelectionInputPanelNode: ChatInputPanelNode {
     }
     
     @objc private func shareButtonPressed() {
-        if let _ = self.presentationInterfaceState?.renderedPeer?.peer as? TelegramSecretChat {
+        if let _ = self.presentationInterfaceState?.renderedPeer?.peer as? IosappSecretChat {
             return
         }
         if let actions = self.actions, actions.isCopyProtected {
@@ -523,7 +523,7 @@ public final class ChatMessageSelectionInputPanelNode: ChatInputPanelNode {
         }
         
         if self.reportButton.isHidden || (self.peerMedia && self.deleteButton.isHidden && self.reportButton.isHidden) {
-            if let peer = interfaceState.renderedPeer?.peer as? TelegramChannel, case .broadcast = peer.info {
+            if let peer = interfaceState.renderedPeer?.peer as? IosappChannel, case .broadcast = peer.info {
                 self.reportButton.isHidden = false
             } else if self.peerMedia {
                 self.deleteButton.isHidden = false

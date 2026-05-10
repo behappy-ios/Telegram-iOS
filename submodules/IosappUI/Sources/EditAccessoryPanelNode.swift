@@ -198,19 +198,19 @@ final class EditAccessoryPanelNode: AccessoryPanelNode {
                 candidateMediaReference = currentEditMedia
             } else {
                 for media in message.media {
-                    if media is TelegramMediaImage || media is TelegramMediaFile {
+                    if media is IosappMediaImage || media is IosappMediaFile {
                         candidateMediaReference = .message(message: MessageReference(message), media: media)
                         break
                     }
                 }
             }
             
-            if let imageReference = candidateMediaReference?.concrete(TelegramMediaImage.self) {
+            if let imageReference = candidateMediaReference?.concrete(IosappMediaImage.self) {
                 updatedMediaReference = imageReference.abstract
                 if let representation = largestRepresentationForPhoto(imageReference.media) {
                     imageDimensions = representation.dimensions.cgSize
                 }
-            } else if let fileReference = candidateMediaReference?.concrete(TelegramMediaFile.self) {
+            } else if let fileReference = candidateMediaReference?.concrete(IosappMediaFile.self) {
                 updatedMediaReference = fileReference.abstract
                 if !fileReference.media.isInstantVideo, let representation = largestImageRepresentation(fileReference.media.previewRepresentations), !fileReference.media.isSticker {
                     imageDimensions = representation.dimensions.cgSize
@@ -239,10 +239,10 @@ final class EditAccessoryPanelNode: AccessoryPanelNode {
         var updateImageSignal: Signal<(TransformImageArguments) -> DrawingContext?, NoError>?
         if mediaUpdated {
             if let updatedMediaReference = updatedMediaReference, imageDimensions != nil {
-                if let imageReference = updatedMediaReference.concrete(TelegramMediaImage.self) {
+                if let imageReference = updatedMediaReference.concrete(IosappMediaImage.self) {
                     updateImageSignal = chatMessagePhotoThumbnail(account: self.context.account, userLocation: (message?.id.peerId).flatMap(MediaResourceUserLocation.peer) ?? .other, photoReference: imageReference, blurred: hasSpoiler)
                     isPhoto = true
-                } else if let fileReference = updatedMediaReference.concrete(TelegramMediaFile.self) {
+                } else if let fileReference = updatedMediaReference.concrete(IosappMediaFile.self) {
                     if fileReference.media.isVideo {
                         updateImageSignal = chatMessageVideoThumbnail(account: self.context.account, userLocation: (message?.id.peerId).flatMap(MediaResourceUserLocation.peer) ?? .other, fileReference: fileReference, blurred: hasSpoiler)
                     } else if let iconImageRepresentation = smallestImageRepresentation(fileReference.media.previewRepresentations) {

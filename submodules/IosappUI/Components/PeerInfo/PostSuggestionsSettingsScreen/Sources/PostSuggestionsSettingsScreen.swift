@@ -206,7 +206,7 @@ final class PostSuggestionsSettingsScreenComponent: Component {
             }, completed: { [weak controller] peerIds in
                 let _ = (context.engine.data.get(
                     EngineDataList(
-                        peerIds.map(TelegramEngine.EngineData.Item.Peer.Peer.init)
+                        peerIds.map(IosappEngine.EngineData.Item.Peer.Peer.init)
                     )
                 )
                 |> deliverOnMainQueue).start(next: { [weak controller] peerList in
@@ -236,7 +236,7 @@ final class PostSuggestionsSettingsScreenComponent: Component {
 
                     controller?.present(UndoOverlayController(presentationData: presentationData, content: .forward(savedMessages: savedMessages, text: text), elevatedLayout: false, animateInAsReplacement: true, action: { action in
                         if savedMessages, action == .info {
-                            let _ = (context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: context.account.peerId))
+                            let _ = (context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: context.account.peerId))
                             |> deliverOnMainQueue).start(next: { [weak controller] peer in
                                 guard let peer else {
                                     return
@@ -628,17 +628,17 @@ public final class PostSuggestionsSettingsScreen: ViewControllerComponentContain
         let configuration = StarsSubscriptionConfiguration.with(appConfiguration: context.currentAppConfiguration.with({ $0 }))
         
         let peer = await context.engine.data.get(
-            TelegramEngine.EngineData.Item.Peer.Peer(id: peerId)
+            IosappEngine.EngineData.Item.Peer.Peer(id: peerId)
         ).get()
         
         let initialPrice: StarsAmount?
         if case let .channel(channel) = peer, case let .broadcast(info) = channel.info, info.flags.contains(.hasMonoforum), let linkedMonoforumId = channel.linkedMonoforumId {
             initialPrice = await context.engine.data.get(
-                TelegramEngine.EngineData.Item.Peer.SendMessageToChannelPrice(id: linkedMonoforumId)
+                IosappEngine.EngineData.Item.Peer.SendMessageToChannelPrice(id: linkedMonoforumId)
             ).get() ?? StarsAmount(value: 0, nanos: 0)
         } else {
             initialPrice = await context.engine.data.get(
-                TelegramEngine.EngineData.Item.Peer.SendMessageToChannelPrice(id: peerId)
+                IosappEngine.EngineData.Item.Peer.SendMessageToChannelPrice(id: peerId)
             ).get()
         }
         

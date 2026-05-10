@@ -30,7 +30,7 @@ extension PeerInfoScreenNode {
             }
             
             if case .botPreview = pane.scope {
-                guard let data = self.data, let user = data.peer as? TelegramUser, let botInfo = user.botInfo, botInfo.flags.contains(.canEdit) else {
+                guard let data = self.data, let user = data.peer as? IosappUser, let botInfo = user.botInfo, botInfo.flags.contains(.canEdit) else {
                     return
                 }
                 
@@ -141,7 +141,7 @@ extension PeerInfoScreenNode {
                 self.mediaGalleryContextMenu = contextController
                 controller.presentInGlobalOverlay(contextController)
             } else if case .peer = pane.scope {
-                guard let data = self.data, let user = data.peer as? TelegramUser else {
+                guard let data = self.data, let user = data.peer as? IosappUser else {
                     return
                 }
                 let _ = user
@@ -273,8 +273,8 @@ extension PeerInfoScreenNode {
             }
         } else {
             let _ = (self.context.engine.data.get(EngineDataMap([
-                TelegramEngine.EngineData.Item.Messages.MessageCount(peerId: peerId, threadId: self.chatLocation.threadId, tag: .photo),
-                TelegramEngine.EngineData.Item.Messages.MessageCount(peerId: peerId, threadId: self.chatLocation.threadId, tag: .video)
+                IosappEngine.EngineData.Item.Messages.MessageCount(peerId: peerId, threadId: self.chatLocation.threadId, tag: .photo),
+                IosappEngine.EngineData.Item.Messages.MessageCount(peerId: peerId, threadId: self.chatLocation.threadId, tag: .video)
             ]))
             |> deliverOnMainQueue).startStandalone(next: { [weak self] messageCounts in
                 guard let strongSelf = self else {

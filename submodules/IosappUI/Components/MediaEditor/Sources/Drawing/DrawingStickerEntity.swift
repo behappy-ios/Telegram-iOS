@@ -36,9 +36,9 @@ public final class DrawingStickerEntity: DrawingEntity, Codable {
         case file(FileMediaReference, FileType)
         case image(UIImage, ImageType)
         case animatedImage(Data, UIImage)
-        case video(TelegramMediaFile)
+        case video(IosappMediaFile)
         case dualVideoReference(Bool)
-        case message([MessageId], CGSize, TelegramMediaFile?, CGRect?, CGFloat?)
+        case message([MessageId], CGSize, IosappMediaFile?, CGRect?, CGFloat?)
         case gift(StarGift.UniqueGift, CGSize)
         
         public static func == (lhs: Content, rhs: Content) -> Bool {
@@ -251,14 +251,14 @@ public final class DrawingStickerEntity: DrawingEntity, Codable {
             self.content = .gift(gift, size)
         } else if let messageIds = try container.decodeIfPresent([MessageId].self, forKey: .messageIds) {
             let size = try container.decodeIfPresent(CGSize.self, forKey: .messageSize) ?? .zero
-            let file = try container.decodeIfPresent(TelegramMediaFile.self, forKey: .messageFile)
+            let file = try container.decodeIfPresent(IosappMediaFile.self, forKey: .messageFile)
             let mediaRect = try container.decodeIfPresent(CGRect.self, forKey: .messageMediaRect)
             let mediaCornerRadius = try container.decodeIfPresent(CGFloat.self, forKey: .messageMediaCornerRadius)
             self.content = .message(messageIds, size, file, mediaRect, mediaCornerRadius)
         } else if let _ = try container.decodeIfPresent(Bool.self, forKey: .dualVideo) {
             let isAdditional = try container.decodeIfPresent(Bool.self, forKey: .isAdditionalVideo) ?? false
             self.content = .dualVideoReference(isAdditional)
-        } else if let file = try container.decodeIfPresent(TelegramMediaFile.self, forKey: .file) {
+        } else if let file = try container.decodeIfPresent(IosappMediaFile.self, forKey: .file) {
             let fileType: Content.FileType
             if let reaction = try container.decodeIfPresent(MessageReaction.Reaction.self, forKey: .reaction) {
                 var reactionStyle: Content.FileType.ReactionStyle = .white
@@ -284,7 +284,7 @@ public final class DrawingStickerEntity: DrawingEntity, Codable {
                 imageType = .sticker
             }
             self.content = .image(image, imageType)
-        } else if let file = try container.decodeIfPresent(TelegramMediaFile.self, forKey: .videoFile) {
+        } else if let file = try container.decodeIfPresent(IosappMediaFile.self, forKey: .videoFile) {
             self.content = .video(file)
         } else {
             throw DrawingStickerEntity.DecodingError.generic

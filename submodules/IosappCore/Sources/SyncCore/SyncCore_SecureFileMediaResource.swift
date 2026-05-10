@@ -17,7 +17,7 @@ public struct SecureFileMediaResourceId {
     }
 }
 
-public final class SecureFileMediaResource: TelegramMediaResource {
+public final class SecureFileMediaResource: IosappMediaResource {
     public let file: SecureIdFileReference
     
     public var id: MediaResourceId {

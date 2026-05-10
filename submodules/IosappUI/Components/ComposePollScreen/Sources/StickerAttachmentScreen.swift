@@ -425,7 +425,7 @@ final class StickerAttachmentScreenComponent: Component {
                                         allEmoticons[emoticon] = keyword.keyword
                                     }
                                 }
-                                let remoteSignal: Signal<(items: [TelegramMediaFile], isFinalResult: Bool), NoError>
+                                let remoteSignal: Signal<(items: [IosappMediaFile], isFinalResult: Bool), NoError>
                                 if hasPremium {
                                     remoteSignal = context.engine.stickers.searchEmoji(query: query, emoticon: Array(allEmoticons.keys), inputLanguageCode: languageCode)
                                 } else {
@@ -469,11 +469,11 @@ final class StickerAttachmentScreenComponent: Component {
                                         if itemFile.isPremiumEmoji && !hasPremium {
                                             continue
                                         }
-                                        let animationData = EntityKeyboardAnimationData(file: TelegramMediaFile.Accessor(itemFile))
+                                        let animationData = EntityKeyboardAnimationData(file: IosappMediaFile.Accessor(itemFile))
                                         let item = EmojiPagerContentComponent.Item(
                                             animationData: animationData,
                                             content: .animation(animationData),
-                                            itemFile: TelegramMediaFile.Accessor(itemFile),
+                                            itemFile: IosappMediaFile.Accessor(itemFile),
                                             subgroupId: nil,
                                             icon: .none,
                                             tintMode: animationData.isTemplate ? .primary : .none
@@ -530,11 +530,11 @@ final class StickerAttachmentScreenComponent: Component {
                                     continue
                                 }
                                 existingIds.insert(itemFile.fileId)
-                                let animationData = EntityKeyboardAnimationData(file: TelegramMediaFile.Accessor(itemFile))
+                                let animationData = EntityKeyboardAnimationData(file: IosappMediaFile.Accessor(itemFile))
                                 let item = EmojiPagerContentComponent.Item(
                                     animationData: animationData,
                                     content: .animation(animationData),
-                                    itemFile: TelegramMediaFile.Accessor(itemFile),
+                                    itemFile: IosappMediaFile.Accessor(itemFile),
                                     subgroupId: nil,
                                     icon: .none,
                                     tintMode: animationData.isTemplate ? .primary : .none
@@ -804,11 +804,11 @@ final class StickerAttachmentScreenComponent: Component {
                                     continue
                                 }
                                 existingIds.insert(itemFile.fileId)
-                                let animationData = EntityKeyboardAnimationData(file: TelegramMediaFile.Accessor(itemFile))
+                                let animationData = EntityKeyboardAnimationData(file: IosappMediaFile.Accessor(itemFile))
                                 let item = EmojiPagerContentComponent.Item(
                                     animationData: animationData,
                                     content: .animation(animationData),
-                                    itemFile: TelegramMediaFile.Accessor(itemFile),
+                                    itemFile: IosappMediaFile.Accessor(itemFile),
                                     subgroupId: nil,
                                     icon: .none,
                                     tintMode: animationData.isTemplate ? .primary : .none

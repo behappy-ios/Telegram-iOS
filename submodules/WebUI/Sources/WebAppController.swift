@@ -345,7 +345,7 @@ public final class WebAppController: ViewController, AttachmentContainable {
                 }
                 |> mapToSignal { bot -> Signal<(FileMediaReference, Bool)?, NoError> in
                     if let bot = bot, let peerReference = PeerReference(bot.peer._asPeer()) {
-                        var imageFile: TelegramMediaFile?
+                        var imageFile: IosappMediaFile?
                         var isPlaceholder = false
                         if let file = bot.icons[.placeholder] {
                             imageFile = file
@@ -435,7 +435,7 @@ public final class WebAppController: ViewController, AttachmentContainable {
                 }))
             }
             
-            self.iconDisposable = (context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: controller.botId))
+            self.iconDisposable = (context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: controller.botId))
             |> mapToSignal { peer -> Signal<UIImage?, NoError> in
                 guard let peer else {
                     return .complete()
@@ -554,7 +554,7 @@ public final class WebAppController: ViewController, AttachmentContainable {
                         }
                     })
                 } else {
-                    if let url = controller.url, isTelegramMeLink(url), let internalUrl = parseFullInternalUrl(sharedContext: self.context.sharedContext, context: self.context, url: url), case .peer(_, .appStart) = internalUrl {
+                    if let url = controller.url, isIosappMeLink(url), let internalUrl = parseFullInternalUrl(sharedContext: self.context.sharedContext, context: self.context, url: url), case .peer(_, .appStart) = internalUrl {
                         let _ = (self.context.sharedContext.resolveUrl(context: self.context, peerId: controller.peerId, url: url, skipUrlAuth: false)
                         |> deliverOnMainQueue).startStandalone(next: { [weak self] result in
                             guard let self, let controller = self.controller else {
@@ -710,7 +710,7 @@ public final class WebAppController: ViewController, AttachmentContainable {
         
         func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
             if let url = navigationAction.request.url?.absoluteString {
-                if isTelegramMeLink(url) || isTelegraPhLink(url) {
+                if isIosappMeLink(url) || isTelegraPhLink(url) {
                     decisionHandler(.cancel)
                     self.controller?.openUrl(url, true, false, {})
                 } else {
@@ -1247,7 +1247,7 @@ public final class WebAppController: ViewController, AttachmentContainable {
                 if let json = json, let slug = json["slug"] as? String {
                     self.paymentDisposable = (self.context.engine.payments.fetchBotPaymentInvoice(source: .slug(slug))
                     |> map(Optional.init)
-                    |> `catch` { _ -> Signal<TelegramMediaInvoice?, NoError> in
+                    |> `catch` { _ -> Signal<IosappMediaInvoice?, NoError> in
                         return .single(nil)
                     }
                     |> deliverOnMainQueue).start(next: { [weak self] invoice in
@@ -1660,7 +1660,7 @@ public final class WebAppController: ViewController, AttachmentContainable {
                                     let target: Stories.PendingTarget = results.first!.target
                                     externalState.storyTarget = target
                                     
-                                    if let rootController = self.context.sharedContext.mainWindow?.viewController as? TelegramRootControllerInterface {
+                                    if let rootController = self.context.sharedContext.mainWindow?.viewController as? IosappRootControllerInterface {
                                         rootController.proceedWithStoryUpload(target: target, results: results, existingMedia: nil, forwardInfo: nil, externalState: externalState, commit: commit)
                                     }
                                 })
@@ -1778,7 +1778,7 @@ public final class WebAppController: ViewController, AttachmentContainable {
             case "web_app_device_storage_get_key":
                 if let json, let requestId = json["req_id"] as? String {
                     if let key = json["key"] as? String {
-                        let _ = (self.context.engine.data.get(TelegramEngine.EngineData.Item.Peer.BotStorageValue(id: controller.botId, key: key))
+                        let _ = (self.context.engine.data.get(IosappEngine.EngineData.Item.Peer.BotStorageValue(id: controller.botId, key: key))
                         |> deliverOnMainQueue).start(next: { [weak self] value in
                             let data: JSON = [
                                 "req_id": requestId,
@@ -2224,8 +2224,8 @@ public final class WebAppController: ViewController, AttachmentContainable {
             }
             
             let _ = (self.context.engine.data.get(
-                TelegramEngine.EngineData.Item.Peer.Peer(id: self.context.account.peerId),
-                TelegramEngine.EngineData.Item.Peer.IsBlocked(id: botId)
+                IosappEngine.EngineData.Item.Peer.Peer(id: self.context.account.peerId),
+                IosappEngine.EngineData.Item.Peer.IsBlocked(id: botId)
             )
             |> deliverOnMainQueue).start(next: { [weak self, weak controller] accountPeer, isBlocked in
                 guard let self, let controller, let accountPeer else {
@@ -2257,7 +2257,7 @@ public final class WebAppController: ViewController, AttachmentContainable {
                             }
                             
                             let sendMessageSignal = enqueueMessages(account: self.context.account, peerId: botId, messages: [
-                                .message(text: "", attributes: [], inlineStickers: [:], mediaReference: .standalone(media: TelegramMediaContact(firstName: user.firstName ?? "", lastName: user.lastName ?? "", phoneNumber: phone, peerId: user.id, vCardData: nil)), threadId: nil, replyToMessageId: nil, replyToStoryId: nil, localGroupingKey: nil, correlationId: nil, bubbleUpEmojiOrStickersets: [])
+                                .message(text: "", attributes: [], inlineStickers: [:], mediaReference: .standalone(media: IosappMediaContact(firstName: user.firstName ?? "", lastName: user.lastName ?? "", phoneNumber: phone, peerId: user.id, vCardData: nil)), threadId: nil, replyToMessageId: nil, replyToStoryId: nil, localGroupingKey: nil, correlationId: nil, bubbleUpEmojiOrStickersets: [])
                             ])
                             |> mapToSignal { messageIds in
                                 if let maybeMessageId = messageIds.first, let messageId = maybeMessageId {
@@ -2397,11 +2397,11 @@ public final class WebAppController: ViewController, AttachmentContainable {
             }
             
             self.context.engine.peers.updateBotBiometricsState(peerId: controller.botId, update: { state in
-                let state = state ?? TelegramBotBiometricsState.create()
+                let state = state ?? IosappBotBiometricsState.create()
                 return state
             })
             let _ = (self.context.engine.data.get(
-                TelegramEngine.EngineData.Item.Peer.BotBiometricsState(id: controller.botId)
+                IosappEngine.EngineData.Item.Peer.BotBiometricsState(id: controller.botId)
             )
             |> deliverOnMainQueue).start(next: { [weak self] state in
                 guard let self else {
@@ -2443,8 +2443,8 @@ public final class WebAppController: ViewController, AttachmentContainable {
                 return
             }
             let _ = (self.context.engine.data.get(
-                TelegramEngine.EngineData.Item.Peer.Peer(id: controller.botId),
-                TelegramEngine.EngineData.Item.Peer.BotBiometricsState(id: controller.botId)
+                IosappEngine.EngineData.Item.Peer.Peer(id: controller.botId),
+                IosappEngine.EngineData.Item.Peer.BotBiometricsState(id: controller.botId)
             )
             |> deliverOnMainQueue).start(next: { [weak self] botPeer, currentState in
                 guard let self, let botPeer, let controller = self.controller else {
@@ -2462,7 +2462,7 @@ public final class WebAppController: ViewController, AttachmentContainable {
                     }
                     
                     self.context.engine.peers.updateBotBiometricsState(peerId: botPeer.id, update: { state in
-                        var state = state ?? TelegramBotBiometricsState.create()
+                        var state = state ?? IosappBotBiometricsState.create()
                         
                         state.accessRequested = true
                         state.accessGranted = granted
@@ -2511,8 +2511,8 @@ public final class WebAppController: ViewController, AttachmentContainable {
                 return
             }
             let _ = (self.context.engine.data.get(
-                TelegramEngine.EngineData.Item.Peer.Peer(id: controller.botId),
-                TelegramEngine.EngineData.Item.Peer.BotBiometricsState(id: controller.botId)
+                IosappEngine.EngineData.Item.Peer.Peer(id: controller.botId),
+                IosappEngine.EngineData.Item.Peer.BotBiometricsState(id: controller.botId)
             )
             |> deliverOnMainQueue).start(next: { [weak self] botPeer, state in
                 guard let self else {
@@ -2610,10 +2610,10 @@ public final class WebAppController: ViewController, AttachmentContainable {
                 Thread { [weak self] in
                     let key = LocalAuth.getOrCreatePrivateKey(baseAppBundleId: appBundleId, keyId: keyId)
                     
-                    var encryptedData: TelegramBotBiometricsState.OpaqueToken?
+                    var encryptedData: IosappBotBiometricsState.OpaqueToken?
                     if let key {
                         if let result = key.encrypt(data: tokenData) {
-                            encryptedData = TelegramBotBiometricsState.OpaqueToken(
+                            encryptedData = IosappBotBiometricsState.OpaqueToken(
                                 publicKey: key.publicKeyRepresentation,
                                 data: result
                             )
@@ -2627,7 +2627,7 @@ public final class WebAppController: ViewController, AttachmentContainable {
                         
                         if let encryptedData {
                             self.context.engine.peers.updateBotBiometricsState(peerId: controller.botId, update: { state in
-                                var state = state ?? TelegramBotBiometricsState.create()
+                                var state = state ?? IosappBotBiometricsState.create()
                                 state.opaqueToken = encryptedData
                                 return state
                             })
@@ -2645,7 +2645,7 @@ public final class WebAppController: ViewController, AttachmentContainable {
                 }.start()
             } else {
                 self.context.engine.peers.updateBotBiometricsState(peerId: controller.botId, update: { state in
-                    var state = state ?? TelegramBotBiometricsState.create()
+                    var state = state ?? IosappBotBiometricsState.create()
                     state.opaqueToken = nil
                     return state
                 })
@@ -3114,10 +3114,10 @@ public final class WebAppController: ViewController, AttachmentContainable {
             }
             let _ = combineLatest(
                 queue: Queue.mainQueue(),
-                self.context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: self.context.account.peerId)),
-                self.context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: controller.botId)),
+                self.context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: self.context.account.peerId)),
+                self.context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: controller.botId)),
                 self.context.engine.stickers.loadedStickerPack(reference: .iconStatusEmoji, forceActualized: false)
-                |> map { result -> [TelegramMediaFile.Accessor] in
+                |> map { result -> [IosappMediaFile.Accessor] in
                     switch result {
                     case let .result(_, items, _):
                         return items.map(\.file)
@@ -3208,8 +3208,8 @@ public final class WebAppController: ViewController, AttachmentContainable {
             let _ = combineLatest(
                 queue: Queue.mainQueue(),
                 self.context.engine.stickers.resolveInlineStickers(fileIds: [fileId]),
-                self.context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: self.context.account.peerId)),
-                self.context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: controller.botId))
+                self.context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: self.context.account.peerId)),
+                self.context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: controller.botId))
             ).start(next: { [weak self] files, accountPeer, botPeer in
                 guard let self, let accountPeer, let controller = self.controller else {
                     return
@@ -3295,7 +3295,7 @@ public final class WebAppController: ViewController, AttachmentContainable {
                 return
             }
             
-            let _ = (self.context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: controller.botId))
+            let _ = (self.context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: controller.botId))
             |> deliverOnMainQueue
             ).start(next: { [weak controller] peer in
                 guard let controller, let peer, let addressName = peer.addressName else {
@@ -3321,7 +3321,7 @@ public final class WebAppController: ViewController, AttachmentContainable {
                 return
             }
             
-            let _ = (self.context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: controller.botId))
+            let _ = (self.context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: controller.botId))
             |> deliverOnMainQueue).start(next: { [weak self] botPeer in
                 guard let self, let botPeer, let controller = self.controller else {
                     return
@@ -3367,7 +3367,7 @@ public final class WebAppController: ViewController, AttachmentContainable {
             guard let controller = self.controller else {
                 return
             }
-            let _ = (self.context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: controller.botId))
+            let _ = (self.context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: controller.botId))
             |> deliverOnMainQueue).start(next: { [weak self] peer in
                 guard let self, let controller = self.controller, let peer else {
                     return
@@ -3468,8 +3468,8 @@ public final class WebAppController: ViewController, AttachmentContainable {
                     
                     if shouldRequest {
                         let _ = (context.engine.data.get(
-                            TelegramEngine.EngineData.Item.Peer.Peer(id: context.account.peerId),
-                            TelegramEngine.EngineData.Item.Peer.Peer(id: botId)
+                            IosappEngine.EngineData.Item.Peer.Peer(id: context.account.peerId),
+                            IosappEngine.EngineData.Item.Peer.Peer(id: botId)
                         )
                         |> deliverOnMainQueue).start(next: { [weak self, weak controller] accountPeer, botPeer in
                             guard let accountPeer, let botPeer, let controller else {
@@ -3772,7 +3772,7 @@ public final class WebAppController: ViewController, AttachmentContainable {
             completion()
         case .button, .inline, .attachMenu, .menu, .simple:
             let _ = (self.context.engine.data.get(
-                TelegramEngine.EngineData.Item.Peer.Peer(id: self.peerId)
+                IosappEngine.EngineData.Item.Peer.Peer(id: self.peerId)
             )
             |> deliverOnMainQueue).start(next: { [weak self] chatPeer in
                 guard let self, let chatPeer else {
@@ -3858,9 +3858,9 @@ public final class WebAppController: ViewController, AttachmentContainable {
         
         let items = combineLatest(queue: Queue.mainQueue(),
             context.engine.messages.attachMenuBots() |> take(1),
-            context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: self.botId)),
-            context.engine.data.get(TelegramEngine.EngineData.Item.Peer.BotCommands(id: self.botId)),
-            context.engine.data.get(TelegramEngine.EngineData.Item.Peer.BotPrivacyPolicyUrl(id: self.botId)),
+            context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: self.botId)),
+            context.engine.data.get(IosappEngine.EngineData.Item.Peer.BotCommands(id: self.botId)),
+            context.engine.data.get(IosappEngine.EngineData.Item.Peer.BotPrivacyPolicyUrl(id: self.botId)),
             activeDownloadProgress
         )
         |> map { [weak self] attachMenuBots, botPeer, botCommands, privacyPolicyUrl, activeDownloadProgress -> ContextController.Items in
@@ -3916,7 +3916,7 @@ public final class WebAppController: ViewController, AttachmentContainable {
                     }
                     
                     let _ = (context.engine.data.get(
-                        TelegramEngine.EngineData.Item.Peer.Peer(id: strongSelf.botId)
+                        IosappEngine.EngineData.Item.Peer.Peer(id: strongSelf.botId)
                     )
                     |> deliverOnMainQueue).start(next: { botPeer in
                         guard let botPeer = botPeer else {

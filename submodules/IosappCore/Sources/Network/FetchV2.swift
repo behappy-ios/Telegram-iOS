@@ -305,7 +305,7 @@ private final class FetchImpl {
         private let postbox: Postbox
         private let network: Network
         private let mediaReferenceRevalidationContext: MediaReferenceRevalidationContext?
-        private var resource: TelegramMediaResource
+        private var resource: IosappMediaResource
         private let datacenterId: Int
         private let size: Int64?
         private let parameters: MediaResourceFetchParameters?
@@ -337,7 +337,7 @@ private final class FetchImpl {
             postbox: Postbox,
             network: Network,
             mediaReferenceRevalidationContext: MediaReferenceRevalidationContext?,
-            resource: TelegramMediaResource,
+            resource: IosappMediaResource,
             datacenterId: Int,
             size: Int64?,
             intervals: Signal<[(Range<Int64>, MediaBoxFetchPriority)], NoError>,
@@ -376,7 +376,7 @@ private final class FetchImpl {
             #endif*/
             
             var isStory = false
-            if let info = parameters?.info as? TelegramCloudMediaResourceFetchInfo {
+            if let info = parameters?.info as? IosappCloudMediaResourceFetchInfo {
                 switch info.reference {
                 case let .media(media, _):
                     if case .story = media {
@@ -394,7 +394,7 @@ private final class FetchImpl {
             }
             self.cdnPartSize = 128 * 1024
             
-            if let resource = resource as? TelegramCloudMediaResource {
+            if let resource = resource as? IosappCloudMediaResource {
                 if let apiInputLocation = resource.apiInputLocation(fileReference: Data()) {
                     self.loggingIdentifier = "\(apiInputLocation)"
                 } else {
@@ -711,7 +711,7 @@ private final class FetchImpl {
                 if state.disposable == nil {
                     Logger.shared.log("FetchV2", "\(self.loggingIdentifier): refreshing file reference")
                     
-                    if let info = self.parameters?.info as? TelegramCloudMediaResourceFetchInfo, let mediaReferenceRevalidationContext = self.mediaReferenceRevalidationContext {
+                    if let info = self.parameters?.info as? IosappCloudMediaResourceFetchInfo, let mediaReferenceRevalidationContext = self.mediaReferenceRevalidationContext {
                         let fetchLocation = state.fetchLocation
                         
                         state.disposable = (revalidateMediaResourceReference(
@@ -727,7 +727,7 @@ private final class FetchImpl {
                                 return
                             }
                             
-                            if let validatedResource = validationResult.updatedResource as? TelegramCloudMediaResourceWithFileReference, let reference = validatedResource.fileReference {
+                            if let validatedResource = validationResult.updatedResource as? IosappCloudMediaResourceWithFileReference, let reference = validatedResource.fileReference {
                                 self.updatedFileReference = reference
                             }
                             self.resource = validationResult.updatedResource
@@ -829,11 +829,11 @@ private final class FetchImpl {
                     return .single(.failure)
                 }
             case let .datacenter(sourceDatacenterId):
-                if let cloudResource = self.resource as? TelegramCloudMediaResource {
+                if let cloudResource = self.resource as? IosappCloudMediaResource {
                     var fileReference: Data?
                     if let updatedFileReference = self.updatedFileReference {
                         fileReference = updatedFileReference
-                    } else if let info = self.parameters?.info as? TelegramCloudMediaResourceFetchInfo {
+                    } else if let info = self.parameters?.info as? IosappCloudMediaResourceFetchInfo {
                         fileReference = info.reference.apiFileReference
                     }
                     if let inputLocation = cloudResource.apiInputLocation(fileReference: fileReference) {
@@ -1094,7 +1094,7 @@ private final class FetchImpl {
         postbox: Postbox,
         network: Network,
         mediaReferenceRevalidationContext: MediaReferenceRevalidationContext?,
-        resource: TelegramMediaResource,
+        resource: IosappMediaResource,
         datacenterId: Int,
         size: Int64?,
         intervals: Signal<[(Range<Int64>, MediaBoxFetchPriority)], NoError>,
@@ -1136,7 +1136,7 @@ func multipartFetchV2(
     postbox: Postbox,
     network: Network,
     mediaReferenceRevalidationContext: MediaReferenceRevalidationContext?,
-    resource: TelegramMediaResource,
+    resource: IosappMediaResource,
     datacenterId: Int,
     size: Int64?,
     intervals: Signal<[(Range<Int64>, MediaBoxFetchPriority)], NoError>,

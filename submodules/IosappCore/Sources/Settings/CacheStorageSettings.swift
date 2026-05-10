@@ -2,7 +2,7 @@ import Foundation
 import Postbox
 import SwiftSignalKit
 
-public func updateCacheStorageSettingsInteractively(accountManager: AccountManager<TelegramAccountManagerTypes>, _ f: @escaping (CacheStorageSettings) -> CacheStorageSettings) -> Signal<Void, NoError> {
+public func updateCacheStorageSettingsInteractively(accountManager: AccountManager<IosappAccountManagerTypes>, _ f: @escaping (CacheStorageSettings) -> CacheStorageSettings) -> Signal<Void, NoError> {
     return accountManager.transaction { transaction -> Void in
         transaction.updateSharedData(SharedDataKeys.cacheStorageSettings, { entry in
             let currentSettings: CacheStorageSettings

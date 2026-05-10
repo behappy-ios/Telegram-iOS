@@ -29,8 +29,8 @@ public final class MediaPlaybackStoredState: Codable {
     }
 }
 
-public func mediaPlaybackStoredState(engine: TelegramEngine, messageId: EngineMessage.Id) -> Signal<MediaPlaybackStoredState?, NoError> {
-    return engine.data.get(TelegramEngine.EngineData.Item.Messages.Message(id: messageId))
+public func mediaPlaybackStoredState(engine: IosappEngine, messageId: EngineMessage.Id) -> Signal<MediaPlaybackStoredState?, NoError> {
+    return engine.data.get(IosappEngine.EngineData.Item.Messages.Message(id: messageId))
     |> map { message -> MediaPlaybackStoredState? in
         guard let message else {
             return nil
@@ -44,7 +44,7 @@ public func mediaPlaybackStoredState(engine: TelegramEngine, messageId: EngineMe
     }
 }
 
-public func updateMediaPlaybackStoredStateInteractively(engine: TelegramEngine, messageId: EngineMessage.Id, state: MediaPlaybackStoredState?) -> Signal<Never, NoError> {
+public func updateMediaPlaybackStoredStateInteractively(engine: IosappEngine, messageId: EngineMessage.Id, state: MediaPlaybackStoredState?) -> Signal<Never, NoError> {
     return engine.messages.updateLocallyDerivedData(messageId: messageId, update: { data in
         var data = data
         if let state, let entry = CodableEntry(state) {

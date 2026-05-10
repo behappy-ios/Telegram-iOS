@@ -19,7 +19,7 @@ final class WebBrowserDomainExceptionItem: ListViewItem, ItemListItem {
     let context: AccountContext
     let title: String
     let label: String
-    let icon: TelegramMediaImage?
+    let icon: IosappMediaImage?
     let sectionId: ItemListSectionId
     let style: ItemListStyle
     let deleted: (() -> Void)?
@@ -30,7 +30,7 @@ final class WebBrowserDomainExceptionItem: ListViewItem, ItemListItem {
         context: AccountContext,
         title: String,
         label: String,
-        icon: TelegramMediaImage?,
+        icon: IosappMediaImage?,
         sectionId: ItemListSectionId,
         style: ItemListStyle,
         deleted: (() -> Void)?

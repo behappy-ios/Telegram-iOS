@@ -209,11 +209,11 @@ public final class ForwardInfoPanelComponent: Component {
 
 public final class MusicPanelComponent: Component {
     public let context: AccountContext
-    public let file: TelegramMediaFile
+    public let file: IosappMediaFile
     
     public init(
         context: AccountContext,
-        file: TelegramMediaFile
+        file: IosappMediaFile
     ) {
         self.context = context
         self.file = file

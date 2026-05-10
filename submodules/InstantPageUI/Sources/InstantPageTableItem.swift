@@ -276,7 +276,7 @@ private func offestForVerticalAlignment(_ verticalAlignment: TableVerticalAlignm
     }
 }
 
-func layoutTableItem(rtl: Bool, rows: [InstantPageTableRow], styleStack: InstantPageTextStyleStack, theme: InstantPageTheme, bordered: Bool, striped: Bool, boundingWidth: CGFloat, horizontalInset: CGFloat, media: [EngineMedia.Id: EngineMedia], webpage: TelegramMediaWebpage) -> InstantPageTableItem {
+func layoutTableItem(rtl: Bool, rows: [InstantPageTableRow], styleStack: InstantPageTextStyleStack, theme: InstantPageTheme, bordered: Bool, striped: Bool, boundingWidth: CGFloat, horizontalInset: CGFloat, media: [EngineMedia.Id: EngineMedia], webpage: IosappMediaWebpage) -> InstantPageTableItem {
     if rows.count == 0 {
         return InstantPageTableItem(frame: CGRect(), totalWidth: 0.0, horizontalInset: 0.0,  borderWidth: 0.0, theme: theme, cells: [], rtl: rtl)
     }

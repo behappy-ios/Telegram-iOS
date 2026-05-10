@@ -9,7 +9,7 @@ final class AccountTaskManager {
         private let queue: Queue
         private let accountPeerId: PeerId
         private let stateManager: AccountStateManager
-        private let accountManager: AccountManager<TelegramAccountManagerTypes>
+        private let accountManager: AccountManager<IosappAccountManagerTypes>
         private let networkArguments: NetworkInitializationArguments
         private let viewTracker: AccountViewTracker
         private let mediaReferenceRevalidationContext: MediaReferenceRevalidationContext
@@ -25,7 +25,7 @@ final class AccountTaskManager {
         
         private var isUpdating: Bool = false
         
-        init(queue: Queue, accountPeerId: PeerId, stateManager: AccountStateManager, accountManager: AccountManager<TelegramAccountManagerTypes>,
+        init(queue: Queue, accountPeerId: PeerId, stateManager: AccountStateManager, accountManager: AccountManager<IosappAccountManagerTypes>,
              networkArguments: NetworkInitializationArguments, viewTracker: AccountViewTracker, mediaReferenceRevalidationContext: MediaReferenceRevalidationContext, isMainApp: Bool, testingEnvironment: Bool) {
             self.queue = queue
             self.accountPeerId = accountPeerId
@@ -169,7 +169,7 @@ final class AccountTaskManager {
     private let queue: Queue
     private let impl: QueueLocalObject<Impl>
     
-    init(stateManager: AccountStateManager, accountManager: AccountManager<TelegramAccountManagerTypes>,
+    init(stateManager: AccountStateManager, accountManager: AccountManager<IosappAccountManagerTypes>,
          networkArguments: NetworkInitializationArguments, viewTracker: AccountViewTracker, mediaReferenceRevalidationContext: MediaReferenceRevalidationContext, isMainApp: Bool, testingEnvironment: Bool) {
         let queue = Account.sharedQueue
         self.queue = queue

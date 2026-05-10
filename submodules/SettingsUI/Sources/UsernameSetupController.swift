@@ -59,7 +59,7 @@ private enum UsernameSetupEntry: ItemListNodeEntry {
     case publicLinkInfo(PresentationTheme, String)
     
     case additionalLinkHeader(PresentationTheme, String)
-    case additionalLink(PresentationTheme, TelegramPeerUsername, Int32, Bool)
+    case additionalLink(PresentationTheme, IosappPeerUsername, Int32, Bool)
     case additionalLinkInfo(PresentationTheme, String)
     
     var section: ItemListSectionId {
@@ -294,7 +294,7 @@ private struct UsernameSetupControllerState: Equatable {
 private func usernameSetupControllerEntries(presentationData: PresentationData, view: PeerView, state: UsernameSetupControllerState, temporaryOrder: [String]?, mode: UsernameSetupMode) -> [UsernameSetupEntry] {
     var entries: [UsernameSetupEntry] = []
     
-    if let peer = view.peers[view.peerId] as? TelegramUser {
+    if let peer = view.peers[view.peerId] as? IosappUser {
         let currentUsername: String
         if let current = state.editingPublicLinkText {
             currentUsername = current
@@ -373,11 +373,11 @@ private func usernameSetupControllerEntries(presentationData: PresentationData, 
             
             var usernames = peer.usernames
             if let temporaryOrder = temporaryOrder {
-                var usernamesMap: [String: TelegramPeerUsername] = [:]
+                var usernamesMap: [String: IosappPeerUsername] = [:]
                 for username in usernames {
                     usernamesMap[username.username] = username
                 }
-                var sortedUsernames: [TelegramPeerUsername] = []
+                var sortedUsernames: [IosappPeerUsername] = []
                 for username in temporaryOrder {
                     if let username = usernamesMap[username] {
                         sortedUsernames.append(username)
@@ -471,7 +471,7 @@ public func usernameSetupController(context: AccountContext, mode: UsernameSetup
         let _ = (context.account.postbox.loadedPeerWithId(peerId)
         |> take(1)
         |> deliverOnMainQueue).start(next: { peer in
-            if let user = peer as? TelegramUser, user.botInfo != nil {
+            if let user = peer as? IosappUser, user.botInfo != nil {
                 context.sharedContext.openExternalUrl(context: context, urlContext: .generic, url: "https://fragment.com/", forceExternal: true, presentationData: context.sharedContext.currentPresentationData.with { $0 }, navigationController: nil, dismissInput: {})
             } else {
                 var currentAddressName: String = peer.addressName ?? ""
@@ -550,7 +550,7 @@ public func usernameSetupController(context: AccountContext, mode: UsernameSetup
         let peer = peerViewMainPeer(view)
         
         var rightNavigationButton: ItemListNavigationButton?
-        if let peer = peer as? TelegramUser {
+        if let peer = peer as? IosappUser {
             var doneEnabled = true
             
             if let addressNameValidationStatus = state.addressNameValidationStatus {
@@ -719,7 +719,7 @@ public func usernameSetupController(context: AccountContext, mode: UsernameSetup
     })
     
     controller.setReorderCompleted({ (entries: [UsernameSetupEntry]) -> Void in
-        var currentUsernames: [TelegramPeerUsername] = []
+        var currentUsernames: [IosappPeerUsername] = []
         for entry in entries {
             switch entry {
             case let .additionalLink(_, username, _, _):

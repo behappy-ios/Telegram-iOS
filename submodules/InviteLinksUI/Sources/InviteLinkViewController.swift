@@ -580,7 +580,7 @@ public final class InviteLinkViewController: ViewController {
             self.isOpaque = false
         
             self.interaction = InviteLinkViewInteraction(context: context, openPeer: { [weak self] peerId in
-                let _ = (context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: peerId))
+                let _ = (context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: peerId))
                 |> deliverOnMainQueue).start(next: { peer in
                     guard let peer else {
                         return
@@ -590,7 +590,7 @@ public final class InviteLinkViewController: ViewController {
                     }
                 })
             }, openSubscription: { [weak self] pricing, importer in
-                let _ = (context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: peerId))
+                let _ = (context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: peerId))
                 |> deliverOnMainQueue).start(next: { [weak self] peer in
                     guard let peer else {
                         return
@@ -617,7 +617,7 @@ public final class InviteLinkViewController: ViewController {
                     if let strongSelf = self {
                         let _ = (strongSelf.context.engine.data.get(
                             EngineDataList(
-                                peerIds.map(TelegramEngine.EngineData.Item.Peer.Peer.init)
+                                peerIds.map(IosappEngine.EngineData.Item.Peer.Peer.init)
                             )
                         )
                         |> deliverOnMainQueue).start(next: { [weak self] peerList in
@@ -648,7 +648,7 @@ public final class InviteLinkViewController: ViewController {
 
                                 strongSelf.controller?.present(UndoOverlayController(presentationData: presentationData, content: .forward(savedMessages: savedMessages, text: text), elevatedLayout: false, animateInAsReplacement: true, action: { action in
                                     if savedMessages, let self, action == .info {
-                                        let _ = (self.context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: self.context.account.peerId))
+                                        let _ = (self.context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: self.context.account.peerId))
                                         |> deliverOnMainQueue).start(next: { [weak self] peer in
                                             guard let self, let peer else {
                                                 return
@@ -675,7 +675,7 @@ public final class InviteLinkViewController: ViewController {
                 
                 var creatorIsBot: Signal<Bool, NoError>
                 if case let .link(_, _, _, _, _, adminId, _, _, _, _, _, _, _) = invite {
-                    creatorIsBot = context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: adminId))
+                    creatorIsBot = context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: adminId))
                     |> map { peer -> Bool in
                         if let peer, case let .user(user) = peer, user.botInfo != nil {
                             return true
@@ -747,7 +747,7 @@ public final class InviteLinkViewController: ViewController {
                                         return
                                     }
                                     let isGroup: Bool
-                                    if let peer = peer as? TelegramChannel, case .broadcast = peer.info {
+                                    if let peer = peer as? IosappChannel, case .broadcast = peer.info {
                                         isGroup = false
                                     } else {
                                         isGroup = true
@@ -766,7 +766,7 @@ public final class InviteLinkViewController: ViewController {
                                 let _ = (context.account.postbox.loadedPeerWithId(peerId)
                                 |> deliverOnMainQueue).start(next: { peer in
                                     let isGroup: Bool
-                                    if let peer = peer as? TelegramChannel, case .broadcast = peer.info {
+                                    if let peer = peer as? IosappChannel, case .broadcast = peer.info {
                                         isGroup = false
                                     } else {
                                         isGroup = true
@@ -861,7 +861,7 @@ public final class InviteLinkViewController: ViewController {
                         if requestsState.importers.isEmpty && requestsState.isLoadingMore {
                             count = min(4, state.count)
                             loading = true
-                            let fakeUser = TelegramUser(id: EnginePeer.Id(namespace: .max, id: EnginePeer.Id.Id._internalFromInt64Value(0)), accessHash: nil, firstName: "", lastName: "", username: nil, phone: nil, photo: [], botInfo: nil, restrictionInfo: nil, flags: [], emojiStatus: nil, usernames: [], storiesHidden: nil, nameColor: nil, backgroundEmojiId: nil, profileColor: nil, profileBackgroundEmojiId: nil, subscriberCount: nil, verificationIconFileId: nil)
+                            let fakeUser = IosappUser(id: EnginePeer.Id(namespace: .max, id: EnginePeer.Id.Id._internalFromInt64Value(0)), accessHash: nil, firstName: "", lastName: "", username: nil, phone: nil, photo: [], botInfo: nil, restrictionInfo: nil, flags: [], emojiStatus: nil, usernames: [], storiesHidden: nil, nameColor: nil, backgroundEmojiId: nil, profileColor: nil, profileBackgroundEmojiId: nil, subscriberCount: nil, verificationIconFileId: nil)
                             for i in 0 ..< count {
                                 entries.append(.request(Int32(i), presentationData.theme, presentationData.dateTimeFormat, EnginePeer.user(fakeUser), 0, true))
                             }
@@ -895,7 +895,7 @@ public final class InviteLinkViewController: ViewController {
                         if state.importers.isEmpty && state.isLoadingMore {
                             count = min(4, state.count)
                             loading = true
-                            let fakeUser = TelegramUser(id: EnginePeer.Id(namespace: .max, id: EnginePeer.Id.Id._internalFromInt64Value(0)), accessHash: nil, firstName: "", lastName: "", username: nil, phone: nil, photo: [], botInfo: nil, restrictionInfo: nil, flags: [], emojiStatus: nil, usernames: [], storiesHidden: nil, nameColor: nil, backgroundEmojiId: nil, profileColor: nil, profileBackgroundEmojiId: nil, subscriberCount: nil, verificationIconFileId: nil)
+                            let fakeUser = IosappUser(id: EnginePeer.Id(namespace: .max, id: EnginePeer.Id.Id._internalFromInt64Value(0)), accessHash: nil, firstName: "", lastName: "", username: nil, phone: nil, photo: [], botInfo: nil, restrictionInfo: nil, flags: [], emojiStatus: nil, usernames: [], storiesHidden: nil, nameColor: nil, backgroundEmojiId: nil, profileColor: nil, profileBackgroundEmojiId: nil, subscriberCount: nil, verificationIconFileId: nil)
                             for i in 0 ..< count {
                                 entries.append(.importer(Int32(i), presentationData.theme, presentationData.dateTimeFormat, EnginePeer.user(fakeUser), 0, false, true, nil, nil))
                             }

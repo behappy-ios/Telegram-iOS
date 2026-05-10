@@ -40,11 +40,11 @@ public enum StickerPreviewPeekItem: Equatable {
         }
     }
     
-    case pack(TelegramMediaFile)
+    case pack(IosappMediaFile)
     case found(FoundStickerItem)
     case portal(PortalView)
     
-    public var file: TelegramMediaFile? {
+    public var file: IosappMediaFile? {
         switch self {
         case let .pack(file):
             return file

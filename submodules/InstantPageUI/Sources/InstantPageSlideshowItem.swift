@@ -9,12 +9,12 @@ import ContextUI
 
 final class InstantPageSlideshowItem: InstantPageItem {
     var frame: CGRect
-    let webPage: TelegramMediaWebpage
+    let webPage: IosappMediaWebpage
     let wantsNode: Bool = true
     let separatesTiles: Bool = false
     let medias: [InstantPageMedia]
     
-    init(frame: CGRect, webPage: TelegramMediaWebpage, medias: [InstantPageMedia]) {
+    init(frame: CGRect, webPage: IosappMediaWebpage, medias: [InstantPageMedia]) {
         self.frame = frame
         self.webPage = webPage
         self.medias = medias

@@ -256,7 +256,7 @@ public final class BrowserBookmarksScreen: ViewController {
                 let presentationData = self.context.sharedContext.currentPresentationData.with { $0 }
                 
                 var itemList: [ContextMenuItem] = []
-                if let webPage = message.media.first(where: { $0 is TelegramMediaWebpage }) as? TelegramMediaWebpage, let url = webPage.content.url {
+                if let webPage = message.media.first(where: { $0 is IosappMediaWebpage }) as? IosappMediaWebpage, let url = webPage.content.url {
                     itemList.append(.action(ContextMenuActionItem(text: presentationData.strings.WebBrowser_CopyLink, icon: { theme in
                         return generateTintedImage(image: UIImage(bundleImageName: "Chat/Context Menu/Copy"), color: theme.contextMenu.primaryColor)
                     }, action: { [weak self] _, f in

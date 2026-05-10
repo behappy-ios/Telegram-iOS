@@ -55,13 +55,13 @@ final class BusinessHoursSetupScreenComponent: Component {
     typealias EnvironmentType = ViewControllerComponentContainer.Environment
     
     let context: AccountContext
-    let initialValue: TelegramBusinessHours?
-    let completion: (TelegramBusinessHours?) -> Void
+    let initialValue: IosappBusinessHours?
+    let completion: (IosappBusinessHours?) -> Void
 
     init(
         context: AccountContext,
-        initialValue: TelegramBusinessHours?,
-        completion: @escaping (TelegramBusinessHours?) -> Void
+        initialValue: IosappBusinessHours?,
+        completion: @escaping (IosappBusinessHours?) -> Void
     ) {
         self.context = context
         self.initialValue = initialValue
@@ -131,7 +131,7 @@ final class BusinessHoursSetupScreenComponent: Component {
             self.validate()
         }
         
-        init(businessHours: TelegramBusinessHours) {
+        init(businessHours: IosappBusinessHours) {
             self.timezoneId = businessHours.timezoneId
             
             self.days = businessHours.splitIntoWeekDays().map { day in
@@ -196,8 +196,8 @@ final class BusinessHoursSetupScreenComponent: Component {
             self.validate()
         }
         
-        func asBusinessHours() throws -> TelegramBusinessHours {
-            var mappedIntervals: [TelegramBusinessHours.WorkingTimeInterval] = []
+        func asBusinessHours() throws -> IosappBusinessHours {
+            var mappedIntervals: [IosappBusinessHours.WorkingTimeInterval] = []
             
             var filledMinutes = IndexSet()
             for i in 0 ..< self.days.count {
@@ -217,24 +217,24 @@ final class BusinessHoursSetupScreenComponent: Component {
                         throw ValidationError.intersectingRanges
                     }
                     filledMinutes.formUnion(wrappedMinutes)
-                    mappedIntervals.append(TelegramBusinessHours.WorkingTimeInterval(startMinute: minuteRange.lowerBound, endMinute: minuteRange.upperBound))
+                    mappedIntervals.append(IosappBusinessHours.WorkingTimeInterval(startMinute: minuteRange.lowerBound, endMinute: minuteRange.upperBound))
                 }
             }
             
-            var mergedIntervals: [TelegramBusinessHours.WorkingTimeInterval] = []
+            var mergedIntervals: [IosappBusinessHours.WorkingTimeInterval] = []
             for interval in mappedIntervals {
                 if mergedIntervals.isEmpty {
                     mergedIntervals.append(interval)
                 } else {
                     if mergedIntervals[mergedIntervals.count - 1].endMinute >= interval.startMinute {
-                        mergedIntervals[mergedIntervals.count - 1] = TelegramBusinessHours.WorkingTimeInterval(startMinute: mergedIntervals[mergedIntervals.count - 1].startMinute, endMinute: interval.endMinute)
+                        mergedIntervals[mergedIntervals.count - 1] = IosappBusinessHours.WorkingTimeInterval(startMinute: mergedIntervals[mergedIntervals.count - 1].startMinute, endMinute: interval.endMinute)
                     } else {
                         mergedIntervals.append(interval)
                     }
                 }
             }
             
-            return TelegramBusinessHours(timezoneId: self.timezoneId, weeklyTimeIntervals: mergedIntervals)
+            return IosappBusinessHours(timezoneId: self.timezoneId, weeklyTimeIntervals: mergedIntervals)
         }
     }
     
@@ -831,7 +831,7 @@ final class BusinessHoursSetupScreenComponent: Component {
 public final class BusinessHoursSetupScreen: ViewControllerComponentContainer {
     private let context: AccountContext
     
-    public init(context: AccountContext, initialValue: TelegramBusinessHours?, completion: @escaping (TelegramBusinessHours?) -> Void) {
+    public init(context: AccountContext, initialValue: IosappBusinessHours?, completion: @escaping (IosappBusinessHours?) -> Void) {
         self.context = context
         
         super.init(context: context, component: BusinessHoursSetupScreenComponent(

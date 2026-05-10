@@ -569,7 +569,7 @@ public class StickerPickerScreen: ViewController {
             
             let gifItems: Signal<EntityKeyboardGifContent?, NoError>
             if controller.hasGifs {
-                let hasRecentGifs = context.engine.data.subscribe(TelegramEngine.EngineData.Item.OrderedLists.ListItems(collectionId: Namespaces.OrderedItemList.CloudRecentGifs))
+                let hasRecentGifs = context.engine.data.subscribe(IosappEngine.EngineData.Item.OrderedLists.ListItems(collectionId: Namespaces.OrderedItemList.CloudRecentGifs))
                 |> map { savedGifs -> Bool in
                     return !savedGifs.isEmpty
                 }
@@ -1079,7 +1079,7 @@ public class StickerPickerScreen: ViewController {
                                         allEmoticons[emoticon] = keyword.keyword
                                     }
                                 }
-                                let remoteSignal: Signal<(items: [TelegramMediaFile], isFinalResult: Bool), NoError>
+                                let remoteSignal: Signal<(items: [IosappMediaFile], isFinalResult: Bool), NoError>
                                 if hasPremium {
                                     remoteSignal = context.engine.stickers.searchEmoji(query: query, emoticon: Array(allEmoticons.keys), inputLanguageCode: languageCode)
                                 } else {
@@ -1123,11 +1123,11 @@ public class StickerPickerScreen: ViewController {
                                         if itemFile.isPremiumEmoji && !hasPremium {
                                             continue
                                         }
-                                        let animationData = EntityKeyboardAnimationData(file: TelegramMediaFile.Accessor(itemFile))
+                                        let animationData = EntityKeyboardAnimationData(file: IosappMediaFile.Accessor(itemFile))
                                         let item = EmojiPagerContentComponent.Item(
                                             animationData: animationData,
                                             content: .animation(animationData),
-                                            itemFile: TelegramMediaFile.Accessor(itemFile),
+                                            itemFile: IosappMediaFile.Accessor(itemFile),
                                             subgroupId: nil,
                                             icon: .none,
                                             tintMode: animationData.isTemplate ? .primary : .none
@@ -1184,11 +1184,11 @@ public class StickerPickerScreen: ViewController {
                                     continue
                                 }
                                 existingIds.insert(itemFile.fileId)
-                                let animationData = EntityKeyboardAnimationData(file: TelegramMediaFile.Accessor(itemFile))
+                                let animationData = EntityKeyboardAnimationData(file: IosappMediaFile.Accessor(itemFile))
                                 let item = EmojiPagerContentComponent.Item(
                                     animationData: animationData,
                                     content: .animation(animationData),
-                                    itemFile: TelegramMediaFile.Accessor(itemFile),
+                                    itemFile: IosappMediaFile.Accessor(itemFile),
                                     subgroupId: nil,
                                     icon: .none,
                                     tintMode: animationData.isTemplate ? .primary : .none
@@ -1472,11 +1472,11 @@ public class StickerPickerScreen: ViewController {
                                     continue
                                 }
                                 existingIds.insert(itemFile.fileId)
-                                let animationData = EntityKeyboardAnimationData(file: TelegramMediaFile.Accessor(itemFile))
+                                let animationData = EntityKeyboardAnimationData(file: IosappMediaFile.Accessor(itemFile))
                                 let item = EmojiPagerContentComponent.Item(
                                     animationData: animationData,
                                     content: .animation(animationData),
-                                    itemFile: TelegramMediaFile.Accessor(itemFile),
+                                    itemFile: IosappMediaFile.Accessor(itemFile),
                                     subgroupId: nil,
                                     icon: .none,
                                     tintMode: animationData.isTemplate ? .primary : .none
@@ -2058,10 +2058,10 @@ public class StickerPickerScreen: ViewController {
     public enum Weather {
         public struct LoadedWeather {
             public let emoji: String
-            public let emojiFile: TelegramMediaFile
+            public let emojiFile: IosappMediaFile
             public let temperature: Double
             
-            public init(emoji: String, emojiFile: TelegramMediaFile, temperature: Double) {
+            public init(emoji: String, emojiFile: IosappMediaFile, temperature: Double) {
                 self.emoji = emoji
                 self.emojiFile = emojiFile
                 self.temperature = temperature
@@ -2179,7 +2179,7 @@ private final class InteractiveStickerButtonContent: Component {
     let theme: PresentationTheme
     let title: String?
     let iconName: String?
-    let iconFile: TelegramMediaFile?
+    let iconFile: IosappMediaFile?
     let useOpaqueTheme: Bool
     weak var tintContainerView: UIView?
 
@@ -2188,7 +2188,7 @@ private final class InteractiveStickerButtonContent: Component {
         theme: PresentationTheme,
         title: String?,
         iconName: String?,
-        iconFile: TelegramMediaFile? = nil,
+        iconFile: IosappMediaFile? = nil,
         useOpaqueTheme: Bool,
         tintContainerView: UIView
     ) {

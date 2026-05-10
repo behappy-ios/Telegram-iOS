@@ -6,10 +6,10 @@ import IosappUIPreferences
 import MediaEditor
 import AccountContext
 
-public func updateStorySources(engine: TelegramEngine) {
+public func updateStorySources(engine: IosappEngine) {
     let currentTimestamp = Int32(CFAbsoluteTimeGetCurrent() + kCFAbsoluteTimeIntervalSince1970)
     let _ = engine.data.get(
-        TelegramEngine.EngineData.Item.OrderedLists.ListItems(collectionId: ApplicationSpecificOrderedItemListCollectionId.storySources)
+        IosappEngine.EngineData.Item.OrderedLists.ListItems(collectionId: ApplicationSpecificOrderedItemListCollectionId.storySources)
     ).start(next: { items in
         for item in items {
             let key = EngineDataBuffer(item.id)
@@ -35,7 +35,7 @@ private func key(peerId: EnginePeer.Id, id: Int64) -> EngineDataBuffer {
 private class StorySourceItem: Codable {
 }
 
-private func addStorySource(engine: TelegramEngine, key: EngineDataBuffer) {
+private func addStorySource(engine: IosappEngine, key: EngineDataBuffer) {
     let _ = engine.orderedLists.addOrMoveToFirstPosition(
         collectionId: ApplicationSpecificOrderedItemListCollectionId.storySources,
         id: key.toMemoryBuffer(),
@@ -44,7 +44,7 @@ private func addStorySource(engine: TelegramEngine, key: EngineDataBuffer) {
     ).start()
 }
 
-private func removeStorySource(engine: TelegramEngine, peerId: EnginePeer.Id, id: Int64, delete: Bool) -> Signal<Never, NoError> {
+private func removeStorySource(engine: IosappEngine, peerId: EnginePeer.Id, id: Int64, delete: Bool) -> Signal<Never, NoError> {
     let key = key(peerId: peerId, id: id)
     return getStorySource(engine: engine, peerId: peerId, id: id)
     |> mapToSignal { source in
@@ -56,7 +56,7 @@ private func removeStorySource(engine: TelegramEngine, peerId: EnginePeer.Id, id
     }
 }
 
-private func removeStorySource(engine: TelegramEngine, key: EngineDataBuffer, delete: Bool) -> Signal<Never, NoError> {
+private func removeStorySource(engine: IosappEngine, key: EngineDataBuffer, delete: Bool) -> Signal<Never, NoError> {
     return getStorySource(engine: engine, key: key)
     |> mapToSignal { source in
         if let source {
@@ -67,29 +67,29 @@ private func removeStorySource(engine: TelegramEngine, key: EngineDataBuffer, de
     }
 }
 
-public func saveStorySource(engine: TelegramEngine, item: MediaEditorDraft, peerId: EnginePeer.Id, id: Int64) {
+public func saveStorySource(engine: IosappEngine, item: MediaEditorDraft, peerId: EnginePeer.Id, id: Int64) {
     let key = key(peerId: peerId, id: id)
     addStorySource(engine: engine, key: key)
     let _ = engine.itemCache.put(collectionId: ApplicationSpecificItemCacheCollectionId.storySource, id: key, item: item).start()
 }
 
-public func getStorySource(engine: TelegramEngine, peerId: EnginePeer.Id, id: Int64) -> Signal<MediaEditorDraft?, NoError> {
+public func getStorySource(engine: IosappEngine, peerId: EnginePeer.Id, id: Int64) -> Signal<MediaEditorDraft?, NoError> {
     let key = key(peerId: peerId, id: id)
     return getStorySource(engine: engine, key: key)
 }
 
-private func getStorySource(engine: TelegramEngine, key: EngineDataBuffer) -> Signal<MediaEditorDraft?, NoError> {
-    return engine.data.get(TelegramEngine.EngineData.Item.ItemCache.Item(collectionId: ApplicationSpecificItemCacheCollectionId.storySource, id: key))
+private func getStorySource(engine: IosappEngine, key: EngineDataBuffer) -> Signal<MediaEditorDraft?, NoError> {
+    return engine.data.get(IosappEngine.EngineData.Item.ItemCache.Item(collectionId: ApplicationSpecificItemCacheCollectionId.storySource, id: key))
     |> map { result -> MediaEditorDraft? in
         return result?.get(MediaEditorDraft.self)
     }
 }
 
-public func moveStorySource(engine: TelegramEngine, peerId: EnginePeer.Id, from fromId: Int64, to toId: Int64) {
+public func moveStorySource(engine: IosappEngine, peerId: EnginePeer.Id, from fromId: Int64, to toId: Int64) {
     let fromKey = key(peerId: peerId, id: fromId)
     let toKey = key(peerId: peerId, id: toId)
     
-    let _ = (engine.data.get(TelegramEngine.EngineData.Item.ItemCache.Item(collectionId: ApplicationSpecificItemCacheCollectionId.storySource, id: fromKey))
+    let _ = (engine.data.get(IosappEngine.EngineData.Item.ItemCache.Item(collectionId: ApplicationSpecificItemCacheCollectionId.storySource, id: fromKey))
     |> mapToSignal { item -> Signal<Never, NoError> in
         if let item = item?.get(MediaEditorDraft.self) {
             addStorySource(engine: engine, key: toKey)

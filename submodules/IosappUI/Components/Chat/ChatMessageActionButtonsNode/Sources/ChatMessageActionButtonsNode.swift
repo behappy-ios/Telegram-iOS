@@ -253,7 +253,7 @@ private final class ChatMessageActionButtonNode: ASDisplayNode {
                     iconImage = incoming ? graphics.chatBubbleActionButtonIncomingMessageIconImage : graphics.chatBubbleActionButtonOutgoingMessageIconImage
                 case let .url(value):
                     var isApp = false
-                    if isTelegramMeLink(value), let internalUrl = parseFullInternalUrl(sharedContext: context.sharedContext, context: context, url: value) {
+                    if isIosappMeLink(value), let internalUrl = parseFullInternalUrl(sharedContext: context.sharedContext, context: context, url: value) {
                         if case .peer(_, .appStart) = internalUrl {
                             isApp = true
                         } else if case .peer(_, .attachBotStart) = internalUrl {
@@ -301,7 +301,7 @@ private final class ChatMessageActionButtonNode: ASDisplayNode {
             var title = button.title
             if case .payment = button.action {
                 for media in message.media {
-                    if let invoice = media as? TelegramMediaInvoice {
+                    if let invoice = media as? IosappMediaInvoice {
                         if invoice.receiptMessageId != nil {
                             title = strings.Message_ReplyActionButtonShowReceipt
                         }
@@ -543,7 +543,7 @@ private final class ChatMessageActionButtonNode: ASDisplayNode {
                         }
                         
                         var animationContent: EmojiStatusComponent.AnimationContent = .customEmoji(fileId: iconFileId)
-                        if let file = message.associatedMedia[MediaId(namespace: Namespaces.Media.CloudFile, id: iconFileId)] as? TelegramMediaFile {
+                        if let file = message.associatedMedia[MediaId(namespace: Namespaces.Media.CloudFile, id: iconFileId)] as? IosappMediaFile {
                             animationContent = .file(file: file)
                         }
                         

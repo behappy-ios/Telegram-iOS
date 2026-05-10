@@ -1,6 +1,6 @@
 import Postbox
 
-public final class TelegramMediaGiveawayResults: Media, Equatable {
+public final class IosappMediaGiveawayResults: Media, Equatable {
     public struct Flags: OptionSet {
         public var rawValue: Int32
         
@@ -91,7 +91,7 @@ public final class TelegramMediaGiveawayResults: Media, Equatable {
     }
     
     public func isEqual(to other: Media) -> Bool {
-        guard let other = other as? TelegramMediaGiveawayResults else {
+        guard let other = other as? IosappMediaGiveawayResults else {
             return false
         }
         if self.flags != other.flags {
@@ -128,7 +128,7 @@ public final class TelegramMediaGiveawayResults: Media, Equatable {
         return self.isEqual(to: other)
     }
     
-    public static func ==(lhs: TelegramMediaGiveawayResults, rhs: TelegramMediaGiveawayResults) -> Bool {
+    public static func ==(lhs: IosappMediaGiveawayResults, rhs: IosappMediaGiveawayResults) -> Bool {
         return lhs.isEqual(to: rhs)
     }
 }

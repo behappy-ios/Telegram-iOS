@@ -447,7 +447,7 @@ final class ThemeGridSearchContentNode: SearchDisplayControllerContentNode {
             let _ = removeRecentWallpaperSearchQuery(engine: context.engine, string: query).start()
         })
         
-        let configuration = self.context.engine.data.get(TelegramEngine.EngineData.Item.Configuration.SearchBots())
+        let configuration = self.context.engine.data.get(IosappEngine.EngineData.Item.Configuration.SearchBots())
         
         let foundItems = self.queryPromise.get()
         |> mapToSignal { query -> Signal<([ThemeGridSearchEntry], Bool)?, NoError> in
@@ -484,7 +484,7 @@ final class ThemeGridSearchContentNode: SearchDisplayControllerContentNode {
                     }
                 }
                 |> mapToSignal { peer -> Signal<([ThemeGridSearchEntry], Bool)?, NoError> in
-                    if let user = peer as? TelegramUser, let botInfo = user.botInfo, let _ = botInfo.inlinePlaceholder {
+                    if let user = peer as? IosappUser, let botInfo = user.botInfo, let _ = botInfo.inlinePlaceholder {
                         let loadMore = searchContext.get()
                         |> mapToSignal { searchContext -> Signal<([ThemeGridSearchEntry], Bool)?, NoError> in
                             if let searchContext = searchContext {

@@ -18,11 +18,11 @@ private extension CGRect {
 
 private final class InlineStickerItem: Hashable {
     let emoji: ChatTextInputTextCustomEmojiAttribute
-    let file: TelegramMediaFile?
+    let file: IosappMediaFile?
     let fontSize: CGFloat
     let enableAnimation: Bool
     
-    init(emoji: ChatTextInputTextCustomEmojiAttribute, file: TelegramMediaFile?, fontSize: CGFloat, enableAnimation: Bool) {
+    init(emoji: ChatTextInputTextCustomEmojiAttribute, file: IosappMediaFile?, fontSize: CGFloat, enableAnimation: Bool) {
         self.emoji = emoji
         self.file = file
         self.fontSize = fontSize
@@ -492,7 +492,7 @@ public class ImmediateTextNodeWithEntities: TextNode {
     public var tapAttributeAction: (([NSAttributedString.Key: Any], Int) -> Void)?
     public var longTapAttributeAction: (([NSAttributedString.Key: Any], Int) -> Void)?
     
-    public var customItemLayout: ((CGSize, TelegramMediaFile) -> CGSize)?
+    public var customItemLayout: ((CGSize, IosappMediaFile) -> CGSize)?
     
     private func processedAttributedText() -> NSAttributedString? {
         var updatedString: NSAttributedString?

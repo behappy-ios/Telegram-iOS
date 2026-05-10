@@ -176,8 +176,8 @@ public final class ChatControllerInteraction: ChatControllerInteractionProtocol 
     }
     
     public enum PollMediaSubject {
-        case option(TelegramMediaPollOption)
-        case solution(TelegramMediaPollResults.Solution)
+        case option(IosappMediaPollOption)
+        case solution(IosappMediaPollResults.Solution)
     }
     
     public let openMessage: (Message, OpenMessageParams) -> Bool
@@ -251,12 +251,12 @@ public final class ChatControllerInteraction: ChatControllerInteractionProtocol 
     public let openMessagePollResults: (MessageId, Data) -> Void
     public let openPollCreation: (Bool?) -> Void
     public let openPollMedia: (Message, PollMediaSubject) -> Void
-    public let displayPollSolution: (TelegramMediaPollResults.Solution?, ASDisplayNode?) -> Void
+    public let displayPollSolution: (IosappMediaPollResults.Solution?, ASDisplayNode?) -> Void
     public let displayPsa: (String, ASDisplayNode) -> Void
-    public let displayDiceTooltip: (TelegramMediaDice) -> Void
+    public let displayDiceTooltip: (IosappMediaDice) -> Void
     public let animateDiceSuccess: (Bool, Bool) -> Void
-    public let displayPremiumStickerTooltip: (TelegramMediaFile, Message) -> Void
-    public let displayEmojiPackTooltip: (TelegramMediaFile, Message) -> Void
+    public let displayPremiumStickerTooltip: (IosappMediaFile, Message) -> Void
+    public let displayEmojiPackTooltip: (IosappMediaFile, Message) -> Void
     public let openPeerContextMenu: (Peer, MessageId?, ASDisplayNode, CGRect, ContextGesture?) -> Void
     public let openMessageReplies: (MessageId, Bool, Bool) -> Void
     public let openReplyThreadOriginalMessage: (Message) -> Void
@@ -267,8 +267,8 @@ public final class ChatControllerInteraction: ChatControllerInteractionProtocol 
     public let isAnimatingMessage: (UInt32) -> Bool
     public let getMessageTransitionNode: () -> ChatMessageTransitionProtocol?
     public let updateChoosingSticker: (Bool) -> Void
-    public let commitEmojiInteraction: (MessageId, String, EmojiInteraction, TelegramMediaFile) -> Void
-    public let openLargeEmojiInfo: (String, String?, TelegramMediaFile) -> Void
+    public let commitEmojiInteraction: (MessageId, String, EmojiInteraction, IosappMediaFile) -> Void
+    public let openLargeEmojiInfo: (String, String?, IosappMediaFile) -> Void
     public let openJoinLink: (String) -> Void
     public let openWebView: (String, String, Bool, ChatOpenWebViewSource) -> Void
     public let activateAdAction: (EngineMessage.Id, Promise<Bool>?, Bool, Bool) -> Void
@@ -428,12 +428,12 @@ public final class ChatControllerInteraction: ChatControllerInteractionProtocol 
         openMessagePollResults: @escaping (MessageId, Data) -> Void,
         openPollCreation: @escaping (Bool?) -> Void,
         openPollMedia: @escaping (Message, PollMediaSubject) -> Void,
-        displayPollSolution: @escaping (TelegramMediaPollResults.Solution?, ASDisplayNode?) -> Void,
+        displayPollSolution: @escaping (IosappMediaPollResults.Solution?, ASDisplayNode?) -> Void,
         displayPsa: @escaping (String, ASDisplayNode) -> Void,
-        displayDiceTooltip: @escaping (TelegramMediaDice) -> Void,
+        displayDiceTooltip: @escaping (IosappMediaDice) -> Void,
         animateDiceSuccess: @escaping (Bool, Bool) -> Void,
-        displayPremiumStickerTooltip: @escaping (TelegramMediaFile, Message) -> Void,
-        displayEmojiPackTooltip: @escaping (TelegramMediaFile, Message) -> Void,
+        displayPremiumStickerTooltip: @escaping (IosappMediaFile, Message) -> Void,
+        displayEmojiPackTooltip: @escaping (IosappMediaFile, Message) -> Void,
         openPeerContextMenu: @escaping (Peer, MessageId?, ASDisplayNode, CGRect, ContextGesture?) -> Void,
         openMessageReplies: @escaping (MessageId, Bool, Bool) -> Void,
         openReplyThreadOriginalMessage: @escaping (Message) -> Void,
@@ -444,8 +444,8 @@ public final class ChatControllerInteraction: ChatControllerInteractionProtocol 
         isAnimatingMessage: @escaping (UInt32) -> Bool,
         getMessageTransitionNode: @escaping () -> ChatMessageTransitionProtocol?,
         updateChoosingSticker: @escaping (Bool) -> Void,
-        commitEmojiInteraction: @escaping (MessageId, String, EmojiInteraction, TelegramMediaFile) -> Void,
-        openLargeEmojiInfo: @escaping (String, String?, TelegramMediaFile) -> Void,
+        commitEmojiInteraction: @escaping (MessageId, String, EmojiInteraction, IosappMediaFile) -> Void,
+        openLargeEmojiInfo: @escaping (String, String?, IosappMediaFile) -> Void,
         openJoinLink: @escaping (String) -> Void,
         openWebView: @escaping (String, String, Bool, ChatOpenWebViewSource) -> Void,
         activateAdAction: @escaping (EngineMessage.Id, Promise<Bool>?, Bool, Bool) -> Void,

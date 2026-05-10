@@ -106,7 +106,7 @@ private final class ScrollContent: CombinedComponent {
             let linkColor = theme.actionSheet.controlAccentColor
             
             let markdownAttributes = MarkdownAttributes(body: MarkdownAttributeSet(font: textFont, textColor: textColor), bold: MarkdownAttributeSet(font: textFont, textColor: textColor), link: MarkdownAttributeSet(font: textFont, textColor: linkColor), linkAttribute: { contents in
-                return (TelegramTextAttributes.URL, contents)
+                return (IosappTextAttributes.URL, contents)
             })
                         
             let spacing: CGFloat = 16.0
@@ -303,8 +303,8 @@ private final class ScrollContent: CombinedComponent {
                     highlightColor: linkColor.withAlphaComponent(0.1),
                     highlightInset: UIEdgeInsets(top: 0.0, left: 0.0, bottom: 0.0, right: -8.0),
                     highlightAction: { attributes in
-                        if let _ = attributes[NSAttributedString.Key(rawValue: TelegramTextAttributes.URL)] {
-                            return NSAttributedString.Key(rawValue: TelegramTextAttributes.URL)
+                        if let _ = attributes[NSAttributedString.Key(rawValue: IosappTextAttributes.URL)] {
+                            return NSAttributedString.Key(rawValue: IosappTextAttributes.URL)
                         } else {
                             return nil
                         }
@@ -592,7 +592,7 @@ private final class ParagraphComponent: CombinedComponent {
                 bold: MarkdownAttributeSet(font: boldTextFont, textColor: textColor),
                 link: MarkdownAttributeSet(font: textFont, textColor: accentColor),
                 linkAttribute: { contents in
-                    return (TelegramTextAttributes.URL, contents)
+                    return (IosappTextAttributes.URL, contents)
                 }
             )
                         
@@ -604,8 +604,8 @@ private final class ParagraphComponent: CombinedComponent {
                     lineSpacing: 0.2,
                     highlightColor: accentColor.withAlphaComponent(0.1),
                     highlightAction: { attributes in
-                        if let _ = attributes[NSAttributedString.Key(rawValue: TelegramTextAttributes.URL)] {
-                            return NSAttributedString.Key(rawValue: TelegramTextAttributes.URL)
+                        if let _ = attributes[NSAttributedString.Key(rawValue: IosappTextAttributes.URL)] {
+                            return NSAttributedString.Key(rawValue: IosappTextAttributes.URL)
                         } else {
                             return nil
                         }

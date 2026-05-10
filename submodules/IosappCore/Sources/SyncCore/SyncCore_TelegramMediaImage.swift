@@ -3,11 +3,11 @@ import Postbox
 import FlatBuffers
 import FlatSerialization
 
-public enum TelegramMediaImageReferenceDecodingError: Error {
+public enum IosappMediaImageReferenceDecodingError: Error {
     case generic
 }
 
-public enum TelegramMediaImageReference: PostboxCoding, Equatable {
+public enum IosappMediaImageReference: PostboxCoding, Equatable {
     enum CodingKeys: String, CodingKey {
         case data
     }
@@ -42,8 +42,8 @@ public enum TelegramMediaImageReference: PostboxCoding, Equatable {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         let data = try container.decode(Data.self, forKey: .data)
         let postboxDecoder = PostboxDecoder(buffer: MemoryBuffer(data: data))
-        guard let object = postboxDecoder.decodeRootObject() as? TelegramMediaImageReference else {
-            throw TelegramMediaImageReferenceDecodingError.generic
+        guard let object = postboxDecoder.decodeRootObject() as? IosappMediaImageReference else {
+            throw IosappMediaImageReferenceDecodingError.generic
         }
         self = object
     }
@@ -56,7 +56,7 @@ public enum TelegramMediaImageReference: PostboxCoding, Equatable {
         try container.encode(postboxEncoder.makeData(), forKey: .data)
     }
     
-    public init(flatBuffersObject: TelegramCore_TelegramMediaImageReference) throws {
+    public init(flatBuffersObject: IosappCore_IosappMediaImageReference) throws {
         self = .cloud(
             imageId: flatBuffersObject.imageId,
             accessHash: flatBuffersObject.accessHash,
@@ -69,19 +69,19 @@ public enum TelegramMediaImageReference: PostboxCoding, Equatable {
         case let .cloud(imageId, accessHash, fileReference):
             let fileReferenceOffset = fileReference.flatMap { builder.createVector(bytes: $0) }
             
-            let start = TelegramCore_TelegramMediaImageReference.startTelegramMediaImageReference(&builder)
+            let start = IosappCore_IosappMediaImageReference.startIosappMediaImageReference(&builder)
             
-            TelegramCore_TelegramMediaImageReference.add(imageId: imageId, &builder)
-            TelegramCore_TelegramMediaImageReference.add(accessHash: accessHash, &builder)
+            IosappCore_IosappMediaImageReference.add(imageId: imageId, &builder)
+            IosappCore_IosappMediaImageReference.add(accessHash: accessHash, &builder)
             if let fileReferenceOffset {
-                TelegramCore_TelegramMediaImageReference.addVectorOf(fileReference: fileReferenceOffset, &builder)
+                IosappCore_IosappMediaImageReference.addVectorOf(fileReference: fileReferenceOffset, &builder)
             }
             
-            return TelegramCore_TelegramMediaImageReference.endTelegramMediaImageReference(&builder, start: start)
+            return IosappCore_IosappMediaImageReference.endIosappMediaImageReference(&builder, start: start)
         }
     }
     
-    public static func ==(lhs: TelegramMediaImageReference, rhs: TelegramMediaImageReference) -> Bool {
+    public static func ==(lhs: IosappMediaImageReference, rhs: IosappMediaImageReference) -> Bool {
         switch lhs {
             case let .cloud(imageId, accessHash, fileReference):
                 if case .cloud(imageId, accessHash, fileReference) = rhs {
@@ -93,32 +93,32 @@ public enum TelegramMediaImageReference: PostboxCoding, Equatable {
     }
 }
 
-public struct TelegramMediaImageFlags: OptionSet {
+public struct IosappMediaImageFlags: OptionSet {
     public var rawValue: Int32
     
     public init(rawValue: Int32) {
         self.rawValue = rawValue
     }
     
-    public static let hasStickers = TelegramMediaImageFlags(rawValue: 1 << 0)
-    public static let isLivePhoto = TelegramMediaImageFlags(rawValue: 1 << 1)
+    public static let hasStickers = IosappMediaImageFlags(rawValue: 1 << 0)
+    public static let isLivePhoto = IosappMediaImageFlags(rawValue: 1 << 1)
 }
 
-public enum TelegramMediaImageDecodingError: Error {
+public enum IosappMediaImageDecodingError: Error {
     case generic
 }
 
-public final class TelegramMediaImage: Media, Equatable, Codable {
+public final class IosappMediaImage: Media, Equatable, Codable {
     enum CodingKeys: String, CodingKey {
         case data
     }
     
     public final class VideoRepresentation: Equatable, PostboxCoding {
         public let dimensions: PixelDimensions
-        public let resource: TelegramMediaResource
+        public let resource: IosappMediaResource
         public let startTimestamp: Double?
         
-        public init(dimensions: PixelDimensions, resource: TelegramMediaResource, startTimestamp: Double?) {
+        public init(dimensions: PixelDimensions, resource: IosappMediaResource, startTimestamp: Double?) {
             self.dimensions = dimensions
             self.resource = resource
             self.startTimestamp = startTimestamp
@@ -126,7 +126,7 @@ public final class TelegramMediaImage: Media, Equatable, Codable {
         
         public init(decoder: PostboxDecoder) {
             self.dimensions = PixelDimensions(width: decoder.decodeInt32ForKey("w", orElse: 0), height: decoder.decodeInt32ForKey("h", orElse: 0))
-            self.resource = decoder.decodeObjectForKey("r") as! TelegramMediaResource
+            self.resource = decoder.decodeObjectForKey("r") as! IosappMediaResource
             self.startTimestamp = decoder.decodeOptionalDoubleForKey("s").flatMap({ Double(Float32($0)) })
         }
         
@@ -141,9 +141,9 @@ public final class TelegramMediaImage: Media, Equatable, Codable {
             }
         }
         
-        public init(flatBuffersObject: TelegramCore_VideoRepresentation) throws {
+        public init(flatBuffersObject: IosappCore_VideoRepresentation) throws {
             self.dimensions = PixelDimensions(width: flatBuffersObject.width, height: flatBuffersObject.height)
-            self.resource = try TelegramMediaResource_parse(flatBuffersObject: flatBuffersObject.resource)
+            self.resource = try IosappMediaResource_parse(flatBuffersObject: flatBuffersObject.resource)
             if flatBuffersObject.startTimestamp != -1.0 {
                 self.startTimestamp = Double(flatBuffersObject.startTimestamp)
             } else {
@@ -152,16 +152,16 @@ public final class TelegramMediaImage: Media, Equatable, Codable {
         }
         
         public func encodeToFlatBuffers(builder: inout FlatBufferBuilder) -> Offset {
-            let resourceOffset = TelegramMediaResource_serialize(resource: self.resource, flatBuffersBuilder: &builder)!
+            let resourceOffset = IosappMediaResource_serialize(resource: self.resource, flatBuffersBuilder: &builder)!
             
-            let start = TelegramCore_VideoRepresentation.startVideoRepresentation(&builder)
+            let start = IosappCore_VideoRepresentation.startVideoRepresentation(&builder)
             
-            TelegramCore_VideoRepresentation.add(width: self.dimensions.width, &builder)
-            TelegramCore_VideoRepresentation.add(height: self.dimensions.height, &builder)
-            TelegramCore_VideoRepresentation.add(resource: resourceOffset, &builder)
-            TelegramCore_VideoRepresentation.add(startTimestamp: Float32(self.startTimestamp ?? -1.0), &builder)
+            IosappCore_VideoRepresentation.add(width: self.dimensions.width, &builder)
+            IosappCore_VideoRepresentation.add(height: self.dimensions.height, &builder)
+            IosappCore_VideoRepresentation.add(resource: resourceOffset, &builder)
+            IosappCore_VideoRepresentation.add(startTimestamp: Float32(self.startTimestamp ?? -1.0), &builder)
             
-            return TelegramCore_VideoRepresentation.endVideoRepresentation(&builder, start: start)
+            return IosappCore_VideoRepresentation.endVideoRepresentation(&builder, start: start)
         }
         
         public static func ==(lhs: VideoRepresentation, rhs: VideoRepresentation) -> Bool {
@@ -216,15 +216,15 @@ public final class TelegramMediaImage: Media, Equatable, Codable {
             encoder.encodeInt32Array(self.backgroundColors, forKey: "b")
         }
         
-        init(flatBuffersObject: TelegramCore_EmojiMarkup) throws {
+        init(flatBuffersObject: IosappCore_EmojiMarkup) throws {
             switch flatBuffersObject.contentType {
             case .emojimarkupContentEmoji:
-                guard let value = flatBuffersObject.content(type: TelegramCore_EmojiMarkup_Content_Emoji.self) else {
+                guard let value = flatBuffersObject.content(type: IosappCore_EmojiMarkup_Content_Emoji.self) else {
                     throw FlatBuffersError.missingRequiredField()
                 }
                 self.content = .emoji(fileId: value.fileId)
             case .emojimarkupContentSticker:
-                guard let value = flatBuffersObject.content(type: TelegramCore_EmojiMarkup_Content_Sticker.self) else {
+                guard let value = flatBuffersObject.content(type: IosappCore_EmojiMarkup_Content_Sticker.self) else {
                     throw FlatBuffersError.missingRequiredField()
                 }
                 self.content = .sticker(packReference: try StickerPackReference(flatBuffersObject: value.packReference), fileId: value.fileId)
@@ -237,29 +237,29 @@ public final class TelegramMediaImage: Media, Equatable, Codable {
         
         func encodeToFlatBuffers(builder: inout FlatBufferBuilder) -> Offset {
             let contentOffset: Offset
-            let contentType: TelegramCore_EmojiMarkup_Content
+            let contentType: IosappCore_EmojiMarkup_Content
             switch self.content {
             case let .emoji(fileId):
                 contentType = .emojimarkupContentEmoji
-                let start = TelegramCore_EmojiMarkup_Content_Emoji.startEmojiMarkup_Content_Emoji(&builder)
-                TelegramCore_EmojiMarkup_Content_Emoji.add(fileId: fileId, &builder)
-                contentOffset = TelegramCore_EmojiMarkup_Content_Emoji.endEmojiMarkup_Content_Emoji(&builder, start: start)
+                let start = IosappCore_EmojiMarkup_Content_Emoji.startEmojiMarkup_Content_Emoji(&builder)
+                IosappCore_EmojiMarkup_Content_Emoji.add(fileId: fileId, &builder)
+                contentOffset = IosappCore_EmojiMarkup_Content_Emoji.endEmojiMarkup_Content_Emoji(&builder, start: start)
             case let .sticker(packReference, fileId):
                 contentType = .emojimarkupContentSticker
                 let packReferenceOffset = packReference.encodeToFlatBuffers(builder: &builder)
-                let start = TelegramCore_EmojiMarkup_Content_Sticker.startEmojiMarkup_Content_Sticker(&builder)
-                TelegramCore_EmojiMarkup_Content_Sticker.add(packReference: packReferenceOffset, &builder)
-                TelegramCore_EmojiMarkup_Content_Sticker.add(fileId: fileId, &builder)
-                contentOffset = TelegramCore_EmojiMarkup_Content_Sticker.endEmojiMarkup_Content_Sticker(&builder, start: start)
+                let start = IosappCore_EmojiMarkup_Content_Sticker.startEmojiMarkup_Content_Sticker(&builder)
+                IosappCore_EmojiMarkup_Content_Sticker.add(packReference: packReferenceOffset, &builder)
+                IosappCore_EmojiMarkup_Content_Sticker.add(fileId: fileId, &builder)
+                contentOffset = IosappCore_EmojiMarkup_Content_Sticker.endEmojiMarkup_Content_Sticker(&builder, start: start)
             }
             
             let backgroundColorsOffset = builder.createVector(self.backgroundColors)
             
-            let start = TelegramCore_EmojiMarkup.startEmojiMarkup(&builder)
-            TelegramCore_EmojiMarkup.add(contentType: contentType, &builder)
-            TelegramCore_EmojiMarkup.add(content: contentOffset, &builder)
-            TelegramCore_EmojiMarkup.addVectorOf(backgroundColors: backgroundColorsOffset, &builder)
-            return TelegramCore_EmojiMarkup.endEmojiMarkup(&builder, start: start)
+            let start = IosappCore_EmojiMarkup.startEmojiMarkup(&builder)
+            IosappCore_EmojiMarkup.add(contentType: contentType, &builder)
+            IosappCore_EmojiMarkup.add(content: contentOffset, &builder)
+            IosappCore_EmojiMarkup.addVectorOf(backgroundColors: backgroundColorsOffset, &builder)
+            return IosappCore_EmojiMarkup.endEmojiMarkup(&builder, start: start)
         }
         
         public static func ==(lhs: EmojiMarkup, rhs: EmojiMarkup) -> Bool {
@@ -275,21 +275,21 @@ public final class TelegramMediaImage: Media, Equatable, Codable {
     
     
     public let imageId: MediaId
-    public let representations: [TelegramMediaImageRepresentation]
-    public let videoRepresentations: [TelegramMediaImage.VideoRepresentation]
+    public let representations: [IosappMediaImageRepresentation]
+    public let videoRepresentations: [IosappMediaImage.VideoRepresentation]
     public let immediateThumbnailData: Data?
-    public let emojiMarkup: TelegramMediaImage.EmojiMarkup?
-    public let reference: TelegramMediaImageReference?
+    public let emojiMarkup: IosappMediaImage.EmojiMarkup?
+    public let reference: IosappMediaImageReference?
     public let partialReference: PartialMediaReference?
     public let peerIds: [PeerId] = []
-    public let flags: TelegramMediaImageFlags
-    public let video: TelegramMediaFile?
+    public let flags: IosappMediaImageFlags
+    public let video: IosappMediaFile?
     
     public var id: MediaId? {
         return self.imageId
     }
     
-    public init(imageId: MediaId, representations: [TelegramMediaImageRepresentation], videoRepresentations: [TelegramMediaImage.VideoRepresentation] = [], immediateThumbnailData: Data?, emojiMarkup: TelegramMediaImage.EmojiMarkup? = nil, reference: TelegramMediaImageReference?, partialReference: PartialMediaReference?, flags: TelegramMediaImageFlags, video: TelegramMediaFile? = nil) {
+    public init(imageId: MediaId, representations: [IosappMediaImageRepresentation], videoRepresentations: [IosappMediaImage.VideoRepresentation] = [], immediateThumbnailData: Data?, emojiMarkup: IosappMediaImage.EmojiMarkup? = nil, reference: IosappMediaImageReference?, partialReference: PartialMediaReference?, flags: IosappMediaImageFlags, video: IosappMediaFile? = nil) {
         self.imageId = imageId
         self.representations = representations
         self.videoRepresentations = videoRepresentations
@@ -306,11 +306,11 @@ public final class TelegramMediaImage: Media, Equatable, Codable {
         self.representations = decoder.decodeObjectArrayForKey("r")
         self.videoRepresentations = decoder.decodeObjectArrayForKey("vr")
         self.immediateThumbnailData = decoder.decodeDataForKey("itd")
-        self.emojiMarkup = decoder.decodeObjectForKey("em", decoder: { TelegramMediaImage.EmojiMarkup(decoder: $0) }) as? TelegramMediaImage.EmojiMarkup
-        self.reference = decoder.decodeObjectForKey("rf", decoder: { TelegramMediaImageReference(decoder: $0) }) as? TelegramMediaImageReference
+        self.emojiMarkup = decoder.decodeObjectForKey("em", decoder: { IosappMediaImage.EmojiMarkup(decoder: $0) }) as? IosappMediaImage.EmojiMarkup
+        self.reference = decoder.decodeObjectForKey("rf", decoder: { IosappMediaImageReference(decoder: $0) }) as? IosappMediaImageReference
         self.partialReference = decoder.decodeAnyObjectForKey("prf", decoder: { PartialMediaReference(decoder: $0) }) as? PartialMediaReference
-        self.flags = TelegramMediaImageFlags(rawValue: decoder.decodeInt32ForKey("fl", orElse: 0))
-        self.video = decoder.decodeObjectForKey("vid", decoder: { TelegramMediaFile(decoder: $0) }) as? TelegramMediaFile
+        self.flags = IosappMediaImageFlags(rawValue: decoder.decodeInt32ForKey("fl", orElse: 0))
+        self.video = decoder.decodeObjectForKey("vid", decoder: { IosappMediaFile(decoder: $0) }) as? IosappMediaFile
     }
     
     public func encode(_ encoder: PostboxEncoder) {
@@ -351,8 +351,8 @@ public final class TelegramMediaImage: Media, Equatable, Codable {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         let data = try container.decode(Data.self, forKey: .data)
         let postboxDecoder = PostboxDecoder(buffer: MemoryBuffer(data: data))
-        guard let object = postboxDecoder.decodeRootObject() as? TelegramMediaImage else {
-            throw TelegramMediaImageDecodingError.generic
+        guard let object = postboxDecoder.decodeRootObject() as? IosappMediaImage else {
+            throw IosappMediaImageDecodingError.generic
         }
         self.imageId = object.imageId
         self.representations = object.representations
@@ -373,20 +373,20 @@ public final class TelegramMediaImage: Media, Equatable, Codable {
         try container.encode(postboxEncoder.makeData(), forKey: .data)
     }
     
-    public init(flatBuffersObject: TelegramCore_TelegramMediaImage) throws {
+    public init(flatBuffersObject: IosappCore_IosappMediaImage) throws {
         self.imageId = MediaId(namespace: flatBuffersObject.imageId.namespace, id: flatBuffersObject.imageId.id)
         self.representations = try (0 ..< flatBuffersObject.representationsCount).map { i in
-            return try TelegramMediaImageRepresentation(flatBuffersObject: flatBuffersObject.representations(at: i)!)
+            return try IosappMediaImageRepresentation(flatBuffersObject: flatBuffersObject.representations(at: i)!)
         }
         self.videoRepresentations = try (0 ..< flatBuffersObject.videoRepresentationsCount).map { i in
-            return try TelegramMediaImage.VideoRepresentation(flatBuffersObject: flatBuffersObject.videoRepresentations(at: i)!)
+            return try IosappMediaImage.VideoRepresentation(flatBuffersObject: flatBuffersObject.videoRepresentations(at: i)!)
         }
         self.immediateThumbnailData = flatBuffersObject.immediateThumbnailData.isEmpty ? nil : Data(flatBuffersObject.immediateThumbnailData)
         self.emojiMarkup = try flatBuffersObject.emojiMarkup.flatMap { try EmojiMarkup(flatBuffersObject: $0) }
-        self.reference = try flatBuffersObject.reference.flatMap { try TelegramMediaImageReference(flatBuffersObject: $0) }
+        self.reference = try flatBuffersObject.reference.flatMap { try IosappMediaImageReference(flatBuffersObject: $0) }
         self.partialReference = try flatBuffersObject.partialReference.flatMap { try PartialMediaReference(flatBuffersObject: $0) }
-        self.flags = TelegramMediaImageFlags(rawValue: flatBuffersObject.flags)
-        self.video = try flatBuffersObject.video.flatMap { try TelegramMediaFile(flatBuffersObject: $0) }
+        self.flags = IosappMediaImageFlags(rawValue: flatBuffersObject.flags)
+        self.video = try flatBuffersObject.video.flatMap { try IosappMediaFile(flatBuffersObject: $0) }
     }
     
     public func encodeToFlatBuffers(builder: inout FlatBufferBuilder) -> Offset {
@@ -406,32 +406,32 @@ public final class TelegramMediaImage: Media, Equatable, Codable {
         let partialReferenceOffset = self.partialReference.flatMap { $0.encodeToFlatBuffers(builder: &builder) }
         let videoOffset = self.video.flatMap { $0.encodeToFlatBuffers(builder: &builder) }
         
-        let start = TelegramCore_TelegramMediaImage.startTelegramMediaImage(&builder)
+        let start = IosappCore_IosappMediaImage.startIosappMediaImage(&builder)
         
-        TelegramCore_TelegramMediaImage.add(imageId: TelegramCore_MediaId(namespace: self.imageId.namespace, id: self.imageId.id), &builder)
-        TelegramCore_TelegramMediaImage.addVectorOf(representations: representationsOffset, &builder)
-        TelegramCore_TelegramMediaImage.addVectorOf(videoRepresentations: videoRepresentationsOffset, &builder)
+        IosappCore_IosappMediaImage.add(imageId: IosappCore_MediaId(namespace: self.imageId.namespace, id: self.imageId.id), &builder)
+        IosappCore_IosappMediaImage.addVectorOf(representations: representationsOffset, &builder)
+        IosappCore_IosappMediaImage.addVectorOf(videoRepresentations: videoRepresentationsOffset, &builder)
         if let immediateThumbnailDataOffset {
-            TelegramCore_TelegramMediaImage.addVectorOf(immediateThumbnailData: immediateThumbnailDataOffset, &builder)
+            IosappCore_IosappMediaImage.addVectorOf(immediateThumbnailData: immediateThumbnailDataOffset, &builder)
         }
         if let emojiMarkupOffset {
-            TelegramCore_TelegramMediaImage.add(emojiMarkup: emojiMarkupOffset, &builder)
+            IosappCore_IosappMediaImage.add(emojiMarkup: emojiMarkupOffset, &builder)
         }
         if let referenceOffset {
-            TelegramCore_TelegramMediaImage.add(reference: referenceOffset, &builder)
+            IosappCore_IosappMediaImage.add(reference: referenceOffset, &builder)
         }
         if let partialReferenceOffset {
-            TelegramCore_TelegramMediaImage.add(partialReference: partialReferenceOffset, &builder)
+            IosappCore_IosappMediaImage.add(partialReference: partialReferenceOffset, &builder)
         }
-        TelegramCore_TelegramMediaImage.add(flags: self.flags.rawValue, &builder)
+        IosappCore_IosappMediaImage.add(flags: self.flags.rawValue, &builder)
         if let videoOffset {
-            TelegramCore_TelegramMediaImage.add(video: videoOffset, &builder)
+            IosappCore_IosappMediaImage.add(video: videoOffset, &builder)
         }
         
-        return TelegramCore_TelegramMediaImage.endTelegramMediaImage(&builder, start: start)
+        return IosappCore_IosappMediaImage.endIosappMediaImage(&builder, start: start)
     }
     
-    public func representationForDisplayAtSize(_ size: PixelDimensions) -> TelegramMediaImageRepresentation? {
+    public func representationForDisplayAtSize(_ size: PixelDimensions) -> IosappMediaImageRepresentation? {
         if self.representations.count == 0 {
             return nil
         } else {
@@ -459,7 +459,7 @@ public final class TelegramMediaImage: Media, Equatable, Codable {
     }
     
     public func isEqual(to other: Media) -> Bool {
-        if let other = other as? TelegramMediaImage {
+        if let other = other as? IosappMediaImage {
             if other.imageId != self.imageId {
                 return false
             }
@@ -490,7 +490,7 @@ public final class TelegramMediaImage: Media, Equatable, Codable {
     }
     
     public func isSemanticallyEqual(to other: Media) -> Bool {
-        if let other = other as? TelegramMediaImage {
+        if let other = other as? IosappMediaImage {
             if other.imageId != self.imageId {
                 return false
             }
@@ -520,16 +520,16 @@ public final class TelegramMediaImage: Media, Equatable, Codable {
         return false
     }
     
-    public static func ==(lhs: TelegramMediaImage, rhs: TelegramMediaImage) -> Bool {
+    public static func ==(lhs: IosappMediaImage, rhs: IosappMediaImage) -> Bool {
         return lhs.isEqual(to: rhs)
     }
     
-    public func withUpdatedPartialReference(_ partialReference: PartialMediaReference?) -> TelegramMediaImage {
-        return TelegramMediaImage(imageId: self.imageId, representations: self.representations, videoRepresentations: self.videoRepresentations, immediateThumbnailData: self.immediateThumbnailData, reference: self.reference, partialReference: partialReference, flags: self.flags, video: self.video)
+    public func withUpdatedPartialReference(_ partialReference: PartialMediaReference?) -> IosappMediaImage {
+        return IosappMediaImage(imageId: self.imageId, representations: self.representations, videoRepresentations: self.videoRepresentations, immediateThumbnailData: self.immediateThumbnailData, reference: self.reference, partialReference: partialReference, flags: self.flags, video: self.video)
     }
 }
 
-public final class TelegramMediaImageRepresentation: PostboxCoding, Equatable, CustomStringConvertible {
+public final class IosappMediaImageRepresentation: PostboxCoding, Equatable, CustomStringConvertible {
     public enum TypeHint: Int32 {
         case generic
         case animated
@@ -537,7 +537,7 @@ public final class TelegramMediaImageRepresentation: PostboxCoding, Equatable, C
     }
     
     public let dimensions: PixelDimensions
-    public let resource: TelegramMediaResource
+    public let resource: IosappMediaResource
     public let progressiveSizes: [Int32]
     public let immediateThumbnailData: Data?
     public let hasVideo: Bool
@@ -546,7 +546,7 @@ public final class TelegramMediaImageRepresentation: PostboxCoding, Equatable, C
     
     public init(
         dimensions: PixelDimensions,
-        resource: TelegramMediaResource,
+        resource: IosappMediaResource,
         progressiveSizes: [Int32],
         immediateThumbnailData: Data?,
         hasVideo: Bool = false,
@@ -564,7 +564,7 @@ public final class TelegramMediaImageRepresentation: PostboxCoding, Equatable, C
     
     public init(decoder: PostboxDecoder) {
         self.dimensions = PixelDimensions(width: decoder.decodeInt32ForKey("dx", orElse: 0), height: decoder.decodeInt32ForKey("dy", orElse: 0))
-        self.resource = decoder.decodeObjectForKey("r") as? TelegramMediaResource ?? EmptyMediaResource()
+        self.resource = decoder.decodeObjectForKey("r") as? IosappMediaResource ?? EmptyMediaResource()
         self.progressiveSizes = decoder.decodeInt32ArrayForKey("ps")
         self.immediateThumbnailData = decoder.decodeDataForKey("th")
         self.hasVideo = decoder.decodeBoolForKey("hv", orElse: false)
@@ -587,9 +587,9 @@ public final class TelegramMediaImageRepresentation: PostboxCoding, Equatable, C
         encoder.encodeInt32(self.typeHint.rawValue, forKey: "th")
     }
     
-    public init(flatBuffersObject: TelegramCore_TelegramMediaImageRepresentation) throws {
+    public init(flatBuffersObject: IosappCore_IosappMediaImageRepresentation) throws {
         self.dimensions = PixelDimensions(width: flatBuffersObject.width, height: flatBuffersObject.height)
-        self.resource = try TelegramMediaResource_parse(flatBuffersObject: flatBuffersObject.resource)
+        self.resource = try IosappMediaResource_parse(flatBuffersObject: flatBuffersObject.resource)
         self.progressiveSizes = flatBuffersObject.progressiveSizes
         self.immediateThumbnailData = flatBuffersObject.immediateThumbnailData.isEmpty ? nil : Data(flatBuffersObject.immediateThumbnailData)
         self.hasVideo = flatBuffersObject.hasVideo
@@ -606,23 +606,23 @@ public final class TelegramMediaImageRepresentation: PostboxCoding, Equatable, C
     }
     
     func encodeToFlatBuffers(builder: inout FlatBufferBuilder) -> Offset {
-        let resourceOffset = TelegramMediaResource_serialize(resource: self.resource, flatBuffersBuilder: &builder)!
+        let resourceOffset = IosappMediaResource_serialize(resource: self.resource, flatBuffersBuilder: &builder)!
         let progressiveSizesOffset = builder.createVector(self.progressiveSizes)
         let immediateThumbnailDataOffset = self.immediateThumbnailData.flatMap { builder.createVector(bytes: $0) }
         
-        let start = TelegramCore_TelegramMediaImageRepresentation.startTelegramMediaImageRepresentation(&builder)
+        let start = IosappCore_IosappMediaImageRepresentation.startIosappMediaImageRepresentation(&builder)
         
-        TelegramCore_TelegramMediaImageRepresentation.add(width: self.dimensions.width, &builder)
-        TelegramCore_TelegramMediaImageRepresentation.add(height: self.dimensions.height, &builder)
-        TelegramCore_TelegramMediaImageRepresentation.add(resource: resourceOffset, &builder)
-        TelegramCore_TelegramMediaImageRepresentation.addVectorOf(progressiveSizes: progressiveSizesOffset, &builder)
+        IosappCore_IosappMediaImageRepresentation.add(width: self.dimensions.width, &builder)
+        IosappCore_IosappMediaImageRepresentation.add(height: self.dimensions.height, &builder)
+        IosappCore_IosappMediaImageRepresentation.add(resource: resourceOffset, &builder)
+        IosappCore_IosappMediaImageRepresentation.addVectorOf(progressiveSizes: progressiveSizesOffset, &builder)
         if let immediateThumbnailDataOffset {
-            TelegramCore_TelegramMediaImageRepresentation.addVectorOf(immediateThumbnailData: immediateThumbnailDataOffset, &builder)
+            IosappCore_IosappMediaImageRepresentation.addVectorOf(immediateThumbnailData: immediateThumbnailDataOffset, &builder)
         }
-        TelegramCore_TelegramMediaImageRepresentation.add(hasVideo: self.hasVideo, &builder)
-        TelegramCore_TelegramMediaImageRepresentation.add(isPersonal: self.isPersonal, &builder)
+        IosappCore_IosappMediaImageRepresentation.add(hasVideo: self.hasVideo, &builder)
+        IosappCore_IosappMediaImageRepresentation.add(isPersonal: self.isPersonal, &builder)
         
-        let mappedTypeHint: TelegramCore_TelegramMediaImageRepresentation_TypeHint
+        let mappedTypeHint: IosappCore_IosappMediaImageRepresentation_TypeHint
         switch self.typeHint {
         case .generic:
             mappedTypeHint = .generic
@@ -631,16 +631,16 @@ public final class TelegramMediaImageRepresentation: PostboxCoding, Equatable, C
         case .video:
             mappedTypeHint = .video
         }
-        TelegramCore_TelegramMediaImageRepresentation.add(typeHint: mappedTypeHint, &builder)
+        IosappCore_IosappMediaImageRepresentation.add(typeHint: mappedTypeHint, &builder)
         
-        return TelegramCore_TelegramMediaImageRepresentation.endTelegramMediaImageRepresentation(&builder, start: start)
+        return IosappCore_IosappMediaImageRepresentation.endIosappMediaImageRepresentation(&builder, start: start)
     }
     
     public var description: String {
         return "(\(Int(dimensions.width))x\(Int(dimensions.height)))"
     }
     
-    public func isSemanticallyEqual(to other: TelegramMediaImageRepresentation) -> Bool {
+    public func isSemanticallyEqual(to other: IosappMediaImageRepresentation) -> Bool {
         if self.dimensions != other.dimensions {
             return false
         }
@@ -666,7 +666,7 @@ public final class TelegramMediaImageRepresentation: PostboxCoding, Equatable, C
     }
 }
 
-public func ==(lhs: TelegramMediaImageRepresentation, rhs: TelegramMediaImageRepresentation) -> Bool {
+public func ==(lhs: IosappMediaImageRepresentation, rhs: IosappMediaImageRepresentation) -> Bool {
     if lhs.dimensions != rhs.dimensions {
         return false
     }

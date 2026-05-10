@@ -241,7 +241,7 @@ public final class StorySearchGridScreen: ViewControllerComponentContainer {
         guard case let .location(_, venue) = self.scope else {
             return
         }
-        let locationMap = TelegramMediaMap(latitude: venue.latitude, longitude: venue.longitude, heading: nil, accuracyRadius: nil, venue: nil, address: venue.address, liveBroadcastingTimeout: nil, liveProximityNotificationRadius: nil)
+        let locationMap = IosappMediaMap(latitude: venue.latitude, longitude: venue.longitude, heading: nil, accuracyRadius: nil, venue: nil, address: venue.address, liveBroadcastingTimeout: nil, liveProximityNotificationRadius: nil)
         
         let presentationData = self.context.sharedContext.currentPresentationData.with({ $0 })
         

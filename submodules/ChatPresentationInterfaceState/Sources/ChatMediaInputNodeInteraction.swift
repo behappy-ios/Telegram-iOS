@@ -37,7 +37,7 @@ public final class ChatMediaInputNodeInteraction {
     public var highlightedStickerItemCollectionId: ItemCollectionId?
     public var highlightedItemCollectionId: ItemCollectionId?
     public var highlightedGifMode: ChatMediaInputGifMode = .recent
-    public var previewedStickerPackItemFile: TelegramMediaFile?
+    public var previewedStickerPackItemFile: IosappMediaFile?
     public var appearanceTransition: CGFloat = 1.0
     public var displayStickerPlaceholder = true
     public var displayStickerPackManageControls = true

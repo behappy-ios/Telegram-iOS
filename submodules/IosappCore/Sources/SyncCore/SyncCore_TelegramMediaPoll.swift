@@ -1,7 +1,7 @@
 import Foundation
 import Postbox
 
-public struct TelegramMediaPollOption: Equatable, PostboxCoding {
+public struct IosappMediaPollOption: Equatable, PostboxCoding {
     public let text: String
     public let entities: [MessageTextEntity]
     public let opaqueIdentifier: Data
@@ -48,7 +48,7 @@ public struct TelegramMediaPollOption: Equatable, PostboxCoding {
         }
     }
 
-    public static func ==(lhs: TelegramMediaPollOption, rhs: TelegramMediaPollOption) -> Bool {
+    public static func ==(lhs: IosappMediaPollOption, rhs: IosappMediaPollOption) -> Bool {
         if lhs.text != rhs.text {
             return false
         }
@@ -75,7 +75,7 @@ public struct TelegramMediaPollOption: Equatable, PostboxCoding {
     }
 }
 
-public struct TelegramMediaPollOptionVoters: Equatable, PostboxCoding {
+public struct IosappMediaPollOptionVoters: Equatable, PostboxCoding {
     public let selected: Bool
     public let opaqueIdentifier: Data
     public let count: Int32?
@@ -111,7 +111,7 @@ public struct TelegramMediaPollOptionVoters: Equatable, PostboxCoding {
     }
 }
 
-public struct TelegramMediaPollResults: Equatable, PostboxCoding {
+public struct IosappMediaPollResults: Equatable, PostboxCoding {
     public struct Solution: Equatable {
         public let text: String
         public let entities: [MessageTextEntity]
@@ -135,13 +135,13 @@ public struct TelegramMediaPollResults: Equatable, PostboxCoding {
         }
     }
 
-    public let voters: [TelegramMediaPollOptionVoters]?
+    public let voters: [IosappMediaPollOptionVoters]?
     public let totalVoters: Int32?
     public let recentVoters: [PeerId]
-    public let solution: TelegramMediaPollResults.Solution?
+    public let solution: IosappMediaPollResults.Solution?
     public let hasUnseenVotes: Bool?
 
-    public init(voters: [TelegramMediaPollOptionVoters]?, totalVoters: Int32?, recentVoters: [PeerId], solution: TelegramMediaPollResults.Solution?, hasUnseenVotes: Bool?) {
+    public init(voters: [IosappMediaPollOptionVoters]?, totalVoters: Int32?, recentVoters: [PeerId], solution: IosappMediaPollResults.Solution?, hasUnseenVotes: Bool?) {
         self.voters = voters
         self.totalVoters = totalVoters
         self.recentVoters = recentVoters
@@ -156,7 +156,7 @@ public struct TelegramMediaPollResults: Equatable, PostboxCoding {
         if let text = decoder.decodeOptionalStringForKey("sol") {
             let entities: [MessageTextEntity] = decoder.decodeObjectArrayWithDecoderForKey("solent")
             let media = decoder.decodeObjectForKey("solmd") as? Media
-            self.solution = TelegramMediaPollResults.Solution(text: text, entities: entities, media: media)
+            self.solution = IosappMediaPollResults.Solution(text: text, entities: entities, media: media)
         } else {
             self.solution = nil
         }
@@ -194,12 +194,12 @@ public struct TelegramMediaPollResults: Equatable, PostboxCoding {
     }
 }
 
-public enum TelegramMediaPollPublicity: Int32 {
+public enum IosappMediaPollPublicity: Int32 {
     case anonymous
     case `public`
 }
 
-public enum TelegramMediaPollKind: Equatable, PostboxCoding {
+public enum IosappMediaPollKind: Equatable, PostboxCoding {
     case poll(multipleAnswers: Bool)
     case quiz(multipleAnswers: Bool)
 
@@ -234,7 +234,7 @@ public enum TelegramMediaPollKind: Equatable, PostboxCoding {
     }
 }
 
-public final class TelegramMediaPoll: Media, Equatable {
+public final class IosappMediaPoll: Media, Equatable {
     public var id: MediaId? {
         return self.pollId
     }
@@ -254,14 +254,14 @@ public final class TelegramMediaPoll: Media, Equatable {
         return peerIds
     }
 
-    public let publicity: TelegramMediaPollPublicity
-    public let kind: TelegramMediaPollKind
+    public let publicity: IosappMediaPollPublicity
+    public let kind: IosappMediaPollKind
 
     public let text: String
     public let textEntities: [MessageTextEntity]
-    public let options: [TelegramMediaPollOption]
+    public let options: [IosappMediaPollOption]
     public let correctAnswers: [Data]?
-    public let results: TelegramMediaPollResults
+    public let results: IosappMediaPollResults
     public let isClosed: Bool
     public let deadlineTimeout: Int32?
     public let deadlineDate: Int32?
@@ -274,7 +274,7 @@ public final class TelegramMediaPoll: Media, Equatable {
     public let isCreator: Bool
     public let attachedMedia: Media?
 
-    public init(pollId: MediaId, publicity: TelegramMediaPollPublicity, kind: TelegramMediaPollKind, text: String, textEntities: [MessageTextEntity], options: [TelegramMediaPollOption], correctAnswers: [Data]?, results: TelegramMediaPollResults, isClosed: Bool, deadlineTimeout: Int32?, deadlineDate: Int32?, pollHash: Int64, openAnswers: Bool = false, revotingDisabled: Bool = false, shuffleAnswers: Bool = false, hideResultsUntilClose: Bool = false, isCreator: Bool = false, attachedMedia: Media? = nil) {
+    public init(pollId: MediaId, publicity: IosappMediaPollPublicity, kind: IosappMediaPollKind, text: String, textEntities: [MessageTextEntity], options: [IosappMediaPollOption], correctAnswers: [Data]?, results: IosappMediaPollResults, isClosed: Bool, deadlineTimeout: Int32?, deadlineDate: Int32?, pollHash: Int64, openAnswers: Bool = false, revotingDisabled: Bool = false, shuffleAnswers: Bool = false, hideResultsUntilClose: Bool = false, isCreator: Bool = false, attachedMedia: Media? = nil) {
         self.pollId = pollId
         self.publicity = publicity
         self.kind = kind
@@ -301,13 +301,13 @@ public final class TelegramMediaPoll: Media, Equatable {
         } else {
             self.pollId = MediaId(namespace: Namespaces.Media.LocalPoll, id: 0)
         }
-        self.publicity = TelegramMediaPollPublicity(rawValue: decoder.decodeInt32ForKey("pb", orElse: 0)) ?? TelegramMediaPollPublicity.anonymous
-        self.kind = decoder.decodeObjectForKey("kn", decoder: { TelegramMediaPollKind(decoder: $0) }) as? TelegramMediaPollKind ?? TelegramMediaPollKind.poll(multipleAnswers: false)
+        self.publicity = IosappMediaPollPublicity(rawValue: decoder.decodeInt32ForKey("pb", orElse: 0)) ?? IosappMediaPollPublicity.anonymous
+        self.kind = decoder.decodeObjectForKey("kn", decoder: { IosappMediaPollKind(decoder: $0) }) as? IosappMediaPollKind ?? IosappMediaPollKind.poll(multipleAnswers: false)
         self.text = decoder.decodeStringForKey("t", orElse: "")
         self.textEntities = decoder.decodeObjectArrayWithDecoderForKey("te")
         self.options = decoder.decodeObjectArrayWithDecoderForKey("os")
         self.correctAnswers = decoder.decodeOptionalDataArrayForKey("ca")
-        self.results = decoder.decodeObjectForKey("rs", decoder: { TelegramMediaPollResults(decoder: $0) }) as? TelegramMediaPollResults ?? TelegramMediaPollResults(voters: nil, totalVoters: nil, recentVoters: [], solution: nil, hasUnseenVotes: nil)
+        self.results = decoder.decodeObjectForKey("rs", decoder: { IosappMediaPollResults(decoder: $0) }) as? IosappMediaPollResults ?? IosappMediaPollResults(voters: nil, totalVoters: nil, recentVoters: [], solution: nil, hasUnseenVotes: nil)
         self.isClosed = decoder.decodeInt32ForKey("ic", orElse: 0) != 0
         self.deadlineTimeout = decoder.decodeOptionalInt32ForKey("dt")
         self.deadlineDate = decoder.decodeOptionalInt32ForKey("dd")
@@ -360,7 +360,7 @@ public final class TelegramMediaPoll: Media, Equatable {
     }
 
     public func isEqual(to other: Media) -> Bool {
-        guard let other = other as? TelegramMediaPoll else {
+        guard let other = other as? IosappMediaPoll else {
             return false
         }
         return self == other
@@ -370,7 +370,7 @@ public final class TelegramMediaPoll: Media, Equatable {
         return self.isEqual(to: other)
     }
 
-    public static func ==(lhs: TelegramMediaPoll, rhs: TelegramMediaPoll) -> Bool {
+    public static func ==(lhs: IosappMediaPoll, rhs: IosappMediaPoll) -> Bool {
         if lhs.pollId != rhs.pollId {
             return false
         }
@@ -430,8 +430,8 @@ public final class TelegramMediaPoll: Media, Equatable {
         return true
     }
 
-    public func withUpdatedResults(_ results: TelegramMediaPollResults, min: Bool) -> TelegramMediaPoll {
-        let updatedResults: TelegramMediaPollResults
+    public func withUpdatedResults(_ results: IosappMediaPollResults, min: Bool) -> IosappMediaPoll {
+        let updatedResults: IosappMediaPollResults
         if min {
             if let currentVoters = self.results.voters, let updatedVoters = results.voters {
                 var selectedOpaqueIdentifiers = Set<Data>()
@@ -444,23 +444,23 @@ public final class TelegramMediaPoll: Media, Equatable {
                         correctOpaqueIdentifiers.insert(voters.opaqueIdentifier)
                     }
                 }
-                updatedResults = TelegramMediaPollResults(voters: updatedVoters.map({ voters in
-                    return TelegramMediaPollOptionVoters(selected: selectedOpaqueIdentifiers.contains(voters.opaqueIdentifier), opaqueIdentifier: voters.opaqueIdentifier, count: voters.count, isCorrect: correctOpaqueIdentifiers.contains(voters.opaqueIdentifier), recentVoters: voters.recentVoters)
+                updatedResults = IosappMediaPollResults(voters: updatedVoters.map({ voters in
+                    return IosappMediaPollOptionVoters(selected: selectedOpaqueIdentifiers.contains(voters.opaqueIdentifier), opaqueIdentifier: voters.opaqueIdentifier, count: voters.count, isCorrect: correctOpaqueIdentifiers.contains(voters.opaqueIdentifier), recentVoters: voters.recentVoters)
                 }), totalVoters: results.totalVoters, recentVoters: results.recentVoters, solution: results.solution ?? self.results.solution, hasUnseenVotes: results.hasUnseenVotes ?? self.results.hasUnseenVotes)
             } else if let updatedVoters = results.voters {
-                updatedResults = TelegramMediaPollResults(voters: updatedVoters, totalVoters: results.totalVoters, recentVoters: results.recentVoters, solution: results.solution ?? self.results.solution, hasUnseenVotes: results.hasUnseenVotes ?? self.results.hasUnseenVotes)
+                updatedResults = IosappMediaPollResults(voters: updatedVoters, totalVoters: results.totalVoters, recentVoters: results.recentVoters, solution: results.solution ?? self.results.solution, hasUnseenVotes: results.hasUnseenVotes ?? self.results.hasUnseenVotes)
             } else {
-                updatedResults = TelegramMediaPollResults(voters: self.results.voters, totalVoters: results.totalVoters, recentVoters: results.recentVoters, solution: results.solution ?? self.results.solution, hasUnseenVotes: results.hasUnseenVotes ?? self.results.hasUnseenVotes)
+                updatedResults = IosappMediaPollResults(voters: self.results.voters, totalVoters: results.totalVoters, recentVoters: results.recentVoters, solution: results.solution ?? self.results.solution, hasUnseenVotes: results.hasUnseenVotes ?? self.results.hasUnseenVotes)
             }
         } else {
             updatedResults = results
         }
-        return TelegramMediaPoll(pollId: self.pollId, publicity: self.publicity, kind: self.kind, text: self.text, textEntities: self.textEntities, options: self.options, correctAnswers: self.correctAnswers, results: updatedResults, isClosed: self.isClosed, deadlineTimeout: self.deadlineTimeout, deadlineDate: self.deadlineDate, pollHash: self.pollHash, openAnswers: self.openAnswers, revotingDisabled: self.revotingDisabled, shuffleAnswers: self.shuffleAnswers, hideResultsUntilClose: self.hideResultsUntilClose, isCreator: self.isCreator, attachedMedia: self.attachedMedia)
+        return IosappMediaPoll(pollId: self.pollId, publicity: self.publicity, kind: self.kind, text: self.text, textEntities: self.textEntities, options: self.options, correctAnswers: self.correctAnswers, results: updatedResults, isClosed: self.isClosed, deadlineTimeout: self.deadlineTimeout, deadlineDate: self.deadlineDate, pollHash: self.pollHash, openAnswers: self.openAnswers, revotingDisabled: self.revotingDisabled, shuffleAnswers: self.shuffleAnswers, hideResultsUntilClose: self.hideResultsUntilClose, isCreator: self.isCreator, attachedMedia: self.attachedMedia)
     }
     
-    public func withoutUnreadResults() -> TelegramMediaPoll {
-        let updatedResults = TelegramMediaPollResults(voters: self.results.voters, totalVoters: self.results.totalVoters, recentVoters: self.results.recentVoters, solution: self.results.solution, hasUnseenVotes: false)
-        return TelegramMediaPoll(pollId: self.pollId, publicity: self.publicity, kind: self.kind, text: self.text, textEntities: self.textEntities, options: self.options, correctAnswers: self.correctAnswers, results: updatedResults, isClosed: self.isClosed, deadlineTimeout: self.deadlineTimeout, deadlineDate: self.deadlineDate, pollHash: self.pollHash, openAnswers: self.openAnswers, revotingDisabled: self.revotingDisabled, shuffleAnswers: self.shuffleAnswers, hideResultsUntilClose: self.hideResultsUntilClose, isCreator: self.isCreator, attachedMedia: self.attachedMedia)
+    public func withoutUnreadResults() -> IosappMediaPoll {
+        let updatedResults = IosappMediaPollResults(voters: self.results.voters, totalVoters: self.results.totalVoters, recentVoters: self.results.recentVoters, solution: self.results.solution, hasUnseenVotes: false)
+        return IosappMediaPoll(pollId: self.pollId, publicity: self.publicity, kind: self.kind, text: self.text, textEntities: self.textEntities, options: self.options, correctAnswers: self.correctAnswers, results: updatedResults, isClosed: self.isClosed, deadlineTimeout: self.deadlineTimeout, deadlineDate: self.deadlineDate, pollHash: self.pollHash, openAnswers: self.openAnswers, revotingDisabled: self.revotingDisabled, shuffleAnswers: self.shuffleAnswers, hideResultsUntilClose: self.hideResultsUntilClose, isCreator: self.isCreator, attachedMedia: self.attachedMedia)
     }
 }
 

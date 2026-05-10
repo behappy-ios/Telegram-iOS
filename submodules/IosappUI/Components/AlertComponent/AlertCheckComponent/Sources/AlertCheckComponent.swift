@@ -74,7 +74,7 @@ public final class AlertCheckComponent: Component {
             let result = super.hitTest(point, with: event)
             if let textView = findTextView(view: result) {
                 if let (_, attributes) = textView.attributesAtPoint(self.convert(point, to: textView)) {
-                    if attributes[NSAttributedString.Key(rawValue: TelegramTextAttributes.URL)] != nil {
+                    if attributes[NSAttributedString.Key(rawValue: IosappTextAttributes.URL)] != nil {
                         return textView
                     }
                 }
@@ -114,7 +114,7 @@ public final class AlertCheckComponent: Component {
                 bold: MarkdownAttributeSet(font: boldTextFont, textColor: textColor),
                 link: MarkdownAttributeSet(font: textFont, textColor: linkColor),
                 linkAttribute: { contents in
-                    return (TelegramTextAttributes.URL, contents)
+                    return (IosappTextAttributes.URL, contents)
                 }
             )
             
@@ -132,14 +132,14 @@ public final class AlertCheckComponent: Component {
                             maximumNumberOfLines: 2,
                             highlightColor: linkColor.withAlphaComponent(0.1),
                             highlightAction: { attributes in
-                                if let _ = attributes[NSAttributedString.Key(rawValue: TelegramTextAttributes.URL)] {
-                                    return NSAttributedString.Key(rawValue: TelegramTextAttributes.URL)
+                                if let _ = attributes[NSAttributedString.Key(rawValue: IosappTextAttributes.URL)] {
+                                    return NSAttributedString.Key(rawValue: IosappTextAttributes.URL)
                                 } else {
                                     return nil
                                 }
                             },
                             tapAction: { attributes, _ in
-                                if let _ = attributes[NSAttributedString.Key(rawValue: TelegramTextAttributes.URL)] as? String {
+                                if let _ = attributes[NSAttributedString.Key(rawValue: IosappTextAttributes.URL)] as? String {
                                     component.linkAction?()
                                 }
                             }

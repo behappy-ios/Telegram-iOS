@@ -148,7 +148,7 @@ public final class MessageInputActionButtonComponent: Component {
         case attach
         case forward
         case more
-        case like(reaction: MessageReaction.Reaction?, file: TelegramMediaFile?, animationFileId: Int64?)
+        case like(reaction: MessageReaction.Reaction?, file: IosappMediaFile?, animationFileId: Int64?)
         case repost
         case captionUp
         case captionDown

@@ -66,7 +66,7 @@ private func stringForCallType(message: Message, strings: PresentationStrings) -
     var string = ""
     for media in message.media {
         switch media {
-        case let action as TelegramMediaAction:
+        case let action as IosappMediaAction:
             switch action.action {
             case let .phoneCall(_, discardReason, _, isVideo):
                 let incoming = message.flags.contains(.Incoming)

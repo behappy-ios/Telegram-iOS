@@ -13,9 +13,9 @@ public final class InstantPageFeedbackItem: InstantPageItem {
     public let separatesTiles: Bool = false
     public let medias: [InstantPageMedia] = []
     
-    let webPage: TelegramMediaWebpage
+    let webPage: IosappMediaWebpage
     
-    init(frame: CGRect, webPage: TelegramMediaWebpage) {
+    init(frame: CGRect, webPage: IosappMediaWebpage) {
         self.frame = frame
         self.webPage = webPage
     }

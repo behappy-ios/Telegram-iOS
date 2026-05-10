@@ -2,7 +2,7 @@ import Postbox
 import FlatBuffers
 import FlatSerialization
 
-public struct TelegramChatBannedRightsFlags: OptionSet, Hashable {
+public struct IosappChatBannedRightsFlags: OptionSet, Hashable {
     public var rawValue: Int32
     
     public init(rawValue: Int32) {
@@ -13,39 +13,39 @@ public struct TelegramChatBannedRightsFlags: OptionSet, Hashable {
         self.rawValue = 0
     }
     
-    public static let banReadMessages = TelegramChatBannedRightsFlags(rawValue: 1 << 0)
-    public static let banSendMedia = TelegramChatBannedRightsFlags(rawValue: 1 << 2)
-    public static let banSendStickers = TelegramChatBannedRightsFlags(rawValue: 1 << 3)
-    public static let banSendGifs = TelegramChatBannedRightsFlags(rawValue: 1 << 4)
-    public static let banSendGames = TelegramChatBannedRightsFlags(rawValue: 1 << 5)
-    public static let banSendInline = TelegramChatBannedRightsFlags(rawValue: 1 << 6)
-    public static let banEmbedLinks = TelegramChatBannedRightsFlags(rawValue: 1 << 7)
-    public static let banSendPolls = TelegramChatBannedRightsFlags(rawValue: 1 << 8)
-    public static let banChangeInfo = TelegramChatBannedRightsFlags(rawValue: 1 << 10)
-    public static let banAddMembers = TelegramChatBannedRightsFlags(rawValue: 1 << 15)
-    public static let banPinMessages = TelegramChatBannedRightsFlags(rawValue: 1 << 17)
-    public static let banManageTopics = TelegramChatBannedRightsFlags(rawValue: 1 << 18)
-    public static let banSendPhotos = TelegramChatBannedRightsFlags(rawValue: 1 << 19)
-    public static let banSendVideos = TelegramChatBannedRightsFlags(rawValue: 1 << 20)
-    public static let banSendInstantVideos = TelegramChatBannedRightsFlags(rawValue: 1 << 21)
-    public static let banSendMusic = TelegramChatBannedRightsFlags(rawValue: 1 << 22)
-    public static let banSendVoice = TelegramChatBannedRightsFlags(rawValue: 1 << 23)
-    public static let banSendFiles = TelegramChatBannedRightsFlags(rawValue: 1 << 24)
-    public static let banSendText = TelegramChatBannedRightsFlags(rawValue: 1 << 25)
-    public static let banEditRank = TelegramChatBannedRightsFlags(rawValue: 1 << 26)
+    public static let banReadMessages = IosappChatBannedRightsFlags(rawValue: 1 << 0)
+    public static let banSendMedia = IosappChatBannedRightsFlags(rawValue: 1 << 2)
+    public static let banSendStickers = IosappChatBannedRightsFlags(rawValue: 1 << 3)
+    public static let banSendGifs = IosappChatBannedRightsFlags(rawValue: 1 << 4)
+    public static let banSendGames = IosappChatBannedRightsFlags(rawValue: 1 << 5)
+    public static let banSendInline = IosappChatBannedRightsFlags(rawValue: 1 << 6)
+    public static let banEmbedLinks = IosappChatBannedRightsFlags(rawValue: 1 << 7)
+    public static let banSendPolls = IosappChatBannedRightsFlags(rawValue: 1 << 8)
+    public static let banChangeInfo = IosappChatBannedRightsFlags(rawValue: 1 << 10)
+    public static let banAddMembers = IosappChatBannedRightsFlags(rawValue: 1 << 15)
+    public static let banPinMessages = IosappChatBannedRightsFlags(rawValue: 1 << 17)
+    public static let banManageTopics = IosappChatBannedRightsFlags(rawValue: 1 << 18)
+    public static let banSendPhotos = IosappChatBannedRightsFlags(rawValue: 1 << 19)
+    public static let banSendVideos = IosappChatBannedRightsFlags(rawValue: 1 << 20)
+    public static let banSendInstantVideos = IosappChatBannedRightsFlags(rawValue: 1 << 21)
+    public static let banSendMusic = IosappChatBannedRightsFlags(rawValue: 1 << 22)
+    public static let banSendVoice = IosappChatBannedRightsFlags(rawValue: 1 << 23)
+    public static let banSendFiles = IosappChatBannedRightsFlags(rawValue: 1 << 24)
+    public static let banSendText = IosappChatBannedRightsFlags(rawValue: 1 << 25)
+    public static let banEditRank = IosappChatBannedRightsFlags(rawValue: 1 << 26)
 }
 
-public struct TelegramChatBannedRights: PostboxCoding, Equatable {
-    public let flags: TelegramChatBannedRightsFlags
+public struct IosappChatBannedRights: PostboxCoding, Equatable {
+    public let flags: IosappChatBannedRightsFlags
     public let untilDate: Int32
     
-    public init(flags: TelegramChatBannedRightsFlags, untilDate: Int32) {
+    public init(flags: IosappChatBannedRightsFlags, untilDate: Int32) {
         self.flags = flags
         self.untilDate = untilDate
     }
     
     public init(decoder: PostboxDecoder) {
-        self.flags = TelegramChatBannedRightsFlags(rawValue: decoder.decodeInt32ForKey("f", orElse: 0))
+        self.flags = IosappChatBannedRightsFlags(rawValue: decoder.decodeInt32ForKey("f", orElse: 0))
         self.untilDate = decoder.decodeInt32ForKey("d", orElse: 0)
     }
     
@@ -54,19 +54,19 @@ public struct TelegramChatBannedRights: PostboxCoding, Equatable {
         encoder.encodeInt32(self.untilDate, forKey: "d")
     }
     
-    public static func ==(lhs: TelegramChatBannedRights, rhs: TelegramChatBannedRights) -> Bool {
+    public static func ==(lhs: IosappChatBannedRights, rhs: IosappChatBannedRights) -> Bool {
         return lhs.flags == rhs.flags && lhs.untilDate == rhs.untilDate
     }
     
-    public init(flatBuffersObject: TelegramCore_TelegramChatBannedRights) throws {
-        self.flags = TelegramChatBannedRightsFlags(rawValue: flatBuffersObject.flags)
+    public init(flatBuffersObject: IosappCore_IosappChatBannedRights) throws {
+        self.flags = IosappChatBannedRightsFlags(rawValue: flatBuffersObject.flags)
         self.untilDate = flatBuffersObject.untilDate
     }
     
     public func encodeToFlatBuffers(builder: inout FlatBufferBuilder) -> Offset {
-        let start = TelegramCore_TelegramChatBannedRights.startTelegramChatBannedRights(&builder)
-        TelegramCore_TelegramChatBannedRights.add(flags: self.flags.rawValue, &builder)
-        TelegramCore_TelegramChatBannedRights.add(untilDate: self.untilDate, &builder)
-        return TelegramCore_TelegramChatBannedRights.endTelegramChatBannedRights(&builder, start: start)
+        let start = IosappCore_IosappChatBannedRights.startIosappChatBannedRights(&builder)
+        IosappCore_IosappChatBannedRights.add(flags: self.flags.rawValue, &builder)
+        IosappCore_IosappChatBannedRights.add(untilDate: self.untilDate, &builder)
+        return IosappCore_IosappChatBannedRights.endIosappChatBannedRights(&builder, start: start)
     }
 }

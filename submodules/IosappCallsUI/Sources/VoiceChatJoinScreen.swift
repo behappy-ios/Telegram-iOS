@@ -74,7 +74,7 @@ public final class VoiceChatJoinScreen: ViewController {
         |> castError(GetCurrentGroupCallError.self)
         |> mapToSignal { call -> Signal<(EnginePeer, GroupCallSummary)?, GetCurrentGroupCallError> in
             if let call = call {
-                let peer = context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: peerId))
+                let peer = context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: peerId))
                 |> castError(GetCurrentGroupCallError.self)
                 return combineLatest(peer, context.engine.calls.getCurrentGroupCall(reference: .id(id: call.id, accessHash: call.accessHash)))
                 |> map { peer, call -> (EnginePeer, GroupCallSummary)? in
@@ -89,7 +89,7 @@ public final class VoiceChatJoinScreen: ViewController {
             }
         }
         
-        let callJoinAsPeerId = context.engine.data.get(TelegramEngine.EngineData.Item.Peer.CallJoinAsPeerId(id: peerId))
+        let callJoinAsPeerId = context.engine.data.get(IosappEngine.EngineData.Item.Peer.CallJoinAsPeerId(id: peerId))
         |> castError(GetCurrentGroupCallError.self)
         
         let currentGroupCall: Signal<(PresentationGroupCall, Int64, Bool)?, GetCurrentGroupCallError>

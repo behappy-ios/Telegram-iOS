@@ -23,7 +23,7 @@ import ChatControllerInteraction
 private let titleFont: UIFont = Font.semibold(15.0)
 
 public final class ChatMessageWebpageBubbleContentNode: ChatMessageBubbleContentNode {
-    private var webPage: TelegramMediaWebpage?
+    private var webPage: IosappMediaWebpage?
     
     public private(set) var contentNode: ChatMessageAttachedContentNode
     
@@ -120,9 +120,9 @@ public final class ChatMessageWebpageBubbleContentNode: ChatMessageBubbleContent
                 if let _ = item.message.adAttribute {
                     item.controllerInteraction.activateAdAction(item.message.id, strongSelf.contentNode.makeProgress(), false, false)
                 } else {
-                    var webPageContent: TelegramMediaWebpageLoadedContent?
+                    var webPageContent: IosappMediaWebpageLoadedContent?
                     for media in item.message.media {
-                        if let media = media as? TelegramMediaWebpage {
+                        if let media = media as? IosappMediaWebpage {
                             if case let .Loaded(content) = media.content {
                                 webPageContent = content
                             }
@@ -198,10 +198,10 @@ public final class ChatMessageWebpageBubbleContentNode: ChatMessageBubbleContent
         let currentContentNodeLayout = self.contentNode.asyncLayout()
         
         return { item, layoutConstants, preparePosition, _, constrainedSize, _ in
-            var webPage: TelegramMediaWebpage?
-            var webPageContent: TelegramMediaWebpageLoadedContent?
+            var webPage: IosappMediaWebpage?
+            var webPageContent: IosappMediaWebpageLoadedContent?
             for media in item.message.media {
-                if let media = media as? TelegramMediaWebpage {
+                if let media = media as? IosappMediaWebpage {
                     webPage = media
                     if case let .Loaded(content) = media.content {
                         webPageContent = content
@@ -313,8 +313,8 @@ public final class ChatMessageWebpageBubbleContentNode: ChatMessageBubbleContent
                         mediaAndFlags = ([media], [])
                     }
                 case "telegram_theme":
-                    var file: TelegramMediaFile?
-                    var settings: TelegramThemeSettings?
+                    var file: IosappMediaFile?
+                    var settings: IosappThemeSettings?
                     var isSupported = false
                     
                     for attribute in webpage.attributes {
@@ -357,7 +357,7 @@ public final class ChatMessageWebpageBubbleContentNode: ChatMessageBubbleContent
                         }
                     }
                 default:
-                    if var file = mainMedia as? TelegramMediaFile, webpage.type != "telegram_theme" {
+                    if var file = mainMedia as? IosappMediaFile, webpage.type != "telegram_theme" {
                         if webpage.imageIsVideoCover, let image = webpage.image {
                             file = file.withUpdatedVideoCover(image)
                         }
@@ -385,7 +385,7 @@ public final class ChatMessageWebpageBubbleContentNode: ChatMessageBubbleContent
                         } else {
                             mediaAndFlags = ([file], [])
                         }
-                    } else if let image = mainMedia as? TelegramMediaImage {
+                    } else if let image = mainMedia as? IosappMediaImage {
                         if let type = webpage.type, ["photo", "video", "embed", "gif", "document", "telegram_album"].contains(type) {
                             var flags = ChatMessageAttachedContentNodeMediaFlags()
                             if webpage.instantPage != nil, let largest = largestImageRepresentation(image.representations) {
@@ -400,7 +400,7 @@ public final class ChatMessageWebpageBubbleContentNode: ChatMessageBubbleContent
                             let flags = ChatMessageAttachedContentNodeMediaFlags()
                             mediaAndFlags = ([image], flags)
                         }
-                    } else if let story = mainMedia as? TelegramMediaStory {
+                    } else if let story = mainMedia as? IosappMediaStory {
                         mediaAndFlags = ([story], [.preferMediaBeforeText, .titleBeforeMedia])
                         if let storyItem = item.message.associatedStories[story.storyId]?.get(Stories.StoredItem.self), case let .item(itemValue) = storyItem {
                             text = itemValue.text
@@ -569,7 +569,7 @@ public final class ChatMessageWebpageBubbleContentNode: ChatMessageBubbleContent
                 }
                 for media in item.message.media {
                     switch media {
-                    case _ as TelegramMediaImage, _ as TelegramMediaFile, _ as TelegramMediaStory:
+                    case _ as IosappMediaImage, _ as IosappMediaFile, _ as IosappMediaStory:
                         mediaAndFlags = ([media], [.preferMediaInline])
                     default:
                         break
@@ -581,7 +581,7 @@ public final class ChatMessageWebpageBubbleContentNode: ChatMessageBubbleContent
                 }
                 
                 actionTitle = adAttribute.buttonText.uppercased()
-                if !isTelegramMeLink(adAttribute.url) {
+                if !isIosappMeLink(adAttribute.url) {
                     actionIcon = .link
                 }
                 displayLine = true
@@ -739,7 +739,7 @@ public final class ChatMessageWebpageBubbleContentNode: ChatMessageBubbleContent
             var updatedMedia = media
             if let current = self.webPage, case let .Loaded(content) = current.content {
                 for item in media {
-                    if let webpage = item as? TelegramMediaWebpage, webpage.id == current.id {
+                    if let webpage = item as? IosappMediaWebpage, webpage.id == current.id {
                         var mediaList: [Media] = [webpage]
                         if let image = content.image {
                             mediaList.append(image)
@@ -781,7 +781,7 @@ public final class ChatMessageWebpageBubbleContentNode: ChatMessageBubbleContent
             return result
         }
         if let current = self.webPage, case let .Loaded(content) = current.content {
-            if let webpage = media as? TelegramMediaWebpage, webpage.id == current.id {
+            if let webpage = media as? IosappMediaWebpage, webpage.id == current.id {
                 if let image = content.image, let result = self.contentNode.transitionNode(media: image) {
                     return result
                 }

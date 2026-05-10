@@ -45,7 +45,7 @@ func localizedOldChannelDate(peer: InactiveChannel, strings: PresentationStrings
         string = strings.OldChannels_InactiveYear(Int32(dif))
     }
     
-    if let channel = peer.peer as? TelegramChannel, case .group = channel.info {
+    if let channel = peer.peer as? IosappChannel, case .group = channel.info {
         if let participantsCount = peer.participantsCount, participantsCount != 0 {
             string = strings.OldChannels_GroupFormat(participantsCount) + ", " + string
         } else {
@@ -301,9 +301,9 @@ public func oldChannelsController(context: AccountContext, updatedPresentationDa
         statePromise.get(),
         peersPromise.get(),
         context.engine.data.get(
-            TelegramEngine.EngineData.Item.Peer.Peer(id: context.account.peerId),
-            TelegramEngine.EngineData.Item.Configuration.UserLimits(isPremium: false),
-            TelegramEngine.EngineData.Item.Configuration.UserLimits(isPremium: true)
+            IosappEngine.EngineData.Item.Peer.Peer(id: context.account.peerId),
+            IosappEngine.EngineData.Item.Configuration.UserLimits(isPremium: false),
+            IosappEngine.EngineData.Item.Configuration.UserLimits(isPremium: true)
         )
     )
     |> map { presentationData, state, peers, limits -> (ItemListControllerState, (ItemListNodeState, Any)) in

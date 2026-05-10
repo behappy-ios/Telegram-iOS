@@ -300,13 +300,13 @@ final class StarsTransactionsListPanelComponent: Component {
                     let itemSubtitle: String?
                     var itemDate: String
                     var itemPeer: StarsAvatarComponent.Peer = .transactionPeer(item.peer)
-                    var itemFile: TelegramMediaFile?
+                    var itemFile: IosappMediaFile?
                     var itemGift: StarGift?
                     switch item.peer {
                     case let .peer(peer):
                         if let months = item.premiumGiftMonths {
                             itemTitle = peer.displayTitle(strings: environment.strings, displayOrder: .firstLast)
-                            itemSubtitle = environment.strings.Stars_Intro_Transaction_TelegramPremium(months)
+                            itemSubtitle = environment.strings.Stars_Intro_Transaction_IosappPremium(months)
                         } else if item.flags.contains(.isPostsSearch) {
                             itemTitle = environment.strings.Stars_Intro_Transaction_SearchFee
                             itemSubtitle = ""
@@ -418,12 +418,12 @@ final class StarsTransactionsListPanelComponent: Component {
                         itemTitle = environment.strings.Stars_Intro_Transaction_PremiumBotTopUp_Title
                         itemSubtitle = environment.strings.Stars_Intro_Transaction_PremiumBotTopUp_Subtitle
                     case .ads:
-                        itemTitle = environment.strings.Stars_Intro_Transaction_TelegramAds_Title
-                        itemSubtitle = environment.strings.Stars_Intro_Transaction_TelegramAds_Subtitle
+                        itemTitle = environment.strings.Stars_Intro_Transaction_IosappAds_Title
+                        itemSubtitle = environment.strings.Stars_Intro_Transaction_IosappAds_Subtitle
                     case .apiLimitExtension:
-                        itemTitle = environment.strings.Stars_Intro_Transaction_TelegramBotApi_Title
+                        itemTitle = environment.strings.Stars_Intro_Transaction_IosappBotApi_Title
                         if let floodskipNumber = item.floodskipNumber {
-                            itemSubtitle = environment.strings.Stars_Intro_Transaction_TelegramBotApi_Messages(floodskipNumber)
+                            itemSubtitle = environment.strings.Stars_Intro_Transaction_IosappBotApi_Messages(floodskipNumber)
                         } else {
                             itemSubtitle = nil
                         }

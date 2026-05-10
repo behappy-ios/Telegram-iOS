@@ -1436,7 +1436,7 @@ public final class CalendarMessageScreen: ViewController {
                 return
             }
             
-            let _ = (self.context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: peerId))
+            let _ = (self.context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: peerId))
             |> map { chatPeer -> ClearInfo? in
                 guard let chatPeer = chatPeer else {
                     return nil
@@ -1804,7 +1804,7 @@ public final class CalendarMessageScreen: ViewController {
                         if message.timestamp >= dayTimestamp && message.timestamp < nextDayTimestamp {
                             mediaLoop: for media in message.media {
                                 switch media {
-                                case _ as TelegramMediaImage, _ as TelegramMediaFile:
+                                case _ as IosappMediaImage, _ as IosappMediaFile:
                                     updatedMedia[i]![day] = DayMedia(message: message, media: EngineMedia(media))
                                     break mediaLoop
                                 default:

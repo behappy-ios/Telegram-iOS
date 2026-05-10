@@ -146,9 +146,9 @@ public extension Message {
         
         for media in self.media {
             switch media {
-                case _ as TelegramMediaImage:
+                case _ as IosappMediaImage:
                     return true
-                case let file as TelegramMediaFile:
+                case let file as IosappMediaFile:
                     if file.isVideo || file.isAnimated || file.isVoice || file.isMusic {
                         return true
                     }

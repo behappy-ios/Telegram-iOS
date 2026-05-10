@@ -24,8 +24,8 @@ filegroup(
 #filegroup(
 #    name = "Icons",
 #    srcs = glob([
-#        "Telegram-iOS/Icons.xcassets/**/*",
-#    ], exclude = ["Telegram-iOS/Icons.xcassets/**/.*"]),
+#        "Sources/Icons.xcassets/**/*",
+#    ], exclude = ["Sources/Icons.xcassets/**/.*"]),
 #)
 
 internal_bundle_ids = [

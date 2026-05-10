@@ -146,12 +146,12 @@ private func synchronizeSavedGifs(transaction: Transaction, accountPeerId: PeerI
                     case .generic:
                         return .fail(.generic)
                     case .invalidReference:
-                        return revalidateMediaResourceReference(accountPeerId: accountPeerId, postbox: postbox, network: network, revalidationContext: revalidationContext, info: TelegramCloudMediaResourceFetchInfo(reference: fileReference.resourceReference(fileReference.media.resource), preferBackgroundReferenceRevalidation: false, continueInBackground: false), resource: fileReference.media.resource)
+                        return revalidateMediaResourceReference(accountPeerId: accountPeerId, postbox: postbox, network: network, revalidationContext: revalidationContext, info: IosappCloudMediaResourceFetchInfo(reference: fileReference.resourceReference(fileReference.media.resource), preferBackgroundReferenceRevalidation: false, continueInBackground: false), resource: fileReference.media.resource)
                         |> mapError { _ -> SaveGifError in
                             return .generic
                         }
                         |> mapToSignal { validatedResource -> Signal<Api.Bool, SaveGifError> in
-                            if let resource = validatedResource.updatedResource as? TelegramCloudMediaResourceWithFileReference, let reference = resource.fileReference {
+                            if let resource = validatedResource.updatedResource as? IosappCloudMediaResourceWithFileReference, let reference = resource.fileReference {
                                 return saveGif(reference)
                             } else {
                                 return .fail(.generic)

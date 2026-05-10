@@ -293,7 +293,7 @@ private enum ChannelMembersEntry: ItemListNodeEntry {
                 return ItemListSectionHeaderItem(presentationData: presentationData, text: text, sectionId: self.section)
             case let .peerItem(_, _, strings, dateTimeFormat, nameDisplayOrder, participant, editing, enabled, _, isGroup):
                 let text: ItemListPeerItemText
-                if let user = participant.peer as? TelegramUser, let _ = user.botInfo {
+                if let user = participant.peer as? IosappUser, let _ = user.botInfo {
                     text = .text(strings.Bot_GenericBotStatus, .secondary)
                 } else {
                     text = .presence
@@ -394,7 +394,7 @@ private func channelMembersControllerEntries(context: AccountContext, presentati
     
     var displayHideMembers = false
     var canSetupHideMembers = false
-    if let channel = view.peers[view.peerId] as? TelegramChannel, case .group = channel.info {
+    if let channel = view.peers[view.peerId] as? IosappChannel, case .group = channel.info {
         displayHideMembers = true
         canSetupHideMembers = channel.hasPermission(.banMembers)
     }
@@ -438,21 +438,21 @@ private func channelMembersControllerEntries(context: AccountContext, presentati
         
     if let participants = participants, let contacts = contacts {
         var canAddMember: Bool = false
-        if let peer = view.peers[view.peerId] as? TelegramChannel {
+        if let peer = view.peers[view.peerId] as? IosappChannel {
             canAddMember = peer.hasPermission(.inviteMembers)
         }
         
         var canEditMembers = false
-        if let peer = view.peers[view.peerId] as? TelegramChannel {
+        if let peer = view.peers[view.peerId] as? IosappChannel {
             canEditMembers = peer.hasPermission(.banMembers)
         }
         
         if canAddMember {
             entries.append(.addMember(presentationData.theme, isGroup ? presentationData.strings.Group_Members_AddMembers : presentationData.strings.Channel_Members_AddMembers))
-            if let peer = view.peers[view.peerId] as? TelegramChannel, peer.addressName == nil {
+            if let peer = view.peers[view.peerId] as? IosappChannel, peer.addressName == nil {
                 entries.append(.inviteLink(presentationData.theme, presentationData.strings.Channel_Members_InviteLink))
             }
-            if let peer = view.peers[view.peerId] as? TelegramChannel {
+            if let peer = view.peers[view.peerId] as? IosappChannel {
                 if peer.flags.contains(.isGigagroup) {
                     entries.append(.addMemberInfo(presentationData.theme, presentationData.strings.Group_Members_AddMembersHelp))
                 } else if case .broadcast = peer.info {
@@ -547,8 +547,8 @@ public func channelMembersController(context: AccountContext, updatedPresentatio
     
     let arguments = ChannelMembersControllerArguments(context: context, addMember: {
         actionsDisposable.add((combineLatest(
-            context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: peerId)),
-            context.engine.data.get(TelegramEngine.EngineData.Item.Peer.ExportedInvitation(id: peerId)),
+            context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: peerId)),
+            context.engine.data.get(IosappEngine.EngineData.Item.Peer.ExportedInvitation(id: peerId)),
             peersPromise.get() |> take(1)
         )
         |> deliverOnMainQueue).start(next: { chatPeer, exportedInvitation, members in
@@ -584,7 +584,7 @@ public func channelMembersController(context: AccountContext, updatedPresentatio
                     contactsController?.dismiss()
                 } else {
                     if let chatPeer {
-                        let failedPeers = failedPeerIds.compactMap { _, error -> TelegramForbiddenInvitePeer? in
+                        let failedPeers = failedPeerIds.compactMap { _, error -> IosappForbiddenInvitePeer? in
                             if case let .restricted(peer) = error {
                                 return peer
                             } else {
@@ -609,7 +609,7 @@ public func channelMembersController(context: AccountContext, updatedPresentatio
                     
                     contactsController?.dismiss()
                     
-                    let _ = (context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: peerId))
+                    let _ = (context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: peerId))
                     |> deliverOnMainQueue).start(next: { peer in
                         let text: String
                         switch failedPeerIds[0].1 {
@@ -677,7 +677,7 @@ public func channelMembersController(context: AccountContext, updatedPresentatio
             return $0.withUpdatedRemovingPeerId(memberId)
         }
         
-        removePeerDisposable.set((context.peerChannelMemberCategoriesContextsManager.updateMemberBannedRights(engine: context.engine, peerId: peerId, memberId: memberId, bannedRights: TelegramChatBannedRights(flags: [.banReadMessages], untilDate: Int32.max))
+        removePeerDisposable.set((context.peerChannelMemberCategoriesContextsManager.updateMemberBannedRights(engine: context.engine, peerId: peerId, memberId: memberId, bannedRights: IosappChatBannedRights(flags: [.banReadMessages], untilDate: Int32.max))
         |> deliverOnMainQueue).start(completed: {
             updateState {
                 return $0.withUpdatedRemovingPeerId(nil)
@@ -729,7 +729,7 @@ public func channelMembersController(context: AccountContext, updatedPresentatio
     |> deliverOnMainQueue
     |> map { presentationData, state, view, contacts, peers -> (ItemListControllerState, (ItemListNodeState, Any)) in
         var isGroup = true
-        if let peer = peerViewMainPeer(view) as? TelegramChannel, case .broadcast = peer.info {
+        if let peer = peerViewMainPeer(view) as? IosappChannel, case .broadcast = peer.info {
             isGroup = false
         }
         

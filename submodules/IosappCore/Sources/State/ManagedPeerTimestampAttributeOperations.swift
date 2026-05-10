@@ -86,7 +86,7 @@ func managedPeerTimestampAttributeOperations(network: Network, postbox: Postbox)
                 |> suspendAwareDelay(delay, queue: Queue.concurrentDefaultQueue())
                 |> then(postbox.transaction { transaction -> Void in
                     if let peer = transaction.getPeer(entry.peerId) {
-                        if let user = peer as? TelegramUser {
+                        if let user = peer as? IosappUser {
                             updatePeersCustom(transaction: transaction, peers: [user.withUpdatedEmojiStatus(nil)], update: { _, updated in updated })
                         }
                     }

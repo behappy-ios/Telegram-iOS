@@ -58,7 +58,7 @@ private enum QuickReactionSetupControllerEntry: ItemListNodeEntry {
     }
     
     case demoHeader(String)
-    case demoMessage(wallpaper: TelegramWallpaper, fontSize: PresentationFontSize, bubbleCorners: PresentationChatBubbleCorners, dateTimeFormat: PresentationDateTimeFormat, nameDisplayOrder: PresentationPersonNameOrder, availableReactions: AvailableReactions?, reaction: MessageReaction.Reaction?, accountPeer: Peer?)
+    case demoMessage(wallpaper: IosappWallpaper, fontSize: PresentationFontSize, bubbleCorners: PresentationChatBubbleCorners, dateTimeFormat: PresentationDateTimeFormat, nameDisplayOrder: PresentationPersonNameOrder, availableReactions: AvailableReactions?, reaction: MessageReaction.Reaction?, accountPeer: Peer?)
     case demoDescription(String)
     case quickReaction(String, MessageReaction.Reaction, AvailableReactions)
     case quickReactionDescription(String)
@@ -262,7 +262,7 @@ public func quickReactionSetupController(
         statePromise.get(),
         context.engine.stickers.availableReactions(),
         settings,
-        context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: context.account.peerId))
+        context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: context.account.peerId))
     )
     |> deliverOnMainQueue
     |> map { presentationData, state, availableReactions, settings, accountPeer -> (ItemListControllerState, (ItemListNodeState, Any)) in

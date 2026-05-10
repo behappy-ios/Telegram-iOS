@@ -144,7 +144,7 @@ public final class MessageReactionButtonsNode: ASDisplayNode {
         
         var hadStars = false
         var mappedReactions = reactions.reactions.map { reaction in
-            var centerAnimation: TelegramMediaFile?
+            var centerAnimation: IosappMediaFile?
             var animationFileId: Int64?
             
             switch reaction.value {
@@ -183,7 +183,7 @@ public final class MessageReactionButtonsNode: ASDisplayNode {
                     }
                 }
             } else {
-                if let channel = message.peers[message.id.peerId] as? TelegramChannel, case .broadcast = channel.info {
+                if let channel = message.peers[message.id.peerId] as? IosappChannel, case .broadcast = channel.info {
                 } else {
                     for recentPeer in reactions.recentPeers {
                         if recentPeer.value == reaction.value {
@@ -221,7 +221,7 @@ public final class MessageReactionButtonsNode: ASDisplayNode {
             )
         }
         if !"".isEmpty && !hadStars {
-            var centerAnimation: TelegramMediaFile?
+            var centerAnimation: IosappMediaFile?
             let animationFileId: Int64? = nil
             
             if let availableReactions = availableReactions {

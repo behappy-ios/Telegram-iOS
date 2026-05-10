@@ -9,7 +9,7 @@ func _internal_setSecretChatMessageAutoremoveTimeoutInteractively(account: Accou
 }
 
 func _internal_setSecretChatMessageAutoremoveTimeoutInteractively(transaction: Transaction, account: Account, peerId: PeerId, timeout: Int32?) {
-    if let peer = transaction.getPeer(peerId) as? TelegramSecretChat, let state = transaction.getPeerChatState(peerId) as? SecretChatState {
+    if let peer = transaction.getPeer(peerId) as? IosappSecretChat, let state = transaction.getPeerChatState(peerId) as? SecretChatState {
         if state.messageAutoremoveTimeout != timeout {
             let updatedPeer = peer.withUpdatedMessageAutoremoveTimeout(timeout)
             let updatedState = state.withUpdatedMessageAutoremoveTimeout(timeout)
@@ -20,21 +20,21 @@ func _internal_setSecretChatMessageAutoremoveTimeoutInteractively(transaction: T
                 transaction.setPeerChatState(peerId, state: updatedState)
             }
             
-            let _ = enqueueMessages(transaction: transaction, account: account, peerId: peerId, messages: [(true, .message(text: "", attributes: [], inlineStickers: [:], mediaReference: .standalone(media: TelegramMediaAction(action: TelegramMediaActionType.messageAutoremoveTimeoutUpdated(period: timeout == nil ? 0 : timeout!, autoSettingSource: nil))), threadId: nil, replyToMessageId: nil, replyToStoryId: nil, localGroupingKey: nil, correlationId: nil, bubbleUpEmojiOrStickersets: []))])
+            let _ = enqueueMessages(transaction: transaction, account: account, peerId: peerId, messages: [(true, .message(text: "", attributes: [], inlineStickers: [:], mediaReference: .standalone(media: IosappMediaAction(action: IosappMediaActionType.messageAutoremoveTimeoutUpdated(period: timeout == nil ? 0 : timeout!, autoSettingSource: nil))), threadId: nil, replyToMessageId: nil, replyToStoryId: nil, localGroupingKey: nil, correlationId: nil, bubbleUpEmojiOrStickersets: []))])
         }
     }
 }
 
 func _internal_addSecretChatMessageScreenshot(account: Account, peerId: PeerId) -> Signal<Void, NoError> {
     return account.postbox.transaction { transaction -> Void in
-        if let _ = transaction.getPeer(peerId) as? TelegramSecretChat, let state = transaction.getPeerChatState(peerId) as? SecretChatState {
+        if let _ = transaction.getPeer(peerId) as? IosappSecretChat, let state = transaction.getPeerChatState(peerId) as? SecretChatState {
             switch state.embeddedState {
             case .handshake, .terminated:
                 return
             default:
                 break
             }
-            let _ = enqueueMessages(transaction: transaction, account: account, peerId: peerId, messages: [(true, .message(text: "", attributes: [], inlineStickers: [:], mediaReference: .standalone(media: TelegramMediaAction(action: TelegramMediaActionType.historyScreenshot)), threadId: nil, replyToMessageId: nil, replyToStoryId: nil, localGroupingKey: nil, correlationId: nil, bubbleUpEmojiOrStickersets: []))])
+            let _ = enqueueMessages(transaction: transaction, account: account, peerId: peerId, messages: [(true, .message(text: "", attributes: [], inlineStickers: [:], mediaReference: .standalone(media: IosappMediaAction(action: IosappMediaActionType.historyScreenshot)), threadId: nil, replyToMessageId: nil, replyToStoryId: nil, localGroupingKey: nil, correlationId: nil, bubbleUpEmojiOrStickersets: []))])
         }
     }
 }

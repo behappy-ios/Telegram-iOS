@@ -22,8 +22,8 @@ extension ChatControllerImpl: VNDocumentCameraViewControllerDelegate {
     
     func enqueueScan(scan: VNDocumentCameraScan, convertToPdf: Bool) {
         struct Item {
-            let resource: TelegramMediaResource
-            let previewResource: TelegramMediaResource?
+            let resource: IosappMediaResource
+            let previewResource: IosappMediaResource?
             let fileName: String
             let mimeType: String
             let size: Int64
@@ -85,15 +85,15 @@ extension ChatControllerImpl: VNDocumentCameraViewControllerDelegate {
         
         for item in items {
             let fileId = Int64.random(in: Int64.min ... Int64.max)
-            var previewRepresentations: [TelegramMediaImageRepresentation] = []
+            var previewRepresentations: [IosappMediaImageRepresentation] = []
             if let previewResource = item.previewResource {
-                previewRepresentations.append(TelegramMediaImageRepresentation(dimensions: PixelDimensions(width: 320, height: 320), resource: previewResource, progressiveSizes: [], immediateThumbnailData: nil, hasVideo: false, isPersonal: false))
+                previewRepresentations.append(IosappMediaImageRepresentation(dimensions: PixelDimensions(width: 320, height: 320), resource: previewResource, progressiveSizes: [], immediateThumbnailData: nil, hasVideo: false, isPersonal: false))
             }
 
-            var attributes: [TelegramMediaFileAttribute] = []
+            var attributes: [IosappMediaFileAttribute] = []
             attributes.append(.FileName(fileName: item.fileName))
             
-            let file = TelegramMediaFile(fileId: MediaId(namespace: Namespaces.Media.LocalFile, id: fileId), partialReference: nil, resource: item.resource, previewRepresentations: previewRepresentations, videoThumbnails: [], immediateThumbnailData: nil, mimeType: item.mimeType, size: item.size, attributes: attributes, alternativeRepresentations: [])
+            let file = IosappMediaFile(fileId: MediaId(namespace: Namespaces.Media.LocalFile, id: fileId), partialReference: nil, resource: item.resource, previewRepresentations: previewRepresentations, videoThumbnails: [], immediateThumbnailData: nil, mimeType: item.mimeType, size: item.size, attributes: attributes, alternativeRepresentations: [])
             let message: EnqueueMessage = .message(text: "", attributes: [], inlineStickers: [:], mediaReference: .standalone(media: file), threadId: self.chatLocation.threadId, replyToMessageId: nil, replyToStoryId: nil, localGroupingKey: groupingKey, correlationId: nil, bubbleUpEmojiOrStickersets: [])
             messages.append(message)
         

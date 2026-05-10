@@ -694,9 +694,9 @@ final class PeerSelectionScreenComponent: Component {
 public final class PeerSelectionScreen: ViewControllerComponentContainer {
     public final class InitialData {
         public let channelId: EnginePeer.Id?
-        public let channels: [TelegramAdminedPublicChannel]?
+        public let channels: [IosappAdminedPublicChannel]?
         
-        init(channelId: EnginePeer.Id?, channels: [TelegramAdminedPublicChannel]?) {
+        init(channelId: EnginePeer.Id?, channels: [IosappAdminedPublicChannel]?) {
             self.channelId = channelId
             self.channels = channels
         }
@@ -746,9 +746,9 @@ public final class PeerSelectionScreen: ViewControllerComponentContainer {
     deinit {
     }
     
-    public static func initialData(context: AccountContext, channels: [TelegramAdminedPublicChannel]?) -> Signal<InitialData, NoError> {
+    public static func initialData(context: AccountContext, channels: [IosappAdminedPublicChannel]?) -> Signal<InitialData, NoError> {
         return context.engine.data.get(
-            TelegramEngine.EngineData.Item.Peer.PersonalChannel(id: context.account.peerId)
+            IosappEngine.EngineData.Item.Peer.PersonalChannel(id: context.account.peerId)
         )
         |> map { personalChannel -> InitialData in
             var channelId: EnginePeer.Id?

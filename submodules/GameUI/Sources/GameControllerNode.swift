@@ -43,11 +43,11 @@ final class GameControllerNode: ViewControllerTracingNode {
         
         self.backgroundColor = .white
         
-        let js = "var TelegramWebviewProxyProto = function() {}; " +
-            "TelegramWebviewProxyProto.prototype.postEvent = function(eventName, eventData) { " +
+        let js = "var IosappWebviewProxyProto = function() {}; " +
+            "IosappWebviewProxyProto.prototype.postEvent = function(eventName, eventData) { " +
             "window.webkit.messageHandlers.performAction.postMessage({'eventName': eventName, 'eventData': eventData}); " +
             "}; " +
-        "var TelegramWebviewProxy = new TelegramWebviewProxyProto();"
+        "var IosappWebviewProxy = new IosappWebviewProxyProto();"
         
         let configuration = WKWebViewConfiguration()
         let userController = WKUserContentController()
@@ -112,7 +112,7 @@ final class GameControllerNode: ViewControllerTracingNode {
         var botPeer: EnginePeer?
         var gameName: String?
         for media in message.media {
-            if let game = media as? TelegramMediaGame {
+            if let game = media as? IosappMediaGame {
                 inner: for attribute in message.attributes {
                     if let attribute = attribute as? InlineBotMessageAttribute, let peerId = attribute.peerId {
                         botPeer = message.peers[peerId].flatMap(EnginePeer.init)
@@ -147,7 +147,7 @@ final class GameControllerNode: ViewControllerTracingNode {
                 if eventName == "share_score" {
                     self.present(self.context.sharedContext.makeShareController(context: self.context, params: ShareControllerParams(subject: .fromExternal(1, { [weak self] peerIds, threadIds, requireStars, text, account, _ in
                         if let strongSelf = self, let message = strongSelf.message, let account = account as? ShareControllerAppAccountContext {
-                            let signals = peerIds.map { TelegramEngine(account: account.context.account).messages.forwardGameWithScore(messageId: message.id, to: $0, threadId: threadIds[$0], as: nil) }
+                            let signals = peerIds.map { IosappEngine(account: account.context.account).messages.forwardGameWithScore(messageId: message.id, to: $0, threadId: threadIds[$0], as: nil) }
                             return .single(.preparing(false))
                             |> castError(ShareControllerError.self)
                             |> then(

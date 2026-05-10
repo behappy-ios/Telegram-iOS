@@ -20,7 +20,7 @@ public func fetchMediaData(context: AccountContext, postbox: Postbox, userLocati
     var isImage = true
     var fileExtension: String?
     var userContentType: MediaResourceUserContentType = .other
-    if let image = mediaReference.media as? TelegramMediaImage {
+    if let image = mediaReference.media as? IosappMediaImage {
         userContentType = .image
         if let video = image.videoRepresentations.last, forceVideo {
             resource = video.resource
@@ -28,7 +28,7 @@ public func fetchMediaData(context: AccountContext, postbox: Postbox, userLocati
         } else if let representation = largestImageRepresentation(image.representations) {
             resource = representation.resource
         }
-    } else if let file = mediaReference.media as? TelegramMediaFile {
+    } else if let file = mediaReference.media as? IosappMediaFile {
         userContentType = MediaResourceUserContentType(file: file)
         resource = file.resource
         if file.isVideo || file.mimeType.hasPrefix("video/") {
@@ -38,7 +38,7 @@ public func fetchMediaData(context: AccountContext, postbox: Postbox, userLocati
         if !maybeExtension.isEmpty {
             fileExtension = maybeExtension
         }
-    } else if let webpage = mediaReference.media as? TelegramMediaWebpage, case let .Loaded(content) = webpage.content {
+    } else if let webpage = mediaReference.media as? IosappMediaWebpage, case let .Loaded(content) = webpage.content {
         if let file = content.file {
             resource = file.resource
             if file.isVideo {
@@ -205,7 +205,7 @@ public func copyToPasteboard(context: AccountContext, postbox: Postbox, userLoca
             return Signal<Void, NoError> { subscriber in
                 let pasteboard = UIPasteboard.general
                 
-                if mediaReference.media is TelegramMediaImage {
+                if mediaReference.media is IosappMediaImage {
                     if let fileData = try? Data(contentsOf: URL(fileURLWithPath: data.path), options: .mappedIfSafe) {
                         pasteboard.setData(fileData, forPasteboardType: kUTTypeJPEG as String)
                     }

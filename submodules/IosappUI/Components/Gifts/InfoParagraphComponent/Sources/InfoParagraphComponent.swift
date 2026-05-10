@@ -110,7 +110,7 @@ public final class InfoParagraphComponent: CombinedComponent {
                 bold: MarkdownAttributeSet(font: boldTextFont, textColor: textColor),
                 link: MarkdownAttributeSet(font: textFont, textColor: accentColor),
                 linkAttribute: { contents in
-                    return (TelegramTextAttributes.URL, contents)
+                    return (IosappTextAttributes.URL, contents)
                 }
             )
                         
@@ -121,8 +121,8 @@ public final class InfoParagraphComponent: CombinedComponent {
                     maximumNumberOfLines: 0,
                     lineSpacing: 0.2,
                     highlightAction: { attributes in
-                        if let _ = attributes[NSAttributedString.Key(rawValue: TelegramTextAttributes.URL)] {
-                            return NSAttributedString.Key(rawValue: TelegramTextAttributes.URL)
+                        if let _ = attributes[NSAttributedString.Key(rawValue: IosappTextAttributes.URL)] {
+                            return NSAttributedString.Key(rawValue: IosappTextAttributes.URL)
                         } else {
                             return nil
                         }

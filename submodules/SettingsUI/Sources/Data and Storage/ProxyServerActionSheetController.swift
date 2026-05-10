@@ -29,7 +29,7 @@ public final class ProxyServerActionSheetController: ActionSheetController {
         self.init(sharedContext: context.sharedContext, presentationData: presentationData, accountManager: context.sharedContext.accountManager, postbox: context.account.postbox, network: context.account.network, server: server, updatedPresentationData: context.sharedContext.presentationData)
     }
     
-    public init(sharedContext: SharedAccountContext, presentationData: PresentationData, accountManager: AccountManager<TelegramAccountManagerTypes>, postbox: Postbox, network: Network, server: ProxyServerSettings, updatedPresentationData: Signal<PresentationData, NoError>?) {
+    public init(sharedContext: SharedAccountContext, presentationData: PresentationData, accountManager: AccountManager<IosappAccountManagerTypes>, postbox: Postbox, network: Network, server: ProxyServerSettings, updatedPresentationData: Signal<PresentationData, NoError>?) {
         self.sharedContext = sharedContext
         let sheetTheme = ActionSheetControllerTheme(presentationData: presentationData)
         super.init(theme: sheetTheme)
@@ -265,7 +265,7 @@ private final class ProxyServerInfoItemNode: ActionSheetItemNode {
 
 private final class ProxyServerActionItem: ActionSheetItem {
     private let sharedContext: SharedAccountContext
-    private let accountManager: AccountManager<TelegramAccountManagerTypes>
+    private let accountManager: AccountManager<IosappAccountManagerTypes>
     private let postbox: Postbox
     private let network: Network
     private let presentationData: PresentationData
@@ -273,7 +273,7 @@ private final class ProxyServerActionItem: ActionSheetItem {
     private let dismiss: (Bool) -> Void
     private let present: (ViewController, Any?) -> Void
     
-    init(sharedContext: SharedAccountContext, accountManager: AccountManager<TelegramAccountManagerTypes>, postbox: Postbox, network: Network, presentationData: PresentationData, server: ProxyServerSettings, dismiss: @escaping (Bool) -> Void, present: @escaping (ViewController, Any?) -> Void) {
+    init(sharedContext: SharedAccountContext, accountManager: AccountManager<IosappAccountManagerTypes>, postbox: Postbox, network: Network, presentationData: PresentationData, server: ProxyServerSettings, dismiss: @escaping (Bool) -> Void, present: @escaping (ViewController, Any?) -> Void) {
         self.sharedContext = sharedContext
         self.accountManager = accountManager
         self.postbox = postbox
@@ -294,7 +294,7 @@ private final class ProxyServerActionItem: ActionSheetItem {
 
 private final class ProxyServerActionItemNode: ActionSheetItemNode {
     private let sharedContext: SharedAccountContext
-    private let accountManager: AccountManager<TelegramAccountManagerTypes>
+    private let accountManager: AccountManager<IosappAccountManagerTypes>
     private let postbox: Postbox
     private let network: Network
     private let presentationData: PresentationData
@@ -310,7 +310,7 @@ private final class ProxyServerActionItemNode: ActionSheetItemNode {
     private let disposable = MetaDisposable()
     private var revertSettings: ProxySettings?
     
-    init(sharedContext: SharedAccountContext, accountManager: AccountManager<TelegramAccountManagerTypes>, postbox: Postbox, network: Network, presentationData: PresentationData, theme: ActionSheetControllerTheme, server: ProxyServerSettings, dismiss: @escaping (Bool) -> Void, present: @escaping (ViewController, Any?) -> Void) {
+    init(sharedContext: SharedAccountContext, accountManager: AccountManager<IosappAccountManagerTypes>, postbox: Postbox, network: Network, presentationData: PresentationData, theme: ActionSheetControllerTheme, server: ProxyServerSettings, dismiss: @escaping (Bool) -> Void, present: @escaping (ViewController, Any?) -> Void) {
         self.sharedContext = sharedContext
         self.accountManager = accountManager
         self.postbox = postbox

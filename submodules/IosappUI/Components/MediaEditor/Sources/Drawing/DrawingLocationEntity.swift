@@ -41,8 +41,8 @@ public final class DrawingLocationEntity: DrawingEntity, Codable {
     
     public var title: String
     public var style: Style
-    public var location: TelegramMediaMap
-    public var icon: TelegramMediaFile?
+    public var location: IosappMediaMap
+    public var icon: IosappMediaFile?
     public var queryId: Int64?
     public var resultId: String?
     public var color: DrawingColor = DrawingColor(color: .white)  {
@@ -80,7 +80,7 @@ public final class DrawingLocationEntity: DrawingEntity, Codable {
         return false
     }
     
-    public init(title: String, style: Style, location: TelegramMediaMap, icon: TelegramMediaFile?, queryId: Int64?, resultId: String?) {
+    public init(title: String, style: Style, location: IosappMediaMap, icon: IosappMediaFile?, queryId: Int64?, resultId: String?) {
         self.uuid = UUID()
         
         self.title = title
@@ -106,13 +106,13 @@ public final class DrawingLocationEntity: DrawingEntity, Codable {
         self.hasCustomColor = try container.decodeIfPresent(Bool.self, forKey: .hasCustomColor) ?? false
         
         if let locationData = try container.decodeIfPresent(Data.self, forKey: .location) {
-            self.location = PostboxDecoder(buffer: MemoryBuffer(data: locationData)).decodeRootObject() as! TelegramMediaMap
+            self.location = PostboxDecoder(buffer: MemoryBuffer(data: locationData)).decodeRootObject() as! IosappMediaMap
         } else {
             fatalError()
         }
         
         if let iconData = try container.decodeIfPresent(Data.self, forKey: .icon) {
-            self.icon = PostboxDecoder(buffer: MemoryBuffer(data: iconData)).decodeRootObject() as? TelegramMediaFile
+            self.icon = PostboxDecoder(buffer: MemoryBuffer(data: iconData)).decodeRootObject() as? IosappMediaFile
         }
 
         self.queryId = try container.decodeIfPresent(Int64.self, forKey: .queryId)

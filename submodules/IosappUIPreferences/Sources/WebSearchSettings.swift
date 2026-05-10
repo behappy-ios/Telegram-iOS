@@ -32,7 +32,7 @@ public struct WebSearchSettings: Codable, Equatable {
     }
 }
 
-public func updateWebSearchSettingsInteractively(accountManager: AccountManager<TelegramAccountManagerTypes>, _ f: @escaping (WebSearchSettings) -> WebSearchSettings) -> Signal<Void, NoError> {
+public func updateWebSearchSettingsInteractively(accountManager: AccountManager<IosappAccountManagerTypes>, _ f: @escaping (WebSearchSettings) -> WebSearchSettings) -> Signal<Void, NoError> {
     return accountManager.transaction { transaction -> Void in
         transaction.updateSharedData(ApplicationSpecificSharedDataKeys.webSearchSettings, { entry in
             let currentSettings: WebSearchSettings

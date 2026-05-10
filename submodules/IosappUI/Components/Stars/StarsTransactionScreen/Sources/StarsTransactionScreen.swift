@@ -111,7 +111,7 @@ private final class StarsTransactionSheetContent: CombinedComponent {
                 peerIds.append(receipt.botPaymentId)
             case let .gift(message):
                 peerIds.append(message.id.peerId)
-                if let action = message.media.first(where: { $0 is TelegramMediaAction }) as? TelegramMediaAction, case let .prizeStars(_, _, boostPeerId, _, _) = action.action, let boostPeerId {
+                if let action = message.media.first(where: { $0 is IosappMediaAction }) as? IosappMediaAction, case let .prizeStars(_, _, boostPeerId, _, _) = action.action, let boostPeerId {
                     peerIds.append(boostPeerId)
                 }
             case let .subscription(subscription):
@@ -124,8 +124,8 @@ private final class StarsTransactionSheetContent: CombinedComponent {
             
             self.disposable = (context.engine.data.get(
                 EngineDataMap(
-                    peerIds.map { peerId -> TelegramEngine.EngineData.Item.Peer.Peer in
-                        return TelegramEngine.EngineData.Item.Peer.Peer(id: peerId)
+                    peerIds.map { peerId -> IosappEngine.EngineData.Item.Peer.Peer in
+                        return IosappEngine.EngineData.Item.Peer.Peer(id: peerId)
                     }
                 )
             ) |> deliverOnMainQueue).startStrict(next: { [weak self] peers in
@@ -213,7 +213,7 @@ private final class StarsTransactionSheetContent: CombinedComponent {
             var toPeer: EnginePeer?
             var transactionPeer: StarsContext.State.Transaction.Peer?
             var media: [AnyMediaReference] = []
-            var photo: TelegramMediaWebFile?
+            var photo: IosappMediaWebFile?
             var transactionStatus: (String, UIColor)? = nil
             var isGift = false
             var isGiftAuctionBid = false
@@ -277,7 +277,7 @@ private final class StarsTransactionSheetContent: CombinedComponent {
                 descriptionText = ""
                 count = CurrencyAmount(amount: subscription.pricing.amount, currency: .stars)
                 date = subscription.untilDate
-                if let creationDate = (subscription.peer._asPeer() as? TelegramChannel)?.creationDate, creationDate > 0 {
+                if let creationDate = (subscription.peer._asPeer() as? IosappChannel)?.creationDate, creationDate > 0 {
                     additionalDate = creationDate
                 } else {
                     additionalDate = nil
@@ -492,7 +492,7 @@ private final class StarsTransactionSheetContent: CombinedComponent {
                     case let .peer(peer):
                         if let months = transaction.premiumGiftMonths {
                             premiumGiftMonths = months
-                            titleText = strings.Stars_Transaction_TelegramPremium(months)
+                            titleText = strings.Stars_Transaction_IosappPremium(months)
                         } else if transaction.flags.contains(.isLiveStreamPaidMessage) {
                             isPaidMessage = true
                             if transaction.flags.contains(.isReaction) {
@@ -546,22 +546,22 @@ private final class StarsTransactionSheetContent: CombinedComponent {
                             via = strings.Stars_Transaction_FragmentWithdrawal_Subtitle
                         }
                     case .ads:
-                        titleText = strings.Stars_Transaction_TelegramAds_Title
-                        via = strings.Stars_Transaction_TelegramAds_Subtitle
+                        titleText = strings.Stars_Transaction_IosappAds_Title
+                        via = strings.Stars_Transaction_IosappAds_Subtitle
                     case .apiLimitExtension:
-                        titleText = strings.Stars_Transaction_TelegramBotApi_Title
+                        titleText = strings.Stars_Transaction_IosappBotApi_Title
                     case .unsupported:
                         titleText = strings.Stars_Transaction_Unsupported_Title
                     }
                     
                     if let floodskipNumber = transaction.floodskipNumber {
-                        descriptionText = strings.Stars_Transaction_TelegramBotApi_Messages(floodskipNumber)
+                        descriptionText = strings.Stars_Transaction_IosappBotApi_Messages(floodskipNumber)
                     } else if !transaction.media.isEmpty {
                         var description: String = ""
                         var photoCount: Int32 = 0
                         var videoCount: Int32 = 0
                         for media in transaction.media {
-                            if let _ = media as? TelegramMediaFile {
+                            if let _ = media as? IosappMediaFile {
                                 videoCount += 1
                             } else {
                                 photoCount += 1
@@ -621,7 +621,7 @@ private final class StarsTransactionSheetContent: CombinedComponent {
 
                 let peerName = state.peerMap[message.id.peerId]?.compactDisplayTitle ?? ""
                 descriptionText = incoming ? strings.Stars_Gift_Received_Text : strings.Stars_Gift_Sent_Text(peerName).string
-                if let action = message.media.first(where: { $0 is TelegramMediaAction }) as? TelegramMediaAction {
+                if let action = message.media.first(where: { $0 is IosappMediaAction }) as? IosappMediaAction {
                     if case let .giftStars(_, _, countValue, _, _, _) = action.action {
                         titleText = incoming ? strings.Stars_Gift_Received_Title : strings.Stars_Gift_Sent_Title
                         
@@ -1402,7 +1402,7 @@ private final class StarsTransactionSheetContent: CombinedComponent {
             let linkColor = theme.actionSheet.controlAccentColor
             let destructiveColor = theme.actionSheet.destructiveActionTextColor
             let markdownAttributes = MarkdownAttributes(body: MarkdownAttributeSet(font: textFont, textColor: textColor), bold: MarkdownAttributeSet(font: boldTextFont, textColor: textColor), link: MarkdownAttributeSet(font: textFont, textColor: linkColor), linkAttribute: { contents in
-                return (TelegramTextAttributes.URL, contents)
+                return (IosappTextAttributes.URL, contents)
             })
             let additional = additional.update(
                 component: BalancedTextComponent(
@@ -1412,8 +1412,8 @@ private final class StarsTransactionSheetContent: CombinedComponent {
                     lineSpacing: 0.2,
                     highlightColor: linkColor.withAlphaComponent(0.2),
                     highlightAction: { attributes in
-                        if let _ = attributes[NSAttributedString.Key(rawValue: TelegramTextAttributes.URL)] {
-                            return NSAttributedString.Key(rawValue: TelegramTextAttributes.URL)
+                        if let _ = attributes[NSAttributedString.Key(rawValue: IosappTextAttributes.URL)] {
+                            return NSAttributedString.Key(rawValue: IosappTextAttributes.URL)
                         } else {
                             return nil
                         }
@@ -1480,7 +1480,7 @@ private final class StarsTransactionSheetContent: CombinedComponent {
                 let linkColor = theme.actionSheet.controlAccentColor
                 
                 let markdownAttributes = MarkdownAttributes(body: MarkdownAttributeSet(font: textFont, textColor: textColor), bold: MarkdownAttributeSet(font: boldTextFont, textColor: textColor), link: MarkdownAttributeSet(font: textFont, textColor: linkColor), linkAttribute: { contents in
-                    return (TelegramTextAttributes.URL, contents)
+                    return (IosappTextAttributes.URL, contents)
                 })
                 let attributedString = parseMarkdownIntoAttributedString(descriptionText, attributes: markdownAttributes, textAlignment: .center).mutableCopy() as! NSMutableAttributedString
                 if let range = attributedString.string.range(of: ">"), let chevronImage = state.cachedChevronImage?.0 {
@@ -1496,14 +1496,14 @@ private final class StarsTransactionSheetContent: CombinedComponent {
                         highlightColor: linkColor.withAlphaComponent(0.1),
                         highlightInset: UIEdgeInsets(top: 0.0, left: 0.0, bottom: 0.0, right: -8.0),
                         highlightAction: { attributes in
-                            if let _ = attributes[NSAttributedString.Key(rawValue: TelegramTextAttributes.URL)] {
-                                return NSAttributedString.Key(rawValue: TelegramTextAttributes.URL)
+                            if let _ = attributes[NSAttributedString.Key(rawValue: IosappTextAttributes.URL)] {
+                                return NSAttributedString.Key(rawValue: IosappTextAttributes.URL)
                             } else {
                                 return nil
                             }
                         },
                         tapAction: { attributes, _ in
-                            if let _ = attributes[NSAttributedString.Key(rawValue: TelegramTextAttributes.URL)] {
+                            if let _ = attributes[NSAttributedString.Key(rawValue: IosappTextAttributes.URL)] {
                                 if isPaidMessage {
                                     openPaidMessageFee()
                                 } else {
@@ -1948,7 +1948,7 @@ public class StarsTransactionScreen: ViewControllerComponentContainer {
             self.dismissAllTooltips()
             
             let _ = (context.engine.data.get(
-                TelegramEngine.EngineData.Item.Peer.Peer(id: peer.id)
+                IosappEngine.EngineData.Item.Peer.Peer(id: peer.id)
             )
             |> deliverOnMainQueue).start(next: { peer in
                 guard let peer else {
@@ -1969,7 +1969,7 @@ public class StarsTransactionScreen: ViewControllerComponentContainer {
                 return
             }
             let _ = (context.engine.data.get(
-                TelegramEngine.EngineData.Item.Peer.Peer(id: messageId.peerId)
+                IosappEngine.EngineData.Item.Peer.Peer(id: messageId.peerId)
             )
             |> deliverOnMainQueue).start(next: { peer in
                 guard let peer = peer else {
@@ -2004,7 +2004,7 @@ public class StarsTransactionScreen: ViewControllerComponentContainer {
                 author: nil,
                 text: "",
                 attributes: [],
-                media: [TelegramMediaPaidContent(amount: 0, extendedMedia: media.map { .full(media: $0) })],
+                media: [IosappMediaPaidContent(amount: 0, extendedMedia: media.map { .full(media: $0) })],
                 peers: SimpleDictionary(),
                 associatedMessages: SimpleDictionary(),
                 associatedMessageIds: [],

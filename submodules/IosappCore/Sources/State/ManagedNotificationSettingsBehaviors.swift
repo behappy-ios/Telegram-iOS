@@ -16,7 +16,7 @@ func managedNotificationSettingsBehaviors(postbox: Postbox) -> Signal<Never, NoE
         let checkSignal = postbox.transaction { transaction -> Void in
             let timestamp = Int32(CFAbsoluteTimeGetCurrent() + NSTimeIntervalSince1970)
             for (peerId, notificationSettings) in transaction.getPeerIdsAndNotificationSettingsWithBehaviorTimestampLessThanOrEqualTo(timestamp) {
-                if let notificationSettings = notificationSettings as? TelegramPeerNotificationSettings {
+                if let notificationSettings = notificationSettings as? IosappPeerNotificationSettings {
                     if case let .muted(untilTimestamp) = notificationSettings.muteState, untilTimestamp <= timestamp {
                         transaction.updateCurrentPeerNotificationSettings([peerId: notificationSettings.withUpdatedMuteState(.unmuted)])
                     }

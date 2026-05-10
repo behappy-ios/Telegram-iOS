@@ -14,7 +14,7 @@ public struct AccountSupportUserInfo: Codable, Equatable {
     }
 }
 
-public enum TelegramAccountRecordAttribute: AccountRecordAttribute, Equatable {
+public enum IosappAccountRecordAttribute: AccountRecordAttribute, Equatable {
     enum CodingKeys: String, CodingKey {
         case backupData
         case environment
@@ -77,26 +77,26 @@ public enum TelegramAccountRecordAttribute: AccountRecordAttribute, Equatable {
     }
 
     public func isEqual(to: AccountRecordAttribute) -> Bool {
-        return self == to as? TelegramAccountRecordAttribute
+        return self == to as? IosappAccountRecordAttribute
     }
 }
 
-public final class TelegramAccountManagerTypes: AccountManagerTypes {
-    public typealias Attribute = TelegramAccountRecordAttribute
+public final class IosappAccountManagerTypes: AccountManagerTypes {
+    public typealias Attribute = IosappAccountRecordAttribute
 }
 
 private var declaredEncodables: Void = {
     declareEncodable(UnauthorizedAccountState.self, f: { UnauthorizedAccountState(decoder: $0) })
     declareEncodable(AuthorizedAccountState.self, f: { AuthorizedAccountState(decoder: $0) })
-    declareEncodable(TelegramUser.self, f: { TelegramUser(decoder: $0) })
-    declareEncodable(TelegramGroup.self, f: { TelegramGroup(decoder: $0) })
-    declareEncodable(TelegramChannel.self, f: { TelegramChannel(decoder: $0) })
-    declareEncodable(TelegramMediaImage.self, f: { TelegramMediaImage(decoder: $0) })
-    declareEncodable(TelegramMediaImageRepresentation.self, f: { TelegramMediaImageRepresentation(decoder: $0) })
-    declareEncodable(TelegramMediaContact.self, f: { TelegramMediaContact(decoder: $0) })
-    declareEncodable(TelegramMediaMap.self, f: { TelegramMediaMap(decoder: $0) })
-    declareEncodable(TelegramMediaFile.self, f: { TelegramMediaFile(decoder: $0) })
-    declareEncodable(TelegramMediaFileAttribute.self, f: { TelegramMediaFileAttribute(decoder: $0) })
+    declareEncodable(IosappUser.self, f: { IosappUser(decoder: $0) })
+    declareEncodable(IosappGroup.self, f: { IosappGroup(decoder: $0) })
+    declareEncodable(IosappChannel.self, f: { IosappChannel(decoder: $0) })
+    declareEncodable(IosappMediaImage.self, f: { IosappMediaImage(decoder: $0) })
+    declareEncodable(IosappMediaImageRepresentation.self, f: { IosappMediaImageRepresentation(decoder: $0) })
+    declareEncodable(IosappMediaContact.self, f: { IosappMediaContact(decoder: $0) })
+    declareEncodable(IosappMediaMap.self, f: { IosappMediaMap(decoder: $0) })
+    declareEncodable(IosappMediaFile.self, f: { IosappMediaFile(decoder: $0) })
+    declareEncodable(IosappMediaFileAttribute.self, f: { IosappMediaFileAttribute(decoder: $0) })
     declareEncodable(CloudFileMediaResource.self, f: { CloudFileMediaResource(decoder: $0) })
     declareEncodable(ChannelState.self, f: { ChannelState(decoder: $0) })
     declareEncodable(RegularChatState.self, f: { RegularChatState(decoder: $0) })
@@ -111,19 +111,19 @@ private var declaredEncodables: Void = {
     declareEncodable(PendingReactionsMessageAttribute.self, f: { PendingReactionsMessageAttribute(decoder: $0) })
     declareEncodable(PendingStarsReactionsMessageAttribute.self, f: { PendingStarsReactionsMessageAttribute(decoder: $0) })
     declareEncodable(CloudDocumentMediaResource.self, f: { CloudDocumentMediaResource(decoder: $0) })
-    declareEncodable(TelegramMediaWebpage.self, f: { TelegramMediaWebpage(decoder: $0) })
+    declareEncodable(IosappMediaWebpage.self, f: { IosappMediaWebpage(decoder: $0) })
     declareEncodable(ViewCountMessageAttribute.self, f: { ViewCountMessageAttribute(decoder: $0) })
     declareEncodable(ForwardCountMessageAttribute.self, f: { ForwardCountMessageAttribute(decoder: $0) })
     declareEncodable(BoostCountMessageAttribute.self, f: { BoostCountMessageAttribute(decoder: $0) })
     declareEncodable(ParticipantRankMessageAttribute.self, f: { ParticipantRankMessageAttribute(decoder: $0) })
     declareEncodable(NotificationInfoMessageAttribute.self, f: { NotificationInfoMessageAttribute(decoder: $0) })
-    declareEncodable(TelegramMediaAction.self, f: { TelegramMediaAction(decoder: $0) })
-    declareEncodable(TelegramPeerNotificationSettings.self, f: { TelegramPeerNotificationSettings(decoder: $0) })
+    declareEncodable(IosappMediaAction.self, f: { IosappMediaAction(decoder: $0) })
+    declareEncodable(IosappPeerNotificationSettings.self, f: { IosappPeerNotificationSettings(decoder: $0) })
     declareEncodable(CachedUserData.self, f: { CachedUserData(decoder: $0) })
     declareEncodable(BotInfo.self, f: { BotInfo(decoder: $0) })
     declareEncodable(CachedGroupData.self, f: { CachedGroupData(decoder: $0) })
     declareEncodable(CachedChannelData.self, f: { CachedChannelData(decoder: $0) })
-    declareEncodable(TelegramUserPresence.self, f: { TelegramUserPresence(decoder: $0) })
+    declareEncodable(IosappUserPresence.self, f: { IosappUserPresence(decoder: $0) })
     declareEncodable(LocalFileMediaResource.self, f: { LocalFileMediaResource(decoder: $0) })
     declareEncodable(StickerPackCollectionInfo.self, f: { StickerPackCollectionInfo(decoder: $0) })
     declareEncodable(StickerPackItem.self, f: { StickerPackItem(decoder: $0) })
@@ -138,7 +138,7 @@ private var declaredEncodables: Void = {
     declareEncodable(HttpReferenceMediaResource.self, f: { HttpReferenceMediaResource(decoder: $0) })
     declareEncodable(WebFileReferenceMediaResource.self, f: { WebFileReferenceMediaResource(decoder: $0) })
     declareEncodable(EmptyMediaResource.self, f: { EmptyMediaResource(decoder: $0) })
-    declareEncodable(TelegramSecretChat.self, f: { TelegramSecretChat(decoder: $0) })
+    declareEncodable(IosappSecretChat.self, f: { IosappSecretChat(decoder: $0) })
     declareEncodable(SecretChatState.self, f: { SecretChatState(decoder: $0) })
     declareEncodable(SecretChatIncomingEncryptedOperation.self, f: { SecretChatIncomingEncryptedOperation(decoder: $0) })
     declareEncodable(SecretChatIncomingDecryptedOperation.self, f: { SecretChatIncomingDecryptedOperation(decoder: $0) })
@@ -153,9 +153,9 @@ private var declaredEncodables: Void = {
     declareEncodable(CloudChatClearHistoryOperation.self, f: { CloudChatClearHistoryOperation(decoder: $0) })
     declareEncodable(OutgoingContentInfoMessageAttribute.self, f: { OutgoingContentInfoMessageAttribute(decoder: $0) })
     declareEncodable(ConsumableContentMessageAttribute.self, f: { ConsumableContentMessageAttribute(decoder: $0) })
-    declareEncodable(TelegramMediaGame.self, f: { TelegramMediaGame(decoder: $0) })
-    declareEncodable(TelegramMediaInvoice.self, f: { TelegramMediaInvoice(decoder: $0) })
-    declareEncodable(TelegramMediaWebFile.self, f: { TelegramMediaWebFile(decoder: $0) })
+    declareEncodable(IosappMediaGame.self, f: { IosappMediaGame(decoder: $0) })
+    declareEncodable(IosappMediaInvoice.self, f: { IosappMediaInvoice(decoder: $0) })
+    declareEncodable(IosappMediaWebFile.self, f: { IosappMediaWebFile(decoder: $0) })
     declareEncodable(SynchronizeInstalledStickerPacksOperation.self, f: { SynchronizeInstalledStickerPacksOperation(decoder: $0) })
     declareEncodable(SynchronizeMarkFeaturedStickerPacksAsSeenOperation.self, f: { SynchronizeMarkFeaturedStickerPacksAsSeenOperation(decoder: $0) })
     declareEncodable(SynchronizeChatInputStateOperation.self, f: { SynchronizeChatInputStateOperation(decoder: $0) })
@@ -167,18 +167,18 @@ private var declaredEncodables: Void = {
     declareEncodable(PeerGroupMessageStateVersionAttribute.self, f: { PeerGroupMessageStateVersionAttribute(decoder: $0) })
     declareEncodable(CachedSecretChatData.self, f: { CachedSecretChatData(decoder: $0) })
     declareEncodable(AuthorSignatureMessageAttribute.self, f: { AuthorSignatureMessageAttribute(decoder: $0) })
-    declareEncodable(TelegramMediaExpiredContent.self, f: { TelegramMediaExpiredContent(decoder: $0) })
+    declareEncodable(IosappMediaExpiredContent.self, f: { IosappMediaExpiredContent(decoder: $0) })
     declareEncodable(ConsumablePersonalMentionMessageAttribute.self, f: { ConsumablePersonalMentionMessageAttribute(decoder: $0) })
     declareEncodable(ConsumePersonalMessageAction.self, f: { ConsumePersonalMessageAction(decoder: $0) })
     declareEncodable(ReadReactionAction.self, f: { ReadReactionAction(decoder: $0) })
     declareEncodable(SynchronizeGroupedPeersOperation.self, f: { SynchronizeGroupedPeersOperation(decoder: $0) })
-    declareEncodable(TelegramDeviceContactImportedData.self, f: { TelegramDeviceContactImportedData(decoder: $0) })
+    declareEncodable(IosappDeviceContactImportedData.self, f: { IosappDeviceContactImportedData(decoder: $0) })
     declareEncodable(SecureFileMediaResource.self, f: { SecureFileMediaResource(decoder: $0) })
     declareEncodable(SynchronizeMarkAllUnseenPersonalMessagesOperation.self, f: { SynchronizeMarkAllUnseenPersonalMessagesOperation(decoder: $0) })
     declareEncodable(SynchronizeMarkAllUnseenReactionsOperation.self, f: { SynchronizeMarkAllUnseenReactionsOperation(decoder: $0) })
     declareEncodable(SynchronizeAppLogEventsOperation.self, f: { SynchronizeAppLogEventsOperation(decoder: $0) })
-    declareEncodable(TelegramMediaPoll.self, f: { TelegramMediaPoll(decoder: $0) })
-    declareEncodable(TelegramMediaUnsupported.self, f: { TelegramMediaUnsupported(decoder: $0) })
+    declareEncodable(IosappMediaPoll.self, f: { IosappMediaPoll(decoder: $0) })
+    declareEncodable(IosappMediaUnsupported.self, f: { IosappMediaUnsupported(decoder: $0) })
     declareEncodable(EmojiKeywordCollectionInfo.self, f: { EmojiKeywordCollectionInfo(decoder: $0) })
     declareEncodable(EmojiKeywordItem.self, f: { EmojiKeywordItem(decoder: $0) })
     declareEncodable(SynchronizeEmojiKeywordsOperation.self, f: { SynchronizeEmojiKeywordsOperation(decoder: $0) })
@@ -195,13 +195,13 @@ private var declaredEncodables: Void = {
     declareEncodable(RestrictedContentMessageAttribute.self, f: { RestrictedContentMessageAttribute(decoder: $0) })
     declareEncodable(SendScheduledMessageImmediatelyAction.self, f: { SendScheduledMessageImmediatelyAction(decoder: $0) })
     declareEncodable(EmbeddedMediaStickersMessageAttribute.self, f: { EmbeddedMediaStickersMessageAttribute(decoder: $0) })
-    declareEncodable(TelegramMediaWebpageAttribute.self, f: { TelegramMediaWebpageAttribute(decoder: $0) })
-    declareEncodable(TelegramMediaDice.self, f: { TelegramMediaDice(decoder: $0) })
+    declareEncodable(IosappMediaWebpageAttribute.self, f: { IosappMediaWebpageAttribute(decoder: $0) })
+    declareEncodable(IosappMediaDice.self, f: { IosappMediaDice(decoder: $0) })
     declareEncodable(SynchronizeChatListFiltersOperation.self, f: { SynchronizeChatListFiltersOperation(decoder: $0) })
     declareEncodable(PromoChatListItem.self, f: { PromoChatListItem(decoder: $0) })
-    declareEncodable(TelegramMediaFile.VideoThumbnail.self, f: { TelegramMediaFile.VideoThumbnail(decoder: $0) })
+    declareEncodable(IosappMediaFile.VideoThumbnail.self, f: { IosappMediaFile.VideoThumbnail(decoder: $0) })
     declareEncodable(PeerAccessRestrictionInfo.self, f: { PeerAccessRestrictionInfo(decoder: $0) })
-    declareEncodable(TelegramMediaImage.VideoRepresentation.self, f: { TelegramMediaImage.VideoRepresentation(decoder: $0) })
+    declareEncodable(IosappMediaImage.VideoRepresentation.self, f: { IosappMediaImage.VideoRepresentation(decoder: $0) })
     declareEncodable(ValidationMessageAttribute.self, f: { ValidationMessageAttribute(decoder: $0) })
     declareEncodable(EmojiSearchQueryMessageAttribute.self, f: { EmojiSearchQueryMessageAttribute(decoder: $0) })
     declareEncodable(WallpaperDataResource.self, f: { WallpaperDataResource(decoder: $0) })
@@ -210,36 +210,36 @@ private var declaredEncodables: Void = {
     declareEncodable(ForwardVideoTimestampAttribute.self, f: { ForwardVideoTimestampAttribute(decoder: $0) })
     declareEncodable(AudioTranscriptionMessageAttribute.self, f: { AudioTranscriptionMessageAttribute(decoder: $0) })
     declareEncodable(NonPremiumMessageAttribute.self, f: { NonPremiumMessageAttribute(decoder: $0) })
-    declareEncodable(TelegramExtendedMedia.self, f: { TelegramExtendedMedia(decoder: $0) })
-    declareEncodable(TelegramPeerUsername.self, f: { TelegramPeerUsername(decoder: $0) })
+    declareEncodable(IosappExtendedMedia.self, f: { IosappExtendedMedia(decoder: $0) })
+    declareEncodable(IosappPeerUsername.self, f: { IosappPeerUsername(decoder: $0) })
     declareEncodable(MediaSpoilerMessageAttribute.self, f: { MediaSpoilerMessageAttribute(decoder: $0) })
     declareEncodable(AuthSessionInfoAttribute.self, f: { AuthSessionInfoAttribute(decoder: $0) })
     declareEncodable(TranslationMessageAttribute.self, f: { TranslationMessageAttribute(decoder: $0) })
     declareEncodable(TranslationMessageAttribute.Additional.self, f: { TranslationMessageAttribute.Additional(decoder: $0) })
     declareEncodable(SynchronizeAutosaveItemOperation.self, f: { SynchronizeAutosaveItemOperation(decoder: $0) })
-    declareEncodable(TelegramMediaStory.self, f: { TelegramMediaStory(decoder: $0) })
+    declareEncodable(IosappMediaStory.self, f: { IosappMediaStory(decoder: $0) })
     declareEncodable(SynchronizeViewStoriesOperation.self, f: { SynchronizeViewStoriesOperation(decoder: $0) })
     declareEncodable(SynchronizePeerStoriesOperation.self, f: { SynchronizePeerStoriesOperation(decoder: $0) })
     declareEncodable(MapVenue.self, f: { MapVenue(decoder: $0) })
     declareEncodable(MapGeoAddress.self, f: { MapGeoAddress(decoder: $0) })
-    declareEncodable(TelegramMediaGiveaway.self, f: { TelegramMediaGiveaway(decoder: $0) })
-    declareEncodable(TelegramMediaGiveawayResults.self, f: { TelegramMediaGiveawayResults(decoder: $0) })
+    declareEncodable(IosappMediaGiveaway.self, f: { IosappMediaGiveaway(decoder: $0) })
+    declareEncodable(IosappMediaGiveawayResults.self, f: { IosappMediaGiveawayResults(decoder: $0) })
     declareEncodable(WebpagePreviewMessageAttribute.self, f: { WebpagePreviewMessageAttribute(decoder: $0) })
     declareEncodable(InvertMediaMessageAttribute.self, f: { InvertMediaMessageAttribute(decoder: $0) })
     declareEncodable(DerivedDataMessageAttribute.self, f: { DerivedDataMessageAttribute(decoder: $0) })
-    declareEncodable(TelegramApplicationIcons.self, f: { TelegramApplicationIcons(decoder: $0) })
+    declareEncodable(IosappApplicationIcons.self, f: { IosappApplicationIcons(decoder: $0) })
     declareEncodable(OutgoingQuickReplyMessageAttribute.self, f: { OutgoingQuickReplyMessageAttribute(decoder: $0) })
     declareEncodable(EffectMessageAttribute.self, f: { EffectMessageAttribute(decoder: $0) })
     declareEncodable(FactCheckMessageAttribute.self, f: { FactCheckMessageAttribute(decoder: $0) })
-    declareEncodable(TelegramMediaPaidContent.self, f: { TelegramMediaPaidContent(decoder: $0) })
+    declareEncodable(IosappMediaPaidContent.self, f: { IosappMediaPaidContent(decoder: $0) })
     declareEncodable(ReportDeliveryMessageAttribute.self, f: { ReportDeliveryMessageAttribute(decoder: $0) })
     declareEncodable(PaidStarsMessageAttribute.self, f: { PaidStarsMessageAttribute(decoder: $0) })
-    declareEncodable(TelegramMediaTodo.self, f: { TelegramMediaTodo(decoder: $0) })
-    declareEncodable(TelegramMediaTodo.Item.self, f: { TelegramMediaTodo.Item(decoder: $0) })
-    declareEncodable(TelegramMediaTodo.Completion.self, f: { TelegramMediaTodo.Completion(decoder: $0) })
+    declareEncodable(IosappMediaTodo.self, f: { IosappMediaTodo(decoder: $0) })
+    declareEncodable(IosappMediaTodo.Item.self, f: { IosappMediaTodo.Item(decoder: $0) })
+    declareEncodable(IosappMediaTodo.Completion.self, f: { IosappMediaTodo.Completion(decoder: $0) })
     declareEncodable(SuggestedPostMessageAttribute.self, f: { SuggestedPostMessageAttribute(decoder: $0) })
     declareEncodable(PublishedSuggestedPostMessageAttribute.self, f: { PublishedSuggestedPostMessageAttribute(decoder: $0) })
-    declareEncodable(TelegramMediaLiveStream.self, f: { TelegramMediaLiveStream(decoder: $0) })
+    declareEncodable(IosappMediaLiveStream.self, f: { IosappMediaLiveStream(decoder: $0) })
     declareEncodable(ScheduledRepeatAttribute.self, f: { ScheduledRepeatAttribute(decoder: $0) })
     declareEncodable(SummarizationMessageAttribute.self, f: { SummarizationMessageAttribute(decoder: $0) })
     return
@@ -286,7 +286,7 @@ public func performAppGroupUpgrades(appGroupPath: String, rootPath: String) {
     }
 }
 
-public func currentAccount(allocateIfNotExists: Bool, networkArguments: NetworkInitializationArguments, supplementary: Bool, manager: AccountManager<TelegramAccountManagerTypes>, rootPath: String, auxiliaryMethods: AccountAuxiliaryMethods, encryptionParameters: ValueBoxEncryptionParameters) -> Signal<AccountResult?, NoError> {
+public func currentAccount(allocateIfNotExists: Bool, networkArguments: NetworkInitializationArguments, supplementary: Bool, manager: AccountManager<IosappAccountManagerTypes>, rootPath: String, auxiliaryMethods: AccountAuxiliaryMethods, encryptionParameters: ValueBoxEncryptionParameters) -> Signal<AccountResult?, NoError> {
     return manager.currentAccountRecord(allocateIfNotExists: allocateIfNotExists)
     |> distinctUntilChanged(isEqual: { lhs, rhs in
         return lhs?.0 == rhs?.0
@@ -357,7 +357,7 @@ public func currentAccount(allocateIfNotExists: Bool, networkArguments: NetworkI
     }
 }
 
-public func logoutFromAccount(id: AccountRecordId, accountManager: AccountManager<TelegramAccountManagerTypes>, alreadyLoggedOutRemotely: Bool) -> Signal<Void, NoError> {
+public func logoutFromAccount(id: AccountRecordId, accountManager: AccountManager<IosappAccountManagerTypes>, alreadyLoggedOutRemotely: Bool) -> Signal<Void, NoError> {
     Logger.shared.log("AccountManager", "logoutFromAccount \(id)")
     return accountManager.transaction { transaction -> Void in
         transaction.updateRecord(id, { current in
@@ -383,7 +383,7 @@ public func logoutFromAccount(id: AccountRecordId, accountManager: AccountManage
     }
 }
 
-public func managedCleanupAccounts(networkArguments: NetworkInitializationArguments, accountManager: AccountManager<TelegramAccountManagerTypes>, rootPath: String, auxiliaryMethods: AccountAuxiliaryMethods, encryptionParameters: ValueBoxEncryptionParameters) -> Signal<Void, NoError> {
+public func managedCleanupAccounts(networkArguments: NetworkInitializationArguments, accountManager: AccountManager<IosappAccountManagerTypes>, rootPath: String, auxiliaryMethods: AccountAuxiliaryMethods, encryptionParameters: ValueBoxEncryptionParameters) -> Signal<Void, NoError> {
     let currentTemporarySessionId = accountManager.temporarySessionId
     return Signal { subscriber in
         let loggedOutAccounts = Atomic<[AccountRecordId: MetaDisposable]>(value: [:])
@@ -398,9 +398,9 @@ public func managedCleanupAccounts(networkArguments: NetworkInitializationArgume
         }).start()
         let disposable = accountManager.accountRecords().start(next: { view in
             var disposeList: [(AccountRecordId, MetaDisposable)] = []
-            var beginList: [(AccountRecordId, [TelegramAccountManagerTypes.Attribute], MetaDisposable)] = []
+            var beginList: [(AccountRecordId, [IosappAccountManagerTypes.Attribute], MetaDisposable)] = []
             let _ = loggedOutAccounts.modify { disposables in
-                var validIds: [AccountRecordId: [TelegramAccountManagerTypes.Attribute]] = [:]
+                var validIds: [AccountRecordId: [IosappAccountManagerTypes.Attribute]] = [:]
                 outer: for record in view.records {
                     for attribute in record.attributes {
                         if case .loggedOut = attribute {
@@ -472,7 +472,7 @@ public func managedCleanupAccounts(networkArguments: NetworkInitializationArgume
 
 public typealias AccountManagerPreferencesEntry = PreferencesEntry
 
-private func cleanupAccount(networkArguments: NetworkInitializationArguments, accountManager: AccountManager<TelegramAccountManagerTypes>, id: AccountRecordId, encryptionParameters: ValueBoxEncryptionParameters, attributes: [TelegramAccountManagerTypes.Attribute], rootPath: String, auxiliaryMethods: AccountAuxiliaryMethods) -> Signal<Void, NoError> {
+private func cleanupAccount(networkArguments: NetworkInitializationArguments, accountManager: AccountManager<IosappAccountManagerTypes>, id: AccountRecordId, encryptionParameters: ValueBoxEncryptionParameters, attributes: [IosappAccountManagerTypes.Attribute], rootPath: String, auxiliaryMethods: AccountAuxiliaryMethods) -> Signal<Void, NoError> {
     let beginWithTestingEnvironment = attributes.contains(where: { attribute in
         if case let .environment(accountEnvironment) = attribute, case .test = accountEnvironment.environment {
             return true

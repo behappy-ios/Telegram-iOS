@@ -1,6 +1,6 @@
 import Postbox
 
-public enum TelegramDeviceContactImportedData: PostboxCoding {
+public enum IosappDeviceContactImportedData: PostboxCoding {
     case imported(data: ImportableDeviceContactData, importedByCount: Int32, peerId: PeerId?)
     case retryLater
     

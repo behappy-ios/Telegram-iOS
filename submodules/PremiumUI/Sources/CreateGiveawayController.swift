@@ -1178,7 +1178,7 @@ public func createGiveawayController(context: AccountContext, updatedPresentatio
         |> mapToSignal { state in
             return context.engine.data.get(EngineDataMap(
                 Set([peerId] + state.channels + state.peers).map {
-                    TelegramEngine.EngineData.Item.Peer.Peer(id: $0)
+                    IosappEngine.EngineData.Item.Peer.Peer(id: $0)
                 }
             ))
             |> map { peers in

@@ -10,7 +10,7 @@ import ChatMessageItemCommon
 import ChatMessageAttachedContentNode
 
 public final class ChatMessageGameBubbleContentNode: ChatMessageBubbleContentNode {
-    private var game: TelegramMediaGame?
+    private var game: IosappMediaGame?
     
     private let contentNode: ChatMessageAttachedContentNode
     
@@ -48,11 +48,11 @@ public final class ChatMessageGameBubbleContentNode: ChatMessageBubbleContentNod
         let contentNodeLayout = self.contentNode.asyncLayout()
         
         return { item, layoutConstants, preparePosition, _, constrainedSize, _ in
-            var game: TelegramMediaGame?
+            var game: IosappMediaGame?
             var messageEntities: [MessageTextEntity]?
             
             for media in item.message.media {
-                if let media = media as? TelegramMediaGame {
+                if let media = media as? IosappMediaGame {
                     game = media
                     break
                 }

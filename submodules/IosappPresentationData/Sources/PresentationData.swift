@@ -82,7 +82,7 @@ public final class PresentationData: Equatable {
     public let strings: PresentationStrings
     public let theme: PresentationTheme
     public let autoNightModeTriggered: Bool
-    public let chatWallpaper: TelegramWallpaper
+    public let chatWallpaper: IosappWallpaper
     public let chatFontSize: PresentationFontSize
     public let chatBubbleCorners: PresentationChatBubbleCorners
     public let listsFontSize: PresentationFontSize
@@ -92,7 +92,7 @@ public final class PresentationData: Equatable {
     public let reduceMotion: Bool
     public let largeEmoji: Bool
     
-    public init(strings: PresentationStrings, theme: PresentationTheme, autoNightModeTriggered: Bool, chatWallpaper: TelegramWallpaper, chatFontSize: PresentationFontSize, chatBubbleCorners: PresentationChatBubbleCorners, listsFontSize: PresentationFontSize, dateTimeFormat: PresentationDateTimeFormat, nameDisplayOrder: PresentationPersonNameOrder, nameSortOrder: PresentationPersonNameOrder, reduceMotion: Bool, largeEmoji: Bool) {
+    public init(strings: PresentationStrings, theme: PresentationTheme, autoNightModeTriggered: Bool, chatWallpaper: IosappWallpaper, chatFontSize: PresentationFontSize, chatBubbleCorners: PresentationChatBubbleCorners, listsFontSize: PresentationFontSize, dateTimeFormat: PresentationDateTimeFormat, nameDisplayOrder: PresentationPersonNameOrder, nameSortOrder: PresentationPersonNameOrder, reduceMotion: Bool, largeEmoji: Bool) {
         self.strings = strings
         self.theme = theme
         self.autoNightModeTriggered = autoNightModeTriggered
@@ -111,7 +111,7 @@ public final class PresentationData: Equatable {
         return PresentationData(strings: self.strings, theme: theme, autoNightModeTriggered: self.autoNightModeTriggered, chatWallpaper: self.chatWallpaper, chatFontSize: self.chatFontSize, chatBubbleCorners: self.chatBubbleCorners, listsFontSize: self.listsFontSize, dateTimeFormat: self.dateTimeFormat, nameDisplayOrder: self.nameDisplayOrder, nameSortOrder: self.nameSortOrder, reduceMotion: self.reduceMotion, largeEmoji: self.largeEmoji)
     }
     
-    public func withUpdated(chatWallpaper: TelegramWallpaper) -> PresentationData {
+    public func withUpdated(chatWallpaper: IosappWallpaper) -> PresentationData {
         return PresentationData(strings: self.strings, theme: self.theme, autoNightModeTriggered: self.autoNightModeTriggered, chatWallpaper: chatWallpaper, chatFontSize: self.chatFontSize, chatBubbleCorners: self.chatBubbleCorners, listsFontSize: self.listsFontSize, dateTimeFormat: self.dateTimeFormat, nameDisplayOrder: self.nameDisplayOrder, nameSortOrder: self.nameSortOrder, reduceMotion: self.reduceMotion, largeEmoji: self.largeEmoji)
     }
     
@@ -234,7 +234,7 @@ public final class InitialPresentationDataAndSettings {
     }
 }
 
-public func currentPresentationDataAndSettings(accountManager: AccountManager<TelegramAccountManagerTypes>, systemUserInterfaceStyle: WindowUserInterfaceStyle) -> Signal<InitialPresentationDataAndSettings, NoError> {
+public func currentPresentationDataAndSettings(accountManager: AccountManager<IosappAccountManagerTypes>, systemUserInterfaceStyle: WindowUserInterfaceStyle) -> Signal<InitialPresentationDataAndSettings, NoError> {
     struct InternalData {
         var localizationSettings: PreferencesEntry?
         var presentationThemeSettings: PreferencesEntry?
@@ -384,7 +384,7 @@ public func currentPresentationDataAndSettings(accountManager: AccountManager<Te
         let contactSettings: ContactSynchronizationSettings = internalData.contactSynchronizationSettings?.get(ContactSynchronizationSettings.self) ?? ContactSynchronizationSettings.defaultSettings
         
         let effectiveTheme: PresentationThemeReference
-        var preferredBaseTheme: TelegramBaseTheme?
+        var preferredBaseTheme: IosappBaseTheme?
         let parameters = AutomaticThemeSwitchParameters(settings: themeSettings.automaticThemeSwitchSetting)
         let autoNightModeTriggered: Bool
         if automaticThemeShouldSwitchNow(parameters, systemUserInterfaceStyle: systemUserInterfaceStyle) {
@@ -408,7 +408,7 @@ public func currentPresentationDataAndSettings(accountManager: AccountManager<Te
         let effectiveColors = themeSettings.themeSpecificAccentColors[effectiveTheme.index]
         let theme = makePresentationTheme(mediaBox: accountManager.mediaBox, themeReference: effectiveTheme, baseTheme: preferredBaseTheme, accentColor: effectiveColors?.colorFor(baseTheme: preferredBaseTheme ?? .day), bubbleColors: effectiveColors?.customBubbleColors ?? [], baseColor: effectiveColors?.baseColor) ?? defaultPresentationTheme
         
-        var effectiveChatWallpaper: TelegramWallpaper = (themeSettings.themeSpecificChatWallpapers[coloredThemeIndex(reference: effectiveTheme, accentColor: effectiveColors)] ?? themeSettings.themeSpecificChatWallpapers[effectiveTheme.index]) ?? theme.chat.defaultWallpaper
+        var effectiveChatWallpaper: IosappWallpaper = (themeSettings.themeSpecificChatWallpapers[coloredThemeIndex(reference: effectiveTheme, accentColor: effectiveColors)] ?? themeSettings.themeSpecificChatWallpapers[effectiveTheme.index]) ?? theme.chat.defaultWallpaper
         if case .builtin = effectiveChatWallpaper {
             effectiveChatWallpaper = defaultBuiltinWallpaper(data: .legacy, colors: legacyBuiltinWallpaperGradientColors.map(\.rgb))
         }
@@ -600,7 +600,7 @@ public func serviceColor(from image: Signal<UIImage?, NoError>) -> Signal<UIColo
     }
 }
 
-public func serviceColor(for wallpaper: (TelegramWallpaper, UIImage?)) -> UIColor {
+public func serviceColor(for wallpaper: (IosappWallpaper, UIImage?)) -> UIColor {
     switch wallpaper.0 {
         case .builtin:
             return UIColor(rgb: 0x748391, alpha: 0.45)
@@ -656,9 +656,9 @@ public func serviceColor(with color: UIColor) -> UIColor {
     return color
 }
 
-private var serviceBackgroundColorForWallpaper: (TelegramWallpaper, UIColor)?
+private var serviceBackgroundColorForWallpaper: (IosappWallpaper, UIColor)?
 
-public func chatServiceBackgroundColor(wallpaper: TelegramWallpaper, mediaBox: MediaBox) -> Signal<UIColor, NoError> {
+public func chatServiceBackgroundColor(wallpaper: IosappWallpaper, mediaBox: MediaBox) -> Signal<UIColor, NoError> {
     if wallpaper == serviceBackgroundColorForWallpaper?.0, let color = serviceBackgroundColorForWallpaper?.1 {
         return .single(color)
     } else {
@@ -727,7 +727,7 @@ public func chatServiceBackgroundColor(wallpaper: TelegramWallpaper, mediaBox: M
     }
 }
 
-public func updatedPresentationData(accountManager: AccountManager<TelegramAccountManagerTypes>, applicationInForeground: Signal<Bool, NoError>, systemUserInterfaceStyle: Signal<WindowUserInterfaceStyle, NoError>) -> Signal<PresentationData, NoError> {
+public func updatedPresentationData(accountManager: AccountManager<IosappAccountManagerTypes>, applicationInForeground: Signal<Bool, NoError>, systemUserInterfaceStyle: Signal<WindowUserInterfaceStyle, NoError>) -> Signal<PresentationData, NoError> {
     return combineLatest(accountManager.sharedData(keys: [SharedDataKeys.localizationSettings, ApplicationSpecificSharedDataKeys.presentationThemeSettings, ApplicationSpecificSharedDataKeys.contactSynchronizationSettings]), systemUserInterfaceStyle)
     |> mapToSignal { sharedData, systemUserInterfaceStyle -> Signal<PresentationData, NoError> in
         let themeSettings: PresentationThemeSettings
@@ -745,7 +745,7 @@ public func updatedPresentationData(accountManager: AccountManager<TelegramAccou
         }
         let themeSpecificWallpaper = (themeSettings.themeSpecificChatWallpapers[coloredThemeIndex(reference: themeSettings.theme, accentColor: currentColors)] ?? themeSettings.themeSpecificChatWallpapers[themeSettings.theme.index])
         
-        let currentWallpaper: TelegramWallpaper
+        let currentWallpaper: IosappWallpaper
         if let themeSpecificWallpaper = themeSpecificWallpaper {
             currentWallpaper = themeSpecificWallpaper
         } else {
@@ -767,7 +767,7 @@ public func updatedPresentationData(accountManager: AccountManager<TelegramAccou
                         var effectiveColors = currentColors
                         
                         var switchedToNightModeWallpaper = false
-                        var preferredBaseTheme: TelegramBaseTheme?
+                        var preferredBaseTheme: IosappBaseTheme?
                         if autoNightModeTriggered {
                             let automaticTheme = themeSettings.automaticThemeSwitchSetting.theme
                             effectiveColors = themeSettings.themeSpecificAccentColors[automaticTheme.index]

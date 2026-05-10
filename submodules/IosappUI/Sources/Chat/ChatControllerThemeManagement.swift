@@ -291,13 +291,13 @@ extension ChatControllerImpl {
         })
     }
     
-    func presentEmojiList(references: [StickerPackReference], previewIconFile: TelegramMediaFile? = nil) {
+    func presentEmojiList(references: [StickerPackReference], previewIconFile: IosappMediaFile? = nil) {
         guard let packReference = references.first else {
             return
         }
         self.chatDisplayNode.dismissTextInput()
         
-        var previewIconFile: TelegramMediaFile? = previewIconFile
+        var previewIconFile: IosappMediaFile? = previewIconFile
         if let file = previewIconFile, let peerId = self.chatLocation.peerId, !file.isValidForDisplay(chatPeerId: peerId) {
             previewIconFile = nil
         }

@@ -117,7 +117,7 @@ func chatHistoryViewForLocation(
                 let isPossibleIntroLoaded: Signal<Bool, NoError>
                 if case let .peer(id) = chatLocation, id.namespace == Namespaces.Peer.CloudUser {
                     isPossibleIntroLoaded = context.engine.data.subscribe(
-                        TelegramEngine.EngineData.Item.Peer.BusinessIntro(id: id)
+                        IosappEngine.EngineData.Item.Peer.BusinessIntro(id: id)
                     )
                     |> map { result -> Bool in
                         switch result {

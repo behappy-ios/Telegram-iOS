@@ -1,7 +1,7 @@
 import Foundation
 import Postbox
 
-public struct TelegramMediaInvoiceFlags: OptionSet {
+public struct IosappMediaInvoiceFlags: OptionSet {
     public var rawValue: Int32
     
     public init(rawValue: Int32) {
@@ -12,12 +12,12 @@ public struct TelegramMediaInvoiceFlags: OptionSet {
         self.rawValue = 0
     }
     
-    public static let isTest = TelegramMediaInvoiceFlags(rawValue: 1 << 0)
-    public static let shippingAddressRequested = TelegramMediaInvoiceFlags(rawValue: 1 << 1)
+    public static let isTest = IosappMediaInvoiceFlags(rawValue: 1 << 0)
+    public static let shippingAddressRequested = IosappMediaInvoiceFlags(rawValue: 1 << 1)
 }
 
-public enum TelegramExtendedMedia: PostboxCoding, Equatable {
-    public static func ==(lhs: TelegramExtendedMedia, rhs: TelegramExtendedMedia) -> Bool {
+public enum IosappExtendedMedia: PostboxCoding, Equatable {
+    public static func ==(lhs: IosappExtendedMedia, rhs: IosappExtendedMedia) -> Bool {
         switch lhs {
             case let .preview(lhsDimensions, lhsImmediateThumbnailData, lhsVideoDuration):
                 if case let .preview(rhsDimensions, rhsImmediateThumbnailData, rhsVideoDuration) = rhs, lhsDimensions == rhsDimensions, lhsImmediateThumbnailData == rhsImmediateThumbnailData, lhsVideoDuration == rhsVideoDuration {
@@ -87,7 +87,7 @@ public enum TelegramExtendedMedia: PostboxCoding, Equatable {
     }
 }
 
-public final class TelegramMediaInvoice: Media, Equatable {
+public final class IosappMediaInvoice: Media, Equatable {
     public static let lastVersion: Int32 = 1
 
     public var peerIds: [PeerId] = []
@@ -100,14 +100,14 @@ public final class TelegramMediaInvoice: Media, Equatable {
     public let currency: String
     public let totalAmount: Int64
     public let startParam: String
-    public let photo: TelegramMediaWebFile?
-    public let flags: TelegramMediaInvoiceFlags
-    public let extendedMedia: TelegramExtendedMedia?
+    public let photo: IosappMediaWebFile?
+    public let flags: IosappMediaInvoiceFlags
+    public let extendedMedia: IosappExtendedMedia?
     public let subscriptionPeriod: Int32?
     
     public let version: Int32
     
-    public init(title: String, description: String, photo: TelegramMediaWebFile?, receiptMessageId: MessageId?, currency: String, totalAmount: Int64, startParam: String, extendedMedia: TelegramExtendedMedia?, subscriptionPeriod: Int32?, flags: TelegramMediaInvoiceFlags, version: Int32) {
+    public init(title: String, description: String, photo: IosappMediaWebFile?, receiptMessageId: MessageId?, currency: String, totalAmount: Int64, startParam: String, extendedMedia: IosappExtendedMedia?, subscriptionPeriod: Int32?, flags: IosappMediaInvoiceFlags, version: Int32) {
         self.title = title
         self.description = description
         self.photo = photo
@@ -127,10 +127,10 @@ public final class TelegramMediaInvoice: Media, Equatable {
         self.currency = decoder.decodeStringForKey("c", orElse: "")
         self.totalAmount = decoder.decodeInt64ForKey("ta", orElse: 0)
         self.startParam = decoder.decodeStringForKey("sp", orElse: "")
-        self.photo = decoder.decodeObjectForKey("p") as? TelegramMediaWebFile
-        self.extendedMedia = decoder.decodeObjectForKey("m", decoder: { TelegramExtendedMedia(decoder: $0) }) as? TelegramExtendedMedia
+        self.photo = decoder.decodeObjectForKey("p") as? IosappMediaWebFile
+        self.extendedMedia = decoder.decodeObjectForKey("m", decoder: { IosappExtendedMedia(decoder: $0) }) as? IosappExtendedMedia
         self.subscriptionPeriod = decoder.decodeOptionalInt32ForKey("sp")
-        self.flags = TelegramMediaInvoiceFlags(rawValue: decoder.decodeInt32ForKey("f", orElse: 0))
+        self.flags = IosappMediaInvoiceFlags(rawValue: decoder.decodeInt32ForKey("f", orElse: 0))
         
         if let receiptMessageIdPeerId = decoder.decodeOptionalInt64ForKey("r.p") as Int64?, let receiptMessageIdNamespace = decoder.decodeOptionalInt32ForKey("r.n") as Int32?, let receiptMessageIdId = decoder.decodeOptionalInt32ForKey("r.i") as Int32? {
             self.receiptMessageId = MessageId(peerId: PeerId(receiptMessageIdPeerId), namespace: receiptMessageIdNamespace, id: receiptMessageIdId)
@@ -180,12 +180,12 @@ public final class TelegramMediaInvoice: Media, Equatable {
         encoder.encodeInt32(self.version, forKey: "vrs")
     }
     
-    public static func ==(lhs: TelegramMediaInvoice, rhs: TelegramMediaInvoice) -> Bool {
+    public static func ==(lhs: IosappMediaInvoice, rhs: IosappMediaInvoice) -> Bool {
         return lhs.isEqual(to: rhs)
     }
     
     public func isEqual(to other: Media) -> Bool {
-        guard let other = other as? TelegramMediaInvoice else {
+        guard let other = other as? IosappMediaInvoice else {
             return false
         }
         
@@ -236,8 +236,8 @@ public final class TelegramMediaInvoice: Media, Equatable {
         return self.isEqual(to: other)
     }
     
-    public func withUpdatedExtendedMedia(_ extendedMedia: TelegramExtendedMedia) -> TelegramMediaInvoice {
-        return TelegramMediaInvoice(
+    public func withUpdatedExtendedMedia(_ extendedMedia: IosappExtendedMedia) -> IosappMediaInvoice {
+        return IosappMediaInvoice(
             title: self.title,
             description: self.description,
             photo: self.photo,

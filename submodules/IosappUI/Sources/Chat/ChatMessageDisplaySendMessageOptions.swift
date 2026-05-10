@@ -47,7 +47,7 @@ func chatMessageDisplaySendMessageOptions(selfController: ChatControllerImpl, no
     }
     
     let availableMessageEffects = selfController.context.availableMessageEffects |> take(1)
-    let hasPremium = selfController.context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: selfController.context.account.peerId))
+    let hasPremium = selfController.context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: selfController.context.account.peerId))
     |> map { peer -> Bool in
         guard case let .user(user) = peer else {
             return false
@@ -58,7 +58,7 @@ func chatMessageDisplaySendMessageOptions(selfController: ChatControllerImpl, no
     let editMessages: Signal<[EngineMessage], NoError>
     if let editMessage = selfController.presentationInterfaceState.interfaceState.editMessage {
         editMessages = selfController.context.engine.data.get(
-            TelegramEngine.EngineData.Item.Messages.MessageGroup(id: editMessage.messageId)
+            IosappEngine.EngineData.Item.Messages.MessageGroup(id: editMessage.messageId)
         )
     } else {
         editMessages = .single([])
@@ -92,11 +92,11 @@ func chatMessageDisplaySendMessageOptions(selfController: ChatControllerImpl, no
             var mediaPreview: ChatSendMessageContextScreenMediaPreview?
             if editMessages.contains(where: { message in
                 return message.media.contains(where: { media in
-                    if media is TelegramMediaImage {
+                    if media is IosappMediaImage {
                         return true
-                    } else if let file = media as? TelegramMediaFile, file.isVideo {
+                    } else if let file = media as? IosappMediaFile, file.isVideo {
                         return true
-                    } else if media is TelegramMediaPaidContent {
+                    } else if media is IosappMediaPaidContent {
                         return true
                     }
                     return false
@@ -183,7 +183,7 @@ func chatMessageDisplaySendMessageOptions(selfController: ChatControllerImpl, no
             }
         } else {
             var sendWhenOnlineAvailable = false
-            if let presence = peerView.peerPresences[peer.id] as? TelegramUserPresence, case let .present(until) = presence.status {
+            if let presence = peerView.peerPresences[peer.id] as? IosappUserPresence, case let .present(until) = presence.status {
                 let currentTime = Int32(CFAbsoluteTimeGetCurrent() + kCFAbsoluteTimeIntervalSince1970)
                 if currentTime > until {
                     sendWhenOnlineAvailable = true

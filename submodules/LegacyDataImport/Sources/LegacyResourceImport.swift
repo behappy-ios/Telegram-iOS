@@ -5,7 +5,7 @@ import SwiftSignalKit
 import Postbox
 import LegacyComponents
 
-func resourceFromLegacyImageUrl(_ fileRef: String) -> TelegramMediaResource? {
+func resourceFromLegacyImageUrl(_ fileRef: String) -> IosappMediaResource? {
     if fileRef.isEmpty {
         return nil
     }
@@ -80,7 +80,7 @@ enum EncryptedFileType {
     case audio
 }
 
-func pathAndResourceFromEncryptedFileUrl(basePath: String, url: String, type: EncryptedFileType) -> (String, TelegramMediaResource)? {
+func pathAndResourceFromEncryptedFileUrl(basePath: String, url: String, type: EncryptedFileType) -> (String, IosappMediaResource)? {
     let cache = TGCache(cachesPath: basePath + "/Caches")!
     
     if url.hasPrefix("encryptedThumbnail:") {

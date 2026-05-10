@@ -440,7 +440,7 @@ func markUnseenReactionOrPollVotesMessage(transaction: Transaction, id: MessageI
             }
         }
         inner: for media in message.media {
-            if let poll = media as? TelegramMediaPoll, poll.results.hasUnseenVotes == true {
+            if let poll = media as? IosappMediaPoll, poll.results.hasUnseenVotes == true {
                 consume = true
                 break inner
             }
@@ -457,7 +457,7 @@ func markUnseenReactionOrPollVotesMessage(transaction: Transaction, id: MessageI
                 }
                 var media = currentMessage.media
                 loop: for j in 0 ..< media.count {
-                    if let poll = media[j] as? TelegramMediaPoll {
+                    if let poll = media[j] as? IosappMediaPoll {
                         media[j] = poll.withoutUnreadResults()
                         break loop
                     }

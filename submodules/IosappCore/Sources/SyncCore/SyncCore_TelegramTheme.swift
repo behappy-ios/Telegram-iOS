@@ -1,7 +1,7 @@
 import Foundation
 import Postbox
 
-public enum TelegramBaseTheme: Int32, Codable {
+public enum IosappBaseTheme: Int32, Codable {
     case classic
     case day
     case night
@@ -14,8 +14,8 @@ public extension UInt32 {
     }
 }
 
-public final class TelegramThemeSettings: Codable, Equatable {
-    public static func == (lhs: TelegramThemeSettings, rhs: TelegramThemeSettings) -> Bool {
+public final class IosappThemeSettings: Codable, Equatable {
+    public static func == (lhs: IosappThemeSettings, rhs: IosappThemeSettings) -> Bool {
         if lhs.baseTheme != rhs.baseTheme {
             return false
         }
@@ -37,14 +37,14 @@ public final class TelegramThemeSettings: Codable, Equatable {
         return true
     }
     
-    public let baseTheme: TelegramBaseTheme
+    public let baseTheme: IosappBaseTheme
     public let accentColor: UInt32
     public let outgoingAccentColor: UInt32?
     public let messageColors: [UInt32]
     public let animateMessageColors: Bool
-    public let wallpaper: TelegramWallpaper?
+    public let wallpaper: IosappWallpaper?
     
-    public init(baseTheme: TelegramBaseTheme, accentColor: UInt32, outgoingAccentColor: UInt32?, messageColors: [UInt32], animateMessageColors: Bool, wallpaper: TelegramWallpaper?) {
+    public init(baseTheme: IosappBaseTheme, accentColor: UInt32, outgoingAccentColor: UInt32?, messageColors: [UInt32], animateMessageColors: Bool, wallpaper: IosappWallpaper?) {
         self.baseTheme = baseTheme
         self.accentColor = accentColor
         self.outgoingAccentColor = outgoingAccentColor
@@ -56,7 +56,7 @@ public final class TelegramThemeSettings: Codable, Equatable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: StringCodingKey.self)
 
-        self.baseTheme = TelegramBaseTheme(rawValue: try container.decode(Int32.self, forKey: "baseTheme")) ?? .classic
+        self.baseTheme = IosappBaseTheme(rawValue: try container.decode(Int32.self, forKey: "baseTheme")) ?? .classic
         self.accentColor = UInt32(bitPattern: try container.decode(Int32.self, forKey: "accent"))
         self.outgoingAccentColor = (try container.decodeIfPresent(Int32.self, forKey: "outgoingAccent")).flatMap { UInt32(bitPattern: $0) }
         let messageColors = try container.decodeIfPresent([Int32].self, forKey: "messageColors") ?? []
@@ -71,7 +71,7 @@ public final class TelegramThemeSettings: Codable, Equatable {
         }
         self.animateMessageColors = (try container.decodeIfPresent(Int32.self, forKey: "animateMessageColors") ?? 0) != 0
 
-        self.wallpaper = (try container.decodeIfPresent(TelegramWallpaperNativeCodable.self, forKey: "wallpaper"))?.value
+        self.wallpaper = (try container.decodeIfPresent(IosappWallpaperNativeCodable.self, forKey: "wallpaper"))?.value
     }
     
     public func encode(to encoder: Encoder) throws {
@@ -86,14 +86,14 @@ public final class TelegramThemeSettings: Codable, Equatable {
         }
         try container.encode(self.messageColors.map(Int32.init(bitPattern:)), forKey: "messageColors")
         try container.encode((self.animateMessageColors ? 1 : 0) as Int32, forKey: "animateMessageColors")
-        try container.encodeIfPresent(self.wallpaper.flatMap(TelegramWallpaperNativeCodable.init), forKey: "wallpaper")
+        try container.encodeIfPresent(self.wallpaper.flatMap(IosappWallpaperNativeCodable.init), forKey: "wallpaper")
     }
 }
 
-public struct TelegramThemeNativeCodable: Codable {
-    public let value: TelegramTheme
+public struct IosappThemeNativeCodable: Codable {
+    public let value: IosappTheme
 
-    public init(_ value: TelegramTheme) {
+    public init(_ value: IosappTheme) {
         self.value = value
     }
 
@@ -106,15 +106,15 @@ public struct TelegramThemeNativeCodable: Codable {
         let emoticon = try container.decodeIfPresent(String.self, forKey: "emoticon")
         let title = try container.decode(String.self, forKey: "title")
 
-        let file: TelegramMediaFile?
+        let file: IosappMediaFile?
         if let fileData = try container.decodeIfPresent(AdaptedPostboxDecoder.RawObjectData.self, forKey: "file") {
-            file = TelegramMediaFile(decoder: PostboxDecoder(buffer: MemoryBuffer(data: fileData.data)))
+            file = IosappMediaFile(decoder: PostboxDecoder(buffer: MemoryBuffer(data: fileData.data)))
         } else {
             file = nil
         }
 
-        let legacySettings = try container.decodeIfPresent(TelegramThemeSettings.self, forKey: "settings")
-        var settings = try container.decodeIfPresent([TelegramThemeSettings].self, forKey: "settingsArray")
+        let legacySettings = try container.decodeIfPresent(IosappThemeSettings.self, forKey: "settings")
+        var settings = try container.decodeIfPresent([IosappThemeSettings].self, forKey: "settingsArray")
         if settings == nil, let legacySettings = legacySettings {
             settings = [legacySettings]
         }
@@ -123,7 +123,7 @@ public struct TelegramThemeNativeCodable: Codable {
         let isDefault = try container.decode(Int32.self, forKey: "isDefault") != 0
         let installCount = try container.decodeIfPresent(Int32.self, forKey: "installCount")
 
-        self.value = TelegramTheme(
+        self.value = IosappTheme(
             id: id,
             accessHash: accessHash,
             slug: slug,
@@ -161,19 +161,19 @@ public struct TelegramThemeNativeCodable: Codable {
     }
 }
 
-public final class TelegramTheme: Equatable {
+public final class IosappTheme: Equatable {
     public let id: Int64
     public let accessHash: Int64
     public let slug: String
     public let emoticon: String?
     public let title: String
-    public let file: TelegramMediaFile?
-    public let settings: [TelegramThemeSettings]?
+    public let file: IosappMediaFile?
+    public let settings: [IosappThemeSettings]?
     public let isCreator: Bool
     public let isDefault: Bool
     public let installCount: Int32?
     
-    public init(id: Int64, accessHash: Int64, slug: String, emoticon: String?, title: String, file: TelegramMediaFile?, settings: [TelegramThemeSettings]?, isCreator: Bool, isDefault: Bool, installCount: Int32?) {
+    public init(id: Int64, accessHash: Int64, slug: String, emoticon: String?, title: String, file: IosappMediaFile?, settings: [IosappThemeSettings]?, isCreator: Bool, isDefault: Bool, installCount: Int32?) {
         self.id = id
         self.accessHash = accessHash
         self.slug = slug
@@ -186,7 +186,7 @@ public final class TelegramTheme: Equatable {
         self.installCount = installCount
     }
     
-    public static func ==(lhs: TelegramTheme, rhs: TelegramTheme) -> Bool {
+    public static func ==(lhs: IosappTheme, rhs: IosappTheme) -> Bool {
         if lhs.id != rhs.id {
             return false
         }

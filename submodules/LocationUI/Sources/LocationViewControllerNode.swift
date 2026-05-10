@@ -18,11 +18,11 @@ import Geocoding
 import DeviceAccess
 import TooltipUI
 
-func getLocation(from message: EngineMessage) -> TelegramMediaMap? {
-    if let poll = message.media.first(where: { $0 is TelegramMediaPoll } ) as? TelegramMediaPoll, let map = poll.attachedMedia as? TelegramMediaMap {
+func getLocation(from message: EngineMessage) -> IosappMediaMap? {
+    if let poll = message.media.first(where: { $0 is IosappMediaPoll } ) as? IosappMediaPoll, let map = poll.attachedMedia as? IosappMediaMap {
         return map
     } else {
-        return message.media.first(where: { $0 is TelegramMediaMap } ) as? TelegramMediaMap
+        return message.media.first(where: { $0 is IosappMediaMap } ) as? IosappMediaMap
     }
 }
 
@@ -52,7 +52,7 @@ public enum LocationViewEntryId: Hashable {
 }
 
 public enum LocationViewEntry: Comparable, Identifiable {
-    case info(PresentationTheme, TelegramMediaMap, String?, Double?, ExpectedTravelTime, ExpectedTravelTime, ExpectedTravelTime, Bool)
+    case info(PresentationTheme, IosappMediaMap, String?, Double?, ExpectedTravelTime, ExpectedTravelTime, ExpectedTravelTime, Bool)
     case toggleLiveLocation(PresentationTheme, String, String, Double?, Double?, Bool, EngineMessage.Id?)
     case liveLocation(PresentationTheme, PresentationDateTimeFormat, PresentationPersonNameOrder, EngineMessage, Double?, ExpectedTravelTime, ExpectedTravelTime, ExpectedTravelTime, Int)
     
@@ -417,7 +417,7 @@ final class LocationViewControllerNode: ViewControllerTracingNode, CLLocationMan
         let previousEntries = Atomic<[LocationViewEntry]?>(value: nil)
         let previousHadTravelTimes = Atomic<Bool>(value: false)
         
-        let selfPeer = context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: context.account.peerId))
+        let selfPeer = context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: context.account.peerId))
                         
         self.disposable = (combineLatest(self.presentationDataPromise.get(), self.statePromise.get(), selfPeer, liveLocations, self.headerNode.mapNode.userLocation, userLocation, address, eta, self.travelTimesPromise.get())
         |> deliverOnMainQueue).start(next: { [weak self] presentationData, state, selfPeer, liveLocations, userLocation, distance, address, eta, travelTimes in
@@ -516,7 +516,7 @@ final class LocationViewControllerNode: ViewControllerTracingNode, CLLocationMan
                         
                 for message in effectiveLiveLocations {
                     if let location = getLocation(from: message) {
-                        if let channel = message.peers[message.id.peerId] as? TelegramChannel, case .broadcast = channel.info, message.threadId != nil {
+                        if let channel = message.peers[message.id.peerId] as? IosappChannel, case .broadcast = channel.info, message.threadId != nil {
                             continue
                         }
                         

@@ -366,7 +366,7 @@ private final class CraftGiftPageContent: Component {
             var infoContentHeight: CGFloat = 0.0
                         
             let anvilPath = getAppBundle().url(forResource: "Anvil", withExtension: "tgs")?.path ?? ""
-            let anvilFile = TelegramMediaFile(
+            let anvilFile = IosappMediaFile(
                 fileId: MediaId(namespace: Namespaces.Media.CloudFile, id: -123456789),
                 partialReference: nil,
                 resource: BundleResource(name: "Anvil", path: anvilPath),

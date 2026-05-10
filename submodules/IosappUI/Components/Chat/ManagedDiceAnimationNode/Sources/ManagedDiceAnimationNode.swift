@@ -14,7 +14,7 @@ public enum ManagedDiceAnimationState: Equatable {
     case value(Int32, Bool)
 }
 
-private func animationItem(account: Account, emojis: Signal<[TelegramMediaFile], NoError>, configuration: Signal<InteractiveEmojiConfiguration?, NoError> = .single(nil), emoji: String, value: Int32?, immediate: Bool = false, roll: Bool = false, loop: Bool = false, successCallback: (() -> Void)? = nil) -> Signal<ManagedAnimationItem?, NoError> {
+private func animationItem(account: Account, emojis: Signal<[IosappMediaFile], NoError>, configuration: Signal<InteractiveEmojiConfiguration?, NoError> = .single(nil), emoji: String, value: Int32?, immediate: Bool = false, roll: Bool = false, loop: Bool = false, successCallback: (() -> Void)? = nil) -> Signal<ManagedAnimationItem?, NoError> {
     return combineLatest(emojis, configuration)
     |> mapToSignal { diceEmojis, configuration -> Signal<ManagedAnimationItem?, NoError> in
         if let value = value, value >= diceEmojis.count {
@@ -64,7 +64,7 @@ private func animationItem(account: Account, emojis: Signal<[TelegramMediaFile],
     }
 }
 
-private func rollingAnimationItem(account: Account, emojis: Signal<[TelegramMediaFile], NoError>, emoji: String) -> Signal<ManagedAnimationItem?, NoError> {
+private func rollingAnimationItem(account: Account, emojis: Signal<[IosappMediaFile], NoError>, emoji: String) -> Signal<ManagedAnimationItem?, NoError> {
     switch emoji {
         case "🎲":
             return .single(ManagedAnimationItem(source: .local("Dice_Rolling"), loop: true))
@@ -129,7 +129,7 @@ public final class ManagedDiceAnimationNode: ManagedAnimationNode {
     private let disposable = MetaDisposable()
     
     private let configuration = Promise<InteractiveEmojiConfiguration?>()
-    private let emojis = Promise<[TelegramMediaFile]>()
+    private let emojis = Promise<[IosappMediaFile]>()
     
     public var isRolling: Bool {
         return self.diceState == .rolling
@@ -147,10 +147,10 @@ public final class ManagedDiceAnimationNode: ManagedAnimationNode {
             return InteractiveEmojiConfiguration.with(appConfiguration: appConfiguration)
         })
         self.emojis.set(context.engine.stickers.loadedStickerPack(reference: .dice(emoji), forceActualized: false)
-        |> mapToSignal { stickerPack -> Signal<[TelegramMediaFile], NoError> in
+        |> mapToSignal { stickerPack -> Signal<[IosappMediaFile], NoError> in
             switch stickerPack {
                 case let .result(_, items, _):
-                    var emojiStickers: [TelegramMediaFile] = []
+                    var emojiStickers: [IosappMediaFile] = []
                     for item in items {
                         emojiStickers.append(item.file._parse())
                     }

@@ -12,7 +12,7 @@ import AccessoryPanelNode
 import AppBundle
 
 final class WebpagePreviewAccessoryPanelNode: AccessoryPanelNode {
-    private(set) var webpage: TelegramMediaWebpage
+    private(set) var webpage: IosappMediaWebpage
     private(set) var url: String
     
     let closeButton: HighlightableButtonNode
@@ -29,7 +29,7 @@ final class WebpagePreviewAccessoryPanelNode: AccessoryPanelNode {
     
     private var validLayout: (size: CGSize, inset: CGFloat, interfaceState: ChatPresentationInterfaceState)?
     
-    init(context: AccountContext, url: String, webpage: TelegramMediaWebpage, theme: PresentationTheme, strings: PresentationStrings) {
+    init(context: AccountContext, url: String, webpage: IosappMediaWebpage, theme: PresentationTheme, strings: PresentationStrings) {
         self.url = url
         self.webpage = webpage
         self.theme = theme
@@ -114,7 +114,7 @@ final class WebpagePreviewAccessoryPanelNode: AccessoryPanelNode {
         }
     }
     
-    func replaceWebpage(url: String, webpage: TelegramMediaWebpage) {
+    func replaceWebpage(url: String, webpage: IosappMediaWebpage) {
         if self.url != url || !self.webpage.isEqual(to: webpage) {
             self.url = url
             self.webpage = webpage

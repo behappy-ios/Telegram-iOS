@@ -135,11 +135,11 @@ private var testHasInstance = false
 
 public final class SharedAccountContextImpl: SharedAccountContext {
     public let mainWindow: Window1?
-    public let applicationBindings: TelegramApplicationBindings
+    public let applicationBindings: IosappApplicationBindings
     public let sharedContainerPath: String
     public let basePath: String
     public let networkArguments: NetworkInitializationArguments
-    public let accountManager: AccountManager<TelegramAccountManagerTypes>
+    public let accountManager: AccountManager<IosappAccountManagerTypes>
     public let appLockContext: AppLockContext
     public var notificationController: NotificationContainerController? {
         didSet {
@@ -290,7 +290,7 @@ public final class SharedAccountContextImpl: SharedAccountContext {
     
     private let energyUsageAutomaticDisposable = MetaDisposable()
     
-    init(mainWindow: Window1?, sharedContainerPath: String, basePath: String, encryptionParameters: ValueBoxEncryptionParameters, accountManager: AccountManager<TelegramAccountManagerTypes>, appLockContext: AppLockContext, notificationController: NotificationContainerController?, applicationBindings: TelegramApplicationBindings, initialPresentationDataAndSettings: InitialPresentationDataAndSettings, networkArguments: NetworkInitializationArguments, hasInAppPurchases: Bool, rootPath: String, legacyBasePath: String?, apsNotificationToken: Signal<Data?, NoError>, voipNotificationToken: Signal<Data?, NoError>, firebaseSecretStream: Signal<[String: String], NoError>, setNotificationCall: @escaping (PresentationCall?) -> Void, navigateToChat: @escaping (AccountRecordId, PeerId, MessageId?, Bool) -> Void, displayUpgradeProgress: @escaping (Float?) -> Void = { _ in }, appDelegate: AppDelegate?, testingEnvironment: Bool = false) {
+    init(mainWindow: Window1?, sharedContainerPath: String, basePath: String, encryptionParameters: ValueBoxEncryptionParameters, accountManager: AccountManager<IosappAccountManagerTypes>, appLockContext: AppLockContext, notificationController: NotificationContainerController?, applicationBindings: IosappApplicationBindings, initialPresentationDataAndSettings: InitialPresentationDataAndSettings, networkArguments: NetworkInitializationArguments, hasInAppPurchases: Bool, rootPath: String, legacyBasePath: String?, apsNotificationToken: Signal<Data?, NoError>, voipNotificationToken: Signal<Data?, NoError>, firebaseSecretStream: Signal<[String: String], NoError>, setNotificationCall: @escaping (PresentationCall?) -> Void, navigateToChat: @escaping (AccountRecordId, PeerId, MessageId?, Bool) -> Void, displayUpgradeProgress: @escaping (Float?) -> Void = { _ in }, appDelegate: AppDelegate?, testingEnvironment: Bool = false) {
         assert(Queue.mainQueue().isCurrent())
         
         precondition(!testHasInstance)
@@ -634,12 +634,12 @@ public final class SharedAccountContextImpl: SharedAccountContext {
                         switch result {
                             case let .authorized(account):
                                 setupAccount(account, fetchCachedResourceRepresentation: fetchCachedResourceRepresentation, transformOutgoingMessageMedia: transformOutgoingMessageMedia)
-                                return TelegramEngine(account: account).data.get(
-                                    TelegramEngine.EngineData.Item.Configuration.Limits(),
-                                    TelegramEngine.EngineData.Item.Configuration.ContentSettings(),
-                                    TelegramEngine.EngineData.Item.Configuration.App(),
-                                    TelegramEngine.EngineData.Item.Configuration.AvailableColorOptions(scope: .replies),
-                                    TelegramEngine.EngineData.Item.Configuration.AvailableColorOptions(scope: .profile)
+                                return IosappEngine(account: account).data.get(
+                                    IosappEngine.EngineData.Item.Configuration.Limits(),
+                                    IosappEngine.EngineData.Item.Configuration.ContentSettings(),
+                                    IosappEngine.EngineData.Item.Configuration.App(),
+                                    IosappEngine.EngineData.Item.Configuration.AvailableColorOptions(scope: .replies),
+                                    IosappEngine.EngineData.Item.Configuration.AvailableColorOptions(scope: .profile)
                                 )
                                 |> map { limitsConfiguration, contentSettings, appConfiguration, availableReplyColors, availableProfileColors -> AddedAccountResult in
                                     return .ready(id, account, attributes.sortIndex, (limitsConfiguration._asLimits(), contentSettings, appConfiguration, availableReplyColors, availableProfileColors))
@@ -800,7 +800,7 @@ public final class SharedAccountContextImpl: SharedAccountContext {
         self.activeAccountsWithInfoPromise.set(self.activeAccountContexts
         |> mapToSignal { primary, accounts, _ -> Signal<(primary: AccountRecordId?, accounts: [AccountWithInfo]), NoError> in
             return combineLatest(accounts.map { _, context, _ -> Signal<AccountWithInfo?, NoError> in
-                return context.engine.data.subscribe(TelegramEngine.EngineData.Item.Peer.Peer(id: context.account.peerId))
+                return context.engine.data.subscribe(IosappEngine.EngineData.Item.Peer.Peer(id: context.account.peerId))
                 |> map { peer -> AccountWithInfo? in
                     guard let peer = peer else {
                         return nil
@@ -928,7 +928,7 @@ public final class SharedAccountContextImpl: SharedAccountContext {
                         } else {
                             if !call.isIntegratedWithCallKit {
                                 self.callPeerDisposable?.dispose()
-                                self.callPeerDisposable = (call.context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: call.peerId))
+                                self.callPeerDisposable = (call.context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: call.peerId))
                                 |> deliverOnMainQueue).startStrict(next: { [weak self, weak call] peer in
                                     guard let self, let call, let peer else {
                                         return
@@ -1121,7 +1121,7 @@ public final class SharedAccountContextImpl: SharedAccountContext {
         UserDefaults.standard.synchronize()
         
         if let primary = self.activeAccountsValue?.primary {
-            let _ = (primary.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: primary.account.peerId))
+            let _ = (primary.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: primary.account.peerId))
             |> deliverOnMainQueue).start(next: { [weak self] peer in
                 guard let self, case let .user(user) = peer else {
                     return
@@ -1150,7 +1150,7 @@ public final class SharedAccountContextImpl: SharedAccountContext {
                     guard let record = record else {
                         return nil
                     }
-                    var attributes: [TelegramAccountManagerTypes.Attribute] = record.attributes.filter { attribute in
+                    var attributes: [IosappAccountManagerTypes.Attribute] = record.attributes.filter { attribute in
                         if case .backupData = attribute {
                             return false
                         } else {
@@ -1268,7 +1268,7 @@ public final class SharedAccountContextImpl: SharedAccountContext {
                 self.hasGroupCallOnScreenPromise.set(thisCallIsOnScreenPromise.get())
                 
                 if !call.isIntegratedWithCallKit {
-                    self.callPeerDisposable = (call.context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: call.peerId))
+                    self.callPeerDisposable = (call.context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: call.peerId))
                     |> deliverOnMainQueue).startStrict(next: { [weak self, weak call] peer in
                         guard let self, let call, let peer else {
                             return
@@ -1759,7 +1759,7 @@ public final class SharedAccountContextImpl: SharedAccountContext {
         
         assert(Queue.mainQueue().isCurrent())
         var chatsBadge: String?
-        if let rootController = self.mainWindow?.viewController as? TelegramRootController {
+        if let rootController = self.mainWindow?.viewController as? IosappRootController {
             if let tabsController = rootController.viewControllers.first as? TabBarController {
                 for controller in tabsController.controllers {
                     if let controller = controller as? ChatListController {
@@ -1793,7 +1793,7 @@ public final class SharedAccountContextImpl: SharedAccountContext {
     }
     
     public func openSearch(filter: ChatListSearchFilter, query: String?) {
-        if let rootController = self.mainWindow?.viewController as? TelegramRootController {
+        if let rootController = self.mainWindow?.viewController as? IosappRootController {
             rootController.openChatsController(activateSearch: true, filter: filter, query: query)
         }
     }
@@ -1949,7 +1949,7 @@ public final class SharedAccountContextImpl: SharedAccountContext {
     
     public func openCreateGroupCallUI(context: AccountContext, peerIds: [EnginePeer.Id], parentController: ViewController) {
         let _ = (context.engine.data.get(
-            EngineDataList(peerIds.map(TelegramEngine.EngineData.Item.Peer.Peer.init(id:)))
+            EngineDataList(peerIds.map(IosappEngine.EngineData.Item.Peer.Peer.init(id:)))
         )
         |> deliverOnMainQueue).startStandalone(next: { [weak parentController] peers in
             guard let parentController else {
@@ -2044,7 +2044,7 @@ public final class SharedAccountContextImpl: SharedAccountContext {
                 
             if let cachedUserData = view.cachedData as? CachedUserData, cachedUserData.callsPrivate {
                 let presentationData = context.sharedContext.currentPresentationData.with { $0 }
-                parentController.push(context.sharedContext.makeSendInviteLinkScreen(context: context, subject: .groupCall(.create), peers: [TelegramForbiddenInvitePeer(
+                parentController.push(context.sharedContext.makeSendInviteLinkScreen(context: context, subject: .groupCall(.create), peers: [IosappForbiddenInvitePeer(
                     peer: EnginePeer(peer),
                     canInviteWithPremium: false,
                     premiumRequiredToContact: false
@@ -2154,11 +2154,11 @@ public final class SharedAccountContextImpl: SharedAccountContext {
         openExternalUrlImpl(context: context, urlContext: urlContext, url: url, forceExternal: forceExternal, presentationData: presentationData, navigationController: navigationController, dismissInput: dismissInput)
     }
     
-    public func chatAvailableMessageActions(engine: TelegramEngine, accountPeerId: EnginePeer.Id, messageIds: Set<EngineMessage.Id>, keepUpdated: Bool) -> Signal<ChatAvailableMessageActions, NoError> {
+    public func chatAvailableMessageActions(engine: IosappEngine, accountPeerId: EnginePeer.Id, messageIds: Set<EngineMessage.Id>, keepUpdated: Bool) -> Signal<ChatAvailableMessageActions, NoError> {
         return chatAvailableMessageActionsImpl(engine: engine, accountPeerId: accountPeerId, messageIds: messageIds, keepUpdated: keepUpdated)
     }
     
-    public func chatAvailableMessageActions(engine: TelegramEngine, accountPeerId: EnginePeer.Id, messageIds: Set<EngineMessage.Id>, messages: [EngineMessage.Id: EngineMessage] = [:], peers: [EnginePeer.Id: EnginePeer] = [:]) -> Signal<ChatAvailableMessageActions, NoError> {
+    public func chatAvailableMessageActions(engine: IosappEngine, accountPeerId: EnginePeer.Id, messageIds: Set<EngineMessage.Id>, messages: [EngineMessage.Id: EngineMessage] = [:], peers: [EnginePeer.Id: EnginePeer] = [:]) -> Signal<ChatAvailableMessageActions, NoError> {
         return chatAvailableMessageActionsImpl(engine: engine, accountPeerId: accountPeerId, messageIds: messageIds, messages: messages.mapValues({ $0._asMessage() }), peers: peers.mapValues({ $0._asPeer() }), keepUpdated: false)
     }
     
@@ -2210,7 +2210,7 @@ public final class SharedAccountContextImpl: SharedAccountContext {
 //                params.openPeer(peer, .info)
             })
             
-            let _ = (context.engine.data.get(TelegramEngine.EngineData.Item.Messages.Message(id: messageId))
+            let _ = (context.engine.data.get(IosappEngine.EngineData.Item.Messages.Message(id: messageId))
             |> deliverOnMainQueue).start(next: { message in
                 guard let message = message else {
                     return
@@ -2347,7 +2347,7 @@ public final class SharedAccountContextImpl: SharedAccountContext {
         return presentAddMembersImpl(context: context, updatedPresentationData: updatedPresentationData, parentController: parentController, groupPeer: groupPeer, selectAddMemberDisposable: selectAddMemberDisposable, addMemberDisposable: addMemberDisposable)
     }
     
-    public func makeChatMessagePreviewItem(context: AccountContext, messages: [Message], theme: PresentationTheme, strings: PresentationStrings, wallpaper: TelegramWallpaper, fontSize: PresentationFontSize, chatBubbleCorners: PresentationChatBubbleCorners, dateTimeFormat: PresentationDateTimeFormat, nameOrder: PresentationPersonNameOrder, forcedResourceStatus: FileMediaResourceStatus?, tapMessage: ((Message) -> Void)?, clickThroughMessage: ((UIView?, CGPoint?) -> Void)? = nil, backgroundNode: ASDisplayNode?, availableReactions: AvailableReactions?, accountPeer: Peer?, isCentered: Bool, isPreview: Bool, isStandalone: Bool, rank: String?, rankRole: ChatRankInfoScreenRole?) -> ListViewItem {
+    public func makeChatMessagePreviewItem(context: AccountContext, messages: [Message], theme: PresentationTheme, strings: PresentationStrings, wallpaper: IosappWallpaper, fontSize: PresentationFontSize, chatBubbleCorners: PresentationChatBubbleCorners, dateTimeFormat: PresentationDateTimeFormat, nameOrder: PresentationPersonNameOrder, forcedResourceStatus: FileMediaResourceStatus?, tapMessage: ((Message) -> Void)?, clickThroughMessage: ((UIView?, CGPoint?) -> Void)? = nil, backgroundNode: ASDisplayNode?, availableReactions: AvailableReactions?, accountPeer: Peer?, isCentered: Bool, isPreview: Bool, isStandalone: Bool, rank: String?, rankRole: ChatRankInfoScreenRole?) -> ListViewItem {
         let controllerInteraction: ChatControllerInteraction
 
         controllerInteraction = ChatControllerInteraction(
@@ -2651,11 +2651,11 @@ public final class SharedAccountContextImpl: SharedAccountContext {
         )
     }
     
-    public func makeChatMessageDateHeaderItem(context: AccountContext, timestamp: Int32, theme: PresentationTheme, strings: PresentationStrings, wallpaper: TelegramWallpaper, fontSize: PresentationFontSize, chatBubbleCorners: PresentationChatBubbleCorners, dateTimeFormat: PresentationDateTimeFormat, nameOrder: PresentationPersonNameOrder) -> ListViewItemHeader {
+    public func makeChatMessageDateHeaderItem(context: AccountContext, timestamp: Int32, theme: PresentationTheme, strings: PresentationStrings, wallpaper: IosappWallpaper, fontSize: PresentationFontSize, chatBubbleCorners: PresentationChatBubbleCorners, dateTimeFormat: PresentationDateTimeFormat, nameOrder: PresentationPersonNameOrder) -> ListViewItemHeader {
         return ChatMessageDateHeader(timestamp: timestamp, separableThreadId: nil, scheduled: false, displayHeader: nil, presentationData: ChatPresentationData(theme: ChatPresentationThemeData(theme: theme, wallpaper: wallpaper), fontSize: fontSize, strings: strings, dateTimeFormat: dateTimeFormat, nameDisplayOrder: nameOrder, disableAnimations: false, largeEmoji: false, chatBubbleCorners: chatBubbleCorners, animatedEmojiScale: 1.0, isPreview: true), controllerInteraction: nil, context: context)
     }
     
-    public func makeChatMessageAvatarHeaderItem(context: AccountContext, timestamp: Int32, peer: Peer, message: Message, theme: PresentationTheme, strings: PresentationStrings, wallpaper: TelegramWallpaper, fontSize: PresentationFontSize, chatBubbleCorners: PresentationChatBubbleCorners, dateTimeFormat: PresentationDateTimeFormat, nameOrder: PresentationPersonNameOrder) -> ListViewItemHeader {
+    public func makeChatMessageAvatarHeaderItem(context: AccountContext, timestamp: Int32, peer: Peer, message: Message, theme: PresentationTheme, strings: PresentationStrings, wallpaper: IosappWallpaper, fontSize: PresentationFontSize, chatBubbleCorners: PresentationChatBubbleCorners, dateTimeFormat: PresentationDateTimeFormat, nameOrder: PresentationPersonNameOrder) -> ListViewItemHeader {
         return ChatMessageAvatarHeader(timestamp: timestamp, peerId: peer.id, peer: peer, messageReference: nil, message: message, presentationData: ChatPresentationData(theme: ChatPresentationThemeData(theme: theme, wallpaper: wallpaper), fontSize: fontSize, strings: strings, dateTimeFormat: dateTimeFormat, nameDisplayOrder: nameOrder, disableAnimations: false, largeEmoji: false, chatBubbleCorners: chatBubbleCorners, animatedEmojiScale: 1.0, isPreview: true), context: context, controllerInteraction: nil, storyStats: nil)
     }
     
@@ -2711,7 +2711,7 @@ public final class SharedAccountContextImpl: SharedAccountContext {
         return makeInstantPageControllerImpl(context: context, message: message, sourcePeerType: sourcePeerType)
     }
     
-    public func makeInstantPageController(context: AccountContext, webPage: TelegramMediaWebpage, anchor: String?, sourceLocation: InstantPageSourceLocation) -> ViewController {
+    public func makeInstantPageController(context: AccountContext, webPage: IosappMediaWebpage, anchor: String?, sourceLocation: InstantPageSourceLocation) -> ViewController {
         return makeInstantPageControllerImpl(context: context, webPage: webPage, anchor: anchor, sourceLocation: sourceLocation)
     }
     
@@ -2809,11 +2809,11 @@ public final class SharedAccountContextImpl: SharedAccountContext {
         return ChatbotSetupScreen.initialData(context: context)
     }
     
-    public func makeBusinessLocationSetupScreen(context: AccountContext, initialValue: TelegramBusinessLocation?, completion: @escaping (TelegramBusinessLocation?) -> Void) -> ViewController {
+    public func makeBusinessLocationSetupScreen(context: AccountContext, initialValue: IosappBusinessLocation?, completion: @escaping (IosappBusinessLocation?) -> Void) -> ViewController {
         return BusinessLocationSetupScreen(context: context, initialValue: initialValue, completion: completion)
     }
     
-    public func makeBusinessHoursSetupScreen(context: AccountContext, initialValue: TelegramBusinessHours?, completion: @escaping (TelegramBusinessHours?) -> Void) -> ViewController {
+    public func makeBusinessHoursSetupScreen(context: AccountContext, initialValue: IosappBusinessHours?, completion: @escaping (IosappBusinessHours?) -> Void) -> ViewController {
         return BusinessHoursSetupScreen(context: context, initialValue: initialValue, completion: completion)
     }
     
@@ -2991,7 +2991,7 @@ public final class SharedAccountContextImpl: SharedAccountContext {
         return controller
     }
     
-    public func makePremiumIntroController(sharedContext: SharedAccountContext, engine: TelegramEngineUnauthorized, inAppPurchaseManager: InAppPurchaseManager, source: PremiumIntroSource, proceed: (() -> Void)?) -> ViewController {
+    public func makePremiumIntroController(sharedContext: SharedAccountContext, engine: IosappEngineUnauthorized, inAppPurchaseManager: InAppPurchaseManager, source: PremiumIntroSource, proceed: (() -> Void)?) -> ViewController {
         var modal = true
         if case .settings = source {
             modal = false
@@ -3110,13 +3110,13 @@ public final class SharedAccountContextImpl: SharedAccountContext {
         return PremiumLimitScreen(context: context, subject: mappedSubject, count: count, forceDark: forceDark, cancel: cancel, action: action)
     }
     
-    public func makeStarsGiftController(context: AccountContext, birthdays: [EnginePeer.Id: TelegramBirthday]?, completion: @escaping (([EnginePeer.Id]) -> Void)) -> ViewController {
+    public func makeStarsGiftController(context: AccountContext, birthdays: [EnginePeer.Id: IosappBirthday]?, completion: @escaping (([EnginePeer.Id]) -> Void)) -> ViewController {
         let presentationData = context.sharedContext.currentPresentationData.with { $0 }
 
         var presentBirthdayPickerImpl: (() -> Void)?
         let starsMode: ContactSelectionControllerMode = .starsGifting(birthdays: birthdays, hasActions: false, showSelf: false, selfSubtitle: nil)
     
-        let contactOptions: Signal<[ContactListAdditionalOption], NoError> = context.engine.data.subscribe(TelegramEngine.EngineData.Item.Peer.Birthday(id: context.account.peerId))
+        let contactOptions: Signal<[ContactListAdditionalOption], NoError> = context.engine.data.subscribe(IosappEngine.EngineData.Item.Peer.Birthday(id: context.account.peerId))
         |> map { birthday in
             if birthday == nil {
                 return [ContactListAdditionalOption(
@@ -3156,7 +3156,7 @@ public final class SharedAccountContextImpl: SharedAccountContext {
             let _ = context.engine.notices.dismissServerProvidedSuggestion(suggestion: ServerProvidedSuggestion.setupBirthday.id).startStandalone()
                     
             let settingsPromise: Promise<AccountPrivacySettings?>
-            if let rootController = context.sharedContext.mainWindow?.viewController as? TelegramRootControllerInterface, let current = rootController.getPrivacySettings() {
+            if let rootController = context.sharedContext.mainWindow?.viewController as? IosappRootControllerInterface, let current = rootController.getPrivacySettings() {
                 settingsPromise = current
             } else {
                 settingsPromise = Promise()
@@ -3187,7 +3187,7 @@ public final class SharedAccountContextImpl: SharedAccountContext {
         
         var presentBirthdayPickerImpl: (() -> Void)?
         var mode: ContactSelectionControllerMode = .generic
-        var currentBirthdays: [EnginePeer.Id: TelegramBirthday]?
+        var currentBirthdays: [EnginePeer.Id: IosappBirthday]?
         
         if case let .starGiftTransfer(birthdays, _, _, _, _, showSelf) = source {
             mode = .starsGifting(birthdays: birthdays, hasActions: false, showSelf: showSelf, selfSubtitle: presentationData.strings.Premium_Gift_ContactSelection_TransferSelf)
@@ -3237,7 +3237,7 @@ public final class SharedAccountContextImpl: SharedAccountContext {
                 contactOptions = .single([])
             }
         } else if currentBirthdays != nil || "".isEmpty {
-            contactOptions = context.engine.data.subscribe(TelegramEngine.EngineData.Item.Peer.Birthday(id: context.account.peerId))
+            contactOptions = context.engine.data.subscribe(IosappEngine.EngineData.Item.Peer.Birthday(id: context.account.peerId))
             |> map { birthday in
                 if birthday == nil {
                     return [ContactListAdditionalOption(
@@ -3294,9 +3294,9 @@ public final class SharedAccountContextImpl: SharedAccountContext {
                 if case .starGiftTransfer = source {
                     presentTransferAlertImpl?(EnginePeer(peer))
                 } else {
-                    let _ = (context.engine.data.get(TelegramEngine.EngineData.Item.Peer.DisallowedGifts(id: peer.id))
+                    let _ = (context.engine.data.get(IosappEngine.EngineData.Item.Peer.DisallowedGifts(id: peer.id))
                     |> deliverOnMainQueue).start(next: { disallowedGifts in
-                        if let disallowedGifts, disallowedGifts == TelegramDisallowedGifts.All && peer.id != context.account.peerId {
+                        if let disallowedGifts, disallowedGifts == IosappDisallowedGifts.All && peer.id != context.account.peerId {
                             let alertController = textAlertController(context: context, title: nil, text: presentationData.strings.Gift_Send_GiftsDisallowed(EnginePeer(peer).compactDisplayTitle).string, actions: [TextAlertAction(type: .defaultAction, title: presentationData.strings.Common_OK, action: {})])
                             controller?.present(alertController, in: .window(.root))
                             return
@@ -3347,7 +3347,7 @@ public final class SharedAccountContextImpl: SharedAccountContext {
             let _ = context.engine.notices.dismissServerProvidedSuggestion(suggestion: ServerProvidedSuggestion.setupBirthday.id).startStandalone()
                     
             let settingsPromise: Promise<AccountPrivacySettings?>
-            if let rootController = context.sharedContext.mainWindow?.viewController as? TelegramRootControllerInterface, let current = rootController.getPrivacySettings() {
+            if let rootController = context.sharedContext.mainWindow?.viewController as? IosappRootControllerInterface, let current = rootController.getPrivacySettings() {
                 settingsPromise = current
             } else {
                 settingsPromise = Promise()
@@ -3770,11 +3770,11 @@ public final class SharedAccountContextImpl: SharedAccountContext {
         return editorController
     }
     
-    public func makeStickerEditorScreen(context: AccountContext, source: Any?, mode: StickerEditorMode, transitionArguments: (UIView, CGRect, UIImage?)?, completion: @escaping (TelegramMediaFile, [String], @escaping () -> Void) -> Void, cancelled: @escaping () -> Void) -> ViewController {
+    public func makeStickerEditorScreen(context: AccountContext, source: Any?, mode: StickerEditorMode, transitionArguments: (UIView, CGRect, UIImage?)?, completion: @escaping (IosappMediaFile, [String], @escaping () -> Void) -> Void, cancelled: @escaping () -> Void) -> ViewController {
         let subject: Signal<MediaEditorScreenImpl.Subject?, NoError>
         var mappedMode: MediaEditorScreenImpl.Mode.StickerEditorMode
         var fromCamera = false
-        if let (file, emoji) = source as? (TelegramMediaFile, [String]) {
+        if let (file, emoji) = source as? (IosappMediaFile, [String]) {
             subject = .single(.sticker(file, emoji))
         } else if let asset = source as? PHAsset {
             subject = .single(.asset(asset))
@@ -4000,7 +4000,7 @@ public final class SharedAccountContextImpl: SharedAccountContext {
         return StarsPurchaseScreen(context: context, starsContext: starsContext, options: options, purpose: purpose, targetPeerId: targetPeerId, customTheme: customTheme, completion: completion)
     }
         
-    public func makeStarsTransferScreen(context: AccountContext, starsContext: StarsContext, invoice: TelegramMediaInvoice, source: BotPaymentInvoiceSource, extendedMedia: [TelegramExtendedMedia], inputData: Signal<(StarsContext.State, BotPaymentForm, EnginePeer?, EnginePeer?)?, NoError>, completion: @escaping (Bool) -> Void) -> ViewController {
+    public func makeStarsTransferScreen(context: AccountContext, starsContext: StarsContext, invoice: IosappMediaInvoice, source: BotPaymentInvoiceSource, extendedMedia: [IosappExtendedMedia], inputData: Signal<(StarsContext.State, BotPaymentForm, EnginePeer?, EnginePeer?)?, NoError>, completion: @escaping (Bool) -> Void) -> ViewController {
         return StarsTransferScreen(context: context, starsContext: starsContext, invoice: invoice, source: source, extendedMedia: extendedMedia, inputData: inputData, navigateToPeer: { [weak self] peer in
             guard let self else {
                 return
@@ -4021,7 +4021,7 @@ public final class SharedAccountContextImpl: SharedAccountContext {
         }, completion: completion)
     }
     
-    public func makeStarsSubscriptionTransferScreen(context: AccountContext, starsContext: StarsContext, invoice: TelegramMediaInvoice, link: String, inputData: Signal<(StarsContext.State, BotPaymentForm, EnginePeer?, EnginePeer?)?, NoError>, navigateToPeer: @escaping (EnginePeer) -> Void) -> ViewController {
+    public func makeStarsSubscriptionTransferScreen(context: AccountContext, starsContext: StarsContext, invoice: IosappMediaInvoice, link: String, inputData: Signal<(StarsContext.State, BotPaymentForm, EnginePeer?, EnginePeer?)?, NoError>, navigateToPeer: @escaping (EnginePeer) -> Void) -> ViewController {
         return StarsTransferScreen(context: context, starsContext: starsContext, invoice: invoice, source: .starsChatSubscription(hash: link), extendedMedia: [], inputData: inputData, navigateToPeer: navigateToPeer, completion: { _ in })
     }
     
@@ -4181,11 +4181,11 @@ public final class SharedAccountContextImpl: SharedAccountContext {
                 }
                 externalState.storyTarget = target
                 
-                if let rootController = context.sharedContext.mainWindow?.viewController as? TelegramRootControllerInterface {
+                if let rootController = context.sharedContext.mainWindow?.viewController as? IosappRootControllerInterface {
                     rootController.proceedWithStoryUpload(target: target, results: [result], existingMedia: nil, forwardInfo: nil, externalState: externalState, commit: commit)
                 }
                 
-                let _ = (context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: targetPeerId))
+                let _ = (context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: targetPeerId))
                 |> deliverOnMainQueue).start(next: { peer in
                     guard let peer else {
                         return
@@ -4286,7 +4286,7 @@ public final class SharedAccountContextImpl: SharedAccountContext {
         return AccountFreezeInfoScreen(context: context)
     }
 
-    public func makeSendInviteLinkScreen(context: AccountContext, subject: SendInviteLinkScreenSubject, peers: [TelegramForbiddenInvitePeer], theme: PresentationTheme?) -> ViewController {
+    public func makeSendInviteLinkScreen(context: AccountContext, subject: SendInviteLinkScreenSubject, peers: [IosappForbiddenInvitePeer], theme: PresentationTheme?) -> ViewController {
         return SendInviteLinkScreen(context: context, subject: subject, peers: peers, theme: theme)
     }
     
@@ -4307,7 +4307,7 @@ public final class SharedAccountContextImpl: SharedAccountContext {
         return ForumSettingsScreen(context: context, peerId: peerId)
     }
     
-    public func makeBirthdayPickerScreen(context: AccountContext, settings: Promise<AccountPrivacySettings?>, openSettings: @escaping (() -> Void), completion: @escaping (TelegramBirthday) -> Void) -> ViewController {
+    public func makeBirthdayPickerScreen(context: AccountContext, settings: Promise<AccountPrivacySettings?>, openSettings: @escaping (() -> Void), completion: @escaping (IosappBirthday) -> Void) -> ViewController {
         return BirthdayPickerScreen(
             context: context,
             mode: .generic,
@@ -4317,7 +4317,7 @@ public final class SharedAccountContextImpl: SharedAccountContext {
         )
     }
     
-    public func makeBirthdaySuggestionScreen(context: AccountContext, peerId: EnginePeer.Id, completion: @escaping (TelegramBirthday) -> Void) -> ViewController {
+    public func makeBirthdaySuggestionScreen(context: AccountContext, peerId: EnginePeer.Id, completion: @escaping (IosappBirthday) -> Void) -> ViewController {
         return BirthdayPickerScreen(
             context: context,
             mode: .suggest(peerId),
@@ -4327,7 +4327,7 @@ public final class SharedAccountContextImpl: SharedAccountContext {
         )
     }
     
-    public func makeBirthdayAcceptSuggestionScreen(context: AccountContext, birthday: TelegramBirthday, settings: Promise<AccountPrivacySettings?>, openSettings: @escaping () -> Void, completion: @escaping (TelegramBirthday) -> Void) -> ViewController {
+    public func makeBirthdayAcceptSuggestionScreen(context: AccountContext, birthday: IosappBirthday, settings: Promise<AccountPrivacySettings?>, openSettings: @escaping () -> Void, completion: @escaping (IosappBirthday) -> Void) -> ViewController {
         return BirthdayPickerScreen(
             context: context,
             mode: .acceptSuggestion(birthday),
@@ -4365,7 +4365,7 @@ public final class SharedAccountContextImpl: SharedAccountContext {
         return ChatRankInfoScreen(context: context, chatPeer: chatPeer, userPeer: userPeer, role: role, rank: rank, canChange: canChange, completion: completion)
     }
     
-    public func makeChatRankPreviewItem(context: AccountContext, peer: EnginePeer, rank: String, rankRole: ChatRankInfoScreenRole, theme: PresentationTheme, strings: PresentationStrings, wallpaper: TelegramWallpaper, fontSize: PresentationFontSize, chatBubbleCorners: PresentationChatBubbleCorners, dateTimeFormat: PresentationDateTimeFormat, nameOrder: PresentationPersonNameOrder, sectionId: Int32) -> ListViewItem {
+    public func makeChatRankPreviewItem(context: AccountContext, peer: EnginePeer, rank: String, rankRole: ChatRankInfoScreenRole, theme: PresentationTheme, strings: PresentationStrings, wallpaper: IosappWallpaper, fontSize: PresentationFontSize, chatBubbleCorners: PresentationChatBubbleCorners, dateTimeFormat: PresentationDateTimeFormat, nameOrder: PresentationPersonNameOrder, sectionId: Int32) -> ListViewItem {
         let messageItem = RankChatPreviewItem.MessageItem(
             peer: peer,
             text: "Reinhardt, we need to find you some new tunes.",
@@ -4430,9 +4430,9 @@ private func peerInfoControllerImpl(context: AccountContext, updatedPresentation
         break
     }
     
-    if let _ = peer as? TelegramGroup {
+    if let _ = peer as? IosappGroup {
         return PeerInfoScreenImpl(context: context, updatedPresentationData: updatedPresentationData, peerId: peer.id, avatarInitiallyExpanded: avatarInitiallyExpanded, isOpenedFromChat: isOpenedFromChat, nearbyPeerDistance: nil, reactionSourceMessageId: nil, callMessages: [], switchToMediaTarget: switchToMediaTarget)
-    } else if let _ = peer as? TelegramChannel {
+    } else if let _ = peer as? IosappChannel {
         var forumTopicThread: ChatReplyThreadMessage?
         var switchToRecommendedChannels = false
         var switchToGiftsTarget: PeerInfoSwitchToGiftsTarget?
@@ -4455,7 +4455,7 @@ private func peerInfoControllerImpl(context: AccountContext, updatedPresentation
             break
         }
         return PeerInfoScreenImpl(context: context, updatedPresentationData: updatedPresentationData, peerId: peer.id, avatarInitiallyExpanded: avatarInitiallyExpanded, isOpenedFromChat: isOpenedFromChat, nearbyPeerDistance: nil, reactionSourceMessageId: nil, callMessages: [], forumTopicThread: forumTopicThread, switchToRecommendedChannels: switchToRecommendedChannels, switchToGiftsTarget: switchToGiftsTarget, switchToGroupsInCommon: switchToGroupsInCommon, switchToStoryFolder: switchToStoryFolder, switchToMediaTarget: switchToMediaTarget)
-    } else if peer is TelegramUser {
+    } else if peer is IosappUser {
         var nearbyPeerDistance: Int32?
         var reactionSourceMessageId: MessageId?
         var callMessages: [Message] = []
@@ -4508,7 +4508,7 @@ private func peerInfoControllerImpl(context: AccountContext, updatedPresentation
             break
         }
         return PeerInfoScreenImpl(context: context, updatedPresentationData: updatedPresentationData, peerId: peer.id, avatarInitiallyExpanded: avatarInitiallyExpanded, isOpenedFromChat: isOpenedFromChat, nearbyPeerDistance: nearbyPeerDistance, reactionSourceMessageId: reactionSourceMessageId, callMessages: callMessages, isMyProfile: isMyProfile, hintGroupInCommon: hintGroupInCommon, forumTopicThread: forumTopicThread, sharedMediaFromForumTopic: sharedMediaFromForumTopic, switchToGiftsTarget: switchToGiftsTarget, switchToGroupsInCommon: switchToGroupsInCommon, switchToStoryFolder: switchToStoryFolder, switchToMediaTarget: switchToMediaTarget)
-    } else if peer is TelegramSecretChat {
+    } else if peer is IosappSecretChat {
         return PeerInfoScreenImpl(context: context, updatedPresentationData: updatedPresentationData, peerId: peer.id, avatarInitiallyExpanded: avatarInitiallyExpanded, isOpenedFromChat: isOpenedFromChat, nearbyPeerDistance: nil, reactionSourceMessageId: nil, callMessages: [], switchToMediaTarget: switchToMediaTarget)
     }
     return nil

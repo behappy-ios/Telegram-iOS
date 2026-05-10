@@ -82,7 +82,7 @@ private struct BotSettingsState: Equatable {
 private func botSettingsEntries(
     presentationData: PresentationData,
     peer: EnginePeer?,
-    biometricsState: TelegramBotBiometricsState?
+    biometricsState: IosappBotBiometricsState?
 ) -> [BotSettingsEntry] {
     var entries: [BotSettingsEntry] = []
     
@@ -112,7 +112,7 @@ public func botSettingsScreen(context: AccountContext, peerId: EnginePeer.Id) ->
         context: context,
         updateBiometryAccess: { value in
             context.engine.peers.updateBotBiometricsState(peerId: peerId, update: { state in
-                var state = state ?? TelegramBotBiometricsState.create()
+                var state = state ?? IosappBotBiometricsState.create()
                 state.accessGranted = value
                 return state
             })
@@ -120,8 +120,8 @@ public func botSettingsScreen(context: AccountContext, peerId: EnginePeer.Id) ->
     )
         
     let data = context.engine.data.subscribe(
-        TelegramEngine.EngineData.Item.Peer.Peer(id: peerId),
-        TelegramEngine.EngineData.Item.Peer.BotBiometricsState(id: peerId)
+        IosappEngine.EngineData.Item.Peer.Peer(id: peerId),
+        IosappEngine.EngineData.Item.Peer.BotBiometricsState(id: peerId)
     )
     
     let signal = combineLatest(

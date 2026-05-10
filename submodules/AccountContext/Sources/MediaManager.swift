@@ -59,7 +59,7 @@ public enum PeerMessagesPlaylistLocation: Equatable, SharedMediaPlaylistLocation
             return .custom(
                 messages: combineLatest(
                     savedMusicContext.state,
-                    context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: savedMusicContext.peerId))
+                    context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: savedMusicContext.peerId))
                 )
                 |> map { state, peer in
                     var messages: [Message] = []
@@ -146,16 +146,16 @@ public enum PeerMessagesPlaylistLocation: Equatable, SharedMediaPlaylistLocation
 }
 
 public func peerMessageMediaPlayerType(_ message: EngineMessage) -> MediaManagerPlayerType? {
-    func extractFileMedia(_ message: EngineMessage) -> TelegramMediaFile? {
-        var file: TelegramMediaFile?
+    func extractFileMedia(_ message: EngineMessage) -> IosappMediaFile? {
+        var file: IosappMediaFile?
         for media in message.media {
-            if let media = media as? TelegramMediaFile {
+            if let media = media as? IosappMediaFile {
                 file = media
                 break
-            } else if let media = media as? TelegramMediaWebpage, case let .Loaded(content) = media.content, let f = content.file {
+            } else if let media = media as? IosappMediaWebpage, case let .Loaded(content) = media.content, let f = content.file {
                 file = f
                 break
-            } else if let media = media as? TelegramMediaPoll, let f = media.attachedMedia as? TelegramMediaFile {
+            } else if let media = media as? IosappMediaPoll, let f = media.attachedMedia as? IosappMediaFile {
                 file = f
                 break
             }
@@ -225,7 +225,7 @@ public protocol MediaManager: AnyObject {
     func audioRecorder(
         resumeData: AudioRecorderResumeData?,
         beginWithTone: Bool,
-        applicationBindings: TelegramApplicationBindings,
+        applicationBindings: IosappApplicationBindings,
         beganWithTone: @escaping (Bool) -> Void
     ) -> Signal<ManagedAudioRecorder?, NoError>
 }

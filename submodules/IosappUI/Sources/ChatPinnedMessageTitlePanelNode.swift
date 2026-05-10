@@ -328,7 +328,7 @@ final class ChatPinnedMessageTitlePanelNode: ChatTitleAccessoryPanelNode {
             
             if actionTitle == nil {
                 for media in message.message.media {
-                    if let webpage = media as? TelegramMediaWebpage, case let .Loaded(content) = webpage.content, content.type == "telegram_call" {
+                    if let webpage = media as? IosappMediaWebpage, case let .Loaded(content) = webpage.content, content.type == "telegram_call" {
                         actionTitle = interfaceState.strings.Chat_TitleJoinGroupCall
                     }
                 }
@@ -621,7 +621,7 @@ final class ChatPinnedMessageTitlePanelNode: ChatTitleAccessoryPanelNode {
         var updatedMediaReference: AnyMediaReference?
         var imageDimensions: CGSize?
         
-        let giveaway = pinnedMessage.message.media.first(where: { $0 is TelegramMediaGiveaway }) as? TelegramMediaGiveaway
+        let giveaway = pinnedMessage.message.media.first(where: { $0 is IosappMediaGiveaway }) as? IosappMediaGiveaway
         
         var titleStrings: [AnimatedCountLabelNode.Segment] = []
         if let _ = giveaway {
@@ -644,13 +644,13 @@ final class ChatPinnedMessageTitlePanelNode: ChatTitleAccessoryPanelNode {
         
         if !message.containsSecretMedia {
             for media in message.media {
-                if let image = media as? TelegramMediaImage {
+                if let image = media as? IosappMediaImage {
                     updatedMediaReference = .message(message: MessageReference(message), media: image)
                     if let representation = largestRepresentationForPhoto(image) {
                         imageDimensions = representation.dimensions.cgSize
                     }
                     break
-                } else if let file = media as? TelegramMediaFile {
+                } else if let file = media as? IosappMediaFile {
                     updatedMediaReference = .message(message: MessageReference(message), media: file)
                     if !file.isInstantVideo && !file.isSticker, let representation = largestImageRepresentation(file.previewRepresentations) {
                         imageDimensions = representation.dimensions.cgSize
@@ -658,22 +658,22 @@ final class ChatPinnedMessageTitlePanelNode: ChatTitleAccessoryPanelNode {
                         imageDimensions = dimensions.cgSize
                     }
                     break
-                } else if let paidContent = media as? TelegramMediaPaidContent, let firstMedia = paidContent.extendedMedia.first {
+                } else if let paidContent = media as? IosappMediaPaidContent, let firstMedia = paidContent.extendedMedia.first {
                     switch firstMedia {
                     case let .preview(dimensions, immediateThumbnailData, _):
-                        let thumbnailMedia = TelegramMediaImage(imageId: MediaId(namespace: 0, id: 0), representations: [], immediateThumbnailData: immediateThumbnailData, reference: nil, partialReference: nil, flags: [])
+                        let thumbnailMedia = IosappMediaImage(imageId: MediaId(namespace: 0, id: 0), representations: [], immediateThumbnailData: immediateThumbnailData, reference: nil, partialReference: nil, flags: [])
                         if let dimensions {
                             imageDimensions = dimensions.cgSize
                         }
                         updatedMediaReference = .standalone(media: thumbnailMedia)
                     case let .full(fullMedia):
                         updatedMediaReference = .message(message: MessageReference(message), media: fullMedia)
-                        if let image = fullMedia as? TelegramMediaImage {
+                        if let image = fullMedia as? IosappMediaImage {
                             if let representation = largestRepresentationForPhoto(image) {
                                 imageDimensions = representation.dimensions.cgSize
                             }
                             break
-                        } else if let file = fullMedia as? TelegramMediaFile {
+                        } else if let file = fullMedia as? IosappMediaFile {
                             if let dimensions = file.dimensions {
                                 imageDimensions = dimensions.cgSize
                             }
@@ -694,10 +694,10 @@ final class ChatPinnedMessageTitlePanelNode: ChatTitleAccessoryPanelNode {
             titleStrings = [.text(0, NSAttributedString(string: titleString, font: Font.medium(15.0), textColor: theme.chat.inputPanel.panelControlColor))]
         } else {
             for media in message.media {
-                if let media = media as? TelegramMediaInvoice {
+                if let media = media as? IosappMediaInvoice {
                     titleStrings = [.text(0, NSAttributedString(string: media.title, font: Font.medium(15.0), textColor: theme.chat.inputPanel.panelControlColor))]
                     break
-                } else if let webpage = media as? TelegramMediaWebpage, case let .Loaded(content) = webpage.content, content.type == "telegram_call" {
+                } else if let webpage = media as? IosappMediaWebpage, case let .Loaded(content) = webpage.content, content.type == "telegram_call" {
                     titleStrings = [.text(0, NSAttributedString(string: strings.Chat_PinnedGroupCallTitle, font: Font.medium(15.0), textColor: theme.chat.inputPanel.panelControlColor))]
                     break
                 }
@@ -725,13 +725,13 @@ final class ChatPinnedMessageTitlePanelNode: ChatTitleAccessoryPanelNode {
         var updatedFetchMediaSignal: Signal<FetchResourceSourceType, FetchResourceError>?
         if mediaUpdated {
             if let updatedMediaReference = updatedMediaReference, imageDimensions != nil {
-                if let imageReference = updatedMediaReference.concrete(TelegramMediaImage.self) {
+                if let imageReference = updatedMediaReference.concrete(IosappMediaImage.self) {
                     if imageReference.media.representations.isEmpty {
                         updateImageSignal = chatSecretPhoto(account: context.account, userLocation: .peer(message.id.peerId), photoReference: imageReference, ignoreFullSize: true, synchronousLoad: true)
                     } else {
                         updateImageSignal = chatMessagePhotoThumbnail(account: context.account, userLocation: .peer(message.id.peerId), photoReference: imageReference, blurred: hasSpoiler)
                     }
-                } else if let fileReference = updatedMediaReference.concrete(TelegramMediaFile.self) {
+                } else if let fileReference = updatedMediaReference.concrete(IosappMediaFile.self) {
                     if fileReference.media.isAnimatedSticker {
                         let dimensions = fileReference.media.dimensions ?? PixelDimensions(width: 512, height: 512)
                         updateImageSignal = chatMessageAnimatedSticker(postbox: context.account.postbox, userLocation: .peer(message.id.peerId), file: fileReference.media, small: false, size: dimensions.cgSize.aspectFitted(CGSize(width: 160.0, height: 160.0)))
@@ -794,7 +794,7 @@ final class ChatPinnedMessageTitlePanelNode: ChatTitleAccessoryPanelNode {
                 messageText = NSAttributedString(string: foldLineBreaks(text), font: textFont, textColor: textColor)
             }
         } else {
-            messageText = NSAttributedString(string: foldLineBreaks(textString.string), font: textFont, textColor: message.media.isEmpty || message.media.first is TelegramMediaWebpage ? theme.chat.inputPanel.primaryTextColor : theme.chat.inputPanel.secondaryTextColor)
+            messageText = NSAttributedString(string: foldLineBreaks(textString.string), font: textFont, textColor: message.media.isEmpty || message.media.first is IosappMediaWebpage ? theme.chat.inputPanel.primaryTextColor : theme.chat.inputPanel.secondaryTextColor)
         }
         
         let textConstrainedSize = CGSize(width: width - textLineInset - contentLeftInset - rightInset - textRightInset, height: CGFloat.greatestFiniteMagnitude)
@@ -1008,7 +1008,7 @@ final class ChatPinnedMessageTitlePanelNode: ChatTitleAccessoryPanelNode {
                     case .setupPoll:
                         break
                     case let .openUserProfile(peerId):
-                        let _ = (self.context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: peerId))
+                        let _ = (self.context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: peerId))
                         |> deliverOnMainQueue).startStandalone(next: { peer in
                             if let peer = peer {
                                 controllerInteraction.openPeer(peer, .info(nil), nil, .default)
@@ -1030,7 +1030,7 @@ final class ChatPinnedMessageTitlePanelNode: ChatTitleAccessoryPanelNode {
             }
             
             for media in message.media {
-                if let webpage = media as? TelegramMediaWebpage, case let .Loaded(content) = webpage.content, content.type == "telegram_call" {
+                if let webpage = media as? IosappMediaWebpage, case let .Loaded(content) = webpage.content, content.type == "telegram_call" {
                     var isConcealed = true
                     if content.url.hasPrefix("tg://") {
                         isConcealed = false

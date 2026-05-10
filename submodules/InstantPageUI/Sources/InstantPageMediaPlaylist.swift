@@ -20,7 +20,7 @@ struct InstantPageMediaPlaylistItemId: SharedMediaPlaylistItemId {
     }
 }
 
-private func extractFileMedia(_ item: InstantPageMedia) -> TelegramMediaFile? {
+private func extractFileMedia(_ item: InstantPageMedia) -> IosappMediaFile? {
     if case let .file(file) = item.media {
         return file
     } else {
@@ -29,11 +29,11 @@ private func extractFileMedia(_ item: InstantPageMedia) -> TelegramMediaFile? {
 }
 
 final class InstantPageMediaPlaylistItem: SharedMediaPlaylistItem {
-    let webPage: TelegramMediaWebpage
+    let webPage: IosappMediaWebpage
     let id: SharedMediaPlaylistItemId
     let item: InstantPageMedia
     
-    init(webPage: TelegramMediaWebpage, item: InstantPageMedia) {
+    init(webPage: IosappMediaWebpage, item: InstantPageMedia) {
         self.webPage = webPage
         self.id = InstantPageMediaPlaylistItemId(index: item.index)
         self.item = item
@@ -142,7 +142,7 @@ struct InstantPagePlaylistLocation: Equatable, SharedMediaPlaylistLocation {
 }
 
 public final class InstantPageMediaPlaylist: SharedMediaPlaylist {
-    private let webPage: TelegramMediaWebpage
+    private let webPage: IosappMediaWebpage
     private let items: [InstantPageMedia]
     private let initialItemIndex: Int
     
@@ -164,7 +164,7 @@ public final class InstantPageMediaPlaylist: SharedMediaPlaylist {
         return self.stateValue.get()
     }
     
-    public init(webPage: TelegramMediaWebpage, items: [InstantPageMedia], initialItemIndex: Int) {
+    public init(webPage: IosappMediaWebpage, items: [InstantPageMedia], initialItemIndex: Int) {
         assert(Queue.mainQueue().isCurrent())
         
         self.id = InstantPageMediaPlaylistId(webpageId: webPage.webpageId)

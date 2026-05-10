@@ -108,9 +108,9 @@ public struct ItemListAvatarAndNameInfoItemState: Equatable {
 }
 
 public final class ItemListAvatarAndNameInfoItemContext {
-    public var hiddenAvatarRepresentation: TelegramMediaImageRepresentation?
+    public var hiddenAvatarRepresentation: IosappMediaImageRepresentation?
     
-    public init(hiddenAvatarRepresentation: TelegramMediaImageRepresentation? = nil) {
+    public init(hiddenAvatarRepresentation: IosappMediaImageRepresentation? = nil) {
         self.hiddenAvatarRepresentation = hiddenAvatarRepresentation
     }
 }
@@ -121,7 +121,7 @@ public enum ItemListAvatarAndNameInfoItemStyle: Equatable {
 }
 
 public enum ItemListAvatarAndNameInfoItemUpdatingAvatar: Equatable {
-    case image(TelegramMediaImageRepresentation, Bool)
+    case image(IosappMediaImageRepresentation, Bool)
     case none
 }
 

@@ -203,7 +203,7 @@ public final class PrincipalThemeEssentialGraphics {
     
     public let hasWallpaper: Bool
     
-    init(presentationTheme: PresentationTheme, wallpaper initialWallpaper: TelegramWallpaper, preview: Bool = false, bubbleCorners: PresentationChatBubbleCorners) {
+    init(presentationTheme: PresentationTheme, wallpaper initialWallpaper: IosappWallpaper, preview: Bool = false, bubbleCorners: PresentationChatBubbleCorners) {
         let theme = presentationTheme.chat
         let wallpaper = initialWallpaper
         self.hasWallpaper = !wallpaper.isEmpty
@@ -594,7 +594,7 @@ public final class PrincipalThemeAdditionalGraphics {
     public let chatEmptyItemLockIcon: UIImage
     public let emptyChatListCheckIcon: UIImage
     
-    init(_ theme: PresentationThemeChat, wallpaper: TelegramWallpaper, bubbleCorners: PresentationChatBubbleCorners) {
+    init(_ theme: PresentationThemeChat, wallpaper: IosappWallpaper, bubbleCorners: PresentationChatBubbleCorners) {
         let serviceColor = serviceMessageColorComponents(chatTheme: theme, wallpaper: wallpaper)
         self.chatServiceBubbleFillImage = generateImage(CGSize(width: 20.0, height: 20.0), contextGenerator: { size, context -> Void in
             context.clear(CGRect(origin: CGPoint(), size: size))

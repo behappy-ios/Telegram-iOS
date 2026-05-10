@@ -183,14 +183,14 @@ public func legacyInstantVideoController(theme: PresentationTheme, forStory: Boo
                 var finalDimensions: CGSize = dimensions
                 var finalDuration: Double = duration
                 
-                var previewRepresentations: [TelegramMediaImageRepresentation] = []
+                var previewRepresentations: [IosappMediaImageRepresentation] = []
                 if let previewImage = previewImage {
                     let resource = LocalFileMediaResource(fileId: Int64.random(in: Int64.min ... Int64.max))
                     let thumbnailSize = finalDimensions.aspectFitted(CGSize(width: 320.0, height: 320.0))
                     let thumbnailImage = TGScaleImageToPixelSize(previewImage, thumbnailSize)!
                     if let thumbnailData = thumbnailImage.jpegData(compressionQuality: 0.4) {
                         context.account.postbox.mediaBox.storeResourceData(resource.id, data: thumbnailData)
-                        previewRepresentations.append(TelegramMediaImageRepresentation(dimensions: PixelDimensions(thumbnailSize), resource: resource, progressiveSizes: [], immediateThumbnailData: nil, hasVideo: false, isPersonal: false))
+                        previewRepresentations.append(IosappMediaImageRepresentation(dimensions: PixelDimensions(thumbnailSize), resource: resource, progressiveSizes: [], immediateThumbnailData: nil, hasVideo: false, isPersonal: false))
                     }
                 }
                 
@@ -213,7 +213,7 @@ public func legacyInstantVideoController(theme: PresentationTheme, forStory: Boo
                     return
                 }
                 
-                let resource: TelegramMediaResource
+                let resource: IosappMediaResource
                 if let liveUploadData = liveUploadData as? LegacyLiveUploadInterfaceResult, resourceAdjustments == nil, let data = try? Data(contentsOf: videoUrl) {
                     resource = LocalFileMediaResource(fileId: liveUploadData.id)
                     context.account.postbox.mediaBox.storeResourceData(resource.id, data: data, synchronous: true)
@@ -231,7 +231,7 @@ public func legacyInstantVideoController(theme: PresentationTheme, forStory: Boo
                     }
                 }
                 
-                let media = TelegramMediaFile(fileId: MediaId(namespace: Namespaces.Media.LocalFile, id: Int64.random(in: Int64.min ... Int64.max)), partialReference: nil, resource: resource, previewRepresentations: previewRepresentations, videoThumbnails: [], immediateThumbnailData: nil, mimeType: "video/mp4", size: nil, attributes: [.FileName(fileName: "video.mp4"), .Video(duration: finalDuration, size: PixelDimensions(finalDimensions), flags: [.instantRoundVideo], preloadSize: nil, coverTime: nil, videoCodec: nil)], alternativeRepresentations: [])
+                let media = IosappMediaFile(fileId: MediaId(namespace: Namespaces.Media.LocalFile, id: Int64.random(in: Int64.min ... Int64.max)), partialReference: nil, resource: resource, previewRepresentations: previewRepresentations, videoThumbnails: [], immediateThumbnailData: nil, mimeType: "video/mp4", size: nil, attributes: [.FileName(fileName: "video.mp4"), .Video(duration: finalDuration, size: PixelDimensions(finalDimensions), flags: [.instantRoundVideo], preloadSize: nil, coverTime: nil, videoCodec: nil)], alternativeRepresentations: [])
                 var message: EnqueueMessage = .message(text: "", attributes: [], inlineStickers: [:], mediaReference: .standalone(media: media), threadId: nil, replyToMessageId: nil, replyToStoryId: nil, localGroupingKey: nil, correlationId: nil, bubbleUpEmojiOrStickersets: [])
                 
                 let scheduleTime: Int32? = scheduleTimestamp > 0 ? scheduleTimestamp : nil

@@ -181,7 +181,7 @@ final class ChatMessageNotificationItemNode: NotificationItemNode {
             if firstMessage.id.peerId.isRepliesOrVerificationCodes, let author = firstMessage.forwardInfo?.author {
                 avatarPeer = EnginePeer(author)
             }
-            if case let .channel(channel) = avatarPeer, channel.isMonoForum, let linkedMonoforumId = channel.linkedMonoforumId, let mainChannel = firstMessage.peers[linkedMonoforumId] as? TelegramChannel {
+            if case let .channel(channel) = avatarPeer, channel.isMonoForum, let linkedMonoforumId = channel.linkedMonoforumId, let mainChannel = firstMessage.peers[linkedMonoforumId] as? IosappChannel {
                 avatarPeer = .channel(mainChannel)
             }
             self.avatarNode.setPeer(context: item.context, theme: presentationData.theme, peer: avatarPeer, overrideImage: peer.id == item.context.account.peerId ? .savedMessagesIcon : nil, emptyColor: presentationData.theme.list.mediaPlaceholderColor)
@@ -197,13 +197,13 @@ final class ChatMessageNotificationItemNode: NotificationItemNode {
         } else if item.messages.count == 1 {
             let message = item.messages[0]
             for media in message.media {
-                if let image = media as? TelegramMediaImage {
+                if let image = media as? IosappMediaImage {
                     updatedMedia = image
                     if let representation = largestRepresentationForPhoto(image) {
                         imageDimensions = representation.dimensions.cgSize
                     }
                     break
-                } else if let file = media as? TelegramMediaFile {
+                } else if let file = media as? IosappMediaFile {
                     updatedMedia = file
                     if let representation = largestImageRepresentation(file.previewRepresentations) {
                         imageDimensions = representation.dimensions.cgSize
@@ -236,14 +236,14 @@ final class ChatMessageNotificationItemNode: NotificationItemNode {
             }
         } else if item.messages.count > 1, let peer = item.messages[0].peers[item.messages[0].id.peerId] {
             var displayAuthor = true
-            if let channel = peer as? TelegramChannel {
+            if let channel = peer as? IosappChannel {
                 switch channel.info {
                     case .group:
                         displayAuthor = true
                     case .broadcast:
                         displayAuthor = false
                 }
-            } else if let _ = peer as? TelegramUser {
+            } else if let _ = peer as? IosappUser {
                 displayAuthor = false
             }
             
@@ -268,7 +268,7 @@ final class ChatMessageNotificationItemNode: NotificationItemNode {
                 }
                 var isChannel = false
                 var isGroup = false
-                if let peer = peer as? TelegramChannel {
+                if let peer = peer as? IosappChannel {
                     if case .broadcast = peer.info {
                         isChannel = true
                     } else {
@@ -331,7 +331,7 @@ final class ChatMessageNotificationItemNode: NotificationItemNode {
         if let message = item.messages.first, let attribute = message.attributes.first(where: { $0 is NotificationInfoMessageAttribute }) as? NotificationInfoMessageAttribute, attribute.flags.contains(.muted), let currentTitle = title {
             var isAction = false
             for media in message.media {
-                if media is TelegramMediaAction {
+                if media is IosappMediaAction {
                     isAction = true
                     break
                 }
@@ -346,9 +346,9 @@ final class ChatMessageNotificationItemNode: NotificationItemNode {
         var attributedMessageText: NSAttributedString
         
         var customEntities: [MessageTextEntity] = []
-        if item.messages[0].id.peerId.isTelegramNotifications || item.messages[0].id.peerId.isVerificationCodes {
+        if item.messages[0].id.peerId.isIosappNotifications || item.messages[0].id.peerId.isVerificationCodes {
             let regex: NSRegularExpression?
-            if item.messages[0].id.peerId.isTelegramNotifications {
+            if item.messages[0].id.peerId.isIosappNotifications {
                 regex = telegramCodeRegex
             } else {
                 regex = loginCodeRegex
@@ -390,9 +390,9 @@ final class ChatMessageNotificationItemNode: NotificationItemNode {
         
         var updateImageSignal: Signal<(TransformImageArguments) -> DrawingContext?, NoError>?
         if let firstMessage = item.messages.first, let updatedMedia = updatedMedia, imageDimensions != nil {
-            if let image = updatedMedia as? TelegramMediaImage {
+            if let image = updatedMedia as? IosappMediaImage {
                 updateImageSignal = mediaGridMessagePhoto(account: item.context.account, userLocation: .peer(firstMessage.id.peerId), photoReference: .message(message: MessageReference(firstMessage), media: image))
-            } else if let file = updatedMedia as? TelegramMediaFile {
+            } else if let file = updatedMedia as? IosappMediaFile {
                 if file.isSticker {
                     updateImageSignal = chatMessageSticker(account: item.context.account, userLocation: .peer(firstMessage.id.peerId), file: file, small: true, fetched: true)
                 } else if file.isVideo {

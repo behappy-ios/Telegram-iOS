@@ -25,7 +25,7 @@ final class ChatGiftPreviewItem: ListViewItem, ItemListItem, ListItemComponentAd
     let sectionId: ItemListSectionId
     let fontSize: PresentationFontSize
     let chatBubbleCorners: PresentationChatBubbleCorners
-    let wallpaper: TelegramWallpaper
+    let wallpaper: IosappWallpaper
     let dateTimeFormat: PresentationDateTimeFormat
     let nameDisplayOrder: PresentationPersonNameOrder
     
@@ -46,7 +46,7 @@ final class ChatGiftPreviewItem: ListViewItem, ItemListItem, ListItemComponentAd
         sectionId: ItemListSectionId,
         fontSize: PresentationFontSize,
         chatBubbleCorners: PresentationChatBubbleCorners,
-        wallpaper: TelegramWallpaper,
+        wallpaper: IosappWallpaper,
         dateTimeFormat: PresentationDateTimeFormat,
         nameDisplayOrder: PresentationPersonNameOrder,
         peers: [EnginePeer],
@@ -238,13 +238,13 @@ final class ChatGiftPreviewItemNode: ListViewItemNode {
                 switch item.subject {
                 case let .premium(months, amount, currency):
                     media = [
-                        TelegramMediaAction(
+                        IosappMediaAction(
                             action: .giftPremium(currency: currency, amount: amount, days: months * 30, cryptoCurrency: nil, cryptoAmount: nil, text: item.text, entities: item.entities)
                         )
                     ]
                 case let .starGift(gift):
                     media = [
-                        TelegramMediaAction(
+                        IosappMediaAction(
                             action: .starGift(gift: .generic(gift), convertStars: gift.convertStars, text: item.text, entities: item.entities, nameHidden: false, savedToProfile: false, converted: false, upgraded: false, canUpgrade: gift.upgradeStars != nil, upgradeStars: item.upgradeStars, isRefunded: false, isPrepaidUpgrade: false, upgradeMessageId: nil, peerId: nil, senderId: nil, savedId: nil, prepaidUpgradeHash: nil, giftMessageId: nil, upgradeSeparate: false, isAuctionAcquired: false, toPeerId: nil, number: nil)
                         )
                     ]

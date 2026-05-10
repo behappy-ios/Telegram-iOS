@@ -67,7 +67,7 @@ extension PeerInfoScreenNode {
         case .stories:
             push(PeerInfoStoryGridScreen(context: self.context, peerId: self.context.account.peerId, scope: .saved))
         case .savedMessages:
-            let _ = (self.context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: self.context.account.peerId))
+            let _ = (self.context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: self.context.account.peerId))
             |> deliverOnMainQueue).startStandalone(next: { [weak self] peer in
                 guard let self, let peer = peer else {
                     return
@@ -198,7 +198,7 @@ extension PeerInfoScreenNode {
             guard let controller = self.controller, !controller.presentAccountFrozenInfoIfNeeded() else {
                 return
             }
-            if let user = self.data?.peer as? TelegramUser, let phoneNumber = user.phone {
+            if let user = self.data?.peer as? IosappUser, let phoneNumber = user.phone {
                 let introController = PrivacyIntroController(context: self.context, mode: .changePhoneNumber(phoneNumber), proceedAction: { [weak self] in
                     if let strongSelf = self, let navigationController = strongSelf.controller?.navigationController as? NavigationController {
                         navigationController.replaceTopController(ChangePhoneNumberController(context: strongSelf.context), animated: true)
@@ -251,7 +251,7 @@ extension PeerInfoScreenNode {
                 }
             })
         case .logout:
-            if let user = self.data?.peer as? TelegramUser, let phoneNumber = user.phone {
+            if let user = self.data?.peer as? IosappUser, let phoneNumber = user.phone {
                 if let controller = self.controller, let navigationController = controller.navigationController as? NavigationController {
                     self.controller?.push(logoutOptionsController(context: self.context, navigationController: navigationController, canAddAccounts: true, phoneNumber: phoneNumber))
                 }

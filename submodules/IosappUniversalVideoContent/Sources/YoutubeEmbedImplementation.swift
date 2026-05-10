@@ -402,7 +402,7 @@ public struct YoutubeEmbedStoryboardMediaResourceId {
     }
 }
 
-public class YoutubeEmbedStoryboardMediaResource: TelegramMediaResource {
+public class YoutubeEmbedStoryboardMediaResource: IosappMediaResource {
     public let videoId: String
     public let storyboardId: Int32
     public let url: String

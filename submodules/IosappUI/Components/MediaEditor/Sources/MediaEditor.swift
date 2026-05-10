@@ -169,7 +169,7 @@ public final class MediaEditor {
         case draft(MediaEditorDraft)
         case message(MessageId)
         case gift(StarGift.UniqueGift)
-        case sticker(TelegramMediaFile)
+        case sticker(IosappMediaFile)
         
         var dimensions: PixelDimensions {
             switch self {
@@ -833,11 +833,11 @@ public final class MediaEditor {
         case let .asset(asset):
             textureSource = textureSourceResult(for: asset)
         case let .message(messageId):
-            textureSource = self.context.engine.data.get(TelegramEngine.EngineData.Item.Messages.Message(id: messageId))
+            textureSource = self.context.engine.data.get(IosappEngine.EngineData.Item.Messages.Message(id: messageId))
             |> mapToSignal { message in
                 var player: AVPlayer?
                 if let message, !"".isEmpty {
-                    if let maybeFile = message.media.first(where: { $0 is TelegramMediaFile }) as? TelegramMediaFile, maybeFile.isVideo, let path = self.context.account.postbox.mediaBox.completedResourcePath(maybeFile.resource, pathExtension: "mp4") {
+                    if let maybeFile = message.media.first(where: { $0 is IosappMediaFile }) as? IosappMediaFile, maybeFile.isVideo, let path = self.context.account.postbox.mediaBox.completedResourcePath(maybeFile.resource, pathExtension: "mp4") {
                         let asset = AVURLAsset(url: URL(fileURLWithPath: path))
                         player = self.makePlayer(asset: asset)
                     }

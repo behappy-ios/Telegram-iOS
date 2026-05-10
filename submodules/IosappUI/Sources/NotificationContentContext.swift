@@ -33,7 +33,7 @@ private func setupSharedLogger(rootPath: String, path: String) {
 
 public struct NotificationViewControllerInitializationData {
     public let appBundleId: String
-    public let appBuildType: TelegramAppBuildType
+    public let appBuildType: IosappAppBuildType
     public let appGroupPath: String
     public let apiId: Int32
     public let apiHash: String
@@ -43,7 +43,7 @@ public struct NotificationViewControllerInitializationData {
     public let bundleData: Data?
     public let useBetaFeatures: Bool
     
-    public init(appBundleId: String, appBuildType: TelegramAppBuildType, appGroupPath: String, apiId: Int32, apiHash: String, languagesCategory: String, encryptionParameters: (Data, Data), appVersion: String, bundleData: Data?, useBetaFeatures: Bool) {
+    public init(appBundleId: String, appBuildType: IosappAppBuildType, appGroupPath: String, apiId: Int32, apiHash: String, languagesCategory: String, encryptionParameters: (Data, Data), appVersion: String, bundleData: Data?, useBetaFeatures: Bool) {
         self.appBundleId = appBundleId
         self.appBuildType = appBuildType
         self.appGroupPath = appGroupPath
@@ -98,7 +98,7 @@ public final class NotificationViewControllerImpl {
         
         if sharedAccountContext == nil {
             initializeAccountManagement()
-            let accountManager = AccountManager<TelegramAccountManagerTypes>(basePath: rootPath + "/accounts-metadata", isTemporary: true, isReadOnly: false, useCaches: false, removeDatabaseOnError: false)
+            let accountManager = AccountManager<IosappAccountManagerTypes>(basePath: rootPath + "/accounts-metadata", isTemporary: true, isReadOnly: false, useCaches: false, removeDatabaseOnError: false)
             
             var initialPresentationDataAndSettings: InitialPresentationDataAndSettings?
             let semaphore = DispatchSemaphore(value: 0)
@@ -108,7 +108,7 @@ public final class NotificationViewControllerImpl {
             })
             semaphore.wait()
             
-            let applicationBindings = TelegramApplicationBindings(isMainApp: false, appBundleId: self.initializationData.appBundleId, appBuildType: self.initializationData.appBuildType, containerPath: self.initializationData.appGroupPath, appSpecificScheme: "tgapp", openUrl: { _ in
+            let applicationBindings = IosappApplicationBindings(isMainApp: false, appBundleId: self.initializationData.appBundleId, appBuildType: self.initializationData.appBuildType, containerPath: self.initializationData.appGroupPath, appSpecificScheme: "tgapp", openUrl: { _ in
             }, openUniversalUrl: { _, completion in
                 completion.completion(false)
                 return
@@ -181,7 +181,7 @@ public final class NotificationViewControllerImpl {
         
         let messageId = MessageId(peerId: PeerId(peerIdValue), namespace: messageIdNamespace, id: messageIdId)
         
-        if let image = media as? TelegramMediaImage, let thumbnailRepresentation = imageRepresentationLargerThan(image.representations, size: PixelDimensions(width: 120, height: 120)), let largestRepresentation = largestImageRepresentation(image.representations) {
+        if let image = media as? IosappMediaImage, let thumbnailRepresentation = imageRepresentationLargerThan(image.representations, size: PixelDimensions(width: 120, height: 120)), let largestRepresentation = largestImageRepresentation(image.representations) {
             let dimensions = largestRepresentation.dimensions
             let fittedSize = dimensions.cgSize.fitted(CGSize(width: view.bounds.width, height: 1000.0))
             view.frame = CGRect(origin: view.frame.origin, size: fittedSize)
@@ -225,7 +225,7 @@ public final class NotificationViewControllerImpl {
                         var imageReference: ImageMediaReference?
                         if let message = message {
                             for media in message.media {
-                                if let image = media as? TelegramMediaImage {
+                                if let image = media as? IosappMediaImage {
                                     imageReference = .message(message: MessageReference(message), media: image)
                                 }
                             }
@@ -246,7 +246,7 @@ public final class NotificationViewControllerImpl {
                     strongSelf.fetchedDisposable.set(standaloneChatMessagePhotoInteractiveFetched(account: accountAndImage.0, userLocation: .other, photoReference: imageReference).startStrict())
                 }
             }))
-        } else if let file = media as? TelegramMediaFile, let dimensions = file.dimensions {
+        } else if let file = media as? IosappMediaFile, let dimensions = file.dimensions {
             guard let sharedAccountContext = sharedAccountContext else {
                 return
             }
@@ -276,7 +276,7 @@ public final class NotificationViewControllerImpl {
                     var fileReference: FileMediaReference?
                     if let message = message {
                         for media in message.media {
-                            if let file = media as? TelegramMediaFile {
+                            if let file = media as? IosappMediaFile {
                                 fileReference = .message(message: MessageReference(message), media: file)
                             }
                         }

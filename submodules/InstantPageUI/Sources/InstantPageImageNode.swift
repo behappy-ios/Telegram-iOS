@@ -23,7 +23,7 @@ private struct FetchControls {
 
 final class InstantPageImageNode: ASDisplayNode, InstantPageNode {
     private let context: AccountContext
-    private let webPage: TelegramMediaWebpage
+    private let webPage: IosappMediaWebpage
     private var theme: InstantPageTheme
     let media: InstantPageMedia
     let attributes: [InstantPageImageAttribute]
@@ -49,7 +49,7 @@ final class InstantPageImageNode: ASDisplayNode, InstantPageNode {
     
     private var themeUpdated: Bool = false
     
-    init(context: AccountContext, sourceLocation: InstantPageSourceLocation, theme: InstantPageTheme, webPage: TelegramMediaWebpage, media: InstantPageMedia, attributes: [InstantPageImageAttribute], interactive: Bool, roundCorners: Bool, fit: Bool, openMedia: @escaping (InstantPageMedia) -> Void, longPressMedia: @escaping (InstantPageMedia) -> Void, activatePinchPreview: ((PinchSourceContainerNode) -> Void)?, pinchPreviewFinished: ((InstantPageNode) -> Void)?, getPreloadedResource: @escaping (String) -> Data?) {
+    init(context: AccountContext, sourceLocation: InstantPageSourceLocation, theme: InstantPageTheme, webPage: IosappMediaWebpage, media: InstantPageMedia, attributes: [InstantPageImageAttribute], interactive: Bool, roundCorners: Bool, fit: Bool, openMedia: @escaping (InstantPageMedia) -> Void, longPressMedia: @escaping (InstantPageMedia) -> Void, activatePinchPreview: ((PinchSourceContainerNode) -> Void)?, pinchPreviewFinished: ((InstantPageNode) -> Void)?, getPreloadedResource: @escaping (String) -> Data?) {
         self.context = context
         self.theme = theme
         self.webPage = webPage

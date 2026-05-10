@@ -219,7 +219,7 @@ public func buyStarGiftImpl(
     if skipConfirmation {
         action(acceptedPrice?.currency ?? .stars, {})
     } else {
-        let _ = (context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: recipientPeerId))
+        let _ = (context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: recipientPeerId))
         |> deliverOnMainQueue).start(next: { peer in
             guard let peer, let controller = getController() else {
                 return

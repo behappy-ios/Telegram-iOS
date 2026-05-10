@@ -28,11 +28,11 @@ func leftNavigationButtonForChatInterfaceState(_ presentationInterfaceState: Cha
                 canClear = true
                 title = strings.ScheduledMessages_ClearAll
             } else {
-                if peer is TelegramUser || peer is TelegramGroup || peer is TelegramSecretChat {
+                if peer is IosappUser || peer is IosappGroup || peer is IosappSecretChat {
                     canClear = true
-                } else if let peer = peer as? TelegramChannel, case .group = peer.info, peer.addressName == nil && presentationInterfaceState.peerGeoLocation == nil {
+                } else if let peer = peer as? IosappChannel, case .group = peer.info, peer.addressName == nil && presentationInterfaceState.peerGeoLocation == nil {
                     canClear = true
-                } else if let peer = peer as? TelegramChannel {
+                } else if let peer = peer as? IosappChannel {
                     if case .broadcast = peer.info {
                         title = strings.Conversation_ClearChannel
                     }
@@ -110,7 +110,7 @@ func rightNavigationButtonForChatInterfaceState(context: AccountContext, present
         }
     }
     
-    if let channel = presentationInterfaceState.renderedPeer?.peer as? TelegramChannel, channel.isMonoForum, case .peer = presentationInterfaceState.chatLocation {
+    if let channel = presentationInterfaceState.renderedPeer?.peer as? IosappChannel, channel.isMonoForum, case .peer = presentationInterfaceState.chatLocation {
         let displaySearch = hasMessages
         
         if displaySearch {
@@ -126,7 +126,7 @@ func rightNavigationButtonForChatInterfaceState(context: AccountContext, present
         }
     }
     
-    if let user = presentationInterfaceState.renderedPeer?.peer as? TelegramUser, user.isForum, case .peer = presentationInterfaceState.chatLocation {
+    if let user = presentationInterfaceState.renderedPeer?.peer as? IosappUser, user.isForum, case .peer = presentationInterfaceState.chatLocation {
         let displaySearch = hasMessages
         
         if displaySearch {
@@ -142,7 +142,7 @@ func rightNavigationButtonForChatInterfaceState(context: AccountContext, present
         }
     }
     
-    if let channel = presentationInterfaceState.renderedPeer?.peer as? TelegramChannel, channel.isForumOrMonoForum, let moreInfoNavigationButton = moreInfoNavigationButton {
+    if let channel = presentationInterfaceState.renderedPeer?.peer as? IosappChannel, channel.isForumOrMonoForum, let moreInfoNavigationButton = moreInfoNavigationButton {
         if case .replyThread = presentationInterfaceState.chatLocation {
         } else {
             if case .pinnedMessages = presentationInterfaceState.subject {
@@ -152,7 +152,7 @@ func rightNavigationButtonForChatInterfaceState(context: AccountContext, present
         }
     }
     
-    if let user = presentationInterfaceState.renderedPeer?.peer as? TelegramUser, let botInfo = user.botInfo, botInfo.flags.contains(.hasForum), let moreInfoNavigationButton = moreInfoNavigationButton {
+    if let user = presentationInterfaceState.renderedPeer?.peer as? IosappUser, let botInfo = user.botInfo, botInfo.flags.contains(.hasForum), let moreInfoNavigationButton = moreInfoNavigationButton {
         if case .pinnedMessages = presentationInterfaceState.subject {
         } else {
             return moreInfoNavigationButton
@@ -196,7 +196,7 @@ func rightNavigationButtonForChatInterfaceState(context: AccountContext, present
     }
     
     if case .replyThread = presentationInterfaceState.chatLocation {
-        if let channel = presentationInterfaceState.renderedPeer?.peer as? TelegramChannel, channel.isForumOrMonoForum {
+        if let channel = presentationInterfaceState.renderedPeer?.peer as? IosappChannel, channel.isForumOrMonoForum {
         } else if hasMessages {
             if case .search = currentButton?.action {
                 return currentButton

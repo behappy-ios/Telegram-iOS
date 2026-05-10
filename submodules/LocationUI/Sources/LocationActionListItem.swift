@@ -16,7 +16,7 @@ public enum LocationActionListItemIcon: Equatable {
     case liveLocation
     case stopLiveLocation
     case extendLiveLocation
-    case venue(TelegramMediaMap)
+    case venue(IosappMediaMap)
     
     public static func ==(lhs: LocationActionListItemIcon, rhs: LocationActionListItemIcon) -> Bool {
         switch lhs {
@@ -137,7 +137,7 @@ private func generateLiveLocationIcon(theme: PresentationTheme, type: LiveLocati
 
 final class LocationActionListItem: ListViewItem {
     let presentationData: ItemListPresentationData
-    let engine: TelegramEngine
+    let engine: IosappEngine
     let title: String
     let subtitle: String
     let icon: LocationActionListItemIcon
@@ -145,7 +145,7 @@ final class LocationActionListItem: ListViewItem {
     let action: () -> Void
     let highlighted: (Bool) -> Void
     
-    public init(presentationData: ItemListPresentationData, engine: TelegramEngine, title: String, subtitle: String, icon: LocationActionListItemIcon, beginTimeAndTimeout: (Double, Double)?, action: @escaping () -> Void, highlighted: @escaping (Bool) -> Void = { _ in }) {
+    public init(presentationData: ItemListPresentationData, engine: IosappEngine, title: String, subtitle: String, icon: LocationActionListItemIcon, beginTimeAndTimeout: (Double, Double)?, action: @escaping () -> Void, highlighted: @escaping (Bool) -> Void = { _ in }) {
         self.presentationData = presentationData
         self.engine = engine
         self.title = title

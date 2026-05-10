@@ -194,7 +194,7 @@ public final class PeerInfoGiftsPaneNode: ASDisplayNode, PeerInfoPaneNode, UIScr
             self.setCurrentCollection(collection: .collection(Int32(initialGiftCollectionId)))
         }
         
-        let _ = (context.engine.data.subscribe(TelegramEngine.EngineData.Item.Peer.Peer(id: peerId))
+        let _ = (context.engine.data.subscribe(IosappEngine.EngineData.Item.Peer.Peer(id: peerId))
         |> deliverOnMainQueue).start(next: { [weak self] peer in
             guard let self else {
                 return
@@ -1006,7 +1006,7 @@ public final class PeerInfoGiftsPaneNode: ASDisplayNode, PeerInfoPaneNode, UIScr
                     self?.createCollection(gifts: [gift])
                 })))
                 
-                var entityFiles: [Int64: TelegramMediaFile] = [:]
+                var entityFiles: [Int64: IosappMediaFile] = [:]
                 
                 if let collections = self?.collections {
                     for collection in collections {
@@ -1047,7 +1047,7 @@ public final class PeerInfoGiftsPaneNode: ASDisplayNode, PeerInfoPaneNode, UIScr
                                 let _ = self.profileGiftsCollections.addGifts(id: collection.id, gifts: [gift]).start()
                             }
                             
-                            var giftFile: TelegramMediaFile?
+                            var giftFile: IosappMediaFile?
                             var giftTitle: String?
                             switch gift.gift {
                             case let .generic(gift):
@@ -1211,7 +1211,7 @@ public final class PeerInfoGiftsPaneNode: ASDisplayNode, PeerInfoPaneNode, UIScr
                             enqueued: { [weak self] peerIds, _ in
                                 let _ = (context.engine.data.get(
                                     EngineDataList(
-                                        peerIds.map(TelegramEngine.EngineData.Item.Peer.Peer.init)
+                                        peerIds.map(IosappEngine.EngineData.Item.Peer.Peer.init)
                                     )
                                 )
                                 |> deliverOnMainQueue).startStandalone(next: { [weak self] peerList in
@@ -1248,7 +1248,7 @@ public final class PeerInfoGiftsPaneNode: ASDisplayNode, PeerInfoPaneNode, UIScr
 
                                     parentController.present(UndoOverlayController(presentationData: presentationData, content: .forward(savedMessages: savedMessages, text: text), elevatedLayout: true, animateInAsReplacement: false, action: { [weak self] action in
                                         if savedMessages, action == .info {
-                                            let _ = (context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: context.account.peerId))
+                                            let _ = (context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: context.account.peerId))
                                             |> deliverOnMainQueue).start(next: { [weak self] peer in
                                                 guard let peer, let navigationController = self?.parentController?.navigationController as? NavigationController else {
                                                     return
@@ -1286,7 +1286,7 @@ public final class PeerInfoGiftsPaneNode: ASDisplayNode, PeerInfoPaneNode, UIScr
                         let added = !gift.savedToProfile
                         profileGifts.updateStarGiftAddedToProfile(reference: reference, added: added)
                         
-                        var animationFile: TelegramMediaFile?
+                        var animationFile: IosappMediaFile?
                         switch gift.gift {
                         case let .generic(gift):
                             animationFile = gift.file
@@ -1388,7 +1388,7 @@ public final class PeerInfoGiftsPaneNode: ASDisplayNode, PeerInfoPaneNode, UIScr
                     let _ = self.profileGiftsCollections.removeGifts(id: id, gifts: [reference]).start()
                 }
                 
-                var giftFile: TelegramMediaFile?
+                var giftFile: IosappMediaFile?
                 var giftTitle: String?
                 switch gift.gift {
                 case let .generic(gift):

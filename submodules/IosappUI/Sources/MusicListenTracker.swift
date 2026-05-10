@@ -5,7 +5,7 @@ import AccountContext
 import UniversalMediaPlayer
 
 final class MusicListenTracker {
-    private let engine: TelegramEngine
+    private let engine: IosappEngine
 
     // Current listening session
     private var currentFileReference: FileMediaReference?
@@ -28,7 +28,7 @@ final class MusicListenTracker {
 
     private static let pauseTimeoutSeconds: Double = 60.0
 
-    init(engine: TelegramEngine) {
+    init(engine: IosappEngine) {
         self.engine = engine
     }
 

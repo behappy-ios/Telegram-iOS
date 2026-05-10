@@ -921,7 +921,7 @@ public func bubbleColorComponents(theme: PresentationTheme, incoming: Bool, wall
     }
 }
 
-public func bubbleVariableColor(variableColor: PresentationThemeVariableColor, wallpaper: TelegramWallpaper) -> UIColor {
+public func bubbleVariableColor(variableColor: PresentationThemeVariableColor, wallpaper: IosappWallpaper) -> UIColor {
     switch wallpaper {
         case .color(0xffffff):
             return variableColor.withoutWallpaper
@@ -1081,11 +1081,11 @@ public final class PresentationThemeServiceMessageColorComponents {
     }
 }
 
-public func serviceMessageColorComponents(theme: PresentationTheme, wallpaper: TelegramWallpaper) -> PresentationThemeServiceMessageColorComponents {
+public func serviceMessageColorComponents(theme: PresentationTheme, wallpaper: IosappWallpaper) -> PresentationThemeServiceMessageColorComponents {
     return serviceMessageColorComponents(chatTheme: theme.chat, wallpaper: wallpaper)
 }
 
-public func serviceMessageColorHasDefaultWallpaper(_ wallpaper: TelegramWallpaper) -> Bool {
+public func serviceMessageColorHasDefaultWallpaper(_ wallpaper: IosappWallpaper) -> Bool {
     switch wallpaper {
         case .color(0xffffff):
             return true
@@ -1094,7 +1094,7 @@ public func serviceMessageColorHasDefaultWallpaper(_ wallpaper: TelegramWallpape
     }
 }
 
-public func serviceMessageColorComponents(chatTheme: PresentationThemeChat, wallpaper: TelegramWallpaper) -> PresentationThemeServiceMessageColorComponents {
+public func serviceMessageColorComponents(chatTheme: PresentationThemeChat, wallpaper: IosappWallpaper) -> PresentationThemeServiceMessageColorComponents {
     return serviceMessageColorHasDefaultWallpaper(wallpaper) ? chatTheme.serviceMessage.components.withDefaultWallpaper : chatTheme.serviceMessage.components.withCustomWallpaper
 }
 
@@ -1384,7 +1384,7 @@ public final class PresentationThemeChatHistoryNavigation {
 }
 
 public final class PresentationThemeChat {
-    public let defaultWallpaper: TelegramWallpaper
+    public let defaultWallpaper: IosappWallpaper
     public let animateMessageColors: Bool
     public let message: PresentationThemeChatMessage
     public let serviceMessage: PresentationThemeServiceMessage
@@ -1393,7 +1393,7 @@ public final class PresentationThemeChat {
     public let inputButtonPanel: PresentationThemeInputButtonPanel
     public let historyNavigation: PresentationThemeChatHistoryNavigation
     
-    public init(defaultWallpaper: TelegramWallpaper, animateMessageColors: Bool, message: PresentationThemeChatMessage, serviceMessage: PresentationThemeServiceMessage, inputPanel: PresentationThemeChatInputPanel, inputMediaPanel: PresentationThemeInputMediaPanel, inputButtonPanel: PresentationThemeInputButtonPanel, historyNavigation: PresentationThemeChatHistoryNavigation) {
+    public init(defaultWallpaper: IosappWallpaper, animateMessageColors: Bool, message: PresentationThemeChatMessage, serviceMessage: PresentationThemeServiceMessage, inputPanel: PresentationThemeChatInputPanel, inputMediaPanel: PresentationThemeInputMediaPanel, inputButtonPanel: PresentationThemeInputButtonPanel, historyNavigation: PresentationThemeChatHistoryNavigation) {
         self.defaultWallpaper = defaultWallpaper
         self.animateMessageColors = animateMessageColors
         self.message = message
@@ -1404,7 +1404,7 @@ public final class PresentationThemeChat {
         self.historyNavigation = historyNavigation
     }
     
-    public func withUpdated(defaultWallpaper: TelegramWallpaper? = nil, animateMessageColors: Bool? = nil, message: PresentationThemeChatMessage? = nil, serviceMessage: PresentationThemeServiceMessage? = nil, inputPanel: PresentationThemeChatInputPanel? = nil, inputMediaPanel: PresentationThemeInputMediaPanel? = nil, inputButtonPanel: PresentationThemeInputButtonPanel? = nil, historyNavigation: PresentationThemeChatHistoryNavigation? = nil) -> PresentationThemeChat {
+    public func withUpdated(defaultWallpaper: IosappWallpaper? = nil, animateMessageColors: Bool? = nil, message: PresentationThemeChatMessage? = nil, serviceMessage: PresentationThemeServiceMessage? = nil, inputPanel: PresentationThemeChatInputPanel? = nil, inputMediaPanel: PresentationThemeInputMediaPanel? = nil, inputButtonPanel: PresentationThemeInputButtonPanel? = nil, historyNavigation: PresentationThemeChatHistoryNavigation? = nil) -> PresentationThemeChat {
         return PresentationThemeChat(defaultWallpaper: defaultWallpaper ?? self.defaultWallpaper, animateMessageColors: animateMessageColors ?? self.animateMessageColors, message: message ?? self.message, serviceMessage: serviceMessage ?? self.serviceMessage, inputPanel: inputPanel ?? self.inputPanel, inputMediaPanel: inputMediaPanel ?? self.inputMediaPanel, inputButtonPanel: inputButtonPanel ?? self.inputButtonPanel, historyNavigation: historyNavigation ?? self.historyNavigation)
     }
 }
@@ -1637,7 +1637,7 @@ public final class PresentationTheme: Equatable {
         return lhs === rhs
     }
     
-    public func withUpdated(name: String?, defaultWallpaper: TelegramWallpaper?) -> PresentationTheme {
+    public func withUpdated(name: String?, defaultWallpaper: IosappWallpaper?) -> PresentationTheme {
         var defaultWallpaper = defaultWallpaper
         if let wallpaper = defaultWallpaper {
             switch wallpaper {

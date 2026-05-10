@@ -338,7 +338,7 @@ final class GiftOptionsScreenComponent: Component {
                                 let alertController = textAlertController(theme: theme, title: NSAttributedString(string: strings.Gift_Options_GiftLocked_Title, font: Font.semibold(theme.baseFontSize), textColor: theme.primaryColor, paragraphAlignment: .center), text: attributedText, actions: [TextAlertAction(type: .defaultAction, title: strings.Common_OK, action: {
                                     dismissImpl?()
                                 })], actionLayout: .horizontal, dismissOnOutsideTap: true, linkAction: { [weak controller] attributes, _ in
-                                    if let value = attributes[NSAttributedString.Key(rawValue: TelegramTextAttributes.URL)] as? String {
+                                    if let value = attributes[NSAttributedString.Key(rawValue: IosappTextAttributes.URL)] as? String {
                                         dismissImpl?()
                                         if let navigationController = controller?.navigationController as? NavigationController {
                                             context.sharedContext.openExternalUrl(context: context, urlContext: .generic, url: value, forceExternal: false, presentationData: context.sharedContext.currentPresentationData.with { $0 }, navigationController: navigationController, dismissInput: {})
@@ -392,8 +392,8 @@ final class GiftOptionsScreenComponent: Component {
                                     mainController.push(giftController)
                                 } else {
                                     let _ = (context.engine.data.get(
-                                        TelegramEngine.EngineData.Item.Peer.Peer(id: currentBidPeerId),
-                                        TelegramEngine.EngineData.Item.Peer.Peer(id: component.peerId)
+                                        IosappEngine.EngineData.Item.Peer.Peer(id: currentBidPeerId),
+                                        IosappEngine.EngineData.Item.Peer.Peer(id: component.peerId)
                                     )
                                     |> deliverOnMainQueue).start(next: { [weak self, weak mainController] fromPeer, toPeer in
                                         guard let component = self?.component, let mainController, let fromPeer, let toPeer else {
@@ -1092,7 +1092,7 @@ final class GiftOptionsScreenComponent: Component {
                                 return
                             }
                             let _ = (component.context.engine.data.get(
-                                TelegramEngine.EngineData.Item.Peer.Peer(id: component.peerId)
+                                IosappEngine.EngineData.Item.Peer.Peer(id: component.peerId)
                             )
                             |> deliverOnMainQueue).start(next: { peer in
                                 guard let peer else {
@@ -1292,7 +1292,7 @@ final class GiftOptionsScreenComponent: Component {
                 self.chevronImage = (generateTintedImage(image: UIImage(bundleImageName: "Settings/TextArrowRight"), color: accentColor)!, theme)
             }
             let markdownAttributes = MarkdownAttributes(body: MarkdownAttributeSet(font: textFont, textColor: textColor), bold: MarkdownAttributeSet(font: boldTextFont, textColor: textColor), link: MarkdownAttributeSet(font: textFont, textColor: accentColor), linkAttribute: { contents in
-                return (TelegramTextAttributes.URL, contents)
+                return (IosappTextAttributes.URL, contents)
             })
             let peerName = state.peer?.compactDisplayTitle ?? ""
             
@@ -1326,8 +1326,8 @@ final class GiftOptionsScreenComponent: Component {
                     highlightColor: accentColor.withAlphaComponent(0.1),
                     highlightInset: UIEdgeInsets(top: 0.0, left: 0.0, bottom: 0.0, right: -8.0),
                     highlightAction: { attributes in
-                        if let _ = attributes[NSAttributedString.Key(rawValue: TelegramTextAttributes.URL)] {
-                            return NSAttributedString.Key(rawValue: TelegramTextAttributes.URL)
+                        if let _ = attributes[NSAttributedString.Key(rawValue: IosappTextAttributes.URL)] {
+                            return NSAttributedString.Key(rawValue: IosappTextAttributes.URL)
                         } else {
                             return nil
                         }
@@ -1575,8 +1575,8 @@ final class GiftOptionsScreenComponent: Component {
                             highlightColor: accentColor.withAlphaComponent(0.1),
                             highlightInset: UIEdgeInsets(top: 0.0, left: 0.0, bottom: 0.0, right: -8.0),
                             highlightAction: { attributes in
-                                if let _ = attributes[NSAttributedString.Key(rawValue: TelegramTextAttributes.URL)] {
-                                    return NSAttributedString.Key(rawValue: TelegramTextAttributes.URL)
+                                if let _ = attributes[NSAttributedString.Key(rawValue: IosappTextAttributes.URL)] {
+                                    return NSAttributedString.Key(rawValue: IosappTextAttributes.URL)
                                 } else {
                                     return nil
                                 }
@@ -1749,7 +1749,7 @@ final class GiftOptionsScreenComponent: Component {
         private var updateDisposable: Disposable?
         
         fileprivate var peer: EnginePeer?
-        fileprivate var disallowedGifts: TelegramDisallowedGifts?
+        fileprivate var disallowedGifts: IosappDisallowedGifts?
         fileprivate var premiumProducts: [PremiumGiftProduct]?
         fileprivate var starGifts: [StarGift]?
         fileprivate var starGiftsVersion: Int = 0
@@ -1778,10 +1778,10 @@ final class GiftOptionsScreenComponent: Component {
             self.disposable = combineLatest(
                 queue: Queue.mainQueue(),
                 context.engine.data.get(
-                    TelegramEngine.EngineData.Item.Peer.Peer.init(id: peerId)
+                    IosappEngine.EngineData.Item.Peer.Peer.init(id: peerId)
                 ),
                 context.engine.data.subscribe(
-                    TelegramEngine.EngineData.Item.Peer.DisallowedGifts(id: peerId)
+                    IosappEngine.EngineData.Item.Peer.DisallowedGifts(id: peerId)
                 ),
                 availableProducts,
                 context.engine.payments.cachedStarGifts(),

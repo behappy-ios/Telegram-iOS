@@ -14,7 +14,7 @@ import BundleIconComponent
 import PlainButtonComponent
 import AccountContext
 
-func businessHoursTextToCopy(businessHours: TelegramBusinessHours, presentationData: PresentationData, displayLocalTimezone: Bool) -> String {
+func businessHoursTextToCopy(businessHours: IosappBusinessHours, presentationData: PresentationData, displayLocalTimezone: Bool) -> String {
     var text = ""
     
     let cachedDays = businessHours.splitIntoWeekDays()
@@ -28,7 +28,7 @@ func businessHoursTextToCopy(businessHours: TelegramBusinessHours, presentationD
         timezoneOffsetMinutes = (currentTimezone.secondsFromGMT() - currentCalendar.timeZone.secondsFromGMT()) / 60
     }
     
-    let businessDays: [TelegramBusinessHours.WeekDay] = cachedDays
+    let businessDays: [IosappBusinessHours.WeekDay] = cachedDays
     
     for i in 0 ..< businessDays.count {
         let dayTitleValue: String
@@ -62,7 +62,7 @@ func businessHoursTextToCopy(businessHours: TelegramBusinessHours, presentationD
     return text
 }
 
-private func dayBusinessHoursText(presentationData: PresentationData, day: TelegramBusinessHours.WeekDay, offsetMinutes: Int, formatAsPlainText: Bool = false) -> String {
+private func dayBusinessHoursText(presentationData: PresentationData, day: IosappBusinessHours.WeekDay, offsetMinutes: Int, formatAsPlainText: Bool = false) -> String {
     var businessHoursText: String = ""
     switch day {
     case .open:
@@ -80,7 +80,7 @@ private func dayBusinessHoursText(presentationData: PresentationData, day: Teleg
         
         var resultText: String = ""
         for range in intervals {
-            let range = TelegramBusinessHours.WorkingTimeInterval(startMinute: range.startMinute + offsetMinutes, endMinute: range.endMinute + offsetMinutes)
+            let range = IosappBusinessHours.WorkingTimeInterval(startMinute: range.startMinute + offsetMinutes, endMinute: range.endMinute + offsetMinutes)
             
             if !resultText.isEmpty {
                 if formatAsPlainText {
@@ -106,7 +106,7 @@ private func dayBusinessHoursText(presentationData: PresentationData, day: Teleg
 final class PeerInfoScreenBusinessHoursItem: PeerInfoScreenItem {
     let id: AnyHashable
     let label: String
-    let businessHours: TelegramBusinessHours
+    let businessHours: IosappBusinessHours
     let requestLayout: (Bool) -> Void
     let longTapAction: ((ASDisplayNode, String) -> Void)?
     let contextAction: ((ASDisplayNode, ContextGesture?, CGPoint?) -> Void)?
@@ -114,7 +114,7 @@ final class PeerInfoScreenBusinessHoursItem: PeerInfoScreenItem {
     init(
         id: AnyHashable,
         label: String,
-        businessHours: TelegramBusinessHours,
+        businessHours: IosappBusinessHours,
         requestLayout: @escaping (Bool) -> Void,
         longTapAction: ((ASDisplayNode, String) -> Void)? = nil,
         contextAction: ((ASDisplayNode, ContextGesture?, CGPoint?) -> Void)? = nil
@@ -160,7 +160,7 @@ private final class PeerInfoScreenBusinessHoursItemNode: PeerInfoScreenItemNode 
     
     private var currentTimezone: TimeZone
     private var displayLocalTimezone: Bool = false
-    private var cachedDays: [TelegramBusinessHours.WeekDay] = []
+    private var cachedDays: [IosappBusinessHours.WeekDay] = []
     private var cachedWeekMinuteSet = IndexSet()
     
     private var isExpanded: Bool = false
@@ -285,7 +285,7 @@ private final class PeerInfoScreenBusinessHoursItemNode: PeerInfoScreenItemNode 
             return 10.0
         }
         
-        let businessDays: [TelegramBusinessHours.WeekDay]
+        let businessDays: [IosappBusinessHours.WeekDay]
         if self.item?.businessHours != item.businessHours {
             businessDays = item.businessHours.splitIntoWeekDays()
             self.cachedDays = businessDays

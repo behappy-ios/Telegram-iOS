@@ -1,7 +1,7 @@
 import Foundation
 import Postbox
 
-public final class TelegramMediaTodo: Media, Equatable {
+public final class IosappMediaTodo: Media, Equatable {
     public struct Flags: OptionSet {
         public var rawValue: Int32
         
@@ -103,7 +103,7 @@ public final class TelegramMediaTodo: Media, Equatable {
     }
     
     public func isEqual(to other: Media) -> Bool {
-        guard let other = other as? TelegramMediaTodo else {
+        guard let other = other as? IosappMediaTodo else {
             return false
         }
         return self == other
@@ -113,7 +113,7 @@ public final class TelegramMediaTodo: Media, Equatable {
         return self.isEqual(to: other)
     }
     
-    public static func ==(lhs: TelegramMediaTodo, rhs: TelegramMediaTodo) -> Bool {
+    public static func ==(lhs: IosappMediaTodo, rhs: IosappMediaTodo) -> Bool {
         if lhs.flags != rhs.flags {
             return false
         }
@@ -132,8 +132,8 @@ public final class TelegramMediaTodo: Media, Equatable {
         return true
     }
     
-    public func withUpdated(items: [TelegramMediaTodo.Item]) -> TelegramMediaTodo {
-        return TelegramMediaTodo(
+    public func withUpdated(items: [IosappMediaTodo.Item]) -> IosappMediaTodo {
+        return IosappMediaTodo(
             flags: self.flags,
             text: self.text,
             textEntities: self.textEntities,
@@ -142,8 +142,8 @@ public final class TelegramMediaTodo: Media, Equatable {
         )
     }
     
-    func withUpdated(completions: [TelegramMediaTodo.Completion]) -> TelegramMediaTodo {
-        return TelegramMediaTodo(
+    func withUpdated(completions: [IosappMediaTodo.Completion]) -> IosappMediaTodo {
+        return IosappMediaTodo(
             flags: self.flags,
             text: self.text,
             textEntities: self.textEntities,

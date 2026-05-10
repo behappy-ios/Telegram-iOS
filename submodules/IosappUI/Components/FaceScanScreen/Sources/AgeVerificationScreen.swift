@@ -29,7 +29,7 @@ public func requireAgeVerification(context: AccountContext) -> Bool {
 
 public func requireAgeVerification(context: AccountContext, peer: EnginePeer) -> Signal<Bool, NoError> {
     if requireAgeVerification(context: context), peer._asPeer().hasSensitiveContent(platform: "ios") {
-        return context.engine.data.get(TelegramEngine.EngineData.Item.Configuration.ContentSettings())
+        return context.engine.data.get(IosappEngine.EngineData.Item.Configuration.ContentSettings())
         |> map { contentSettings in
             if !contentSettings.ignoreContentRestrictionReasons.contains("sensitive") {
                 return true
@@ -149,7 +149,7 @@ private final class SheetContent: CombinedComponent {
             let textColor = theme.actionSheet.primaryTextColor
             let linkColor = theme.actionSheet.controlAccentColor
             let markdownAttributes = MarkdownAttributes(body: MarkdownAttributeSet(font: textFont, textColor: textColor), bold: MarkdownAttributeSet(font: boldTextFont, textColor: textColor), link: MarkdownAttributeSet(font: textFont, textColor: linkColor), linkAttribute: { contents in
-                return (TelegramTextAttributes.URL, contents)
+                return (IosappTextAttributes.URL, contents)
             })
             
             var textString = environment.strings.AgeVerification_Text

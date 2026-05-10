@@ -176,15 +176,15 @@ public func canViewMessageReactionList(message: Message) -> Bool {
     }
     
     if let peer = message.peers[message.id.peerId] {
-        if let channel = peer as? TelegramChannel {
+        if let channel = peer as? IosappChannel {
             if case .broadcast = channel.info {
                 return false
             } else {
                 return canViewList
             }
-        } else if let _ = peer as? TelegramGroup {
+        } else if let _ = peer as? IosappGroup {
             return canViewList
-        } else if let _ = peer as? TelegramUser {
+        } else if let _ = peer as? IosappUser {
             return true
         } else {
             return false
@@ -226,7 +226,7 @@ public func transcribedText(message: Message) -> TranscribedText? {
     return nil
 }
 
-public func isPollEffectivelyClosed(message: Message, poll: TelegramMediaPoll) -> Bool {
+public func isPollEffectivelyClosed(message: Message, poll: IosappMediaPoll) -> Bool {
     if poll.isClosed {
         return true
     } else {
@@ -262,7 +262,7 @@ public func messageIsEligibleForLargeCustomEmoji(_ message: Message) -> Bool {
     }
     for entity in entities {
         if case let .CustomEmoji(_, fileId) = entity.type {
-            if let _ = message.associatedMedia[MediaId(namespace: Namespaces.Media.CloudFile, id: fileId)] as? TelegramMediaFile {
+            if let _ = message.associatedMedia[MediaId(namespace: Namespaces.Media.CloudFile, id: fileId)] as? IosappMediaFile {
                 
             } else {
                 return false
@@ -279,14 +279,14 @@ public func canAddMessageReactions(message: Message) -> Bool {
         return false
     }
     if let peer = message.peers[message.id.peerId] {
-        if let _ = peer as? TelegramSecretChat {
+        if let _ = peer as? IosappSecretChat {
             return false
         }
     } else {
         return false
     }
     for media in message.media {
-        if let action = media as? TelegramMediaAction {
+        if let action = media as? IosappMediaAction {
             if message.flags.contains(.ReactionsArePossible) {
                 return true
             } else {

@@ -105,7 +105,7 @@ final class AuthorizedApplicationContext {
     
     let context: AccountContextImpl
     
-    let rootController: TelegramRootController
+    let rootController: IosappRootController
     let notificationController: NotificationContainerController
     
     private let scheduledCallPeerDisposable = MetaDisposable()
@@ -155,7 +155,7 @@ final class AuthorizedApplicationContext {
     private var showCallsTabDisposable: Disposable?
     private var enablePostboxTransactionsDiposable: Disposable?
     
-    init(sharedApplicationContext: SharedApplicationContext, mainWindow: Window1, context: AccountContextImpl, accountManager: AccountManager<TelegramAccountManagerTypes>, showCallsTab: Bool, reinitializedNotificationSettings: @escaping () -> Void) {
+    init(sharedApplicationContext: SharedApplicationContext, mainWindow: Window1, context: AccountContextImpl, accountManager: AccountManager<IosappAccountManagerTypes>, showCallsTab: Bool, reinitializedNotificationSettings: @escaping () -> Void) {
         self.sharedApplicationContext = sharedApplicationContext
         
         setupLegacyComponents(context: context)
@@ -170,7 +170,7 @@ final class AuthorizedApplicationContext {
         
         self.notificationController = NotificationContainerController(context: context)
         
-        self.rootController = TelegramRootController(context: context)
+        self.rootController = IosappRootController(context: context)
         self.rootController.minimizedContainer = self.sharedApplicationContext.minimizedContainer[context.account.id]
         self.rootController.minimizedContainerUpdated = { [weak self] minimizedContainer in
             guard let self else {
@@ -294,9 +294,9 @@ final class AuthorizedApplicationContext {
         self.notificationMessagesDisposable.set((context.account.stateManager.notificationMessages
         |> mapToSignal { messageList -> Signal<[([Message], PeerGroupId, Bool, MessageHistoryThreadData?)], NoError> in
             return engine.data.get(EngineDataMap(
-                messageList.compactMap { item -> TelegramEngine.EngineData.Item.Messages.ChatListIndex? in
+                messageList.compactMap { item -> IosappEngine.EngineData.Item.Messages.ChatListIndex? in
                     if let message = item.0.first {
-                        return TelegramEngine.EngineData.Item.Messages.ChatListIndex(id: message.id.peerId)
+                        return IosappEngine.EngineData.Item.Messages.ChatListIndex(id: message.id.peerId)
                     } else {
                         return nil
                     }
@@ -395,7 +395,7 @@ final class AuthorizedApplicationContext {
                                 return
                             }
                             for media in firstMessage.media {
-                                if let action = media as? TelegramMediaAction {
+                                if let action = media as? IosappMediaAction {
                                     if case .messageAutoremoveTimeoutUpdated = action.action {
                                         return
                                     } else if case .conferenceCall = action.action {
@@ -462,7 +462,7 @@ final class AuthorizedApplicationContext {
                                         
                                         var processed = false
                                         for media in firstMessage.media {
-                                            if let action = media as? TelegramMediaAction, case .geoProximityReached = action.action {
+                                            if let action = media as? IosappMediaAction, case .geoProximityReached = action.action {
                                                 strongSelf.context.sharedContext.openLocationScreen(context: strongSelf.context, messageId: firstMessage.id, navigationController: strongSelf.rootController)
                                                 processed = true
                                                 break
@@ -870,7 +870,7 @@ final class AuthorizedApplicationContext {
                 let isOutgoingMessage: Signal<Bool, NoError>
                 if let messageId {
                     let accountPeerId = self.context.account.peerId
-                    isOutgoingMessage = self.context.engine.data.get(TelegramEngine.EngineData.Item.Messages.Message(id: messageId))
+                    isOutgoingMessage = self.context.engine.data.get(IosappEngine.EngineData.Item.Messages.Message(id: messageId))
                     |> map { message -> Bool in
                         if let message {
                             return !message._asMessage().effectivelyIncoming(accountPeerId)
@@ -883,7 +883,7 @@ final class AuthorizedApplicationContext {
                 }
                 let _ = combineLatest(
                     queue: Queue.mainQueue(),
-                    self.context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: peerId)),
+                    self.context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: peerId)),
                     isOutgoingMessage
                 ).start(next: { peer, isOutgoingMessage in
                     guard let peer = peer else {

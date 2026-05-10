@@ -136,7 +136,7 @@ enum ThemeSettingsColorOption: Equatable {
         }
     }
     
-    var wallpaper: TelegramWallpaper? {
+    var wallpaper: IosappWallpaper? {
         switch self {
             case let .accentColor(color):
                 return color.wallpaper

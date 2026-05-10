@@ -2,7 +2,7 @@ import Foundation
 import UIKit
 import IosappCore
 
-public extension TelegramWallpaper {
+public extension IosappWallpaper {
     var isEmpty: Bool {
         switch self {
         case .image:

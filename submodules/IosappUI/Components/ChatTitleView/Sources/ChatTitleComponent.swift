@@ -20,13 +20,13 @@ public final class ChatNavigationBarTitleView: UIView, NavigationBarTitleView {
         let context: AccountContext
         let theme: PresentationTheme
         let preferClearGlass: Bool
-        let wallpaper: TelegramWallpaper
+        let wallpaper: IosappWallpaper
         let strings: PresentationStrings
         let dateTimeFormat: PresentationDateTimeFormat
         let nameDisplayOrder: PresentationPersonNameOrder
         let content: ChatTitleContent
         
-        init(context: AccountContext, theme: PresentationTheme, preferClearGlass: Bool, wallpaper: TelegramWallpaper, strings: PresentationStrings, dateTimeFormat: PresentationDateTimeFormat, nameDisplayOrder: PresentationPersonNameOrder, content: ChatTitleContent) {
+        init(context: AccountContext, theme: PresentationTheme, preferClearGlass: Bool, wallpaper: IosappWallpaper, strings: PresentationStrings, dateTimeFormat: PresentationDateTimeFormat, nameDisplayOrder: PresentationPersonNameOrder, content: ChatTitleContent) {
             self.context = context
             self.theme = theme
             self.preferClearGlass = preferClearGlass
@@ -107,7 +107,7 @@ public final class ChatNavigationBarTitleView: UIView, NavigationBarTitleView {
         context: AccountContext,
         theme: PresentationTheme,
         preferClearGlass: Bool,
-        wallpaper: TelegramWallpaper,
+        wallpaper: IosappWallpaper,
         strings: PresentationStrings,
         dateTimeFormat: PresentationDateTimeFormat,
         nameDisplayOrder: PresentationPersonNameOrder,
@@ -428,7 +428,7 @@ public final class ChatTitleComponent: Component {
                                 content: .text(component.strings.ChatList_AuthorHidden)
                             )]
                         } else {
-                            if !peerView.isContact, let user = peer as? TelegramUser, !user.flags.contains(.isSupport), user.botInfo == nil, let phone = user.phone, !phone.isEmpty {
+                            if !peerView.isContact, let user = peer as? IosappUser, !user.flags.contains(.isSupport), user.botInfo == nil, let phone = user.phone, !phone.isEmpty {
                                 titleSegments = [AnimatedTextComponent.Item(
                                     id: AnyHashable(0),
                                     isUnbreakable: true,
@@ -722,7 +722,7 @@ public final class ChatTitleComponent: Component {
                             if peer.id == component.context.account.peerId || isScheduledMessages || peer.id.isRepliesOrVerificationCodes {
                                 let string = NSAttributedString(string: "", font: subtitleFont, textColor: component.theme.chat.inputPanel.inputControlColor)
                                 state = .info(string, .generic)
-                            } else if let user = peer as? TelegramUser {
+                            } else if let user = peer as? IosappUser {
                                 if user.isDeleted {
                                     state = .none
                                 } else if servicePeer {
@@ -744,12 +744,12 @@ public final class ChatTitleComponent: Component {
                                     state = .info(string, .generic)
                                 } else if let peer = peerView.peer {
                                     let timestamp = CFAbsoluteTimeGetCurrent() + NSTimeIntervalSince1970
-                                    let userPresence: TelegramUserPresence
-                                    if let presence = peerView.peerPresences[peer.id] as? TelegramUserPresence {
+                                    let userPresence: IosappUserPresence
+                                    if let presence = peerView.peerPresences[peer.id] as? IosappUserPresence {
                                         userPresence = presence
                                         self.presenceManager?.reset(presence: EnginePeer.Presence(presence))
                                     } else {
-                                        userPresence = TelegramUserPresence(status: .none, lastActivity: 0)
+                                        userPresence = IosappUserPresence(status: .none, lastActivity: 0)
                                     }
                                     let (string, activity) = stringAndActivityForUserPresence(strings: component.strings, dateTimeFormat: component.dateTimeFormat, presence: EnginePeer.Presence(userPresence), relativeTo: Int32(timestamp))
                                     let attributedString = NSAttributedString(string: string, font: subtitleFont, textColor: activity ? component.theme.rootController.navigationBar.accentTextColor : component.theme.chat.inputPanel.inputControlColor)
@@ -758,12 +758,12 @@ public final class ChatTitleComponent: Component {
                                     let string = NSAttributedString(string: "", font: subtitleFont, textColor: component.theme.chat.inputPanel.inputControlColor)
                                     state = .info(string, .generic)
                                 }
-                            } else if let group = peer as? TelegramGroup {
+                            } else if let group = peer as? IosappGroup {
                                 var onlineCount = 0
                                 if let cachedGroupData = peerView.cachedData as? CachedGroupData, let participants = cachedGroupData.participants {
                                     let timestamp = CFAbsoluteTimeGetCurrent() + NSTimeIntervalSince1970
                                     for participant in participants.participants {
-                                        if let presence = peerView.peerPresences[participant.peerId] as? TelegramUserPresence {
+                                        if let presence = peerView.peerPresences[participant.peerId] as? IosappUserPresence {
                                             let relativeStatus = relativeUserPresenceStatus(EnginePeer.Presence(presence), relativeTo: Int32(timestamp))
                                             switch relativeStatus {
                                             case .online:
@@ -784,7 +784,7 @@ public final class ChatTitleComponent: Component {
                                     let string = NSAttributedString(string: component.strings.Conversation_StatusMembers(Int32(group.participantCount)), font: subtitleFont, textColor: component.theme.chat.inputPanel.inputControlColor)
                                     state = .info(string, .generic)
                                 }
-                            } else if let channel = peer as? TelegramChannel {
+                            } else if let channel = peer as? IosappChannel {
                                 if channel.isForumOrMonoForum, customTitle != nil {
                                     let string = NSAttributedString(string: EnginePeer(peer).displayTitle(strings: component.strings, displayOrder: component.nameDisplayOrder), font: subtitleFont, textColor: component.theme.chat.inputPanel.inputControlColor)
                                     state = .info(string, .generic)

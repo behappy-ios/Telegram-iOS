@@ -129,7 +129,7 @@ private enum DeviceContactInfoEntryId: Hashable {
 }
 
 private enum DeviceContactInfoEntry: ItemListNodeEntry {
-    case info(Int, PresentationTheme, PresentationStrings, PresentationDateTimeFormat, peer: EnginePeer, state: ItemListAvatarAndNameInfoItemState, job: String?, isPlain: Bool, hiddenAvatar: TelegramMediaImageRepresentation?)
+    case info(Int, PresentationTheme, PresentationStrings, PresentationDateTimeFormat, peer: EnginePeer, state: ItemListAvatarAndNameInfoItemState, job: String?, isPlain: Bool, hiddenAvatar: IosappMediaImageRepresentation?)
     
     case invite(Int, PresentationTheme, String)
     case sendMessage(Int, PresentationTheme, String)
@@ -633,7 +633,7 @@ private func filteredContactData(contactData: DeviceContactExtendedData, exclude
     return DeviceContactExtendedData(basicData: DeviceContactBasicData(firstName: contactData.basicData.firstName, lastName: contactData.basicData.lastName, phoneNumbers: phoneNumbers), middleName: contactData.middleName, prefix: contactData.prefix, suffix: contactData.suffix, organization: includeJob ? contactData.organization : "", jobTitle: includeJob ? contactData.jobTitle : "", department: includeJob ? contactData.department : "", emailAddresses: emailAddresses, urls: urls, addresses: addresses, birthdayDate: includeBirthday ? contactData.birthdayDate : nil, socialProfiles: socialProfiles, instantMessagingProfiles: instantMessagingProfiles, note: includeNote ? contactData.note : "")
 }
 
-private func deviceContactInfoEntries(context: ShareControllerAccountContext, presentationData: PresentationData, peer: EnginePeer?, isShare: Bool, shareViaException: Bool, contactData: DeviceContactExtendedData, isContact: Bool, state: DeviceContactInfoState, selecting: Bool, editingPhoneNumbers: Bool, hiddenAvatar: TelegramMediaImageRepresentation?) -> [DeviceContactInfoEntry] {
+private func deviceContactInfoEntries(context: ShareControllerAccountContext, presentationData: PresentationData, peer: EnginePeer?, isShare: Bool, shareViaException: Bool, contactData: DeviceContactExtendedData, isContact: Bool, state: DeviceContactInfoState, selecting: Bool, editingPhoneNumbers: Bool, hiddenAvatar: IosappMediaImageRepresentation?) -> [DeviceContactInfoEntry] {
     var entries: [DeviceContactInfoEntry] = []
     
     var editingName: ItemListAvatarAndNameInfoItemName?
@@ -671,7 +671,7 @@ private func deviceContactInfoEntries(context: ShareControllerAccountContext, pr
         firstName = presentationData.strings.Message_Contact
     }
     
-    entries.append(.info(entries.count, presentationData.theme, presentationData.strings, presentationData.dateTimeFormat, peer: peer ?? EnginePeer.user(TelegramUser(id: EnginePeer.Id(namespace: .max, id: EnginePeer.Id.Id._internalFromInt64Value(0)), accessHash: nil, firstName: firstName, lastName: isOrganization ? nil : personName.1, username: nil, phone: nil, photo: [], botInfo: nil, restrictionInfo: nil, flags: [], emojiStatus: nil, usernames: [], storiesHidden: nil, nameColor: nil, backgroundEmojiId: nil, profileColor: nil, profileBackgroundEmojiId: nil, subscriberCount: nil, verificationIconFileId: nil)), state: ItemListAvatarAndNameInfoItemState(editingName: editingName, updatingName: nil), job: isOrganization ? nil : jobSummary, isPlain: !isShare, hiddenAvatar: hiddenAvatar))
+    entries.append(.info(entries.count, presentationData.theme, presentationData.strings, presentationData.dateTimeFormat, peer: peer ?? EnginePeer.user(IosappUser(id: EnginePeer.Id(namespace: .max, id: EnginePeer.Id.Id._internalFromInt64Value(0)), accessHash: nil, firstName: firstName, lastName: isOrganization ? nil : personName.1, username: nil, phone: nil, photo: [], botInfo: nil, restrictionInfo: nil, flags: [], emojiStatus: nil, usernames: [], storiesHidden: nil, nameColor: nil, backgroundEmojiId: nil, profileColor: nil, profileBackgroundEmojiId: nil, subscriberCount: nil, verificationIconFileId: nil)), state: ItemListAvatarAndNameInfoItemState(editingName: editingName, updatingName: nil), job: isOrganization ? nil : jobSummary, isPlain: !isShare, hiddenAvatar: hiddenAvatar))
     
     if !selecting {
         if let _ = peer {
@@ -846,7 +846,7 @@ public func deviceContactInfoController(context: ShareControllerAccountContext, 
         var peerPhoneNumber: String?
         var firstName = contactData.basicData.firstName
         var lastName = contactData.basicData.lastName
-        if let peer = peer as? TelegramUser {
+        if let peer = peer as? IosappUser {
             firstName = peer.firstName ?? ""
             lastName = peer.lastName ?? ""
             if let phone = peer.phone {
@@ -893,10 +893,10 @@ public func deviceContactInfoController(context: ShareControllerAccountContext, 
         guard let context = (context as? ShareControllerAppAccountContext)?.context else {
             return
         }
-        let user: Signal<TelegramUser?, NoError>
+        let user: Signal<IosappUser?, NoError>
         if let peer = subject.peer {
-            user = context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: peer.id))
-            |> map { peer -> TelegramUser? in
+            user = context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: peer.id))
+            |> map { peer -> IosappUser? in
                 if case let .user(user) = peer {
                     return user
                 } else {
@@ -916,7 +916,7 @@ public func deviceContactInfoController(context: ShareControllerAccountContext, 
                 }
                 controller.setItemGroups([
                     ActionSheetItemGroup(items: [
-                        ActionSheetButtonItem(title: presentationData.strings.UserInfo_TelegramCall, action: {
+                        ActionSheetButtonItem(title: presentationData.strings.UserInfo_IosappCall, action: {
                             dismissAction()
                             context.requestCall(peerId: user.id, isVideo: false, completion: {})
                         }),
@@ -1076,7 +1076,7 @@ public func deviceContactInfoController(context: ShareControllerAccountContext, 
         openAvatarImpl?(peer)
     })
     
-    let hiddenAvatarPromise = Promise<TelegramMediaImageRepresentation?>(nil)
+    let hiddenAvatarPromise = Promise<IosappMediaImageRepresentation?>(nil)
     let updatedPresentationData = updatedPresentationData?.signal ?? environment.updatedPresentationData
     let previousEditingPhoneIds = Atomic<Set<Int64>?>(value: nil)
     let signal = combineLatest(updatedPresentationData, statePromise.get(), contactData, hiddenAvatarPromise.get())
@@ -1186,7 +1186,7 @@ public func deviceContactInfoController(context: ShareControllerAccountContext, 
                                             |> mapToSignal { _ -> Signal<(DeviceContactStableId, DeviceContactExtendedData, EnginePeer?)?, AddContactError> in
                                             }
                                             |> then(
-                                                context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: peer.id))
+                                                context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: peer.id))
                                                 |> castError(AddContactError.self)
                                                 |> map { result -> (DeviceContactStableId, DeviceContactExtendedData, EnginePeer?)? in
                                                     return (id, data, result)
@@ -1201,7 +1201,7 @@ public func deviceContactInfoController(context: ShareControllerAccountContext, 
                                 |> castError(AddContactError.self)
                                 |> mapToSignal { peerId -> Signal<(DeviceContactStableId, DeviceContactExtendedData, EnginePeer?)?, AddContactError> in
                                     if let peerId = peerId {
-                                        return context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: peerId))
+                                        return context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: peerId))
                                         |> castError(AddContactError.self)
                                         |> map { result -> (DeviceContactStableId, DeviceContactExtendedData, EnginePeer?)? in
                                             return (id, data, result)
@@ -1293,7 +1293,7 @@ public func deviceContactInfoController(context: ShareControllerAccountContext, 
         guard let controller, let context = (context as? ShareControllerAppAccountContext)?.context else {
             return
         }
-        let _ = (context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: peerId))
+        let _ = (context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: peerId))
         |> deliverOnMainQueue).start(next: { [weak controller] peer in
             guard let peer, let controller else {
                 return
@@ -1381,7 +1381,7 @@ public func deviceContactInfoController(context: ShareControllerAccountContext, 
         })
         hiddenAvatarPromise.set(
             avatarController.hiddenMedia
-            |> map { entry -> TelegramMediaImageRepresentation? in
+            |> map { entry -> IosappMediaImageRepresentation? in
                 return entry?.representations.first?.representation
             }
         )
@@ -1416,7 +1416,7 @@ private func addContactToExisting(context: AccountContext, parentController: Vie
             let dataSignal: Signal<(EnginePeer?, DeviceContactStableId?), NoError>
             switch peer {
                 case let .peer(contact, _, _):
-                    guard let contact = contact as? TelegramUser, let phoneNumber = contact.phone else {
+                    guard let contact = contact as? IosappUser, let phoneNumber = contact.phone else {
                         return
                     }
                     dataSignal = (context.sharedContext.contactDataManager?.basicData() ?? .single([:]))
@@ -1451,7 +1451,7 @@ private func addContactToExisting(context: AccountContext, parentController: Vie
                             return
                         }
                         let _ = (context.engine.data.get(
-                            TelegramEngine.EngineData.Item.Contacts.List(includePresences: false)
+                            IosappEngine.EngineData.Item.Contacts.List(includePresences: false)
                         )
                         |> deliverOnMainQueue).start(next: { view in
                             let phones = Set<String>(contactData.basicData.phoneNumbers.map {

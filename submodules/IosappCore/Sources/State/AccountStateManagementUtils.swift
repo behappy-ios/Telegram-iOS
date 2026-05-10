@@ -75,7 +75,7 @@ private func activeChannelsFromUpdateGroups(_ groups: [UpdateGroup]) -> Set<Peer
         for chat in group.chats {
             switch chat {
                 case .channel:
-                    if let channel = parseTelegramGroupOrChannel(chat: chat) as? TelegramChannel {
+                    if let channel = parseIosappGroupOrChannel(chat: chat) as? IosappChannel {
                         if channel.participationStatus == .member, case .personal = channel.accessHash {
                             peerIds.insert(channel.id)
                         }
@@ -161,7 +161,7 @@ private func peerIdsRequiringLocalChatStateFromUpdateGroups(_ groups: [UpdateGro
             }
         }
         for chat in group.chats {
-            if let channel = parseTelegramGroupOrChannel(chat: chat) as? TelegramChannel, channelUpdates.contains(channel.id) {
+            if let channel = parseIosappGroupOrChannel(chat: chat) as? IosappChannel, channelUpdates.contains(channel.id) {
                 if let accessHash = channel.accessHash, case .personal = accessHash {
                     if case .member = channel.participationStatus {
                         peerIds.insert(channel.id)
@@ -288,7 +288,7 @@ private func activeChannelsFromDifference(_ difference: Api.updates.Difference) 
     for chat in chats {
         switch chat {
             case .channel:
-                if let channel = parseTelegramGroupOrChannel(chat: chat) as? TelegramChannel {
+                if let channel = parseIosappGroupOrChannel(chat: chat) as? IosappChannel {
                     if channel.participationStatus == .member {
                         peerIds.insert(channel.id)
                     }
@@ -469,7 +469,7 @@ func initialStateWithPeerIds(_ transaction: Transaction, peerIds: Set<PeerId>, a
     for peerId in activeChannelIds {
         if transaction.getTopPeerMessageIndex(peerId: peerId, namespace: Namespaces.Message.Cloud) == nil {
             channelsToPollExplicitely.insert(peerId)
-        } else if let channel = transaction.getPeer(peerId) as? TelegramChannel, channel.participationStatus != .member {
+        } else if let channel = transaction.getPeer(peerId) as? IosappChannel, channel.participationStatus != .member {
             channelsToPollExplicitely.insert(peerId)
         }
     }
@@ -510,7 +510,7 @@ func initialStateWithPeerIds(_ transaction: Transaction, peerIds: Set<PeerId>, a
             }
         } else {
             if let peer = transaction.getPeer(peerId) {
-                if let channel = peer as? TelegramChannel, channel.participationStatus != .member {
+                if let channel = peer as? IosappChannel, channel.participationStatus != .member {
                     if let notificationSettings = transaction.getPeerNotificationSettings(id: peerId) {
                         peerChatInfos[peerId] = PeerChatInfo(notificationSettings: notificationSettings)
                         Logger.shared.log("State", "Peer \(peerId) (\(peer.debugDisplayTitle) has no stored inclusion, using synthesized one")
@@ -931,7 +931,7 @@ private func finalStateWithUpdatesAndServerTime(accountPeerId: PeerId, postbox: 
                 let peerId = PeerId(namespace: Namespaces.Peer.CloudChannel, id: PeerId.Id._internalFromInt64Value(channelId))
                 if case .none = channelsToPoll[peerId] {
                     if let channelPts = channelPts, let channelState = state.channelStates[peerId], channelState.pts >= channelPts {
-                        Logger.shared.log("State", "channel \(peerId) (\((updatedState.peers[peerId] as? TelegramChannel)?.title ?? "nil")) skip updateChannelTooLong by pts")
+                        Logger.shared.log("State", "channel \(peerId) (\((updatedState.peers[peerId] as? IosappChannel)?.title ?? "nil")) skip updateChannelTooLong by pts")
                     } else {
                         channelsToPoll[peerId] = channelPts
                     }
@@ -950,19 +950,19 @@ private func finalStateWithUpdatesAndServerTime(accountPeerId: PeerId, postbox: 
                 let peerId = PeerId(namespace: Namespaces.Peer.CloudChannel, id: PeerId.Id._internalFromInt64Value(channelId))
                 if let previousState = updatedState.channelStates[peerId] {
                     if previousState.pts >= pts {
-                        Logger.shared.log("State", "channel \(peerId) (\((updatedState.peers[peerId] as? TelegramChannel)?.title ?? "nil")) skip old delete update")
+                        Logger.shared.log("State", "channel \(peerId) (\((updatedState.peers[peerId] as? IosappChannel)?.title ?? "nil")) skip old delete update")
                     } else if previousState.pts + ptsCount == pts {
                         updatedState.deleteMessages(messages.map({ MessageId(peerId: peerId, namespace: Namespaces.Message.Cloud, id: $0) }))
                         updatedState.updateChannelState(peerId, pts: pts)
                     } else {
                         if !missingUpdatesFromChannels.contains(peerId) {
-                            Logger.shared.log("State", "channel \(peerId) (\((updatedState.peers[peerId] as? TelegramChannel)?.title ?? "nil")) delete pts hole \(previousState.pts) + \(ptsCount) != \(pts)")
+                            Logger.shared.log("State", "channel \(peerId) (\((updatedState.peers[peerId] as? IosappChannel)?.title ?? "nil")) delete pts hole \(previousState.pts) + \(ptsCount) != \(pts)")
                             missingUpdatesFromChannels.insert(peerId)
                         }
                     }
                 } else {
                     if case .none = channelsToPoll[peerId] {
-                        //Logger.shared.log("State", "channel \(peerId) (\((updatedState.peers[peerId] as? TelegramChannel)?.title ?? "nil")) state unknown")
+                        //Logger.shared.log("State", "channel \(peerId) (\((updatedState.peers[peerId] as? IosappChannel)?.title ?? "nil")) state unknown")
                         channelsToPoll[peerId] = nil
                     }
                 }
@@ -976,7 +976,7 @@ private func finalStateWithUpdatesAndServerTime(accountPeerId: PeerId, postbox: 
                     let peerId = messageId.peerId
                     if let previousState = updatedState.channelStates[peerId] {
                         if previousState.pts >= pts {
-                            Logger.shared.log("State", "channel \(peerId) (\((updatedState.peers[peerId] as? TelegramChannel)?.title ?? "nil")) skip old edit update")
+                            Logger.shared.log("State", "channel \(peerId) (\((updatedState.peers[peerId] as? IosappChannel)?.title ?? "nil")) skip old edit update")
                         } else if previousState.pts + ptsCount == pts {
                             if let preCachedResources = apiMessage.preCachedResources {
                                 for (resource, data) in preCachedResources {
@@ -994,13 +994,13 @@ private func finalStateWithUpdatesAndServerTime(accountPeerId: PeerId, postbox: 
                             updatedState.updateChannelState(peerId, pts: pts)
                         } else {
                             if !missingUpdatesFromChannels.contains(peerId) {
-                                Logger.shared.log("State", "channel \(peerId) (\((updatedState.peers[peerId] as? TelegramChannel)?.title ?? "nil")) edit message pts hole \(previousState.pts) + \(ptsCount) != \(pts)")
+                                Logger.shared.log("State", "channel \(peerId) (\((updatedState.peers[peerId] as? IosappChannel)?.title ?? "nil")) edit message pts hole \(previousState.pts) + \(ptsCount) != \(pts)")
                                 missingUpdatesFromChannels.insert(peerId)
                             }
                         }
                     } else {
                         if case .none = channelsToPoll[peerId] {
-                            //Logger.shared.log("State", "channel \(peerId) (\((updatedState.peers[peerId] as? TelegramChannel)?.title ?? "nil")) state unknown")
+                            //Logger.shared.log("State", "channel \(peerId) (\((updatedState.peers[peerId] as? IosappChannel)?.title ?? "nil")) state unknown")
                             channelsToPoll[peerId] = nil
                         }
                     }
@@ -1028,7 +1028,7 @@ private func finalStateWithUpdatesAndServerTime(accountPeerId: PeerId, postbox: 
                         updatedState.updateChannelState(peerId, pts: pts)
                     } else {
                         if case .none = channelsToPoll[peerId] {
-                            Logger.shared.log("State", "channel \(peerId) (\((updatedState.peers[peerId] as? TelegramChannel)?.title ?? "nil")) updateWebPage pts hole \(previousState.pts) + \(ptsCount) != \(pts)")
+                            Logger.shared.log("State", "channel \(peerId) (\((updatedState.peers[peerId] as? IosappChannel)?.title ?? "nil")) updateWebPage pts hole \(previousState.pts) + \(ptsCount) != \(pts)")
                             channelsToPoll[peerId] = nil
                         }
                     }
@@ -1068,7 +1068,7 @@ private func finalStateWithUpdatesAndServerTime(accountPeerId: PeerId, postbox: 
                     }
                     updatedState.editMessage(messageId, message: message)
                     for media in message.media {
-                        if let media = media as? TelegramMediaAction {
+                        if let media = media as? IosappMediaAction {
                             if case .historyCleared = media.action {
                                 updatedState.readInbox(messageId)
                             }
@@ -1090,7 +1090,7 @@ private func finalStateWithUpdatesAndServerTime(accountPeerId: PeerId, postbox: 
                             } else {
                                 messageText = message.text
                             }
-                        Logger.shared.log("State", "channel \(message.id.peerId) (\((updatedState.peers[message.id.peerId] as? TelegramChannel)?.title ?? "nil")) skip old message \(message.id) (\(messageText))")
+                        Logger.shared.log("State", "channel \(message.id.peerId) (\((updatedState.peers[message.id.peerId] as? IosappChannel)?.title ?? "nil")) skip old message \(message.id) (\(messageText))")
                         } else if previousState.pts + ptsCount == pts {
                             if let preCachedResources = apiMessage.preCachedResources {
                                 for (resource, data) in preCachedResources {
@@ -1111,14 +1111,14 @@ private func finalStateWithUpdatesAndServerTime(accountPeerId: PeerId, postbox: 
                             }
                         } else {
                             if !missingUpdatesFromChannels.contains(message.id.peerId) {
-                                Logger.shared.log("State", "channel \(message.id.peerId) (\((updatedState.peers[message.id.peerId] as? TelegramChannel)?.title ?? "nil")) message pts hole \(previousState.pts) + \(ptsCount) != \(pts)")
+                                Logger.shared.log("State", "channel \(message.id.peerId) (\((updatedState.peers[message.id.peerId] as? IosappChannel)?.title ?? "nil")) message pts hole \(previousState.pts) + \(ptsCount) != \(pts)")
                                 ;
                                 missingUpdatesFromChannels.insert(message.id.peerId)
                             }
                         }
                     } else {
                         if case .none = channelsToPoll[message.id.peerId] {
-                            Logger.shared.log("State", "channel \(message.id.peerId) (\((updatedState.peers[message.id.peerId] as? TelegramChannel)?.title ?? "nil")) state unknown")
+                            Logger.shared.log("State", "channel \(message.id.peerId) (\((updatedState.peers[message.id.peerId] as? IosappChannel)?.title ?? "nil")) state unknown")
                             channelsToPoll[message.id.peerId] = nil
                         }
                     }
@@ -1157,7 +1157,7 @@ private func finalStateWithUpdatesAndServerTime(accountPeerId: PeerId, postbox: 
                     if updatedState.peers[peerId] == nil {
                         updatedState.updatePeer(peerId, { peer in
                             if peer == nil {
-                                return TelegramUser(id: peerId, accessHash: nil, firstName: "Telegram Notifications", lastName: nil, username: nil, phone: nil, photo: [], botInfo: BotUserInfo(flags: [], inlinePlaceholder: nil), restrictionInfo: nil, flags: [.isVerified], emojiStatus: nil, usernames: [], storiesHidden: nil, nameColor: nil, backgroundEmojiId: nil, profileColor: nil, profileBackgroundEmojiId: nil, subscriberCount: nil, verificationIconFileId: nil)
+                                return IosappUser(id: peerId, accessHash: nil, firstName: "Telegram Notifications", lastName: nil, username: nil, phone: nil, photo: [], botInfo: BotUserInfo(flags: [], inlinePlaceholder: nil), restrictionInfo: nil, flags: [.isVerified], emojiStatus: nil, usernames: [], storiesHidden: nil, nameColor: nil, backgroundEmojiId: nil, profileColor: nil, profileBackgroundEmojiId: nil, subscriberCount: nil, verificationIconFileId: nil)
                             } else {
                                 return peer
                             }
@@ -1188,7 +1188,7 @@ private func finalStateWithUpdatesAndServerTime(accountPeerId: PeerId, postbox: 
                         if let mediaValue = mediaValue {
                             medias.append(mediaValue)
                             
-                            if mediaValue is TelegramMediaWebpage {
+                            if mediaValue is IosappMediaWebpage {
                                 if let webpageAttributes = webpageAttributes {
                                     attributes.append(WebpagePreviewMessageAttribute(leadingPreview: false, forceLargeMedia: webpageAttributes.forceLargeMedia, isManuallyAdded: webpageAttributes.isManuallyAdded, isSafe: webpageAttributes.isSafe))
                                 }
@@ -1291,11 +1291,11 @@ private func finalStateWithUpdatesAndServerTime(accountPeerId: PeerId, postbox: 
                 switch apiPeer {
                     case let .notifyPeer(notifyPeerData):
                         let peer = notifyPeerData.peer
-                        let notificationSettings = TelegramPeerNotificationSettings(apiSettings: apiNotificationSettings)
+                        let notificationSettings = IosappPeerNotificationSettings(apiSettings: apiNotificationSettings)
                         updatedState.updateNotificationSettings(.peer(peerId: peer.peerId, threadId: nil), notificationSettings: notificationSettings)
                     case let .notifyForumTopic(notifyForumTopicData):
                         let (peer, topMsgId) = (notifyForumTopicData.peer, notifyForumTopicData.topMsgId)
-                        let notificationSettings = TelegramPeerNotificationSettings(apiSettings: apiNotificationSettings)
+                        let notificationSettings = IosappPeerNotificationSettings(apiSettings: apiNotificationSettings)
                         updatedState.updateNotificationSettings(.peer(peerId: peer.peerId, threadId: Int64(topMsgId)), notificationSettings: notificationSettings)
                     case .notifyUsers:
                         updatedState.updateGlobalNotificationSettings(.privateChats, notificationSettings: MessageNotificationSettings(apiSettings: apiNotificationSettings))
@@ -1395,10 +1395,10 @@ private func finalStateWithUpdatesAndServerTime(accountPeerId: PeerId, postbox: 
             case let .updateChatDefaultBannedRights(updateChatDefaultBannedRightsData):
                 let (peer, defaultBannedRights, version) = (updateChatDefaultBannedRightsData.peer, updateChatDefaultBannedRightsData.defaultBannedRights, updateChatDefaultBannedRightsData.version)
                 updatedState.updatePeer(peer.peerId, { peer in
-                    if let group = peer as? TelegramGroup {//, group.version == version - 1 {
-                        return group.updateDefaultBannedRights(TelegramChatBannedRights(apiBannedRights: defaultBannedRights), version: max(group.version, Int(version)))
-                    } else if let channel = peer as? TelegramChannel {//, group.version == version - 1 {
-                        return channel.withUpdatedDefaultBannedRights(TelegramChatBannedRights(apiBannedRights: defaultBannedRights))
+                    if let group = peer as? IosappGroup {//, group.version == version - 1 {
+                        return group.updateDefaultBannedRights(IosappChatBannedRights(apiBannedRights: defaultBannedRights), version: max(group.version, Int(version)))
+                    } else if let channel = peer as? IosappChannel {//, group.version == version - 1 {
+                        return channel.withUpdatedDefaultBannedRights(IosappChatBannedRights(apiBannedRights: defaultBannedRights))
                     } else {
                         return peer
                     }
@@ -1408,7 +1408,7 @@ private func finalStateWithUpdatesAndServerTime(accountPeerId: PeerId, postbox: 
                 let peerId = PeerId(namespace: Namespaces.Peer.CloudChannel, id: PeerId.Id._internalFromInt64Value(channelId))
                 if let previousState = updatedState.channelStates[peerId] {
                     if previousState.pts >= pts {
-                        Logger.shared.log("State", "channel \(peerId) (\((updatedState.peers[peerId] as? TelegramChannel)?.title ?? "nil")) skip old pinned messages update")
+                        Logger.shared.log("State", "channel \(peerId) (\((updatedState.peers[peerId] as? IosappChannel)?.title ?? "nil")) skip old pinned messages update")
                     } else if previousState.pts + ptsCount == pts {
                         let channelPeerId = PeerId(namespace: Namespaces.Peer.CloudChannel, id: PeerId.Id._internalFromInt64Value(channelId))
                         updatedState.updateMessagesPinned(ids: messages.map { id in
@@ -1417,13 +1417,13 @@ private func finalStateWithUpdatesAndServerTime(accountPeerId: PeerId, postbox: 
                         updatedState.updateChannelState(peerId, pts: pts)
                     } else {
                         if !missingUpdatesFromChannels.contains(peerId) {
-                            Logger.shared.log("State", "channel \(peerId) (\((updatedState.peers[peerId] as? TelegramChannel)?.title ?? "nil")) pinned messages pts hole \(previousState.pts) + \(ptsCount) != \(pts)")
+                            Logger.shared.log("State", "channel \(peerId) (\((updatedState.peers[peerId] as? IosappChannel)?.title ?? "nil")) pinned messages pts hole \(previousState.pts) + \(ptsCount) != \(pts)")
                             missingUpdatesFromChannels.insert(peerId)
                         }
                     }
                 } else {
                     if case .none = channelsToPoll[peerId] {
-                        //Logger.shared.log("State", "channel \(peerId) (\((updatedState.peers[peerId] as? TelegramChannel)?.title ?? "nil")) state unknown")
+                        //Logger.shared.log("State", "channel \(peerId) (\((updatedState.peers[peerId] as? IosappChannel)?.title ?? "nil")) state unknown")
                         channelsToPoll[peerId] = nil
                     }
                 }
@@ -1450,15 +1450,15 @@ private func finalStateWithUpdatesAndServerTime(accountPeerId: PeerId, postbox: 
                 let (userId, usernames) = (updateUserNameData.userId, updateUserNameData.usernames)
                 //TODO add contact checking for apply first and last name
                 updatedState.updatePeer(PeerId(namespace: Namespaces.Peer.CloudUser, id: PeerId.Id._internalFromInt64Value(userId)), { peer in
-                    if let user = peer as? TelegramUser {
-                        return user.withUpdatedUsernames(usernames.map { TelegramPeerUsername(apiUsername: $0) })
+                    if let user = peer as? IosappUser {
+                        return user.withUpdatedUsernames(usernames.map { IosappPeerUsername(apiUsername: $0) })
                     } else {
                         return peer
                     }
                 })
             case let .updateUserPhone(updateUserPhoneData):
                 updatedState.updatePeer(PeerId(namespace: Namespaces.Peer.CloudUser, id: PeerId.Id._internalFromInt64Value(updateUserPhoneData.userId)), { peer in
-                    if let user = peer as? TelegramUser {
+                    if let user = peer as? IosappUser {
                         return user.withUpdatedPhone(updateUserPhoneData.phone.isEmpty ? nil : updateUserPhoneData.phone)
                     } else {
                         return peer
@@ -1466,7 +1466,7 @@ private func finalStateWithUpdatesAndServerTime(accountPeerId: PeerId, postbox: 
                 })
             case let .updateUserEmojiStatus(updateUserEmojiStatusData):
                 updatedState.updatePeer(PeerId(namespace: Namespaces.Peer.CloudUser, id: PeerId.Id._internalFromInt64Value(updateUserEmojiStatusData.userId)), { peer in
-                    if let user = peer as? TelegramUser {
+                    if let user = peer as? IosappUser {
                         return user.withUpdatedEmojiStatus(PeerEmojiStatus(apiStatus: updateUserEmojiStatusData.emojiStatus))
                     } else {
                         return peer
@@ -1869,7 +1869,7 @@ private func finalStateWithUpdatesAndServerTime(accountPeerId: PeerId, postbox: 
                 }
                 updatedState.deleteMessages(messageIds)
             case let .updateTheme(updateThemeData):
-                updatedState.updateTheme(TelegramTheme(apiTheme: updateThemeData.theme))
+                updatedState.updateTheme(IosappTheme(apiTheme: updateThemeData.theme))
             case let .updateMessageID(updateMessageIDData):
                 updatedState.updatedOutgoingUniqueMessageIds[updateMessageIDData.randomId] = updateMessageIDData.id
             case .updateDialogFilters:
@@ -1979,14 +1979,14 @@ private func finalStateWithUpdatesAndServerTime(accountPeerId: PeerId, postbox: 
                 let isUnconfirmed = (flags & (1 << 0)) != 0
                 updatedState.updateNewAuthorization(isUnconfirmed: isUnconfirmed, hash: hash, date: date ?? 0, device: device ?? "", location: location ?? "")
             case let .updatePeerWallpaper(updatePeerWallpaperData):
-                updatedState.updateWallpaper(peerId: updatePeerWallpaperData.peer.peerId, wallpaper: updatePeerWallpaperData.wallpaper.flatMap { TelegramWallpaper(apiWallpaper: $0) })
+                updatedState.updateWallpaper(peerId: updatePeerWallpaperData.peer.peerId, wallpaper: updatePeerWallpaperData.wallpaper.flatMap { IosappWallpaper(apiWallpaper: $0) })
             case let .updateStarsBalance(updateStarsBalanceData):
                 let amount = CurrencyAmount(apiAmount: updateStarsBalanceData.balance)
                 updatedState.updateStarsBalance(peerId: accountPeerId, currency: amount.currency, balance: amount.amount)
             case let .updateStarsRevenueStatus(updateStarsRevenueStatusData):
                 updatedState.updateStarsRevenueStatus(peerId: updateStarsRevenueStatusData.peer.peerId, status: StarsRevenueStats.Balances(apiStarsRevenueStatus: updateStarsRevenueStatusData.status))
             case let .updatePaidReactionPrivacy(updatePaidReactionPrivacyData):
-                let mappedPrivacy: TelegramPaidReactionPrivacy
+                let mappedPrivacy: IosappPaidReactionPrivacy
                 switch updatePaidReactionPrivacyData.private {
                 case .paidReactionPrivacyDefault:
                     mappedPrivacy = .default
@@ -2168,11 +2168,11 @@ func resolveForumThreads(accountPeerId: PeerId, postbox: Postbox, source: FetchM
         case let .AddMessages(messages, _):
             for message in messages {
                 if let threadId = message.threadId {
-                    if let channel = state.peers[message.id.peerId] as? TelegramChannel, case .group = channel.info {
+                    if let channel = state.peers[message.id.peerId] as? IosappChannel, case .group = channel.info {
                         if channel.flags.contains(.isForum) || channel.flags.contains(.isMonoforum) {
                             forumThreadIds.insert(PeerAndBoundThreadId(peerId: message.id.peerId, threadId: threadId))
                         }
-                    } else if let user = state.peers[message.id.peerId] as? TelegramUser, let botInfo = user.botInfo, botInfo.flags.contains(.hasForum) {
+                    } else if let user = state.peers[message.id.peerId] as? IosappUser, let botInfo = user.botInfo, botInfo.flags.contains(.hasForum) {
                         forumThreadIds.insert(PeerAndBoundThreadId(peerId: message.id.peerId, threadId: threadId))
                     }
                 }
@@ -2204,7 +2204,7 @@ func resolveForumThreads(accountPeerId: PeerId, postbox: Postbox, source: FetchM
                         continue
                     }
                     
-                    if let peer = peer as? TelegramChannel, peer.flags.contains(.isMonoforum) {
+                    if let peer = peer as? IosappChannel, peer.flags.contains(.isMonoforum) {
                         let signal = source.request(Api.functions.messages.getSavedDialogsByID(flags: 1 << 1, parentPeer: inputPeer, ids: threadIds.compactMap { threadId in
                             let threadPeerId = PeerId(threadId)
                             if let threadPeer = state.peers[threadPeerId] {
@@ -2283,7 +2283,7 @@ func resolveForumThreads(accountPeerId: PeerId, postbox: Postbox, source: FetchM
                                                     maxOutgoingReadId: readOutboxMaxId,
                                                     isClosed: (flags & (1 << 2)) != 0,
                                                     isHidden: (flags & (1 << 6)) != 0,
-                                                    notificationSettings: TelegramPeerNotificationSettings(apiSettings: notifySettings),
+                                                    notificationSettings: IosappPeerNotificationSettings(apiSettings: notifySettings),
                                                     isMessageFeeRemoved: false
                                                 ),
                                                 topMessageId: topMessage,
@@ -2319,7 +2319,7 @@ func resolveForumThreads(accountPeerId: PeerId, postbox: Postbox, source: FetchM
                                                     maxOutgoingReadId: readOutboxMaxId,
                                                     isClosed: false,
                                                     isHidden: false,
-                                                    notificationSettings: TelegramPeerNotificationSettings.defaultSettings,
+                                                    notificationSettings: IosappPeerNotificationSettings.defaultSettings,
                                                     isMessageFeeRemoved: (flags & (1 << 4)) != 0
                                                 ),
                                                 topMessageId: topMessage,
@@ -2372,7 +2372,7 @@ func resolveForumThreads(accountPeerId: PeerId, postbox: Postbox, source: FetchM
                         continue
                     }
                     
-                    if let peer = peer as? TelegramChannel, peer.flags.contains(.isMonoforum) {
+                    if let peer = peer as? IosappChannel, peer.flags.contains(.isMonoforum) {
                         let signal = source.request(Api.functions.messages.getSavedDialogsByID(flags: 1 << 1, parentPeer: inputPeer, ids: threadIds.compactMap { threadId in
                             let threadPeerId = PeerId(threadId)
                             if let threadPeer = additionalPeers.get(threadPeerId) {
@@ -2449,7 +2449,7 @@ func resolveForumThreads(accountPeerId: PeerId, postbox: Postbox, source: FetchM
                                                 maxOutgoingReadId: readOutboxMaxId,
                                                 isClosed: (flags & (1 << 2)) != 0,
                                                 isHidden: (flags & (1 << 6)) != 0,
-                                                notificationSettings: TelegramPeerNotificationSettings(apiSettings: notifySettings),
+                                                notificationSettings: IosappPeerNotificationSettings(apiSettings: notifySettings),
                                                 isMessageFeeRemoved: false
                                             )
                                             if let entry = StoredMessageHistoryThreadInfo(data) {
@@ -2482,7 +2482,7 @@ func resolveForumThreads(accountPeerId: PeerId, postbox: Postbox, source: FetchM
                                                 maxOutgoingReadId: readOutboxMaxId,
                                                 isClosed: false,
                                                 isHidden: false,
-                                                notificationSettings: TelegramPeerNotificationSettings.defaultSettings,
+                                                notificationSettings: IosappPeerNotificationSettings.defaultSettings,
                                                 isMessageFeeRemoved: (flags & (1 << 4)) != 0
                                             )
                                             if let entry = StoredMessageHistoryThreadInfo(data) {
@@ -2517,9 +2517,9 @@ func resolveForumThreads(accountPeerId: PeerId, postbox: Postbox, source: FetchM
     
     for message in fetchedChatList.storeMessages {
         if let threadId = message.threadId {
-            if let channel = fetchedChatList.peers.peers.first(where: { $0.key == message.id.peerId })?.value as? TelegramChannel, case .group = channel.info, (channel.flags.contains(.isForum) || channel.flags.contains(.isMonoforum)) {
+            if let channel = fetchedChatList.peers.peers.first(where: { $0.key == message.id.peerId })?.value as? IosappChannel, case .group = channel.info, (channel.flags.contains(.isForum) || channel.flags.contains(.isMonoforum)) {
                 forumThreadIds.insert(PeerAndBoundThreadId(peerId: message.id.peerId, threadId: threadId))
-            } else if let user = fetchedChatList.peers.peers.first(where: { $0.key == message.id.peerId })?.value as? TelegramUser, let botInfo = user.botInfo, botInfo.flags.contains(.hasForum) {
+            } else if let user = fetchedChatList.peers.peers.first(where: { $0.key == message.id.peerId })?.value as? IosappUser, let botInfo = user.botInfo, botInfo.flags.contains(.hasForum) {
                 forumThreadIds.insert(PeerAndBoundThreadId(peerId: message.id.peerId, threadId: threadId))
             }
         }
@@ -2547,7 +2547,7 @@ func resolveForumThreads(accountPeerId: PeerId, postbox: Postbox, source: FetchM
                         continue
                     }
                     
-                    if let peer = peer as? TelegramChannel, peer.flags.contains(.isMonoforum) {
+                    if let peer = peer as? IosappChannel, peer.flags.contains(.isMonoforum) {
                         let signal = source.request(Api.functions.messages.getSavedDialogsByID(flags: 1 << 1, parentPeer: inputPeer, ids: threadIds.compactMap { threadId in
                             let threadPeerId = PeerId(threadId)
                             if let threadPeer = fetchedChatList.peers.get(threadPeerId) {
@@ -2621,7 +2621,7 @@ func resolveForumThreads(accountPeerId: PeerId, postbox: Postbox, source: FetchM
                                                 maxOutgoingReadId: readOutboxMaxId,
                                                 isClosed: (flags & (1 << 2)) != 0,
                                                 isHidden: (flags & (1 << 6)) != 0,
-                                                notificationSettings: TelegramPeerNotificationSettings(apiSettings: notifySettings),
+                                                notificationSettings: IosappPeerNotificationSettings(apiSettings: notifySettings),
                                                 isMessageFeeRemoved: false
                                             ),
                                             topMessageId: topMessage,
@@ -2654,7 +2654,7 @@ func resolveForumThreads(accountPeerId: PeerId, postbox: Postbox, source: FetchM
                                                 maxOutgoingReadId: readOutboxMaxId,
                                                 isClosed: false,
                                                 isHidden: false,
-                                                notificationSettings: TelegramPeerNotificationSettings.defaultSettings,
+                                                notificationSettings: IosappPeerNotificationSettings.defaultSettings,
                                                 isMessageFeeRemoved: (flags & (1 << 4)) != 0
                                             ),
                                             topMessageId: topMessage,
@@ -3015,8 +3015,8 @@ private func resolveMissingPeerChatInfos(accountPeerId: PeerId, network: Network
                                 var isExcludedFromChatList = false
                                 for chat in chats {
                                     if chat.peerId == peerId {
-                                        if let groupOrChannel = parseTelegramGroupOrChannel(chat: chat) {
-                                            if let group = groupOrChannel as? TelegramGroup {
+                                        if let groupOrChannel = parseIosappGroupOrChannel(chat: chat) {
+                                            if let group = groupOrChannel as? IosappGroup {
                                                 if group.flags.contains(.deactivated) {
                                                     isExcludedFromChatList = true
                                                 } else {
@@ -3027,7 +3027,7 @@ private func resolveMissingPeerChatInfos(accountPeerId: PeerId, network: Network
                                                         isExcludedFromChatList = true
                                                     }
                                                 }
-                                            } else if let channel = groupOrChannel as? TelegramChannel {
+                                            } else if let channel = groupOrChannel as? IosappChannel {
                                                 switch channel.participationStatus {
                                                 case .member:
                                                     break
@@ -3046,7 +3046,7 @@ private func resolveMissingPeerChatInfos(accountPeerId: PeerId, network: Network
                             
                                 updatedState.updateAutoremoveTimeout(peer: peer, value: ttlPeriod.flatMap(CachedPeerAutoremoveTimeout.Value.init(peerValue:)))
                                 
-                                let notificationSettings = TelegramPeerNotificationSettings(apiSettings: notifySettings)
+                                let notificationSettings = IosappPeerNotificationSettings(apiSettings: notifySettings)
                                 updatedState.updateNotificationSettings(.peer(peerId: peer.peerId, threadId: nil), notificationSettings: notificationSettings)
                                 
                                 updatedState.resetReadState(peer.peerId, namespace: Namespaces.Message.Cloud, maxIncomingReadId: readInboxMaxId, maxOutgoingReadId: readOutboxMaxId, maxKnownId: topMessage, count: unreadCount, markedUnread: nil)
@@ -3119,7 +3119,7 @@ func pollChannelOnce(accountPeerId: PeerId, postbox: Postbox, network: Network, 
                 hasValidInclusion = false
         }
         if hasValidInclusion {
-            if let notificationSettings = transaction.getPeerNotificationSettings(id: peerId) as? TelegramPeerNotificationSettings {
+            if let notificationSettings = transaction.getPeerNotificationSettings(id: peerId) as? IosappPeerNotificationSettings {
                 peerChatInfos[peerId] = PeerChatInfo(notificationSettings: notificationSettings)
             }
         }
@@ -3176,7 +3176,7 @@ public func standalonePollChannelOnce(accountPeerId: PeerId, postbox: Postbox, n
             hasValidInclusion = false
         }
         if hasValidInclusion {
-            if let notificationSettings = transaction.getPeerNotificationSettings(id: peerId) as? TelegramPeerNotificationSettings {
+            if let notificationSettings = transaction.getPeerNotificationSettings(id: peerId) as? IosappPeerNotificationSettings {
                 peerChatInfos[peerId] = PeerChatInfo(notificationSettings: notificationSettings)
             }
         }
@@ -3235,7 +3235,7 @@ func resetChannels(accountPeerId: PeerId, postbox: Postbox, network: Network, pe
         var channelStates: [PeerId: AccountStateChannelState] = [:]
         var invalidateChannelStates: [PeerId: Int32] = [:]
         var channelSynchronizedUntilMessage: [PeerId: MessageId.Id] = [:]
-        var notificationSettings: [PeerId: TelegramPeerNotificationSettings] = [:]
+        var notificationSettings: [PeerId: IosappPeerNotificationSettings] = [:]
         
         var resetForumTopics = Set<PeerId>()
         
@@ -3301,7 +3301,7 @@ func resetChannels(accountPeerId: PeerId, postbox: Postbox, network: Network, pe
                             invalidateChannelStates[peerId] = apiChannelPts
                         }
                         
-                        notificationSettings[peerId] = TelegramPeerNotificationSettings(apiSettings: apiNotificationSettings)
+                        notificationSettings[peerId] = IosappPeerNotificationSettings(apiSettings: apiNotificationSettings)
                         
                         updatedState.updatePeerChatInclusion(peerId: peerId, groupId: groupId, changedGroup: false)
                         
@@ -3486,9 +3486,9 @@ private func pollChannel(accountPeerId: PeerId, postbox: Postbox, network: Netwo
                             updatedState.updateChannelSynchronizedUntilMessage(id.peerId, id: id.id)
                             
                             if let threadId = message.threadId {
-                                if let channel = updatedState.peers[message.id.peerId] as? TelegramChannel, case .group = channel.info, channel.flags.contains(.isForum) {
+                                if let channel = updatedState.peers[message.id.peerId] as? IosappChannel, case .group = channel.info, channel.flags.contains(.isForum) {
                                     forumThreadIds.insert(MessageId(peerId: message.id.peerId, namespace: message.id.namespace, id: Int32(clamping: threadId)))
-                                } else if let user = updatedState.peers[message.id.peerId] as? TelegramUser, let botInfo = user.botInfo, botInfo.flags.contains(.hasForum) {
+                                } else if let user = updatedState.peers[message.id.peerId] as? IosappUser, let botInfo = user.botInfo, botInfo.flags.contains(.hasForum) {
                                     forumThreadIds.insert(MessageId(peerId: message.id.peerId, namespace: message.id.namespace, id: Int32(clamping: threadId)))
                                 }
                             }
@@ -3523,9 +3523,9 @@ private func pollChannel(accountPeerId: PeerId, postbox: Postbox, network: Netwo
                             updatedState.editMessage(messageId, message: message.withUpdatedAttributes(attributes))
                             
                             if let threadId = message.threadId {
-                                if let channel = updatedState.peers[message.id.peerId] as? TelegramChannel, case .group = channel.info, channel.flags.contains(.isForum) {
+                                if let channel = updatedState.peers[message.id.peerId] as? IosappChannel, case .group = channel.info, channel.flags.contains(.isForum) {
                                     forumThreadIds.insert(MessageId(peerId: message.id.peerId, namespace: message.id.namespace, id: Int32(clamping: threadId)))
-                                } else if let user = updatedState.peers[message.id.peerId] as? TelegramUser, let botInfo = user.botInfo, botInfo.flags.contains(.hasForum) {
+                                } else if let user = updatedState.peers[message.id.peerId] as? IosappUser, let botInfo = user.botInfo, botInfo.flags.contains(.hasForum) {
                                     forumThreadIds.insert(MessageId(peerId: message.id.peerId, namespace: message.id.namespace, id: Int32(clamping: threadId)))
                                 }
                             }
@@ -3886,7 +3886,7 @@ private func recordPeerActivityTimestamp(peerId: PeerId, timestamp: Int32, into 
 }
 
 func replayFinalState(
-    accountManager: AccountManager<TelegramAccountManagerTypes>,
+    accountManager: AccountManager<IosappAccountManagerTypes>,
     postbox: Postbox,
     accountPeerId: PeerId,
     mediaBox: MediaBox,
@@ -3912,7 +3912,7 @@ func replayFinalState(
     var updatedIncomingThreadReadStates: [PeerAndBoundThreadId: MessageId.Id] = [:]
     var updatedOutgoingThreadReadStates: [PeerAndBoundThreadId: MessageId.Id] = [:]
     var updatedSecretChatTypingActivities = Set<PeerId>()
-    var updatedWebpages: [MediaId: TelegramMediaWebpage] = [:]
+    var updatedWebpages: [MediaId: IosappMediaWebpage] = [:]
     var updatedCalls: [Api.PhoneCall] = []
     var addedCallSignalingData: [(Int64, Data)] = []
     var updatedGroupCallParticipants: [(Int64, GroupCallParticipantsContext.Update)] = []
@@ -3921,14 +3921,14 @@ func replayFinalState(
     var updatedPeersNearby: [PeerNearby]?
     var isContactUpdates: [(PeerId, Bool)] = []
     var stickerPackOperations: [AccountStateUpdateStickerPacksOperation] = []
-    var recentlyUsedStickers: [MediaId: (MessageIndex, TelegramMediaFile)] = [:]
+    var recentlyUsedStickers: [MediaId: (MessageIndex, IosappMediaFile)] = [:]
     var slowModeLastMessageTimeouts:[PeerId : Int32] = [:]
-    var recentlyUsedGifs: [MediaId: (MessageIndex, TelegramMediaFile)] = [:]
+    var recentlyUsedGifs: [MediaId: (MessageIndex, IosappMediaFile)] = [:]
     var syncRecentGifs = false
     var langPackDifferences: [String: [Api.LangPackDifference]] = [:]
     var pollLangPacks = Set<String>()
-    var updatedThemes: [Int64: TelegramTheme] = [:]
-    var updatedWallpapers: [PeerId: TelegramWallpaper?] = [:]
+    var updatedThemes: [Int64: IosappTheme] = [:]
+    var updatedWallpapers: [PeerId: IosappWallpaper?] = [:]
     var delayNotificatonsUntil: Int32?
     var peerActivityTimestamps: [PeerId: Int32] = [:]
     var syncChatListFilters = false
@@ -3938,7 +3938,7 @@ func replayFinalState(
     var updatedStarsBalance: [PeerId: StarsAmount] = [:]
     var updatedTonBalance: [PeerId: StarsAmount] = [:]
     var updatedStarsRevenueStatus: [PeerId: StarsRevenueStats.Balances] = [:]
-    var updatedStarsReactionsDefaultPrivacy: TelegramPaidReactionPrivacy?
+    var updatedStarsReactionsDefaultPrivacy: IosappPaidReactionPrivacy?
     var reportMessageDelivery = Set<MessageId>()
     var updatedStarGiftAuctionState: [Int64: GiftAuctionContext.State.AuctionState] = [:]
     var updatedStarGiftAuctionMyState: [Int64: GiftAuctionContext.State.MyState] = [:]
@@ -4037,7 +4037,7 @@ func replayFinalState(
 
                             if id.namespace == Namespaces.Message.Cloud && id.peerId.namespace == Namespaces.Peer.CloudUser {
                                 inner: for media in message.media {
-                                    if let action = media as? TelegramMediaAction, case .conferenceCall = action.action {
+                                    if let action = media as? IosappMediaAction, case .conferenceCall = action.action {
                                         addedConferenceInvitationMessagesIds.append(id)
                                         break inner
                                     }
@@ -4145,7 +4145,7 @@ func replayFinalState(
                         if case let .Id(id) = message.id {
                             if let threadId = message.threadId {
                                 for media in message.media {
-                                    if let action = media as? TelegramMediaAction {
+                                    if let action = media as? IosappMediaAction {
                                         switch action.action {
                                         case .topicCreated:
                                             transaction.removeHole(peerId: id.peerId, threadId: threadId, namespace: Namespaces.Message.Cloud, space: .everywhere, range: 1 ... id.id)
@@ -4269,7 +4269,7 @@ func replayFinalState(
                             }
                             
                             for media in message.media {
-                                if let action = media as? TelegramMediaAction {
+                                if let action = media as? IosappMediaAction {
                                     if message.id.peerId.namespace == Namespaces.Peer.CloudGroup, case let .groupMigratedToChannel(channelId) = action.action {
                                         transaction.updatePeerCachedData(peerIds: [channelId], update: { peerId, current in
                                             var current = current as? CachedChannelData ?? CachedChannelData()
@@ -4355,7 +4355,7 @@ func replayFinalState(
                                 
                             } else {
                                 inner: for media in message.media {
-                                    if let file = media as? TelegramMediaFile {
+                                    if let file = media as? IosappMediaFile {
                                         for attribute in file.attributes {
                                             switch attribute {
                                                 case let .Sticker(_, packReference, _):
@@ -4494,7 +4494,7 @@ func replayFinalState(
                     }
                     
                     var updatedMedia = message.media
-                    if let previousPaidContent = previousMessage.media.first(where: { $0 is TelegramMediaPaidContent }) as? TelegramMediaPaidContent, case .full = previousPaidContent.extendedMedia.first {
+                    if let previousPaidContent = previousMessage.media.first(where: { $0 is IosappMediaPaidContent }) as? IosappMediaPaidContent, case .full = previousPaidContent.extendedMedia.first {
                         updatedMedia = previousMessage.media
                     }
                     
@@ -4504,7 +4504,7 @@ func replayFinalState(
                     addedReactionEvents.append(generatedEvent)
                 }
             case let .UpdateMessagePoll(pollId, apiPoll, results):
-                if let poll = transaction.getMedia(pollId) as? TelegramMediaPoll {
+                if let poll = transaction.getMedia(pollId) as? IosappMediaPoll {
                     var updatedPoll = poll
                     let resultsMin: Bool
                     switch results {
@@ -4516,13 +4516,13 @@ func replayFinalState(
                         switch apiPoll {
                         case let .poll(pollData):
                             let (id, flags, question, answers, closePeriod, closeDate, pollHash) = (pollData.id, pollData.flags, pollData.question, pollData.answers, pollData.closePeriod, pollData.closeDate, pollData.hash)
-                            let publicity: TelegramMediaPollPublicity
+                            let publicity: IosappMediaPollPublicity
                             if (flags & (1 << 1)) != 0 {
                                 publicity = .public
                             } else {
                                 publicity = .anonymous
                             }
-                            let kind: TelegramMediaPollKind
+                            let kind: IosappMediaPollKind
                             if (flags & (1 << 3)) != 0 {
                                 kind = .quiz(multipleAnswers: (flags & (1 << 2)) != 0)
                             } else {
@@ -4543,14 +4543,14 @@ func replayFinalState(
                                 questionEntities = messageTextEntitiesFromApiEntities(entities)
                             }
 
-                            updatedPoll = TelegramMediaPoll(pollId: MediaId(namespace: Namespaces.Media.CloudPoll, id: id), publicity: publicity, kind: kind, text: questionText, textEntities: questionEntities, options: answers.map(TelegramMediaPollOption.init(apiOption:)), correctAnswers: nil, results: poll.results, isClosed: (flags & (1 << 0)) != 0, deadlineTimeout: closePeriod, deadlineDate: closeDate, pollHash: pollHash, openAnswers: openAnswers, revotingDisabled: revotingDisabled, shuffleAnswers: shuffleAnswers, hideResultsUntilClose: hideResultsUntilClose, isCreator: isCreator, attachedMedia: poll.attachedMedia)
+                            updatedPoll = IosappMediaPoll(pollId: MediaId(namespace: Namespaces.Media.CloudPoll, id: id), publicity: publicity, kind: kind, text: questionText, textEntities: questionEntities, options: answers.map(IosappMediaPollOption.init(apiOption:)), correctAnswers: nil, results: poll.results, isClosed: (flags & (1 << 0)) != 0, deadlineTimeout: closePeriod, deadlineDate: closeDate, pollHash: pollHash, openAnswers: openAnswers, revotingDisabled: revotingDisabled, shuffleAnswers: shuffleAnswers, hideResultsUntilClose: hideResultsUntilClose, isCreator: isCreator, attachedMedia: poll.attachedMedia)
                         }
                     }
-                    updatedPoll = updatedPoll.withUpdatedResults(TelegramMediaPollResults(apiResults: results), min: resultsMin)
+                    updatedPoll = updatedPoll.withUpdatedResults(IosappMediaPollResults(apiResults: results), min: resultsMin)
                     updateMessageMedia(transaction: transaction, id: pollId, media: updatedPoll)
                 }
             case let .UpdateMedia(id, media):
-                if let media = media as? TelegramMediaWebpage {
+                if let media = media as? IosappMediaWebpage {
                     updatedWebpages[id] = media
                 }
                 updateMessageMedia(transaction: transaction, id: id, media: media)
@@ -4573,7 +4573,7 @@ func replayFinalState(
                     } else {
                         updatedIncomingThreadReadStates[peerAndThreadId] = readMaxId
                     }
-                    if let channel = transaction.getPeer(peerAndThreadId.peerId) as? TelegramChannel, case .group = channel.info, (channel.flags.contains(.isForum) || channel.flags.contains(.isMonoforum)) {
+                    if let channel = transaction.getPeer(peerAndThreadId.peerId) as? IosappChannel, case .group = channel.info, (channel.flags.contains(.isForum) || channel.flags.contains(.isMonoforum)) {
                         let threadId = peerAndThreadId.threadId
                         if var data = transaction.getMessageHistoryThreadInfo(peerId: peerAndThreadId.peerId, threadId: threadId)?.data.get(MessageHistoryThreadData.self) {
                             if readMaxId > data.maxIncomingReadId {
@@ -4626,7 +4626,7 @@ func replayFinalState(
                     } else {
                         updatedOutgoingThreadReadStates[peerAndThreadId] = readMaxId
                     }
-                    if let channel = transaction.getPeer(peerAndThreadId.peerId) as? TelegramChannel, case .group = channel.info, (channel.flags.contains(.isForum) || channel.flags.contains(.isMonoforum)) {
+                    if let channel = transaction.getPeer(peerAndThreadId.peerId) as? IosappChannel, case .group = channel.info, (channel.flags.contains(.isForum) || channel.flags.contains(.isMonoforum)) {
                         if var data = transaction.getMessageHistoryThreadInfo(peerId: peerAndThreadId.peerId, threadId: peerAndThreadId.threadId)?.data.get(MessageHistoryThreadData.self) {
                             if readMaxId >= data.maxOutgoingReadId {
                                 data.maxOutgoingReadId = readMaxId
@@ -4636,7 +4636,7 @@ func replayFinalState(
                                 }
                             }
                         }
-                    } else if let user = transaction.getPeer(peerAndThreadId.peerId) as? TelegramUser, let botInfo = user.botInfo, botInfo.flags.contains(.hasForum) {
+                    } else if let user = transaction.getPeer(peerAndThreadId.peerId) as? IosappUser, let botInfo = user.botInfo, botInfo.flags.contains(.hasForum) {
                         if var data = transaction.getMessageHistoryThreadInfo(peerId: peerAndThreadId.peerId, threadId: peerAndThreadId.threadId)?.data.get(MessageHistoryThreadData.self) {
                             if readMaxId >= data.maxOutgoingReadId {
                                 data.maxOutgoingReadId = readMaxId
@@ -4839,7 +4839,7 @@ func replayFinalState(
                 updatePeers(transaction: transaction, accountPeerId: accountPeerId, peers: parsedPeers)
             case let .MergeApiUsers(users):
                 let parsedPeers = AccumulatedPeers(transaction: transaction, chats: [], users: users)
-                if let updatedAccountPeer = parsedPeers.get(accountPeerId) as? TelegramUser, let previousAccountPeer = transaction.getPeer(accountPeerId) as? TelegramUser {
+                if let updatedAccountPeer = parsedPeers.get(accountPeerId) as? IosappUser, let previousAccountPeer = transaction.getPeer(accountPeerId) as? IosappUser {
                     if updatedAccountPeer.isPremium != previousAccountPeer.isPremium {
                         isPremiumUpdated = true
                     }
@@ -4849,7 +4849,7 @@ func replayFinalState(
                 updateContacts(transaction: transaction, apiUsers: users)
             case let .UpdatePeer(id, f):
                 if let peer = f(transaction.getPeer(id)) {
-                    if id == accountPeerId, let updatedAccountPeer = peer as? TelegramUser, let previousAccountPeer = transaction.getPeer(accountPeerId) as? TelegramUser {
+                    if id == accountPeerId, let updatedAccountPeer = peer as? IosappUser, let previousAccountPeer = transaction.getPeer(accountPeerId) as? IosappUser {
                         if updatedAccountPeer.isPremium != previousAccountPeer.isPremium {
                             isPremiumUpdated = true
                         }
@@ -4903,7 +4903,7 @@ func replayFinalState(
                             }
                         }
                     } else {
-                        let presence = TelegramUserPresence(apiStatus: status)
+                        let presence = IosappUserPresence(apiStatus: status)
                         presences[peerId] = presence
                     }
                     
@@ -5318,24 +5318,24 @@ func replayFinalState(
             case let .UpdateExtendedMedia(messageId, apiExtendedMedia):
                 transaction.updateMessage(messageId, update: { currentMessage in
                     var media = currentMessage.media
-                    let invoice = media.first(where: { $0 is TelegramMediaInvoice }) as? TelegramMediaInvoice
-                    let paidContent = media.first(where: { $0 is TelegramMediaPaidContent }) as? TelegramMediaPaidContent
+                    let invoice = media.first(where: { $0 is IosappMediaInvoice }) as? IosappMediaInvoice
+                    let paidContent = media.first(where: { $0 is IosappMediaPaidContent }) as? IosappMediaPaidContent
                     
                     var storeForwardInfo: StoreMessageForwardInfo?
                     if let forwardInfo = currentMessage.forwardInfo {
                         storeForwardInfo = StoreMessageForwardInfo(authorId: forwardInfo.author?.id, sourceId: forwardInfo.source?.id, sourceMessageId: forwardInfo.sourceMessageId, date: forwardInfo.date, authorSignature: forwardInfo.authorSignature, psaType: forwardInfo.psaType, flags: forwardInfo.flags)
                     }
                     
-                    let updatedExtendedMedia = apiExtendedMedia.compactMap { TelegramExtendedMedia(apiExtendedMedia: $0, peerId: messageId.peerId) }
+                    let updatedExtendedMedia = apiExtendedMedia.compactMap { IosappExtendedMedia(apiExtendedMedia: $0, peerId: messageId.peerId) }
                     
                     if let first = updatedExtendedMedia.first, case .full = first {
                         if var invoice = invoice {
-                            media = media.filter { !($0 is TelegramMediaInvoice) }
+                            media = media.filter { !($0 is IosappMediaInvoice) }
                             invoice = invoice.withUpdatedExtendedMedia(first)
                             media.append(invoice)
                         }
                         if var paidContent = paidContent {
-                            media = media.filter { !($0 is TelegramMediaPaidContent) }
+                            media = media.filter { !($0 is IosappMediaPaidContent) }
                             paidContent = paidContent.withUpdatedExtendedMedia(updatedExtendedMedia)
                             media.append(paidContent)
                         }
@@ -5807,7 +5807,7 @@ func replayFinalState(
     }
     
     if !recentlyUsedStickers.isEmpty {
-        let stickerFiles: [TelegramMediaFile] = recentlyUsedStickers.values.sorted(by: {
+        let stickerFiles: [IosappMediaFile] = recentlyUsedStickers.values.sorted(by: {
             return $0.0 < $1.0
         }).map({ $0.1 })
         for file in stickerFiles {
@@ -5822,7 +5822,7 @@ func replayFinalState(
         var cachedDatas:[PeerId : CachedChannelData] = [:]
         for (peerId, timeout) in slowModeLastMessageTimeouts {
             if let peer = transaction.getPeer(peerId) {
-                if let peer = peer as? TelegramChannel {
+                if let peer = peer as? IosappChannel {
                     inner: switch peer.info {
                     case let .group(info):
                         if info.flags.contains(.slowModeEnabled), peer.adminRights == nil && !peer.flags.contains(.isCreator)  {
@@ -5847,7 +5847,7 @@ func replayFinalState(
     if syncRecentGifs {
         addSynchronizeSavedGifsOperation(transaction: transaction, operation: .sync)
     } else {
-        let gifFiles: [TelegramMediaFile] = recentlyUsedGifs.values.sorted(by: {
+        let gifFiles: [IosappMediaFile] = recentlyUsedGifs.values.sorted(by: {
             return $0.0 < $1.0
         }).map({ $0.1 })
         for file in gifFiles {
@@ -5868,7 +5868,7 @@ func replayFinalState(
     }
     
     for chatPeerId in updatedSecretChatTypingActivities {
-        if let peer = transaction.getPeer(chatPeerId) as? TelegramSecretChat {
+        if let peer = transaction.getPeer(chatPeerId) as? IosappSecretChat {
             let authorId = peer.regularPeerId
             let activityValue: PeerInputActivity? = .typingText
             if updatedTypingActivities[PeerActivitySpace(peerId: chatPeerId, category: .global)] == nil {
@@ -5890,7 +5890,7 @@ func replayFinalState(
                 if !processResult.addedMessages.isEmpty {
                     let currentInclusion = transaction.getPeerChatListInclusion(peerId)
                     if let groupId = currentInclusion.groupId, groupId == Namespaces.PeerGroup.archive {
-                        if let peer = transaction.getPeer(peerId) as? TelegramSecretChat {
+                        if let peer = transaction.getPeer(peerId) as? IosappSecretChat {
                             let isRemovedFromTotalUnreadCount = resolvedIsRemovedFromTotalUnreadCount(globalSettings: transaction.getGlobalNotificationSettings(), peer: peer, peerSettings: transaction.getPeerNotificationSettings(id: peer.regularPeerId))
                             
                             if !isRemovedFromTotalUnreadCount {
@@ -5963,8 +5963,8 @@ func replayFinalState(
     
     if !updatedThemes.isEmpty {
         let entries = transaction.getOrderedListItems(collectionId: Namespaces.OrderedItemList.CloudThemes)
-        let themes = entries.map { entry -> TelegramTheme in
-            let theme = entry.contents.get(TelegramThemeNativeCodable.self)!
+        let themes = entries.map { entry -> IosappTheme in
+            let theme = entry.contents.get(IosappThemeNativeCodable.self)!
             if let updatedTheme = updatedThemes[theme.value.id] {
                 return updatedTheme
             } else {
@@ -5975,7 +5975,7 @@ func replayFinalState(
         for theme in themes {
             var intValue = Int32(updatedEntries.count)
             let id = MemoryBuffer(data: Data(bytes: &intValue, count: 4))
-            if let entry = CodableEntry(TelegramThemeNativeCodable(theme)) {
+            if let entry = CodableEntry(IosappThemeNativeCodable(theme)) {
                 updatedEntries.append(OrderedItemListEntry(id: id, contents: entry))
             }
         }
@@ -6023,11 +6023,11 @@ func replayFinalState(
             var isContactOrMember = false
             if transaction.isPeerContact(peerId: peerId) {
                 isContactOrMember = true
-            } else if let peer = transaction.getPeer(peerId) as? TelegramChannel {
+            } else if let peer = transaction.getPeer(peerId) as? IosappChannel {
                 if peer.participationStatus == .member {
                     isContactOrMember = true
                 }
-            } else if let peer = transaction.getPeer(peerId) as? TelegramGroup {
+            } else if let peer = transaction.getPeer(peerId) as? IosappGroup {
                 if case .Member = peer.membership {
                     isContactOrMember = true
                 }

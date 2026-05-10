@@ -502,13 +502,13 @@ final class OverlayAudioPlayerControllerNode: ViewControllerTracingNode, ASGestu
                 copyProtectionEnabled = .single(false)
             } else if peerId.namespace == Namespaces.Peer.CloudUser {
                 copyProtectionEnabled = context.engine.data.subscribe(
-                    TelegramEngine.EngineData.Item.Peer.CopyProtectionEnabled(id: peerId),
-                    TelegramEngine.EngineData.Item.Peer.MyCopyProtectionEnabled(id: peerId)
+                    IosappEngine.EngineData.Item.Peer.CopyProtectionEnabled(id: peerId),
+                    IosappEngine.EngineData.Item.Peer.MyCopyProtectionEnabled(id: peerId)
                 ) |> map { copyProtectionEnabled, myCopyProtectionEnabled in
                     return copyProtectionEnabled || myCopyProtectionEnabled
                 }
             } else {
-                copyProtectionEnabled = context.engine.data.subscribe(TelegramEngine.EngineData.Item.Peer.CopyProtectionEnabled(id: peerId))
+                copyProtectionEnabled = context.engine.data.subscribe(IosappEngine.EngineData.Item.Peer.CopyProtectionEnabled(id: peerId))
             }
         } else {
             copyProtectionEnabled = .single(false)
@@ -516,7 +516,7 @@ final class OverlayAudioPlayerControllerNode: ViewControllerTracingNode, ASGestu
         
         let peer: Signal<EnginePeer?, NoError>
         if let playlistLocation = self.playlistLocation as? PeerMessagesPlaylistLocation, case let .savedMusic(savedMusicContext, _, _) = playlistLocation {
-            peer = context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: savedMusicContext.peerId))
+            peer = context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: savedMusicContext.peerId))
         } else {
             peer = .single(nil)
         }
@@ -598,7 +598,7 @@ final class OverlayAudioPlayerControllerNode: ViewControllerTracingNode, ASGestu
         guard let playlistLocation = self.playlistLocation as? PeerMessagesPlaylistLocation, case let .savedMusic(savedMusicContext, _, canReorder) = playlistLocation, canReorder else {
             return
         }
-        let _ = (self.context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: savedMusicContext.peerId))
+        let _ = (self.context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: savedMusicContext.peerId))
         |> deliverOnMainQueue).start(next: { [weak self] peer in
             guard let self, let peer = peer.flatMap({ PeerReference($0._asPeer()) }) else {
                 return
@@ -614,14 +614,14 @@ final class OverlayAudioPlayerControllerNode: ViewControllerTracingNode, ASGestu
                 }
 
                 let mappedFromIndex = mapIndex(fromIndex)
-                guard filteredEntries.indices.contains(mappedFromIndex), case let .MessageEntry(fromMessage, _, _, _, _, _) = filteredEntries[mappedFromIndex], let fromFile = fromMessage.media.first(where: { $0 is TelegramMediaFile }) as? TelegramMediaFile else {
+                guard filteredEntries.indices.contains(mappedFromIndex), case let .MessageEntry(fromMessage, _, _, _, _, _) = filteredEntries[mappedFromIndex], let fromFile = fromMessage.media.first(where: { $0 is IosappMediaFile }) as? IosappMediaFile else {
                     return .single(false)
                 }
 
-                var afterFile: TelegramMediaFile?
+                var afterFile: IosappMediaFile?
                 if toIndex > 0 {
                     let afterMappedIndex = mapIndex(toIndex - 1)
-                    if filteredEntries.indices.contains(afterMappedIndex), case let .MessageEntry(afterMessage, _, _, _, _, _) = filteredEntries[afterMappedIndex], let file = afterMessage.media.first(where: { $0 is TelegramMediaFile }) as? TelegramMediaFile {
+                    if filteredEntries.indices.contains(afterMappedIndex), case let .MessageEntry(afterMessage, _, _, _, _, _) = filteredEntries[afterMappedIndex], let file = afterMessage.media.first(where: { $0 is IosappMediaFile }) as? IosappMediaFile {
                         afterFile = file
                     }
                 } else {
@@ -728,7 +728,7 @@ final class OverlayAudioPlayerControllerNode: ViewControllerTracingNode, ASGestu
             ),
             action: { [weak self] action in
                 if let self, case .undo = action {
-                    let _ = (self.context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: self.context.account.peerId))
+                    let _ = (self.context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: self.context.account.peerId))
                     |> deliverOnMainQueue).start(next: { [weak self] peer in
                         guard let self, let peer else {
                             return
@@ -1360,7 +1360,7 @@ final class OverlayAudioPlayerControllerNode: ViewControllerTracingNode, ASGestu
     }
     
     private func openMessageContextMenu(message: Message, node: ASDisplayNode, frame: CGRect, recognizer: TapLongTapOrDoubleTapGestureRecognizer? = nil, gesture: ContextGesture? = nil, location: CGPoint? = nil) {
-        guard let node = node as? ContextExtractedContentContainingNode, let peer = message.peers[message.id.peerId].flatMap({ PeerReference($0) }), let file = message.media.first(where: { $0 is TelegramMediaFile}) as? TelegramMediaFile else {
+        guard let node = node as? ContextExtractedContentContainingNode, let peer = message.peers[message.id.peerId].flatMap({ PeerReference($0) }), let file = message.media.first(where: { $0 is IosappMediaFile}) as? IosappMediaFile else {
             return
         }
         let context = self.context
@@ -1497,11 +1497,11 @@ final class OverlayAudioPlayerControllerNode: ViewControllerTracingNode, ASGestu
                     canDelete = true
                 }
             } else if let peer = message.peers[message.id.peerId] {
-                if peer is TelegramUser || peer is TelegramSecretChat {
+                if peer is IosappUser || peer is IosappSecretChat {
                     canDelete = true
-                } else if let _ = peer as? TelegramGroup {
+                } else if let _ = peer as? IosappGroup {
                     canDelete = true
-                } else if let channel = peer as? TelegramChannel {
+                } else if let channel = peer as? IosappChannel {
                     if message.flags.contains(.Incoming) {
                         canDelete = channel.hasPermission(.deleteAllMessages)
                     } else {
@@ -1532,7 +1532,7 @@ final class OverlayAudioPlayerControllerNode: ViewControllerTracingNode, ASGestu
                             f(.default)
                             self.removeFromSavedMusic(file: fileReference)
                         } else {
-                            c?.setItems(context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: message.id.peerId))
+                            c?.setItems(context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: message.id.peerId))
                             |> map { peer -> ContextController.Items in
                                 var items: [ContextMenuItem] = []
                                 let messageIds = [message.id]

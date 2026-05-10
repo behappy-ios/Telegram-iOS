@@ -736,12 +736,12 @@ final class ShareWithPeersScreenComponent: Component {
             let context = component.context
             if peer.id.namespace == Namespaces.Peer.CloudGroup {
                 let _ = (context.engine.data.subscribe(
-                    TelegramEngine.EngineData.Item.Peer.LegacyGroupParticipants(id: peer.id)
+                    IosappEngine.EngineData.Item.Peer.LegacyGroupParticipants(id: peer.id)
                 )
                 |> mapToSignal { participants -> Signal<[EnginePeer], NoError> in
                     if case let .known(participants) = participants {
                         return context.engine.data.get(
-                            EngineDataMap(participants.map { TelegramEngine.EngineData.Item.Peer.Peer(id: $0.peerId) })
+                            EngineDataMap(participants.map { IosappEngine.EngineData.Item.Peer.Peer(id: $0.peerId) })
                         )
                         |> map { peers in
                             var result: [EnginePeer] = []
@@ -774,7 +774,7 @@ final class ShareWithPeersScreenComponent: Component {
                             if item.peer.id == context.account.peerId {
                                 continue
                             }
-                            if let user = item.peer as? TelegramUser, user.botInfo != nil {
+                            if let user = item.peer as? IosappUser, user.botInfo != nil {
                                 continue
                             }
                             peers.append(EnginePeer(item.peer))
@@ -917,9 +917,9 @@ final class ShareWithPeersScreenComponent: Component {
                         var imageSignal: Signal<UIImage?, NoError>?
                         
                         var selectedMedia: Media?
-                        if let image = story.media._asMedia() as? TelegramMediaImage {
+                        if let image = story.media._asMedia() as? IosappMediaImage {
                             selectedMedia = image
-                        } else if let file = story.media._asMedia() as? TelegramMediaFile {
+                        } else if let file = story.media._asMedia() as? IosappMediaFile {
                             selectedMedia = file
                         }
                         
@@ -1319,7 +1319,7 @@ final class ShareWithPeersScreenComponent: Component {
                                                 case .channelBoostRequired:
                                                     let _ = combineLatest(
                                                         queue: Queue.mainQueue(),
-                                                        component.context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: peer.id)),
+                                                        component.context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: peer.id)),
                                                         component.context.engine.peers.getChannelBoostStatus(peerId: peer.id),
                                                         component.context.engine.peers.getMyBoostStatus()
                                                     ).start(next: { [weak self] peer, boostStatus, myBoostStatus in
@@ -3019,7 +3019,7 @@ final class ShareWithPeersScreenComponent: Component {
                                 
                                 let complete = {
                                     let peers = component.context.engine.data.get(EngineDataMap(selectedPeers.map { id in
-                                        return TelegramEngine.EngineData.Item.Peer.Peer(id: id)
+                                        return IosappEngine.EngineData.Item.Peer.Peer(id: id)
                                     }))
                                     
                                     let _ = (peers
@@ -3076,7 +3076,7 @@ final class ShareWithPeersScreenComponent: Component {
                                     controller.present(alertController, in: .window(.root))
                                 }
                                 
-                                func matchingUsername(user: TelegramUser, usernames: Set<String>) -> String? {
+                                func matchingUsername(user: IosappUser, usernames: Set<String>) -> String? {
                                     for username in user.usernames {
                                         if usernames.contains(username.username) {
                                             return username.username
@@ -3104,7 +3104,7 @@ final class ShareWithPeersScreenComponent: Component {
                                                 var filteredMentions = Set(component.mentions)
                                                 for peerId in selectedPeerIds {
                                                     if let peer = transaction.getPeer(peerId) {
-                                                        if let user = peer as? TelegramUser {
+                                                        if let user = peer as? IosappUser {
                                                             if let username = matchingUsername(user: user, usernames: filteredMentions) {
                                                                 filteredMentions.remove(username)
                                                             }
@@ -3126,7 +3126,7 @@ final class ShareWithPeersScreenComponent: Component {
                                             })
                                         }
                                     } else if case .contacts = base {
-                                        let _ = (context.engine.data.get(TelegramEngine.EngineData.Item.Contacts.List(includePresences: false))
+                                        let _ = (context.engine.data.get(IosappEngine.EngineData.Item.Contacts.List(includePresences: false))
                                         |> map { contacts -> [String] in
                                             var filteredMentions = Set(component.mentions)
                                             let peers = contacts.peers
@@ -3148,7 +3148,7 @@ final class ShareWithPeersScreenComponent: Component {
                                             }
                                         })
                                     } else if case .closeFriends = base {
-                                        let _ = (context.engine.data.get(TelegramEngine.EngineData.Item.Contacts.List(includePresences: false))
+                                        let _ = (context.engine.data.get(IosappEngine.EngineData.Item.Contacts.List(includePresences: false))
                                                  |> map { contacts -> [String] in
                                             var filteredMentions = Set(component.mentions)
                                             let peers = contacts.peers

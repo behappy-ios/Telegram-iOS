@@ -5,7 +5,7 @@ import Postbox
 import IosappCore
 import Display
 
-public func mapResourceToAvatarSizes(postbox: Postbox, resource: MediaResource, representations: [TelegramMediaImageRepresentation]) -> Signal<[Int: Data], NoError> {
+public func mapResourceToAvatarSizes(postbox: Postbox, resource: MediaResource, representations: [IosappMediaImageRepresentation]) -> Signal<[Int: Data], NoError> {
     return postbox.mediaBox.resourceData(resource)
     |> take(1)
     |> map { data -> [Int: Data] in

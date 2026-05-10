@@ -29,9 +29,9 @@ func updatePeerChatInclusionWithMinTimestamp(transaction: Transaction, id: PeerI
 }
 
 func minTimestampForPeerInclusion(_ peer: Peer) -> Int32? {
-    if let group = peer as? TelegramGroup {
+    if let group = peer as? IosappGroup {
         return group.creationDate
-    } else if let channel = peer as? TelegramChannel {
+    } else if let channel = peer as? IosappChannel {
         return channel.creationDate
     } else {
         return nil
@@ -48,7 +48,7 @@ func shouldKeepUserStoriesInFeed(peerId: PeerId, isContactOrMember: Bool) -> Boo
 func updatePeers(transaction: Transaction, accountPeerId: PeerId, peers: AccumulatedPeers) {
     var parsedPeers: [Peer] = []
     for (_, user) in peers.users {
-        if let telegramUser = TelegramUser.merge(transaction.getPeer(user.peerId) as? TelegramUser, rhs: user) {
+        if let telegramUser = IosappUser.merge(transaction.getPeer(user.peerId) as? IosappUser, rhs: user) {
             parsedPeers.append(telegramUser)
             switch user {
             case let .user(userData):
@@ -115,7 +115,7 @@ func updatePeers(transaction: Transaction, accountPeerId: PeerId, peers: Accumul
     updatePeerPresences(transaction: transaction, accountPeerId: accountPeerId, peerPresences: peers.users)
 }
 
-func _internal_updatePeerIsContact(transaction: Transaction, user: TelegramUser, isContact: Bool) {
+func _internal_updatePeerIsContact(transaction: Transaction, user: IosappUser, isContact: Bool) {
     let previousValue = shouldKeepUserStoriesInFeed(peerId: user.id, isContactOrMember: transaction.isPeerContact(peerId: user.id))
     let updatedValue = shouldKeepUserStoriesInFeed(peerId: user.id, isContactOrMember: isContact)
     
@@ -163,7 +163,7 @@ func _internal_updatePeerIsContact(transaction: Transaction, user: TelegramUser,
     }
 }
 
-private func _internal_updateChannelMembership(transaction: Transaction, channel: TelegramChannel, isMember: Bool, justJoined: Bool) {
+private func _internal_updateChannelMembership(transaction: Transaction, channel: IosappChannel, isMember: Bool, justJoined: Bool) {
     if isMember, let storiesHidden = channel.storiesHidden {
         if storiesHidden {
             if transaction.storySubscriptionsContains(key: .filtered, peerId: channel.id) {
@@ -216,20 +216,20 @@ public func updatePeersCustom(transaction: Transaction, peers: [Peer], update: (
         
         var updated = updated
         
-        if let previous = previous as? TelegramUser, let updatedUser = updated as? TelegramUser {
-            updated = TelegramUser.merge(lhs: previous, rhs: updatedUser)
+        if let previous = previous as? IosappUser, let updatedUser = updated as? IosappUser {
+            updated = IosappUser.merge(lhs: previous, rhs: updatedUser)
         }
         
-        if let updatedChannel = updated as? TelegramChannel {
+        if let updatedChannel = updated as? IosappChannel {
             var wasMember = false
             var wasHidden: Bool?
-            if let previous = previous as? TelegramChannel {
+            if let previous = previous as? IosappChannel {
                 wasMember = previous.participationStatus == .member
                 wasHidden = previous.storiesHidden
                 updated = mergeChannel(lhs: previous, rhs: updatedChannel)
             }
             
-            if let updated = updated as? TelegramChannel {
+            if let updated = updated as? IosappChannel {
                 let isMember = updated.participationStatus == .member
                 if isMember != wasMember || updated.storiesHidden != wasHidden {
                     _internal_updateChannelMembership(transaction: transaction, channel: updated, isMember: isMember, justJoined: previous == nil || wasHidden == nil)
@@ -239,7 +239,7 @@ public func updatePeersCustom(transaction: Transaction, peers: [Peer], update: (
         
         switch peerId.namespace {
             case Namespaces.Peer.CloudUser:
-                if let updated = updated as? TelegramUser, let previous = previous as? TelegramUser {
+                if let updated = updated as? IosappUser, let previous = previous as? IosappUser {
                     if let storiesHidden = updated.storiesHidden, storiesHidden != previous.storiesHidden {
                         if storiesHidden {
                             if transaction.storySubscriptionsContains(key: .filtered, peerId: updated.id) {
@@ -273,7 +273,7 @@ public func updatePeersCustom(transaction: Transaction, peers: [Peer], update: (
                     }
                 }
             case Namespaces.Peer.CloudGroup:
-                if let group = updated as? TelegramGroup {
+                if let group = updated as? IosappGroup {
                     if group.flags.contains(.deactivated) {
                         transaction.updatePeerChatListInclusion(peerId, inclusion: .notIncluded)
                     } else {
@@ -288,7 +288,7 @@ public func updatePeersCustom(transaction: Transaction, peers: [Peer], update: (
                     assertionFailure()
                 }
             case Namespaces.Peer.CloudChannel:
-                if let channel = updated as? TelegramChannel {
+                if let channel = updated as? IosappChannel {
                     if case .personal = channel.accessHash {
                         switch channel.participationStatus {
                         case .member:
@@ -305,7 +305,7 @@ public func updatePeersCustom(transaction: Transaction, peers: [Peer], update: (
                     assertionFailure()
                 }
             case Namespaces.Peer.SecretChat:
-                if let secretChat = updated as? TelegramSecretChat {
+                if let secretChat = updated as? IosappSecretChat {
                     let isActive: Bool
                     switch secretChat.embeddedState {
                         case .active, .handshake:
@@ -329,7 +329,7 @@ public func updatePeersCustom(transaction: Transaction, peers: [Peer], update: (
 func updatePeerPresences(transaction: Transaction, accountPeerId: PeerId, peerPresences: [PeerId: Api.User]) {
     var parsedPresences: [PeerId: PeerPresence] = [:]
     for (peerId, user) in peerPresences {
-        guard let presence = TelegramUserPresence(apiUser: user) else {
+        guard let presence = IosappUserPresence(apiUser: user) else {
             continue
         }
         switch presence.status {
@@ -353,8 +353,8 @@ func updatePeerPresences(transaction: Transaction, accountPeerId: PeerId, peerPr
     parsedPresences.removeValue(forKey: accountPeerId)
         
     transaction.updatePeerPresencesInternal(presences: parsedPresences, merge: { previous, updated in
-        if let previous = previous as? TelegramUserPresence, let updated = updated as? TelegramUserPresence, previous.lastActivity != updated.lastActivity {
-            return TelegramUserPresence(status: updated.status, lastActivity: max(previous.lastActivity, updated.lastActivity))
+        if let previous = previous as? IosappUserPresence, let updated = updated as? IosappUserPresence, previous.lastActivity != updated.lastActivity {
+            return IosappUserPresence(status: updated.status, lastActivity: max(previous.lastActivity, updated.lastActivity))
         }
         return updated
     })
@@ -366,8 +366,8 @@ func updatePeerPresencesClean(transaction: Transaction, accountPeerId: PeerId, p
         peerPresences.removeValue(forKey: accountPeerId)
     }
     transaction.updatePeerPresencesInternal(presences: peerPresences, merge: { previous, updated in
-        if let previous = previous as? TelegramUserPresence, let updated = updated as? TelegramUserPresence, previous.lastActivity != updated.lastActivity {
-            return TelegramUserPresence(status: updated.status, lastActivity: max(previous.lastActivity, updated.lastActivity))
+        if let previous = previous as? IosappUserPresence, let updated = updated as? IosappUserPresence, previous.lastActivity != updated.lastActivity {
+            return IosappUserPresence(status: updated.status, lastActivity: max(previous.lastActivity, updated.lastActivity))
         }
         return updated
     })
@@ -380,7 +380,7 @@ func updatePeerPresenceLastActivities(transaction: Transaction, accountPeerId: P
     }
     for (peerId, timestamp) in activities {
         transaction.updatePeerPresenceInternal(peerId: peerId, update: { previous in
-            if let previous = previous as? TelegramUserPresence, previous.lastActivity < timestamp {
+            if let previous = previous as? IosappUserPresence, previous.lastActivity < timestamp {
                 var updatedStatus = previous.status
                 switch updatedStatus {
                     case let .present(until):
@@ -390,7 +390,7 @@ func updatePeerPresenceLastActivities(transaction: Transaction, accountPeerId: P
                     default:
                         break
                 }
-                return TelegramUserPresence(status: updatedStatus, lastActivity: timestamp)
+                return IosappUserPresence(status: updatedStatus, lastActivity: timestamp)
             }
             return previous
         })

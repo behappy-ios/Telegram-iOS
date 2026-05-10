@@ -331,7 +331,7 @@ public final class ItemListPeerItem: ListViewItem, ItemListItem {
             public let animationCache: AnimationCache
             public let animationRenderer: MultiAnimationRenderer
             public let isPremiumDisabled: Bool
-            public let resolveInlineStickers: ([Int64]) -> Signal<[Int64: TelegramMediaFile], NoError>
+            public let resolveInlineStickers: ([Int64]) -> Signal<[Int64: IosappMediaFile], NoError>
             
             public init(
                 accountPeerId: EnginePeer.Id,
@@ -340,7 +340,7 @@ public final class ItemListPeerItem: ListViewItem, ItemListItem {
                 animationCache: AnimationCache,
                 animationRenderer: MultiAnimationRenderer,
                 isPremiumDisabled: Bool,
-                resolveInlineStickers: @escaping ([Int64]) -> Signal<[Int64: TelegramMediaFile], NoError>
+                resolveInlineStickers: @escaping ([Int64]) -> Signal<[Int64: IosappMediaFile], NoError>
             ) {
                 self.accountPeerId = accountPeerId
                 self.postbox = postbox
@@ -409,7 +409,7 @@ public final class ItemListPeerItem: ListViewItem, ItemListItem {
             }
         }
         
-        public var resolveInlineStickers: ([Int64]) -> Signal<[Int64: TelegramMediaFile], NoError> {
+        public var resolveInlineStickers: ([Int64]) -> Signal<[Int64: IosappMediaFile], NoError> {
             switch self {
             case let .account(context):
                 return { fileIds in

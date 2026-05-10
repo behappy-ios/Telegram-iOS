@@ -94,7 +94,7 @@ public func presentedLegacyCamera(context: AccountContext, peer: Peer?, chatLoca
     if let peer {
         controller.recipientName = EnginePeer(peer).displayTitle(strings: presentationData.strings, displayOrder: presentationData.nameDisplayOrder)
         if peer.id != context.account.peerId {
-            if peer is TelegramUser {
+            if peer is IosappUser {
                 controller.hasTimer = hasSchedule
             }
             controller.hasSilentPosting = true

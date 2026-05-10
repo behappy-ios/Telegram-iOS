@@ -13,7 +13,7 @@ private let titleFont = Font.regular(13.0)
 private let titleBoldFont = Font.bold(13.0)
 
 private func spoilerAttributes(primaryTextColor: UIColor) -> MarkdownAttributeSet {
-    return MarkdownAttributeSet(font: titleFont, textColor: primaryTextColor, additionalAttributes: [TelegramTextAttributes.Spoiler: true])
+    return MarkdownAttributeSet(font: titleFont, textColor: primaryTextColor, additionalAttributes: [IosappTextAttributes.Spoiler: true])
 }
 
 private func customEmojiAttributes(primaryTextColor: UIColor, emoji: ChatTextInputTextCustomEmojiAttribute) -> MarkdownAttributeSet {
@@ -47,9 +47,9 @@ private func addServiceMessageTextEntities(_ entities: [MessageTextEntity], to a
         let entityRange = NSRange(location: range.location + entity.range.lowerBound, length: length)
         switch entity.type {
         case .Spoiler:
-            attributedString.addAttribute(NSAttributedString.Key(rawValue: TelegramTextAttributes.Spoiler), value: true, range: entityRange)
+            attributedString.addAttribute(NSAttributedString.Key(rawValue: IosappTextAttributes.Spoiler), value: true, range: entityRange)
         case let .CustomEmoji(_, fileId):
-            attributedString.addAttribute(ChatTextInputAttributes.customEmoji, value: ChatTextInputTextCustomEmojiAttribute(interactivelySelectedFromPackId: nil, fileId: fileId, file: associatedMedia[MediaId(namespace: Namespaces.Media.CloudFile, id: fileId)] as? TelegramMediaFile), range: entityRange)
+            attributedString.addAttribute(ChatTextInputAttributes.customEmoji, value: ChatTextInputTextCustomEmojiAttribute(interactivelySelectedFromPackId: nil, fileId: fileId, file: associatedMedia[MediaId(namespace: Namespaces.Media.CloudFile, id: fileId)] as? IosappMediaFile), range: entityRange)
         default:
             break
         }
@@ -57,7 +57,7 @@ private func addServiceMessageTextEntities(_ entities: [MessageTextEntity], to a
 }
 
 private func peerMentionAttributes(primaryTextColor: UIColor, peerId: EnginePeer.Id) -> MarkdownAttributeSet {
-    return MarkdownAttributeSet(font: titleBoldFont, textColor: primaryTextColor, additionalAttributes: [TelegramTextAttributes.PeerMention: TelegramPeerMention(peerId: peerId, mention: "")])
+    return MarkdownAttributeSet(font: titleBoldFont, textColor: primaryTextColor, additionalAttributes: [IosappTextAttributes.PeerMention: IosappPeerMention(peerId: peerId, mention: "")])
 }
 
 private func peerMentionsAttributes(primaryTextColor: UIColor, peerIds: [(Int, EnginePeer.Id?)]) -> [Int: MarkdownAttributeSet] {
@@ -75,7 +75,7 @@ public func plainServiceMessageString(strings: PresentationStrings, nameDisplayO
         var ranges: [NSRange] = []
         var customEmojiRanges: [(NSRange, ChatTextInputTextCustomEmojiAttribute)] = []
         attributedString.enumerateAttributes(in: NSRange(location: 0, length: attributedString.length), options: [], using: { attributes, range, _ in
-            if let _ = attributes[NSAttributedString.Key(rawValue: TelegramTextAttributes.Spoiler)] {
+            if let _ = attributes[NSAttributedString.Key(rawValue: IosappTextAttributes.Spoiler)] {
                 ranges.append(range)
             } else if let value = attributes[ChatTextInputAttributes.customEmoji] as? ChatTextInputTextCustomEmojiAttribute {
                 customEmojiRanges.append((range, value))
@@ -115,7 +115,7 @@ private func peerDisplayTitles(_ peers: [Peer], strings: PresentationStrings, na
     }
 }
 
-public func universalServiceMessageString(presentationData: (PresentationTheme, TelegramWallpaper)?, strings: PresentationStrings, nameDisplayOrder: PresentationPersonNameOrder, dateTimeFormat: PresentationDateTimeFormat, message: EngineMessage, messageCount: Int? = nil, accountPeerId: EnginePeer.Id, forChatList: Bool, forForumOverview: Bool, forAdditionalServiceMessage: Bool = false) -> NSAttributedString? {
+public func universalServiceMessageString(presentationData: (PresentationTheme, IosappWallpaper)?, strings: PresentationStrings, nameDisplayOrder: PresentationPersonNameOrder, dateTimeFormat: PresentationDateTimeFormat, message: EngineMessage, messageCount: Int? = nil, accountPeerId: EnginePeer.Id, forChatList: Bool, forForumOverview: Bool, forAdditionalServiceMessage: Bool = false) -> NSAttributedString? {
     var attributedString: NSAttributedString?
     
     let primaryTextColor: UIColor
@@ -156,13 +156,13 @@ public func universalServiceMessageString(presentationData: (PresentationTheme, 
     }
     
     for media in message.media {
-        if let action = media as? TelegramMediaAction {
+        if let action = media as? IosappMediaAction {
             let authorName = message.author?.displayTitle(strings: strings, displayOrder: nameDisplayOrder) ?? ""
             let compactAuthorName = message.author?.compactDisplayTitle ?? ""
             
             var isChannel = false
             var isMonoforum = false
-            if message.id.peerId.namespace == Namespaces.Peer.CloudChannel, let peer = message.peers[message.id.peerId] as? TelegramChannel {
+            if message.id.peerId.namespace == Namespaces.Peer.CloudChannel, let peer = message.peers[message.id.peerId] as? IosappChannel {
                 if case .broadcast = peer.info {
                     isChannel = true
                 }
@@ -186,7 +186,7 @@ public func universalServiceMessageString(presentationData: (PresentationTheme, 
                 }
             case let .addedMembers(peerIds):
                 if let peerId = peerIds.first, peerId == message.author?.id {
-                    if let peer = message.peers[message.id.peerId] as? TelegramChannel, case .broadcast = peer.info {
+                    if let peer = message.peers[message.id.peerId] as? IosappChannel, case .broadcast = peer.info {
                         attributedString = addAttributesToStringWithRanges(strings.Notification_JoinedChannel(authorName)._tuple, body: bodyAttributes, argumentAttributes: peerMentionsAttributes(primaryTextColor: primaryTextColor, peerIds: [(0, peerId)]))
                     } else {
                         attributedString = addAttributesToStringWithRanges(strings.Notification_JoinedChat(authorName)._tuple, body: bodyAttributes, argumentAttributes: peerMentionsAttributes(primaryTextColor: primaryTextColor, peerIds: [(0, peerId)]))
@@ -205,7 +205,7 @@ public func universalServiceMessageString(presentationData: (PresentationTheme, 
                 }
             case let .removedMembers(peerIds):
                 if peerIds.first == message.author?.id {
-                    if let peer = message.peers[message.id.peerId] as? TelegramChannel, case .broadcast = peer.info {
+                    if let peer = message.peers[message.id.peerId] as? IosappChannel, case .broadcast = peer.info {
                         attributedString = addAttributesToStringWithRanges(strings.Notification_LeftChannel(authorName)._tuple, body: bodyAttributes, argumentAttributes: peerMentionsAttributes(primaryTextColor: primaryTextColor, peerIds: [(0, message.author?.id)]))
                     } else {
                         attributedString = addAttributesToStringWithRanges(strings.Notification_LeftChat(authorName)._tuple, body: bodyAttributes, argumentAttributes: peerMentionsAttributes(primaryTextColor: primaryTextColor, peerIds: [(0, message.author?.id)]))
@@ -270,7 +270,7 @@ public func universalServiceMessageString(presentationData: (PresentationTheme, 
                     case sticker
                     case location
                     case contact
-                    case poll(TelegramMediaPollKind)
+                    case poll(IosappMediaPollKind)
                     case deleted
                 }
                 
@@ -293,13 +293,13 @@ public func universalServiceMessageString(presentationData: (PresentationTheme, 
                     }
                     type = .text(pinnedMessage.text, entities)
                     inner: for media in pinnedMessage.media {
-                        if media is TelegramMediaGame {
+                        if media is IosappMediaGame {
                             type = .game
                             break inner
                         }
-                        if let _ = media as? TelegramMediaImage {
+                        if let _ = media as? IosappMediaImage {
                             type = .photo
-                        } else if let file = media as? TelegramMediaFile {
+                        } else if let file = media as? IosappMediaFile {
                             type = .file
                             if file.isAnimated {
                                 type = .gif
@@ -329,11 +329,11 @@ public func universalServiceMessageString(presentationData: (PresentationTheme, 
                                     }
                                 }
                             }
-                        } else if let _ = media as? TelegramMediaMap {
+                        } else if let _ = media as? IosappMediaMap {
                             type = .location
-                        } else if let _ = media as? TelegramMediaContact {
+                        } else if let _ = media as? IosappMediaContact {
                             type = .contact
-                        } else if let poll = media as? TelegramMediaPoll {
+                        } else if let poll = media as? IosappMediaPoll {
                             type = .poll(poll.kind)
                         }
                     }
@@ -380,7 +380,7 @@ public func universalServiceMessageString(presentationData: (PresentationTheme, 
                             case let .CustomEmoji(_, fileId):
                                 let index = ranges.count
                                 ranges.append((ranges.count, NSRange(location: location, length: length)))
-                                attributes[index] = customEmojiAttributes(primaryTextColor: primaryTextColor, emoji: ChatTextInputTextCustomEmojiAttribute(interactivelySelectedFromPackId: nil, fileId: fileId, file: message.associatedMedia[MediaId(namespace: Namespaces.Media.CloudFile, id: fileId)] as? TelegramMediaFile))
+                                attributes[index] = customEmojiAttributes(primaryTextColor: primaryTextColor, emoji: ChatTextInputTextCustomEmojiAttribute(interactivelySelectedFromPackId: nil, fileId: fileId, file: message.associatedMedia[MediaId(namespace: Namespaces.Media.CloudFile, id: fileId)] as? IosappMediaFile))
                             default:
                                 break
                             }
@@ -448,7 +448,7 @@ public func universalServiceMessageString(presentationData: (PresentationTheme, 
                 if timeout > 0 {
                     let timeValue = timeIntervalString(strings: strings, value: timeout, preferLowerValue: false)
                     
-                    if let user = messagePeer as? TelegramUser {
+                    if let user = messagePeer as? IosappUser {
                         if let autoSourcePeerId = autoSourcePeerId {
                             if autoSourcePeerId == accountPeerId {
                                 attributedString = NSAttributedString(string: strings.Conversation_AutoremoveTimerSetUserGlobalYou(timeValue).string, font: titleFont, textColor: primaryTextColor)
@@ -460,13 +460,13 @@ public func universalServiceMessageString(presentationData: (PresentationTheme, 
                         } else {
                             attributedString = NSAttributedString(string: strings.Conversation_AutoremoveTimerSetUser(authorString, timeValue).string, font: titleFont, textColor: primaryTextColor)
                         }
-                    } else if let _ = messagePeer as? TelegramGroup {
+                    } else if let _ = messagePeer as? IosappGroup {
                         if message.author?.id == accountPeerId {
                             attributedString = NSAttributedString(string: strings.Conversation_AutoremoveTimerSetUserYou(timeValue).string, font: titleFont, textColor: primaryTextColor)
                         } else {
                             attributedString = NSAttributedString(string: strings.Conversation_AutoremoveTimerSetGroup(timeValue).string, font: titleFont, textColor: primaryTextColor)
                         }
-                    } else if let channel = messagePeer as? TelegramChannel {
+                    } else if let channel = messagePeer as? IosappChannel {
                         if message.author?.id == accountPeerId {
                             attributedString = NSAttributedString(string: strings.Conversation_AutoremoveTimerSetUserYou(timeValue).string, font: titleFont, textColor: primaryTextColor)
                         } else {
@@ -485,19 +485,19 @@ public func universalServiceMessageString(presentationData: (PresentationTheme, 
                     }
                 } else {
                     let string: String
-                    if let _ = messagePeer as? TelegramUser {
+                    if let _ = messagePeer as? IosappUser {
                         if message.author?.id == accountPeerId {
                             string = strings.Conversation_AutoremoveTimerRemovedUserYou
                         } else {
                             string = strings.Conversation_AutoremoveTimerRemovedUser(authorString).string
                         }
-                    } else if let _ = messagePeer as? TelegramGroup {
+                    } else if let _ = messagePeer as? IosappGroup {
                         if message.author?.id == accountPeerId {
                             string = strings.Conversation_AutoremoveTimerRemovedUserYou
                         } else {
                             string = strings.Conversation_AutoremoveTimerRemovedGroup
                         }
-                    } else if let channel = messagePeer as? TelegramChannel {
+                    } else if let channel = messagePeer as? IosappChannel {
                         if case .group = channel.info {
                             if message.author?.id == accountPeerId {
                                 string = strings.Conversation_AutoremoveTimerRemovedUserYou
@@ -531,7 +531,7 @@ public func universalServiceMessageString(presentationData: (PresentationTheme, 
                 inner: for attribute in message.attributes {
                     if let attribute = attribute as? ReplyMessageAttribute, let message = message.associatedMessages[attribute.messageId] {
                         for media in message.media {
-                            if let game = media as? TelegramMediaGame {
+                            if let game = media as? IosappMediaGame {
                                 gameTitle = game.title
                                 break inner
                             }
@@ -577,7 +577,7 @@ public func universalServiceMessageString(presentationData: (PresentationTheme, 
                 var invoiceTitle: String?
                 if let invoiceMessage = invoiceMessage {
                     for media in invoiceMessage.media {
-                        if let invoice = media as? TelegramMediaInvoice {
+                        if let invoice = media as? IosappMediaInvoice {
                             invoiceTitle = invoice.title
                         }
                     }
@@ -822,7 +822,7 @@ public func universalServiceMessageString(presentationData: (PresentationTheme, 
                     case let .emoticon(emoticon):
                         emoji = emoticon
                     case let .gift(starGift, _):
-                        var file: TelegramMediaFile?
+                        var file: IosappMediaFile?
                         
                         if case let .unique(uniqueGift) = starGift {
                             giftTitle = "\(uniqueGift.title) #\(formatCollectibleNumber(uniqueGift.number, dateTimeFormat: dateTimeFormat))"
@@ -1068,7 +1068,7 @@ public func universalServiceMessageString(presentationData: (PresentationTheme, 
             case let .setChatWallpaper(_, forBoth):
                 var isGroup = false
                 let messagePeer = message.peers[message.id.peerId]
-                if let channel = messagePeer as? TelegramChannel, case .group = channel.info {
+                if let channel = messagePeer as? IosappChannel, case .group = channel.info {
                     isGroup = true
                 }
                 if message.author?.id == accountPeerId {
@@ -1117,7 +1117,7 @@ public func universalServiceMessageString(presentationData: (PresentationTheme, 
             case let .giveawayLaunched(stars):
                 var isGroup = false
                 let messagePeer = message.peers[message.id.peerId]
-                if let channel = messagePeer as? TelegramChannel, case .group = channel.info {
+                if let channel = messagePeer as? IosappChannel, case .group = channel.info {
                     isGroup = true
                 }
                 let resultTitleString: PresentationStrings.FormattedString
@@ -1133,7 +1133,7 @@ public func universalServiceMessageString(presentationData: (PresentationTheme, 
             case let .giveawayResults(winners, unclaimed, stars):
                 var isGroup = false
                 let messagePeer = message.peers[message.id.peerId]
-                if let channel = messagePeer as? TelegramChannel, case .group = channel.info {
+                if let channel = messagePeer as? IosappChannel, case .group = channel.info {
                     isGroup = true
                 }
                 if winners == 0 {
@@ -1202,7 +1202,7 @@ public func universalServiceMessageString(presentationData: (PresentationTheme, 
                 if range.location != NSNotFound {
                     let peerName = message.peers[peerId].flatMap { EnginePeer($0) }?.compactDisplayTitle ?? ""
                     mutableString.replaceCharacters(in: range, with: NSAttributedString(string: peerName, font: titleBoldFont, textColor: primaryTextColor))
-                    mutableString.addAttribute(NSAttributedString.Key(TelegramTextAttributes.PeerMention), value: TelegramPeerMention(peerId: peerId, mention: ""), range: NSMakeRange(range.location, (peerName as NSString).length))
+                    mutableString.addAttribute(NSAttributedString.Key(IosappTextAttributes.PeerMention), value: IosappPeerMention(peerId: peerId, mention: ""), range: NSMakeRange(range.location, (peerName as NSString).length))
                 }
                 attributedString = mutableString
             case .prizeStars:
@@ -1234,7 +1234,7 @@ public func universalServiceMessageString(presentationData: (PresentationTheme, 
                     }
                     if isAuctionAcquired {
                         attributedString = addAttributesToStringWithRanges(strings.Notification_GiftAuction_Acquired(starsPrice)._tuple, body: bodyAttributes, argumentAttributes: [0: boldAttributes])
-                    } else if message.id.peerId.isTelegramNotifications && senderId == nil {
+                    } else if message.id.peerId.isIosappNotifications && senderId == nil {
                         attributedString = NSAttributedString(string: strings.Notification_StarsGift_SentSomeone, font: titleFont, textColor: primaryTextColor)
                     } else if message.id.peerId == accountPeerId {
                         attributedString = addAttributesToStringWithRanges(strings.Notification_StarsGift_Self_Bought(starsPrice)._tuple, body: bodyAttributes, argumentAttributes: [0: boldAttributes])
@@ -1306,7 +1306,7 @@ public func universalServiceMessageString(presentationData: (PresentationTheme, 
                         var peerName = EnginePeer(messagePeer).compactDisplayTitle
                         var peerIds: [(Int, EnginePeer.Id?)] = [(0, messagePeer.id)]
                         if isUpgrade {
-                            if message.id.peerId.isTelegramNotifications {
+                            if message.id.peerId.isIosappNotifications {
                                 attributedString = NSAttributedString(string: strings.Notification_StarsGift_UpgradeChannel, font: titleFont, textColor: primaryTextColor)
                             } else if message.id.peerId == accountPeerId {
                                 attributedString = NSAttributedString(string: strings.Notification_StarsGift_UpgradeSelf, font: titleFont, textColor: primaryTextColor)
@@ -1356,7 +1356,7 @@ public func universalServiceMessageString(presentationData: (PresentationTheme, 
                                 let attributes: [Int: MarkdownAttributeSet] = [0: boldAttributes]
                                 let giftTitle = "\(gift.title) #\(presentationStringsFormattedNumber(gift.number, dateTimeFormat.groupingSeparator))"
                                 attributedString = addAttributesToStringWithRanges(strings.Notification_StarsGift_Assigned(giftTitle)._tuple, body: bodyAttributes, argumentAttributes: attributes)
-                            } else if message.id.peerId.isTelegramNotifications && senderId == nil {
+                            } else if message.id.peerId.isIosappNotifications && senderId == nil {
                                 attributedString = NSAttributedString(string: strings.Notification_StarsGift_SentSomeone, font: titleFont, textColor: primaryTextColor)
                             } else if message.author?.id == accountPeerId {
                                 if let resaleStars {
@@ -1429,12 +1429,12 @@ public func universalServiceMessageString(presentationData: (PresentationTheme, 
                 if message.author?.id == accountPeerId, let messagePeerValue = message.peers[message.id.peerId] {
                     isOutgoing = true
                     messagePeer = EnginePeer(messagePeerValue)
-                } else if message.id.peerId.namespace == Namespaces.Peer.CloudChannel, let peer = message.peers[message.id.peerId] as? TelegramChannel, peer.isMonoForum {
+                } else if message.id.peerId.namespace == Namespaces.Peer.CloudChannel, let peer = message.peers[message.id.peerId] as? IosappChannel, peer.isMonoForum {
                     if let author = message.author, let threadId = message.threadId, let threadPeer = message.peers[PeerId(threadId)], author.id != threadPeer.id {
                         if case .channel = author {
                             var isUser = true
-                            if let peer = message.peers[message.id.peerId] as? TelegramChannel {
-                                if peer.isMonoForum, let linkedMonoforumId = peer.linkedMonoforumId, let mainChannel = message.peers[linkedMonoforumId] as? TelegramChannel, mainChannel.hasPermission(.manageDirect) {
+                            if let peer = message.peers[message.id.peerId] as? IosappChannel {
+                                if peer.isMonoForum, let linkedMonoforumId = peer.linkedMonoforumId, let mainChannel = message.peers[linkedMonoforumId] as? IosappChannel, mainChannel.hasPermission(.manageDirect) {
                                     isUser = false
                                 }
                             }
@@ -1486,7 +1486,7 @@ public func universalServiceMessageString(presentationData: (PresentationTheme, 
                             resultString = PresentationStrings.FormattedString(string: rawString, ranges: [])
                         }
                     } else {
-                        if let channel = message.peers[message.id.peerId] as? TelegramChannel, case .broadcast = channel.info {
+                        if let channel = message.peers[message.id.peerId] as? IosappChannel, case .broadcast = channel.info {
                             resultString = strings.Notification_ChannelMessageDisabled(peerName)
                         } else {
                             resultString = strings.Notification_PaidMessagePriceChanged(peerName, starsString)
@@ -1495,11 +1495,11 @@ public func universalServiceMessageString(presentationData: (PresentationTheme, 
                     attributedString = addAttributesToStringWithRanges(resultString._tuple, body: bodyAttributes, argumentAttributes: attributes)
                 }
             case let .todoCompletions(completed, incompleted):
-                var todo: TelegramMediaTodo?
+                var todo: IosappMediaTodo?
                 for attribute in message.attributes {
                     if let attribute = attribute as? ReplyMessageAttribute, let message = message.associatedMessages[attribute.messageId] {
                         for media in message.media {
-                            if let media = media as? TelegramMediaTodo {
+                            if let media = media as? IosappMediaTodo {
                                 todo = media
                             }
                         }
@@ -1557,7 +1557,7 @@ public func universalServiceMessageString(presentationData: (PresentationTheme, 
                 for attribute in message.attributes {
                     if let attribute = attribute as? ReplyMessageAttribute, let message = message.associatedMessages[attribute.messageId] {
                         for media in message.media {
-                            if let todo = media as? TelegramMediaTodo {
+                            if let todo = media as? IosappMediaTodo {
                                 todoTitle = todo.text
                             }
                         }
@@ -1626,9 +1626,9 @@ public func universalServiceMessageString(presentationData: (PresentationTheme, 
             case let .suggestedPostSuccess(amount):
                 var isUser = true
                 var channelName: String = ""
-                if let peer = message.peers[message.id.peerId] as? TelegramChannel {
+                if let peer = message.peers[message.id.peerId] as? IosappChannel {
                     channelName = peer.title
-                    if peer.isMonoForum, let linkedMonoforumId = peer.linkedMonoforumId, let mainChannel = message.peers[linkedMonoforumId] as? TelegramChannel, mainChannel.hasPermission(.manageDirect) {
+                    if peer.isMonoForum, let linkedMonoforumId = peer.linkedMonoforumId, let mainChannel = message.peers[linkedMonoforumId] as? IosappChannel, mainChannel.hasPermission(.manageDirect) {
                         isUser = false
                     }
                 }
@@ -1645,9 +1645,9 @@ public func universalServiceMessageString(presentationData: (PresentationTheme, 
             case let .suggestedPostRefund(info):
                 var isUser = true
                 var channelName: String = ""
-                if let peer = message.peers[message.id.peerId] as? TelegramChannel {
+                if let peer = message.peers[message.id.peerId] as? IosappChannel {
                     channelName = peer.title
-                    if peer.isMonoForum, let linkedMonoforumId = peer.linkedMonoforumId, let mainChannel = message.peers[linkedMonoforumId] as? TelegramChannel, mainChannel.hasPermission(.manageDirect) {
+                    if peer.isMonoForum, let linkedMonoforumId = peer.linkedMonoforumId, let mainChannel = message.peers[linkedMonoforumId] as? IosappChannel, mainChannel.hasPermission(.manageDirect) {
                         isUser = false
                     }
                 }
@@ -1901,7 +1901,7 @@ public func universalServiceMessageString(presentationData: (PresentationTheme, 
                 attributedString = nil
             }
             break
-        } else if let expiredMedia = media as? TelegramMediaExpiredContent {
+        } else if let expiredMedia = media as? IosappMediaExpiredContent {
             switch expiredMedia.data {
             case .image:
                 attributedString = NSAttributedString(string: strings.Message_ImageExpired, font: titleFont, textColor: primaryTextColor)
@@ -1912,7 +1912,7 @@ public func universalServiceMessageString(presentationData: (PresentationTheme, 
             case .voiceMessage:
                 attributedString = NSAttributedString(string: strings.Message_VoiceMessageExpired, font: titleFont, textColor: primaryTextColor)
             }
-        } else if let _ = media as? TelegramMediaStory {
+        } else if let _ = media as? IosappMediaStory {
             let compactPeerName = message.peers[message.id.peerId].flatMap(EnginePeer.init)?.compactDisplayTitle ?? ""
             
             let resultTitleString: PresentationStrings.FormattedString
@@ -1922,7 +1922,7 @@ public func universalServiceMessageString(presentationData: (PresentationTheme, 
                 resultTitleString = strings.Conversation_StoryExpiredMentionTextOutgoing(compactPeerName)
             }
             attributedString = addAttributesToStringWithRanges(resultTitleString._tuple, body: bodyAttributes, argumentAttributes: [0: boldAttributes])
-        } else if let dice = media as? TelegramMediaDice, let gameOutcome = dice.gameOutcome {
+        } else if let dice = media as? IosappMediaDice, let gameOutcome = dice.gameOutcome {
             if let value = dice.value {
                 let rawString: String
                 if message.author?.id == accountPeerId {

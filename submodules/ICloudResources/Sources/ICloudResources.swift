@@ -24,7 +24,7 @@ public struct ICloudFileResourceId {
     }
 }
 
-public class ICloudFileResource: TelegramMediaResource {
+public class ICloudFileResource: IosappMediaResource {
     public let urlData: String
     public let thumbnail: Bool
     

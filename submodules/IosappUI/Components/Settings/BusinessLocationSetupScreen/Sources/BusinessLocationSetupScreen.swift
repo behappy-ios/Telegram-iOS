@@ -27,13 +27,13 @@ final class BusinessLocationSetupScreenComponent: Component {
     typealias EnvironmentType = ViewControllerComponentContainer.Environment
     
     let context: AccountContext
-    let initialValue: TelegramBusinessLocation?
-    let completion: (TelegramBusinessLocation?) -> Void
+    let initialValue: IosappBusinessLocation?
+    let completion: (IosappBusinessLocation?) -> Void
 
     init(
         context: AccountContext,
-        initialValue: TelegramBusinessLocation?,
-        completion: @escaping (TelegramBusinessLocation?) -> Void
+        initialValue: IosappBusinessLocation?,
+        completion: @escaping (IosappBusinessLocation?) -> Void
     ) {
         self.context = context
         self.initialValue = initialValue
@@ -81,7 +81,7 @@ final class BusinessLocationSetupScreenComponent: Component {
         private var isLoadingGeocodedAddress: Bool = false
         private var geocodeDisposable: Disposable?
         
-        private var mapCoordinates: TelegramBusinessLocation.Coordinates?
+        private var mapCoordinates: IosappBusinessLocation.Coordinates?
         private var mapCoordinatesManuallySet: Bool = false
         
         private var applyButtonItem: UIBarButtonItem?
@@ -175,15 +175,15 @@ final class BusinessLocationSetupScreenComponent: Component {
             }
         }
         
-        private func currentBusinessLocation() -> TelegramBusinessLocation? {
+        private func currentBusinessLocation() -> IosappBusinessLocation? {
             var address = ""
             if let textView = self.addressSection.findTaggedView(tag: self.textFieldTag) as? ListMultilineTextFieldItemComponent.View {
                 address = textView.currentText
             }
             
-            var businessLocation: TelegramBusinessLocation?
+            var businessLocation: IosappBusinessLocation?
             if !address.isEmpty || self.mapCoordinates != nil {
-                businessLocation = TelegramBusinessLocation(address: address, coordinates: self.mapCoordinates)
+                businessLocation = IosappBusinessLocation(address: address, coordinates: self.mapCoordinates)
             }
             return businessLocation
         }
@@ -225,7 +225,7 @@ final class BusinessLocationSetupScreenComponent: Component {
                     return
                 }
                 
-                self.mapCoordinates = TelegramBusinessLocation.Coordinates(latitude: location.latitude, longitude: location.longitude)
+                self.mapCoordinates = IosappBusinessLocation.Coordinates(latitude: location.latitude, longitude: location.longitude)
                 self.mapCoordinatesManuallySet = true
                 if let textView = self.addressSection.findTaggedView(tag: self.textFieldTag) as? ListMultilineTextFieldItemComponent.View, textView.currentText.isEmpty {
                     self.resetAddressText = address
@@ -636,8 +636,8 @@ public final class BusinessLocationSetupScreen: ViewControllerComponentContainer
     
     public init(
         context: AccountContext,
-        initialValue: TelegramBusinessLocation?,
-        completion: @escaping (TelegramBusinessLocation?) -> Void
+        initialValue: IosappBusinessLocation?,
+        completion: @escaping (IosappBusinessLocation?) -> Void
     ) {
         self.context = context
         

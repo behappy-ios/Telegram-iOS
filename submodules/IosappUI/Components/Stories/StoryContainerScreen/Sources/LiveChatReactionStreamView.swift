@@ -93,7 +93,7 @@ private func avatarViewLettersImage(size: CGSize, peerId: EnginePeer.Id, letters
     return image
 }
 
-private func makePeerBadgeImage(engine: TelegramEngine, peer: EnginePeer, count: Int) async -> UIImage {
+private func makePeerBadgeImage(engine: IosappEngine, peer: EnginePeer, count: Int) async -> UIImage {
     let avatarSize: CGFloat = 16.0
     let avatarInset: CGFloat = 2.0
     let avatarIconSpacing: CGFloat = 2.0
@@ -173,10 +173,10 @@ private actor LiveChatReactionItemTaskQueue {
         }
     }
     
-    private let engine: TelegramEngine
+    private let engine: IosappEngine
     private var tasks: [PeerTask] = []
     
-    init(engine: TelegramEngine) {
+    init(engine: IosappEngine) {
         self.engine = engine
     }
     

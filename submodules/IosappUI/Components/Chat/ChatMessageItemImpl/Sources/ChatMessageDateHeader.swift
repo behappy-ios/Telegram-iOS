@@ -1089,8 +1089,8 @@ public final class ChatMessageAvatarHeaderNodeImpl: ListViewItemHeaderNode, Chat
                 }
                 
                 let cachedPeerData = peerView.cachedData as? CachedUserData
-                var personalPhoto: TelegramMediaImage?
-                var profilePhoto: TelegramMediaImage?
+                var personalPhoto: IosappMediaImage?
+                var profilePhoto: IosappMediaImage?
                 var isKnown = false
                 
                 if let cachedPeerData = cachedPeerData {
@@ -1298,7 +1298,7 @@ public final class ChatMessageAvatarHeaderNodeImpl: ListViewItemHeaderNode, Chat
                 } else if let adMessageId = self.adMessageId {
                     self.controllerInteraction?.activateAdAction(adMessageId, nil, false, false)
                 } else {
-                    if let channel = peer as? TelegramChannel, case .broadcast = channel.info {
+                    if let channel = peer as? IosappChannel, case .broadcast = channel.info {
                         self.controllerInteraction?.openPeer(EnginePeer(peer), .chat(textInputState: nil, subject: nil, peekData: nil), self.messageReference, .default)
                     } else {
                         self.controllerInteraction?.openPeer(EnginePeer(peer), .info(nil), self.messageReference, .groupParticipant(storyStats: nil, avatarHeaderNode: self))

@@ -567,7 +567,7 @@ public final class PendingReactionsMessageAttribute: MessageAttribute {
 public final class PendingStarsReactionsMessageAttribute: MessageAttribute {
     public let accountPeerId: PeerId?
     public let count: Int32
-    public let privacy: TelegramPaidReactionPrivacy
+    public let privacy: IosappPaidReactionPrivacy
     
     public var associatedPeerIds: [PeerId] {
         var peerIds: [PeerId] = []
@@ -577,7 +577,7 @@ public final class PendingStarsReactionsMessageAttribute: MessageAttribute {
         return peerIds
     }
     
-    public init(accountPeerId: PeerId?, count: Int32, privacy: TelegramPaidReactionPrivacy) {
+    public init(accountPeerId: PeerId?, count: Int32, privacy: IosappPaidReactionPrivacy) {
         self.accountPeerId = accountPeerId
         self.count = count
         self.privacy = privacy
@@ -587,7 +587,7 @@ public final class PendingStarsReactionsMessageAttribute: MessageAttribute {
         self.accountPeerId = decoder.decodeOptionalInt64ForKey("ap").flatMap(PeerId.init)
         self.count = decoder.decodeInt32ForKey("cnt", orElse: 1)
         
-        if let privacy = decoder.decode(TelegramPaidReactionPrivacy.self, forKey: "priv") {
+        if let privacy = decoder.decode(IosappPaidReactionPrivacy.self, forKey: "priv") {
             self.privacy = privacy
         } else {
             self.privacy = decoder.decodeBoolForKey("anon", orElse: false) ? .anonymous : .default

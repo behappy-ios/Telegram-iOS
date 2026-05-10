@@ -12,7 +12,7 @@ private let textFont = Font.regular(13.0)
 
 public final class ChatRecentActionsEmptyNode: ASDisplayNode {
     private var theme: PresentationTheme
-    private var chatWallpaper: TelegramWallpaper
+    private var chatWallpaper: IosappWallpaper
     private var hasIcon: Bool
         
     private let backgroundNode: NavigationBackgroundNode
@@ -30,7 +30,7 @@ public final class ChatRecentActionsEmptyNode: ASDisplayNode {
     private var title: String = ""
     private var text: String = ""
     
-    public init(theme: PresentationTheme, chatWallpaper: TelegramWallpaper, chatBubbleCorners: PresentationChatBubbleCorners, hasIcon: Bool) {
+    public init(theme: PresentationTheme, chatWallpaper: IosappWallpaper, chatBubbleCorners: PresentationChatBubbleCorners, hasIcon: Bool) {
         self.theme = theme
         self.chatWallpaper = chatWallpaper
         self.hasIcon = hasIcon

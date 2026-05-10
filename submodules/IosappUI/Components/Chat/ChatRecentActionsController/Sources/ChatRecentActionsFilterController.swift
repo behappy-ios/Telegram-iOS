@@ -256,7 +256,7 @@ private struct ChatRecentActionsFilterControllerState: Equatable {
 
 private func channelRecentActionsFilterControllerEntries(presentationData: PresentationData, accountPeerId: PeerId, peer: Peer, antiSpamBotId: PeerId?, state: ChatRecentActionsFilterControllerState, participants: [RenderedChannelParticipant]?) -> [ChatRecentActionsFilterEntry] {
     var isGroup = true
-    if let peer = peer as? TelegramChannel, case .broadcast = peer.info {
+    if let peer = peer as? IosappChannel, case .broadcast = peer.info {
         isGroup = false
     }
     
@@ -439,7 +439,7 @@ public func channelRecentActionsFilterController(context: AccountContext, update
     let antiSpamBotConfiguration = AntiSpamBotConfiguration.with(appConfiguration: context.currentAppConfiguration.with { $0 })
     let antiSpamBotPeerPromise = Promise<RenderedChannelParticipant?>(nil)
     if let antiSpamBotId = antiSpamBotConfiguration.antiSpamBotId {
-        antiSpamBotPeerPromise.set(context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: antiSpamBotId))
+        antiSpamBotPeerPromise.set(context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: antiSpamBotId))
         |> map { peer in
             if let peer = peer, case let .user(user) = peer {
                 return RenderedChannelParticipant(participant: .member(id: user.id, invitedAt: 0, adminInfo: nil, banInfo: nil, rank: nil, subscriptionUntilDate: nil), peer: user)

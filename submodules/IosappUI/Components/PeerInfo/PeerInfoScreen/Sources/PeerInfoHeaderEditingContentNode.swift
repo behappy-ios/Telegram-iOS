@@ -70,11 +70,11 @@ final class PeerInfoHeaderEditingContentNode: ASDisplayNode {
         }
         
         var isEditableBot = false
-        if let user = peer as? TelegramUser, let botInfo = user.botInfo, botInfo.flags.contains(.canEdit) {
+        if let user = peer as? IosappUser, let botInfo = user.botInfo, botInfo.flags.contains(.canEdit) {
             isEditableBot = true
         }
         var fieldKeys: [PeerInfoHeaderTextFieldNodeKey] = []
-        if let user = peer as? TelegramUser {
+        if let user = peer as? IosappUser {
             if !user.isDeleted {
                 fieldKeys.append(.firstName)
                 if isEditableBot {
@@ -83,12 +83,12 @@ final class PeerInfoHeaderEditingContentNode: ASDisplayNode {
                     fieldKeys.append(.lastName)
                 }
             }
-        } else if let _ = peer as? TelegramGroup {
+        } else if let _ = peer as? IosappGroup {
             fieldKeys.append(.title)
             if canEditPeerInfo(context: self.context, peer: peer, chatLocation: chatLocation, threadData: threadData) {
                 fieldKeys.append(.description)
             }
-        } else if let _ = peer as? TelegramChannel {
+        } else if let _ = peer as? IosappChannel {
             fieldKeys.append(.title)
             if canEditPeerInfo(context: self.context, peer: peer, chatLocation: chatLocation, threadData: threadData) {
                 fieldKeys.append(.description)
@@ -104,7 +104,7 @@ final class PeerInfoHeaderEditingContentNode: ASDisplayNode {
                 var isMultiline = false
                 switch key {
                 case .firstName:
-                    if let peer = peer as? TelegramUser {
+                    if let peer = peer as? IosappUser {
                         if let editableBotInfo = (cachedData as? CachedUserData)?.editableBotInfo {
                             updateText = editableBotInfo.name
                         } else {
@@ -112,7 +112,7 @@ final class PeerInfoHeaderEditingContentNode: ASDisplayNode {
                         }
                     }
                 case .lastName:
-                    updateText = (peer as? TelegramUser)?.lastName ?? ""
+                    updateText = (peer as? IosappUser)?.lastName ?? ""
                 case .title:
                     updateText = peer?.debugDisplayTitle ?? ""
                 case .description:
@@ -151,7 +151,7 @@ final class PeerInfoHeaderEditingContentNode: ASDisplayNode {
                 placeholder = presentationData.strings.UserInfo_LastNamePlaceholder
                 isEnabled = isContact || isSettings
             case .title:
-                if let channel = peer as? TelegramChannel, case .broadcast = channel.info {
+                if let channel = peer as? IosappChannel, case .broadcast = channel.info {
                     placeholder = presentationData.strings.GroupInfo_ChannelListNamePlaceholder
                 } else {
                     placeholder = presentationData.strings.GroupInfo_GroupNamePlaceholder

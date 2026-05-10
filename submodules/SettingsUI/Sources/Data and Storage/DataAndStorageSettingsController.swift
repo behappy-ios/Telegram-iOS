@@ -946,7 +946,7 @@ public func dataAndStorageController(context: AccountContext, focusOnItemTag: Da
     |> mapToSignal { mediaAutoSaveSettings -> Signal<[EnginePeer.Id: EnginePeer?], NoError> in
         let peerIds = mediaAutoSaveSettings.exceptions.map(\.id)
         return context.engine.data.get(EngineDataMap(
-            peerIds.map(TelegramEngine.EngineData.Item.Peer.Peer.init(id:))
+            peerIds.map(IosappEngine.EngineData.Item.Peer.Peer.init(id:))
         ))
     }
 

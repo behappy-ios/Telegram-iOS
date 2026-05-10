@@ -24,7 +24,7 @@ public final class ChatLoadingNode: ASDisplayNode {
     private let activityIndicator: ActivityIndicator
     private let offset: CGPoint
     
-    public init(context: AccountContext, theme: PresentationTheme, chatWallpaper: TelegramWallpaper, bubbleCorners: PresentationChatBubbleCorners) {
+    public init(context: AccountContext, theme: PresentationTheme, chatWallpaper: IosappWallpaper, bubbleCorners: PresentationChatBubbleCorners) {
         self.backgroundNode = NavigationBackgroundNode(color: selectDateFillStaticColor(theme: theme, wallpaper: chatWallpaper), enableBlur: context.sharedContext.energyUsageSettings.fullTranslucency && dateFillNeedsBlur(theme: theme, wallpaper: chatWallpaper))
         
         let serviceColor = serviceMessageColorComponents(theme: theme, wallpaper: chatWallpaper)
@@ -175,7 +175,7 @@ public final class ChatLoadingPlaceholderNode: ASDisplayNode {
     
     private var validLayout: (CGSize, Bool, UIEdgeInsets, LayoutMetrics)?
     
-    public init(context: AccountContext, theme: PresentationTheme, chatWallpaper: TelegramWallpaper, bubbleCorners: PresentationChatBubbleCorners, backgroundNode: WallpaperBackgroundNode) {
+    public init(context: AccountContext, theme: PresentationTheme, chatWallpaper: IosappWallpaper, bubbleCorners: PresentationChatBubbleCorners, backgroundNode: WallpaperBackgroundNode) {
         self.context = context
         self.backgroundNode = backgroundNode
         
@@ -424,13 +424,13 @@ public final class ChatLoadingPlaceholderNode: ASDisplayNode {
     public func updatePresentationInterfaceState(renderedPeer: RenderedPeer?, chatLocation: ChatLocation) {
         var chatType: ChatType = .channel
         if let peer = renderedPeer?.peer {
-            if peer is TelegramUser {
+            if peer is IosappUser {
                 chatType = .user
-            } else if peer is TelegramGroup {
+            } else if peer is IosappGroup {
                 chatType = .group
-            } else if let channel = peer as? TelegramChannel {
+            } else if let channel = peer as? IosappChannel {
                 if channel.isMonoForum {
-                    if let mainChannel = renderedPeer?.chatOrMonoforumMainPeer as? TelegramChannel, mainChannel.hasPermission(.manageDirect) {
+                    if let mainChannel = renderedPeer?.chatOrMonoforumMainPeer as? IosappChannel, mainChannel.hasPermission(.manageDirect) {
                         if chatLocation.threadId == nil {
                             chatType = .group
                         } else {

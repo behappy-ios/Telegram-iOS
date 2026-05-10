@@ -113,7 +113,7 @@ private final class SheetContent: CombinedComponent {
             let amountFont = Font.regular(13.0)
             let amountTextColor = theme.list.freeTextColor
             let amountMarkdownAttributes = MarkdownAttributes(body: MarkdownAttributeSet(font: amountFont, textColor: amountTextColor), bold: MarkdownAttributeSet(font: amountFont, textColor: amountTextColor), link: MarkdownAttributeSet(font: amountFont, textColor: theme.list.itemAccentColor), linkAttribute: { contents in
-                return (TelegramTextAttributes.URL, contents)
+                return (IosappTextAttributes.URL, contents)
             })
 
             let amountInfoString = NSMutableAttributedString(attributedString: parseMarkdownIntoAttributedString(environment.strings.WebApp_ShareMessage_Info(component.botName).string, attributes: amountMarkdownAttributes, textAlignment: .natural))
@@ -123,8 +123,8 @@ private final class SheetContent: CombinedComponent {
                 highlightColor: environment.theme.list.itemAccentColor.withAlphaComponent(0.1),
                 highlightInset: UIEdgeInsets(top: 0.0, left: 0.0, bottom: 0.0, right: -8.0),
                 highlightAction: { attributes in
-                    if let _ = attributes[NSAttributedString.Key(rawValue: TelegramTextAttributes.URL)] {
-                        return NSAttributedString.Key(rawValue: TelegramTextAttributes.URL)
+                    if let _ = attributes[NSAttributedString.Key(rawValue: IosappTextAttributes.URL)] {
+                        return NSAttributedString.Key(rawValue: IosappTextAttributes.URL)
                     } else {
                         return nil
                     }
@@ -441,10 +441,10 @@ public final class WebAppMessagePreviewScreen: ViewControllerComponentContainer 
     fileprivate func complete(peers: [EnginePeer], controller: ViewController?) {
         let _ = (self.context.engine.data.get(
             EngineDataMap(
-                peers.map { TelegramEngine.EngineData.Item.Peer.SendPaidMessageStars.init(id: $0.id) }
+                peers.map { IosappEngine.EngineData.Item.Peer.SendPaidMessageStars.init(id: $0.id) }
             ),
             EngineDataList(
-                peers.map { TelegramEngine.EngineData.Item.Peer.RenderedPeer.init(id: $0.id) }
+                peers.map { IosappEngine.EngineData.Item.Peer.RenderedPeer.init(id: $0.id) }
             )
         )
         |> deliverOnMainQueue).start(next: { [weak self] sendPaidMessageStars, renderedPeers in
@@ -552,7 +552,7 @@ public final class WebAppMessagePreviewScreen: ViewControllerComponentContainer 
             types.append(.user(.init(isBot: true, isPremium: nil)))
         }
         if peerTypes.contains(.channels) {
-            types.append(.channel(.init(isCreator: false, hasUsername: nil, userAdminRights: TelegramChatAdminRights(rights: [.canPostMessages]), botAdminRights: nil)))
+            types.append(.channel(.init(isCreator: false, hasUsername: nil, userAdminRights: IosappChatAdminRights(rights: [.canPostMessages]), botAdminRights: nil)))
         }
         if peerTypes.contains(.groups) {
             types.append(.group(.init(isCreator: false, hasUsername: nil, isForum: nil, botParticipant: false, userAdminRights: nil, botAdminRights: nil)))

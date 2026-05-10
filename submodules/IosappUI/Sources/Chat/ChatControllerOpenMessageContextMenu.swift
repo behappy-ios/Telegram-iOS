@@ -47,7 +47,7 @@ extension ChatControllerImpl {
             }
             
             let _ = combineLatest(queue: .mainQueue(),
-                self.context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: self.context.account.peerId)),
+                self.context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: self.context.account.peerId)),
                 contextMenuForChatPresentationInterfaceState(chatPresentationInterfaceState: self.presentationInterfaceState, context: self.context, messages: updatedMessages, controllerInteraction: self.controllerInteraction, selectAll: selectAll, interfaceInteraction: self.interfaceInteraction, messageNode: node as? ChatMessageItemView),
                 peerMessageAllowedReactions(context: self.context, message: topMessage),
                 peerMessageSelectedReactions(context: self.context, message: topMessage),
@@ -83,7 +83,7 @@ extension ChatControllerImpl {
                         
                     var isAction = false
                     for media in message.media {
-                        if media is TelegramMediaAction {
+                        if media is IosappMediaAction {
                             isAction = true
                             break
                         }
@@ -94,11 +94,11 @@ extension ChatControllerImpl {
                         if case .scheduledMessages = self.subject {
                         } else {
                             if let peer = self.presentationInterfaceState.renderedPeer?.peer {
-                                if peer is TelegramUser {
+                                if peer is IosappUser {
                                     tip = .messageCopyProtection(text: self.presentationData.strings.Conversation_CopyProtectionInfoPrivate(EnginePeer(peer).compactDisplayTitle).string)
                                 } else {
                                     var isChannel = false
-                                    if let channel = self.presentationInterfaceState.renderedPeer?.peer as? TelegramChannel, case .broadcast = channel.info {
+                                    if let channel = self.presentationInterfaceState.renderedPeer?.peer as? IosappChannel, case .broadcast = channel.info {
                                         isChannel = true
                                     }
                                     tip = .messageCopyProtection(text: isChannel ? self.presentationData.strings.Conversation_CopyProtectionInfoChannel : self.presentationData.strings.Conversation_CopyProtectionInfoGroup)
@@ -140,7 +140,7 @@ extension ChatControllerImpl {
                         actions.allPresetReactionsAreAvailable = true
                     }
                     
-                    if let channel = self.presentationInterfaceState.renderedPeer?.peer as? TelegramChannel, case .broadcast = channel.info {
+                    if let channel = self.presentationInterfaceState.renderedPeer?.peer as? IosappChannel, case .broadcast = channel.info {
                         actions.alwaysAllowPremiumReactions = true
                     }
                     
@@ -162,7 +162,7 @@ extension ChatControllerImpl {
                             allReactionsAreAvailable = true
                         }
                         
-                        if let channel = self.presentationInterfaceState.renderedPeer?.chatMainPeer as? TelegramChannel, case .broadcast = channel.info {
+                        if let channel = self.presentationInterfaceState.renderedPeer?.chatMainPeer as? IosappChannel, case .broadcast = channel.info {
                             allReactionsAreAvailable = false
                         }
                         
@@ -303,9 +303,9 @@ extension ChatControllerImpl {
                 
                 var keepDefaultContentTouches = false
                 for media in message.media {
-                    if media is TelegramMediaImage {
+                    if media is IosappMediaImage {
                         keepDefaultContentTouches = true
-                    } else if let file = media as? TelegramMediaFile, file.isVideo {
+                    } else if let file = media as? IosappMediaFile, file.isVideo {
                         keepDefaultContentTouches = true
                     }
                 }
@@ -321,7 +321,7 @@ extension ChatControllerImpl {
                 
                 var hideReactionPanelTail = false
                 for media in message.media {
-                    if let action = media as? TelegramMediaAction {
+                    if let action = media as? IosappMediaAction {
                         switch action.action {
                         case .phoneCall:
                             break
@@ -432,7 +432,7 @@ extension ChatControllerImpl {
                         }
                         let _ = (combineLatest(
                             starsContext.state,
-                            self.context.engine.data.get(TelegramEngine.EngineData.Item.Peer.ReactionSettings(id: message.id.peerId))
+                            self.context.engine.data.get(IosappEngine.EngineData.Item.Peer.ReactionSettings(id: message.id.peerId))
                         )
                         |> take(1)
                         |> deliverOnMainQueue).start(next: { [weak self] state, reactionSettings in
@@ -514,7 +514,7 @@ extension ChatControllerImpl {
                             }
                         } else {
                             if removedReaction == nil, case .custom = chosenReaction {
-                                if let peer = self.presentationInterfaceState.renderedPeer?.peer as? TelegramChannel, case .broadcast = peer.info {
+                                if let peer = self.presentationInterfaceState.renderedPeer?.peer as? IosappChannel, case .broadcast = peer.info {
                                 } else {
                                     if !self.presentationInterfaceState.isPremium {
                                         controller?.premiumReactionsSelected?()
@@ -593,7 +593,7 @@ extension ChatControllerImpl {
                             case let .builtin(value):
                                 return .builtin(value)
                             case let .custom(fileId):
-                                var customFile: TelegramMediaFile?
+                                var customFile: IosappMediaFile?
                                 if case let .custom(customFileId, file) = chosenUpdatedReaction, fileId == customFileId {
                                     customFile = file
                                 }

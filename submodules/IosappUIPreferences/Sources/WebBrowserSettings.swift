@@ -6,9 +6,9 @@ import SwiftSignalKit
 public struct WebBrowserException: Codable, Equatable {
     public let domain: String
     public let title: String
-    public let icon: TelegramMediaImage?
+    public let icon: IosappMediaImage?
     
-    public init(domain: String, title: String, icon: TelegramMediaImage?) {
+    public init(domain: String, title: String, icon: IosappMediaImage?) {
         self.domain = domain
         self.title = title
         self.icon = icon
@@ -19,7 +19,7 @@ public struct WebBrowserException: Codable, Equatable {
 
         self.domain = try container.decode(String.self, forKey: "domain")
         self.title = try container.decode(String.self, forKey: "title")
-        self.icon = try container.decodeIfPresent(TelegramMediaImage.self, forKey: "icon")
+        self.icon = try container.decodeIfPresent(IosappMediaImage.self, forKey: "icon")
     }
     
     public func encode(to encoder: Encoder) throws {
@@ -81,7 +81,7 @@ public struct WebBrowserSettings: Codable, Equatable {
     }
 }
 
-public func updateWebBrowserSettingsInteractively(accountManager: AccountManager<TelegramAccountManagerTypes>, _ f: @escaping (WebBrowserSettings) -> WebBrowserSettings) -> Signal<Void, NoError> {
+public func updateWebBrowserSettingsInteractively(accountManager: AccountManager<IosappAccountManagerTypes>, _ f: @escaping (WebBrowserSettings) -> WebBrowserSettings) -> Signal<Void, NoError> {
     return accountManager.transaction { transaction -> Void in
         transaction.updateSharedData(ApplicationSpecificSharedDataKeys.webBrowserSettings, { entry in
             let currentSettings: WebBrowserSettings

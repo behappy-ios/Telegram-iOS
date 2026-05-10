@@ -102,7 +102,7 @@ private let smallExtensionFont = Font.with(size: 12.0, design: .round, weight: .
 private final class FileListItemComponent: Component {
     enum Icon: Equatable {
         case fileExtension(String)
-        case media(Media, TelegramMediaImageRepresentation)
+        case media(Media, IosappMediaImageRepresentation)
         case audio
         
         static func ==(lhs: Icon, rhs: Icon) -> Bool {
@@ -463,7 +463,7 @@ private final class FileListItemComponent: Component {
                 let imageSize: CGSize = representation.dimensions.cgSize
                 
                 if resetImage {
-                    if let file = media as? TelegramMediaFile {
+                    if let file = media as? IosappMediaFile {
                         iconImageNode.setSignal(chatWebpageSnippetFile(
                             account: component.context.account,
                             userLocation: .peer(component.messageId.peerId),
@@ -471,7 +471,7 @@ private final class FileListItemComponent: Component {
                             representation: representation,
                             automaticFetch: false
                         ))
-                    } else if let image = media as? TelegramMediaImage {
+                    } else if let image = media as? IosappMediaImage {
                         iconImageNode.setSignal(mediaGridMessagePhoto(
                             account: component.context.account,
                             userLocation: .peer(component.messageId.peerId),
@@ -894,7 +894,7 @@ final class StorageFileListPanelComponent: Component {
                     var imageIconValue: FileListItemComponent.Icon?
                     
                     for media in item.message.media {
-                        if let file = media as? TelegramMediaFile {
+                        if let file = media as? IosappMediaFile {
                             let isInstantVideo = file.isInstantVideo
                             
                             for attribute in file.attributes {
@@ -985,7 +985,7 @@ final class StorageFileListPanelComponent: Component {
                                     imageIconValue = .media(file, representation)
                                 }
                             }
-                        } else if let image = media as? TelegramMediaImage {
+                        } else if let image = media as? IosappMediaImage {
                             title = environment.strings.Message_Photo
                             
                             if let representation = largestImageRepresentation(image.representations) {

@@ -755,7 +755,7 @@ final class OverscrollContentsComponent: Component {
     let threadData: ChatOverscrollThreadData?
     let isForumThread: Bool
     let unreadCount: Int
-    let location: TelegramEngine.NextUnreadChannelLocation
+    let location: IosappEngine.NextUnreadChannelLocation
     let expandOffset: CGFloat
     let freezeProgress: Bool
     let absoluteRect: CGRect
@@ -770,7 +770,7 @@ final class OverscrollContentsComponent: Component {
         threadData: ChatOverscrollThreadData?,
         isForumThread: Bool,
         unreadCount: Int,
-        location: TelegramEngine.NextUnreadChannelLocation,
+        location: IosappEngine.NextUnreadChannelLocation,
         expandOffset: CGFloat,
         freezeProgress: Bool,
         absoluteRect: CGRect,
@@ -1100,7 +1100,7 @@ public final class ChatOverscrollControl: CombinedComponent {
     let threadData: ChatOverscrollThreadData?
     let isForumThread: Bool
     let unreadCount: Int
-    let location: TelegramEngine.NextUnreadChannelLocation
+    let location: IosappEngine.NextUnreadChannelLocation
     let context: AccountContext
     let expandDistance: CGFloat
     let freezeProgress: Bool
@@ -1115,7 +1115,7 @@ public final class ChatOverscrollControl: CombinedComponent {
         threadData: ChatOverscrollThreadData?,
         isForumThread: Bool,
         unreadCount: Int,
-        location: TelegramEngine.NextUnreadChannelLocation,
+        location: IosappEngine.NextUnreadChannelLocation,
         context: AccountContext,
         expandDistance: CGFloat,
         freezeProgress: Bool,

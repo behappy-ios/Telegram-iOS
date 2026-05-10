@@ -23,16 +23,16 @@ import HexColor
 
 private struct ThemeCarouselThemeEntry: Comparable, Identifiable {
     let index: Int
-    let emojiFile: TelegramMediaFile?
+    let emojiFile: IosappMediaFile?
     let themeReference: PresentationThemeReference?
     let nightMode: Bool
     let channelMode: Bool
     let themeSpecificAccentColors: [Int64: PresentationThemeAccentColor]
-    let themeSpecificChatWallpapers: [Int64: TelegramWallpaper]
+    let themeSpecificChatWallpapers: [Int64: IosappWallpaper]
     var selected: Bool
     let theme: PresentationTheme
     let strings: PresentationStrings
-    let wallpaper: TelegramWallpaper?
+    let wallpaper: IosappWallpaper?
     
     var stableId: Int {
         return index
@@ -87,20 +87,20 @@ private struct ThemeCarouselThemeEntry: Comparable, Identifiable {
 
 public class ThemeCarouselThemeIconItem: ListViewItem {
     public let context: AccountContext
-    public let emojiFile: TelegramMediaFile?
+    public let emojiFile: IosappMediaFile?
     public let themeReference: PresentationThemeReference?
     public let nightMode: Bool
     public let channelMode: Bool
     public let themeSpecificAccentColors: [Int64: PresentationThemeAccentColor]
-    public let themeSpecificChatWallpapers: [Int64: TelegramWallpaper]
+    public let themeSpecificChatWallpapers: [Int64: IosappWallpaper]
     public let selected: Bool
     public let theme: PresentationTheme
     public let strings: PresentationStrings
-    public let wallpaper: TelegramWallpaper?
+    public let wallpaper: IosappWallpaper?
     public let action: (PresentationThemeReference?) -> Void
     public let contextAction: ((PresentationThemeReference, ASDisplayNode, ContextGesture?) -> Void)?
     
-    public init(context: AccountContext, emojiFile: TelegramMediaFile?, themeReference: PresentationThemeReference?, nightMode: Bool, channelMode: Bool, themeSpecificAccentColors: [Int64: PresentationThemeAccentColor], themeSpecificChatWallpapers: [Int64: TelegramWallpaper], selected: Bool, theme: PresentationTheme, strings: PresentationStrings, wallpaper: TelegramWallpaper?, action: @escaping (PresentationThemeReference?) -> Void, contextAction: ((PresentationThemeReference, ASDisplayNode, ContextGesture?) -> Void)?) {
+    public init(context: AccountContext, emojiFile: IosappMediaFile?, themeReference: PresentationThemeReference?, nightMode: Bool, channelMode: Bool, themeSpecificAccentColors: [Int64: PresentationThemeAccentColor], themeSpecificChatWallpapers: [Int64: IosappWallpaper], selected: Bool, theme: PresentationTheme, strings: PresentationStrings, wallpaper: IosappWallpaper?, action: @escaping (PresentationThemeReference?) -> Void, contextAction: ((PresentationThemeReference, ASDisplayNode, ContextGesture?) -> Void)?) {
         self.context = context
         self.emojiFile = emojiFile
         self.themeReference = themeReference
@@ -549,16 +549,16 @@ public class ThemeCarouselThemeItem: ListViewItem, ItemListItem, ListItemCompone
     public let hasNoTheme: Bool
     public let animatedEmojiStickers: [String: [StickerPackItem]]
     public let themeSpecificAccentColors: [Int64: PresentationThemeAccentColor]
-    public let themeSpecificChatWallpapers: [Int64: TelegramWallpaper]
+    public let themeSpecificChatWallpapers: [Int64: IosappWallpaper]
     public let nightMode: Bool
     public let channelMode: Bool
-    public let selectedWallpaper: TelegramWallpaper?
+    public let selectedWallpaper: IosappWallpaper?
     public let currentTheme: PresentationThemeReference?
     public let updatedTheme: (PresentationThemeReference?) -> Void
     public let contextAction: ((PresentationThemeReference, ASDisplayNode, ContextGesture?) -> Void)?
     public let tag: ItemListItemTag?
 
-    public init(context: AccountContext, theme: PresentationTheme, strings: PresentationStrings, sectionId: ItemListSectionId, themes: [PresentationThemeReference], hasNoTheme: Bool, animatedEmojiStickers: [String: [StickerPackItem]], themeSpecificAccentColors: [Int64: PresentationThemeAccentColor], themeSpecificChatWallpapers: [Int64: TelegramWallpaper], nightMode: Bool, channelMode: Bool = false, selectedWallpaper: TelegramWallpaper? = nil, currentTheme: PresentationThemeReference?, updatedTheme: @escaping (PresentationThemeReference?) -> Void, contextAction: ((PresentationThemeReference, ASDisplayNode, ContextGesture?) -> Void)?, tag: ItemListItemTag? = nil) {
+    public init(context: AccountContext, theme: PresentationTheme, strings: PresentationStrings, sectionId: ItemListSectionId, themes: [PresentationThemeReference], hasNoTheme: Bool, animatedEmojiStickers: [String: [StickerPackItem]], themeSpecificAccentColors: [Int64: PresentationThemeAccentColor], themeSpecificChatWallpapers: [Int64: IosappWallpaper], nightMode: Bool, channelMode: Bool = false, selectedWallpaper: IosappWallpaper? = nil, currentTheme: PresentationThemeReference?, updatedTheme: @escaping (PresentationThemeReference?) -> Void, contextAction: ((PresentationThemeReference, ASDisplayNode, ContextGesture?) -> Void)?, tag: ItemListItemTag? = nil) {
         self.context = context
         self.theme = theme
         self.strings = strings

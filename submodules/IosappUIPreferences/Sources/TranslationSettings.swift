@@ -50,7 +50,7 @@ public struct TranslationSettings: Codable, Equatable {
     }
 }
 
-public func updateTranslationSettingsInteractively(accountManager: AccountManager<TelegramAccountManagerTypes>, _ f: @escaping (TranslationSettings) -> TranslationSettings) -> Signal<Void, NoError> {
+public func updateTranslationSettingsInteractively(accountManager: AccountManager<IosappAccountManagerTypes>, _ f: @escaping (TranslationSettings) -> TranslationSettings) -> Signal<Void, NoError> {
     return accountManager.transaction { transaction -> Void in
         transaction.updateSharedData(ApplicationSpecificSharedDataKeys.translationSettings, { entry in
             let currentSettings: TranslationSettings

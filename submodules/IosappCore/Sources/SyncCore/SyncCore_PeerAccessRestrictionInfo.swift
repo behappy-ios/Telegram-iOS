@@ -44,7 +44,7 @@ public final class RestrictionRule: PostboxCoding, Equatable {
         return true
     }
     
-    public init(flatBuffersObject: TelegramCore_RestrictionRule) throws {
+    public init(flatBuffersObject: IosappCore_RestrictionRule) throws {
         self.platform = flatBuffersObject.platform
         self.reason = flatBuffersObject.reason
         self.text = flatBuffersObject.text
@@ -55,11 +55,11 @@ public final class RestrictionRule: PostboxCoding, Equatable {
         let reasonOffset = builder.create(string: self.reason)
         let textOffset = builder.create(string: self.text)
         
-        let start = TelegramCore_RestrictionRule.startRestrictionRule(&builder)
-        TelegramCore_RestrictionRule.add(platform: platformOffset, &builder)
-        TelegramCore_RestrictionRule.add(reason: reasonOffset, &builder)
-        TelegramCore_RestrictionRule.add(text: textOffset, &builder)
-        return TelegramCore_RestrictionRule.endRestrictionRule(&builder, start: start)
+        let start = IosappCore_RestrictionRule.startRestrictionRule(&builder)
+        IosappCore_RestrictionRule.add(platform: platformOffset, &builder)
+        IosappCore_RestrictionRule.add(reason: reasonOffset, &builder)
+        IosappCore_RestrictionRule.add(text: textOffset, &builder)
+        return IosappCore_RestrictionRule.endRestrictionRule(&builder, start: start)
     }
 }
 
@@ -86,7 +86,7 @@ public final class PeerAccessRestrictionInfo: PostboxCoding, Equatable {
         return lhs.rules == rhs.rules
     }
     
-    public init(flatBuffersObject: TelegramCore_PeerAccessRestrictionInfo) throws {
+    public init(flatBuffersObject: IosappCore_PeerAccessRestrictionInfo) throws {
         self.rules = try (0 ..< flatBuffersObject.rulesCount).map { try RestrictionRule(flatBuffersObject: flatBuffersObject.rules(at: $0)!) }
     }
     
@@ -94,8 +94,8 @@ public final class PeerAccessRestrictionInfo: PostboxCoding, Equatable {
         let rulesOffsets = self.rules.map { $0.encodeToFlatBuffers(builder: &builder) }
         let rulesOffset = builder.createVector(ofOffsets: rulesOffsets, len: rulesOffsets.count)
         
-        let start = TelegramCore_PeerAccessRestrictionInfo.startPeerAccessRestrictionInfo(&builder)
-        TelegramCore_PeerAccessRestrictionInfo.addVectorOf(rules: rulesOffset, &builder)
-        return TelegramCore_PeerAccessRestrictionInfo.endPeerAccessRestrictionInfo(&builder, start: start)
+        let start = IosappCore_PeerAccessRestrictionInfo.startPeerAccessRestrictionInfo(&builder)
+        IosappCore_PeerAccessRestrictionInfo.addVectorOf(rules: rulesOffset, &builder)
+        return IosappCore_PeerAccessRestrictionInfo.endPeerAccessRestrictionInfo(&builder, start: start)
     }
 }

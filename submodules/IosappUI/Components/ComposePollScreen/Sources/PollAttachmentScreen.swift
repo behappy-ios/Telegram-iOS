@@ -163,17 +163,17 @@ public func presentPollAttachmentScreen(
                             }
                             let fileId = Int64.random(in: Int64.min ... Int64.max)
                             let mimeType = guessMimeTypeByFileExtension((item.fileName as NSString).pathExtension)
-                            var previewRepresentations: [TelegramMediaImageRepresentation] = []
+                            var previewRepresentations: [IosappMediaImageRepresentation] = []
                             if mimeType.hasPrefix("image/") || mimeType == "application/pdf" {
-                                previewRepresentations.append(TelegramMediaImageRepresentation(dimensions: PixelDimensions(width: 320, height: 320), resource: ICloudFileResource(urlData: item.urlData, thumbnail: true), progressiveSizes: [], immediateThumbnailData: nil, hasVideo: false, isPersonal: false))
+                                previewRepresentations.append(IosappMediaImageRepresentation(dimensions: PixelDimensions(width: 320, height: 320), resource: ICloudFileResource(urlData: item.urlData, thumbnail: true), progressiveSizes: [], immediateThumbnailData: nil, hasVideo: false, isPersonal: false))
                             }
-                            var attributes: [TelegramMediaFileAttribute] = []
+                            var attributes: [IosappMediaFileAttribute] = []
                             attributes.append(.FileName(fileName: item.fileName))
                             if let audioMetadata = item.audioMetadata {
                                 attributes.append(.Audio(isVoice: false, duration: audioMetadata.duration, title: audioMetadata.title, performer: audioMetadata.performer, waveform: nil))
                             }
                             
-                            let file = TelegramMediaFile(fileId: MediaId(namespace: Namespaces.Media.LocalFile, id: fileId), partialReference: nil, resource: ICloudFileResource(urlData: item.urlData, thumbnail: false), previewRepresentations: previewRepresentations, videoThumbnails: [], immediateThumbnailData: nil, mimeType: mimeType, size: Int64(item.fileSize), attributes: attributes, alternativeRepresentations: [])
+                            let file = IosappMediaFile(fileId: MediaId(namespace: Namespaces.Media.LocalFile, id: fileId), partialReference: nil, resource: ICloudFileResource(urlData: item.urlData, thumbnail: false), previewRepresentations: previewRepresentations, videoThumbnails: [], immediateThumbnailData: nil, mimeType: mimeType, size: Int64(item.fileSize), attributes: attributes, alternativeRepresentations: [])
                             completion(.standalone(media: file))
                         })
                     })

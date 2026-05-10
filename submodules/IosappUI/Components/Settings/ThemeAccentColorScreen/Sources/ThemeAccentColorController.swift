@@ -15,8 +15,8 @@ import GenerateThemeName
 
 private let randomBackgroundColors: [Int32] = [0x0088ff, 0x00c2ed, 0x29b327, 0xeb6ca4, 0xf08200, 0x9472ee, 0xd33213, 0xedb400, 0x6d839e]
 
-public extension TelegramThemeSettings {
-    convenience init(baseTheme: TelegramBaseTheme, accentColor: UIColor, outgoingAccentColor: UIColor?, messageColors: [UInt32], animateMessageColors: Bool, wallpaper: TelegramWallpaper?) {
+public extension IosappThemeSettings {
+    convenience init(baseTheme: IosappBaseTheme, accentColor: UIColor, outgoingAccentColor: UIColor?, messageColors: [UInt32], animateMessageColors: Bool, wallpaper: IosappWallpaper?) {
         self.init(baseTheme: baseTheme, accentColor: accentColor.argb, outgoingAccentColor: outgoingAccentColor?.argb, messageColors: messageColors, animateMessageColors: animateMessageColors, wallpaper: wallpaper)
     }
 }
@@ -24,7 +24,7 @@ public extension TelegramThemeSettings {
 public enum ThemeAccentColorControllerMode {
     case colors(themeReference: PresentationThemeReference, create: Bool)
     case background(themeReference: PresentationThemeReference)
-    case edit(settings: TelegramThemeSettings?, theme: PresentationTheme, wallpaper: TelegramWallpaper?, generalThemeReference: PresentationThemeReference?, defaultThemeReference: PresentationThemeReference?, create: Bool, completion: (PresentationTheme, TelegramThemeSettings?) -> Void)
+    case edit(settings: IosappThemeSettings?, theme: PresentationTheme, wallpaper: IosappWallpaper?, generalThemeReference: PresentationThemeReference?, defaultThemeReference: PresentationThemeReference?, create: Bool, completion: (PresentationTheme, IosappThemeSettings?) -> Void)
     
     var themeReference: PresentationThemeReference? {
         switch self {
@@ -147,7 +147,7 @@ public final class ThemeAccentColorController: ViewController {
         super.loadDisplayNode()
         
         let theme: PresentationTheme
-        let initialWallpaper: TelegramWallpaper
+        let initialWallpaper: IosappWallpaper
         if case let .edit(_, editedTheme, walpaper, _, _, _, _) = self.mode {
             theme = editedTheme
             initialWallpaper = walpaper ?? editedTheme.chat.defaultWallpaper
@@ -165,12 +165,12 @@ public final class ThemeAccentColorController: ViewController {
                 let context = strongSelf.context
                 let autoNightModeTriggered = strongSelf.presentationData.autoNightModeTriggered
                 
-                var coloredWallpaper: TelegramWallpaper?
+                var coloredWallpaper: IosappWallpaper?
                 if !state.backgroundColors.isEmpty {
                     if let patternWallpaper = state.patternWallpaper {
                         coloredWallpaper = patternWallpaper.withUpdatedSettings(WallpaperSettings(colors: state.backgroundColors.map { $0.rgb }, intensity: state.patternIntensity, rotation: state.rotation))
                     } else if state.backgroundColors.count >= 2 {
-                        coloredWallpaper = .gradient(TelegramWallpaper.Gradient(id: nil, colors: state.backgroundColors.map { $0.rgb }, settings: WallpaperSettings(rotation: state.rotation)))
+                        coloredWallpaper = .gradient(IosappWallpaper.Gradient(id: nil, colors: state.backgroundColors.map { $0.rgb }, settings: WallpaperSettings(rotation: state.rotation)))
                     } else {
                         coloredWallpaper = .color(state.backgroundColors[0].rgb)
                     }
@@ -207,9 +207,9 @@ public final class ThemeAccentColorController: ViewController {
                     let _ = (prepareWallpaper
                     |> deliverOnMainQueue).start(completed: {
                         let updatedTheme: PresentationTheme
-                        var settings: TelegramThemeSettings?
+                        var settings: IosappThemeSettings?
                         var hasSettings = false
-                        var baseTheme: TelegramBaseTheme?
+                        var baseTheme: IosappBaseTheme?
                         
                         if let settings = themeSettings {
                             hasSettings = true
@@ -229,14 +229,14 @@ public final class ThemeAccentColorController: ViewController {
                         }
                         
                         if hasSettings, let baseTheme = baseTheme {
-                            settings = TelegramThemeSettings(baseTheme: baseTheme, accentColor: state.accentColor.color, outgoingAccentColor: state.outgoingAccentColor?.color, messageColors: state.messagesColors.map { $0.rgb }, animateMessageColors: state.animateMessageColors, wallpaper: coloredWallpaper)
+                            settings = IosappThemeSettings(baseTheme: baseTheme, accentColor: state.accentColor.color, outgoingAccentColor: state.outgoingAccentColor?.color, messageColors: state.messagesColors.map { $0.rgb }, animateMessageColors: state.animateMessageColors, wallpaper: coloredWallpaper)
                         }
                         
                         completion(updatedTheme, settings)
                     })
                 } else if case let .colors(theme, create) = strongSelf.mode {
-                    var baseTheme: TelegramBaseTheme
-                    var telegramTheme: TelegramTheme?
+                    var baseTheme: IosappBaseTheme
+                    var telegramTheme: IosappTheme?
                     if case let .cloud(theme) = theme, let settings = theme.theme.settings?.first {
                         telegramTheme = theme.theme
                         baseTheme = settings.baseTheme
@@ -248,7 +248,7 @@ public final class ThemeAccentColorController: ViewController {
                     
                     let wallpaper = coloredWallpaper ?? state.initialWallpaper
                     
-                    let settings = TelegramThemeSettings(baseTheme: baseTheme, accentColor: state.accentColor.rgb, outgoingAccentColor: state.outgoingAccentColor?.rgb, messageColors: state.messagesColors.map { $0.rgb }, animateMessageColors: state.animateMessageColors, wallpaper: wallpaper)
+                    let settings = IosappThemeSettings(baseTheme: baseTheme, accentColor: state.accentColor.rgb, outgoingAccentColor: state.outgoingAccentColor?.rgb, messageColors: state.messagesColors.map { $0.rgb }, animateMessageColors: state.animateMessageColors, wallpaper: wallpaper)
                     let baseThemeReference = PresentationThemeReference.builtin(PresentationBuiltinThemeReference(baseTheme: baseTheme))
                     
                     let apply: Signal<Void, CreateThemeError>
@@ -396,16 +396,16 @@ public final class ThemeAccentColorController: ViewController {
                 
             let accentColor: UIColor
             let outgoingAccentColor: UIColor?
-            var initialWallpaper: TelegramWallpaper?
+            var initialWallpaper: IosappWallpaper?
             var backgroundColors: [UInt32] = []
-            var patternWallpaper: TelegramWallpaper?
+            var patternWallpaper: IosappWallpaper?
             var patternIntensity: Int32 = 50
             let messageColors: [UInt32]
             let defaultMessagesColor: UIColor? = nil
             var rotation: Int32 = 0
             let animateMessageColors: Bool
             
-            func extractWallpaperParameters(_ wallpaper: TelegramWallpaper?) {
+            func extractWallpaperParameters(_ wallpaper: IosappWallpaper?) {
                 guard let wallpaper = wallpaper else {
                     return
                 }
@@ -435,11 +435,11 @@ public final class ThemeAccentColorController: ViewController {
             }
             
             if let themeReference = strongSelf.mode.themeReference {
-                var wallpaper: TelegramWallpaper
+                var wallpaper: IosappWallpaper
         
-                func extractBuiltinWallpaper(_ currentWallpaper: TelegramWallpaper) {
+                func extractBuiltinWallpaper(_ currentWallpaper: IosappWallpaper) {
                     if case let .builtin(settings) = currentWallpaper {
-                        var defaultPatternWallpaper: TelegramWallpaper?
+                        var defaultPatternWallpaper: IosappWallpaper?
                         
                         for wallpaper in wallpapers {
                             if case let .file(file) = wallpaper, file.slug == "JqSUrO0-mFIBAAAAWwTvLzoWGQI" {

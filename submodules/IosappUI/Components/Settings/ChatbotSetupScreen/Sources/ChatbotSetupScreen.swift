@@ -113,7 +113,7 @@ final class ChatbotSetupScreenComponent: Component {
     
     final class Permission {
         var id: String
-        var key: TelegramBusinessBotRights?
+        var key: IosappBusinessBotRights?
         var title: String
         var value: Bool?
         var enabled: Bool
@@ -122,7 +122,7 @@ final class ChatbotSetupScreenComponent: Component {
         
         init(
             id: String,
-            key: TelegramBusinessBotRights? = nil,
+            key: IosappBusinessBotRights? = nil,
             title: String,
             value: Bool? = nil,
             enabled: Bool = true,
@@ -173,7 +173,7 @@ final class ChatbotSetupScreenComponent: Component {
         )
         
         private var permissions: [Permission] = []
-        private var botRights: TelegramBusinessBotRights = []
+        private var botRights: IosappBusinessBotRights = []
         
         private var temporaryEnabledPermissions = Set<String>()
         
@@ -214,7 +214,7 @@ final class ChatbotSetupScreenComponent: Component {
                 return true
             }
             
-            var mappedCategories: TelegramBusinessRecipients.Categories = []
+            var mappedCategories: IosappBusinessRecipients.Categories = []
             if self.additionalPeerList.categories.contains(.existingChats) {
                 mappedCategories.insert(.existingChats)
             }
@@ -227,7 +227,7 @@ final class ChatbotSetupScreenComponent: Component {
             if self.additionalPeerList.categories.contains(.nonContacts) {
                 mappedCategories.insert(.nonContacts)
             }
-            let recipients = TelegramBusinessRecipients(
+            let recipients = IosappBusinessRecipients(
                 categories: mappedCategories,
                 additionalPeers: Set(self.additionalPeerList.peers.map(\.peer.id)),
                 excludePeers: Set(self.additionalPeerList.excludePeers.map(\.peer.id)),
@@ -235,7 +235,7 @@ final class ChatbotSetupScreenComponent: Component {
             )
             
             if let botResolutionState = self.botResolutionState, case let .found(peer, isInstalled) = botResolutionState.state, isInstalled {
-                let _ = component.context.engine.accountData.setAccountConnectedBot(bot: TelegramAccountConnectedBot(
+                let _ = component.context.engine.accountData.setAccountConnectedBot(bot: IosappAccountConnectedBot(
                     id: peer.id,
                     recipients: recipients,
                     rights: self.botRights
@@ -508,7 +508,7 @@ final class ChatbotSetupScreenComponent: Component {
             }
         }
         
-        private func presentStarGiftsWarningIfNeeded(_ key: TelegramBusinessBotRights, completion: @escaping (Bool) -> Void) -> Bool {
+        private func presentStarGiftsWarningIfNeeded(_ key: IosappBusinessBotRights, completion: @escaping (Bool) -> Void) -> Bool {
             guard let component = self.component, let environment = self.environment, let botResolutionState = self.botResolutionState, case let .found(peer, _) = botResolutionState.state, let controller = environment.controller() else {
                 return false
             }
@@ -1163,7 +1163,7 @@ final class ChatbotSetupScreenComponent: Component {
                                 }
                                 if let subpermissions = permission.subpermissions {
                                     if value {
-                                        var combinedKey: TelegramBusinessBotRights = []
+                                        var combinedKey: IosappBusinessBotRights = []
                                         for subpermission in subpermissions {
                                             if subpermission.enabled, let key = subpermission.key {
                                                 combinedKey.insert(key)
@@ -1368,12 +1368,12 @@ final class ChatbotSetupScreenComponent: Component {
 
 public final class ChatbotSetupScreen: ViewControllerComponentContainer {
     public final class InitialData: ChatbotSetupScreenInitialData {
-        fileprivate let bot: TelegramAccountConnectedBot?
+        fileprivate let bot: IosappAccountConnectedBot?
         fileprivate let botPeer: EnginePeer?
         fileprivate let additionalPeers: [EnginePeer.Id: ChatbotSetupScreenComponent.AdditionalPeerList.Peer]
         
         fileprivate init(
-            bot: TelegramAccountConnectedBot?,
+            bot: IosappAccountConnectedBot?,
             botPeer: EnginePeer?,
             additionalPeers: [EnginePeer.Id: ChatbotSetupScreenComponent.AdditionalPeerList.Peer]
         ) {
@@ -1430,7 +1430,7 @@ public final class ChatbotSetupScreen: ViewControllerComponentContainer {
     
     public static func initialData(context: AccountContext) -> Signal<ChatbotSetupScreenInitialData, NoError> {
         return context.engine.data.get(
-            TelegramEngine.EngineData.Item.Peer.BusinessConnectedBot(id: context.account.peerId)
+            IosappEngine.EngineData.Item.Peer.BusinessConnectedBot(id: context.account.peerId)
         )
         |> mapToSignal { connectedBot -> Signal<ChatbotSetupScreenInitialData, NoError> in
             guard let connectedBot else {
@@ -1448,9 +1448,9 @@ public final class ChatbotSetupScreen: ViewControllerComponentContainer {
             additionalPeerIds.formUnion(connectedBot.recipients.excludePeers)
             
             return context.engine.data.get(
-                TelegramEngine.EngineData.Item.Peer.Peer(id: connectedBot.id),
-                EngineDataMap(additionalPeerIds.map(TelegramEngine.EngineData.Item.Peer.Peer.init(id:))),
-                EngineDataMap(additionalPeerIds.map(TelegramEngine.EngineData.Item.Peer.IsContact.init(id:)))
+                IosappEngine.EngineData.Item.Peer.Peer(id: connectedBot.id),
+                EngineDataMap(additionalPeerIds.map(IosappEngine.EngineData.Item.Peer.Peer.init(id:))),
+                EngineDataMap(additionalPeerIds.map(IosappEngine.EngineData.Item.Peer.IsContact.init(id:)))
             )
             |> map { botPeer, peers, isContacts -> ChatbotSetupScreenInitialData in
                 var additionalPeers: [EnginePeer.Id: ChatbotSetupScreenComponent.AdditionalPeerList.Peer] = [:]

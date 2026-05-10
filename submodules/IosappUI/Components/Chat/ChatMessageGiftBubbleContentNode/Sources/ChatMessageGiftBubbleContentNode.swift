@@ -278,7 +278,7 @@ public class ChatMessageGiftBubbleContentNode: ChatMessageBubbleContentNode {
         
         var releasedBy: EnginePeer.Id?
         for media in item.message.media {
-            if let action = media as? TelegramMediaAction {
+            if let action = media as? IosappMediaAction {
                 switch action.action {
                 case let .starGift(gift, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _):
                     releasedBy = gift.releasedBy
@@ -421,7 +421,7 @@ public class ChatMessageGiftBubbleContentNode: ChatMessageBubbleContentNode {
                                 
                 var months: Int32 = 3
                 var animationName: String = ""
-                var animationFile: TelegramMediaFile?
+                var animationFile: IosappMediaFile?
                 var uniqueGift: StarGift.UniqueGift?
                 var title = item.presentationData.strings.Notification_PremiumGift_Title
                 var text = ""
@@ -445,13 +445,13 @@ public class ChatMessageGiftBubbleContentNode: ChatMessageBubbleContentNode {
                 var uniqueBackgroundColor: UIColor?
                 var uniqueSecondBackgroundColor: UIColor?
                 var uniquePatternColor: UIColor?
-                var uniquePatternFile: TelegramMediaFile?
+                var uniquePatternFile: IosappMediaFile?
                 
                 let isStoryEntity = item.message.id.id == -1
                 var hasServiceMessage = !isStoryEntity
                 
                 for media in item.message.media {
-                    if let action = media as? TelegramMediaAction {
+                    if let action = media as? IosappMediaAction {
                         switch action.action {
                         case let .giftPremium(_, _, daysValue, _, _, giftText, giftEntities):
                             months = max(3, Int32(round(Float(daysValue) / 30.0)))
@@ -571,7 +571,7 @@ public class ChatMessageGiftBubbleContentNode: ChatMessageBubbleContentNode {
                                 isStarGift = true
                                 
                                 var isSelfGift = item.message.id.peerId == item.context.account.peerId
-                                if item.message.id.peerId.isTelegramNotifications, let toPeerId {
+                                if item.message.id.peerId.isIosappNotifications, let toPeerId {
                                     if toPeerId == item.context.account.peerId {
                                         isSelfGift = true
                                     } else {
@@ -719,7 +719,7 @@ public class ChatMessageGiftBubbleContentNode: ChatMessageBubbleContentNode {
                                     } else {
                                         title = item.presentationData.strings.Notification_StarGift_Purchased_Title
                                     }
-                                } else if item.message.id.peerId.isTelegramNotifications {
+                                } else if item.message.id.peerId.isIosappNotifications {
                                     title = item.presentationData.strings.Notification_StarGift_TitleShort
                                 } else {
                                     title = item.presentationData.strings.Notification_StarGift_Title(authorName).string
@@ -1373,7 +1373,7 @@ public class ChatMessageGiftBubbleContentNode: ChatMessageBubbleContentNode {
                             if let uniqueBackgroundColor, let uniqueSecondBackgroundColor, let uniquePatternColor, let uniquePatternFile {
                                 let patternInset: CGFloat = 4.0
                                 let patternSize = CGSize(width: mediaBackgroundFrame.width - patternInset * 2.0, height: mediaBackgroundFrame.height - patternInset * 2.0)
-                                let files: [Int64: TelegramMediaFile] = [uniquePatternFile.fileId.id: uniquePatternFile]
+                                let files: [Int64: IosappMediaFile] = [uniquePatternFile.fileId.id: uniquePatternFile]
                                 let _ = strongSelf.patternView.update(
                                     transition: .immediate,
                                     component: AnyComponent(PeerInfoCoverComponent(
@@ -1525,11 +1525,11 @@ public class ChatMessageGiftBubbleContentNode: ChatMessageBubbleContentNode {
             if let point = point {
                 if let (index, attributes) = self.labelNode.attributesAtPoint(CGPoint(x: point.x - textNodeFrame.minX, y: point.y - textNodeFrame.minY - 10.0)) {
                     let possibleNames: [String] = [
-                        TelegramTextAttributes.URL,
-                        TelegramTextAttributes.PeerMention,
-                        TelegramTextAttributes.PeerTextMention,
-                        TelegramTextAttributes.BotCommand,
-                        TelegramTextAttributes.Hashtag
+                        IosappTextAttributes.URL,
+                        IosappTextAttributes.PeerMention,
+                        IosappTextAttributes.PeerTextMention,
+                        IosappTextAttributes.BotCommand,
+                        IosappTextAttributes.Hashtag
                     ]
                     for name in possibleNames {
                         if let _ = attributes[NSAttributedString.Key(rawValue: name)] {
@@ -1572,25 +1572,25 @@ public class ChatMessageGiftBubbleContentNode: ChatMessageBubbleContentNode {
 
     override public func tapActionAtPoint(_ point: CGPoint, gesture: TapLongTapOrDoubleTapGesture, isEstimating: Bool) -> ChatMessageBubbleContentTapAction {
         if let (index, attributes) = self.labelNode.attributesAtPoint(CGPoint(x: point.x - self.labelNode.frame.minX, y: point.y - self.labelNode.frame.minY - 10.0)), gesture == .tap {
-            if let url = attributes[NSAttributedString.Key(rawValue: TelegramTextAttributes.URL)] as? String {
+            if let url = attributes[NSAttributedString.Key(rawValue: IosappTextAttributes.URL)] as? String {
                 var concealed = true
-                if let (attributeText, fullText) = self.labelNode.attributeSubstring(name: TelegramTextAttributes.URL, index: index) {
+                if let (attributeText, fullText) = self.labelNode.attributeSubstring(name: IosappTextAttributes.URL, index: index) {
                     concealed = !doesUrlMatchText(url: url, text: attributeText, fullText: fullText)
                 }
                 return ChatMessageBubbleContentTapAction(content: .url(ChatMessageBubbleContentTapAction.Url(url: url, concealed: concealed)))
-            } else if let peerMention = attributes[NSAttributedString.Key(rawValue: TelegramTextAttributes.PeerMention)] as? TelegramPeerMention {
+            } else if let peerMention = attributes[NSAttributedString.Key(rawValue: IosappTextAttributes.PeerMention)] as? IosappPeerMention {
                 return ChatMessageBubbleContentTapAction(content: .peerMention(peerId: peerMention.peerId, mention: peerMention.mention, openProfile: false))
-            } else if let peerName = attributes[NSAttributedString.Key(rawValue: TelegramTextAttributes.PeerTextMention)] as? String {
+            } else if let peerName = attributes[NSAttributedString.Key(rawValue: IosappTextAttributes.PeerTextMention)] as? String {
                 return ChatMessageBubbleContentTapAction(content: .textMention(peerName))
-            } else if let botCommand = attributes[NSAttributedString.Key(rawValue: TelegramTextAttributes.BotCommand)] as? String {
+            } else if let botCommand = attributes[NSAttributedString.Key(rawValue: IosappTextAttributes.BotCommand)] as? String {
                 return ChatMessageBubbleContentTapAction(content: .botCommand(botCommand))
-            } else if let hashtag = attributes[NSAttributedString.Key(rawValue: TelegramTextAttributes.Hashtag)] as? TelegramHashtag {
+            } else if let hashtag = attributes[NSAttributedString.Key(rawValue: IosappTextAttributes.Hashtag)] as? IosappHashtag {
                 return ChatMessageBubbleContentTapAction(content: .hashtag(hashtag.peerName, hashtag.hashtag))
             }
         }
         
         if let (_, attributes) = self.subtitleNode.textNode.attributesAtPoint(CGPoint(x: point.x - self.textClippingNode.frame.minX, y: point.y - self.textClippingNode.frame.minY)), gesture == .tap {
-            if let _ = attributes[NSAttributedString.Key(rawValue: TelegramTextAttributes.Spoiler)], let dustNode = self.dustNode, !dustNode.isRevealed {
+            if let _ = attributes[NSAttributedString.Key(rawValue: IosappTextAttributes.Spoiler)], let dustNode = self.dustNode, !dustNode.isRevealed {
                 return ChatMessageBubbleContentTapAction(content: .none)
             }
         }
@@ -1634,7 +1634,7 @@ public class ChatMessageGiftBubbleContentNode: ChatMessageBubbleContentNode {
         if isPlaying {
             var alreadySeen = true
             
-            if let action = item.message.media.first(where: { $0 is TelegramMediaAction }) as? TelegramMediaAction, case .setChatTheme = action.action {
+            if let action = item.message.media.first(where: { $0 is IosappMediaAction }) as? IosappMediaAction, case .setChatTheme = action.action {
                 
             } else if item.message.flags.contains(.Incoming) {
                 if let unreadRange = item.controllerInteraction.unreadMessageRange[UnreadMessageRangeKey(peerId: item.message.id.peerId, namespace: item.message.id.namespace)] {

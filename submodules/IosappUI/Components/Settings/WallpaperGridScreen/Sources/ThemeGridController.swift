@@ -26,7 +26,7 @@ public enum WallpaperSelectionResult {
 public final class ThemeGridController: ViewController {
     public enum Mode {
         case generic
-        case peer(EnginePeer, [TelegramTheme], TelegramWallpaper?, Int?, Int?)
+        case peer(EnginePeer, [IosappTheme], IosappWallpaper?, Int?, Int?)
     }
     private var controllerNode: ThemeGridControllerNode {
         return self.displayNode as! ThemeGridControllerNode
@@ -426,7 +426,7 @@ public final class ThemeGridController: ViewController {
         }
     }
     
-    private func shareWallpapers(_ wallpapers: [TelegramWallpaper]) {
+    private func shareWallpapers(_ wallpapers: [IosappWallpaper]) {
         var string: String = ""
         for wallpaper in wallpapers {
             var item: String?

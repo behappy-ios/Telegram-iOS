@@ -425,10 +425,10 @@ public final class MessageInlineBlockBackgroundView: UIView {
     public final class Pattern: Equatable {
         public let context: AccountContext
         public let fileId: Int64
-        public let file: TelegramMediaFile?
+        public let file: IosappMediaFile?
         public let emptyCorner: Bool
         
-        public init(context: AccountContext, fileId: Int64, file: TelegramMediaFile?, emptyCorner: Bool = false) {
+        public init(context: AccountContext, fileId: Int64, file: IosappMediaFile?, emptyCorner: Bool = false) {
             self.context = context
             self.fileId = fileId
             self.file = file
@@ -519,7 +519,7 @@ public final class MessageInlineBlockBackgroundView: UIView {
     
     private var patternContentsTarget: PatternContentsTarget?
     private var patternContentLayers: [SimpleLayer] = []
-    private var patternFile: TelegramMediaFile?
+    private var patternFile: IosappMediaFile?
     private var patternFileDisposable: Disposable?
     private var patternImage: UIImage?
     private var patternImageDisposable: Disposable?

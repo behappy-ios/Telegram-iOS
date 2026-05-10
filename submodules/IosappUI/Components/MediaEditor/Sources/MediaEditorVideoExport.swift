@@ -50,7 +50,7 @@ public final class MediaEditorVideoExport {
     public enum Subject {
         case image(image: UIImage)
         case video(asset: AVAsset, isStory: Bool)
-        case sticker(file: TelegramMediaFile)
+        case sticker(file: IosappMediaFile)
     }
     
     public struct Configuration {
@@ -315,7 +315,7 @@ public final class MediaEditorVideoExport {
     enum Input {
         case image(image: UIImage, rect: CGRect?, scale: CGFloat, offset: CGPoint)
         case video(asset: AVAsset, rect: CGRect?, scale: CGFloat, offset: CGPoint, rotation: TextureRotation, duration: Double, trimRange: Range<Double>?, trimOffset: Double?, volume: CGFloat?)
-        case sticker(TelegramMediaFile)
+        case sticker(IosappMediaFile)
         
         var isVideo: Bool {
             if case .video = self {

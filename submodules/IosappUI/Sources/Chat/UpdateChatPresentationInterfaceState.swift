@@ -198,7 +198,7 @@ func updateChatPresentationInterfaceStateImpl(
     }
     
     var isBot = false
-    if let peer = updatedChatPresentationInterfaceState.renderedPeer?.peer as? TelegramUser, peer.botInfo != nil {
+    if let peer = updatedChatPresentationInterfaceState.renderedPeer?.peer as? IosappUser, peer.botInfo != nil {
         isBot = true
     } else {
         isBot = false
@@ -247,7 +247,7 @@ func updateChatPresentationInterfaceStateImpl(
     if canHaveUrlPreview, let (updatedUrlPreviewState, updatedUrlPreviewSignal) = urlPreviewStateForInputText(updatedChatPresentationInterfaceState.interfaceState.composeInputState.inputText, context: selfController.context, currentQuery: selfController.urlPreviewQueryState?.0, forPeerId: selfController.chatLocation.peerId) {
         selfController.urlPreviewQueryState?.1.dispose()
         var inScope = true
-        var inScopeResult: ((TelegramMediaWebpage?) -> (TelegramMediaWebpage, String)?)?
+        var inScopeResult: ((IosappMediaWebpage?) -> (IosappMediaWebpage, String)?)?
         let linkPreviews: Signal<Bool, NoError>
         if case let .peer(peerId) = selfController.chatLocation, peerId.namespace == Namespaces.Peer.SecretChat {
             linkPreviews = interactiveChatLinkPreviewsEnabled(accountManager: selfController.context.sharedContext.accountManager, displayAlert: { [weak selfController] f in
@@ -263,9 +263,9 @@ func updateChatPresentationInterfaceStateImpl(
             })
         } else {
             var bannedEmbedLinks = false
-            if let channel = selfController.presentationInterfaceState.renderedPeer?.peer as? TelegramChannel, channel.hasBannedPermission(.banEmbedLinks) != nil {
+            if let channel = selfController.presentationInterfaceState.renderedPeer?.peer as? IosappChannel, channel.hasBannedPermission(.banEmbedLinks) != nil {
                 bannedEmbedLinks = true
-            } else if let group = selfController.presentationInterfaceState.renderedPeer?.peer as? TelegramGroup, group.hasBannedPermission(.banEmbedLinks) {
+            } else if let group = selfController.presentationInterfaceState.renderedPeer?.peer as? IosappGroup, group.hasBannedPermission(.banEmbedLinks) {
                 bannedEmbedLinks = true
             }
             if bannedEmbedLinks {
@@ -276,7 +276,7 @@ func updateChatPresentationInterfaceStateImpl(
         }
         let filteredPreviewSignal = linkPreviews
         |> take(1)
-        |> mapToSignal { value -> Signal<(TelegramMediaWebpage?) -> (TelegramMediaWebpage, String)?, NoError> in
+        |> mapToSignal { value -> Signal<(IosappMediaWebpage?) -> (IosappMediaWebpage, String)?, NoError> in
             if value {
                 return updatedUrlPreviewSignal
             } else {
@@ -328,7 +328,7 @@ func updateChatPresentationInterfaceStateImpl(
     if let (updatedEditingUrlPreviewState, updatedEditingUrlPreviewSignal) = urlPreviewStateForInputText(editingUrlPreviewText, context: selfController.context, currentQuery: selfController.editingUrlPreviewQueryState?.0, forPeerId: selfController.chatLocation.peerId) {
         selfController.editingUrlPreviewQueryState?.1.dispose()
         var inScope = true
-        var inScopeResult: ((TelegramMediaWebpage?) -> (TelegramMediaWebpage, String)?)?
+        var inScopeResult: ((IosappMediaWebpage?) -> (IosappMediaWebpage, String)?)?
         selfController.editingUrlPreviewQueryState = (updatedEditingUrlPreviewState, (updatedEditingUrlPreviewSignal |> deliverOnMainQueue).startStrict(next: { [weak selfController] result in
             guard let selfController else {
                 return
@@ -374,7 +374,7 @@ func updateChatPresentationInterfaceStateImpl(
             updatedChatPresentationInterfaceState = updatedChatPresentationInterfaceState.updatedReplyMessage(nil)
             let disposable = MetaDisposable()
             selfController.replyMessageState = (replyMessageId, disposable)
-            disposable.set((selfController.context.engine.data.subscribe(TelegramEngine.EngineData.Item.Messages.Message(id: replyMessageId))
+            disposable.set((selfController.context.engine.data.subscribe(IosappEngine.EngineData.Item.Messages.Message(id: replyMessageId))
             |> deliverOnMainQueue).start(next: { [weak selfController] message in
                 guard let selfController else {
                     return

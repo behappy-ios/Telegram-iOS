@@ -112,8 +112,8 @@ final class PeerAllowedReactionsScreenComponent: Component {
             }
         }
         
-        private var emptyResultEmojis: [TelegramMediaFile] = []
-        private var stableEmptyResultEmoji: TelegramMediaFile?
+        private var emptyResultEmojis: [IosappMediaFile] = []
+        private var stableEmptyResultEmoji: IosappMediaFile?
         private let stableEmptyResultEmojiDisposable = MetaDisposable()
         
         private var caretPosition: Int?
@@ -332,7 +332,7 @@ final class PeerAllowedReactionsScreenComponent: Component {
                 return
             }
             
-            let _ = (component.context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: component.peerId))
+            let _ = (component.context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: component.peerId))
             |> deliverOnMainQueue).startStandalone(next: { [weak self] peer in
                 guard let self, let component = self.component, let peer, let status = self.boostStatus else {
                     return
@@ -624,7 +624,7 @@ final class PeerAllowedReactionsScreenComponent: Component {
                                         }
                                     }
                                 
-                                    let hasPremium = context.engine.data.subscribe(TelegramEngine.EngineData.Item.Peer.Peer(id: context.account.peerId))
+                                    let hasPremium = context.engine.data.subscribe(IosappEngine.EngineData.Item.Peer.Peer(id: context.account.peerId))
                                     |> map { peer -> Bool in
                                         guard case let .user(user) = peer else {
                                             return false
@@ -700,7 +700,7 @@ final class PeerAllowedReactionsScreenComponent: Component {
                                                     localPacksSignal
                                                 )
                                                 |> map { view, availableReactions, hasPremium, foundPacks, foundEmoji, foundLocalPacks -> [EmojiPagerContentComponent.ItemGroup] in
-                                                    var result: [(String, TelegramMediaFile.Accessor?, String)] = []
+                                                    var result: [(String, IosappMediaFile.Accessor?, String)] = []
                                                     
                                                     var allEmoticons: [String: String] = [:]
                                                     for keyword in keywords {
@@ -714,9 +714,9 @@ final class PeerAllowedReactionsScreenComponent: Component {
                                                             switch attribute {
                                                             case let .CustomEmoji(_, _, alt, _):
                                                                 if !alt.isEmpty, let keyword = allEmoticons[alt] {
-                                                                    result.append((alt, TelegramMediaFile.Accessor(itemFile), keyword))
+                                                                    result.append((alt, IosappMediaFile.Accessor(itemFile), keyword))
                                                                 } else if alt == query {
-                                                                    result.append((alt, TelegramMediaFile.Accessor(itemFile), alt))
+                                                                    result.append((alt, IosappMediaFile.Accessor(itemFile), alt))
                                                                 }
                                                             default:
                                                                 break
@@ -874,11 +874,11 @@ final class PeerAllowedReactionsScreenComponent: Component {
                                                 continue
                                             }
                                             existingIds.insert(itemFile.fileId)
-                                            let animationData = EntityKeyboardAnimationData(file: TelegramMediaFile.Accessor(itemFile))
+                                            let animationData = EntityKeyboardAnimationData(file: IosappMediaFile.Accessor(itemFile))
                                             let item = EmojiPagerContentComponent.Item(
                                                 animationData: animationData,
                                                 content: .animation(animationData),
-                                                itemFile: TelegramMediaFile.Accessor(itemFile),
+                                                itemFile: IosappMediaFile.Accessor(itemFile),
                                                 subgroupId: nil,
                                                 icon: .none,
                                                 tintMode: animationData.isTemplate ? .primary : .none
@@ -1178,7 +1178,7 @@ final class PeerAllowedReactionsScreenComponent: Component {
                 let body = MarkdownAttributeSet(font: UIFont.systemFont(ofSize: 13.0), textColor: environment.theme.list.freeTextColor)
                 let link = MarkdownAttributeSet(font: UIFont.systemFont(ofSize: 13.0), textColor: environment.theme.list.itemAccentColor, additionalAttributes: [:])
                 let attributes = MarkdownAttributes(body: body, bold: body, link: link, linkAttribute: { contents in
-                    return (TelegramTextAttributes.URL, contents)
+                    return (IosappTextAttributes.URL, contents)
                 })
                 let reactionsInfoTextSize = reactionsInfoText.update(
                     transition: .immediate,
@@ -1186,14 +1186,14 @@ final class PeerAllowedReactionsScreenComponent: Component {
                         text: .markdown(text: environment.strings.ChannelReactions_ReactionsInfoLabel, attributes: attributes),
                         maximumNumberOfLines: 0,
                         highlightAction: { attributes in
-                            if let _ = attributes[NSAttributedString.Key(rawValue: TelegramTextAttributes.URL)] {
-                                return NSAttributedString.Key(rawValue: TelegramTextAttributes.URL)
+                            if let _ = attributes[NSAttributedString.Key(rawValue: IosappTextAttributes.URL)] {
+                                return NSAttributedString.Key(rawValue: IosappTextAttributes.URL)
                             } else {
                                 return nil
                             }
                         },
                         tapAction: { [weak self] attributes, _ in
-                            guard let self, let component = self.component, attributes[NSAttributedString.Key(rawValue: TelegramTextAttributes.URL)] != nil else {
+                            guard let self, let component = self.component, attributes[NSAttributedString.Key(rawValue: IosappTextAttributes.URL)] != nil else {
                                 return
                             }
                             self.resolveStickersBotDisposable?.dispose()
@@ -1858,7 +1858,7 @@ public class PeerAllowedReactionsScreen: ViewControllerComponentContainer {
                     } else {
                         if case let .custom(fileId) = reaction {
                             if let file = files[fileId] {
-                                result.append(EmojiComponentReactionItem(reaction: reaction, file: TelegramMediaFile.Accessor(file)))
+                                result.append(EmojiComponentReactionItem(reaction: reaction, file: IosappMediaFile.Accessor(file)))
                             }
                         }
                     }

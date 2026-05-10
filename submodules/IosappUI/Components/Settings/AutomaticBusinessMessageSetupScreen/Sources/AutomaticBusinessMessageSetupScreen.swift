@@ -236,7 +236,7 @@ final class AutomaticBusinessMessageSetupScreenComponent: Component {
                 }
             }
             
-            var mappedCategories: TelegramBusinessRecipients.Categories = []
+            var mappedCategories: IosappBusinessRecipients.Categories = []
             if self.additionalPeerList.categories.contains(.existingChats) {
                 mappedCategories.insert(.existingChats)
             }
@@ -249,7 +249,7 @@ final class AutomaticBusinessMessageSetupScreenComponent: Component {
             if self.additionalPeerList.categories.contains(.nonContacts) {
                 mappedCategories.insert(.nonContacts)
             }
-            let recipients = TelegramBusinessRecipients(
+            let recipients = IosappBusinessRecipients(
                 categories: mappedCategories,
                 additionalPeers: Set(self.additionalPeerList.peers.map(\.peer.id)),
                 excludePeers: Set(),
@@ -258,9 +258,9 @@ final class AutomaticBusinessMessageSetupScreenComponent: Component {
             
             switch component.mode {
             case .greeting:
-                var greetingMessage: TelegramBusinessGreetingMessage?
+                var greetingMessage: IosappBusinessGreetingMessage?
                 if self.isOn, let currentShortcut = self.currentShortcut, let shortcutId = currentShortcut.id {
-                    greetingMessage = TelegramBusinessGreetingMessage(
+                    greetingMessage = IosappBusinessGreetingMessage(
                         shortcutId: shortcutId,
                         recipients: recipients,
                         inactivityDays: self.inactivityDays
@@ -268,9 +268,9 @@ final class AutomaticBusinessMessageSetupScreenComponent: Component {
                 }
                 let _ = component.context.engine.accountData.updateBusinessGreetingMessage(greetingMessage: greetingMessage).startStandalone()
             case .away:
-                var awayMessage: TelegramBusinessAwayMessage?
+                var awayMessage: IosappBusinessAwayMessage?
                 if self.isOn, let currentShortcut = self.currentShortcut, let shortcutId = currentShortcut.id {
-                    let mappedSchedule: TelegramBusinessAwayMessage.Schedule
+                    let mappedSchedule: IosappBusinessAwayMessage.Schedule
                     switch self.schedule {
                     case .always:
                         mappedSchedule = .always
@@ -283,7 +283,7 @@ final class AutomaticBusinessMessageSetupScreenComponent: Component {
                             return false
                         }
                     }
-                    awayMessage = TelegramBusinessAwayMessage(
+                    awayMessage = IosappBusinessAwayMessage(
                         shortcutId: shortcutId,
                         recipients: recipients,
                         schedule: mappedSchedule,
@@ -408,10 +408,10 @@ final class AutomaticBusinessMessageSetupScreenComponent: Component {
                 
                 let _ = (component.context.engine.data.get(
                     EngineDataMap(
-                        peerIds.map(TelegramEngine.EngineData.Item.Peer.Peer.init(id:))
+                        peerIds.map(IosappEngine.EngineData.Item.Peer.Peer.init(id:))
                     ),
                     EngineDataMap(
-                        peerIds.map(TelegramEngine.EngineData.Item.Peer.IsContact.init(id:))
+                        peerIds.map(IosappEngine.EngineData.Item.Peer.IsContact.init(id:))
                     )
                 )
                 |> deliverOnMainQueue).start(next: { [weak self] peerMap, isContactMap in
@@ -585,7 +585,7 @@ final class AutomaticBusinessMessageSetupScreenComponent: Component {
             if self.component == nil {
                 self.accountPeer = component.initialData.accountPeer
                 
-                var initialRecipients: TelegramBusinessRecipients?
+                var initialRecipients: IosappBusinessRecipients?
                 
                 let shortcutName: String
                 switch component.mode {
@@ -1566,18 +1566,18 @@ public final class AutomaticBusinessMessageSetupScreen: ViewControllerComponentC
     public final class InitialData: AutomaticBusinessMessageSetupScreenInitialData {
         fileprivate let accountPeer: EnginePeer?
         fileprivate let shortcutMessageList: ShortcutMessageList
-        fileprivate let greetingMessage: TelegramBusinessGreetingMessage?
-        fileprivate let awayMessage: TelegramBusinessAwayMessage?
+        fileprivate let greetingMessage: IosappBusinessGreetingMessage?
+        fileprivate let awayMessage: IosappBusinessAwayMessage?
         fileprivate let additionalPeers: [EnginePeer.Id: AutomaticBusinessMessageSetupScreenComponent.AdditionalPeerList.Peer]
-        fileprivate let businessHours: TelegramBusinessHours?
+        fileprivate let businessHours: IosappBusinessHours?
         
         fileprivate init(
             accountPeer: EnginePeer?,
             shortcutMessageList: ShortcutMessageList,
-            greetingMessage: TelegramBusinessGreetingMessage?,
-            awayMessage: TelegramBusinessAwayMessage?,
+            greetingMessage: IosappBusinessGreetingMessage?,
+            awayMessage: IosappBusinessAwayMessage?,
             additionalPeers: [EnginePeer.Id: AutomaticBusinessMessageSetupScreenComponent.AdditionalPeerList.Peer],
-            businessHours: TelegramBusinessHours?
+            businessHours: IosappBusinessHours?
         ) {
             self.accountPeer = accountPeer
             self.shortcutMessageList = shortcutMessageList
@@ -1642,10 +1642,10 @@ public final class AutomaticBusinessMessageSetupScreen: ViewControllerComponentC
     public static func initialData(context: AccountContext) -> Signal<AutomaticBusinessMessageSetupScreenInitialData, NoError> {
         return combineLatest(
             context.engine.data.get(
-                TelegramEngine.EngineData.Item.Peer.Peer(id: context.account.peerId),
-                TelegramEngine.EngineData.Item.Peer.BusinessGreetingMessage(id: context.account.peerId),
-                TelegramEngine.EngineData.Item.Peer.BusinessAwayMessage(id: context.account.peerId),
-                TelegramEngine.EngineData.Item.Peer.BusinessHours(id: context.account.peerId)
+                IosappEngine.EngineData.Item.Peer.Peer(id: context.account.peerId),
+                IosappEngine.EngineData.Item.Peer.BusinessGreetingMessage(id: context.account.peerId),
+                IosappEngine.EngineData.Item.Peer.BusinessAwayMessage(id: context.account.peerId),
+                IosappEngine.EngineData.Item.Peer.BusinessHours(id: context.account.peerId)
             ),
             context.engine.accountData.shortcutMessageList(onlyRemote: true)
             |> take(1)
@@ -1662,8 +1662,8 @@ public final class AutomaticBusinessMessageSetupScreen: ViewControllerComponentC
             }
             
             return context.engine.data.get(
-                EngineDataMap(additionalPeerIds.map(TelegramEngine.EngineData.Item.Peer.Peer.init(id:))),
-                EngineDataMap(additionalPeerIds.map(TelegramEngine.EngineData.Item.Peer.IsContact.init(id:)))
+                EngineDataMap(additionalPeerIds.map(IosappEngine.EngineData.Item.Peer.Peer.init(id:))),
+                EngineDataMap(additionalPeerIds.map(IosappEngine.EngineData.Item.Peer.IsContact.init(id:)))
             )
             |> map { peers, isContacts -> AutomaticBusinessMessageSetupScreenInitialData in
                 var additionalPeers: [EnginePeer.Id: AutomaticBusinessMessageSetupScreenComponent.AdditionalPeerList.Peer] = [:]

@@ -206,7 +206,7 @@ private func initialHandshakeAccept(postbox: Postbox, network: Network, peerId: 
                     var updatedState = state
                     updatedState = updatedState.withUpdatedEmbeddedState(.terminated)
                     transaction.setPeerChatState(peerId, state: updatedState)
-                    if let peer = transaction.getPeer(peerId) as? TelegramSecretChat {
+                    if let peer = transaction.getPeer(peerId) as? IosappSecretChat {
                         updatePeersCustom(transaction: transaction, peers: [peer.withUpdatedEmbeddedState(updatedState.embeddedState.peerState)], update: { _, updated in
                             return updated
                         })
@@ -280,7 +280,7 @@ private func initialHandshakeAccept(postbox: Postbox, network: Network, peerId: 
                         updatedState = addSecretChatOutgoingOperation(transaction: transaction, peerId: peerId, operation: .reportLayerSupport(layer: layer, actionGloballyUniqueId: Int64.random(in: Int64.min ... Int64.max), layerSupport: 46), state: updatedState)
                     }
                     transaction.setPeerChatState(peerId, state: updatedState)
-                    if let peer = transaction.getPeer(peerId) as? TelegramSecretChat {
+                    if let peer = transaction.getPeer(peerId) as? IosappSecretChat {
                         updatePeersCustom(transaction: transaction, peers: [peer.withUpdatedEmbeddedState(updatedState.embeddedState.peerState)], update: { _, updated in
                             return updated
                         })
@@ -528,7 +528,7 @@ private enum SecretMessageAction {
     }
 }
 
-private func decryptedAttributes46(_ attributes: [TelegramMediaFileAttribute], transaction: Transaction) -> [SecretApi46.DocumentAttribute] {
+private func decryptedAttributes46(_ attributes: [IosappMediaFileAttribute], transaction: Transaction) -> [SecretApi46.DocumentAttribute] {
     var result: [SecretApi46.DocumentAttribute] = []
     for attribute in attributes {
         switch attribute {
@@ -587,7 +587,7 @@ private func decryptedAttributes46(_ attributes: [TelegramMediaFileAttribute], t
     return result
 }
 
-private func decryptedAttributes73(_ attributes: [TelegramMediaFileAttribute], transaction: Transaction) -> [SecretApi73.DocumentAttribute] {
+private func decryptedAttributes73(_ attributes: [IosappMediaFileAttribute], transaction: Transaction) -> [SecretApi73.DocumentAttribute] {
     var result: [SecretApi73.DocumentAttribute] = []
     for attribute in attributes {
         switch attribute {
@@ -650,7 +650,7 @@ private func decryptedAttributes73(_ attributes: [TelegramMediaFileAttribute], t
     return result
 }
 
-private func decryptedAttributes101(_ attributes: [TelegramMediaFileAttribute], transaction: Transaction) -> [SecretApi101.DocumentAttribute] {
+private func decryptedAttributes101(_ attributes: [IosappMediaFileAttribute], transaction: Transaction) -> [SecretApi101.DocumentAttribute] {
     var result: [SecretApi101.DocumentAttribute] = []
     for attribute in attributes {
         switch attribute {
@@ -713,7 +713,7 @@ private func decryptedAttributes101(_ attributes: [TelegramMediaFileAttribute], 
     return result
 }
 
-private func decryptedAttributes144(_ attributes: [TelegramMediaFileAttribute], transaction: Transaction) -> [SecretApi144.DocumentAttribute] {
+private func decryptedAttributes144(_ attributes: [IosappMediaFileAttribute], transaction: Transaction) -> [SecretApi144.DocumentAttribute] {
     var result: [SecretApi144.DocumentAttribute] = []
     for attribute in attributes {
         switch attribute {
@@ -981,7 +981,7 @@ private func boxedDecryptedMessage(transaction: Transaction, message: Message, g
     }
     
     if let media = media {
-        if let image = media as? TelegramMediaImage, let uploadedFile = uploadedFile, let largestRepresentation = largestImageRepresentation(image.representations) {
+        if let image = media as? IosappMediaImage, let uploadedFile = uploadedFile, let largestRepresentation = largestImageRepresentation(image.representations) {
             let thumbW: Int32
             let thumbH: Int32
             let thumb: Buffer
@@ -1066,7 +1066,7 @@ private func boxedDecryptedMessage(transaction: Transaction, message: Message, g
                     }
                     return .layer144(.decryptedMessage(flags: flags, randomId: globallyUniqueId, ttl: messageAutoremoveTimeout, message: message.text, media: decryptedMedia, entities: decryptedEntites, viaBotName: viaBotName, replyToRandomId: replyGlobalId, groupedId: message.groupingKey))
             }
-        } else if let file = media as? TelegramMediaFile {
+        } else if let file = media as? IosappMediaFile {
             let thumbW: Int32
             let thumbH: Int32
             let thumb: Buffer
@@ -1235,7 +1235,7 @@ private func boxedDecryptedMessage(transaction: Transaction, message: Message, g
                     return .layer144(.decryptedMessage(flags: flags, randomId: globallyUniqueId, ttl: messageAutoremoveTimeout, message: message.text, media: decryptedMedia, entities: decryptedEntites, viaBotName: viaBotName, replyToRandomId: replyGlobalId, groupedId: message.groupingKey))
                 }
             }
-        } else if let webpage = media as? TelegramMediaWebpage {
+        } else if let webpage = media as? IosappMediaWebpage {
             var url: String?
             if case let .Loaded(content) = webpage.content {
                 url = content.url
@@ -1299,7 +1299,7 @@ private func boxedDecryptedMessage(transaction: Transaction, message: Message, g
                         return .layer144(.decryptedMessage(flags: flags, randomId: globallyUniqueId, ttl: messageAutoremoveTimeout, message: message.text, media: decryptedMedia, entities: decryptedEntites, viaBotName: viaBotName, replyToRandomId: replyGlobalId, groupedId: message.groupingKey))
                 }
             }
-        } else if let location = media as? TelegramMediaMap {
+        } else if let location = media as? IosappMediaMap {
             switch layer {
                 case .layer8:
                     break
@@ -1379,7 +1379,7 @@ private func boxedDecryptedMessage(transaction: Transaction, message: Message, g
                     }
                     return .layer144(.decryptedMessage(flags: flags, randomId: globallyUniqueId, ttl: messageAutoremoveTimeout, message: message.text, media: decryptedMedia, entities: decryptedEntites, viaBotName: viaBotName, replyToRandomId: replyGlobalId, groupedId: message.groupingKey))
             }
-        } else if let contact = media as? TelegramMediaContact {
+        } else if let contact = media as? IosappMediaContact {
             switch layer {
                 case .layer8:
                     break
@@ -1737,11 +1737,11 @@ private func resourceThumbnailData(auxiliaryMethods: AccountAuxiliaryMethods, me
 private func messageWithThumbnailData(auxiliaryMethods: AccountAuxiliaryMethods, mediaBox: MediaBox, media: [Media]) -> Signal<[MediaId: (PixelDimensions, Data)], NoError> {
     var signals: [Signal<(MediaId, PixelDimensions, Data)?, NoError>] = []
     for media in media {
-        if let image = media as? TelegramMediaImage {
+        if let image = media as? IosappMediaImage {
             if let smallestRepresentation = smallestImageRepresentation(image.representations) {
                 signals.append(resourceThumbnailData(auxiliaryMethods: auxiliaryMethods, mediaBox: mediaBox, resource: smallestRepresentation.resource, mediaId: image.imageId))
             }
-        } else if let file = media as? TelegramMediaFile {
+        } else if let file = media as? IosappMediaFile {
             if let smallestRepresentation = smallestImageRepresentation(file.previewRepresentations) {
                 signals.append(resourceThumbnailData(auxiliaryMethods: auxiliaryMethods, mediaBox: mediaBox, resource: smallestRepresentation.resource, mediaId: file.fileId))
             }
@@ -1770,7 +1770,7 @@ private func sendMessage(auxiliaryMethods: AccountAuxiliaryMethods, postbox: Pos
     |> switchToLatest
     |> mapToSignal { thumbnailData -> Signal<Void, NoError> in
         return postbox.transaction { transaction -> Signal<Void, NoError> in
-            if let state = transaction.getPeerChatState(messageId.peerId) as? SecretChatState, let peer = transaction.getPeer(messageId.peerId) as? TelegramSecretChat {
+            if let state = transaction.getPeerChatState(messageId.peerId) as? SecretChatState, let peer = transaction.getPeer(messageId.peerId) as? IosappSecretChat {
                 if let message = transaction.getMessage(messageId), let globallyUniqueId = message.globallyUniqueId {
                     let decryptedMessage = boxedDecryptedMessage(transaction: transaction, message: message, globallyUniqueId: globallyUniqueId, uploadedFile: file, thumbnailData: thumbnailData, layer: layer)
                     return sendBoxedDecryptedMessage(postbox: postbox, network: network, peer: peer, state: state, operationIndex: tagLocalIndex, decryptedMessage: decryptedMessage, globallyUniqueId: globallyUniqueId, file: file, silent: message.muted, asService: wasDelivered, wasDelivered: wasDelivered)
@@ -1819,8 +1819,8 @@ private func sendMessage(auxiliaryMethods: AccountAuxiliaryMethods, postbox: Pos
                                 
                                 if let fromMedia = currentMessage.media.first, let encryptedFile = encryptedFile, let file = file {
                                     var toMedia: Media?
-                                    if let fromMedia = fromMedia as? TelegramMediaFile {
-                                        let updatedFile = TelegramMediaFile(fileId: MediaId(namespace: Namespaces.Media.CloudSecretFile, id: encryptedFile.id), partialReference: nil, resource: SecretFileMediaResource(fileId: encryptedFile.id, accessHash: encryptedFile.accessHash, containerSize: encryptedFile.size, decryptedSize: file.size, datacenterId: Int(encryptedFile.datacenterId), key: file.key), previewRepresentations: fromMedia.previewRepresentations, videoThumbnails: fromMedia.videoThumbnails, immediateThumbnailData: fromMedia.immediateThumbnailData, mimeType: fromMedia.mimeType, size: fromMedia.size, attributes: fromMedia.attributes, alternativeRepresentations: fromMedia.alternativeRepresentations)
+                                    if let fromMedia = fromMedia as? IosappMediaFile {
+                                        let updatedFile = IosappMediaFile(fileId: MediaId(namespace: Namespaces.Media.CloudSecretFile, id: encryptedFile.id), partialReference: nil, resource: SecretFileMediaResource(fileId: encryptedFile.id, accessHash: encryptedFile.accessHash, containerSize: encryptedFile.size, decryptedSize: file.size, datacenterId: Int(encryptedFile.datacenterId), key: file.key), previewRepresentations: fromMedia.previewRepresentations, videoThumbnails: fromMedia.videoThumbnails, immediateThumbnailData: fromMedia.immediateThumbnailData, mimeType: fromMedia.mimeType, size: fromMedia.size, attributes: fromMedia.attributes, alternativeRepresentations: fromMedia.alternativeRepresentations)
                                         toMedia = updatedFile
                                         updatedMedia = [updatedFile]
                                     }
@@ -1835,9 +1835,9 @@ private func sendMessage(auxiliaryMethods: AccountAuxiliaryMethods, postbox: Pos
                             
                             maybeReadSecretOutgoingMessage(transaction: transaction, index: MessageIndex(id: message.id, timestamp: timestamp))
                             
-                            var sentStickers: [TelegramMediaFile] = []
+                            var sentStickers: [IosappMediaFile] = []
                             for media in message.media {
-                                if let file = media as? TelegramMediaFile {
+                                if let file = media as? IosappMediaFile {
                                     if file.isSticker {
                                         sentStickers.append(file)
                                     }
@@ -1876,7 +1876,7 @@ private func sendStandaloneMessage(auxiliaryMethods: AccountAuxiliaryMethods, po
     |> switchToLatest
     |> mapToSignal { thumbnailData -> Signal<Void, NoError> in
         return postbox.transaction { transaction -> Signal<Void, NoError> in
-            guard let state = transaction.getPeerChatState(peerId) as? SecretChatState, let peer = transaction.getPeer(peerId) as? TelegramSecretChat else {
+            guard let state = transaction.getPeerChatState(peerId) as? SecretChatState, let peer = transaction.getPeer(peerId) as? IosappSecretChat else {
                 return .complete()
             }
             
@@ -1949,8 +1949,8 @@ private func sendStandaloneMessage(auxiliaryMethods: AccountAuxiliaryMethods, po
                     if let timestamp = timestamp {
                         var updatedMedia: [Media] = []
                         for item in media {
-                            if let file = item as? TelegramMediaFile, let encryptedFile = encryptedFile, let sourceFile = contents.file {
-                                let updatedFile = TelegramMediaFile(
+                            if let file = item as? IosappMediaFile, let encryptedFile = encryptedFile, let sourceFile = contents.file {
+                                let updatedFile = IosappMediaFile(
                                     fileId: MediaId(namespace: Namespaces.Media.CloudSecretFile, id: encryptedFile.id),
                                     partialReference: nil,
                                     resource: SecretFileMediaResource(fileId: encryptedFile.id, accessHash: encryptedFile.accessHash, containerSize: encryptedFile.size, decryptedSize: sourceFile.size, datacenterId: Int(encryptedFile.datacenterId), key: sourceFile.key),
@@ -1963,11 +1963,11 @@ private func sendStandaloneMessage(auxiliaryMethods: AccountAuxiliaryMethods, po
                                     alternativeRepresentations: file.alternativeRepresentations
                                 )
                                 updatedMedia.append(updatedFile)
-                            } else if let image = item as? TelegramMediaImage, let encryptedFile = encryptedFile, let sourceFile = contents.file, let representation = image.representations.last {
-                                let updatedImage = TelegramMediaImage(
+                            } else if let image = item as? IosappMediaImage, let encryptedFile = encryptedFile, let sourceFile = contents.file, let representation = image.representations.last {
+                                let updatedImage = IosappMediaImage(
                                     imageId: MediaId(namespace: Namespaces.Media.CloudSecretImage, id: encryptedFile.id),
                                     representations: [
-                                        TelegramMediaImageRepresentation(
+                                        IosappMediaImageRepresentation(
                                             dimensions: representation.dimensions,
                                             resource: SecretFileMediaResource(fileId: encryptedFile.id, accessHash: encryptedFile.accessHash, containerSize: encryptedFile.size, decryptedSize: sourceFile.size, datacenterId: Int(encryptedFile.datacenterId), key: sourceFile.key),
                                             progressiveSizes: [],
@@ -2013,9 +2013,9 @@ private func sendStandaloneMessage(auxiliaryMethods: AccountAuxiliaryMethods, po
                             maybeReadSecretOutgoingMessage(transaction: transaction, index: MessageIndex(id: id, timestamp: timestamp))
                         }
                         
-                        var sentStickers: [TelegramMediaFile] = []
+                        var sentStickers: [IosappMediaFile] = []
                         for media in message.media {
-                            if let file = media as? TelegramMediaFile {
+                            if let file = media as? IosappMediaFile {
                                 if file.isSticker {
                                     sentStickers.append(file)
                                 }
@@ -2038,7 +2038,7 @@ private func sendStandaloneMessage(auxiliaryMethods: AccountAuxiliaryMethods, po
 
 private func sendServiceActionMessage(postbox: Postbox, network: Network, peerId: PeerId, action: SecretMessageAction, tagLocalIndex: Int32, wasDelivered: Bool) -> Signal<Void, NoError> {
     return postbox.transaction { transaction -> Signal<Void, NoError> in
-        if let state = transaction.getPeerChatState(peerId) as? SecretChatState, let peer = transaction.getPeer(peerId) as? TelegramSecretChat {
+        if let state = transaction.getPeerChatState(peerId) as? SecretChatState, let peer = transaction.getPeer(peerId) as? IosappSecretChat {
             let decryptedMessage = boxedDecryptedSecretMessageAction(action: action)
             return sendBoxedDecryptedMessage(postbox: postbox, network: network, peer: peer, state: state, operationIndex: tagLocalIndex, decryptedMessage: decryptedMessage, globallyUniqueId: action.globallyUniqueId, file: nil, silent: false, asService: true, wasDelivered: wasDelivered)
             |> mapToSignal { result in
@@ -2101,7 +2101,7 @@ private enum SendBoxedDecryptedMessageResult {
     case error(SendBoxedDecryptedMessageError)
 }
 
-private func sendBoxedDecryptedMessage(postbox: Postbox, network: Network, peer: TelegramSecretChat, state: SecretChatState, operationIndex: Int32, decryptedMessage: BoxedDecryptedMessage, globallyUniqueId: Int64, file: SecretChatOutgoingFile?, silent: Bool, asService: Bool, wasDelivered: Bool) -> Signal<SendBoxedDecryptedMessageResult, NoError> {
+private func sendBoxedDecryptedMessage(postbox: Postbox, network: Network, peer: IosappSecretChat, state: SecretChatState, operationIndex: Int32, decryptedMessage: BoxedDecryptedMessage, globallyUniqueId: Int64, file: SecretChatOutgoingFile?, silent: Bool, asService: Bool, wasDelivered: Bool) -> Signal<SendBoxedDecryptedMessageResult, NoError> {
     let payload = Buffer()
     var sequenceInfo: SecretChatOperationSequenceInfo?
     var maybeParameters: SecretChatEncryptionParameters?
@@ -2191,8 +2191,8 @@ private func requestTerminateSecretChat(postbox: Postbox, network: Network, peer
     }
     |> mapToSignal { _ -> Signal<Void, NoError> in
         if reportSpam {
-            return postbox.transaction { transaction -> TelegramSecretChat? in
-                if let peer = transaction.getPeer(peerId) as? TelegramSecretChat {
+            return postbox.transaction { transaction -> IosappSecretChat? in
+                if let peer = transaction.getPeer(peerId) as? IosappSecretChat {
                     return peer
                 } else {
                     return nil

@@ -32,7 +32,7 @@ private func pendingWebpages(entries: [MessageHistoryEntry]) -> (Set<MessageId>,
     var localWebpages: [MessageId: (MediaId, String)] = [:]
     for entry in entries {
         for media in entry.message.media {
-            if let media = media as? TelegramMediaWebpage {
+            if let media = media as? IosappMediaWebpage {
                 if case let .Pending(_, url) = media.content {
                     messageIds.insert(entry.message.id)
                     if let url = url, media.webpageId.namespace == Namespaces.Media.LocalWebpage {
@@ -51,7 +51,7 @@ private func pollMessages(entries: [MessageHistoryEntry]) -> (Set<MessageId>, [M
     var messages: [MessageId: Message] = [:]
     for entry in entries {
         for media in entry.message.media {
-            if let poll = media as? TelegramMediaPoll, poll.pollId.namespace == Namespaces.Media.CloudPoll, entry.message.id.namespace == Namespaces.Message.Cloud, !poll.isClosed {
+            if let poll = media as? IosappMediaPoll, poll.pollId.namespace == Namespaces.Media.CloudPoll, entry.message.id.namespace == Namespaces.Message.Cloud, !poll.isClosed {
                 messageIds.insert(entry.message.id)
                 messages[entry.message.id] = entry.message
                 break
@@ -130,9 +130,9 @@ private func fetchWebpage(account: Account, messageId: MessageId, threadId: Int6
                     
                     for message in messages {
                         if let storeMessage = StoreMessage(apiMessage: message, accountPeerId: accountPeerId, peerIsForum: peer.isForumOrMonoForum, namespace: targetMessageNamespace) {
-                            var webpage: TelegramMediaWebpage?
+                            var webpage: IosappMediaWebpage?
                             for media in storeMessage.media {
-                                if let media = media as? TelegramMediaWebpage {
+                                if let media = media as? IosappMediaWebpage {
                                     webpage = media
                                 }
                             }
@@ -142,7 +142,7 @@ private func fetchWebpage(account: Account, messageId: MessageId, threadId: Int6
                             } else {
                                 if let previousMessage = transaction.getMessage(messageId) {
                                     for media in previousMessage.media {
-                                        if let media = media as? TelegramMediaWebpage {
+                                        if let media = media as? IosappMediaWebpage {
                                             updateMessageMedia(transaction: transaction, id: media.webpageId, media: nil)
                                             
                                             break
@@ -169,7 +169,7 @@ private func fetchPoll(account: Account, messageId: MessageId) -> Signal<Void, N
             return .complete()
         }
         var pollHash: Int64 = 0
-        if let message = transaction.getMessage(messageId), let poll = message.media.first(where: { $0 is TelegramMediaPoll }) as? TelegramMediaPoll {
+        if let message = transaction.getMessage(messageId), let poll = message.media.first(where: { $0 is IosappMediaPoll }) as? IosappMediaPoll {
             pollHash = poll.pollHash
         }
         return account.network.request(Api.functions.messages.getPollResults(peer: inputPeer, msgId: messageId.id, pollHash: pollHash))
@@ -454,7 +454,7 @@ public final class AccountViewTracker {
                                             let storeForwardInfo = currentMessage.forwardInfo.flatMap(StoreMessageForwardInfo.init)
                                             var media = currentMessage.media
                                             for i in 0 ..< media.count {
-                                                if let _ = media[i] as? TelegramMediaWebpage {
+                                                if let _ = media[i] as? IosappMediaWebpage {
                                                     media[i] = webpageResult.webpage
                                                     break
                                                 }
@@ -537,7 +537,7 @@ public final class AccountViewTracker {
                         
                         if let message = messages[messageId] {
                             for media in message.media {
-                                if let poll = media as? TelegramMediaPoll {
+                                if let poll = media as? IosappMediaPoll {
                                     if let _ = poll.deadlineTimeout, message.id.namespace == Namespaces.Message.Cloud {
                                         let startDate: Int32
                                         if let forwardInfo = message.forwardInfo {
@@ -1166,12 +1166,12 @@ public final class AccountViewTracker {
                     self.nextUpdatedUnsupportedMediaDisposableId += 1
                     
                     if let account = self.account {
-                        let signal = account.postbox.transaction { transaction -> [TelegramMediaFile] in
-                            var result: [TelegramMediaFile] = []
+                        let signal = account.postbox.transaction { transaction -> [IosappMediaFile] in
+                            var result: [IosappMediaFile] = []
                             for id in messageIds {
                                 if let message = transaction.getMessage(id) {
                                     for media in message.media {
-                                        if let file = media as? TelegramMediaFile, file.isAnimatedSticker {
+                                        if let file = media as? IosappMediaFile, file.isAnimatedSticker {
                                             result.append(file)
                                         }
                                     }
@@ -1271,9 +1271,9 @@ public final class AccountViewTracker {
                             for id in messageIds {
                                 if let message = transaction.getMessage(id) {
                                     for media in message.media {
-                                        if let storyMedia = media as? TelegramMediaStory {
+                                        if let storyMedia = media as? IosappMediaStory {
                                             result.insert(storyMedia.storyId)
-                                        } else if let webpage = media as? TelegramMediaWebpage, case let .Loaded(content)  = webpage.content, let story = content.story {
+                                        } else if let webpage = media as? IosappMediaWebpage, case let .Loaded(content)  = webpage.content, let story = content.story {
                                             result.insert(story.storyId)
                                         }
                                     }
@@ -1351,7 +1351,7 @@ public final class AccountViewTracker {
                             for id in messageIds {
                                 if let message = transaction.getMessage(id) {
                                     for media in message.media {
-                                        if let _ = media as? TelegramMediaAction {
+                                        if let _ = media as? IosappMediaAction {
                                             result.append(id)
                                             break
                                         }
@@ -1707,7 +1707,7 @@ public final class AccountViewTracker {
                         }
                         var media = currentMessage.media
                         for i in 0 ..< media.count {
-                            if let poll = media[i] as? TelegramMediaPoll {
+                            if let poll = media[i] as? IosappMediaPoll {
                                 media[i] = poll.withoutUnreadResults()
                             }
                         }
@@ -1765,7 +1765,7 @@ public final class AccountViewTracker {
                                     }
                                     var media = currentMessage.media
                                     loop: for j in 0 ..< media.count {
-                                        if let poll = media[j] as? TelegramMediaPoll {
+                                        if let poll = media[j] as? IosappMediaPoll {
                                             media[j] = poll.withoutUnreadResults()
                                             break loop
                                         }
@@ -2455,7 +2455,7 @@ public final class AccountViewTracker {
                 var lhsOther = false
                 var lhsConferenceId: Int64?
                 inner: for media in lhs.media {
-                    if let action = media as? TelegramMediaAction {
+                    if let action = media as? IosappMediaAction {
                         if case let .phoneCall(_, discardReason, _, video) = action.action {
                             lhsVideo = video
                             if lhs.flags.contains(.Incoming), let discardReason = discardReason, case .missed = discardReason {
@@ -2475,7 +2475,7 @@ public final class AccountViewTracker {
                 var rhsOther = false
                 var rhsConferenceId: Int64?
                 inner: for media in rhs.media {
-                    if let action = media as? TelegramMediaAction {
+                    if let action = media as? IosappMediaAction {
                         if case let .phoneCall(_, discardReason, _, video) = action.action {
                             rhsVideo = video
                             if rhs.flags.contains(.Incoming), let discardReason = discardReason, case .missed = discardReason {

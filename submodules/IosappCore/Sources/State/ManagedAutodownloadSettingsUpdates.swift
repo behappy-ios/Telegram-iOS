@@ -5,7 +5,7 @@ import IosappApi
 import MtProtoKit
 
 
-func managedAutodownloadSettingsUpdates(accountManager: AccountManager<TelegramAccountManagerTypes>, network: Network) -> Signal<Void, NoError> {
+func managedAutodownloadSettingsUpdates(accountManager: AccountManager<IosappAccountManagerTypes>, network: Network) -> Signal<Void, NoError> {
     let poll = Signal<Void, NoError> { subscriber in
         return (network.request(Api.functions.account.getAutoDownloadSettings())
         |> retryRequestIfNotFrozen

@@ -127,11 +127,11 @@ genrule(
     name = "GeneratedPresentationStrings",
     srcs = [
         "//build-system:GenerateStrings/GenerateStrings.py",
-        "Telegram-iOS/en.lproj/Localizable.strings",
+        "Sources/en.lproj/Localizable.strings",
     ],
     cmd = '''
         python3 $(location //build-system:GenerateStrings/GenerateStrings.py) \\
-            --source=$(location Telegram-iOS/en.lproj/Localizable.strings) \\
+            --source=$(location Sources/en.lproj/Localizable.strings) \\
             --outImplementation=$(location GeneratedPresentationStrings/Sources/PresentationStrings.m) \\
             --outHeader=$(location GeneratedPresentationStrings/PublicHeaders/PresentationStrings/PresentationStrings.h) \\
             --outData=$(location GeneratedPresentationStrings/Resources/PresentationStrings.data) \\
@@ -244,14 +244,14 @@ strip_framework = select({
 filegroup(
     name = "AppResources",
     srcs = glob([
-        "Telegram-iOS/Resources/**/*",
-    ], exclude = ["Telegram-iOS/Resources/**/.*"]),
+        "Sources/Resources/**/*",
+    ], exclude = ["Sources/Resources/**/.*"]),
 )
 
 filegroup(
     name = "AppStringResources",
     srcs = [
-        "Telegram-iOS/en.lproj/Localizable.strings",
+        "Sources/en.lproj/Localizable.strings",
     ] + [
         "{}.lproj/Localizable.strings".format(language) for language in empty_languages
     ],
@@ -260,42 +260,42 @@ filegroup(
 filegroup(
     name = "AppIntentVocabularyResources",
     srcs = glob([
-        "Telegram-iOS/*.lproj/AppIntentVocabulary.plist",
-    ], exclude = ["Telegram-iOS/*.lproj/**/.*"]),
+        "Sources/*.lproj/AppIntentVocabulary.plist",
+    ], exclude = ["Sources/*.lproj/**/.*"]),
 )
 
 filegroup(
     name = "InfoPlistStringResources",
     srcs = glob([
-        "Telegram-iOS/*.lproj/InfoPlist.strings",
-    ], exclude = ["Telegram-iOS/*.lproj/**/.*"]),
+        "Sources/*.lproj/InfoPlist.strings",
+    ], exclude = ["Sources/*.lproj/**/.*"]),
 )
 
 filegroup(
     name = "Icons",
     srcs = glob([
-        "Telegram-iOS/Icons.xcassets/**/*",
-    ], exclude = ["Telegram-iOS/Icons.xcassets/**/.*"]),
+        "Sources/Icons.xcassets/**/*",
+    ], exclude = ["Sources/Icons.xcassets/**/.*"]),
 )
 
 filegroup(
     name = "AppIcons",
     srcs = glob([
-        "Telegram-iOS/AppIcons.xcassets/**/*",
-    ], exclude = ["Telegram-iOS/AppIcons.xcassets/**/.*"]),
+        "Sources/AppIcons.xcassets/**/*",
+    ], exclude = ["Sources/AppIcons.xcassets/**/.*"]),
 )
 
 filegroup(
     name = "DefaultAppIcon",
     srcs = glob([
-        "Telegram-iOS/DefaultAppIcon.xcassets/**/*",
-    ], exclude = ["Telegram-iOS/DefaultAppIcon.xcassets/**/.*"]),
+        "Sources/DefaultAppIcon.xcassets/**/*",
+    ], exclude = ["Sources/DefaultAppIcon.xcassets/**/.*"]),
 )
 
 filegroup(
     name = "DefaultIcon",
     srcs = glob([
-        "Telegram-iOS/AppIcons.xcassets/BlueIcon.appiconset/*.png",
+        "Sources/AppIcons.xcassets/BlueIcon.appiconset/*.png",
     ]),
 )
 
@@ -329,7 +329,7 @@ composer_icon_folders = []
     filegroup(
         name = "{}".format(name),
         srcs = glob([
-            "Telegram-iOS/{}.alticon/*.png".format(name),
+            "Sources/{}.alticon/*.png".format(name),
         ]),
     ) for name in alternate_icon_folders
 ]
@@ -338,7 +338,7 @@ composer_icon_folders = []
     filegroup(
         name = "{}_icon".format(name),
         srcs = glob([
-            "Telegram-iOS/{}.icon/**/*".format(name),
+            "Sources/{}.icon/**/*".format(name),
         ]),
     ) for name in composer_icon_folders
 ]
@@ -346,7 +346,7 @@ composer_icon_folders = []
 filegroup(
     name = "LaunchScreen",
     srcs = glob([
-        "Telegram-iOS/Base.lproj/LaunchScreen.xib",
+        "Sources/Base.lproj/LaunchScreen.xib",
     ]),
 )
 
@@ -354,7 +354,7 @@ objc_library(
     name = "Main",
     module_name = "Main",
     srcs = [
-        "Telegram-iOS/main.m"
+        "Sources/main.m"
     ],
 )
 
@@ -362,7 +362,7 @@ swift_library(
     name = "Lib",
     module_name = "Lib",
     srcs = glob([
-        "Telegram-iOS/Application.swift",
+        "Sources/Application.swift",
     ]),
     data = [
         ":Icons",
@@ -873,11 +873,11 @@ genrule(
 genrule(
     name = "GenerateAddAlternateIcons",
     srcs = [
-        "Telegram-iOS/AddAlternateIcons.sh",
+        "Sources/AddAlternateIcons.sh",
     ],
     cmd_bash =
 """
-    cat $(location Telegram-iOS/AddAlternateIcons.sh) >> $(location AddAlternateIcons.sh)
+    cat $(location Sources/AddAlternateIcons.sh) >> $(location AddAlternateIcons.sh)
 """,
     outs = [
         "AddAlternateIcons.sh",
@@ -891,8 +891,8 @@ genrule(
 sh_binary(
     name = "AddAlternateIcons",
     data = [
-        "Telegram-iOS/AlternateIcons.plist",
-        "Telegram-iOS/AlternateIcons-iPad.plist",
+        "Sources/AlternateIcons.plist",
+        "Sources/AlternateIcons-iPad.plist",
     ],
     srcs = [":GenerateAddAlternateIcons"],
 )

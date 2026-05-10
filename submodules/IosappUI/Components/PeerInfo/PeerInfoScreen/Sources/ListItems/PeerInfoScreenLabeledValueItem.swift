@@ -647,7 +647,7 @@ private final class PeerInfoScreenLabeledValueItemNode: PeerInfoScreenItemNode {
         let additionalTextFrame = CGRect(origin: CGPoint(x: sideInset, y: topOffset), size: additionalTextSize)
         
         if let context = item.context, let leftIcon = item.leftIcon {
-            var file: TelegramMediaFile?
+            var file: IosappMediaFile?
             switch leftIcon {
             case .birthday:
                 file = context.animatedEmojiStickersValue["🎂"]?.first?.file._parse()
@@ -875,25 +875,25 @@ private final class PeerInfoScreenLabeledValueItemNode: PeerInfoScreenItemNode {
         if let (index, attributes) = self.textNode.attributesAtPoint(CGPoint(x: point.x - textNodeFrame.minX, y: point.y - textNodeFrame.minY)) {
             var item: TextLinkItem?
             var urlRange: NSRange?
-            if let _ = attributes[NSAttributedString.Key(rawValue: TelegramTextAttributes.Spoiler)], let dustNode = self.textNode.dustNode, !dustNode.isRevealed {
+            if let _ = attributes[NSAttributedString.Key(rawValue: IosappTextAttributes.Spoiler)], let dustNode = self.textNode.dustNode, !dustNode.isRevealed {
                 return nil
             }
-            if let url = attributes[NSAttributedString.Key(rawValue: TelegramTextAttributes.URL)] as? String {
+            if let url = attributes[NSAttributedString.Key(rawValue: IosappTextAttributes.URL)] as? String {
                 item = .url(url: url, concealed: false)
                 
-                if let (_, _, urlRangeValue) = self.textNode.attributeSubstringWithRange(name: TelegramTextAttributes.URL, index: index) {
+                if let (_, _, urlRangeValue) = self.textNode.attributeSubstringWithRange(name: IosappTextAttributes.URL, index: index) {
                     urlRange = urlRangeValue
                 }
-            } else if let peerName = attributes[NSAttributedString.Key(rawValue: TelegramTextAttributes.PeerTextMention)] as? String {
+            } else if let peerName = attributes[NSAttributedString.Key(rawValue: IosappTextAttributes.PeerTextMention)] as? String {
                 item = .mention(peerName)
                 
-                if let (_, _, urlRangeValue) = self.textNode.attributeSubstringWithRange(name: NSAttributedString.Key(rawValue: TelegramTextAttributes.PeerTextMention).rawValue, index: index) {
+                if let (_, _, urlRangeValue) = self.textNode.attributeSubstringWithRange(name: NSAttributedString.Key(rawValue: IosappTextAttributes.PeerTextMention).rawValue, index: index) {
                     urlRange = urlRangeValue
                 }
-            } else if let hashtag = attributes[NSAttributedString.Key(rawValue: TelegramTextAttributes.Hashtag)] as? TelegramHashtag {
+            } else if let hashtag = attributes[NSAttributedString.Key(rawValue: IosappTextAttributes.Hashtag)] as? IosappHashtag {
                 item = .hashtag(hashtag.peerName, hashtag.hashtag)
                 
-                if let (_, _, urlRangeValue) = self.textNode.attributeSubstringWithRange(name: NSAttributedString.Key(rawValue: TelegramTextAttributes.Hashtag).rawValue, index: index) {
+                if let (_, _, urlRangeValue) = self.textNode.attributeSubstringWithRange(name: NSAttributedString.Key(rawValue: IosappTextAttributes.Hashtag).rawValue, index: index) {
                     urlRange = urlRangeValue
                 }
             } else {
@@ -910,22 +910,22 @@ private final class PeerInfoScreenLabeledValueItemNode: PeerInfoScreenItemNode {
             var item: TextLinkItem?
             var urlRange: NSRange?
             
-            if let url = attributes[NSAttributedString.Key(rawValue: TelegramTextAttributes.URL)] as? String {
+            if let url = attributes[NSAttributedString.Key(rawValue: IosappTextAttributes.URL)] as? String {
                 item = .url(url: url, concealed: false)
                 
-                if let (_, _, urlRangeValue) = self.additionalTextNode.attributeSubstringWithRange(name: TelegramTextAttributes.URL, index: index) {
+                if let (_, _, urlRangeValue) = self.additionalTextNode.attributeSubstringWithRange(name: IosappTextAttributes.URL, index: index) {
                     urlRange = urlRangeValue
                 }
-            } else if let peerName = attributes[NSAttributedString.Key(rawValue: TelegramTextAttributes.PeerTextMention)] as? String {
+            } else if let peerName = attributes[NSAttributedString.Key(rawValue: IosappTextAttributes.PeerTextMention)] as? String {
                 item = .mention(peerName)
                 
-                if let (_, _, urlRangeValue) = self.additionalTextNode.attributeSubstringWithRange(name: NSAttributedString.Key(rawValue: TelegramTextAttributes.PeerTextMention).rawValue, index: index) {
+                if let (_, _, urlRangeValue) = self.additionalTextNode.attributeSubstringWithRange(name: NSAttributedString.Key(rawValue: IosappTextAttributes.PeerTextMention).rawValue, index: index) {
                     urlRange = urlRangeValue
                 }
-            } else if let hashtag = attributes[NSAttributedString.Key(rawValue: TelegramTextAttributes.Hashtag)] as? TelegramHashtag {
+            } else if let hashtag = attributes[NSAttributedString.Key(rawValue: IosappTextAttributes.Hashtag)] as? IosappHashtag {
                 item = .hashtag(hashtag.peerName, hashtag.hashtag)
                 
-                if let (_, _, urlRangeValue) = self.additionalTextNode.attributeSubstringWithRange(name: NSAttributedString.Key(rawValue: TelegramTextAttributes.Hashtag).rawValue, index: index) {
+                if let (_, _, urlRangeValue) = self.additionalTextNode.attributeSubstringWithRange(name: NSAttributedString.Key(rawValue: IosappTextAttributes.Hashtag).rawValue, index: index) {
                     urlRange = urlRangeValue
                 }
             } else {
@@ -951,11 +951,11 @@ private final class PeerInfoScreenLabeledValueItemNode: PeerInfoScreenItemNode {
             let textNodeFrame = self.textNode.frame
             if let (index, attributes) = self.textNode.attributesAtPoint(CGPoint(x: point.x - textNodeFrame.minX, y: point.y - textNodeFrame.minY)) {
                 let possibleNames: [String] = [
-                    TelegramTextAttributes.URL,
-                    TelegramTextAttributes.PeerMention,
-                    TelegramTextAttributes.PeerTextMention,
-                    TelegramTextAttributes.BotCommand,
-                    TelegramTextAttributes.Hashtag
+                    IosappTextAttributes.URL,
+                    IosappTextAttributes.PeerMention,
+                    IosappTextAttributes.PeerTextMention,
+                    IosappTextAttributes.BotCommand,
+                    IosappTextAttributes.Hashtag
                 ]
                 for name in possibleNames {
                     if let _ = attributes[NSAttributedString.Key(rawValue: name)] {
@@ -964,7 +964,7 @@ private final class PeerInfoScreenLabeledValueItemNode: PeerInfoScreenItemNode {
                         break
                     }
                 }
-                if let _ = attributes[NSAttributedString.Key(rawValue: TelegramTextAttributes.Spoiler)], let dustNode = self.textNode.dustNode, !dustNode.isRevealed {
+                if let _ = attributes[NSAttributedString.Key(rawValue: IosappTextAttributes.Spoiler)], let dustNode = self.textNode.dustNode, !dustNode.isRevealed {
                     rects = nil
                     textNode = nil
                     
@@ -978,11 +978,11 @@ private final class PeerInfoScreenLabeledValueItemNode: PeerInfoScreenItemNode {
                 let mappedPoint = CGPoint(x: point.x - additionalTextNodeFrame.minX, y: point.y - additionalTextNodeFrame.minY)
                 if mappedPoint.y > 0.0, let (index, attributes) = self.additionalTextNode.attributesAtPoint(mappedPoint) {
                     let possibleNames: [String] = [
-                        TelegramTextAttributes.URL,
-                        TelegramTextAttributes.PeerMention,
-                        TelegramTextAttributes.PeerTextMention,
-                        TelegramTextAttributes.BotCommand,
-                        TelegramTextAttributes.Hashtag
+                        IosappTextAttributes.URL,
+                        IosappTextAttributes.PeerMention,
+                        IosappTextAttributes.PeerTextMention,
+                        IosappTextAttributes.BotCommand,
+                        IosappTextAttributes.Hashtag
                     ]
                     for name in possibleNames {
                         if let _ = attributes[NSAttributedString.Key(rawValue: name)] {

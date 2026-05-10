@@ -71,14 +71,14 @@ extension ChatControllerImpl {
         var canSendPolls = true
         var canSendTodos = true
         if let peer = self.presentationInterfaceState.renderedPeer?.peer {
-            if let peer = peer as? TelegramUser {
+            if let peer = peer as? IosappUser {
                 if peer.botInfo == nil && peer.id != self.context.account.peerId {
                     canSendPolls = false
                 }
-            } else if peer is TelegramSecretChat {
+            } else if peer is IosappSecretChat {
                 canSendPolls = false
                 canSendTodos = false
-            } else if let channel = peer as? TelegramChannel {
+            } else if let channel = peer as? IosappChannel {
                 if case .broadcast = channel.info {
                     canSendTodos = false
                 }
@@ -97,7 +97,7 @@ extension ChatControllerImpl {
                 if channel.hasBannedPermission(.banSendPolls, ignoreDefault: canByPassRestrictions) != nil || channel.isMonoForum {
                     canSendPolls = false
                 }
-            } else if let group = peer as? TelegramGroup {
+            } else if let group = peer as? IosappGroup {
                 if group.hasBannedPermission(.banSendPhotos) {
                     bannedSendPhotos = (Int32.max, false)
                 }
@@ -150,15 +150,15 @@ extension ChatControllerImpl {
         
         var peerType: AttachMenuBots.Bot.PeerFlags = []
         if let peer = self.presentationInterfaceState.renderedPeer?.peer {
-            if let user = peer as? TelegramUser {
+            if let user = peer as? IosappUser {
                 if let _ = user.botInfo {
                     peerType.insert(.bot)
                 } else {
                     peerType.insert(.user)
                 }
-            } else if let _ = peer as? TelegramGroup {
+            } else if let _ = peer as? IosappGroup {
                 peerType = .group
-            } else if let channel = peer as? TelegramChannel {
+            } else if let channel = peer as? IosappChannel {
                 if case .broadcast = channel.info {
                     peerType = .channel
                 } else {
@@ -208,7 +208,7 @@ extension ChatControllerImpl {
                 }
                 
                 if !isPaidMessages {
-                    if context.isPremium, shortcutMessageList.items.count > 0, let user = peer as? TelegramUser, user.botInfo == nil {
+                    if context.isPremium, shortcutMessageList.items.count > 0, let user = peer as? IosappUser, user.botInfo == nil {
                         if let index = buttons.firstIndex(where: { $0 == .location }) {
                             buttons.insert(.quickReply, at: index + 1)
                         } else {
@@ -237,7 +237,7 @@ extension ChatControllerImpl {
         let premiumGiftOptions: [CachedPremiumGiftOption]
         
         var showPremiumGift = false
-        if !premiumConfiguration.isPremiumDisabled && self.presentationInterfaceState.disallowedGifts != TelegramDisallowedGifts.All {
+        if !premiumConfiguration.isPremiumDisabled && self.presentationInterfaceState.disallowedGifts != IosappDisallowedGifts.All {
             if self.presentationInterfaceState.alwaysShowGiftButton {
                 showPremiumGift = true
             } else if self.presentationInterfaceState.hasBirthdayToday {
@@ -247,7 +247,7 @@ extension ChatControllerImpl {
             }
         }
         
-        if let peer = self.presentationInterfaceState.renderedPeer?.peer, showPremiumGift, let user = peer as? TelegramUser, !user.isDeleted && user.botInfo == nil && !user.flags.contains(.isSupport) {
+        if let peer = self.presentationInterfaceState.renderedPeer?.peer, showPremiumGift, let user = peer as? IosappUser, !user.isDeleted && user.botInfo == nil && !user.flags.contains(.isSupport) {
             premiumGiftOptions = self.presentationInterfaceState.premiumGiftOptions
         } else {
             premiumGiftOptions = []
@@ -479,9 +479,9 @@ extension ChatControllerImpl {
                     }
                     let selfPeerId: PeerId
                     if let peer = strongSelf.presentationInterfaceState.renderedPeer?.peer {
-                        if let peer = peer as? TelegramChannel, case .broadcast = peer.info {
+                        if let peer = peer as? IosappChannel, case .broadcast = peer.info {
                             selfPeerId = peer.id
-                        } else if let peer = peer as? TelegramChannel, case .group = peer.info, peer.hasPermission(.canBeAnonymous) {
+                        } else if let peer = peer as? IosappChannel, case .group = peer.info, peer.hasPermission(.canBeAnonymous) {
                             selfPeerId = peer.id
                         } else {
                             selfPeerId = strongSelf.context.account.peerId
@@ -489,7 +489,7 @@ extension ChatControllerImpl {
                     } else {
                         selfPeerId = strongSelf.context.account.peerId
                     }
-                    let _ = (strongSelf.context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: selfPeerId))
+                    let _ = (strongSelf.context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: selfPeerId))
                     |> deliverOnMainQueue).startStandalone(next: { selfPeer in
                         guard let strongSelf = self, let selfPeer = selfPeer else {
                             return
@@ -556,16 +556,16 @@ extension ChatControllerImpl {
                                     enqueueMessages.append(textEnqueueMessage)
                                 }
                                 for peer in peers {
-                                    var media: TelegramMediaContact?
+                                    var media: IosappMediaContact?
                                     switch peer {
                                     case let .peer(contact, _, _):
-                                        guard let contact = contact as? TelegramUser, let phoneNumber = contact.phone else {
+                                        guard let contact = contact as? IosappUser, let phoneNumber = contact.phone else {
                                             continue
                                         }
                                         let contactData = DeviceContactExtendedData(basicData: DeviceContactBasicData(firstName: contact.firstName ?? "", lastName: contact.lastName ?? "", phoneNumbers: [DeviceContactPhoneNumberData(label: "_$!<Mobile>!$_", value: phoneNumber)]), middleName: "", prefix: "", suffix: "", organization: "", jobTitle: "", department: "", emailAddresses: [], urls: [], addresses: [], birthdayDate: nil, socialProfiles: [], instantMessagingProfiles: [], note: "")
                                         
                                         let phone = contactData.basicData.phoneNumbers[0].value
-                                        media = TelegramMediaContact(firstName: contactData.basicData.firstName, lastName: contactData.basicData.lastName, phoneNumber: phone, peerId: contact.id, vCardData: nil)
+                                        media = IosappMediaContact(firstName: contactData.basicData.firstName, lastName: contactData.basicData.lastName, phoneNumber: phone, peerId: contact.id, vCardData: nil)
                                     case let .deviceContact(_, basicData):
                                         guard !basicData.phoneNumbers.isEmpty else {
                                             continue
@@ -573,7 +573,7 @@ extension ChatControllerImpl {
                                         let contactData = DeviceContactExtendedData(basicData: basicData, middleName: "", prefix: "", suffix: "", organization: "", jobTitle: "", department: "", emailAddresses: [], urls: [], addresses: [], birthdayDate: nil, socialProfiles: [], instantMessagingProfiles: [], note: "")
                                         
                                         let phone = contactData.basicData.phoneNumbers[0].value
-                                        media = TelegramMediaContact(firstName: contactData.basicData.firstName, lastName: contactData.basicData.lastName, phoneNumber: phone, peerId: nil, vCardData: nil)
+                                        media = IosappMediaContact(firstName: contactData.basicData.firstName, lastName: contactData.basicData.lastName, phoneNumber: phone, peerId: nil, vCardData: nil)
                                     }
                                     
                                     if let media = media {
@@ -612,7 +612,7 @@ extension ChatControllerImpl {
                                 let dataSignal: Signal<(Peer?,  DeviceContactExtendedData?), NoError>
                                 switch peer {
                                 case let .peer(contact, _, _):
-                                    guard let contact = contact as? TelegramUser, let phoneNumber = contact.phone else {
+                                    guard let contact = contact as? IosappUser, let phoneNumber = contact.phone else {
                                         return
                                     }
                                     let contactData = DeviceContactExtendedData(basicData: DeviceContactBasicData(firstName: contact.firstName ?? "", lastName: contact.lastName ?? "", phoneNumbers: [DeviceContactPhoneNumberData(label: "_$!<Mobile>!$_", value: phoneNumber)]), middleName: "", prefix: "", suffix: "", organization: "", jobTitle: "", department: "", emailAddresses: [], urls: [], addresses: [], birthdayDate: nil, socialProfiles: [], instantMessagingProfiles: [], note: "")
@@ -653,7 +653,7 @@ extension ChatControllerImpl {
                                     if let strongSelf = self, let contactData = peerAndContactData.1, contactData.basicData.phoneNumbers.count != 0 {
                                         if contactData.isPrimitive {
                                             let phone = contactData.basicData.phoneNumbers[0].value
-                                            let media = TelegramMediaContact(firstName: contactData.basicData.firstName, lastName: contactData.basicData.lastName, phoneNumber: phone, peerId: peerAndContactData.0?.id, vCardData: nil)
+                                            let media = IosappMediaContact(firstName: contactData.basicData.firstName, lastName: contactData.basicData.lastName, phoneNumber: phone, peerId: peerAndContactData.0?.id, vCardData: nil)
                                             let replyMessageSubject = strongSelf.presentationInterfaceState.interfaceState.replyMessageSubject
                                             strongSelf.chatDisplayNode.setupSendActionOnViewUpdate({
                                                 if let strongSelf = self {
@@ -689,7 +689,7 @@ extension ChatControllerImpl {
                                                 }
                                                 let phone = contactData.basicData.phoneNumbers[0].value
                                                 if let vCardData = contactData.serializedVCard() {
-                                                    let media = TelegramMediaContact(firstName: contactData.basicData.firstName, lastName: contactData.basicData.lastName, phoneNumber: phone, peerId: peer?.id, vCardData: vCardData)
+                                                    let media = IosappMediaContact(firstName: contactData.basicData.firstName, lastName: contactData.basicData.lastName, phoneNumber: phone, peerId: peer?.id, vCardData: vCardData)
                                                     let replyMessageSubject = strongSelf.presentationInterfaceState.interfaceState.replyMessageSubject
                                                     strongSelf.chatDisplayNode.setupSendActionOnViewUpdate({
                                                         if let strongSelf = self {
@@ -891,14 +891,14 @@ extension ChatControllerImpl {
             var bannedSendMedia: (Int32, Bool)?
             var canSendPolls = true
             if let peer = strongSelf.presentationInterfaceState.renderedPeer?.peer {
-                if let channel = peer as? TelegramChannel {
+                if let channel = peer as? IosappChannel {
                     if let value = channel.hasBannedPermission(.banSendMedia) {
                         bannedSendMedia = value
                     }
                     if channel.hasBannedPermission(.banSendPolls) != nil || channel.isMonoForum {
                         canSendPolls = false
                     }
-                } else if let group = peer as? TelegramGroup {
+                } else if let group = peer as? IosappGroup {
                     if group.hasBannedPermission(.banSendMedia) {
                         bannedSendMedia = (Int32.max, false)
                     }
@@ -974,7 +974,7 @@ extension ChatControllerImpl {
             var slowModeEnabled = false
             var hasSchedule = false
             if let peer = strongSelf.presentationInterfaceState.renderedPeer?.peer {
-                if let channel = peer as? TelegramChannel, channel.isRestrictedBySlowmode {
+                if let channel = peer as? IosappChannel, channel.isRestrictedBySlowmode {
                     slowModeEnabled = true
                 }
                 hasSchedule = strongSelf.presentationInterfaceState.subject != .scheduledMessages && peer.id.namespace != Namespaces.Peer.SecretChat && strongSelf.presentationInterfaceState.sendPaidMessageStars == nil
@@ -1014,14 +1014,14 @@ extension ChatControllerImpl {
                         var bannedSendVideos: (Int32, Bool)?
                         
                         if let peer = strongSelf.presentationInterfaceState.renderedPeer?.peer {
-                            if let channel = peer as? TelegramChannel {
+                            if let channel = peer as? IosappChannel {
                                 if let value = channel.hasBannedPermission(.banSendPhotos) {
                                     bannedSendPhotos = value
                                 }
                                 if let value = channel.hasBannedPermission(.banSendVideos) {
                                     bannedSendVideos = value
                                 }
-                            } else if let group = peer as? TelegramGroup {
+                            } else if let group = peer as? IosappGroup {
                                 if group.hasBannedPermission(.banSendPhotos) {
                                     bannedSendPhotos = (Int32.max, false)
                                 }
@@ -1190,9 +1190,9 @@ extension ChatControllerImpl {
     
     func presentICloudFileGallery(editingMessage: Bool = false, documentTypes: [String] = ["public.item"]) {
         let _ = (self.context.engine.data.get(
-            TelegramEngine.EngineData.Item.Peer.Peer(id: self.context.account.peerId),
-            TelegramEngine.EngineData.Item.Configuration.UserLimits(isPremium: false),
-            TelegramEngine.EngineData.Item.Configuration.UserLimits(isPremium: true)
+            IosappEngine.EngineData.Item.Peer.Peer(id: self.context.account.peerId),
+            IosappEngine.EngineData.Item.Configuration.UserLimits(isPremium: false),
+            IosappEngine.EngineData.Item.Configuration.UserLimits(isPremium: true)
         )
         |> deliverOnMainQueue).startStandalone(next: { [weak self] result in
             guard let strongSelf = self else {
@@ -1259,17 +1259,17 @@ extension ChatControllerImpl {
                                 if let item = item {
                                     let fileId = Int64.random(in: Int64.min ... Int64.max)
                                     let mimeType = guessMimeTypeByFileExtension((item.fileName as NSString).pathExtension)
-                                    var previewRepresentations: [TelegramMediaImageRepresentation] = []
+                                    var previewRepresentations: [IosappMediaImageRepresentation] = []
                                     if mimeType.hasPrefix("image/") || mimeType == "application/pdf" {
-                                        previewRepresentations.append(TelegramMediaImageRepresentation(dimensions: PixelDimensions(width: 320, height: 320), resource: ICloudFileResource(urlData: item.urlData, thumbnail: true), progressiveSizes: [], immediateThumbnailData: nil, hasVideo: false, isPersonal: false))
+                                        previewRepresentations.append(IosappMediaImageRepresentation(dimensions: PixelDimensions(width: 320, height: 320), resource: ICloudFileResource(urlData: item.urlData, thumbnail: true), progressiveSizes: [], immediateThumbnailData: nil, hasVideo: false, isPersonal: false))
                                     }
-                                    var attributes: [TelegramMediaFileAttribute] = []
+                                    var attributes: [IosappMediaFileAttribute] = []
                                     attributes.append(.FileName(fileName: item.fileName))
                                     if let audioMetadata = item.audioMetadata {
                                         attributes.append(.Audio(isVoice: false, duration: audioMetadata.duration, title: audioMetadata.title, performer: audioMetadata.performer, waveform: nil))
                                     }
                                     
-                                    let file = TelegramMediaFile(fileId: MediaId(namespace: Namespaces.Media.LocalFile, id: fileId), partialReference: nil, resource: ICloudFileResource(urlData: item.urlData, thumbnail: false), previewRepresentations: previewRepresentations, videoThumbnails: [], immediateThumbnailData: nil, mimeType: mimeType, size: Int64(item.fileSize), attributes: attributes, alternativeRepresentations: [])
+                                    let file = IosappMediaFile(fileId: MediaId(namespace: Namespaces.Media.LocalFile, id: fileId), partialReference: nil, resource: ICloudFileResource(urlData: item.urlData, thumbnail: false), previewRepresentations: previewRepresentations, videoThumbnails: [], immediateThumbnailData: nil, mimeType: mimeType, size: Int64(item.fileSize), attributes: attributes, alternativeRepresentations: [])
                                     let message: EnqueueMessage = .message(text: "", attributes: [], inlineStickers: [:], mediaReference: .standalone(media: file), threadId: strongSelf.chatLocation.threadId, replyToMessageId: replyMessageSubject?.subjectModel, replyToStoryId: nil, localGroupingKey: groupingKey, correlationId: nil, bubbleUpEmojiOrStickersets: [])
                                     messages.append(message)
                                 }
@@ -1466,7 +1466,7 @@ extension ChatControllerImpl {
         let _ = (self.context.sharedContext.accountManager.transaction { transaction -> Signal<(GeneratedMediaStoreSettings, EngineConfiguration.SearchBots), NoError> in
             let entry = transaction.getSharedData(ApplicationSpecificSharedDataKeys.generatedMediaStoreSettings)?.get(GeneratedMediaStoreSettings.self)
             
-            return engine.data.get(TelegramEngine.EngineData.Item.Configuration.SearchBots())
+            return engine.data.get(IosappEngine.EngineData.Item.Configuration.SearchBots())
             |> map { configuration -> (GeneratedMediaStoreSettings, EngineConfiguration.SearchBots) in
                 return (entry ?? GeneratedMediaStoreSettings.defaultSettings, configuration)
             }
@@ -1479,7 +1479,7 @@ extension ChatControllerImpl {
             let inputText = strongSelf.presentationInterfaceState.interfaceState.effectiveInputState.inputText
             var selectionLimit: Int = 100
             var slowModeEnabled = false
-            if let channel = peer as? TelegramChannel, channel.isRestrictedBySlowmode {
+            if let channel = peer as? IosappChannel, channel.isRestrictedBySlowmode {
                 selectionLimit = 10
                 slowModeEnabled = true
             }
@@ -1580,7 +1580,7 @@ extension ChatControllerImpl {
             return
         }
         
-        let _ = (self.context.engine.data.get(TelegramEngine.EngineData.Item.Configuration.SearchBots())
+        let _ = (self.context.engine.data.get(IosappEngine.EngineData.Item.Configuration.SearchBots())
         |> deliverOnMainQueue).startStandalone(next: { [weak self] configuration in
             if let strongSelf = self {
                 let controller = WebSearchController(context: strongSelf.context, updatedPresentationData: strongSelf.updatedPresentationData, peer: EnginePeer(peer), chatLocation: strongSelf.chatLocation, configuration: configuration, mode: .media(attachment: attachment, completion: { [weak self] results, selectionState, editingState, silentPosting in
@@ -1634,7 +1634,7 @@ extension ChatControllerImpl {
                     var bannedSendVideos: (Int32, Bool)?
                     var bannedSendGifs: (Int32, Bool)?
                     
-                    if let channel = peer as? TelegramChannel {
+                    if let channel = peer as? IosappChannel {
                         if let value = channel.hasBannedPermission(.banSendPhotos) {
                             bannedSendPhotos = value
                         }
@@ -1644,7 +1644,7 @@ extension ChatControllerImpl {
                         if let value = channel.hasBannedPermission(.banSendGifs) {
                             bannedSendGifs = value
                         }
-                    } else if let group = peer as? TelegramGroup {
+                    } else if let group = peer as? IosappGroup {
                         if group.hasBannedPermission(.banSendPhotos) {
                             bannedSendPhotos = (Int32.max, false)
                         }
@@ -1694,14 +1694,14 @@ extension ChatControllerImpl {
             return
         }
         let selfPeerId: PeerId
-        if let peer = peer as? TelegramChannel, case .broadcast = peer.info {
+        if let peer = peer as? IosappChannel, case .broadcast = peer.info {
             selfPeerId = peer.id
-        } else if let peer = peer as? TelegramChannel, case .group = peer.info, peer.hasPermission(.canBeAnonymous) {
+        } else if let peer = peer as? IosappChannel, case .group = peer.info, peer.hasPermission(.canBeAnonymous) {
             selfPeerId = peer.id
         } else {
             selfPeerId = self.context.account.peerId
         }
-        let _ = (self.context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: selfPeerId))
+        let _ = (self.context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: selfPeerId))
         |> deliverOnMainQueue).startStandalone(next: { [weak self] selfPeer in
             guard let strongSelf = self, let selfPeer = selfPeer else {
                 return
@@ -1745,16 +1745,16 @@ extension ChatControllerImpl {
                 if peers.count > 1 {
                     var enqueueMessages: [EnqueueMessage] = []
                     for peer in peers {
-                        var media: TelegramMediaContact?
+                        var media: IosappMediaContact?
                         switch peer {
                             case let .peer(contact, _, _):
-                                guard let contact = contact as? TelegramUser, let phoneNumber = contact.phone else {
+                                guard let contact = contact as? IosappUser, let phoneNumber = contact.phone else {
                                     continue
                                 }
                                 let contactData = DeviceContactExtendedData(basicData: DeviceContactBasicData(firstName: contact.firstName ?? "", lastName: contact.lastName ?? "", phoneNumbers: [DeviceContactPhoneNumberData(label: "_$!<Mobile>!$_", value: phoneNumber)]), middleName: "", prefix: "", suffix: "", organization: "", jobTitle: "", department: "", emailAddresses: [], urls: [], addresses: [], birthdayDate: nil, socialProfiles: [], instantMessagingProfiles: [], note: "")
                                 
                                 let phone = contactData.basicData.phoneNumbers[0].value
-                                media = TelegramMediaContact(firstName: contactData.basicData.firstName, lastName: contactData.basicData.lastName, phoneNumber: phone, peerId: contact.id, vCardData: nil)
+                                media = IosappMediaContact(firstName: contactData.basicData.firstName, lastName: contactData.basicData.lastName, phoneNumber: phone, peerId: contact.id, vCardData: nil)
                             case let .deviceContact(_, basicData):
                                 guard !basicData.phoneNumbers.isEmpty else {
                                     continue
@@ -1762,7 +1762,7 @@ extension ChatControllerImpl {
                                 let contactData = DeviceContactExtendedData(basicData: basicData, middleName: "", prefix: "", suffix: "", organization: "", jobTitle: "", department: "", emailAddresses: [], urls: [], addresses: [], birthdayDate: nil, socialProfiles: [], instantMessagingProfiles: [], note: "")
                                 
                                 let phone = contactData.basicData.phoneNumbers[0].value
-                                media = TelegramMediaContact(firstName: contactData.basicData.firstName, lastName: contactData.basicData.lastName, phoneNumber: phone, peerId: nil, vCardData: nil)
+                                media = IosappMediaContact(firstName: contactData.basicData.firstName, lastName: contactData.basicData.lastName, phoneNumber: phone, peerId: nil, vCardData: nil)
                         }
 
                         if let media = media {
@@ -1790,7 +1790,7 @@ extension ChatControllerImpl {
                     let dataSignal: Signal<(Peer?,  DeviceContactExtendedData?), NoError>
                     switch peer {
                         case let .peer(contact, _, _):
-                            guard let contact = contact as? TelegramUser, let phoneNumber = contact.phone else {
+                            guard let contact = contact as? IosappUser, let phoneNumber = contact.phone else {
                                 return
                             }
                             let contactData = DeviceContactExtendedData(basicData: DeviceContactBasicData(firstName: contact.firstName ?? "", lastName: contact.lastName ?? "", phoneNumbers: [DeviceContactPhoneNumberData(label: "_$!<Mobile>!$_", value: phoneNumber)]), middleName: "", prefix: "", suffix: "", organization: "", jobTitle: "", department: "", emailAddresses: [], urls: [], addresses: [], birthdayDate: nil, socialProfiles: [], instantMessagingProfiles: [], note: "")
@@ -1831,7 +1831,7 @@ extension ChatControllerImpl {
                         if let strongSelf = self, let contactData = peerAndContactData.1, contactData.basicData.phoneNumbers.count != 0 {
                             if contactData.isPrimitive {
                                 let phone = contactData.basicData.phoneNumbers[0].value
-                                let media = TelegramMediaContact(firstName: contactData.basicData.firstName, lastName: contactData.basicData.lastName, phoneNumber: phone, peerId: peerAndContactData.0?.id, vCardData: nil)
+                                let media = IosappMediaContact(firstName: contactData.basicData.firstName, lastName: contactData.basicData.lastName, phoneNumber: phone, peerId: peerAndContactData.0?.id, vCardData: nil)
                                 let replyMessageSubject = strongSelf.presentationInterfaceState.interfaceState.replyMessageSubject
                                 strongSelf.chatDisplayNode.setupSendActionOnViewUpdate({
                                     if let strongSelf = self {
@@ -1856,7 +1856,7 @@ extension ChatControllerImpl {
                                     }
                                     let phone = contactData.basicData.phoneNumbers[0].value
                                     if let vCardData = contactData.serializedVCard() {
-                                        let media = TelegramMediaContact(firstName: contactData.basicData.firstName, lastName: contactData.basicData.lastName, phoneNumber: phone, peerId: peer?.id, vCardData: vCardData)
+                                        let media = IosappMediaContact(firstName: contactData.basicData.firstName, lastName: contactData.basicData.lastName, phoneNumber: phone, peerId: peer?.id, vCardData: vCardData)
                                         let replyMessageSubject = strongSelf.presentationInterfaceState.interfaceState.replyMessageSubject
                                         strongSelf.chatDisplayNode.setupSendActionOnViewUpdate({
                                             if let strongSelf = self {
@@ -1923,14 +1923,14 @@ extension ChatControllerImpl {
             var bannedSendVideos: (Int32, Bool)?
             
             if let peer = strongSelf.presentationInterfaceState.renderedPeer?.peer {
-                if let channel = peer as? TelegramChannel {
+                if let channel = peer as? IosappChannel {
                     if let value = channel.hasBannedPermission(.banSendPhotos) {
                         bannedSendPhotos = value
                     }
                     if let value = channel.hasBannedPermission(.banSendVideos) {
                         bannedSendVideos = value
                     }
-                } else if let group = peer as? TelegramGroup {
+                } else if let group = peer as? IosappGroup {
                     if group.hasBannedPermission(.banSendPhotos) {
                         bannedSendPhotos = (Int32.max, false)
                     }
@@ -2120,7 +2120,7 @@ extension ChatControllerImpl {
                         text: poll.description.string,
                         attributes: attributes,
                         inlineStickers: [:],
-                        mediaReference: .standalone(media: TelegramMediaPoll(
+                        mediaReference: .standalone(media: IosappMediaPoll(
                             pollId: MediaId(namespace: Namespaces.Media.LocalPoll, id: Int64.random(in: Int64.min...Int64.max)),
                             publicity: poll.publicity,
                             kind: poll.kind,
@@ -2202,7 +2202,7 @@ extension ChatControllerImpl {
         guard let message = self.chatDisplayNode.historyNode.messageInCurrentHistoryView(messageId), let peer = self.presentationInterfaceState.renderedPeer?.peer else {
             return
         }
-        guard let existingTodo = message.media.first(where: { $0 is TelegramMediaTodo }) as? TelegramMediaTodo else {
+        guard let existingTodo = message.media.first(where: { $0 is IosappMediaTodo }) as? IosappMediaTodo else {
             return
         }
         
@@ -2236,7 +2236,7 @@ extension ChatControllerImpl {
                 guard let self else {
                     return
                 }
-                func areItemsOnlyAppended(existing: [TelegramMediaTodo.Item], updated: [TelegramMediaTodo.Item]) -> Bool {
+                func areItemsOnlyAppended(existing: [IosappMediaTodo.Item], updated: [IosappMediaTodo.Item]) -> Bool {
                     guard updated.count >= existing.count else {
                         return false
                     }

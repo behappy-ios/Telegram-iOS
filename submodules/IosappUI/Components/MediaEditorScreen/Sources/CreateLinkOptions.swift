@@ -15,7 +15,7 @@ private enum OptionsId: Hashable {
     case link
 }
 
-func presentLinkOptionsController(context: AccountContext, selfController: CreateLinkScreen, snapshotImage: UIImage?, isDark: Bool, sourceNode: ASDisplayNode, url: String, name: String, positionBelowText: Bool, largeMedia: Bool?, webPage: TelegramMediaWebpage, completion: @escaping (Bool, Bool?) -> Void, remove: @escaping () -> Void) {
+func presentLinkOptionsController(context: AccountContext, selfController: CreateLinkScreen, snapshotImage: UIImage?, isDark: Bool, sourceNode: ASDisplayNode, url: String, name: String, positionBelowText: Bool, largeMedia: Bool?, webPage: IosappMediaWebpage, completion: @escaping (Bool, Bool?) -> Void, remove: @escaping () -> Void) {
     var sources: [ContextController.Source] = []
     
     if let source = linkOptions(context: context, selfController: selfController, snapshotImage: snapshotImage, isDark: isDark, sourceNode: sourceNode, url: url, text: name, positionBelowText: positionBelowText, largeMedia: largeMedia, webPage: webPage, completion: completion, remove: remove) {
@@ -35,7 +35,7 @@ func presentLinkOptionsController(context: AccountContext, selfController: Creat
     selfController.presentInGlobalOverlay(contextController)
 }
 
-private func linkOptions(context: AccountContext, selfController: CreateLinkScreen, snapshotImage: UIImage?, isDark: Bool, sourceNode: ASDisplayNode, url: String, text: String, positionBelowText: Bool, largeMedia: Bool?, webPage: TelegramMediaWebpage, completion: @escaping (Bool, Bool?) -> Void, remove: @escaping () -> Void) -> ContextController.Source? {
+private func linkOptions(context: AccountContext, selfController: CreateLinkScreen, snapshotImage: UIImage?, isDark: Bool, sourceNode: ASDisplayNode, url: String, text: String, positionBelowText: Bool, largeMedia: Bool?, webPage: IosappMediaWebpage, completion: @escaping (Bool, Bool?) -> Void, remove: @escaping () -> Void) -> ContextController.Source? {
     let peerId = PeerId(namespace: Namespaces.Peer.CloudUser, id: PeerId.Id._internalFromInt64Value(1))
     let presentationData = context.sharedContext.currentPresentationData.with { $0 }.withUpdated(theme: defaultDarkColorPresentationTheme)
     
@@ -86,13 +86,13 @@ private func linkOptions(context: AccountContext, selfController: CreateLinkScre
     }
     |> distinctUntilChanged
     
-    let wallpaper: TelegramWallpaper?
+    let wallpaper: IosappWallpaper?
     if let image = snapshotImage {
         let wallpaperResource = LocalFileMediaResource(fileId: Int64.random(in: Int64.min ... Int64.max))
         if let wallpaperData = image.jpegData(compressionQuality: 0.87) {
             context.account.postbox.mediaBox.storeResourceData(wallpaperResource.id, data: wallpaperData, synchronous: true)
         }
-        let wallpaperRepresentation = TelegramMediaImageRepresentation(dimensions: PixelDimensions(image.size), resource: wallpaperResource, progressiveSizes: [], immediateThumbnailData: nil)
+        let wallpaperRepresentation = IosappMediaImageRepresentation(dimensions: PixelDimensions(image.size), resource: wallpaperResource, progressiveSizes: [], immediateThumbnailData: nil)
         wallpaper = .image([wallpaperRepresentation], WallpaperSettings())
     } else {
         wallpaper = nil

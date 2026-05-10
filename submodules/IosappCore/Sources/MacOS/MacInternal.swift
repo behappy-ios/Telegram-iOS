@@ -11,7 +11,7 @@ public enum InternalUpdaterError {
 }
 
 public func requestUpdatesXml(account: Account, source: String) -> Signal<Data, InternalUpdaterError> {
-    return TelegramEngine(account: account).peers.resolvePeerByName(name: source, referrer: nil)
+    return IosappEngine(account: account).peers.resolvePeerByName(name: source, referrer: nil)
         |> castError(InternalUpdaterError.self)
         |> mapToSignal { result -> Signal<Peer?, InternalUpdaterError> in
             switch result {
@@ -34,16 +34,16 @@ public func requestUpdatesXml(account: Account, source: String) -> Signal<Data, 
                                 
                                 var peers: [PeerId: Peer] = [:]
                                 for chat in apiChats {
-                                    if let groupOrChannel = parseTelegramGroupOrChannel(chat: chat) {
+                                    if let groupOrChannel = parseIosappGroupOrChannel(chat: chat) {
                                         peers[groupOrChannel.id] = groupOrChannel
                                     }
                                 }
                                 for user in apiUsers {
-                                    let telegramUser = TelegramUser(user: user)
+                                    let telegramUser = IosappUser(user: user)
                                     peers[telegramUser.id] = telegramUser
                                 }
                                 
-                                if let message = locallyRenderedMessage(message: storeMessage, peers: peers), let media = message.media.first as? TelegramMediaFile {
+                                if let message = locallyRenderedMessage(message: storeMessage, peers: peers), let media = message.media.first as? IosappMediaFile {
                                     return Signal { subscriber in
                                         let fetchDispsable = fetchedMediaResource(mediaBox: account.postbox.mediaBox, userLocation: .other, userContentType: .other, reference: MediaResourceReference.media(media: AnyMediaReference.message(message: MessageReference(message), media: media), resource: media.resource)).start()
                                         
@@ -82,7 +82,7 @@ public enum AppUpdateDownloadResult {
 }
 
 public func downloadAppUpdate(account: Account, source: String, messageId: Int32) -> Signal<AppUpdateDownloadResult, InternalUpdaterError> {
-    return TelegramEngine(account: account).peers.resolvePeerByName(name: source, referrer: nil)
+    return IosappEngine(account: account).peers.resolvePeerByName(name: source, referrer: nil)
         |> castError(InternalUpdaterError.self)
         |> mapToSignal { result -> Signal<Peer?, InternalUpdaterError> in
             switch result {
@@ -104,24 +104,24 @@ public func downloadAppUpdate(account: Account, source: String, messageId: Int32
 
                             var peers: [PeerId: Peer] = [:]
                             for chat in apiChats {
-                                if let groupOrChannel = parseTelegramGroupOrChannel(chat: chat) {
+                                if let groupOrChannel = parseIosappGroupOrChannel(chat: chat) {
                                     peers[groupOrChannel.id] = groupOrChannel
                                 }
                             }
                             for user in apiUsers {
-                                let telegramUser = TelegramUser(user: user)
+                                let telegramUser = IosappUser(user: user)
                                 peers[telegramUser.id] = telegramUser
                             }
 
-                            let messageAndFile:(Message, TelegramMediaFile)? = apiMessages.compactMap { value in
+                            let messageAndFile:(Message, IosappMediaFile)? = apiMessages.compactMap { value in
                                 return StoreMessage(apiMessage: value, accountPeerId: account.peerId, peerIsForum: peer.isForum)
                                 }.compactMap { value in
                                     return locallyRenderedMessage(message: value, peers: peers)
                                 }.sorted(by: {
                                     $0.id > $1.id
                                 }).first(where: { value -> Bool in
-                                    return value.media.first is TelegramMediaFile
-                                }).map { ($0, $0.media.first as! TelegramMediaFile )}
+                                    return value.media.first is IosappMediaFile
+                                }).map { ($0, $0.media.first as! IosappMediaFile )}
                             
                             if let (message, media) = messageAndFile {
                                 return Signal { subscriber in
@@ -178,7 +178,7 @@ public func downloadAppUpdate(account: Account, source: String, messageId: Int32
     }
 }
 
-public func requestApplicationIcons(engine: TelegramEngine, source: String = "macos_app_icons") -> Signal<Void, NoError> {
+public func requestApplicationIcons(engine: IosappEngine, source: String = "macos_app_icons") -> Signal<Void, NoError> {
     return engine.peers.resolvePeerByName(name: source, referrer: nil)
         |> mapToSignal { result -> Signal<Peer?, NoError> in
             switch result {
@@ -196,21 +196,21 @@ public func requestApplicationIcons(engine: TelegramEngine, source: String = "ma
                     switch result {
                     case let .channelMessages(channelMessagesData):
                         let (apiMessages, apiChats, apiUsers) = (channelMessagesData.messages, channelMessagesData.chats, channelMessagesData.users)
-                        var icons: [TelegramApplicationIcons.Icon] = []
+                        var icons: [IosappApplicationIcons.Icon] = []
                         for apiMessage in apiMessages.reversed() {
                             if let storeMessage = StoreMessage(apiMessage: apiMessage, accountPeerId: engine.account.peerId, peerIsForum: peer.isForum) {
                                 var peers: [PeerId: Peer] = [:]
                                 for chat in apiChats {
-                                    if let groupOrChannel = parseTelegramGroupOrChannel(chat: chat) {
+                                    if let groupOrChannel = parseIosappGroupOrChannel(chat: chat) {
                                         peers[groupOrChannel.id] = groupOrChannel
                                     }
                                 }
                                 for user in apiUsers {
-                                    let telegramUser = TelegramUser(user: user)
+                                    let telegramUser = IosappUser(user: user)
                                     peers[telegramUser.id] = telegramUser
                                 }
                                 
-                                if let message = locallyRenderedMessage(message: storeMessage, peers: peers), let media = message.media.first as? TelegramMediaFile {
+                                if let message = locallyRenderedMessage(message: storeMessage, peers: peers), let media = message.media.first as? IosappMediaFile {
                                     icons.append(.init(file: media, reference: MessageReference(message)))
                                 }
                             }

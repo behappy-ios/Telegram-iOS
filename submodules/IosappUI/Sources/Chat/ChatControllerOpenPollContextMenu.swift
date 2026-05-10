@@ -24,7 +24,7 @@ private enum OptionsId: Hashable {
 
 extension ChatControllerImpl {
     func openPollOptionContextMenu(optionId: Data, params: ChatControllerInteraction.LongTapParams) -> Void {
-        guard let message = params.message, let poll = message.media.first(where: { $0 is TelegramMediaPoll }) as? TelegramMediaPoll, let pollOptionIndex = poll.options.firstIndex(where: { $0.opaqueIdentifier == optionId }), let contentNode = params.contentNode else {
+        guard let message = params.message, let poll = message.media.first(where: { $0 is IosappMediaPoll }) as? IosappMediaPoll, let pollOptionIndex = poll.options.firstIndex(where: { $0.opaqueIdentifier == optionId }), let contentNode = params.contentNode else {
             return
         }
         
@@ -41,7 +41,7 @@ extension ChatControllerImpl {
         
         var addedByPeer: Signal<EnginePeer?, NoError> = .single(nil)
         if let peerId = pollOption.addedBy {
-            addedByPeer = self.context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: peerId))
+            addedByPeer = self.context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: peerId))
         }
         
         let _ = combineLatest(
@@ -119,7 +119,7 @@ extension ChatControllerImpl {
                 isReplyThreadHead = message.id == replyThreadMessage.effectiveTopId
             }
             
-            if message.id.namespace == Namespaces.Message.Cloud, let channel = message.peers[message.id.peerId] as? TelegramChannel, !channel.isMonoForum, !isReplyThreadHead {
+            if message.id.namespace == Namespaces.Message.Cloud, let channel = message.peers[message.id.peerId] as? IosappChannel, !channel.isMonoForum, !isReplyThreadHead {
                 items.append(.action(ContextMenuActionItem(text: self.presentationData.strings.Conversation_ContextMenuCopyLink, icon: { theme in
                     return generateTintedImage(image: UIImage(bundleImageName: "Chat/Context Menu/Link"), color: theme.contextMenu.primaryColor)
                 }, action: { [weak self] _, f in

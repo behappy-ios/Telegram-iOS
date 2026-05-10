@@ -67,11 +67,11 @@ final class VoiceChatParticipantItem: ListViewItem {
     let action: ((ASDisplayNode?) -> Void)?
     let contextAction: ((ASDisplayNode, ContextGesture?) -> Void)?
     let getIsExpanded: () -> Bool
-    let getUpdatingAvatar: () -> Signal<(TelegramMediaImageRepresentation, Float)?, NoError>
+    let getUpdatingAvatar: () -> Signal<(IosappMediaImageRepresentation, Float)?, NoError>
     
     public let selectable: Bool = true
     
-    public init(presentationData: ItemListPresentationData, dateTimeFormat: PresentationDateTimeFormat, nameDisplayOrder: PresentationPersonNameOrder, context: AccountContext, peer: EnginePeer, text: ParticipantText, expandedText: ParticipantText?, icon: Icon, getAudioLevel: (() -> Signal<Float, NoError>)?, action: ((ASDisplayNode?) -> Void)?, contextAction: ((ASDisplayNode, ContextGesture?) -> Void)? = nil, getIsExpanded: @escaping () -> Bool, getUpdatingAvatar: @escaping () -> Signal<(TelegramMediaImageRepresentation, Float)?, NoError>) {
+    public init(presentationData: ItemListPresentationData, dateTimeFormat: PresentationDateTimeFormat, nameDisplayOrder: PresentationPersonNameOrder, context: AccountContext, peer: EnginePeer, text: ParticipantText, expandedText: ParticipantText?, icon: Icon, getAudioLevel: (() -> Signal<Float, NoError>)?, action: ((ASDisplayNode?) -> Void)?, contextAction: ((ASDisplayNode, ContextGesture?) -> Void)? = nil, getIsExpanded: @escaping () -> Bool, getUpdatingAvatar: @escaping () -> Signal<(IosappMediaImageRepresentation, Float)?, NoError>) {
         self.presentationData = presentationData
         self.dateTimeFormat = dateTimeFormat
         self.nameDisplayOrder = nameDisplayOrder

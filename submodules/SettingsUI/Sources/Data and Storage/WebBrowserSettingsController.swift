@@ -462,14 +462,14 @@ private func fetchDomainExceptionInfo(context: AccountContext, url: String) -> S
             metadataProvider.shouldFetchSubresources = true
             metadataProvider.startFetchingMetadata(for: url, completionHandler: { metadata, _ in
                 let completeWithImage: (Data?) -> Void = { imageData in
-                    var image: TelegramMediaImage?
+                    var image: IosappMediaImage?
                     if let imageData, let parsedImage = UIImage(data: imageData) {
                         let resource = LocalFileMediaResource(fileId: Int64.random(in: Int64.min ... Int64.max))
                         context.sharedContext.accountManager.mediaBox.storeResourceData(resource.id, data: imageData)
-                        image = TelegramMediaImage(
+                        image = IosappMediaImage(
                             imageId: MediaId(namespace: Namespaces.Media.LocalImage, id: Int64.random(in: Int64.min ... Int64.max)),
                             representations: [
-                                TelegramMediaImageRepresentation(
+                                IosappMediaImageRepresentation(
                                     dimensions: PixelDimensions(width: Int32(parsedImage.size.width), height: Int32(parsedImage.size.height)),
                                     resource: resource,
                                     progressiveSizes: [],

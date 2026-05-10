@@ -16,7 +16,7 @@ public enum PresentationBuiltinThemeReference: Int32 {
     case day = 2
     case nightAccent = 3
     
-    public init(baseTheme: TelegramBaseTheme) {
+    public init(baseTheme: IosappBaseTheme) {
         switch baseTheme {
             case .classic:
                 self = .dayClassic
@@ -29,7 +29,7 @@ public enum PresentationBuiltinThemeReference: Int32 {
         }
     }
     
-    public var baseTheme: TelegramBaseTheme {
+    public var baseTheme: IosappBaseTheme {
         switch self {
             case .dayClassic:
                 return .classic
@@ -61,9 +61,9 @@ public struct WallpaperPresentationOptions: OptionSet {
 public struct PresentationLocalTheme: PostboxCoding, Equatable {
     public let title: String
     public let resource: LocalFileMediaResource
-    public let resolvedWallpaper: TelegramWallpaper?
+    public let resolvedWallpaper: IosappWallpaper?
     
-    public init(title: String, resource: LocalFileMediaResource, resolvedWallpaper: TelegramWallpaper?) {
+    public init(title: String, resource: LocalFileMediaResource, resolvedWallpaper: IosappWallpaper?) {
         self.title = title
         self.resource = resource
         self.resolvedWallpaper = resolvedWallpaper
@@ -72,14 +72,14 @@ public struct PresentationLocalTheme: PostboxCoding, Equatable {
     public init(decoder: PostboxDecoder) {
         self.title = decoder.decodeStringForKey("title", orElse: "")
         self.resource = decoder.decodeObjectForKey("resource", decoder: { LocalFileMediaResource(decoder: $0) }) as! LocalFileMediaResource
-        self.resolvedWallpaper = decoder.decode(TelegramWallpaperNativeCodable.self, forKey: "wallpaper")?.value
+        self.resolvedWallpaper = decoder.decode(IosappWallpaperNativeCodable.self, forKey: "wallpaper")?.value
     }
     
     public func encode(_ encoder: PostboxEncoder) {
         encoder.encodeString(self.title, forKey: "title")
         encoder.encodeObject(self.resource, forKey: "resource")
         if let resolvedWallpaper = self.resolvedWallpaper {
-            encoder.encode(TelegramWallpaperNativeCodable(resolvedWallpaper), forKey: "wallpaper")
+            encoder.encode(IosappWallpaperNativeCodable(resolvedWallpaper), forKey: "wallpaper")
         } else {
             encoder.encodeNil(forKey: "wallpaper")
         }
@@ -100,11 +100,11 @@ public struct PresentationLocalTheme: PostboxCoding, Equatable {
 }
 
 public struct PresentationCloudTheme: Codable, Equatable {
-    public let theme: TelegramTheme
-    public let resolvedWallpaper: TelegramWallpaper?
+    public let theme: IosappTheme
+    public let resolvedWallpaper: IosappWallpaper?
     public let creatorAccountId: AccountRecordId?
     
-    public init(theme: TelegramTheme, resolvedWallpaper: TelegramWallpaper?, creatorAccountId: AccountRecordId?) {
+    public init(theme: IosappTheme, resolvedWallpaper: IosappWallpaper?, creatorAccountId: AccountRecordId?) {
         self.theme = theme
         self.resolvedWallpaper = resolvedWallpaper
         self.creatorAccountId = creatorAccountId
@@ -113,16 +113,16 @@ public struct PresentationCloudTheme: Codable, Equatable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: StringCodingKey.self)
 
-        self.theme = (try container.decode(TelegramThemeNativeCodable.self, forKey: "theme")).value
-        self.resolvedWallpaper = (try container.decodeIfPresent(TelegramWallpaperNativeCodable.self, forKey: "wallpaper"))?.value
+        self.theme = (try container.decode(IosappThemeNativeCodable.self, forKey: "theme")).value
+        self.resolvedWallpaper = (try container.decodeIfPresent(IosappWallpaperNativeCodable.self, forKey: "wallpaper"))?.value
         self.creatorAccountId = (try container.decodeIfPresent(Int64.self, forKey: "account")).flatMap(AccountRecordId.init(rawValue:))
     }
 
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: StringCodingKey.self)
 
-        try container.encode(TelegramThemeNativeCodable(self.theme), forKey: "theme")
-        try container.encodeIfPresent(self.resolvedWallpaper.flatMap(TelegramWallpaperNativeCodable.init), forKey: "wallpaper")
+        try container.encode(IosappThemeNativeCodable(self.theme), forKey: "theme")
+        try container.encodeIfPresent(self.resolvedWallpaper.flatMap(IosappWallpaperNativeCodable.init), forKey: "wallpaper")
         try container.encodeIfPresent(self.creatorAccountId?.int64, forKey: "account")
     }
     
@@ -444,7 +444,7 @@ public struct PresentationThemeAccentColor: PostboxCoding, Equatable {
     public var baseColor: PresentationThemeBaseColor
     public var accentColor: UInt32?
     public var bubbleColors: [UInt32]
-    public var wallpaper: TelegramWallpaper?
+    public var wallpaper: IosappWallpaper?
     public var themeIndex: Int64?
     
     public init(baseColor: PresentationThemeBaseColor) {
@@ -459,7 +459,7 @@ public struct PresentationThemeAccentColor: PostboxCoding, Equatable {
         self.wallpaper = nil
     }
     
-    public init(index: Int32, baseColor: PresentationThemeBaseColor, accentColor: UInt32? = nil, bubbleColors: [UInt32] = [], wallpaper: TelegramWallpaper? = nil) {
+    public init(index: Int32, baseColor: PresentationThemeBaseColor, accentColor: UInt32? = nil, bubbleColors: [UInt32] = [], wallpaper: IosappWallpaper? = nil) {
         self.index = index
         self.baseColor = baseColor
         self.accentColor = accentColor
@@ -496,7 +496,7 @@ public struct PresentationThemeAccentColor: PostboxCoding, Equatable {
             }
         }
 
-        self.wallpaper = decoder.decode(TelegramWallpaperNativeCodable.self, forKey: "w")?.value
+        self.wallpaper = decoder.decode(IosappWallpaperNativeCodable.self, forKey: "w")?.value
         self.themeIndex = decoder.decodeOptionalInt64ForKey("t")
     }
     
@@ -510,7 +510,7 @@ public struct PresentationThemeAccentColor: PostboxCoding, Equatable {
         }
         encoder.encodeInt32Array(self.bubbleColors.map(Int32.init(bitPattern:)), forKey: "bubbleColors")
         if let wallpaper = self.wallpaper {
-            encoder.encode(TelegramWallpaperNativeCodable(wallpaper), forKey: "w")
+            encoder.encode(IosappWallpaperNativeCodable(wallpaper), forKey: "w")
         } else {
             encoder.encodeNil(forKey: "w")
         }
@@ -529,7 +529,7 @@ public struct PresentationThemeAccentColor: PostboxCoding, Equatable {
         }
     }
     
-    public func colorFor(baseTheme: TelegramBaseTheme) -> UIColor {
+    public func colorFor(baseTheme: IosappBaseTheme) -> UIColor {
         if let value = self.accentColor {
             return UIColor(rgb: UInt32(bitPattern: value))
         } else {
@@ -549,7 +549,7 @@ public struct PresentationThemeAccentColor: PostboxCoding, Equatable {
         return self.bubbleColors
     }
     
-    public func withUpdatedWallpaper(_ wallpaper: TelegramWallpaper?) -> PresentationThemeAccentColor {
+    public func withUpdatedWallpaper(_ wallpaper: IosappWallpaper?) -> PresentationThemeAccentColor {
         return PresentationThemeAccentColor(index: self.index, baseColor: self.baseColor, accentColor: self.accentColor, bubbleColors: self.bubbleColors, wallpaper: wallpaper)
     }
 }
@@ -606,9 +606,9 @@ public struct PresentationThemeSettings: Codable {
     }
 
     public var theme: PresentationThemeReference
-    public var themePreferredBaseTheme: [Int64: TelegramBaseTheme]
+    public var themePreferredBaseTheme: [Int64: IosappBaseTheme]
     public var themeSpecificAccentColors: [Int64: PresentationThemeAccentColor]
-    public var themeSpecificChatWallpapers: [Int64: TelegramWallpaper]
+    public var themeSpecificChatWallpapers: [Int64: IosappWallpaper]
     public var useSystemFont: Bool
     public var fontSize: PresentationFontSize
     public var listsFontSize: PresentationFontSize
@@ -617,7 +617,7 @@ public struct PresentationThemeSettings: Codable {
     public var largeEmoji: Bool
     public var reduceMotion: Bool
     
-    private func wallpaperResources(_ wallpaper: TelegramWallpaper) -> [MediaResourceId] {
+    private func wallpaperResources(_ wallpaper: IosappWallpaper) -> [MediaResourceId] {
         switch wallpaper {
             case let .image(representations, _):
                 return representations.map { $0.resource.id }
@@ -656,7 +656,7 @@ public struct PresentationThemeSettings: Codable {
         return PresentationThemeSettings(theme: .builtin(.dayClassic), themePreferredBaseTheme: [:], themeSpecificAccentColors: [:], themeSpecificChatWallpapers: [:], useSystemFont: true, fontSize: .regular, listsFontSize: .regular, chatBubbleSettings: .default, automaticThemeSwitchSetting: AutomaticThemeSwitchSetting(force: false, trigger: .system, theme: .builtin(.night)), largeEmoji: true, reduceMotion: false)
     }
     
-    public init(theme: PresentationThemeReference, themePreferredBaseTheme: [Int64: TelegramBaseTheme], themeSpecificAccentColors: [Int64: PresentationThemeAccentColor], themeSpecificChatWallpapers: [Int64: TelegramWallpaper], useSystemFont: Bool, fontSize: PresentationFontSize, listsFontSize: PresentationFontSize, chatBubbleSettings: PresentationChatBubbleSettings, automaticThemeSwitchSetting: AutomaticThemeSwitchSetting, largeEmoji: Bool, reduceMotion: Bool) {
+    public init(theme: PresentationThemeReference, themePreferredBaseTheme: [Int64: IosappBaseTheme], themeSpecificAccentColors: [Int64: PresentationThemeAccentColor], themeSpecificChatWallpapers: [Int64: IosappWallpaper], useSystemFont: Bool, fontSize: PresentationFontSize, listsFontSize: PresentationFontSize, chatBubbleSettings: PresentationChatBubbleSettings, automaticThemeSwitchSetting: AutomaticThemeSwitchSetting, largeEmoji: Bool, reduceMotion: Bool) {
         self.theme = theme
         self.themePreferredBaseTheme = themePreferredBaseTheme
         self.themeSpecificAccentColors = themeSpecificAccentColors
@@ -679,17 +679,17 @@ public struct PresentationThemeSettings: Codable {
             self.theme = .builtin(.dayClassic)
         }
         
-        var mappedThemePreferredBaseTheme: [Int64: TelegramBaseTheme] = [:]
+        var mappedThemePreferredBaseTheme: [Int64: IosappBaseTheme] = [:]
         let themePreferredBaseThemeDict = try container.decodeIfPresent([Int64: Int64].self, forKey: "themePreferredBaseTheme") ?? [:]
         for (key, value) in themePreferredBaseThemeDict {
-            if let baseTheme = TelegramBaseTheme(rawValue: Int32(clamping: value)) {
+            if let baseTheme = IosappBaseTheme(rawValue: Int32(clamping: value)) {
                 mappedThemePreferredBaseTheme[key] = baseTheme
             }
         }
         self.themePreferredBaseTheme = mappedThemePreferredBaseTheme
 
-        let themeSpecificChatWallpapersDict = try container.decode([DictionaryKey: TelegramWallpaperNativeCodable].self, forKey: "themeSpecificChatWallpapers")
-        var mappedThemeSpecificChatWallpapers: [Int64: TelegramWallpaper] = [:]
+        let themeSpecificChatWallpapersDict = try container.decode([DictionaryKey: IosappWallpaperNativeCodable].self, forKey: "themeSpecificChatWallpapers")
+        var mappedThemeSpecificChatWallpapers: [Int64: IosappWallpaper] = [:]
         for (key, value) in themeSpecificChatWallpapersDict {
             mappedThemeSpecificChatWallpapers[key.key] = value.value
         }
@@ -733,9 +733,9 @@ public struct PresentationThemeSettings: Codable {
         }
         try container.encode(mappedThemeSpecificAccentColors, forKey: "themeSpecificAccentColors")
 
-        var mappedThemeSpecificChatWallpapers: [DictionaryKey: TelegramWallpaperNativeCodable] = [:]
+        var mappedThemeSpecificChatWallpapers: [DictionaryKey: IosappWallpaperNativeCodable] = [:]
         for (key, value) in self.themeSpecificChatWallpapers {
-            mappedThemeSpecificChatWallpapers[DictionaryKey(key)] = TelegramWallpaperNativeCodable(value)
+            mappedThemeSpecificChatWallpapers[DictionaryKey(key)] = IosappWallpaperNativeCodable(value)
         }
         try container.encode(mappedThemeSpecificChatWallpapers, forKey: "themeSpecificChatWallpapers")
 
@@ -756,7 +756,7 @@ public struct PresentationThemeSettings: Codable {
         return PresentationThemeSettings(theme: theme, themePreferredBaseTheme: self.themePreferredBaseTheme, themeSpecificAccentColors: self.themeSpecificAccentColors, themeSpecificChatWallpapers: self.themeSpecificChatWallpapers, useSystemFont: self.useSystemFont, fontSize: self.fontSize, listsFontSize: self.listsFontSize, chatBubbleSettings: self.chatBubbleSettings, automaticThemeSwitchSetting: self.automaticThemeSwitchSetting, largeEmoji: self.largeEmoji, reduceMotion: self.reduceMotion)
     }
     
-    public func withUpdatedThemePreferredBaseTheme(_ themePreferredBaseTheme: [Int64: TelegramBaseTheme]) -> PresentationThemeSettings {
+    public func withUpdatedThemePreferredBaseTheme(_ themePreferredBaseTheme: [Int64: IosappBaseTheme]) -> PresentationThemeSettings {
         return PresentationThemeSettings(theme: self.theme, themePreferredBaseTheme: themePreferredBaseTheme, themeSpecificAccentColors: self.themeSpecificAccentColors, themeSpecificChatWallpapers: self.themeSpecificChatWallpapers, useSystemFont: self.useSystemFont, fontSize: self.fontSize, listsFontSize: self.listsFontSize, chatBubbleSettings: self.chatBubbleSettings, automaticThemeSwitchSetting: self.automaticThemeSwitchSetting, largeEmoji: self.largeEmoji, reduceMotion: self.reduceMotion)
     }
     
@@ -764,7 +764,7 @@ public struct PresentationThemeSettings: Codable {
         return PresentationThemeSettings(theme: self.theme, themePreferredBaseTheme: self.themePreferredBaseTheme, themeSpecificAccentColors: themeSpecificAccentColors, themeSpecificChatWallpapers: self.themeSpecificChatWallpapers, useSystemFont: self.useSystemFont, fontSize: self.fontSize, listsFontSize: self.listsFontSize, chatBubbleSettings: self.chatBubbleSettings, automaticThemeSwitchSetting: self.automaticThemeSwitchSetting, largeEmoji: self.largeEmoji, reduceMotion: self.reduceMotion)
     }
     
-    public func withUpdatedThemeSpecificChatWallpapers(_ themeSpecificChatWallpapers: [Int64: TelegramWallpaper]) -> PresentationThemeSettings {
+    public func withUpdatedThemeSpecificChatWallpapers(_ themeSpecificChatWallpapers: [Int64: IosappWallpaper]) -> PresentationThemeSettings {
         return PresentationThemeSettings(theme: self.theme, themePreferredBaseTheme: self.themePreferredBaseTheme, themeSpecificAccentColors: self.themeSpecificAccentColors, themeSpecificChatWallpapers: themeSpecificChatWallpapers, useSystemFont: self.useSystemFont, fontSize: self.fontSize, listsFontSize: self.listsFontSize, chatBubbleSettings: self.chatBubbleSettings, automaticThemeSwitchSetting: self.automaticThemeSwitchSetting, largeEmoji: self.largeEmoji, reduceMotion: self.reduceMotion)
     }
     
@@ -793,7 +793,7 @@ public struct PresentationThemeSettings: Codable {
     }
 }
 
-public func updatePresentationThemeSettingsInteractively(accountManager: AccountManager<TelegramAccountManagerTypes>, _ f: @escaping (PresentationThemeSettings) -> PresentationThemeSettings) -> Signal<Void, NoError> {
+public func updatePresentationThemeSettingsInteractively(accountManager: AccountManager<IosappAccountManagerTypes>, _ f: @escaping (PresentationThemeSettings) -> PresentationThemeSettings) -> Signal<Void, NoError> {
     return accountManager.transaction { transaction -> Void in
         transaction.updateSharedData(ApplicationSpecificSharedDataKeys.presentationThemeSettings, { entry in
             let currentSettings: PresentationThemeSettings

@@ -320,18 +320,18 @@ final class ShareSearchContainerNode: ASDisplayNode, ShareContentContainerNode {
                     var result = Set<EnginePeer.Id>()
                     
                     for peer in foundPeers.foundLocalPeers {
-                        if let user = peer.peer as? TelegramUser, user.flags.contains(.requirePremium) {
+                        if let user = peer.peer as? IosappUser, user.flags.contains(.requirePremium) {
                             result.insert(user.id)
                         }
                     }
                     
                     for peer in foundPeers.foundRemotePeers.0 {
-                        if let user = peer.peer as? TelegramUser, user.flags.contains(.requirePremium) {
+                        if let user = peer.peer as? IosappUser, user.flags.contains(.requirePremium) {
                             result.insert(user.id)
                         }
                     }
                     for peer in foundPeers.foundRemotePeers.1 {
-                        if let user = peer.peer as? TelegramUser, user.flags.contains(.requirePremium) {
+                        if let user = peer.peer as? IosappUser, user.flags.contains(.requirePremium) {
                             result.insert(user.id)
                         }
                     }
@@ -346,7 +346,7 @@ final class ShareSearchContainerNode: ASDisplayNode, ShareContentContainerNode {
                     
                     return context.engineData.subscribe(
                         EngineDataMap(
-                            peerIds.map(TelegramEngine.EngineData.Item.Peer.IsPremiumRequiredForMessaging.init(id:))
+                            peerIds.map(IosappEngine.EngineData.Item.Peer.IsPremiumRequiredForMessaging.init(id:))
                         )
                     )
                 }

@@ -11,7 +11,7 @@ public final class ChatMessageSelectionNode: ASDisplayNode {
     public private(set) var selected = false
     private let checkNode: CheckNode
     
-    public init(wallpaper: TelegramWallpaper, theme: PresentationTheme, toggle: @escaping (Bool) -> Void) {
+    public init(wallpaper: IosappWallpaper, theme: PresentationTheme, toggle: @escaping (Bool) -> Void) {
         self.toggle = toggle
         
         let style: CheckNodeTheme.Style

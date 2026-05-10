@@ -107,7 +107,7 @@ private final class PeerInfoScreenCommentItemNode: PeerInfoScreenItemNode {
         text = text.replacingOccurrences(of: " >]", with: "\u{00A0}>]")
         
         let attributedText = parseMarkdownIntoAttributedString(text, attributes: MarkdownAttributes(body: MarkdownAttributeSet(font: textFont, textColor: textColor), bold: MarkdownAttributeSet(font: textFont, textColor: textColor), link: MarkdownAttributeSet(font: textFont, textColor: item.useAccentLinkColor ? presentationData.theme.list.itemAccentColor : textColor, additionalAttributes: item.useAccentLinkColor ? [:] : [NSAttributedString.Key.underlineStyle.rawValue: NSUnderlineStyle.single.rawValue as NSNumber]), linkAttribute: { contents in
-            return (TelegramTextAttributes.URL, contents)
+            return (IosappTextAttributes.URL, contents)
         })).mutableCopy() as! NSMutableAttributedString
         
         if let attributedPrefix = item.attributedPrefix {
@@ -183,7 +183,7 @@ private final class PeerInfoScreenCommentItemNode: PeerInfoScreenItemNode {
                             let titleFrame = self.textNode.frame
                             if let item = self.item, titleFrame.contains(location) {
                                 if let (_, attributes) = self.textNode.attributesAtPoint(CGPoint(x: location.x - titleFrame.minX, y: location.y - titleFrame.minY)) {
-                                    if let url = attributes[NSAttributedString.Key(rawValue: TelegramTextAttributes.URL)] as? String {
+                                    if let url = attributes[NSAttributedString.Key(rawValue: IosappTextAttributes.URL)] as? String {
                                         item.linkAction?(.tap(url))
                                     }
                                 }
@@ -204,11 +204,11 @@ private final class PeerInfoScreenCommentItemNode: PeerInfoScreenItemNode {
                 let textNodeFrame = self.textNode.frame
                 if let (index, attributes) = self.textNode.attributesAtPoint(CGPoint(x: point.x - textNodeFrame.minX, y: point.y - textNodeFrame.minY)) {
                     let possibleNames: [String] = [
-                        TelegramTextAttributes.URL,
-                        TelegramTextAttributes.PeerMention,
-                        TelegramTextAttributes.PeerTextMention,
-                        TelegramTextAttributes.BotCommand,
-                        TelegramTextAttributes.Hashtag
+                        IosappTextAttributes.URL,
+                        IosappTextAttributes.PeerMention,
+                        IosappTextAttributes.PeerTextMention,
+                        IosappTextAttributes.BotCommand,
+                        IosappTextAttributes.Hashtag
                     ]
                     for name in possibleNames {
                         if let _ = attributes[NSAttributedString.Key(rawValue: name)] {

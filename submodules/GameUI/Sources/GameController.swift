@@ -33,7 +33,7 @@ public final class GameController: ViewController {
             self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: PresentationResourcesRootController.navigationShareIcon(self.presentationData.theme), style: .plain, target: self, action: #selector(self.sharePressed))
             
             for media in message.media {
-                if let game = media as? TelegramMediaGame {
+                if let game = media as? IosappMediaGame {
                     let titleView = GameControllerTitleView(theme: self.presentationData.theme)
                     
                     var botPeer: EnginePeer?

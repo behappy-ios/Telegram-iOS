@@ -11,7 +11,7 @@ import ChatPresentationInterfaceState
 import LegacyMediaPickerUI
 
 extension ChatControllerImpl {
-    func openStickerEditing(file: TelegramMediaFile) {
+    func openStickerEditing(file: IosappMediaFile) {
         var emoji: [String] = []
         for attribute in file.attributes {
             if case let .Sticker(displayText, _, _) = attribute {

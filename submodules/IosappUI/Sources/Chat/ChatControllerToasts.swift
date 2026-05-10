@@ -22,7 +22,7 @@ extension ChatControllerImpl {
         }
         
         let _ = (self.context.engine.data.get(
-            EngineDataList(ids.map(TelegramEngine.EngineData.Item.Messages.Message.init(id:)))
+            EngineDataList(ids.map(IosappEngine.EngineData.Item.Messages.Message.init(id:)))
         )
         |> deliverOnMainQueue).startStandalone(next: { [weak self] messages in
             guard let self else {
@@ -30,10 +30,10 @@ extension ChatControllerImpl {
             }
             let messages = messages.compactMap { $0 }
             
-            var found: (message: EngineMessage, file: TelegramMediaFile)?
+            var found: (message: EngineMessage, file: IosappMediaFile)?
             outer: for message in messages {
                 for media in message.media {
-                    if let file = media as? TelegramMediaFile, file.isVideo {
+                    if let file = media as? IosappMediaFile, file.isVideo {
                         found = (message, file)
                         break outer
                     }

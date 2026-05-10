@@ -236,7 +236,7 @@ private func updatedContextQueryResultStateForQuery(context: AccountContext, cha
             }
         }
     case let .emojiSearch(query, languageCode, range):
-        let hasPremium = context.engine.data.subscribe(TelegramEngine.EngineData.Item.Peer.Peer(id: context.account.peerId))
+        let hasPremium = context.engine.data.subscribe(IosappEngine.EngineData.Item.Peer.Peer(id: context.account.peerId))
         |> map { peer -> Bool in
             guard case let .user(user) = peer else {
                 return false
@@ -250,8 +250,8 @@ private func updatedContextQueryResultStateForQuery(context: AccountContext, cha
                 context.account.postbox.itemCollectionsView(orderedItemListCollectionIds: [], namespaces: [Namespaces.ItemCollection.CloudEmojiPacks], aroundIndex: nil, count: 10000000),
                 hasPremium
             )
-            |> map { view, hasPremium -> [(String, TelegramMediaFile?, String)] in
-                var result: [(String, TelegramMediaFile?, String)] = []
+            |> map { view, hasPremium -> [(String, IosappMediaFile?, String)] in
+                var result: [(String, IosappMediaFile?, String)] = []
                 
                 for entry in view.entries {
                     guard let item = entry.item as? StickerPackItem, !item.file.isPremiumEmoji || hasPremium else {
@@ -293,8 +293,8 @@ private func updatedContextQueryResultStateForQuery(context: AccountContext, cha
                     context.account.postbox.itemCollectionsView(orderedItemListCollectionIds: [], namespaces: [Namespaces.ItemCollection.CloudEmojiPacks], aroundIndex: nil, count: 10000000),
                     hasPremium
                 )
-                |> map { view, hasPremium -> [(String, TelegramMediaFile?, String)] in
-                    var result: [(String, TelegramMediaFile?, String)] = []
+                |> map { view, hasPremium -> [(String, IosappMediaFile?, String)] in
+                    var result: [(String, IosappMediaFile?, String)] = []
                     
                     var allEmoticons: [String: String] = [:]
                     for keyword in keywords {

@@ -101,14 +101,14 @@ public struct PresentationResourcesChat {
         })
     }
     
-    public static func principalGraphics(theme: PresentationTheme, wallpaper: TelegramWallpaper, bubbleCorners: PresentationChatBubbleCorners) -> PrincipalThemeEssentialGraphics {
+    public static func principalGraphics(theme: PresentationTheme, wallpaper: IosappWallpaper, bubbleCorners: PresentationChatBubbleCorners) -> PrincipalThemeEssentialGraphics {
         let hasWallpaper = !wallpaper.isEmpty
         return theme.object(PresentationResourceParameterKey.chatPrincipalThemeEssentialGraphics(hasWallpaper: hasWallpaper, bubbleCorners: bubbleCorners), { theme in
             return PrincipalThemeEssentialGraphics(presentationTheme: theme, wallpaper: wallpaper, preview: theme.preview, bubbleCorners: bubbleCorners)
         }) as! PrincipalThemeEssentialGraphics
     }
     
-    public static func additionalGraphics(_ theme: PresentationTheme, wallpaper: TelegramWallpaper, bubbleCorners: PresentationChatBubbleCorners) -> PrincipalThemeAdditionalGraphics {
+    public static func additionalGraphics(_ theme: PresentationTheme, wallpaper: IosappWallpaper, bubbleCorners: PresentationChatBubbleCorners) -> PrincipalThemeAdditionalGraphics {
         let key: PresentationResourceParameterKey = .chatPrincipalThemeAdditionalGraphics(isCustomWallpaper: !wallpaper.isBuiltin, bubbleCorners: bubbleCorners)
         return theme.object(key, { theme in
             return PrincipalThemeAdditionalGraphics(theme.chat, wallpaper: wallpaper, bubbleCorners: bubbleCorners)
@@ -1113,19 +1113,19 @@ public struct PresentationResourcesChat {
         })
     }
     
-    public static func chatFreeCommentButtonIcon(_ theme: PresentationTheme, wallpaper: TelegramWallpaper) -> UIImage? {
+    public static func chatFreeCommentButtonIcon(_ theme: PresentationTheme, wallpaper: IosappWallpaper) -> UIImage? {
         return theme.image(PresentationResourceKey.chatFreeCommentButtonIcon.rawValue, { _ in
             return generateTintedImage(image: UIImage(bundleImageName: "Chat/Message/FreeRepliesIcon"), color: bubbleVariableColor(variableColor: theme.chat.message.shareButtonForegroundColor, wallpaper: wallpaper))
         })
     }
     
-    public static func chatFreeNavigateButtonIcon(_ theme: PresentationTheme, wallpaper: TelegramWallpaper) -> UIImage? {
+    public static func chatFreeNavigateButtonIcon(_ theme: PresentationTheme, wallpaper: IosappWallpaper) -> UIImage? {
         return theme.image(PresentationResourceKey.chatFreeNavigateButtonIcon.rawValue, { _ in
             return generateTintedImage(image: UIImage(bundleImageName: "Chat/Message/NavigateToMessageIcon"), color: bubbleVariableColor(variableColor: theme.chat.message.shareButtonForegroundColor, wallpaper: wallpaper))
         })
     }
     
-    public static func chatFreeNavigateToThreadButtonIcon(_ theme: PresentationTheme, wallpaper: TelegramWallpaper) -> UIImage? {
+    public static func chatFreeNavigateToThreadButtonIcon(_ theme: PresentationTheme, wallpaper: IosappWallpaper) -> UIImage? {
         return theme.image(PresentationResourceKey.chatFreeNavigateToThreadButtonIcon.rawValue, { _ in
             return generateImage(CGSize(width: 8.0, height: 14.0), rotatedContext: { size, context in
                 context.clear(CGRect(origin: CGPoint(), size: size))
@@ -1142,19 +1142,19 @@ public struct PresentationResourcesChat {
         })
     }
     
-    public static func chatFreeShareButtonIcon(_ theme: PresentationTheme, wallpaper: TelegramWallpaper) -> UIImage? {
+    public static func chatFreeShareButtonIcon(_ theme: PresentationTheme, wallpaper: IosappWallpaper) -> UIImage? {
         return theme.image(PresentationResourceKey.chatFreeShareButtonIcon.rawValue, { _ in
             return generateTintedImage(image: UIImage(bundleImageName: "Chat/Message/ShareIcon"), color: bubbleVariableColor(variableColor: theme.chat.message.shareButtonForegroundColor, wallpaper: wallpaper))
         })
     }
     
-    public static func chatFreeCloseButtonIcon(_ theme: PresentationTheme, wallpaper: TelegramWallpaper) -> UIImage? {
+    public static func chatFreeCloseButtonIcon(_ theme: PresentationTheme, wallpaper: IosappWallpaper) -> UIImage? {
         return theme.image(PresentationResourceKey.chatFreeCloseButtonIcon.rawValue, { _ in
             return generateTintedImage(image: UIImage(bundleImageName: "Chat/Message/SideCloseIcon"), color: bubbleVariableColor(variableColor: theme.chat.message.shareButtonForegroundColor, wallpaper: wallpaper))
         })
     }
     
-    public static func chatFreeMoreButtonIcon(_ theme: PresentationTheme, wallpaper: TelegramWallpaper) -> UIImage? {
+    public static func chatFreeMoreButtonIcon(_ theme: PresentationTheme, wallpaper: IosappWallpaper) -> UIImage? {
         return theme.image(PresentationResourceKey.chatFreeMoreButtonIcon.rawValue, { _ in
             return generateImage(CGSize(width: 16.0, height: 16.0), rotatedContext: { size, context in
                 context.clear(CGRect(origin: CGPoint(), size: size))
@@ -1168,13 +1168,13 @@ public struct PresentationResourcesChat {
         })
     }
     
-    public static func chatFreeExpandButtonIcon(_ theme: PresentationTheme, wallpaper: TelegramWallpaper) -> UIImage? {
+    public static func chatFreeExpandButtonIcon(_ theme: PresentationTheme, wallpaper: IosappWallpaper) -> UIImage? {
         return theme.image(PresentationResourceKey.chatFreeExpandButtonIcon.rawValue, { _ in
             return generateTintedImage(image: UIImage(bundleImageName: "Chat/Message/ExpandIcon"), color: bubbleVariableColor(variableColor: theme.chat.message.shareButtonForegroundColor, wallpaper: wallpaper))
         })
     }
     
-    public static func chatFreeCollapseButtonIcon(_ theme: PresentationTheme, wallpaper: TelegramWallpaper) -> UIImage? {
+    public static func chatFreeCollapseButtonIcon(_ theme: PresentationTheme, wallpaper: IosappWallpaper) -> UIImage? {
         return theme.image(PresentationResourceKey.chatFreeCollapseButtonIcon.rawValue, { _ in
             return generateTintedImage(image: UIImage(bundleImageName: "Chat/Message/CollapseIcon"), color: bubbleVariableColor(variableColor: theme.chat.message.shareButtonForegroundColor, wallpaper: wallpaper))
         })

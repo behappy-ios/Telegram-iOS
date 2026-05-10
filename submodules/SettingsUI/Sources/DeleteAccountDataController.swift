@@ -272,7 +272,7 @@ func deleteAccountDataController(context: AccountContext, mode: DeleteAccountDat
                         return []
                     }
                 },
-                context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: context.account.peerId))
+                context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: context.account.peerId))
             ) |> map { recentPeers, accountPeer -> [EnginePeer] in
                 var peers: [EnginePeer] = []
                 if let accountPeer = accountPeer {
@@ -504,7 +504,7 @@ func deleteAccountDataController(context: AccountContext, mode: DeleteAccountDat
                 }
             
                 if let code, var number, (code + number).count > 4 {
-                    let _ = (context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: context.account.peerId))
+                    let _ = (context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: context.account.peerId))
                     |> deliverOnMainQueue)
                     .start(next: { accountPeer in
                         if let accountPeer = accountPeer, case let .user(user) = accountPeer, var phone = user.phone {

@@ -272,7 +272,7 @@ public final class ChatTextInputActionButtonsNode: ASDisplayNode, ChatSendMessag
         self.sendButtonPointerInteraction = PointerInteraction(view: self.sendButton.view, customInteractionView: self.sendButtonBackgroundView, style: .lift)
     }
     
-    public func updateTheme(theme: PresentationTheme, wallpaper: TelegramWallpaper) {
+    public func updateTheme(theme: PresentationTheme, wallpaper: IosappWallpaper) {
         self.micButton.updateTheme(theme: theme)
         self.expandMediaInputButtonIcon.tintColor = theme.chat.inputPanel.panelControlColor
         self.expandMediaInputButtonIcon.setMonochromaticEffect(tintColor: theme.chat.inputPanel.panelControlColor)

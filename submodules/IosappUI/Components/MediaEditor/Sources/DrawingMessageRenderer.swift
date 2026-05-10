@@ -11,13 +11,13 @@ import WallpaperBackgroundNode
 
 public final class DrawingWallpaperRenderer {
     private let context: AccountContext
-    private let dayWallpaper: TelegramWallpaper?
-    private let nightWallpaper: TelegramWallpaper?
+    private let dayWallpaper: IosappWallpaper?
+    private let nightWallpaper: IosappWallpaper?
     
     private let wallpaperBackgroundNode: WallpaperBackgroundNode
     private let darkWallpaperBackgroundNode: WallpaperBackgroundNode
     
-    public init (context: AccountContext, dayWallpaper: TelegramWallpaper?, nightWallpaper: TelegramWallpaper?) {
+    public init (context: AccountContext, dayWallpaper: IosappWallpaper?, nightWallpaper: IosappWallpaper?) {
         self.context = context
         self.dayWallpaper = dayWallpaper
         self.nightWallpaper = nightWallpaper

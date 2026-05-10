@@ -22,13 +22,13 @@ extension PeerInfoScreenNode {
         switch key {
         case .message:
             if let navigationController = controller.navigationController as? NavigationController, let peer = self.data?.peer {
-                if let channel = peer as? TelegramChannel, case let .broadcast(info) = channel.info, info.flags.contains(.hasMonoforum), let linkedMonoforumId = channel.linkedMonoforumId {
+                if let channel = peer as? IosappChannel, case let .broadcast(info) = channel.info, info.flags.contains(.hasMonoforum), let linkedMonoforumId = channel.linkedMonoforumId {
                     Task { @MainActor [weak self] in
                         guard let self else {
                             return
                         }
                         
-                        guard let peer = await self.context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: linkedMonoforumId)).get() else {
+                        guard let peer = await self.context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: linkedMonoforumId)).get() else {
                             return
                         }
                         
@@ -51,7 +51,7 @@ extension PeerInfoScreenNode {
             }
         case .discussion:
             if let cachedData = self.data?.cachedData as? CachedChannelData, case let .known(maybeLinkedDiscussionPeerId) = cachedData.linkedDiscussionPeerId, let linkedDiscussionPeerId = maybeLinkedDiscussionPeerId {
-                let _ = (self.context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: linkedDiscussionPeerId))
+                let _ = (self.context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: linkedDiscussionPeerId))
                 |> deliverOnMainQueue).startStandalone(next: { [weak self] linkedDiscussionPeer in
                     guard let self, let linkedDiscussionPeer else {
                         return
@@ -75,7 +75,7 @@ extension PeerInfoScreenNode {
             } else {
                 displayCustomNotificationSettings = true
             }
-            if self.data?.threadData == nil, let channel = self.data?.peer as? TelegramChannel, channel.isForumOrMonoForum {
+            if self.data?.threadData == nil, let channel = self.data?.peer as? IosappChannel, channel.isForumOrMonoForum {
                 displayCustomNotificationSettings = true
             }
             
@@ -195,7 +195,7 @@ extension PeerInfoScreenNode {
                     f(.dismissWithoutContent)
                     
                     let _ = (context.engine.data.get(
-                        TelegramEngine.EngineData.Item.NotificationSettings.Global()
+                        IosappEngine.EngineData.Item.NotificationSettings.Global()
                     )
                     |> deliverOnMainQueue).startStandalone(next: { globalSettings in
                         guard let strongSelf = self, let peer = strongSelf.data?.peer else {
@@ -233,13 +233,13 @@ extension PeerInfoScreenNode {
                         
                         let mode: NotificationExceptionMode
                         let defaultSound: PeerMessageSound
-                        if let _ = peer as? TelegramUser {
+                        if let _ = peer as? IosappUser {
                             mode = .users([:])
                             defaultSound = globalSettings.privateChats.sound._asMessageSound()
-                        } else if let _ = peer as? TelegramSecretChat {
+                        } else if let _ = peer as? IosappSecretChat {
                             mode = .users([:])
                             defaultSound = globalSettings.privateChats.sound._asMessageSound()
-                        } else if let channel = peer as? TelegramChannel {
+                        } else if let channel = peer as? IosappChannel {
                             if case .broadcast = channel.info {
                                 mode = .channels([:])
                                 defaultSound = globalSettings.channels.sound._asMessageSound()
@@ -436,18 +436,18 @@ extension PeerInfoScreenNode {
                 
                 var canSetupAutoremoveTimeout = false
                 
-                if let secretChat = chatPeer as? TelegramSecretChat {
+                if let secretChat = chatPeer as? IosappSecretChat {
                     currentAutoremoveTimeout = secretChat.messageAutoremoveTimeout
                     canSetupAutoremoveTimeout = false
-                } else if let group = chatPeer as? TelegramGroup {
+                } else if let group = chatPeer as? IosappGroup {
                     if !group.hasBannedPermission(.banChangeInfo) {
                         canSetupAutoremoveTimeout = true
                     }
-                } else if let user = chatPeer as? TelegramUser {
+                } else if let user = chatPeer as? IosappUser {
                     if user.id != strongSelf.context.account.peerId {
                         canSetupAutoremoveTimeout = true
                     }
-                } else if let channel = chatPeer as? TelegramChannel {
+                } else if let channel = chatPeer as? IosappChannel {
                     if channel.hasPermission(.changeInfo) {
                         canSetupAutoremoveTimeout = true
                     }
@@ -471,7 +471,7 @@ extension PeerInfoScreenNode {
                 }
                 
                 var hasDiscussion = false
-                if let channel = chatPeer as? TelegramChannel {
+                if let channel = chatPeer as? IosappChannel {
                     switch channel.info {
                     case let .broadcast(info):
                         hasDiscussion = info.flags.contains(.hasDiscussionGroup)
@@ -488,7 +488,7 @@ extension PeerInfoScreenNode {
                     })))
                 }
                 
-                if let user = peer as? TelegramUser {
+                if let user = peer as? IosappUser {
                     if user.botInfo == nil && strongSelf.data?.encryptionKeyFingerprint == nil && !user.isDeleted {
                         items.append(.action(ContextMenuActionItem(text: presentationData.strings.UserInfo_ChangeWallpaper, icon: { theme in
                             generateTintedImage(image: UIImage(bundleImageName: "Chat/Context Menu/ApplyTheme"), color: theme.contextMenu.primaryColor)
@@ -575,19 +575,19 @@ extension PeerInfoScreenNode {
                         }
                     }
                     
-                    if user.botInfo == nil && data.isContact, let peer = strongSelf.data?.peer as? TelegramUser, let phone = peer.phone {
+                    if user.botInfo == nil && data.isContact, let peer = strongSelf.data?.peer as? IosappUser, let phone = peer.phone {
                         items.append(.action(ContextMenuActionItem(text: presentationData.strings.Profile_ShareContactButton, icon: { theme in
                             generateTintedImage(image: UIImage(bundleImageName: "Chat/Context Menu/Forward"), color: theme.contextMenu.primaryColor)
                         }, action: { [weak self] _, f in
                             f(.dismissWithoutContent)
                             
                             if let strongSelf = self {
-                                let contact = TelegramMediaContact(firstName: peer.firstName ?? "", lastName: peer.lastName ?? "", phoneNumber: phone, peerId: peer.id, vCardData: nil)
+                                let contact = IosappMediaContact(firstName: peer.firstName ?? "", lastName: peer.lastName ?? "", phoneNumber: phone, peerId: peer.id, vCardData: nil)
                                 let shareController = strongSelf.context.sharedContext.makeShareController(context: strongSelf.context, params: ShareControllerParams(subject: .media(.standalone(media: contact), nil), updatedPresentationData: strongSelf.controller?.updatedPresentationData, completed: { [weak self] peerIds in
                                     if let strongSelf = self {
                                         let _ = (strongSelf.context.engine.data.get(
                                             EngineDataList(
-                                                peerIds.map(TelegramEngine.EngineData.Item.Peer.Peer.init)
+                                                peerIds.map(IosappEngine.EngineData.Item.Peer.Peer.init)
                                             )
                                         )
                                         |> deliverOnMainQueue).startStandalone(next: { [weak self] peerList in
@@ -622,7 +622,7 @@ extension PeerInfoScreenNode {
 
                                             strongSelf.controller?.present(UndoOverlayController(presentationData: presentationData, content: .forward(savedMessages: savedMessages, text: text), elevatedLayout: false, animateInAsReplacement: true, action: { action in
                                                 if savedMessages, let self, action == .info {
-                                                    let _ = (self.context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: self.context.account.peerId))
+                                                    let _ = (self.context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: self.context.account.peerId))
                                                     |> deliverOnMainQueue).start(next: { [weak self] peer in
                                                         guard let self, let peer else {
                                                             return
@@ -782,7 +782,7 @@ extension PeerInfoScreenNode {
                         })))
                     }
                     
-                    if let user = data.peer as? TelegramUser, let cachedData = data.cachedData as? CachedUserData, user.botInfo == nil && !user.flags.contains(.isSupport) && user.id != strongSelf.context.account.peerId && strongSelf.peerId.namespace != Namespaces.Peer.SecretChat {
+                    if let user = data.peer as? IosappUser, let cachedData = data.cachedData as? CachedUserData, user.botInfo == nil && !user.flags.contains(.isSupport) && user.id != strongSelf.context.account.peerId && strongSelf.peerId.namespace != Namespaces.Peer.SecretChat {
                         let copyProtectionEnabled = cachedData.flags.contains(.myCopyProtectionEnabled) || cachedData.flags.contains(.copyProtectionEnabled)
                         items.append(.action(ContextMenuActionItem(text: !copyProtectionEnabled ? strongSelf.presentationData.strings.PeerInfo_DisableSharing : strongSelf.presentationData.strings.PeerInfo_EnableSharing, icon: { theme in
                             generateTintedImage(image: UIImage(bundleImageName: !copyProtectionEnabled ? "Chat/Context Menu/ForwardDisable" : "Chat/Context Menu/ForwardEnable"), color: theme.contextMenu.primaryColor)
@@ -901,7 +901,7 @@ extension PeerInfoScreenNode {
                     if finalItemsCount > itemsCount {
                         items.insert(.separator, at: itemsCount)
                     }
-                } else if let channel = peer as? TelegramChannel {
+                } else if let channel = peer as? IosappChannel {
                     if let cachedData = strongSelf.data?.cachedData as? CachedChannelData {
                         if case .broadcast = channel.info, cachedData.flags.contains(.starGiftsAvailable) {
                             items.append(.action(ContextMenuActionItem(text: presentationData.strings.Profile_SendGift, badge: nil, icon: { theme in
@@ -1123,7 +1123,7 @@ extension PeerInfoScreenNode {
                             }
                         }
                     }
-                } else if let group = peer as? TelegramGroup {
+                } else if let group = peer as? IosappGroup {
                     if canSetupAutoremoveTimeout {
                         let strings = strongSelf.presentationData.strings
                         items.append(.action(ContextMenuActionItem(text: currentAutoremoveTimeout == nil ? strongSelf.presentationData.strings.PeerInfo_EnableAutoDelete : strongSelf.presentationData.strings.PeerInfo_AdjustAutoDelete, icon: { theme in

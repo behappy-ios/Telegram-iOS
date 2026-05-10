@@ -104,7 +104,7 @@ public struct InAppNotificationSettings: Codable, Equatable {
     }
 }
 
-public func updateInAppNotificationSettingsInteractively(accountManager: AccountManager<TelegramAccountManagerTypes>, _ f: @escaping (InAppNotificationSettings) -> InAppNotificationSettings) -> Signal<Void, NoError> {
+public func updateInAppNotificationSettingsInteractively(accountManager: AccountManager<IosappAccountManagerTypes>, _ f: @escaping (InAppNotificationSettings) -> InAppNotificationSettings) -> Signal<Void, NoError> {
     return accountManager.transaction { transaction -> Void in
         transaction.updateSharedData(ApplicationSpecificSharedDataKeys.inAppNotificationSettings, { entry in
             let currentSettings: InAppNotificationSettings

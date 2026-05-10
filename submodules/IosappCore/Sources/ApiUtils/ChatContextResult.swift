@@ -16,9 +16,9 @@ public enum ChatContextResultMessage: PostboxCoding, Equatable, Codable {
     
     case auto(caption: String, entities: TextEntitiesMessageAttribute?, replyMarkup: ReplyMarkupMessageAttribute?)
     case text(text: String, entities: TextEntitiesMessageAttribute?, disableUrlPreview: Bool, previewParameters: WebpagePreviewMessageAttribute?, replyMarkup: ReplyMarkupMessageAttribute?)
-    case mapLocation(media: TelegramMediaMap, replyMarkup: ReplyMarkupMessageAttribute?)
-    case contact(media: TelegramMediaContact, replyMarkup: ReplyMarkupMessageAttribute?)
-    case invoice(media: TelegramMediaInvoice, replyMarkup: ReplyMarkupMessageAttribute?)
+    case mapLocation(media: IosappMediaMap, replyMarkup: ReplyMarkupMessageAttribute?)
+    case contact(media: IosappMediaContact, replyMarkup: ReplyMarkupMessageAttribute?)
+    case invoice(media: IosappMediaInvoice, replyMarkup: ReplyMarkupMessageAttribute?)
     case webpage(text: String, entities: TextEntitiesMessageAttribute?, url: String, previewParameters: WebpagePreviewMessageAttribute?, replyMarkup: ReplyMarkupMessageAttribute?)
     
     public init(decoder: PostboxDecoder) {
@@ -28,11 +28,11 @@ public enum ChatContextResultMessage: PostboxCoding, Equatable, Codable {
         case 1:
             self = .text(text: decoder.decodeStringForKey("t", orElse: ""), entities: decoder.decodeObjectForKey("e") as? TextEntitiesMessageAttribute, disableUrlPreview: decoder.decodeInt32ForKey("du", orElse: 0) != 0, previewParameters: decoder.decodeObjectForKey("prp") as? WebpagePreviewMessageAttribute, replyMarkup: decoder.decodeObjectForKey("m") as? ReplyMarkupMessageAttribute)
         case 2:
-            self = .mapLocation(media: decoder.decodeObjectForKey("l") as! TelegramMediaMap, replyMarkup: decoder.decodeObjectForKey("m") as? ReplyMarkupMessageAttribute)
+            self = .mapLocation(media: decoder.decodeObjectForKey("l") as! IosappMediaMap, replyMarkup: decoder.decodeObjectForKey("m") as? ReplyMarkupMessageAttribute)
         case 3:
-            self = .contact(media: decoder.decodeObjectForKey("c") as! TelegramMediaContact, replyMarkup: decoder.decodeObjectForKey("m") as? ReplyMarkupMessageAttribute)
+            self = .contact(media: decoder.decodeObjectForKey("c") as! IosappMediaContact, replyMarkup: decoder.decodeObjectForKey("m") as? ReplyMarkupMessageAttribute)
         case 4:
-            self = .invoice(media: decoder.decodeObjectForKey("i") as! TelegramMediaInvoice, replyMarkup: decoder.decodeObjectForKey("m") as? ReplyMarkupMessageAttribute)
+            self = .invoice(media: decoder.decodeObjectForKey("i") as! IosappMediaInvoice, replyMarkup: decoder.decodeObjectForKey("m") as? ReplyMarkupMessageAttribute)
         case 5:
             self = .webpage(text: decoder.decodeStringForKey("t", orElse: ""), entities: decoder.decodeObjectForKey("e") as? TextEntitiesMessageAttribute, url: decoder.decodeStringForKey("url", orElse: ""), previewParameters: decoder.decodeObjectForKey("prp") as? WebpagePreviewMessageAttribute, replyMarkup: decoder.decodeObjectForKey("m") as? ReplyMarkupMessageAttribute)
         default:
@@ -251,8 +251,8 @@ public enum ChatContextResult: Equatable, Codable {
         public let title: String?
         public let description: String?
         public let url: String?
-        public let content: TelegramMediaWebFile?
-        public let thumbnail: TelegramMediaWebFile?
+        public let content: IosappMediaWebFile?
+        public let thumbnail: IosappMediaWebFile?
         public let message: ChatContextResultMessage
         
         public init(
@@ -262,8 +262,8 @@ public enum ChatContextResult: Equatable, Codable {
             title: String?,
             description: String?,
             url: String?,
-            content: TelegramMediaWebFile?,
-            thumbnail: TelegramMediaWebFile?,
+            content: IosappMediaWebFile?,
+            thumbnail: IosappMediaWebFile?,
             message: ChatContextResultMessage
         ) {
             self.queryId = queryId
@@ -284,8 +284,8 @@ public enum ChatContextResult: Equatable, Codable {
         public let type: String
         public let title: String?
         public let description: String?
-        public let image: TelegramMediaImage?
-        public let file: TelegramMediaFile?
+        public let image: IosappMediaImage?
+        public let file: IosappMediaFile?
         public let message: ChatContextResultMessage
         
         public init(
@@ -294,8 +294,8 @@ public enum ChatContextResult: Equatable, Codable {
             type: String,
             title: String?,
             description: String?,
-            image: TelegramMediaImage?,
-            file: TelegramMediaFile?,
+            image: IosappMediaImage?,
+            file: IosappMediaFile?,
             message: ChatContextResultMessage
         ) {
             self.queryId = queryId
@@ -536,7 +536,7 @@ extension ChatContextResultMessage {
                 self = .mapLocation(media: media, replyMarkup: parsedReplyMarkup)
             case let .botInlineMessageMediaContact(botInlineMessageMediaContactData):
                 let (_, phoneNumber, firstName, lastName, vcard, replyMarkup) = (botInlineMessageMediaContactData.flags, botInlineMessageMediaContactData.phoneNumber, botInlineMessageMediaContactData.firstName, botInlineMessageMediaContactData.lastName, botInlineMessageMediaContactData.vcard, botInlineMessageMediaContactData.replyMarkup)
-                let media = TelegramMediaContact(firstName: firstName, lastName: lastName, phoneNumber: phoneNumber, peerId: nil, vCardData: vcard.isEmpty ? nil : vcard)
+                let media = IosappMediaContact(firstName: firstName, lastName: lastName, phoneNumber: phoneNumber, peerId: nil, vCardData: vcard.isEmpty ? nil : vcard)
                 var parsedReplyMarkup: ReplyMarkupMessageAttribute?
                 if let replyMarkup = replyMarkup {
                     parsedReplyMarkup = ReplyMarkupMessageAttribute(apiMarkup: replyMarkup)
@@ -544,7 +544,7 @@ extension ChatContextResultMessage {
                 self = .contact(media: media, replyMarkup: parsedReplyMarkup)
             case let .botInlineMessageMediaInvoice(botInlineMessageMediaInvoiceData):
                 let (flags, title, description, photo, currency, totalAmount, replyMarkup) = (botInlineMessageMediaInvoiceData.flags, botInlineMessageMediaInvoiceData.title, botInlineMessageMediaInvoiceData.description, botInlineMessageMediaInvoiceData.photo, botInlineMessageMediaInvoiceData.currency, botInlineMessageMediaInvoiceData.totalAmount, botInlineMessageMediaInvoiceData.replyMarkup)
-                var parsedFlags = TelegramMediaInvoiceFlags()
+                var parsedFlags = IosappMediaInvoiceFlags()
                 if (flags & (1 << 3)) != 0 {
                     parsedFlags.insert(.isTest)
                 }
@@ -555,7 +555,7 @@ extension ChatContextResultMessage {
                 if let replyMarkup = replyMarkup {
                     parsedReplyMarkup = ReplyMarkupMessageAttribute(apiMarkup: replyMarkup)
                 }
-                self = .invoice(media: TelegramMediaInvoice(title: title, description: description, photo: photo.flatMap(TelegramMediaWebFile.init), receiptMessageId: nil, currency: currency, totalAmount: totalAmount, startParam: "", extendedMedia: nil, subscriptionPeriod: nil, flags: parsedFlags, version: TelegramMediaInvoice.lastVersion), replyMarkup: parsedReplyMarkup)
+                self = .invoice(media: IosappMediaInvoice(title: title, description: description, photo: photo.flatMap(IosappMediaWebFile.init), receiptMessageId: nil, currency: currency, totalAmount: totalAmount, startParam: "", extendedMedia: nil, subscriptionPeriod: nil, flags: parsedFlags, version: IosappMediaInvoice.lastVersion), replyMarkup: parsedReplyMarkup)
             case let .botInlineMessageMediaWebPage(botInlineMessageMediaWebPageData):
                 let (flags, message, entities, url, replyMarkup) = (botInlineMessageMediaWebPageData.flags, botInlineMessageMediaWebPageData.message, botInlineMessageMediaWebPageData.entities, botInlineMessageMediaWebPageData.url, botInlineMessageMediaWebPageData.replyMarkup)
                 var parsedReplyMarkup: ReplyMarkupMessageAttribute?
@@ -599,11 +599,11 @@ extension ChatContextResult {
         switch apiResult {
             case let .botInlineResult(botInlineResultData):
                 let (_, id, type, title, description, url, thumb, content, sendMessage) = (botInlineResultData.flags, botInlineResultData.id, botInlineResultData.type, botInlineResultData.title, botInlineResultData.description, botInlineResultData.url, botInlineResultData.thumb, botInlineResultData.content, botInlineResultData.sendMessage)
-                self = .externalReference(ChatContextResult.ExternalReference(queryId: queryId, id: id, type: type, title: title, description: description, url: url, content: content.flatMap(TelegramMediaWebFile.init), thumbnail: thumb.flatMap(TelegramMediaWebFile.init), message: ChatContextResultMessage(apiMessage: sendMessage)))
+                self = .externalReference(ChatContextResult.ExternalReference(queryId: queryId, id: id, type: type, title: title, description: description, url: url, content: content.flatMap(IosappMediaWebFile.init), thumbnail: thumb.flatMap(IosappMediaWebFile.init), message: ChatContextResultMessage(apiMessage: sendMessage)))
             case let .botInlineMediaResult(botInlineMediaResultData):
                 let (_, id, type, photo, document, title, description, sendMessage) = (botInlineMediaResultData.flags, botInlineMediaResultData.id, botInlineMediaResultData.type, botInlineMediaResultData.photo, botInlineMediaResultData.document, botInlineMediaResultData.title, botInlineMediaResultData.description, botInlineMediaResultData.sendMessage)
-                var image: TelegramMediaImage?
-                var file: TelegramMediaFile?
+                var image: IosappMediaImage?
+                var file: IosappMediaFile?
                 if let photo = photo, let parsedImage = telegramMediaImageFromApiPhoto(photo) {
                     image = parsedImage
                 }
@@ -665,7 +665,7 @@ extension ChatContextResultCollection {
     }
 }
 
-public func requestContextResults(engine: TelegramEngine, botId: EnginePeer.Id, query: String, peerId: EnginePeer.Id, offset: String = "", existingResults: ChatContextResultCollection? = nil, incompleteResults: Bool = false, staleCachedResults: Bool = false, limit: Int = 60) -> Signal<RequestChatContextResultsResult?, NoError> {
+public func requestContextResults(engine: IosappEngine, botId: EnginePeer.Id, query: String, peerId: EnginePeer.Id, offset: String = "", existingResults: ChatContextResultCollection? = nil, incompleteResults: Bool = false, staleCachedResults: Bool = false, limit: Int = 60) -> Signal<RequestChatContextResultsResult?, NoError> {
     return engine.messages.requestChatContextResults(botId: botId, peerId: peerId, query: query, offset: offset, incompleteResults: incompleteResults, staleCachedResults: staleCachedResults)
     |> `catch` { error -> Signal<RequestChatContextResultsResult?, NoError> in
         return .single(nil)

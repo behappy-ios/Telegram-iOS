@@ -332,7 +332,7 @@ final class StoryContentLiveChatComponent: Component {
                     return
                 }
                 guard let chatPeer = await component.context.engine.data.get(
-                    TelegramEngine.EngineData.Item.Peer.Peer(id: component.storyPeerId)
+                    IosappEngine.EngineData.Item.Peer.Peer(id: component.storyPeerId)
                 ).get() else {
                     return
                 }
@@ -387,7 +387,7 @@ final class StoryContentLiveChatComponent: Component {
                                 if component.storyPeerId == component.context.account.peerId {
                                     let _ = component.context.engine.privacy.requestUpdatePeerIsBlocked(peerId: author.id, isBlocked: true).startStandalone()
                                 } else {
-                                    let _ = component.context.engine.peers.updateChannelMemberBannedRights(peerId: component.storyPeerId, memberId: author.id, rights: TelegramChatBannedRights(flags: .banReadMessages, untilDate: Int32.max)).startStandalone()
+                                    let _ = component.context.engine.peers.updateChannelMemberBannedRights(peerId: component.storyPeerId, memberId: author.id, rights: IosappChatBannedRights(flags: .banReadMessages, untilDate: Int32.max)).startStandalone()
                                 }
                             }
                         }

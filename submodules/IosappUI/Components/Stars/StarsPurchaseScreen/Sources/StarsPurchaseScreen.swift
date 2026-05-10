@@ -258,7 +258,7 @@ private final class StarsPurchaseScreenContentComponent: CombinedComponent {
             }
             
             let markdownAttributes = MarkdownAttributes(body: MarkdownAttributeSet(font: textFont, textColor: textColor), bold: MarkdownAttributeSet(font: boldTextFont, textColor: textColor), link: MarkdownAttributeSet(font: textFont, textColor: accentColor), linkAttribute: { contents in
-                return (TelegramTextAttributes.URL, contents)
+                return (IosappTextAttributes.URL, contents)
             })
             
             if state.cachedChevronImage == nil || state.cachedChevronImage?.1 !== theme {
@@ -281,8 +281,8 @@ private final class StarsPurchaseScreenContentComponent: CombinedComponent {
                     highlightColor: environment.theme.list.itemAccentColor.withAlphaComponent(0.1),
                     highlightInset: UIEdgeInsets(top: 0.0, left: 0.0, bottom: 0.0, right: -8.0),
                     highlightAction: { attributes in
-                        if let _ = attributes[NSAttributedString.Key(rawValue: TelegramTextAttributes.URL)] {
-                            return NSAttributedString.Key(rawValue: TelegramTextAttributes.URL)
+                        if let _ = attributes[NSAttributedString.Key(rawValue: IosappTextAttributes.URL)] {
+                            return NSAttributedString.Key(rawValue: IosappTextAttributes.URL)
                         } else {
                             return nil
                         }
@@ -457,7 +457,7 @@ private final class StarsPurchaseScreenContentComponent: CombinedComponent {
             let termsFont = Font.regular(13.0)
             let termsTextColor = environment.theme.list.freeTextColor
             let termsMarkdownAttributes = MarkdownAttributes(body: MarkdownAttributeSet(font: termsFont, textColor: termsTextColor), bold: MarkdownAttributeSet(font: termsFont, textColor: termsTextColor), link: MarkdownAttributeSet(font: termsFont, textColor: environment.theme.list.itemAccentColor), linkAttribute: { contents in
-                return (TelegramTextAttributes.URL, contents)
+                return (IosappTextAttributes.URL, contents)
             })
             let textSideInset: CGFloat = 16.0
             
@@ -469,8 +469,8 @@ private final class StarsPurchaseScreenContentComponent: CombinedComponent {
                     lineSpacing: 0.2,
                     highlightColor: environment.theme.list.itemAccentColor.withAlphaComponent(0.2),
                     highlightAction: { attributes in
-                        if let _ = attributes[NSAttributedString.Key(rawValue: TelegramTextAttributes.URL)] {
-                            return NSAttributedString.Key(rawValue: TelegramTextAttributes.URL)
+                        if let _ = attributes[NSAttributedString.Key(rawValue: IosappTextAttributes.URL)] {
+                            return NSAttributedString.Key(rawValue: IosappTextAttributes.URL)
                         } else {
                             return nil
                         }
@@ -650,7 +650,7 @@ private final class StarsPurchaseScreenComponent: CombinedComponent {
                 queue: Queue.mainQueue(),
                 products,
                 starsContext.state,
-                context.engine.data.get(EngineDataMap(peerIds.map(TelegramEngine.EngineData.Item.Peer.Peer.init(id:))))
+                context.engine.data.get(EngineDataMap(peerIds.map(IosappEngine.EngineData.Item.Peer.Peer.init(id:))))
             ).start(next: { [weak self] products, starsState, result in
                 guard let self else {
                     return

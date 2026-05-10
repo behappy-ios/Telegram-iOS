@@ -229,12 +229,12 @@ private struct MediaEditorDraftItemId {
     }
 }
 
-public func addStoryDraft(engine: TelegramEngine, item: MediaEditorDraft) {
+public func addStoryDraft(engine: IosappEngine, item: MediaEditorDraft) {
     let itemId = MediaEditorDraftItemId(item.path.persistentHashValue)
     let _ = engine.orderedLists.addOrMoveToFirstPosition(collectionId: ApplicationSpecificOrderedItemListCollectionId.storyDrafts, id: itemId.rawValue, item: item, removeTailIfCountExceeds: 50).start()
 }
 
-public func removeStoryDraft(engine: TelegramEngine, path: String, delete: Bool) {
+public func removeStoryDraft(engine: IosappEngine, path: String, delete: Bool) {
     if delete {
         try? FileManager.default.removeItem(atPath: fullDraftPath(peerId: engine.account.peerId, path: path))
     }
@@ -242,8 +242,8 @@ public func removeStoryDraft(engine: TelegramEngine, path: String, delete: Bool)
     let _ = engine.orderedLists.removeItem(collectionId: ApplicationSpecificOrderedItemListCollectionId.storyDrafts, id: itemId.rawValue).start()
 }
 
-public func clearStoryDrafts(engine: TelegramEngine) {
-    let _ = engine.data.get(TelegramEngine.EngineData.Item.OrderedLists.ListItems(collectionId: ApplicationSpecificOrderedItemListCollectionId.storyDrafts)).start(next: { items in
+public func clearStoryDrafts(engine: IosappEngine) {
+    let _ = engine.data.get(IosappEngine.EngineData.Item.OrderedLists.ListItems(collectionId: ApplicationSpecificOrderedItemListCollectionId.storyDrafts)).start(next: { items in
         for item in items {
             if let draft = item.contents.get(MediaEditorDraft.self) {
                 removeStoryDraft(engine: engine, path: draft.path, delete: true)
@@ -257,8 +257,8 @@ public func deleteAllStoryDrafts(peerId: EnginePeer.Id) {
     try? FileManager.default.removeItem(atPath: path)
 }
 
-public func storyDrafts(engine: TelegramEngine) -> Signal<[MediaEditorDraft], NoError> {
-    return engine.data.subscribe(TelegramEngine.EngineData.Item.OrderedLists.ListItems(collectionId: ApplicationSpecificOrderedItemListCollectionId.storyDrafts))
+public func storyDrafts(engine: IosappEngine) -> Signal<[MediaEditorDraft], NoError> {
+    return engine.data.subscribe(IosappEngine.EngineData.Item.OrderedLists.ListItems(collectionId: ApplicationSpecificOrderedItemListCollectionId.storyDrafts))
     |> map { items -> [MediaEditorDraft] in
         var result: [MediaEditorDraft] = []
         for item in items {
@@ -270,10 +270,10 @@ public func storyDrafts(engine: TelegramEngine) -> Signal<[MediaEditorDraft], No
     }
 }
 
-public func updateStoryDrafts(engine: TelegramEngine) {
+public func updateStoryDrafts(engine: IosappEngine) {
     let currentTimestamp = Int32(CFAbsoluteTimeGetCurrent() + kCFAbsoluteTimeIntervalSince1970)
     let _ = engine.data.get(
-        TelegramEngine.EngineData.Item.OrderedLists.ListItems(collectionId: ApplicationSpecificOrderedItemListCollectionId.storyDrafts)
+        IosappEngine.EngineData.Item.OrderedLists.ListItems(collectionId: ApplicationSpecificOrderedItemListCollectionId.storyDrafts)
     ).start(next: { items in
         for item in items {
             if let draft = item.contents.get(MediaEditorDraft.self) {
@@ -286,7 +286,7 @@ public func updateStoryDrafts(engine: TelegramEngine) {
 }
 
 public extension MediaEditorDraft {
-    func fullPath(engine: TelegramEngine) -> String {
+    func fullPath(engine: IosappEngine) -> String {
         return fullDraftPath(peerId: engine.account.peerId, path: self.path)
     }
 }

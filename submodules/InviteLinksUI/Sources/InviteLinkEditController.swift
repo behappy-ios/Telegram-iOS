@@ -627,7 +627,7 @@ public func inviteLinkEditController(context: AccountContext, updatedPresentatio
         let _ = (context.account.postbox.loadedPeerWithId(peerId)
         |> deliverOnMainQueue).start(next: { peer in
             let isGroup: Bool
-            if let peer = peer as? TelegramChannel, case .broadcast = peer.info {
+            if let peer = peer as? IosappChannel, case .broadcast = peer.info {
                 isGroup = false
             } else {
                 isGroup = true
@@ -683,7 +683,7 @@ public func inviteLinkEditController(context: AccountContext, updatedPresentatio
         presentationData,
         statePromise.get(),
         context.engine.data.subscribe(
-            TelegramEngine.EngineData.Item.Peer.Peer(id: peerId)
+            IosappEngine.EngineData.Item.Peer.Peer(id: peerId)
         ))
     |> deliverOnMainQueue
     |> map { presentationData, state, peer -> (ItemListControllerState, (ItemListNodeState, Any)) in

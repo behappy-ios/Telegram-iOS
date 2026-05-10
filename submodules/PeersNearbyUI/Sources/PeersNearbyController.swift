@@ -546,8 +546,8 @@ public func peersNearbyController(context: AccountContext) -> ViewController {
                     }
                 }
                 return context.engine.data.get(
-                    EngineDataMap(peerIds.map(TelegramEngine.EngineData.Item.Peer.Peer.init)),
-                    EngineDataMap(peerIds.map(TelegramEngine.EngineData.Item.Peer.ParticipantCount.init))
+                    EngineDataMap(peerIds.map(IosappEngine.EngineData.Item.Peer.Peer.init)),
+                    EngineDataMap(peerIds.map(IosappEngine.EngineData.Item.Peer.ParticipantCount.init))
                 )
                 |> map { peerMap, participantCountMap -> PeersNearbyData? in
                     var users: [PeerNearbyEntry] = []

@@ -271,7 +271,7 @@ final class MediaEditorScreenComponent: Component {
                 }
             })
             
-            self.isPremiumDisposable = (context.engine.data.subscribe(TelegramEngine.EngineData.Item.Peer.Peer(id: context.account.peerId))
+            self.isPremiumDisposable = (context.engine.data.subscribe(IosappEngine.EngineData.Item.Peer.Peer(id: context.account.peerId))
             |> deliverOnMainQueue).start(next: { [weak self] peer in
                 if let self {
                     self.isPremium = peer?.isPremium ?? false
@@ -3723,7 +3723,7 @@ public final class MediaEditorScreenImpl: ViewController, MediaEditorScreen, UID
                 let messages: Signal<[Message], NoError>
                 if case let .message(messageIds) = subject {
                     messages = self.context.engine.data.get(
-                        EngineDataMap(messageIds.map(TelegramEngine.EngineData.Item.Messages.Message.init(id:)))
+                        EngineDataMap(messageIds.map(IosappEngine.EngineData.Item.Messages.Message.init(id:)))
                     )
                     |> map { result in
                         var messages: [Message] = []
@@ -3736,7 +3736,7 @@ public final class MediaEditorScreenImpl: ViewController, MediaEditorScreen, UID
                     }
                 } else if case let .gift(gift) = subject {
                     isGift = true
-                    let media: [Media] = [TelegramMediaAction(action: .starGiftUnique(gift: .unique(gift), isUpgrade: false, isTransferred: false, savedToProfile: false, canExportDate: nil, transferStars: nil, isRefunded: false, isPrepaidUpgrade: false, peerId: nil, senderId: nil, savedId: nil, resaleAmount: nil, canTransferDate: nil, canResaleDate: nil, dropOriginalDetailsStars: nil, assigned: false, fromOffer: false, canCraftAt: nil, isCrafted: false))]
+                    let media: [Media] = [IosappMediaAction(action: .starGiftUnique(gift: .unique(gift), isUpgrade: false, isTransferred: false, savedToProfile: false, canExportDate: nil, transferStars: nil, isRefunded: false, isPrepaidUpgrade: false, peerId: nil, senderId: nil, savedId: nil, resaleAmount: nil, canTransferDate: nil, canResaleDate: nil, dropOriginalDetailsStars: nil, assigned: false, fromOffer: false, canCraftAt: nil, isCrafted: false))]
                     let message = Message(stableId: 0, stableVersion: 0, id: MessageId(peerId: self.context.account.peerId, namespace: Namespaces.Message.Cloud, id: -1), globallyUniqueId: nil, groupingKey: nil, groupInfo: nil, threadId: nil, timestamp: 0, flags: [], tags: [], globalTags: [], localTags: [], customTags: [], forwardInfo: nil, author: nil, text: "", attributes: [], media: media, peers: SimpleDictionary(), associatedMessages: SimpleDictionary(), associatedMessageIds: [], associatedMedia: [:], associatedThreadInfo: nil, associatedStories: [:])
                     messages = .single([message])
                 } else {
@@ -3749,8 +3749,8 @@ public final class MediaEditorScreenImpl: ViewController, MediaEditorScreen, UID
                     guard let self else {
                         return
                     }
-                    var messageFile: TelegramMediaFile?
-                    if let maybeFile = messages.first?.media.first(where: { $0 is TelegramMediaFile }) as? TelegramMediaFile, maybeFile.isVideo, let _ = self.context.account.postbox.mediaBox.completedResourcePath(maybeFile.resource, pathExtension: nil) {
+                    var messageFile: IosappMediaFile?
+                    if let maybeFile = messages.first?.media.first(where: { $0 is IosappMediaFile }) as? IosappMediaFile, maybeFile.isVideo, let _ = self.context.account.postbox.mediaBox.completedResourcePath(maybeFile.resource, pathExtension: nil) {
                         messageFile = maybeFile
                     }
                     if "".isEmpty {
@@ -5040,7 +5040,7 @@ public final class MediaEditorScreenImpl: ViewController, MediaEditorScreen, UID
                 },
                 completion: { [weak self] location, queryId, resultId, address, countryCode in
                     if let self  {
-                        let emojiFile: Signal<TelegramMediaFile?, NoError>
+                        let emojiFile: Signal<IosappMediaFile?, NoError>
                         if let countryCode {
                             let flag = flagEmoji(countryCode: countryCode)
                             emojiFile = self.staticEmojiPack.get()
@@ -5052,7 +5052,7 @@ public final class MediaEditorScreenImpl: ViewController, MediaEditorScreen, UID
                                 }
                             }
                             |> take(1)
-                            |> map { result -> TelegramMediaFile? in
+                            |> map { result -> IosappMediaFile? in
                                 if case let .result(_, items, _) = result, let match = items.first(where: { item in
                                     var displayText: String?
                                     if let alt = item.file.customEmojiAlt {
@@ -5148,7 +5148,7 @@ public final class MediaEditorScreenImpl: ViewController, MediaEditorScreen, UID
                             try? FileManager.default.createDirectory(atPath: draftPath(engine: self.context.engine), withIntermediateDirectories: true)
                             
                             var originalFileName: String = "audio_\(Int.random(in: 0 ..< .max)).mp3"
-                            if let file = file.media as? TelegramMediaFile {
+                            if let file = file.media as? IosappMediaFile {
                                 originalFileName = file.fileName ?? "\(file.fileId.id).mp3"
                             }
                             
@@ -5163,7 +5163,7 @@ public final class MediaEditorScreenImpl: ViewController, MediaEditorScreen, UID
                                 return
                             }
                             
-                            self.insertAudio(path: copyPath, fileName: fileName, file: file.media as? TelegramMediaFile)
+                            self.insertAudio(path: copyPath, fileName: fileName, file: file.media as? IosappMediaFile)
                         }
                     })
                 }
@@ -5224,7 +5224,7 @@ public final class MediaEditorScreenImpl: ViewController, MediaEditorScreen, UID
             }), in: .window(.root))
         }
         
-        private func insertAudio(path: String, fileName: String, file: TelegramMediaFile? = nil, dispose: (() -> Void)? = nil) {
+        private func insertAudio(path: String, fileName: String, file: IosappMediaFile? = nil, dispose: (() -> Void)? = nil) {
             guard let mediaEditor = self.mediaEditor else {
                 return
             }
@@ -6606,7 +6606,7 @@ public final class MediaEditorScreenImpl: ViewController, MediaEditorScreen, UID
         case draft(MediaEditorDraft, Int64?)
         case message([MessageId])
         case gift(StarGift.UniqueGift)
-        case sticker(TelegramMediaFile, [String])
+        case sticker(IosappMediaFile, [String])
         case multiple([Subject])
         
         var sourceIdentifier: String {
@@ -6704,7 +6704,7 @@ public final class MediaEditorScreenImpl: ViewController, MediaEditorScreen, UID
         
         case image(image: UIImage, dimensions: PixelDimensions)
         case video(video: VideoResult, coverImage: UIImage?, values: MediaEditorValues, duration: Double, dimensions: PixelDimensions)
-        case sticker(file: TelegramMediaFile, emoji: [String])
+        case sticker(file: IosappMediaFile, emoji: [String])
     }
     
     public struct Result {
@@ -6713,8 +6713,8 @@ public final class MediaEditorScreenImpl: ViewController, MediaEditorScreen, UID
         public let caption: NSAttributedString
         public let coverTimestamp: Double?
         public let options: MediaEditorResultPrivacy
-        public let stickers: [TelegramMediaFile]
-        public let music: TelegramMediaFile?
+        public let stickers: [IosappMediaFile]
+        public let music: IosappMediaFile?
         public let randomId: Int64
         
         init() {
@@ -6734,8 +6734,8 @@ public final class MediaEditorScreenImpl: ViewController, MediaEditorScreen, UID
             caption: NSAttributedString = NSAttributedString(),
             coverTimestamp: Double? = nil,
             options: MediaEditorResultPrivacy = MediaEditorResultPrivacy(sendAsPeerId: nil, privacy: EngineStoryPrivacy(base: .everyone, additionallyIncludePeers: []), timeout: 0, isForwardingDisabled: false, pin: false, folderIds: []),
-            stickers: [TelegramMediaFile] = [],
-            music: TelegramMediaFile? = nil,
+            stickers: [IosappMediaFile] = [],
+            music: IosappMediaFile? = nil,
             randomId: Int64 = 0
         ) {
             self.media = media
@@ -6862,7 +6862,7 @@ public final class MediaEditorScreenImpl: ViewController, MediaEditorScreen, UID
             let _ = combineLatest(
                 queue: Queue.mainQueue(),
                 mediaEditorStoredState(engine: self.context.engine),
-                self.context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: self.context.account.peerId))
+                self.context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: self.context.account.peerId))
             ).start(next: { [weak self] state, peer in
                 if let self, var privacy = state?.privacy {
                     if case let .user(user) = peer, !user.isPremium && privacy.timeout != 86400 {
@@ -6968,7 +6968,7 @@ public final class MediaEditorScreenImpl: ViewController, MediaEditorScreen, UID
                     guard let self else {
                         return
                     }
-                    let _ = (self.context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: self.context.account.peerId))
+                    let _ = (self.context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: self.context.account.peerId))
                     |> deliverOnMainQueue).start(next: { [weak self] peer in
                         guard let self else {
                             return
@@ -7001,7 +7001,7 @@ public final class MediaEditorScreenImpl: ViewController, MediaEditorScreen, UID
         
         Queue.mainQueue().after(0.4) {
             self.adminedChannels.set(.single([]) |> then(self.context.engine.peers.channelsForStories()))
-            self.closeFriends.set(self.context.engine.data.get(TelegramEngine.EngineData.Item.Contacts.CloseFriends()))
+            self.closeFriends.set(self.context.engine.data.get(IosappEngine.EngineData.Item.Contacts.CloseFriends()))
         }
     }
     
@@ -7356,7 +7356,7 @@ public final class MediaEditorScreenImpl: ViewController, MediaEditorScreen, UID
         self.dismissAllTooltips()
         
         let context = self.context
-        let _ = (context.engine.data.get(TelegramEngine.EngineData.Item.Configuration.UserLimits(isPremium: true))
+        let _ = (context.engine.data.get(IosappEngine.EngineData.Item.Configuration.UserLimits(isPremium: true))
         |> deliverOnMainQueue).start(next: { [weak self] premiumLimits in
             guard let self else {
                 return
@@ -7400,7 +7400,7 @@ public final class MediaEditorScreenImpl: ViewController, MediaEditorScreen, UID
         })
     }
     
-    fileprivate func presentUnavailableReactionPremiumSuggestion(file: TelegramMediaFile) {
+    fileprivate func presentUnavailableReactionPremiumSuggestion(file: IosappMediaFile) {
         self.hapticFeedback.error()
         
         self.dismissAllTooltips()
@@ -7587,7 +7587,7 @@ public final class MediaEditorScreenImpl: ViewController, MediaEditorScreen, UID
     fileprivate func checkCaptionLimit() -> Bool {
         let caption = self.node.getCaption()
         if caption.length > self.context.userLimits.maxStoryCaptionLength {
-            let _ = (self.context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: self.context.account.peerId))
+            let _ = (self.context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: self.context.account.peerId))
             |> deliverOnMainQueue).start(next: { [weak self] peer in
                 if let self {
                     self.presentCaptionLimitPremiumSuggestion(isPremium: peer?.isPremium ?? false)
@@ -8005,7 +8005,7 @@ public final class MediaEditorScreenImpl: ViewController, MediaEditorScreen, UID
         case send
     }
     
-    private func presentCreateStickerPack(file: TelegramMediaFile, completion: @escaping () -> Void) {
+    private func presentCreateStickerPack(file: IosappMediaFile, completion: @escaping () -> Void) {
         let presentationData = self.context.sharedContext.currentPresentationData.with { $0 }.withUpdated(theme: defaultDarkColorPresentationTheme)
         
         var dismissImpl: (() -> Void)?
@@ -8027,7 +8027,7 @@ public final class MediaEditorScreenImpl: ViewController, MediaEditorScreen, UID
     }
         
     private let stickerUploadDisposable = MetaDisposable()
-    private func uploadSticker(_ file: TelegramMediaFile, action: StickerAction) {
+    private func uploadSticker(_ file: IosappMediaFile, action: StickerAction) {
         let context = self.context
         let dimensions = PixelDimensions(width: 512, height: 512)
         let duration = file.duration
@@ -8046,7 +8046,7 @@ public final class MediaEditorScreenImpl: ViewController, MediaEditorScreen, UID
         
         enum PrepareStickerStatus {
             case progress(Float)
-            case complete(TelegramMediaResource)
+            case complete(IosappMediaResource)
             case failed
         }
         let resourceSignal: Signal<PrepareStickerStatus, UploadStickerError>
@@ -8080,7 +8080,7 @@ public final class MediaEditorScreenImpl: ViewController, MediaEditorScreen, UID
             resourceSignal = .single(.complete(file.resource))
         }
         
-        let signal = context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: context.account.peerId))
+        let signal = context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: context.account.peerId))
         |> castError(UploadStickerError.self)
         |> mapToSignal { peer -> Signal<(UploadStickerStatus, (StickerPackReference, String)?), UploadStickerError> in
             guard let peer else {
@@ -9023,7 +9023,7 @@ public final class BlurredGradientComponent: Component {
     }
 }
 
-func draftPath(engine: TelegramEngine) -> String {
+func draftPath(engine: IosappEngine) -> String {
     return NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] + "/storyDrafts_\(engine.account.peerId.toInt64())"
 }
 
@@ -9194,8 +9194,8 @@ extension MediaScrubberComponent.Track {
     }
 }
 
-private func stickerFile(resource: TelegramMediaResource, thumbnailResource: TelegramMediaResource?, size: Int64, dimensions: PixelDimensions, duration: Double?, isVideo: Bool) -> TelegramMediaFile {
-    var fileAttributes: [TelegramMediaFileAttribute] = []
+private func stickerFile(resource: IosappMediaResource, thumbnailResource: IosappMediaResource?, size: Int64, dimensions: PixelDimensions, duration: Double?, isVideo: Bool) -> IosappMediaFile {
+    var fileAttributes: [IosappMediaFileAttribute] = []
     fileAttributes.append(.FileName(fileName: isVideo ? "sticker.webm" : "sticker.webp"))
     fileAttributes.append(.Sticker(displayText: "", packReference: nil, maskData: nil))
     if isVideo {
@@ -9203,12 +9203,12 @@ private func stickerFile(resource: TelegramMediaResource, thumbnailResource: Tel
     } else {
         fileAttributes.append(.ImageSize(size: dimensions))
     }
-    var previewRepresentations: [TelegramMediaImageRepresentation] = []
+    var previewRepresentations: [IosappMediaImageRepresentation] = []
     if let thumbnailResource {
-        previewRepresentations.append(TelegramMediaImageRepresentation(dimensions: dimensions, resource: thumbnailResource, progressiveSizes: [], immediateThumbnailData: nil))
+        previewRepresentations.append(IosappMediaImageRepresentation(dimensions: dimensions, resource: thumbnailResource, progressiveSizes: [], immediateThumbnailData: nil))
     }
     
-    return TelegramMediaFile(fileId: MediaId(namespace: Namespaces.Media.LocalFile, id: Int64.random(in: Int64.min ... Int64.max)), partialReference: nil, resource: resource, previewRepresentations: previewRepresentations, videoThumbnails: [], immediateThumbnailData: nil, mimeType: isVideo ? "video/webm" : "image/webp", size: size, attributes: fileAttributes, alternativeRepresentations: [])
+    return IosappMediaFile(fileId: MediaId(namespace: Namespaces.Media.LocalFile, id: Int64.random(in: Int64.min ... Int64.max)), partialReference: nil, resource: resource, previewRepresentations: previewRepresentations, videoThumbnails: [], immediateThumbnailData: nil, mimeType: isVideo ? "video/webm" : "image/webp", size: size, attributes: fileAttributes, alternativeRepresentations: [])
 }
 
 private struct MediaEditorConfiguration {

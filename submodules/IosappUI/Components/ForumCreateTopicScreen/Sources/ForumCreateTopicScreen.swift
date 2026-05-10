@@ -529,7 +529,7 @@ private final class ForumCreateTopicScreenComponent: CombinedComponent {
                 self?.updated(transition: .immediate)
             }))
             
-            self.isPremiumDisposable = (context.engine.data.subscribe(TelegramEngine.EngineData.Item.Peer.Peer(id: context.account.peerId))
+            self.isPremiumDisposable = (context.engine.data.subscribe(IosappEngine.EngineData.Item.Peer.Peer(id: context.account.peerId))
             |> map { peer -> Bool in
                 guard case let .user(user) = peer else {
                     return false

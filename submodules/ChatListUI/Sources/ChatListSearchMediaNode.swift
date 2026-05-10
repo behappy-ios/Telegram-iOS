@@ -119,17 +119,17 @@ private final class VisualMediaItemNode: ASDisplayNode {
                     if let _ = self.item {
                         var media: Media?
                         for value in message.media {
-                            if let image = value as? TelegramMediaImage {
+                            if let image = value as? IosappMediaImage {
                                 media = image
                                 break
-                            } else if let file = value as? TelegramMediaFile {
+                            } else if let file = value as? IosappMediaFile {
                                 media = file
                                 break
                             }
                         }
                         
                         if let media = media {
-                            if let file = media as? TelegramMediaFile {
+                            if let file = media as? IosappMediaFile {
                                 if isMediaStreamable(message: message, media: file) {
                                     self.interaction.openMessage(message)
                                 } else {
@@ -152,16 +152,16 @@ private final class VisualMediaItemNode: ASDisplayNode {
         
         var media: Media?
         for value in message.media {
-            if let image = value as? TelegramMediaImage {
+            if let image = value as? IosappMediaImage {
                 media = image
                 break
-            } else if let file = value as? TelegramMediaFile {
+            } else if let file = value as? IosappMediaFile {
                 media = file
                 break
             }
         }
         
-        if let resourceStatus = self.resourceStatus, let file = media as? TelegramMediaFile {
+        if let resourceStatus = self.resourceStatus, let file = media as? IosappMediaFile {
             switch resourceStatus {
             case .Fetching:
                 messageMediaFileCancelInteractiveFetch(context: self.context, messageId: message.id, file: file)
@@ -188,10 +188,10 @@ private final class VisualMediaItemNode: ASDisplayNode {
         var media: Media?
         if let message = item.message {
             for value in message.media {
-                if let image = value as? TelegramMediaImage {
+                if let image = value as? IosappMediaImage {
                     media = image
                     break
-                } else if let file = value as? TelegramMediaFile {
+                } else if let file = value as? IosappMediaFile {
                     media = file
                     break
                 }
@@ -200,7 +200,7 @@ private final class VisualMediaItemNode: ASDisplayNode {
         
         if let media = media, (self.item?.1 == nil || !media.isEqual(to: self.item!.1!)), let message = item.message {
             var mediaDimensions: CGSize?
-            if let image = media as? TelegramMediaImage, let largestSize = largestImageRepresentation(image.representations)?.dimensions {
+            if let image = media as? IosappMediaImage, let largestSize = largestImageRepresentation(image.representations)?.dimensions {
                 mediaDimensions = largestSize.cgSize
                
                 self.imageNode.setSignal(mediaGridMessagePhoto(account: context.account, userLocation: .peer(message.id.peerId), photoReference: .message(message: MessageReference(message), media: image), fullRepresentationSize: CGSize(width: 300.0, height: 300.0), synchronousLoad: synchronousLoad), attemptSynchronously: synchronousLoad, dispatchOnDisplayLink: true)
@@ -211,7 +211,7 @@ private final class VisualMediaItemNode: ASDisplayNode {
                 })
                 self.mediaBadgeNode.isHidden = true
                 self.resourceStatus = nil
-            } else if let file = media as? TelegramMediaFile, file.isVideo {
+            } else if let file = media as? IosappMediaFile, file.isVideo {
                 mediaDimensions = file.dimensions?.cgSize
                 self.imageNode.setSignal(mediaGridMessageVideo(postbox: context.account.postbox, userLocation: .peer(message.id.peerId), videoReference: .message(message: MessageReference(message), media: file), synchronousLoad: synchronousLoad, autoFetchFullSizeThumbnail: true), attemptSynchronously: synchronousLoad)
                 
@@ -415,7 +415,7 @@ private final class VisualMediaItem {
         var aspectRatio: CGFloat = 1.0
         var dimensions = CGSize(width: 100.0, height: 100.0)
         for media in message.media {
-            if let file = media as? TelegramMediaFile {
+            if let file = media as? IosappMediaFile {
                 if let dimensionsValue = file.dimensions, dimensions.height > 1 {
                     dimensions = dimensionsValue.cgSize
                     aspectRatio = CGFloat(dimensionsValue.width) / CGFloat(dimensionsValue.height)

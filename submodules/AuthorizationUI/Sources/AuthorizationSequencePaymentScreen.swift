@@ -34,7 +34,7 @@ final class AuthorizationSequencePaymentScreenComponent: Component {
     typealias EnvironmentType = ViewControllerComponentContainer.Environment
     
     let sharedContext: SharedAccountContext
-    let engine: TelegramEngineUnauthorized
+    let engine: IosappEngineUnauthorized
     let inAppPurchaseManager: InAppPurchaseManager
     let presentationData: PresentationData
     let phoneNumber: String
@@ -45,7 +45,7 @@ final class AuthorizationSequencePaymentScreenComponent: Component {
     
     init(
         sharedContext: SharedAccountContext,
-        engine: TelegramEngineUnauthorized,
+        engine: IosappEngineUnauthorized,
         inAppPurchaseManager: InAppPurchaseManager,
         presentationData: PresentationData,
         phoneNumber: String,
@@ -462,7 +462,7 @@ final class AuthorizationSequencePaymentScreenComponent: Component {
 public final class AuthorizationSequencePaymentScreen: ViewControllerComponentContainer {
     public init(
         sharedContext: SharedAccountContext,
-        engine: TelegramEngineUnauthorized,
+        engine: IosappEngineUnauthorized,
         presentationData: PresentationData,
         inAppPurchaseManager: InAppPurchaseManager,
         phoneNumber: String,
@@ -603,7 +603,7 @@ private final class ParagraphComponent: CombinedComponent {
                 bold: MarkdownAttributeSet(font: boldTextFont, textColor: titleColor),
                 link: MarkdownAttributeSet(font: boldTextFont, textColor: linkColor),
                 linkAttribute: { contents in
-                    return (TelegramTextAttributes.URL, contents)
+                    return (IosappTextAttributes.URL, contents)
                 }
             )
                         
@@ -624,14 +624,14 @@ private final class ParagraphComponent: CombinedComponent {
                     highlightColor: linkColor.withAlphaComponent(0.1),
                     highlightInset: UIEdgeInsets(top: 0.0, left: 0.0, bottom: 0.0, right: -8.0),
                     highlightAction: { attributes in
-                        if let _ = attributes[NSAttributedString.Key(rawValue: TelegramTextAttributes.URL)] {
-                            return NSAttributedString.Key(rawValue: TelegramTextAttributes.URL)
+                        if let _ = attributes[NSAttributedString.Key(rawValue: IosappTextAttributes.URL)] {
+                            return NSAttributedString.Key(rawValue: IosappTextAttributes.URL)
                         } else {
                             return nil
                         }
                     },
                     tapAction: { attributes, _ in
-                        if let _ = attributes[NSAttributedString.Key(rawValue: TelegramTextAttributes.URL)] as? String {
+                        if let _ = attributes[NSAttributedString.Key(rawValue: IosappTextAttributes.URL)] as? String {
                             component.action?()
                         }
                     }
@@ -646,7 +646,7 @@ private final class ParagraphComponent: CombinedComponent {
                 bold: MarkdownAttributeSet(font: boldTextFont, textColor: textColor),
                 link: MarkdownAttributeSet(font: textFont, textColor: linkColor),
                 linkAttribute: { contents in
-                    return (TelegramTextAttributes.URL, contents)
+                    return (IosappTextAttributes.URL, contents)
                 }
             )
                         
@@ -658,14 +658,14 @@ private final class ParagraphComponent: CombinedComponent {
                     lineSpacing: 0.2,
                     highlightColor: linkColor.withAlphaComponent(0.1),
                     highlightAction: { attributes in
-                        if let _ = attributes[NSAttributedString.Key(rawValue: TelegramTextAttributes.URL)] {
-                            return NSAttributedString.Key(rawValue: TelegramTextAttributes.URL)
+                        if let _ = attributes[NSAttributedString.Key(rawValue: IosappTextAttributes.URL)] {
+                            return NSAttributedString.Key(rawValue: IosappTextAttributes.URL)
                         } else {
                             return nil
                         }
                     },
                     tapAction: { attributes, _ in
-                        if let _ = attributes[NSAttributedString.Key(rawValue: TelegramTextAttributes.URL)] as? String {
+                        if let _ = attributes[NSAttributedString.Key(rawValue: IosappTextAttributes.URL)] as? String {
                             component.action?()
                         }
                     }

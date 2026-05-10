@@ -31,10 +31,10 @@ class ChatExternalFileGalleryItem: GalleryItem {
         let node = ChatExternalFileGalleryItemNode(context: self.context, presentationData: self.presentationData)
         
         for media in self.message.media {
-            if let file = media as? TelegramMediaFile {
+            if let file = media as? IosappMediaFile {
                 node.setFile(context: context, fileReference: .message(message: MessageReference(self.message), media: file))
                 break
-            } else if let webpage = media as? TelegramMediaWebpage, case let .Loaded(content) = webpage.content {
+            } else if let webpage = media as? IosappMediaWebpage, case let .Loaded(content) = webpage.content {
                 if let file = content.file {
                     node.setFile(context: context, fileReference: .message(message: MessageReference(self.message), media: file))
                     break

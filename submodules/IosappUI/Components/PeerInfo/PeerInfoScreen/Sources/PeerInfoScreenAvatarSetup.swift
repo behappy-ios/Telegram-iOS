@@ -26,7 +26,7 @@ private func sharedSetupProfilePhotoUpload(context: AccountContext, image: UIIma
     
     let resource = LocalFileMediaResource(fileId: Int64.random(in: Int64.min ... Int64.max))
     context.account.postbox.mediaBox.storeResourceData(resource.id, data: data)
-    let representation = TelegramMediaImageRepresentation(dimensions: PixelDimensions(width: 640, height: 640), resource: resource, progressiveSizes: [], immediateThumbnailData: nil, hasVideo: false, isPersonal: mode == .custom)
+    let representation = IosappMediaImageRepresentation(dimensions: PixelDimensions(width: 640, height: 640), resource: resource, progressiveSizes: [], immediateThumbnailData: nil, hasVideo: false, isPersonal: mode == .custom)
     
     let _ = representation
     
@@ -47,7 +47,7 @@ public extension PeerInfoScreenImpl {
         }
         let _ = isForum
         
-        let emojiMarkup: TelegramMediaImage.EmojiMarkup? = nil
+        let emojiMarkup: IosappMediaImage.EmojiMarkup? = nil
         
         let mode: PeerInfoAvatarEditingMode = .generic
             
@@ -315,7 +315,7 @@ public extension PeerInfoScreenImpl {
         let account = context.account
         let context = context
         
-        let videoResource: Signal<TelegramMediaResource?, UploadPeerPhotoError>
+        let videoResource: Signal<IosappMediaResource?, UploadPeerPhotoError>
         if uploadVideo, let video, let values {
             var exportSubject: Signal<(MediaEditorVideoExport.Subject, Double), NoError>?
             switch video {
@@ -357,7 +357,7 @@ public extension PeerInfoScreenImpl {
                 videoResource = exportSubject
                 |> castError(UploadPeerPhotoError.self)
                 |> mapToSignal { exportSubject, duration in
-                    return Signal<TelegramMediaResource?, UploadPeerPhotoError> { subscriber in
+                    return Signal<IosappMediaResource?, UploadPeerPhotoError> { subscriber in
                         let configuration = recommendedVideoExportConfiguration(values: values, duration: duration, forceFullHd: true, frameRate: 60.0, isAvatar: true)
                         let tempFile = EngineTempBox.shared.tempFile(fileName: "video.mp4")
                         let videoExport = MediaEditorVideoExport(postbox: context.account.postbox, subject: exportSubject, configuration: configuration, outputPath: tempFile.path, textScale: 2.0)
@@ -440,12 +440,12 @@ extension PeerInfoScreenImpl {
         
         let peerId = self.peerId
         var isForum = false
-        if let peer = peer as? TelegramChannel, peer.isForumOrMonoForum {
+        if let peer = peer as? IosappChannel, peer.isForumOrMonoForum {
             isForum = true
         }
         
         var currentIsVideo = false
-        var emojiMarkup: TelegramMediaImage.EmojiMarkup?
+        var emojiMarkup: IosappMediaImage.EmojiMarkup?
         let item = self.controllerNode.headerNode.avatarListNode.listContainerNode.currentItemNode?.item
         if let item = item, case let .image(_, _, videoRepresentations, _, _, emojiMarkupValue) = item {
             currentIsVideo = !videoRepresentations.isEmpty
@@ -456,7 +456,7 @@ extension PeerInfoScreenImpl {
         let _ = currentIsVideo
         
         let _ = (self.context.engine.data.get(
-            TelegramEngine.EngineData.Item.Peer.Peer(id: peerId)
+            IosappEngine.EngineData.Item.Peer.Peer(id: peerId)
         )
         |> deliverOnMainQueue).startStandalone(next: { [weak self] peer in
             guard let self, let peer else {
@@ -767,7 +767,7 @@ extension PeerInfoScreenImpl {
         
         let resource = LocalFileMediaResource(fileId: Int64.random(in: Int64.min ... Int64.max))
         self.context.account.postbox.mediaBox.storeResourceData(resource.id, data: data)
-        let representation = TelegramMediaImageRepresentation(dimensions: PixelDimensions(width: 640, height: 640), resource: resource, progressiveSizes: [], immediateThumbnailData: nil, hasVideo: false, isPersonal: mode == .custom)
+        let representation = IosappMediaImageRepresentation(dimensions: PixelDimensions(width: 640, height: 640), resource: resource, progressiveSizes: [], immediateThumbnailData: nil, hasVideo: false, isPersonal: mode == .custom)
         
         if [.suggest, .fallback].contains(mode) {
         } else {
@@ -858,7 +858,7 @@ extension PeerInfoScreenImpl {
             if case .complete = result {
                 dismissStatus?()
                 
-                let _ = (strongSelf.context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: strongSelf.peerId))
+                let _ = (strongSelf.context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: strongSelf.peerId))
                 |> deliverOnMainQueue).startStandalone(next: { [weak self] peer in
                     if let strongSelf = self, let peer {
                         switch mode {
@@ -915,7 +915,7 @@ extension PeerInfoScreenImpl {
         let account = self.context.account
         let context = self.context
         
-        let videoResource: Signal<TelegramMediaResource?, UploadPeerPhotoError>
+        let videoResource: Signal<IosappMediaResource?, UploadPeerPhotoError>
         if uploadVideo, let video, let values {
             var exportSubject: Signal<(MediaEditorVideoExport.Subject, Double), NoError>?
             switch video {
@@ -957,7 +957,7 @@ extension PeerInfoScreenImpl {
                 videoResource = exportSubject
                 |> castError(UploadPeerPhotoError.self)
                 |> mapToSignal { exportSubject, duration in
-                    return Signal<TelegramMediaResource?, UploadPeerPhotoError> { subscriber in
+                    return Signal<IosappMediaResource?, UploadPeerPhotoError> { subscriber in
                         let configuration = recommendedVideoExportConfiguration(values: values, duration: duration, forceFullHd: true, frameRate: 60.0, isAvatar: true)
                         let tempFile = EngineTempBox.shared.tempFile(fileName: "video.mp4")
                         let videoExport = MediaEditorVideoExport(postbox: context.account.postbox, subject: exportSubject, configuration: configuration, outputPath: tempFile.path, textScale: 2.0)
@@ -1061,7 +1061,7 @@ extension PeerInfoScreenImpl {
             if case .complete = result {
                 dismissStatus?()
                 
-                let _ = (strongSelf.context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: strongSelf.peerId))
+                let _ = (strongSelf.context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: strongSelf.peerId))
                 |> deliverOnMainQueue).startStandalone(next: { [weak self] peer in
                     if let strongSelf = self, let peer {
                         switch mode {
@@ -1122,9 +1122,9 @@ extension PeerInfoScreenImpl {
         let account = self.context.account
         let context = self.context
         
-        let videoResource: Signal<TelegramMediaResource?, UploadPeerPhotoError>
+        let videoResource: Signal<IosappMediaResource?, UploadPeerPhotoError>
         if uploadVideo {
-            videoResource = Signal<TelegramMediaResource?, UploadPeerPhotoError> { [weak self] subscriber in
+            videoResource = Signal<IosappMediaResource?, UploadPeerPhotoError> { [weak self] subscriber in
                 let entityRenderer: LegacyPaintEntityRenderer? = adjustments.flatMap { adjustments in
                     if let paintingData = adjustments.paintingData, paintingData.hasAnimation {
                         return LegacyPaintEntityRenderer(postbox: account.postbox, adjustments: adjustments)
@@ -1173,7 +1173,7 @@ extension PeerInfoScreenImpl {
                         var value = stat()
                         if stat(result.fileURL.path, &value) == 0 {
                             if let data = try? Data(contentsOf: result.fileURL) {
-                                let resource: TelegramMediaResource
+                                let resource: IosappMediaResource
                                 if let liveUploadData = result.liveUploadData as? LegacyLiveUploadInterfaceResult {
                                     resource = LocalFileMediaResource(fileId: liveUploadData.id)
                                 } else {
@@ -1273,7 +1273,7 @@ extension PeerInfoScreenImpl {
             if case .complete = result {
                 dismissStatus?()
                 
-                let _ = (strongSelf.context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: strongSelf.peerId))
+                let _ = (strongSelf.context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: strongSelf.peerId))
                 |> deliverOnMainQueue).startStandalone(next: { [weak self] peer in
                     if let strongSelf = self, let peer {
                         switch mode {

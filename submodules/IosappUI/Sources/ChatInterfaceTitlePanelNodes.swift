@@ -119,7 +119,7 @@ func titlePanelForChatPresentationInterfaceState(_ chatPresentationInterfaceStat
         }
     }
     
-    if let channel = chatPresentationInterfaceState.renderedPeer?.peer as? TelegramChannel, channel.isForumOrMonoForum {
+    if let channel = chatPresentationInterfaceState.renderedPeer?.peer as? IosappChannel, channel.isForumOrMonoForum {
         if let threadData = chatPresentationInterfaceState.threadData {
             if threadData.isClosed {
                 var canManage = false
@@ -142,7 +142,7 @@ func titlePanelForChatPresentationInterfaceState(_ chatPresentationInterfaceStat
                 }
             }
         }
-    } else if chatPresentationInterfaceState.isManagedBot, let user = chatPresentationInterfaceState.renderedPeer?.peer as? TelegramUser, user.profileImageRepresentations.isEmpty {
+    } else if chatPresentationInterfaceState.isManagedBot, let user = chatPresentationInterfaceState.renderedPeer?.peer as? IosappUser, user.profileImageRepresentations.isEmpty {
         if let currentPanel = currentPanel as? ChatReportPeerTitlePanelNode {
             return currentPanel
         } else if let controllerInteraction = controllerInteraction {
@@ -259,7 +259,7 @@ func headerTopicsPanelForChatPresentationInterfaceState(_ chatPresentationInterf
         }
     }
     
-    if let channel = chatPresentationInterfaceState.renderedPeer?.peer as? TelegramChannel, channel.isMonoForum, let linkedMonoforumId = channel.linkedMonoforumId, let mainChannel = chatPresentationInterfaceState.renderedPeer?.peers[linkedMonoforumId] as? TelegramChannel, mainChannel.hasPermission(.manageDirect), chatPresentationInterfaceState.search == nil {
+    if let channel = chatPresentationInterfaceState.renderedPeer?.peer as? IosappChannel, channel.isMonoForum, let linkedMonoforumId = channel.linkedMonoforumId, let mainChannel = chatPresentationInterfaceState.renderedPeer?.peers[linkedMonoforumId] as? IosappChannel, mainChannel.hasPermission(.manageDirect), chatPresentationInterfaceState.search == nil {
         let topicListDisplayModeOnTheSide = chatPresentationInterfaceState.persistentData.topicListPanelLocation == .side
         if !topicListDisplayModeOnTheSide {
             return AnyComponent(ChatTopicsHeaderPanelComponent(
@@ -287,7 +287,7 @@ func headerTopicsPanelForChatPresentationInterfaceState(_ chatPresentationInterf
                 }
             ))
         }
-    } else if let channel = chatPresentationInterfaceState.renderedPeer?.peer as? TelegramChannel, channel.isForum, chatPresentationInterfaceState.search == nil {
+    } else if let channel = chatPresentationInterfaceState.renderedPeer?.peer as? IosappChannel, channel.isForum, chatPresentationInterfaceState.search == nil {
         if !chatPresentationInterfaceState.viewForumAsMessages {
             return nil
         }
@@ -318,7 +318,7 @@ func headerTopicsPanelForChatPresentationInterfaceState(_ chatPresentationInterf
                 }
             ))
         }
-    } else if let user = chatPresentationInterfaceState.renderedPeer?.peer as? TelegramUser, let botInfo = user.botInfo, botInfo.flags.contains(.hasForum), chatPresentationInterfaceState.search == nil {
+    } else if let user = chatPresentationInterfaceState.renderedPeer?.peer as? IosappUser, let botInfo = user.botInfo, botInfo.flags.contains(.hasForum), chatPresentationInterfaceState.search == nil {
         if !botInfo.flags.contains(.forumManagedByUser) {
             if !chatPresentationInterfaceState.hasTopics {
                 return nil
@@ -377,7 +377,7 @@ func floatingTopicsPanelForChatPresentationInterfaceState(_ chatPresentationInte
         }
     }
     
-    if let channel = chatPresentationInterfaceState.renderedPeer?.peer as? TelegramChannel, channel.isMonoForum, let linkedMonoforumId = channel.linkedMonoforumId, let mainChannel = chatPresentationInterfaceState.renderedPeer?.peers[linkedMonoforumId] as? TelegramChannel, mainChannel.hasPermission(.manageDirect), chatPresentationInterfaceState.search == nil {
+    if let channel = chatPresentationInterfaceState.renderedPeer?.peer as? IosappChannel, channel.isMonoForum, let linkedMonoforumId = channel.linkedMonoforumId, let mainChannel = chatPresentationInterfaceState.renderedPeer?.peers[linkedMonoforumId] as? IosappChannel, mainChannel.hasPermission(.manageDirect), chatPresentationInterfaceState.search == nil {
         let topicListDisplayModeOnTheSide = chatPresentationInterfaceState.persistentData.topicListPanelLocation == .side
         if topicListDisplayModeOnTheSide {
             return ChatFloatingTopicsPanel(
@@ -406,7 +406,7 @@ func floatingTopicsPanelForChatPresentationInterfaceState(_ chatPresentationInte
                 }
             )
         }
-    } else if let channel = chatPresentationInterfaceState.renderedPeer?.peer as? TelegramChannel, channel.isForum, chatPresentationInterfaceState.search == nil {
+    } else if let channel = chatPresentationInterfaceState.renderedPeer?.peer as? IosappChannel, channel.isForum, chatPresentationInterfaceState.search == nil {
         if !chatPresentationInterfaceState.viewForumAsMessages {
             return nil
         }
@@ -438,7 +438,7 @@ func floatingTopicsPanelForChatPresentationInterfaceState(_ chatPresentationInte
                 }
             )
         }
-    } else if let user = chatPresentationInterfaceState.renderedPeer?.peer as? TelegramUser, let botInfo = user.botInfo, botInfo.flags.contains(.hasForum), chatPresentationInterfaceState.search == nil {
+    } else if let user = chatPresentationInterfaceState.renderedPeer?.peer as? IosappUser, let botInfo = user.botInfo, botInfo.flags.contains(.hasForum), chatPresentationInterfaceState.search == nil {
         if !botInfo.flags.contains(.forumManagedByUser) {
             if !chatPresentationInterfaceState.hasTopics {
                 return nil

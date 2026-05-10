@@ -111,7 +111,7 @@ public extension ShareWithPeersScreen {
                 self.stateDisposable = (.single(peers)
                 |> mapToSignal { peers -> Signal<([EnginePeer], [EnginePeer.Id: Optional<Int>]), NoError> in
                     return context.engine.data.subscribe(
-                        EngineDataMap(peers.map(\.id).map(TelegramEngine.EngineData.Item.Peer.ParticipantCount.init))
+                        EngineDataMap(peers.map(\.id).map(IosappEngine.EngineData.Item.Peer.ParticipantCount.init))
                     )
                     |> map { participantCountMap -> ([EnginePeer], [EnginePeer.Id: Optional<Int>]) in
                         return (peers, participantCountMap)
@@ -155,7 +155,7 @@ public extension ShareWithPeersScreen {
                     var everyonePeerSignals: [Signal<EnginePeer?, NoError>] = []
                     if everyone.count < 3 {
                         for peerId in everyone {
-                            everyonePeerSignals.append(context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: peerId)))
+                            everyonePeerSignals.append(context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: peerId)))
                         }
                     }
                     
@@ -166,7 +166,7 @@ public extension ShareWithPeersScreen {
                     var contactsPeerSignals: [Signal<EnginePeer?, NoError>] = []
                     if contacts.count < 3 {
                         for peerId in contacts {
-                            contactsPeerSignals.append(context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: peerId)))
+                            contactsPeerSignals.append(context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: peerId)))
                         }
                     }
                     
@@ -177,7 +177,7 @@ public extension ShareWithPeersScreen {
                     var selectedPeerSignals: [Signal<EnginePeer?, NoError>] = []
                     if selected.count < 3 {
                         for peerId in selected {
-                            selectedPeerSignals.append(context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: peerId)))
+                            selectedPeerSignals.append(context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: peerId)))
                         }
                     }
                     return combineLatest(
@@ -213,7 +213,7 @@ public extension ShareWithPeersScreen {
                 let adminedChannelsWithParticipants = adminedChannels
                 |> mapToSignal { peers -> Signal<([EnginePeer], [EnginePeer.Id: Optional<Int>]), NoError> in
                     return context.engine.data.subscribe(
-                        EngineDataMap(peers.map(\.id).map(TelegramEngine.EngineData.Item.Peer.ParticipantCount.init))
+                        EngineDataMap(peers.map(\.id).map(IosappEngine.EngineData.Item.Peer.ParticipantCount.init))
                     )
                     |> map { participantCountMap -> ([EnginePeer], [EnginePeer.Id: Optional<Int>]) in
                         return (peers, participantCountMap)
@@ -222,7 +222,7 @@ public extension ShareWithPeersScreen {
             
                 self.stateDisposable = combineLatest(
                     queue: Queue.mainQueue(),
-                    context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: context.account.peerId)),
+                    context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: context.account.peerId)),
                     adminedChannelsWithParticipants,
                     savedPeers,
                     closeFriends,
@@ -276,13 +276,13 @@ public extension ShareWithPeersScreen {
             case let .chats(isGrayList):
                 self.stateDisposable = (combineLatest(
                     context.engine.messages.chatList(group: .root, count: 200) |> take(1),
-                    context.engine.data.get(TelegramEngine.EngineData.Item.Contacts.List(includePresences: true)),
-                    context.engine.data.get(EngineDataMap(Array(self.initialPeerIds).map(TelegramEngine.EngineData.Item.Peer.Peer.init))),
+                    context.engine.data.get(IosappEngine.EngineData.Item.Contacts.List(includePresences: true)),
+                    context.engine.data.get(EngineDataMap(Array(self.initialPeerIds).map(IosappEngine.EngineData.Item.Peer.Peer.init))),
                     grayListPeers
                 )
                 |> mapToSignal { chatList, contacts, initialPeers, grayListPeers -> Signal<(EngineChatList, EngineContactList, [EnginePeer.Id: Optional<EnginePeer>], [EnginePeer.Id: Optional<Int>], [EnginePeer]), NoError> in
                     return context.engine.data.subscribe(
-                        EngineDataMap(chatList.items.map(\.renderedPeer.peerId).map(TelegramEngine.EngineData.Item.Peer.ParticipantCount.init))
+                        EngineDataMap(chatList.items.map(\.renderedPeer.peerId).map(IosappEngine.EngineData.Item.Peer.ParticipantCount.init))
                     )
                     |> map { participantCountMap -> (EngineChatList, EngineContactList, [EnginePeer.Id: Optional<EnginePeer>], [EnginePeer.Id: Optional<Int>], [EnginePeer]) in
                         return (chatList, contacts, initialPeers, participantCountMap, grayListPeers)
@@ -390,7 +390,7 @@ public extension ShareWithPeersScreen {
                 })
             case let .contacts(base):
                 self.stateDisposable = (context.engine.data.subscribe(
-                    TelegramEngine.EngineData.Item.Contacts.List(includePresences: true)
+                    IosappEngine.EngineData.Item.Contacts.List(includePresences: true)
                 )
                 |> deliverOnMainQueue).start(next: { [weak self] contactList in
                     guard let self else {
@@ -458,8 +458,8 @@ public extension ShareWithPeersScreen {
                     signal = context.engine.contacts.searchLocalPeers(query: query)
                     |> mapToSignal { peers in
                         return context.engine.data.subscribe(
-                            EngineDataMap(peers.map(\.peerId).map(TelegramEngine.EngineData.Item.Peer.Presence.init)),
-                            EngineDataMap(peers.map(\.peerId).map(TelegramEngine.EngineData.Item.Peer.ParticipantCount.init))
+                            EngineDataMap(peers.map(\.peerId).map(IosappEngine.EngineData.Item.Peer.Presence.init)),
+                            EngineDataMap(peers.map(\.peerId).map(IosappEngine.EngineData.Item.Peer.ParticipantCount.init))
                         )
                         |> map { presenceMap, participantCountMap -> ([EngineRenderedPeer], [EnginePeer.Id: Optional<EnginePeer.Presence>], [EnginePeer.Id: Optional<Int>]) in
                             return (peers, presenceMap, participantCountMap)
@@ -563,7 +563,7 @@ public extension ShareWithPeersScreen {
                         if participant.peer.isDeleted || existingPeersIds.contains(participant.peer.id) || participant.participant.adminInfo != nil {
                             continue
                         }
-                        if let user = participant.peer as? TelegramUser, user.botInfo != nil {
+                        if let user = participant.peer as? IosappUser, user.botInfo != nil {
                             continue
                         }
                         
@@ -598,7 +598,7 @@ public extension ShareWithPeersScreen {
                 self.stateDisposable = (combineLatest(
                     context.engine.messages.chatList(group: .root, count: 500) |> take(1),
                     searchQuery.flatMap { context.engine.contacts.searchLocalPeers(query: $0) } ?? .single([]),
-                    context.engine.data.get(EngineDataMap(Array(self.initialPeerIds).map(TelegramEngine.EngineData.Item.Peer.Peer.init)))
+                    context.engine.data.get(EngineDataMap(Array(self.initialPeerIds).map(IosappEngine.EngineData.Item.Peer.Peer.init)))
                 )
                 |> mapToSignal { chatList, searchResults, initialPeers -> Signal<(EngineChatList, [EngineRenderedPeer], [EnginePeer.Id: Optional<EnginePeer>], [EnginePeer.Id: Optional<Int>]), NoError> in
                     var peerIds: [EnginePeer.Id] = []
@@ -606,7 +606,7 @@ public extension ShareWithPeersScreen {
                     peerIds.append(contentsOf: searchResults.map(\.peerId))
                     peerIds.append(contentsOf: initialPeers.compactMap(\.value?.id))
                     return context.engine.data.subscribe(
-                        EngineDataMap(chatList.items.map(\.renderedPeer.peerId).map(TelegramEngine.EngineData.Item.Peer.ParticipantCount.init))
+                        EngineDataMap(chatList.items.map(\.renderedPeer.peerId).map(IosappEngine.EngineData.Item.Peer.ParticipantCount.init))
                     )
                     |> map { participantCountMap -> (EngineChatList, [EngineRenderedPeer], [EnginePeer.Id: Optional<EnginePeer>], [EnginePeer.Id: Optional<Int>]) in
                         return (chatList, searchResults, initialPeers, participantCountMap)
@@ -731,17 +731,17 @@ final class PeersListStoredState: Codable {
     }
 }
 
-func peersListStoredState(engine: TelegramEngine, base: Stories.Item.Privacy.Base) -> Signal<[EnginePeer.Id], NoError> {
+func peersListStoredState(engine: IosappEngine, base: Stories.Item.Privacy.Base) -> Signal<[EnginePeer.Id], NoError> {
     let key = EngineDataBuffer(length: 4)
     key.setInt32(0, value: base.rawValue)
     
-    return engine.data.get(TelegramEngine.EngineData.Item.ItemCache.Item(collectionId: ApplicationSpecificItemCacheCollectionId.shareWithPeersState, id: key))
+    return engine.data.get(IosappEngine.EngineData.Item.ItemCache.Item(collectionId: ApplicationSpecificItemCacheCollectionId.shareWithPeersState, id: key))
     |> map { entry -> [EnginePeer.Id] in
         return entry?.get(PeersListStoredState.self)?.peerIds ?? []
     }
 }
 
-func updatePeersListStoredState(engine: TelegramEngine, base: Stories.Item.Privacy.Base, peerIds: [EnginePeer.Id]) -> Signal<Never, NoError> {
+func updatePeersListStoredState(engine: IosappEngine, base: Stories.Item.Privacy.Base, peerIds: [EnginePeer.Id]) -> Signal<Never, NoError> {
     let key = EngineDataBuffer(length: 4)
     key.setInt32(0, value: base.rawValue)
     

@@ -98,7 +98,7 @@ final class UserAppearanceScreenComponent: Component {
         static func get(context: AccountContext) -> Signal<ContentsData, NoError> {
             return combineLatest(
                 context.engine.data.subscribe(
-                    TelegramEngine.EngineData.Item.Peer.Peer(id: context.account.peerId)
+                    IosappEngine.EngineData.Item.Peer.Peer(id: context.account.peerId)
                 ),
                 context.account.postbox.itemCollectionsView(orderedItemListCollectionIds: [Namespaces.OrderedItemList.CloudUniqueStarGifts], namespaces: [Namespaces.ItemCollection.CloudDice], aroundIndex: nil, count: 10000000),
                 context.engine.payments.cachedStarGifts()
@@ -209,7 +209,7 @@ final class UserAppearanceScreenComponent: Component {
         private var starGiftsDisposable: Disposable?
         private var starGifts: [StarGift.UniqueGift] = []
         
-        private var cachedIconFiles: [Int64: TelegramMediaFile] = [:]
+        private var cachedIconFiles: [Int64: IosappMediaFile] = [:]
         
         private var selectedNameGift: StarGift.UniqueGift?
         private var updatedPeerNameColor: PeerColor?
@@ -221,7 +221,7 @@ final class UserAppearanceScreenComponent: Component {
         private var updatedPeerStatus: PeerEmojiStatus??
         
         private var currentTheme: PresentationThemeReference?
-        private var resolvedCurrentTheme: (reference: PresentationThemeReference, isDark: Bool, theme: PresentationTheme, wallpaper: TelegramWallpaper?)?
+        private var resolvedCurrentTheme: (reference: PresentationThemeReference, isDark: Bool, theme: PresentationTheme, wallpaper: IosappWallpaper?)?
         private var resolvingCurrentTheme: (reference: PresentationThemeReference, isDark: Bool, disposable: Disposable)?
                 
         private var isApplyingSettings: Bool = false
@@ -659,7 +659,7 @@ final class UserAppearanceScreenComponent: Component {
             if skipConfirmation {
                 action(acceptedPrice?.currency ?? .stars)
             } else {
-                let _ = (component.context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: component.context.account.peerId))
+                let _ = (component.context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: component.context.account.peerId))
                 |> deliverOnMainQueue).start(next: { [weak controller] peer in
                     guard let controller, let peer else {
                         return
@@ -1111,10 +1111,10 @@ final class UserAppearanceScreenComponent: Component {
                     presentationTheme = makePresentationTheme(mediaBox: component.context.sharedContext.accountManager.mediaBox, themeReference: currentTheme)
                 }
                 if let presentationTheme {
-                    let resolvedWallpaper: Signal<TelegramWallpaper?, NoError>
+                    let resolvedWallpaper: Signal<IosappWallpaper?, NoError>
                     if case let .file(file) = presentationTheme.chat.defaultWallpaper, file.id == 0 {
                         resolvedWallpaper = cachedWallpaper(account: component.context.account, slug: file.slug, settings: file.settings)
-                        |> map { wallpaper -> TelegramWallpaper? in
+                        |> map { wallpaper -> IosappWallpaper? in
                             return wallpaper?.wallpaper
                         }
                     } else {
@@ -1300,7 +1300,7 @@ final class UserAppearanceScreenComponent: Component {
                     bold: MarkdownAttributeSet(font: Font.semibold(13.0), textColor: environment.theme.list.freeTextColor),
                     link: MarkdownAttributeSet(font: Font.regular(13.0), textColor: environment.theme.list.itemAccentColor),
                     linkAttribute: { contents in
-                        return (TelegramTextAttributes.URL, contents)
+                        return (IosappTextAttributes.URL, contents)
                     }
                 )
                 let previewFooterText = NSMutableAttributedString(attributedString: parseMarkdownIntoAttributedString(environment.strings.ProfileColorSetup_ProfileColorPreviewInfo, attributes: footerAttributes))
@@ -1320,8 +1320,8 @@ final class UserAppearanceScreenComponent: Component {
                             highlightColor: environment.theme.list.itemAccentColor.withAlphaComponent(0.1),
                             highlightInset: UIEdgeInsets(top: 0.0, left: 0.0, bottom: 0.0, right: -8.0),
                             highlightAction: { attributes in
-                                if let _ = attributes[NSAttributedString.Key(rawValue: TelegramTextAttributes.URL)] {
-                                    return NSAttributedString.Key(rawValue: TelegramTextAttributes.URL)
+                                if let _ = attributes[NSAttributedString.Key(rawValue: IosappTextAttributes.URL)] {
+                                    return NSAttributedString.Key(rawValue: IosappTextAttributes.URL)
                                 } else {
                                     return nil
                                 }
@@ -1586,7 +1586,7 @@ final class UserAppearanceScreenComponent: Component {
                 }
                 
                 var chatPreviewTheme: PresentationTheme = environment.theme
-                var chatPreviewWallpaper: TelegramWallpaper = presentationData.chatWallpaper
+                var chatPreviewWallpaper: IosappWallpaper = presentationData.chatWallpaper
                 if let resolvedCurrentTheme = self.resolvedCurrentTheme {
                     chatPreviewTheme = resolvedCurrentTheme.theme
                     if let wallpaper = resolvedCurrentTheme.wallpaper {

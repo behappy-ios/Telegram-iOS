@@ -36,7 +36,7 @@ private struct ApplicationSettings {
     let logging: LoggingSettings
 }
 
-private func applicationSettings(accountManager: AccountManager<TelegramAccountManagerTypes>) -> Signal<ApplicationSettings, NoError> {
+private func applicationSettings(accountManager: AccountManager<IosappAccountManagerTypes>) -> Signal<ApplicationSettings, NoError> {
     return accountManager.transaction { transaction -> ApplicationSettings in
         let loggingSettings: LoggingSettings
         if let value = transaction.getSharedData(SharedDataKeys.loggingSettings)?.get(LoggingSettings.self) {
@@ -80,7 +80,7 @@ class DefaultIntentHandler: INExtension, INSendMessageIntentHandling, INSearchFo
     private let searchDisposable = MetaDisposable()
     
     private var rootPath: String?
-    private var accountManager: AccountManager<TelegramAccountManagerTypes>?
+    private var accountManager: AccountManager<IosappAccountManagerTypes>?
     private var encryptionParameters: ValueBoxEncryptionParameters?
     private var appGroupUrl: URL?
     
@@ -122,7 +122,7 @@ class DefaultIntentHandler: INExtension, INSendMessageIntentHandling, INSearchFo
         let appVersion = (Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String) ?? "unknown"
         
         initializeAccountManagement()
-        let accountManager = AccountManager<TelegramAccountManagerTypes>(basePath: rootPath + "/accounts-metadata", isTemporary: true, isReadOnly: false, useCaches: false, removeDatabaseOnError: false)
+        let accountManager = AccountManager<IosappAccountManagerTypes>(basePath: rootPath + "/accounts-metadata", isTemporary: true, isReadOnly: false, useCaches: false, removeDatabaseOnError: false)
         self.accountManager = accountManager
         
         let deviceSpecificEncryptionParameters = BuildConfig.deviceSpecificEncryptionParameters(rootPath, baseAppBundleId: baseAppBundleId)
@@ -333,7 +333,7 @@ class DefaultIntentHandler: INExtension, INSendMessageIntentHandling, INSearchFo
         |> mapToSignal { matchedContacts in
             return account
             |> castError(IntentContactsError.self)
-            |> mapToSignal { account -> Signal<[(String, TelegramUser)], IntentContactsError> in
+            |> mapToSignal { account -> Signal<[(String, IosappUser)], IntentContactsError> in
                 if let account = account {
                     return matchingCloudContacts(postbox: account.postbox, contacts: matchedContacts)
                     |> castError(IntentContactsError.self)
@@ -629,7 +629,7 @@ class DefaultIntentHandler: INExtension, INSendMessageIntentHandling, INSearchFo
             }
             
             for (_, messageId) in maxMessageIdsToApply {
-                signals.append(TelegramEngine(account: account).messages.applyMaxReadIndexInteractively(index: MessageIndex(id: messageId, timestamp: 0))
+                signals.append(IosappEngine(account: account).messages.applyMaxReadIndexInteractively(index: MessageIndex(id: messageId, timestamp: 0))
                 |> castError(IntentHandlingError.self))
             }
             
@@ -803,7 +803,7 @@ class DefaultIntentHandler: INExtension, INSendMessageIntentHandling, INSearchFo
             for (accountId, accountPeerId, _) in accounts {
                 accountResults.append(accountTransaction(rootPath: rootPath, id: accountId, encryptionParameters: encryptionParameters, isReadOnly: true, useCopy: false, transaction: { postbox, transaction -> INObjectSection<Friend> in
                     var accountTitle: String = ""
-                    if let peer = transaction.getPeer(accountPeerId) as? TelegramUser {
+                    if let peer = transaction.getPeer(accountPeerId) as? IosappUser {
                         if let username = peer.addressName, !username.isEmpty {
                             accountTitle = "@\(username)"
                         } else {
@@ -816,7 +816,7 @@ class DefaultIntentHandler: INExtension, INSendMessageIntentHandling, INSearchFo
                     if let searchTerm = searchTerm {
                         if !searchTerm.isEmpty {
                             for renderedPeer in transaction.searchPeers(query: searchTerm, predicate: nil) {
-                                if let peer = renderedPeer.peer, !(peer is TelegramSecretChat), !peer.isDeleted {
+                                if let peer = renderedPeer.peer, !(peer is IosappSecretChat), !peer.isDeleted {
                                     peers.append(peer)
                                 }
                             }
@@ -827,7 +827,7 @@ class DefaultIntentHandler: INExtension, INSendMessageIntentHandling, INSearchFo
                         }
                     } else {
                         for renderedPeer in transaction.getTopChatListEntries(groupId: .root, count: 50) {
-                            if let peer = renderedPeer.peer, !(peer is TelegramSecretChat), !peer.isDeleted {
+                            if let peer = renderedPeer.peer, !(peer is IosappSecretChat), !peer.isDeleted {
                                 peers.append(peer)
                             }
                         }
@@ -905,7 +905,7 @@ private final class WidgetIntentHandler {
         let encryptionParameters = ValueBoxEncryptionParameters(forceEncryptionIfNoSet: false, key: ValueBoxEncryptionParameters.Key(data: deviceSpecificEncryptionParameters.key)!, salt: ValueBoxEncryptionParameters.Salt(data: deviceSpecificEncryptionParameters.salt)!)
         self.encryptionParameters = encryptionParameters
         
-        let view = AccountManager<TelegramAccountManagerTypes>.getCurrentRecords(basePath: rootPath + "/accounts-metadata")
+        let view = AccountManager<IosappAccountManagerTypes>.getCurrentRecords(basePath: rootPath + "/accounts-metadata")
         
         var result: [(AccountRecordId, Int, PeerId, Bool)] = []
         for record in view.records {
@@ -976,7 +976,7 @@ private final class WidgetIntentHandler {
             for (accountId, accountPeerId, _) in accounts {
                 accountResults.append(accountTransaction(rootPath: rootPath, id: accountId, encryptionParameters: encryptionParameters, isReadOnly: true, useCopy: false, transaction: { postbox, transaction -> INObjectSection<Friend> in
                     var accountTitle: String = ""
-                    if let peer = transaction.getPeer(accountPeerId) as? TelegramUser {
+                    if let peer = transaction.getPeer(accountPeerId) as? IosappUser {
                         if let username = peer.addressName, !username.isEmpty {
                             accountTitle = "@\(username)"
                         } else {
@@ -989,7 +989,7 @@ private final class WidgetIntentHandler {
                     if let searchTerm = searchTerm {
                         if !searchTerm.isEmpty {
                             for renderedPeer in transaction.searchPeers(query: searchTerm, predicate: nil) {
-                                if let peer = renderedPeer.peer, !(peer is TelegramSecretChat), !peer.isDeleted {
+                                if let peer = renderedPeer.peer, !(peer is IosappSecretChat), !peer.isDeleted {
                                     peers.append(peer)
                                 }
                             }
@@ -1000,7 +1000,7 @@ private final class WidgetIntentHandler {
                         }
                     } else {
                         for renderedPeer in transaction.getTopChatListEntries(groupId: .root, count: 50) {
-                            if let peer = renderedPeer.peer, !(peer is TelegramSecretChat), !peer.isDeleted {
+                            if let peer = renderedPeer.peer, !(peer is IosappSecretChat), !peer.isDeleted {
                                 peers.append(peer)
                             }
                         }
@@ -1061,7 +1061,7 @@ private final class WidgetIntentHandler {
                     var peers: [Peer] = []
                     
                     for id in _internal_getRecentPeers(transaction: transaction) {
-                        if let peer = transaction.getPeer(id), !(peer is TelegramSecretChat), !peer.isDeleted {
+                        if let peer = transaction.getPeer(id), !(peer is IosappSecretChat), !peer.isDeleted {
                             peers.append(peer)
                         }
                         if peers.count >= 8 {
@@ -1321,7 +1321,7 @@ private func mapPeersToFriends(accountId: AccountRecordId, accountPeerId: PeerId
             var profileImage: INImage?
             
             var isForum = false
-            if let peer = peer as? TelegramChannel, peer.isForumOrMonoForum {
+            if let peer = peer as? IosappChannel, peer.isForumOrMonoForum {
                 isForum = true
             }
             

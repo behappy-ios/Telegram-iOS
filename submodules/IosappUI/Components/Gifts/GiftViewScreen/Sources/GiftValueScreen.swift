@@ -204,7 +204,7 @@ private final class GiftValueSheetContent: CombinedComponent {
             let titleString: String = formatCurrencyAmount(component.valueInfo.value, currency: component.valueInfo.currency)
             var giftTitle: String = ""
             var giftCollectionTitle: String = ""
-            var animationFile: TelegramMediaFile?
+            var animationFile: IosappMediaFile?
             var giftIconSubject: GiftItemComponent.Subject?
             var genericGift: StarGift.Gift?
             
@@ -312,7 +312,7 @@ private final class GiftValueSheetContent: CombinedComponent {
                 let textColor = theme.list.itemPrimaryTextColor
                 
                 let markdownAttributes = MarkdownAttributes(body: MarkdownAttributeSet(font: textFont, textColor: textColor), bold: MarkdownAttributeSet(font: boldTextFont, textColor: textColor), link: MarkdownAttributeSet(font: textFont, textColor: linkColor), linkAttribute: { contents in
-                    return (TelegramTextAttributes.URL, contents)
+                    return (IosappTextAttributes.URL, contents)
                 })
                 
                 descriptionText = descriptionText.replacingOccurrences(of: " >]", with: "\u{00A0}>]")
@@ -335,8 +335,8 @@ private final class GiftValueSheetContent: CombinedComponent {
                         highlightColor: linkColor.withAlphaComponent(0.1),
                         highlightInset: UIEdgeInsets(top: 0.0, left: 0.0, bottom: 0.0, right: -8.0),
                         highlightAction: { attributes in
-                            if let _ = attributes[NSAttributedString.Key(rawValue: TelegramTextAttributes.URL)] {
-                                return NSAttributedString.Key(rawValue: TelegramTextAttributes.URL)
+                            if let _ = attributes[NSAttributedString.Key(rawValue: IosappTextAttributes.URL)] {
+                                return NSAttributedString.Key(rawValue: IosappTextAttributes.URL)
                             } else {
                                 return nil
                             }

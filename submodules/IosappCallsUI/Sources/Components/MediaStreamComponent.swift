@@ -114,7 +114,7 @@ public final class MediaStreamComponent: CombinedComponent {
             
             let callPeer: Signal<EnginePeer?, NoError>
             if let peerId = call.peerId {
-                callPeer = call.accountContext.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: peerId))
+                callPeer = call.accountContext.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: peerId))
             } else {
                 callPeer = .single(nil)
             }
@@ -1142,8 +1142,8 @@ public final class MediaStreamComponentController: ViewControllerComponentContai
             }
             
             let _ = (strongSelf.context.engine.data.get(
-                TelegramEngine.EngineData.Item.Peer.Peer(id: peerId),
-                TelegramEngine.EngineData.Item.Peer.ExportedInvitation(id: peerId)
+                IosappEngine.EngineData.Item.Peer.Peer(id: peerId),
+                IosappEngine.EngineData.Item.Peer.ExportedInvitation(id: peerId)
             )
             |> map { peer, exportedInvitation -> GroupCallInviteLinks? in
                 if let inviteLinks = inviteLinks {
@@ -1190,7 +1190,7 @@ public final class MediaStreamComponentController: ViewControllerComponentContai
             if let strongSelf = self {
                 var inviteLinks = inviteLinks
                 
-                if let peer = peer as? TelegramChannel, case .group = peer.info, !peer.flags.contains(.isGigagroup), !(peer.addressName ?? "").isEmpty, let defaultParticipantMuteState = callState.defaultParticipantMuteState {
+                if let peer = peer as? IosappChannel, case .group = peer.info, !peer.flags.contains(.isGigagroup), !(peer.addressName ?? "").isEmpty, let defaultParticipantMuteState = callState.defaultParticipantMuteState {
                     let isMuted = defaultParticipantMuteState == .muted
                     
                     if !isMuted {
@@ -1211,7 +1211,7 @@ public final class MediaStreamComponentController: ViewControllerComponentContai
                     if let strongSelf = self {
                         let _ = (strongSelf.context.engine.data.get(
                             EngineDataList(
-                                peerIds.map(TelegramEngine.EngineData.Item.Peer.Peer.init)
+                                peerIds.map(IosappEngine.EngineData.Item.Peer.Peer.init)
                             )
                         )
                         |> deliverOnMainQueue).start(next: { [weak self] peerList in

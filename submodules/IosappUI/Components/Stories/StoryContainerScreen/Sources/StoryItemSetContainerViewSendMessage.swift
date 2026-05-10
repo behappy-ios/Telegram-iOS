@@ -234,7 +234,7 @@ final class StoryItemSetContainerSendMessage: @unchecked(Sendable) {
             self.sendAsDisposable = combineLatest(
                 queue: Queue.mainQueue(),
                 component.context.engine.data.subscribe(
-                    TelegramEngine.EngineData.Item.Peer.Peer(id: component.context.account.peerId)
+                    IosappEngine.EngineData.Item.Peer.Peer(id: component.context.account.peerId)
                 ),
                 component.context.engine.peers.liveStorySendAsAvailablePeers(peerId: peerId)
             ).startStrict(next: { [weak self, weak view] accountPeer, peers in
@@ -623,7 +623,7 @@ final class StoryItemSetContainerSendMessage: @unchecked(Sendable) {
         
         let _ = (combineLatest(
             component.context.engine.data.get(
-                TelegramEngine.EngineData.Item.Configuration.StoryConfigurationState()
+                IosappEngine.EngineData.Item.Configuration.StoryConfigurationState()
             ),
             ApplicationSpecificNotice.storyStealthModeReplyCount(accountManager: component.context.sharedContext.accountManager)
         )
@@ -836,7 +836,7 @@ final class StoryItemSetContainerSendMessage: @unchecked(Sendable) {
                         messageAttributes.append(PaidStarsMessageAttribute(stars: sendPaidMessageStars, postponeSending: false))
                     }
                     
-                    let messages: [EnqueueMessage] = [.message(text: "", attributes: messageAttributes, inlineStickers: [:], mediaReference: .standalone(media: TelegramMediaFile(fileId: EngineMedia.Id(namespace: Namespaces.Media.LocalFile, id: Int64.random(in: Int64.min ... Int64.max)), partialReference: nil, resource: audio.resource, previewRepresentations: [], videoThumbnails: [], immediateThumbnailData: nil, mimeType: "audio/ogg", size: Int64(audio.fileSize), attributes: [.Audio(isVoice: true, duration: Int(audio.duration), title: nil, performer: nil, waveform: waveformBuffer)], alternativeRepresentations: [])), threadId: nil, replyToMessageId: nil, replyToStoryId: focusedStoryId, localGroupingKey: nil, correlationId: nil, bubbleUpEmojiOrStickersets: [])]
+                    let messages: [EnqueueMessage] = [.message(text: "", attributes: messageAttributes, inlineStickers: [:], mediaReference: .standalone(media: IosappMediaFile(fileId: EngineMedia.Id(namespace: Namespaces.Media.LocalFile, id: Int64.random(in: Int64.min ... Int64.max)), partialReference: nil, resource: audio.resource, previewRepresentations: [], videoThumbnails: [], immediateThumbnailData: nil, mimeType: "audio/ogg", size: Int64(audio.fileSize), attributes: [.Audio(isVoice: true, duration: Int(audio.duration), title: nil, performer: nil, waveform: waveformBuffer)], alternativeRepresentations: [])), threadId: nil, replyToMessageId: nil, replyToStoryId: focusedStoryId, localGroupingKey: nil, correlationId: nil, bubbleUpEmojiOrStickersets: [])]
                     
                     let _ = enqueueMessages(account: component.context.account, peerId: peerId, messages: messages).start()
                     
@@ -1061,12 +1061,12 @@ final class StoryItemSetContainerSendMessage: @unchecked(Sendable) {
                 let resource = LocalFileMediaResource(fileId: Int64.random(in: Int64.min ... Int64.max))
                 component.context.account.postbox.mediaBox.storeResourceData(resource.id, data: data)
                 
-                var fileAttributes: [TelegramMediaFileAttribute] = []
+                var fileAttributes: [IosappMediaFileAttribute] = []
                 fileAttributes.append(.FileName(fileName: "sticker.webp"))
                 fileAttributes.append(.Sticker(displayText: "", packReference: nil, maskData: nil))
                 fileAttributes.append(.ImageSize(size: PixelDimensions(size)))
                 
-                let media = TelegramMediaFile(fileId: MediaId(namespace: Namespaces.Media.LocalFile, id: Int64.random(in: Int64.min ... Int64.max)), partialReference: nil, resource: resource, previewRepresentations: [], videoThumbnails: [], immediateThumbnailData: nil, mimeType: "image/webp", size: Int64(data.count), attributes: fileAttributes, alternativeRepresentations: [])
+                let media = IosappMediaFile(fileId: MediaId(namespace: Namespaces.Media.LocalFile, id: Int64.random(in: Int64.min ... Int64.max)), partialReference: nil, resource: resource, previewRepresentations: [], videoThumbnails: [], immediateThumbnailData: nil, mimeType: "image/webp", size: Int64(data.count), attributes: fileAttributes, alternativeRepresentations: [])
                 let message = EnqueueMessage.message(text: "", attributes: [], inlineStickers: [:], mediaReference: .standalone(media: media), threadId: nil, replyToMessageId: nil, replyToStoryId: nil, localGroupingKey: nil, correlationId: nil, bubbleUpEmojiOrStickersets: [])
                 
                 self.presentPaidMessageAlertIfNeeded(view: view, completion: { [weak self] in
@@ -1096,7 +1096,7 @@ final class StoryItemSetContainerSendMessage: @unchecked(Sendable) {
         }
         let focusedStoryId = StoryId(peerId: peerId, id: focusedItem.storyItem.id)
         let _ = (component.context.engine.data.get(
-            TelegramEngine.EngineData.Item.Peer.Peer(id: peerId)
+            IosappEngine.EngineData.Item.Peer.Peer(id: peerId)
         )
         |> deliverOnMainQueue).start(next: { [weak view] peer in
             guard let view, let component = view.component, let peer else {
@@ -1185,7 +1185,7 @@ final class StoryItemSetContainerSendMessage: @unchecked(Sendable) {
                                     guard let self, let view else {
                                         return
                                     }
-                                    self.sendMessages(view: view, peer: peer, messages: [.message(text: "", attributes: [], inlineStickers: [:], mediaReference: .standalone(media: TelegramMediaFile(fileId: EngineMedia.Id(namespace: Namespaces.Media.LocalFile, id: randomId), partialReference: nil, resource: resource, previewRepresentations: [], videoThumbnails: [], immediateThumbnailData: nil, mimeType: "audio/ogg", size: Int64(data.compressedData.count), attributes: [.Audio(isVoice: true, duration: Int(data.duration), title: nil, performer: nil, waveform: waveformBuffer)], alternativeRepresentations: [])), threadId: nil, replyToMessageId: nil, replyToStoryId: focusedStoryId, localGroupingKey: nil, correlationId: nil, bubbleUpEmojiOrStickersets: [])])
+                                    self.sendMessages(view: view, peer: peer, messages: [.message(text: "", attributes: [], inlineStickers: [:], mediaReference: .standalone(media: IosappMediaFile(fileId: EngineMedia.Id(namespace: Namespaces.Media.LocalFile, id: randomId), partialReference: nil, resource: resource, previewRepresentations: [], videoThumbnails: [], immediateThumbnailData: nil, mimeType: "audio/ogg", size: Int64(data.compressedData.count), attributes: [.Audio(isVoice: true, duration: Int(data.duration), title: nil, performer: nil, waveform: waveformBuffer)], alternativeRepresentations: [])), threadId: nil, replyToMessageId: nil, replyToStoryId: focusedStoryId, localGroupingKey: nil, correlationId: nil, bubbleUpEmojiOrStickersets: [])])
                                     
                                     HapticFeedback().tap()
                                 })
@@ -1324,7 +1324,7 @@ final class StoryItemSetContainerSendMessage: @unchecked(Sendable) {
             }
             
             let shareController = component.context.sharedContext.makeShareController(context: component.context, params: ShareControllerParams(
-                subject: .media(AnyMediaReference.standalone(media: TelegramMediaStory(storyId: StoryId(peerId: peerId, id: focusedItem.storyItem.id), isMention: false)), nil),
+                subject: .media(AnyMediaReference.standalone(media: IosappMediaStory(storyId: StoryId(peerId: peerId, id: focusedItem.storyItem.id), isMention: false)), nil),
                 preferredAction: preferredAction ?? .default,
                 externalShare: false,
                 immediateExternalShare: false,
@@ -1343,7 +1343,7 @@ final class StoryItemSetContainerSendMessage: @unchecked(Sendable) {
 
                     let _ = (component.context.engine.data.get(
                         EngineDataList(
-                            peerIds.map(TelegramEngine.EngineData.Item.Peer.Peer.init)
+                            peerIds.map(IosappEngine.EngineData.Item.Peer.Peer.init)
                         )
                     )
                     |> deliverOnMainQueue).start(next: { [weak view] peerList in
@@ -1388,7 +1388,7 @@ final class StoryItemSetContainerSendMessage: @unchecked(Sendable) {
                                 animateInAsReplacement: false,
                                 action: { [weak controller] action in
                                     if savedMessages, action == .info {
-                                        let _ = (context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: context.account.peerId))
+                                        let _ = (context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: context.account.peerId))
                                         |> deliverOnMainQueue).start(next: { peer in
                                             guard let controller, let peer else {
                                                 return
@@ -1677,7 +1677,7 @@ final class StoryItemSetContainerSendMessage: @unchecked(Sendable) {
         }
         
         let _ = (component.context.engine.data.get(
-            TelegramEngine.EngineData.Item.Peer.Peer(id: peerId)
+            IosappEngine.EngineData.Item.Peer.Peer(id: peerId)
         )
         |> deliverOnMainQueue).start(next: { [weak self, weak view] peer in
             guard let self, let view, let component = view.component else {
@@ -1983,7 +1983,7 @@ final class StoryItemSetContainerSendMessage: @unchecked(Sendable) {
                         } else {
                             selfPeerId = component.context.account.peerId
                         }
-                        let _ = (component.context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: selfPeerId))
+                        let _ = (component.context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: selfPeerId))
                         |> deliverOnMainQueue).start(next: { [weak self, weak view] selfPeer in
                             guard let self, let view, let component = view.component, let selfPeer else {
                                 return
@@ -2045,16 +2045,16 @@ final class StoryItemSetContainerSendMessage: @unchecked(Sendable) {
                                     enqueueMessages.append(textEnqueueMessage)
                                 }
                                 for peer in peers {
-                                    var media: TelegramMediaContact?
+                                    var media: IosappMediaContact?
                                     switch peer {
                                     case let .peer(contact, _, _):
-                                        guard let contact = contact as? TelegramUser, let phoneNumber = contact.phone else {
+                                        guard let contact = contact as? IosappUser, let phoneNumber = contact.phone else {
                                             continue
                                         }
                                         let contactData = DeviceContactExtendedData(basicData: DeviceContactBasicData(firstName: contact.firstName ?? "", lastName: contact.lastName ?? "", phoneNumbers: [DeviceContactPhoneNumberData(label: "_$!<Mobile>!$_", value: phoneNumber)]), middleName: "", prefix: "", suffix: "", organization: "", jobTitle: "", department: "", emailAddresses: [], urls: [], addresses: [], birthdayDate: nil, socialProfiles: [], instantMessagingProfiles: [], note: "")
                                         
                                         let phone = contactData.basicData.phoneNumbers[0].value
-                                        media = TelegramMediaContact(firstName: contactData.basicData.firstName, lastName: contactData.basicData.lastName, phoneNumber: phone, peerId: contact.id, vCardData: nil)
+                                        media = IosappMediaContact(firstName: contactData.basicData.firstName, lastName: contactData.basicData.lastName, phoneNumber: phone, peerId: contact.id, vCardData: nil)
                                     case let .deviceContact(_, basicData):
                                         guard !basicData.phoneNumbers.isEmpty else {
                                             continue
@@ -2062,7 +2062,7 @@ final class StoryItemSetContainerSendMessage: @unchecked(Sendable) {
                                         let contactData = DeviceContactExtendedData(basicData: basicData, middleName: "", prefix: "", suffix: "", organization: "", jobTitle: "", department: "", emailAddresses: [], urls: [], addresses: [], birthdayDate: nil, socialProfiles: [], instantMessagingProfiles: [], note: "")
                                         
                                         let phone = contactData.basicData.phoneNumbers[0].value
-                                        media = TelegramMediaContact(firstName: contactData.basicData.firstName, lastName: contactData.basicData.lastName, phoneNumber: phone, peerId: nil, vCardData: nil)
+                                        media = IosappMediaContact(firstName: contactData.basicData.firstName, lastName: contactData.basicData.lastName, phoneNumber: phone, peerId: nil, vCardData: nil)
                                     }
                                     
                                     if let media = media {
@@ -2081,7 +2081,7 @@ final class StoryItemSetContainerSendMessage: @unchecked(Sendable) {
                                 let dataSignal: Signal<(EnginePeer?, DeviceContactExtendedData?), NoError>
                                 switch peer {
                                 case let .peer(contact, _, _):
-                                    guard let contact = contact as? TelegramUser, let phoneNumber = contact.phone else {
+                                    guard let contact = contact as? IosappUser, let phoneNumber = contact.phone else {
                                         return
                                     }
                                     let contactData = DeviceContactExtendedData(basicData: DeviceContactBasicData(firstName: contact.firstName ?? "", lastName: contact.lastName ?? "", phoneNumbers: [DeviceContactPhoneNumberData(label: "_$!<Mobile>!$_", value: phoneNumber)]), middleName: "", prefix: "", suffix: "", organization: "", jobTitle: "", department: "", emailAddresses: [], urls: [], addresses: [], birthdayDate: nil, socialProfiles: [], instantMessagingProfiles: [], note: "")
@@ -2124,7 +2124,7 @@ final class StoryItemSetContainerSendMessage: @unchecked(Sendable) {
                                     }
                                     if contactData.isPrimitive {
                                         let phone = contactData.basicData.phoneNumbers[0].value
-                                        let media = TelegramMediaContact(firstName: contactData.basicData.firstName, lastName: contactData.basicData.lastName, phoneNumber: phone, peerId: peerAndContactData.0?.id, vCardData: nil)
+                                        let media = IosappMediaContact(firstName: contactData.basicData.firstName, lastName: contactData.basicData.lastName, phoneNumber: phone, peerId: peerAndContactData.0?.id, vCardData: nil)
                                         var enqueueMessages: [EnqueueMessage] = []
                                         if let textEnqueueMessage = textEnqueueMessage {
                                             enqueueMessages.append(textEnqueueMessage)
@@ -2147,7 +2147,7 @@ final class StoryItemSetContainerSendMessage: @unchecked(Sendable) {
                                             }
                                             let phone = contactData.basicData.phoneNumbers[0].value
                                             if let vCardData = contactData.serializedVCard() {
-                                                let media = TelegramMediaContact(firstName: contactData.basicData.firstName, lastName: contactData.basicData.lastName, phoneNumber: phone, peerId: peer?.id, vCardData: vCardData)
+                                                let media = IosappMediaContact(firstName: contactData.basicData.firstName, lastName: contactData.basicData.lastName, phoneNumber: phone, peerId: peer?.id, vCardData: vCardData)
                                                 
                                                 var enqueueMessages: [EnqueueMessage] = []
                                                 if let textEnqueueMessage = textEnqueueMessage {
@@ -2343,7 +2343,7 @@ final class StoryItemSetContainerSendMessage: @unchecked(Sendable) {
         let _ = (component.context.sharedContext.accountManager.transaction { transaction -> Signal<(GeneratedMediaStoreSettings, EngineConfiguration.SearchBots), NoError> in
             let entry = transaction.getSharedData(ApplicationSpecificSharedDataKeys.generatedMediaStoreSettings)?.get(GeneratedMediaStoreSettings.self)
             
-            return engine.data.get(TelegramEngine.EngineData.Item.Configuration.SearchBots())
+            return engine.data.get(IosappEngine.EngineData.Item.Configuration.SearchBots())
             |> map { configuration -> (GeneratedMediaStoreSettings, EngineConfiguration.SearchBots) in
                 return (entry ?? GeneratedMediaStoreSettings.defaultSettings, configuration)
             }
@@ -2479,9 +2479,9 @@ final class StoryItemSetContainerSendMessage: @unchecked(Sendable) {
             return
         }
         let _ = (component.context.engine.data.get(
-            TelegramEngine.EngineData.Item.Peer.Peer(id: component.context.account.peerId),
-            TelegramEngine.EngineData.Item.Configuration.UserLimits(isPremium: false),
-            TelegramEngine.EngineData.Item.Configuration.UserLimits(isPremium: true)
+            IosappEngine.EngineData.Item.Peer.Peer(id: component.context.account.peerId),
+            IosappEngine.EngineData.Item.Configuration.UserLimits(isPremium: false),
+            IosappEngine.EngineData.Item.Configuration.UserLimits(isPremium: true)
         )
         |> deliverOnMainQueue).start(next: { [weak self, weak view] result in
             guard let self, let view, let component = view.component else {
@@ -2548,17 +2548,17 @@ final class StoryItemSetContainerSendMessage: @unchecked(Sendable) {
                                 if let item = item {
                                     let fileId = Int64.random(in: Int64.min ... Int64.max)
                                     let mimeType = guessMimeTypeByFileExtension((item.fileName as NSString).pathExtension)
-                                    var previewRepresentations: [TelegramMediaImageRepresentation] = []
+                                    var previewRepresentations: [IosappMediaImageRepresentation] = []
                                     if mimeType.hasPrefix("image/") || mimeType == "application/pdf" {
-                                        previewRepresentations.append(TelegramMediaImageRepresentation(dimensions: PixelDimensions(width: 320, height: 320), resource: ICloudFileResource(urlData: item.urlData, thumbnail: true), progressiveSizes: [], immediateThumbnailData: nil, hasVideo: false, isPersonal: false))
+                                        previewRepresentations.append(IosappMediaImageRepresentation(dimensions: PixelDimensions(width: 320, height: 320), resource: ICloudFileResource(urlData: item.urlData, thumbnail: true), progressiveSizes: [], immediateThumbnailData: nil, hasVideo: false, isPersonal: false))
                                     }
-                                    var attributes: [TelegramMediaFileAttribute] = []
+                                    var attributes: [IosappMediaFileAttribute] = []
                                     attributes.append(.FileName(fileName: item.fileName))
                                     if let audioMetadata = item.audioMetadata {
                                         attributes.append(.Audio(isVoice: false, duration: audioMetadata.duration, title: audioMetadata.title, performer: audioMetadata.performer, waveform: nil))
                                     }
                                     
-                                    let file = TelegramMediaFile(fileId: EngineMedia.Id(namespace: Namespaces.Media.LocalFile, id: fileId), partialReference: nil, resource: ICloudFileResource(urlData: item.urlData, thumbnail: false), previewRepresentations: previewRepresentations, videoThumbnails: [], immediateThumbnailData: nil, mimeType: mimeType, size: Int64(item.fileSize), attributes: attributes, alternativeRepresentations: [])
+                                    let file = IosappMediaFile(fileId: EngineMedia.Id(namespace: Namespaces.Media.LocalFile, id: fileId), partialReference: nil, resource: ICloudFileResource(urlData: item.urlData, thumbnail: false), previewRepresentations: previewRepresentations, videoThumbnails: [], immediateThumbnailData: nil, mimeType: mimeType, size: Int64(item.fileSize), attributes: attributes, alternativeRepresentations: [])
                                     let message: EnqueueMessage = .message(text: "", attributes: [], inlineStickers: [:], mediaReference: .standalone(media: file), threadId: nil, replyToMessageId: replyMessageId.flatMap { EngineMessageReplySubject(messageId: $0, quote: nil, innerSubject: nil) }, replyToStoryId: replyToStoryId, localGroupingKey: groupingKey, correlationId: nil, bubbleUpEmojiOrStickersets: [])
                                     messages.append(message)
                                 }
@@ -2693,7 +2693,7 @@ final class StoryItemSetContainerSendMessage: @unchecked(Sendable) {
         let theme = component.theme
         let updatedPresentationData: (initial: PresentationData, signal: Signal<PresentationData, NoError>) = (component.context.sharedContext.currentPresentationData.with({ $0 }).withUpdated(theme: theme), component.context.sharedContext.presentationData |> map { $0.withUpdated(theme: theme) })
          
-        let _ = (context.engine.data.get(TelegramEngine.EngineData.Item.Configuration.SearchBots())
+        let _ = (context.engine.data.get(IosappEngine.EngineData.Item.Configuration.SearchBots())
         |> deliverOnMainQueue).start(next: { [weak self, weak view] configuration in
             if let self {
                 let controller = WebSearchController(context: context, updatedPresentationData: updatedPresentationData, peer: peer, chatLocation: .peer(id: peer.id), configuration: configuration, mode: .media(attachment: true, completion: { [weak self] results, selectionState, editingState, silentPosting in
@@ -2879,7 +2879,7 @@ final class StoryItemSetContainerSendMessage: @unchecked(Sendable) {
             return
         }
         let _ = (component.context.engine.data.get(
-            TelegramEngine.EngineData.Item.Peer.Presence(id: peer.id)
+            IosappEngine.EngineData.Item.Peer.Presence(id: peer.id)
         )
         |> deliverOnMainQueue).start(next: { [weak view] presence in
             guard let view, let component = view.component else {
@@ -3159,7 +3159,7 @@ final class StoryItemSetContainerSendMessage: @unchecked(Sendable) {
         guard let component = view.component else {
             return
         }
-        let _ = (component.context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: messageId.peerId))
+        let _ = (component.context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: messageId.peerId))
         |> deliverOnMainQueue).start(next: { [weak view] peer in
             guard let view, let component = view.component, let controller = component.controller(), let peer = peer else {
                 return
@@ -3230,7 +3230,7 @@ final class StoryItemSetContainerSendMessage: @unchecked(Sendable) {
             }
             if let peer = peer {
                 var navigation: ChatControllerInteractionNavigateToPeer
-                if let peer = peer as? TelegramUser, peer.botInfo == nil {
+                if let peer = peer as? IosappUser, peer.botInfo == nil {
                     navigation = .info(nil)
                 } else {
                     navigation = .chat(textInputState: nil, subject: nil, peekData: nil)
@@ -3330,7 +3330,7 @@ final class StoryItemSetContainerSendMessage: @unchecked(Sendable) {
         guard let component = view.component else {
             return
         }
-        let _ = (component.context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: peerId))
+        let _ = (component.context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: peerId))
         |> deliverOnMainQueue).start(next: { [weak self, weak view] peer in
             guard let self, let view, let peer else {
                 return
@@ -3544,8 +3544,8 @@ final class StoryItemSetContainerSendMessage: @unchecked(Sendable) {
         }
         
         let _ = (component.context.engine.data.get(
-            TelegramEngine.EngineData.Item.Configuration.StoryConfigurationState(),
-            TelegramEngine.EngineData.Item.Configuration.App()
+            IosappEngine.EngineData.Item.Configuration.StoryConfigurationState(),
+            IosappEngine.EngineData.Item.Configuration.App()
         )
         |> deliverOnMainQueue).start(next: { [weak self, weak view] config, appConfig in
             guard let self, let view, let component = view.component, let controller = component.controller() else {
@@ -3664,8 +3664,8 @@ final class StoryItemSetContainerSendMessage: @unchecked(Sendable) {
         }
         
         let _ = (component.context.engine.data.get(
-            TelegramEngine.EngineData.Item.Configuration.StoryConfigurationState(),
-            TelegramEngine.EngineData.Item.Configuration.App()
+            IosappEngine.EngineData.Item.Configuration.StoryConfigurationState(),
+            IosappEngine.EngineData.Item.Configuration.App()
         )
         |> deliverOnMainQueue).start(next: { [weak self, weak view] config, appConfig in
             guard let self, let view, let component = view.component, let controller = component.controller() else {
@@ -3781,7 +3781,7 @@ final class StoryItemSetContainerSendMessage: @unchecked(Sendable) {
                     }
                     switch error {
                     case .privateChannel:
-                        let _ = (context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: messageId.peerId))
+                        let _ = (context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: messageId.peerId))
                         |> deliverOnMainQueue).startStandalone(next: { [weak self, weak view] peer in
                             guard let self, let view else {
                                 return
@@ -3986,7 +3986,7 @@ final class StoryItemSetContainerSendMessage: @unchecked(Sendable) {
             let _ = (component.context.engine.stickers.resolveInlineStickers(fileIds: [fileId])
             |> deliverOnMainQueue).start(next: { files in
                 if let itemFile = files[fileId] {
-                    let itemFile = TelegramMediaFile.Accessor(itemFile)
+                    let itemFile = IosappMediaFile.Accessor(itemFile)
                     let reactionItem = ReactionItem(
                         reaction: ReactionItem.Reaction(rawValue: .custom(itemFile.fileId.id)),
                         appearAnimation: itemFile,

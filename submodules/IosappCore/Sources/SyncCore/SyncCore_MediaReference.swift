@@ -153,7 +153,7 @@ public struct WebpageReference: PostboxCoding, Hashable, Equatable {
         self.content = content
     }
     
-    public init(_ webPage: TelegramMediaWebpage) {
+    public init(_ webPage: IosappMediaWebpage) {
         if case let .Loaded(content) = webPage.content {
             self.content = .webPage(id: webPage.webpageId.id, url: content.url)
         } else {
@@ -874,8 +874,8 @@ public enum MediaReference<T: Media> {
     }
 }
 
-public typealias FileMediaReference = MediaReference<TelegramMediaFile>
-public typealias ImageMediaReference = MediaReference<TelegramMediaImage>
+public typealias FileMediaReference = MediaReference<IosappMediaFile>
+public typealias ImageMediaReference = MediaReference<IosappMediaImage>
 
 public enum MediaResourceReference: Equatable {
     case media(media: AnyMediaReference, resource: MediaResource)

@@ -160,7 +160,7 @@ final class PeerInfoAvatarTransformContainerNode: ASDisplayNode {
         }
         
         var isForum = false
-        if let peer, let channel = peer as? TelegramChannel, channel.isForumOrMonoForum {
+        if let peer, let channel = peer as? IosappChannel, channel.isForumOrMonoForum {
             isForum = true
         }
         
@@ -327,7 +327,7 @@ final class PeerInfoAvatarTransformContainerNode: ASDisplayNode {
             
             var isForum = false
             let avatarCornerRadius: CGFloat
-            if let channel = peer as? TelegramChannel, channel.isForumOrMonoForum {
+            if let channel = peer as? IosappChannel, channel.isForumOrMonoForum {
                 avatarCornerRadius = floor(avatarSize * 0.25)
                 isForum = true
             } else {
@@ -351,7 +351,7 @@ final class PeerInfoAvatarTransformContainerNode: ASDisplayNode {
                 let videoRepresentations: [VideoRepresentationWithReference]
                 let immediateThumbnailData: Data?
                 var videoId: Int64
-                let markup: TelegramMediaImage.EmojiMarkup?
+                let markup: IosappMediaImage.EmojiMarkup?
                 switch item {
                 case .custom:
                     representations = []
@@ -402,7 +402,7 @@ final class PeerInfoAvatarTransformContainerNode: ASDisplayNode {
                     markupNode.update(markup: markup, size: CGSize(width: 320.0, height: 320.0))
                     markupNode.updateVisibility(true)
                 } else if threadInfo == nil, let video = videoRepresentations.last, let peerReference = PeerReference(peer) {
-                    let videoFileReference = FileMediaReference.avatarList(peer: peerReference, media: TelegramMediaFile(fileId: MediaId(namespace: Namespaces.Media.LocalFile, id: 0), partialReference: nil, resource: video.representation.resource, previewRepresentations: representations.map { $0.representation }, videoThumbnails: [], immediateThumbnailData: immediateThumbnailData, mimeType: "video/mp4", size: nil, attributes: [.Animated, .Video(duration: 0, size: video.representation.dimensions, flags: [], preloadSize: nil, coverTime: nil, videoCodec: nil)], alternativeRepresentations: []))
+                    let videoFileReference = FileMediaReference.avatarList(peer: peerReference, media: IosappMediaFile(fileId: MediaId(namespace: Namespaces.Media.LocalFile, id: 0), partialReference: nil, resource: video.representation.resource, previewRepresentations: representations.map { $0.representation }, videoThumbnails: [], immediateThumbnailData: immediateThumbnailData, mimeType: "video/mp4", size: nil, attributes: [.Animated, .Video(duration: 0, size: video.representation.dimensions, flags: [], preloadSize: nil, coverTime: nil, videoCodec: nil)], alternativeRepresentations: []))
                     let videoContent = NativeVideoContent(id: .profileVideo(videoId, nil), userLocation: .other, fileReference: videoFileReference, streamVideo: isMediaStreamable(resource: video.representation.resource) ? .conservative : .none, loopVideo: true, enableSound: false, fetchAutomatically: true, onlyFullSizeThumbnail: false, useLargeThumbnail: true, autoFetchFullSizeThumbnail: true, startTimestamp: video.representation.startTimestamp, continuePlayingWithoutSoundOnLostAudioSession: false, placeholderColor: .clear, captureProtected: peer.isCopyProtectionEnabled, storeAfterDownload: nil)
                     if videoContent.id != self.videoContent?.id {
                         self.videoNode?.removeFromSupernode()

@@ -118,7 +118,7 @@ public final class PaneSearchContainerNode: ASDisplayNode, EntitySearchContainer
                     return nil
                 }
                 
-                var maybeFile: TelegramMediaFile?
+                var maybeFile: IosappMediaFile?
                 if let item = item as? StickerPreviewPeekItem {
                     switch item {
                     case let .found(foundItem):

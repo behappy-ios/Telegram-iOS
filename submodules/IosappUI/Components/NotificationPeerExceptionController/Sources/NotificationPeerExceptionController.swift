@@ -13,11 +13,11 @@ import IosappStringFormatting
 import NotificationSoundSelectionUI
 
 public struct NotificationExceptionWrapper : Equatable {
-    public let settings: TelegramPeerNotificationSettings
+    public let settings: IosappPeerNotificationSettings
     public let date: TimeInterval?
     public let peer: EnginePeer
     
-    public init(settings: TelegramPeerNotificationSettings, peer: EnginePeer, date: TimeInterval? = nil) {
+    public init(settings: IosappPeerNotificationSettings, peer: EnginePeer, date: TimeInterval? = nil) {
         self.settings = settings
         self.date = date
         self.peer = peer
@@ -27,11 +27,11 @@ public struct NotificationExceptionWrapper : Equatable {
         return lhs.settings == rhs.settings && lhs.date == rhs.date
     }
     
-    public func withUpdatedSettings(_ settings: TelegramPeerNotificationSettings) -> NotificationExceptionWrapper {
+    public func withUpdatedSettings(_ settings: IosappPeerNotificationSettings) -> NotificationExceptionWrapper {
         return NotificationExceptionWrapper(settings: settings, peer: self.peer, date: self.date)
     }
     
-    public func updateSettings(_ f: (TelegramPeerNotificationSettings) -> TelegramPeerNotificationSettings) -> NotificationExceptionWrapper {
+    public func updateSettings(_ f: (IosappPeerNotificationSettings) -> IosappPeerNotificationSettings) -> NotificationExceptionWrapper {
         return NotificationExceptionWrapper(settings: f(self.settings), peer: self.peer, date: self.date)
     }
     
@@ -123,7 +123,7 @@ public enum NotificationExceptionMode : Equatable {
                     case .default:
                         break
                     default:
-                    values[peerId] = NotificationExceptionWrapper(settings: TelegramPeerNotificationSettings(muteState: .default, messageSound: sound, displayPreviews: .default, storySettings: .default), peer: peer, date: Date().timeIntervalSince1970)
+                    values[peerId] = NotificationExceptionWrapper(settings: IosappPeerNotificationSettings(muteState: .default, messageSound: sound, displayPreviews: .default, storySettings: .default), peer: peer, date: Date().timeIntervalSince1970)
                 }
             }
             return values
@@ -161,7 +161,7 @@ public enum NotificationExceptionMode : Equatable {
                     case .default:
                         break
                     default:
-                        values[peerId] = NotificationExceptionWrapper(settings: TelegramPeerNotificationSettings(muteState: muteState, messageSound: .default, displayPreviews: .default, storySettings: .default), peer: peer, date: Date().timeIntervalSince1970)
+                        values[peerId] = NotificationExceptionWrapper(settings: IosappPeerNotificationSettings(muteState: muteState, messageSound: .default, displayPreviews: .default, storySettings: .default), peer: peer, date: Date().timeIntervalSince1970)
                 }
             }
             return values
@@ -215,7 +215,7 @@ public enum NotificationExceptionMode : Equatable {
                 case .default:
                     break
                 default:
-                    values[peerId] = NotificationExceptionWrapper(settings: TelegramPeerNotificationSettings(muteState: .unmuted, messageSound: .default, displayPreviews: displayPreviews, storySettings: .default), peer: peer, date: Date().timeIntervalSince1970)
+                    values[peerId] = NotificationExceptionWrapper(settings: IosappPeerNotificationSettings(muteState: .unmuted, messageSound: .default, displayPreviews: displayPreviews, storySettings: .default), peer: peer, date: Date().timeIntervalSince1970)
                 }
             }
             return values
@@ -264,7 +264,7 @@ public enum NotificationExceptionMode : Equatable {
                 default:
                     var updatedSettings = PeerStoryNotificationSettings.default
                     updatedSettings.mute = mute
-                    values[peerId] = NotificationExceptionWrapper(settings: TelegramPeerNotificationSettings(muteState: .unmuted, messageSound: .default, displayPreviews: .default, storySettings: updatedSettings), peer: peer, date: Date().timeIntervalSince1970)
+                    values[peerId] = NotificationExceptionWrapper(settings: IosappPeerNotificationSettings(muteState: .unmuted, messageSound: .default, displayPreviews: .default, storySettings: updatedSettings), peer: peer, date: Date().timeIntervalSince1970)
                 }
             }
             return values
@@ -309,7 +309,7 @@ public enum NotificationExceptionMode : Equatable {
                 default:
                     var updatedSettings = PeerStoryNotificationSettings.default
                     updatedSettings.hideSender = hideSender
-                    values[peerId] = NotificationExceptionWrapper(settings: TelegramPeerNotificationSettings(muteState: .unmuted, messageSound: .default, displayPreviews: .default, storySettings: updatedSettings), peer: peer, date: Date().timeIntervalSince1970)
+                    values[peerId] = NotificationExceptionWrapper(settings: IosappPeerNotificationSettings(muteState: .unmuted, messageSound: .default, displayPreviews: .default, storySettings: updatedSettings), peer: peer, date: Date().timeIntervalSince1970)
                 }
             }
             return values
@@ -354,7 +354,7 @@ public enum NotificationExceptionMode : Equatable {
                     default:
                         var updatedSettings = PeerStoryNotificationSettings.default
                         updatedSettings.sound = sound
-                        values[peerId] = NotificationExceptionWrapper(settings: TelegramPeerNotificationSettings(muteState: .unmuted, messageSound: .default, displayPreviews: .default, storySettings: updatedSettings), peer: peer, date: Date().timeIntervalSince1970)
+                        values[peerId] = NotificationExceptionWrapper(settings: IosappPeerNotificationSettings(muteState: .unmuted, messageSound: .default, displayPreviews: .default, storySettings: updatedSettings), peer: peer, date: Date().timeIntervalSince1970)
                 }
             }
             return values
@@ -755,7 +755,7 @@ private func notificationPeerExceptionEntries(presentationData: PresentationData
     if displaySounds {
         let defaultSound = isStories == true ? state.defaultStoriesSound : state.defaultSound
         
-        entries.append(.cloudHeader(index: index, text: presentationData.strings.Notifications_TelegramTones))
+        entries.append(.cloudHeader(index: index, text: presentationData.strings.Notifications_IosappTones))
         index += 1
         
         index = 1000
@@ -823,7 +823,7 @@ private struct NotificationExceptionPeerState : Equatable {
     var storiesHideSender: NotificationPeerExceptionSwitcher
     var removedSounds: [PeerMessageSound]
     
-    init(canRemove: Bool, notifications: TelegramPeerNotificationSettings? = nil) {
+    init(canRemove: Bool, notifications: IosappPeerNotificationSettings? = nil) {
         self.canRemove = canRemove
         
         if let notifications = notifications {
@@ -988,9 +988,9 @@ public func notificationPeerExceptionController(
     })
     
     statePromise.set(context.engine.data.get(
-        TelegramEngine.EngineData.Item.Peer.NotificationSettings(id: peer.id),
-        EngineDataOptional(threadId.flatMap { TelegramEngine.EngineData.Item.Peer.ThreadNotificationSettings(id: peer.id, threadId: $0) }),
-        TelegramEngine.EngineData.Item.NotificationSettings.Global()
+        IosappEngine.EngineData.Item.Peer.NotificationSettings(id: peer.id),
+        EngineDataOptional(threadId.flatMap { IosappEngine.EngineData.Item.Peer.ThreadNotificationSettings(id: peer.id, threadId: $0) }),
+        IosappEngine.EngineData.Item.NotificationSettings.Global()
     )
     |> map { peerNotificationSettings, threadNotificationSettings, globalNotificationSettings -> NotificationExceptionPeerState in
         let effectiveSettings = threadNotificationSettings ?? peerNotificationSettings

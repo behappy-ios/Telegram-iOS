@@ -65,7 +65,7 @@ private func withTakenOperation(postbox: Postbox, peerId: PeerId, tag: PeerOpera
         } |> switchToLatest
 }
 
-func managedLocalizationUpdatesOperations(accountManager: AccountManager<TelegramAccountManagerTypes>, postbox: Postbox, network: Network) -> Signal<Void, NoError> {
+func managedLocalizationUpdatesOperations(accountManager: AccountManager<IosappAccountManagerTypes>, postbox: Postbox, network: Network) -> Signal<Void, NoError> {
     return Signal { _ in
         let tag: PeerOperationLogTag = OperationLogTags.SynchronizeLocalizationUpdates
         
@@ -116,7 +116,7 @@ private enum SynchronizeLocalizationUpdatesError {
     case reset
 }
 
-func getLocalization(_ transaction: AccountManagerModifier<TelegramAccountManagerTypes>) -> (primary: (code: String, version: Int32, entries: [LocalizationEntry]), secondary: (code: String, version: Int32, entries: [LocalizationEntry])?) {
+func getLocalization(_ transaction: AccountManagerModifier<IosappAccountManagerTypes>) -> (primary: (code: String, version: Int32, entries: [LocalizationEntry]), secondary: (code: String, version: Int32, entries: [LocalizationEntry])?) {
     let localizationSettings: LocalizationSettings?
     if let current = transaction.getSharedData(SharedDataKeys.localizationSettings)?.get(LocalizationSettings.self) {
         localizationSettings = current
@@ -152,7 +152,7 @@ private func parseLangPackDifference(_ difference: Api.LangPackDifference) -> (c
     }
 }
 
-private func synchronizeLocalizationUpdates(accountManager: AccountManager<TelegramAccountManagerTypes>, postbox: Postbox, network: Network) -> Signal<Void, NoError> {
+private func synchronizeLocalizationUpdates(accountManager: AccountManager<IosappAccountManagerTypes>, postbox: Postbox, network: Network) -> Signal<Void, NoError> {
     let currentLanguageAndVersion = accountManager.transaction { transaction -> (primary: (code: String, version: Int32), secondary: (code: String, version: Int32)?) in
         let (primary, secondary) = getLocalization(transaction)
         return ((primary.code, primary.version), secondary.flatMap({ ($0.code, $0.version) }))
@@ -243,7 +243,7 @@ private func synchronizeLocalizationUpdates(accountManager: AccountManager<Teleg
     }
 }
 
-func tryApplyingLanguageDifference(transaction: AccountManagerModifier<TelegramAccountManagerTypes>, langCode: String, difference: Api.LangPackDifference) -> Bool {
+func tryApplyingLanguageDifference(transaction: AccountManagerModifier<IosappAccountManagerTypes>, langCode: String, difference: Api.LangPackDifference) -> Bool {
     let (primary, secondary) = getLocalization(transaction)
     switch difference {
         case let .langPackDifference(langPackDifferenceData):

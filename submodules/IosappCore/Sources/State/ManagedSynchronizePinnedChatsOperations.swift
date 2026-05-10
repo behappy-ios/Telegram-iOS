@@ -190,7 +190,7 @@ private func synchronizePinnedChats(transaction: Transaction, postbox: Postbox, 
                     channelStates[peerId] = apiChannelPts
                 }
                 
-                notificationSettings[peerId] = TelegramPeerNotificationSettings(apiSettings: apiNotificationSettings)
+                notificationSettings[peerId] = IosappPeerNotificationSettings(apiSettings: apiNotificationSettings)
                 
                 ttlPeriods[peerId] = .known(apiTtlPeriod.flatMap(CachedPeerAutoremoveTimeout.Value.init(peerValue:)))
             }

@@ -271,7 +271,7 @@ private final class CocoonInfoSheetContent: CombinedComponent {
                         iconName: "Chat/Input/Accessory Panels/Gift",
                         iconColor: linkColor,
                         action: { attributes, _ in
-                            guard let link = attributes[NSAttributedString.Key(rawValue: TelegramTextAttributes.URL)] as? String, let controller = environment.controller() else {
+                            guard let link = attributes[NSAttributedString.Key(rawValue: IosappTextAttributes.URL)] as? String, let controller = environment.controller() else {
                                 return
                             }
                             switch link {
@@ -305,7 +305,7 @@ private final class CocoonInfoSheetContent: CombinedComponent {
                     bold: MarkdownAttributeSet(font: Font.semibold(13.0), textColor: secondaryTextColor),
                     link: MarkdownAttributeSet(font: Font.regular(13.0), textColor: linkColor),
                     linkAttribute: { contents in
-                        return (TelegramTextAttributes.URL, contents)
+                        return (IosappTextAttributes.URL, contents)
                     }
                 )
             )
@@ -317,8 +317,8 @@ private final class CocoonInfoSheetContent: CombinedComponent {
                     lineSpacing: 0.2,
                     highlightColor: linkColor.withAlphaComponent(0.1),
                     highlightAction: { attributes in
-                        if let _ = attributes[NSAttributedString.Key(rawValue: TelegramTextAttributes.URL)] {
-                            return NSAttributedString.Key(rawValue: TelegramTextAttributes.URL)
+                        if let _ = attributes[NSAttributedString.Key(rawValue: IosappTextAttributes.URL)] {
+                            return NSAttributedString.Key(rawValue: IosappTextAttributes.URL)
                         } else {
                             return nil
                         }
@@ -667,7 +667,7 @@ private final class ParagraphComponent: CombinedComponent {
                 bold: MarkdownAttributeSet(font: boldTextFont, textColor: textColor),
                 link: MarkdownAttributeSet(font: textFont, textColor: accentColor),
                 linkAttribute: { contents in
-                    return (TelegramTextAttributes.URL, contents)
+                    return (IosappTextAttributes.URL, contents)
                 }
             )
                         
@@ -679,8 +679,8 @@ private final class ParagraphComponent: CombinedComponent {
                     lineSpacing: 0.2,
                     highlightColor: accentColor.withAlphaComponent(0.1),
                     highlightAction: { attributes in
-                        if let _ = attributes[NSAttributedString.Key(rawValue: TelegramTextAttributes.URL)] {
-                            return NSAttributedString.Key(rawValue: TelegramTextAttributes.URL)
+                        if let _ = attributes[NSAttributedString.Key(rawValue: IosappTextAttributes.URL)] {
+                            return NSAttributedString.Key(rawValue: IosappTextAttributes.URL)
                         } else {
                             return nil
                         }

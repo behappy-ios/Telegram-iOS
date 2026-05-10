@@ -297,7 +297,7 @@ public class ChatMessageTextBubbleContentNode: ChatMessageBubbleContentNode {
                 
                 var maxTextWidth = CGFloat.greatestFiniteMagnitude
                 for media in item.message.media {
-                    if let webpage = media as? TelegramMediaWebpage, case let .Loaded(content) = webpage.content, content.type == "telegram_background" || content.type == "telegram_theme" {
+                    if let webpage = media as? IosappMediaWebpage, case let .Loaded(content) = webpage.content, content.type == "telegram_background" || content.type == "telegram_theme" {
                         maxTextWidth = layoutConstants.wallpapers.maxTextWidth
                         break
                     }
@@ -324,7 +324,7 @@ public class ChatMessageTextBubbleContentNode: ChatMessageBubbleContentNode {
                     } else if let attribute = attribute as? ViewCountMessageAttribute {
                         viewCount = attribute.count
                     } else if let attribute = attribute as? ReplyThreadMessageAttribute, case .peer = item.chatLocation {
-                        if let channel = item.message.peers[item.message.id.peerId] as? TelegramChannel, case .group = channel.info {
+                        if let channel = item.message.peers[item.message.id.peerId] as? IosappChannel, case .group = channel.info {
                             dateReplies = Int(attribute.count)
                         }
                     } else if let attribute = attribute as? PaidStarsMessageAttribute, item.message.id.peerId.namespace == Namespaces.Peer.CloudChannel {
@@ -389,18 +389,18 @@ public class ChatMessageTextBubbleContentNode: ChatMessageBubbleContentNode {
                 var isSeekableWebMedia = false
                 var isUnsupportedMedia = false
                 var story: Stories.Item?
-                var invoice: TelegramMediaInvoice?
+                var invoice: IosappMediaInvoice?
                 for media in item.message.media {
-                    if let file = media as? TelegramMediaFile, let duration = file.duration {
+                    if let file = media as? IosappMediaFile, let duration = file.duration {
                         mediaDuration = Double(duration)
                     }
-                    if let media = media as? TelegramMediaInvoice, media.currency == "XTR" {
+                    if let media = media as? IosappMediaInvoice, media.currency == "XTR" {
                         invoice = media
-                    } else if let webpage = media as? TelegramMediaWebpage, case let .Loaded(content) = webpage.content, webEmbedType(content: content).supportsSeeking {
+                    } else if let webpage = media as? IosappMediaWebpage, case let .Loaded(content) = webpage.content, webEmbedType(content: content).supportsSeeking {
                         isSeekableWebMedia = true
-                    } else if media is TelegramMediaUnsupported {
+                    } else if media is IosappMediaUnsupported {
                         isUnsupportedMedia = true
-                    } else if let storyMedia = media as? TelegramMediaStory {
+                    } else if let storyMedia = media as? IosappMediaStory {
                         if let value = item.message.associatedStories[storyMedia.storyId]?.get(Stories.StoredItem.self) {
                             if case let .item(storyValue) = value {
                                 story = storyValue
@@ -432,10 +432,10 @@ public class ChatMessageTextBubbleContentNode: ChatMessageBubbleContentNode {
                         } else if mediaDuration == nil, let attribute = attribute as? ReplyMessageAttribute {
                             if let replyMessage = item.message.associatedMessages[attribute.messageId] {
                                 for media in replyMessage.media {
-                                    if let file = media as? TelegramMediaFile, let duration = file.duration {
+                                    if let file = media as? IosappMediaFile, let duration = file.duration {
                                         mediaDuration = Double(duration)
                                     }
-                                    if let webpage = media as? TelegramMediaWebpage, case let .Loaded(content) = webpage.content, webEmbedType(content: content).supportsSeeking {
+                                    if let webpage = media as? IosappMediaWebpage, case let .Loaded(content) = webpage.content, webEmbedType(content: content).supportsSeeking {
                                         isSeekableWebMedia = true
                                     }
                                 }
@@ -529,7 +529,7 @@ public class ChatMessageTextBubbleContentNode: ChatMessageBubbleContentNode {
                     } else {
                         var generateEntities = false
                         for media in message.media {
-                            if media is TelegramMediaImage || media is TelegramMediaFile {
+                            if media is IosappMediaImage || media is IosappMediaFile {
                                 generateEntities = true
                                 break
                             }
@@ -655,7 +655,7 @@ public class ChatMessageTextBubbleContentNode: ChatMessageBubbleContentNode {
                         
                         let currentDict = updatedString.attributes(at: range.lowerBound, effectiveRange: nil)
                         var updatedAttributes: [NSAttributedString.Key: Any] = currentDict
-                        updatedAttributes[ChatTextInputAttributes.customEmoji] = ChatTextInputTextCustomEmojiAttribute(interactivelySelectedFromPackId: nil, fileId: fileId, file: item.message.associatedMedia[MediaId(namespace: Namespaces.Media.CloudFile, id: fileId)] as? TelegramMediaFile)
+                        updatedAttributes[ChatTextInputAttributes.customEmoji] = ChatTextInputTextCustomEmojiAttribute(interactivelySelectedFromPackId: nil, fileId: fileId, file: item.message.associatedMedia[MediaId(namespace: Namespaces.Media.CloudFile, id: fileId)] as? IosappMediaFile)
                         
                         let insertString = NSAttributedString(string: updatedString.attributedSubstring(from: range).string, attributes: updatedAttributes)
                         updatedString.replaceCharacters(in: range, with: insertString)
@@ -668,19 +668,19 @@ public class ChatMessageTextBubbleContentNode: ChatMessageBubbleContentNode {
                 if item.presentationData.isPreview {
                     if item.message.groupingKey != nil {
                         maximumNumberOfLines = 6
-                    } else if let image = item.message.media.first(where: { $0 is TelegramMediaImage }) as? TelegramMediaImage, let dimensions = image.representations.first?.dimensions {
+                    } else if let image = item.message.media.first(where: { $0 is IosappMediaImage }) as? IosappMediaImage, let dimensions = image.representations.first?.dimensions {
                         if dimensions.width > dimensions.height {
                             maximumNumberOfLines = 9
                         } else {
                             maximumNumberOfLines = 6
                         }
-                    } else if let file = item.message.media.first(where: { $0 is TelegramMediaFile }) as? TelegramMediaFile, file.isVideo || file.isAnimated, let dimensions = file.dimensions {
+                    } else if let file = item.message.media.first(where: { $0 is IosappMediaFile }) as? IosappMediaFile, file.isVideo || file.isAnimated, let dimensions = file.dimensions {
                         if dimensions.width > dimensions.height {
                             maximumNumberOfLines = 9
                         } else {
                             maximumNumberOfLines = 6
                         }
-                    } else if let _ = item.message.media.first(where: { $0 is TelegramMediaWebpage }) as? TelegramMediaWebpage {
+                    } else if let _ = item.message.media.first(where: { $0 is IosappMediaWebpage }) as? IosappMediaWebpage {
                         maximumNumberOfLines = 9
                     } else {
                         maximumNumberOfLines = 12
@@ -1192,14 +1192,14 @@ public class ChatMessageTextBubbleContentNode: ChatMessageBubbleContentNode {
         if let (index, attributes) = self.textNode.textNode.attributesAtPoint(textLocalPoint) {
             var rects: [CGRect]?
             let possibleNames: [String] = [
-                TelegramTextAttributes.URL,
-                TelegramTextAttributes.PeerMention,
-                TelegramTextAttributes.PeerTextMention,
-                TelegramTextAttributes.BotCommand,
-                TelegramTextAttributes.Hashtag,
-                TelegramTextAttributes.Timecode,
-                TelegramTextAttributes.BankCard,
-                TelegramTextAttributes.Date
+                IosappTextAttributes.URL,
+                IosappTextAttributes.PeerMention,
+                IosappTextAttributes.PeerTextMention,
+                IosappTextAttributes.BotCommand,
+                IosappTextAttributes.Hashtag,
+                IosappTextAttributes.Timecode,
+                IosappTextAttributes.BankCard,
+                IosappTextAttributes.Date
             ]
             for name in possibleNames {
                 if let _ = attributes[NSAttributedString.Key(rawValue: name)] {
@@ -1209,12 +1209,12 @@ public class ChatMessageTextBubbleContentNode: ChatMessageBubbleContentNode {
             }
             
             
-            if let _ = attributes[NSAttributedString.Key(rawValue: TelegramTextAttributes.Spoiler)], !self.displayContentsUnderSpoilers.value {
+            if let _ = attributes[NSAttributedString.Key(rawValue: IosappTextAttributes.Spoiler)], !self.displayContentsUnderSpoilers.value {
                 return ChatMessageBubbleContentTapAction(content: .none)
-            } else if let url = attributes[NSAttributedString.Key(rawValue: TelegramTextAttributes.URL)] as? String {
+            } else if let url = attributes[NSAttributedString.Key(rawValue: IosappTextAttributes.URL)] as? String {
                 var concealed = true
                 var urlRange: NSRange?
-                if let (attributeText, fullText, urlRangeValue) = self.textNode.textNode.attributeSubstringWithRange(name: TelegramTextAttributes.URL, index: index) {
+                if let (attributeText, fullText, urlRangeValue) = self.textNode.textNode.attributeSubstringWithRange(name: IosappTextAttributes.URL, index: index) {
                     urlRange = urlRangeValue
                     concealed = !doesUrlMatchText(url: url, text: attributeText, fullText: fullText)
                 }
@@ -1227,34 +1227,34 @@ public class ChatMessageTextBubbleContentNode: ChatMessageBubbleContentNode {
                 }
                 
                 return ChatMessageBubbleContentTapAction(content: content, rects: rects, activate: makeActivate(urlRange))
-            } else if let peerMention = attributes[NSAttributedString.Key(rawValue: TelegramTextAttributes.PeerMention)] as? TelegramPeerMention {
+            } else if let peerMention = attributes[NSAttributedString.Key(rawValue: IosappTextAttributes.PeerMention)] as? IosappPeerMention {
                 return ChatMessageBubbleContentTapAction(content: .peerMention(peerId: peerMention.peerId, mention: peerMention.mention, openProfile: false), rects: rects)
-            } else if let peerName = attributes[NSAttributedString.Key(rawValue: TelegramTextAttributes.PeerTextMention)] as? String {
+            } else if let peerName = attributes[NSAttributedString.Key(rawValue: IosappTextAttributes.PeerTextMention)] as? String {
                 var urlRange: NSRange?
-                if let (_, _, urlRangeValue) = self.textNode.textNode.attributeSubstringWithRange(name: TelegramTextAttributes.PeerTextMention, index: index) {
+                if let (_, _, urlRangeValue) = self.textNode.textNode.attributeSubstringWithRange(name: IosappTextAttributes.PeerTextMention, index: index) {
                     urlRange = urlRangeValue
                 }
                 
                 return ChatMessageBubbleContentTapAction(content: .textMention(peerName), rects: rects, activate: makeActivate(urlRange))
-            } else if let botCommand = attributes[NSAttributedString.Key(rawValue: TelegramTextAttributes.BotCommand)] as? String {
+            } else if let botCommand = attributes[NSAttributedString.Key(rawValue: IosappTextAttributes.BotCommand)] as? String {
                 return ChatMessageBubbleContentTapAction(content: .botCommand(botCommand), rects: rects)
-            } else if let hashtag = attributes[NSAttributedString.Key(rawValue: TelegramTextAttributes.Hashtag)] as? TelegramHashtag {
+            } else if let hashtag = attributes[NSAttributedString.Key(rawValue: IosappTextAttributes.Hashtag)] as? IosappHashtag {
                 return ChatMessageBubbleContentTapAction(content: .hashtag(hashtag.peerName, hashtag.hashtag), rects: rects)
-            } else if let timecode = attributes[NSAttributedString.Key(rawValue: TelegramTextAttributes.Timecode)] as? TelegramTimecode {
+            } else if let timecode = attributes[NSAttributedString.Key(rawValue: IosappTextAttributes.Timecode)] as? IosappTimecode {
                 return ChatMessageBubbleContentTapAction(content: .timecode(timecode.time, timecode.text), rects: rects)
-            } else if let bankCard = attributes[NSAttributedString.Key(rawValue: TelegramTextAttributes.BankCard)] as? String {
+            } else if let bankCard = attributes[NSAttributedString.Key(rawValue: IosappTextAttributes.BankCard)] as? String {
                 var urlRange: NSRange?
-                if let (_, _, urlRangeValue) = self.textNode.textNode.attributeSubstringWithRange(name: TelegramTextAttributes.BankCard, index: index) {
+                if let (_, _, urlRangeValue) = self.textNode.textNode.attributeSubstringWithRange(name: IosappTextAttributes.BankCard, index: index) {
                     urlRange = urlRangeValue
                 }
                 return ChatMessageBubbleContentTapAction(content: .bankCard(bankCard), rects: rects, activate: makeActivate(urlRange))
-            } else if let pre = attributes[NSAttributedString.Key(rawValue: TelegramTextAttributes.Pre)] as? String {
+            } else if let pre = attributes[NSAttributedString.Key(rawValue: IosappTextAttributes.Pre)] as? String {
                 return ChatMessageBubbleContentTapAction(content: .copy(pre))
-            } else if let code = attributes[NSAttributedString.Key(rawValue: TelegramTextAttributes.Code)] as? String {
+            } else if let code = attributes[NSAttributedString.Key(rawValue: IosappTextAttributes.Code)] as? String {
                 return ChatMessageBubbleContentTapAction(content: .copy(code))
-            } else if let date = attributes[NSAttributedString.Key(rawValue: TelegramTextAttributes.Date)] as? Int32 {
+            } else if let date = attributes[NSAttributedString.Key(rawValue: IosappTextAttributes.Date)] as? Int32 {
                 var string = ""
-                if let (_, text, _) = self.textNode.textNode.attributeSubstringWithRange(name: TelegramTextAttributes.Date, index: index) {
+                if let (_, text, _) = self.textNode.textNode.attributeSubstringWithRange(name: IosappTextAttributes.Date, index: index) {
                     string = text
                 }
                 return ChatMessageBubbleContentTapAction(content: .date(date, string), rects: rects)
@@ -1273,7 +1273,7 @@ public class ChatMessageTextBubbleContentNode: ChatMessageBubbleContentNode {
             } else {
                 if let item = self.item, item.message.text.count == 1, !item.presentationData.largeEmoji {
                     let (emoji, fitz) = item.message.text.basicEmoji
-                    var emojiFile: TelegramMediaFile?
+                    var emojiFile: IosappMediaFile?
                     
                     emojiFile = item.associatedData.animatedEmojiStickers[emoji]?.first?.file._parse()
                     if emojiFile == nil {
@@ -1359,14 +1359,14 @@ public class ChatMessageTextBubbleContentNode: ChatMessageBubbleContentNode {
                 let textNodeFrame = self.textNode.textNode.frame
                 if let (index, attributes) = self.textNode.textNode.attributesAtPoint(CGPoint(x: point.x - textNodeFrame.minX, y: point.y - textNodeFrame.minY)) {
                     let possibleNames: [String] = [
-                        TelegramTextAttributes.URL,
-                        TelegramTextAttributes.PeerMention,
-                        TelegramTextAttributes.PeerTextMention,
-                        TelegramTextAttributes.BotCommand,
-                        TelegramTextAttributes.Hashtag,
-                        TelegramTextAttributes.Timecode,
-                        TelegramTextAttributes.BankCard,
-                        TelegramTextAttributes.Date
+                        IosappTextAttributes.URL,
+                        IosappTextAttributes.PeerMention,
+                        IosappTextAttributes.PeerTextMention,
+                        IosappTextAttributes.BotCommand,
+                        IosappTextAttributes.Hashtag,
+                        IosappTextAttributes.Timecode,
+                        IosappTextAttributes.BankCard,
+                        IosappTextAttributes.Date
                     ]
                     for name in possibleNames {
                         if let _ = attributes[NSAttributedString.Key(rawValue: name)] {
@@ -1374,8 +1374,8 @@ public class ChatMessageTextBubbleContentNode: ChatMessageBubbleContentNode {
                             break
                         }
                     }
-                    if let _ = attributes[NSAttributedString.Key(rawValue: TelegramTextAttributes.Spoiler)] {
-                        spoilerRects = self.textNode.textNode.attributeRects(name: TelegramTextAttributes.Spoiler, at: index)
+                    if let _ = attributes[NSAttributedString.Key(rawValue: IosappTextAttributes.Spoiler)] {
+                        spoilerRects = self.textNode.textNode.attributeRects(name: IosappTextAttributes.Spoiler, at: index)
                     }
                 }
             }

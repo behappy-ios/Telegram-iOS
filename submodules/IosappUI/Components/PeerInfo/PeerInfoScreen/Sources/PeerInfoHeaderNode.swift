@@ -179,7 +179,7 @@ final class PeerInfoHeaderNode: ASDisplayNode {
     
     var displaySavedMusic: (() -> Void)?
     
-    var displayPremiumIntro: ((UIView, PeerEmojiStatus?, Signal<(TelegramMediaFile, LoadedStickerPack)?, NoError>, Bool) -> Void)?
+    var displayPremiumIntro: ((UIView, PeerEmojiStatus?, Signal<(IosappMediaFile, LoadedStickerPack)?, NoError>, Bool) -> Void)?
     var displayStatusPremiumIntro: (() -> Void)?
     var displayUniqueGiftInfo: ((UIView, String) -> Void)?
     var openUniqueGift: ((UIView, String) -> Void)?
@@ -197,15 +197,15 @@ final class PeerInfoHeaderNode: ASDisplayNode {
     let animationRenderer: MultiAnimationRenderer
     
     var emojiStatusPackDisposable = MetaDisposable()
-    var emojiStatusFileAndPackTitle = Promise<(TelegramMediaFile, LoadedStickerPack)?>()
+    var emojiStatusFileAndPackTitle = Promise<(IosappMediaFile, LoadedStickerPack)?>()
     
     var customNavigationContentNode: PeerInfoPanelNodeNavigationContentNode?
     private var appliedCustomNavigationContentNode: PeerInfoPanelNodeNavigationContentNode?
     
     private var validLayout: (width: CGFloat, statusBarHeight: CGFloat, deviceMetrics: DeviceMetrics)?
     
-    private var currentStarRating: TelegramStarRating?
-    private var currentPendingStarRating: TelegramStarPendingRating?
+    private var currentStarRating: IosappStarRating?
+    private var currentPendingStarRating: IosappStarPendingRating?
     
     init(context: AccountContext, controller: PeerInfoScreenImpl, avatarInitiallyExpanded: Bool, isOpenedFromChat: Bool, isMediaOnly: Bool, isSettings: Bool, isMyProfile: Bool, forumTopicThreadId: Int64?, chatLocation: ChatLocation) {
         self.context = context
@@ -493,7 +493,7 @@ final class PeerInfoHeaderNode: ASDisplayNode {
     private var currentStatusIcon: CredibilityIcon?
     
     private var currentPanelStatusData: PeerInfoStatusData?
-    func update(width: CGFloat, containerHeight: CGFloat, containerInset: CGFloat, statusBarHeight: CGFloat, navigationHeight: CGFloat, isModalOverlay: Bool, isMediaOnly: Bool, contentOffset: CGFloat, paneContainerY: CGFloat, presentationData: PresentationData, peer: Peer?, cachedData: CachedPeerData?, threadData: MessageHistoryThreadData?, peerNotificationSettings: TelegramPeerNotificationSettings?, threadNotificationSettings: TelegramPeerNotificationSettings?, globalNotificationSettings: EngineGlobalNotificationSettings?, statusData: PeerInfoStatusData?, panelStatusData: (PeerInfoStatusData?, PeerInfoStatusData?, CGFloat?), isSecretChat: Bool, isContact: Bool, isSettings: Bool, state: PeerInfoState, profileGiftsContext: ProfileGiftsContext?, screenData: PeerInfoScreenData?, isSearching: Bool, metrics: LayoutMetrics, deviceMetrics: DeviceMetrics, transition: ContainedViewLayoutTransition, additive: Bool, animateHeader: Bool) -> CGFloat {
+    func update(width: CGFloat, containerHeight: CGFloat, containerInset: CGFloat, statusBarHeight: CGFloat, navigationHeight: CGFloat, isModalOverlay: Bool, isMediaOnly: Bool, contentOffset: CGFloat, paneContainerY: CGFloat, presentationData: PresentationData, peer: Peer?, cachedData: CachedPeerData?, threadData: MessageHistoryThreadData?, peerNotificationSettings: IosappPeerNotificationSettings?, threadNotificationSettings: IosappPeerNotificationSettings?, globalNotificationSettings: EngineGlobalNotificationSettings?, statusData: PeerInfoStatusData?, panelStatusData: (PeerInfoStatusData?, PeerInfoStatusData?, CGFloat?), isSecretChat: Bool, isContact: Bool, isSettings: Bool, state: PeerInfoState, profileGiftsContext: ProfileGiftsContext?, screenData: PeerInfoScreenData?, isSearching: Bool, metrics: LayoutMetrics, deviceMetrics: DeviceMetrics, transition: ContainedViewLayoutTransition, additive: Bool, animateHeader: Bool) -> CGFloat {
         if self.appliedCustomNavigationContentNode !== self.customNavigationContentNode {
             if let previous = self.appliedCustomNavigationContentNode {
                 ComponentTransition(transition).setAlpha(view: previous.view, alpha: 0.0, completion: { [weak previous] _ in
@@ -576,7 +576,7 @@ final class PeerInfoHeaderNode: ASDisplayNode {
             backgroundCoverSubject = nil
         }
         
-        var currentSavedMusic: TelegramMediaFile?
+        var currentSavedMusic: IosappMediaFile?
         if let peer, peer.id != self.context.account.peerId || self.isMyProfile, let screenData {
             if let savedMusicState = screenData.savedMusicState {
                 currentSavedMusic = savedMusicState.files.first
@@ -619,7 +619,7 @@ final class PeerInfoHeaderNode: ASDisplayNode {
         }
         
         var isForum = false
-        if let channel = peer as? TelegramChannel, channel.isForumOrMonoForum {
+        if let channel = peer as? IosappChannel, channel.isForumOrMonoForum {
             isForum = true
         }
         
@@ -1031,7 +1031,7 @@ final class PeerInfoHeaderNode: ASDisplayNode {
                                             return false
                                         }
                                     }
-                                    |> mapToSignal { result -> Signal<(TelegramMediaFile, LoadedStickerPack)?, NoError> in
+                                    |> mapToSignal { result -> Signal<(IosappMediaFile, LoadedStickerPack)?, NoError> in
                                         if case let .result(_, items, _) = result {
                                             return .single(items.first.flatMap { ($0.file._parse(), result) })
                                         } else {
@@ -1222,7 +1222,7 @@ final class PeerInfoHeaderNode: ASDisplayNode {
                 title = "" //"\u{00A0}"
             }
             if title.isEmpty {
-                if let peer = peer as? TelegramUser, let phone = peer.phone {
+                if let peer = peer as? IosappUser, let phone = peer.phone {
                     title = formatPhoneNumber(context: self.context, number: phone)
                 } else if let addressName = peer.addressName {
                     title = "@\(addressName)"
@@ -1235,7 +1235,7 @@ final class PeerInfoHeaderNode: ASDisplayNode {
             titleAttributes = MultiScaleTextState.Attributes(font: Font.medium(28.0), color: .white)
             smallTitleAttributes = MultiScaleTextState.Attributes(font: Font.medium(28.0), color: .white, shadowColor: titleShadowColor)
             
-            if self.isSettings, let user = peer as? TelegramUser {
+            if self.isSettings, let user = peer as? IosappUser {
                 var subtitle = formatPhoneNumber(context: self.context, number: user.phone ?? "")
                 
                 if let mainUsername = user.addressName, !mainUsername.isEmpty {
@@ -1271,7 +1271,7 @@ final class PeerInfoHeaderNode: ASDisplayNode {
                 subtitleColor = UIColor.white
                 
                 let statusText: String
-                if let user = peer as? TelegramUser, user.isForum {
+                if let user = peer as? IosappUser, user.isForum {
                     statusText = " "
                 } else {
                     statusText = peer.debugDisplayTitle
@@ -2010,18 +2010,18 @@ final class PeerInfoHeaderNode: ASDisplayNode {
         
         #if DEBUG && false
         if "".isEmpty {
-            let starRating: TelegramStarRating
+            let starRating: IosappStarRating
             
             if self.context.account.peerId.id._internalGetInt64Value() == 654152421 {
-                starRating = TelegramStarRating(level: -1, currentLevelStars: -1, stars: -100, nextLevelStars: 0)
+                starRating = IosappStarRating(level: -1, currentLevelStars: -1, stars: -100, nextLevelStars: 0)
             } else {
-                starRating = TelegramStarRating(level: 2, currentLevelStars: 1000, stars: 2000, nextLevelStars: 3000)
+                starRating = IosappStarRating(level: 2, currentLevelStars: 1000, stars: 2000, nextLevelStars: 3000)
             }
             self.currentStarRating = starRating
             
             if let _ = starRating.nextLevelStars {
-                //self.currentPendingStarRating = TelegramStarPendingRating(rating: TelegramStarRating(level: starRating.level, currentLevelStars: starRating.currentLevelStars, stars: starRating.stars + 234, nextLevelStars: starRating.nextLevelStars), timestamp: Int32(Date().timeIntervalSince1970) + 60 * 60 * 24 * 3)
-                self.currentPendingStarRating = TelegramStarPendingRating(rating: TelegramStarRating(level: starRating.level + 2, currentLevelStars: starRating.nextLevelStars!, stars: max(500, starRating.nextLevelStars! + starRating.nextLevelStars! / 2 - starRating.nextLevelStars! / 4), nextLevelStars: max(1000, starRating.nextLevelStars! * 2)), timestamp: Int32(Date().timeIntervalSince1970) + 60 * 60 * 24 * 3)
+                //self.currentPendingStarRating = IosappStarPendingRating(rating: IosappStarRating(level: starRating.level, currentLevelStars: starRating.currentLevelStars, stars: starRating.stars + 234, nextLevelStars: starRating.nextLevelStars), timestamp: Int32(Date().timeIntervalSince1970) + 60 * 60 * 24 * 3)
+                self.currentPendingStarRating = IosappStarPendingRating(rating: IosappStarRating(level: starRating.level + 2, currentLevelStars: starRating.nextLevelStars!, stars: max(500, starRating.nextLevelStars! + starRating.nextLevelStars! / 2 - starRating.nextLevelStars! / 4), nextLevelStars: max(1000, starRating.nextLevelStars! * 2)), timestamp: Int32(Date().timeIntervalSince1970) + 60 * 60 * 24 * 3)
             }
         }
         #endif
@@ -2350,7 +2350,7 @@ final class PeerInfoHeaderNode: ASDisplayNode {
                 buttonText = presentationData.strings.PeerInfo_ButtonVideoCall
                 buttonIcon = .videoCall
             case .voiceChat:
-                if let channel = peer as? TelegramChannel, case .broadcast = channel.info {
+                if let channel = peer as? IosappChannel, case .broadcast = channel.info {
                     buttonText = presentationData.strings.PeerInfo_ButtonLiveStream
                 } else {
                     buttonText = presentationData.strings.PeerInfo_ButtonVoiceChat

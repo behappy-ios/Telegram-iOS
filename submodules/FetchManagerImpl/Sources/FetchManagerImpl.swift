@@ -662,7 +662,7 @@ private func filterDownloadStatsEntry(entry: FetchManagerLocationEntry) -> Bool 
     switch mediaReference {
     case let .message(_, media):
         switch media {
-        case let file as TelegramMediaFile:
+        case let file as IosappMediaFile:
             if file.isVideo {
                 if file.isAnimated {
                     return false

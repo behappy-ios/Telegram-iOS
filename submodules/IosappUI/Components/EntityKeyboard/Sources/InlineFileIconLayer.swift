@@ -19,7 +19,7 @@ public final class InlineFileIconLayer: MultiAnimationRenderTarget {
     private final class Arguments {
         let context: InlineFileIconLayer.Context
         let userLocation: MediaResourceUserLocation
-        let file: TelegramMediaFile
+        let file: IosappMediaFile
         let cache: AnimationCache
         let renderer: MultiAnimationRenderer
         let unique: Bool
@@ -28,7 +28,7 @@ public final class InlineFileIconLayer: MultiAnimationRenderTarget {
         let pointSize: CGSize
         let pixelSize: CGSize
         
-        init(context: InlineFileIconLayer.Context, userLocation: MediaResourceUserLocation, file: TelegramMediaFile, cache: AnimationCache, renderer: MultiAnimationRenderer, unique: Bool, placeholderColor: UIColor, pointSize: CGSize, pixelSize: CGSize) {
+        init(context: InlineFileIconLayer.Context, userLocation: MediaResourceUserLocation, file: IosappMediaFile, cache: AnimationCache, renderer: MultiAnimationRenderer, unique: Bool, placeholderColor: UIColor, pointSize: CGSize, pixelSize: CGSize) {
             self.context = context
             self.userLocation = userLocation
             self.file = file
@@ -45,9 +45,9 @@ public final class InlineFileIconLayer: MultiAnimationRenderTarget {
         public final class Custom: Equatable {
             public let postbox: Postbox
             public let energyUsageSettings: () -> EnergyUsageSettings
-            public let resolveInlineStickers: ([Int64]) -> Signal<[Int64: TelegramMediaFile], NoError>
+            public let resolveInlineStickers: ([Int64]) -> Signal<[Int64: IosappMediaFile], NoError>
             
-            public init(postbox: Postbox, energyUsageSettings: @escaping () -> EnergyUsageSettings, resolveInlineStickers: @escaping ([Int64]) -> Signal<[Int64: TelegramMediaFile], NoError>) {
+            public init(postbox: Postbox, energyUsageSettings: @escaping () -> EnergyUsageSettings, resolveInlineStickers: @escaping ([Int64]) -> Signal<[Int64: IosappMediaFile], NoError>) {
                 self.postbox = postbox
                 self.energyUsageSettings = energyUsageSettings
                 self.resolveInlineStickers = resolveInlineStickers
@@ -82,7 +82,7 @@ public final class InlineFileIconLayer: MultiAnimationRenderTarget {
             }
         }
         
-        func resolveInlineStickers(fileIds: [Int64]) -> Signal<[Int64: TelegramMediaFile], NoError> {
+        func resolveInlineStickers(fileIds: [Int64]) -> Signal<[Int64: IosappMediaFile], NoError> {
             switch self {
             case let .account(account):
                 return account.engine.stickers.resolveInlineStickers(fileIds: fileIds)
@@ -126,7 +126,7 @@ public final class InlineFileIconLayer: MultiAnimationRenderTarget {
     private var isDisplayingPlaceholder: Bool = false
     private var didProcessTintColor: Bool = false
     
-    public private(set) var file: TelegramMediaFile?
+    public private(set) var file: IosappMediaFile?
     private var infoDisposable: Disposable?
     private var disposable: Disposable?
     private var fetchDisposable: Disposable?
@@ -164,7 +164,7 @@ public final class InlineFileIconLayer: MultiAnimationRenderTarget {
         context: AccountContext,
         userLocation: MediaResourceUserLocation,
         attemptSynchronousLoad: Bool,
-        file: TelegramMediaFile,
+        file: IosappMediaFile,
         cache: AnimationCache,
         renderer: MultiAnimationRenderer,
         unique: Bool = false,
@@ -190,7 +190,7 @@ public final class InlineFileIconLayer: MultiAnimationRenderTarget {
         context: InlineFileIconLayer.Context,
         userLocation: MediaResourceUserLocation,
         attemptSynchronousLoad: Bool,
-        file: TelegramMediaFile,
+        file: IosappMediaFile,
         cache: AnimationCache,
         renderer: MultiAnimationRenderer,
         unique: Bool = false,
@@ -245,7 +245,7 @@ public final class InlineFileIconLayer: MultiAnimationRenderTarget {
         return nullAction
     }
     
-    private func updateFile(file: TelegramMediaFile, attemptSynchronousLoad: Bool) {
+    private func updateFile(file: IosappMediaFile, attemptSynchronousLoad: Bool) {
         guard let arguments = self.arguments else {
             return
         }

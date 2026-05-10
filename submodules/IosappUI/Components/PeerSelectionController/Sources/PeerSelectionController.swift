@@ -299,7 +299,7 @@ public final class PeerSelectionControllerImpl: ViewController, PeerSelectionCon
                 let mainPeer: Signal<EnginePeer?, NoError>
                 if peer.isMonoForum, let linkedMonoforumId = peer.linkedMonoforumId {
                     mainPeer = self.context.engine.data.get(
-                        TelegramEngine.EngineData.Item.Peer.Peer(id: linkedMonoforumId)
+                        IosappEngine.EngineData.Item.Peer.Peer(id: linkedMonoforumId)
                     )
                 } else {
                     mainPeer = .single(EnginePeer.channel(peer))
@@ -481,7 +481,7 @@ public final class PeerSelectionControllerImpl: ViewController, PeerSelectionCon
         self.filterDisposable.set((combineLatest(queue: .mainQueue(),
             filterItems,
             self.context.account.postbox.peerView(id: self.context.account.peerId),
-            self.context.engine.data.get(TelegramEngine.EngineData.Item.Configuration.UserLimits(isPremium: false))
+            self.context.engine.data.get(IosappEngine.EngineData.Item.Configuration.UserLimits(isPremium: false))
         )
         |> deliverOnMainQueue).start(next: { [weak self] countAndFilterItems, peerView, limits in
             guard let strongSelf = self else {

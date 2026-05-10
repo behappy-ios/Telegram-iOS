@@ -401,7 +401,7 @@ private final class CameraScreenComponent: CombinedComponent {
                     self.sendAsPeerId = customTarget
                     self.isCustomTarget = true
                     
-                    let _ = (self.context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: customTarget))
+                    let _ = (self.context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: customTarget))
                     |> deliverOnMainQueue).start(next: { [weak self] peer in
                         guard let self else {
                             return
@@ -569,7 +569,7 @@ private final class CameraScreenComponent: CombinedComponent {
                 if self.storiesBlockedPeers == nil {
                     self.storiesBlockedPeers = BlockedPeersContext(account: self.context.account, subject: .stories)
                     self.adminedChannels.set(.single([]) |> then(self.context.engine.peers.channelsForStories()))
-                    self.closeFriends.set(self.context.engine.data.get(TelegramEngine.EngineData.Item.Contacts.CloseFriends()))
+                    self.closeFriends.set(self.context.engine.data.get(IosappEngine.EngineData.Item.Contacts.CloseFriends()))
                 }
                 
                 self.displayingCollageSelection = false
@@ -972,7 +972,7 @@ private final class CameraScreenComponent: CombinedComponent {
             let _ = combineLatest(
                 queue: Queue.mainQueue(),
                 self.adminedChannels.get(),
-                self.context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: self.context.account.peerId))
+                self.context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: self.context.account.peerId))
             ).start(next: { [weak self] sendAsPeers, accountPeer in
                 guard let self, let accountPeer else {
                     return
@@ -2461,7 +2461,7 @@ public class CameraScreenImpl: ViewController, CameraScreen {
                 } else if dualCamWasEnabled != isDualCameraEnabled {
                     self.requestUpdateLayout(transition: .spring(duration: 0.4))
                     
-                    UserDefaults.standard.set(isDualCameraEnabled as NSNumber, forKey: "TelegramStoryCameraIsDualEnabled")
+                    UserDefaults.standard.set(isDualCameraEnabled as NSNumber, forKey: "IosappStoryCameraIsDualEnabled")
                 }
             }
         }
@@ -2503,7 +2503,7 @@ public class CameraScreenImpl: ViewController, CameraScreen {
             
             var isDualCameraEnabled = Camera.isDualCameraSupported(forRoundVideo: false)
             if isDualCameraEnabled {
-                if let isDualCameraEnabledValue = UserDefaults.standard.object(forKey: "TelegramStoryCameraIsDualEnabled") as? NSNumber {
+                if let isDualCameraEnabledValue = UserDefaults.standard.object(forKey: "IosappStoryCameraIsDualEnabled") as? NSNumber {
                     isDualCameraEnabled = isDualCameraEnabledValue.boolValue
                 }
             }
@@ -2512,13 +2512,13 @@ public class CameraScreenImpl: ViewController, CameraScreen {
             }
             
             var dualCameraPosition: PIPPosition = .topRight
-            if let dualCameraPositionValue = UserDefaults.standard.object(forKey: "TelegramStoryCameraDualPosition") as? NSNumber {
+            if let dualCameraPositionValue = UserDefaults.standard.object(forKey: "IosappStoryCameraDualPosition") as? NSNumber {
                 dualCameraPosition = PIPPosition(rawValue: dualCameraPositionValue.int32Value) ?? .topRight
             }
             self.pipPosition = dualCameraPosition
         
             var cameraFrontPosition = false
-            if let cameraFrontPositionValue = UserDefaults.standard.object(forKey: "TelegramStoryCameraUseFrontPosition") as? NSNumber, cameraFrontPositionValue.boolValue {
+            if let cameraFrontPositionValue = UserDefaults.standard.object(forKey: "IosappStoryCameraUseFrontPosition") as? NSNumber, cameraFrontPositionValue.boolValue {
                 cameraFrontPosition = true
             }
             
@@ -2824,7 +2824,7 @@ public class CameraScreenImpl: ViewController, CameraScreen {
                 }
                 
                 if previousState.position != self.cameraState.position {
-                    UserDefaults.standard.set((self.cameraState.position == .front) as NSNumber, forKey: "TelegramStoryCameraUseFrontPosition")
+                    UserDefaults.standard.set((self.cameraState.position == .front) as NSNumber, forKey: "IosappStoryCameraUseFrontPosition")
                 }
             })
             
@@ -3100,7 +3100,7 @@ public class CameraScreenImpl: ViewController, CameraScreen {
                 
                 self._livestreamMediaSource?.setDualCameraPosition(self.pipPosition)
                 
-                UserDefaults.standard.set(self.pipPosition.rawValue as NSNumber, forKey: "TelegramStoryCameraDualPosition")
+                UserDefaults.standard.set(self.pipPosition.rawValue as NSNumber, forKey: "IosappStoryCameraDualPosition")
             default:
                 break
             }
@@ -4190,7 +4190,7 @@ public class CameraScreenImpl: ViewController, CameraScreen {
                         guard let self else {
                             return
                         }
-                        let _ = (self.context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: self.context.account.peerId))
+                        let _ = (self.context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: self.context.account.peerId))
                         |> deliverOnMainQueue).start(next: { [weak self] peer in
                             guard let self else {
                                 return

@@ -351,7 +351,7 @@ private func synchronizeReadMessageReactionsOrPollVotes(transaction: Transaction
                     }
                     var media = currentMessage.media
                     loop: for j in 0 ..< media.count {
-                        if let poll = media[j] as? TelegramMediaPoll {
+                        if let poll = media[j] as? IosappMediaPoll {
                             media[j] = poll.withoutUnreadResults()
                         }
                     }
@@ -386,7 +386,7 @@ private func synchronizeReadMessageReactionsOrPollVotes(transaction: Transaction
                         }
                         var media = currentMessage.media
                         loop: for j in 0 ..< media.count {
-                            if let poll = media[j] as? TelegramMediaPoll {
+                            if let poll = media[j] as? IosappMediaPoll {
                                 media[j] = poll.withoutUnreadResults()
                             }
                         }

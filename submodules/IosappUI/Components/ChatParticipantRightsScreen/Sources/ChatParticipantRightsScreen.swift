@@ -80,8 +80,8 @@ private final class ChatParticipantRightsContent: CombinedComponent {
             }
             
             self.disposable = (context.engine.data.subscribe(
-                TelegramEngine.EngineData.Item.Peer.Peer(id: participantId),
-                TelegramEngine.EngineData.Item.Peer.Presence(id: participantId)
+                IosappEngine.EngineData.Item.Peer.Peer(id: participantId),
+                IosappEngine.EngineData.Item.Peer.Presence(id: participantId)
             )
             |> deliverOnMainQueue).start(next: { [weak self] peer, presence in
                 guard let self else {
@@ -187,7 +187,7 @@ private final class ChatParticipantRightsContent: CombinedComponent {
             if let current = state.peer {
                 peer = current
             } else {
-                peer = EnginePeer.user(TelegramUser(id: component.subject.participantId, accessHash: nil, firstName: " ", lastName: nil, username: nil, phone: nil, photo: [], botInfo: nil, restrictionInfo: nil, flags: [], emojiStatus: nil, usernames: [], storiesHidden: nil, nameColor: nil, backgroundEmojiId: nil, profileColor: nil, profileBackgroundEmojiId: nil, subscriberCount: nil, verificationIconFileId: nil))
+                peer = EnginePeer.user(IosappUser(id: component.subject.participantId, accessHash: nil, firstName: " ", lastName: nil, username: nil, phone: nil, photo: [], botInfo: nil, restrictionInfo: nil, flags: [], emojiStatus: nil, usernames: [], storiesHidden: nil, nameColor: nil, backgroundEmojiId: nil, profileColor: nil, profileBackgroundEmojiId: nil, subscriberCount: nil, verificationIconFileId: nil))
             }
             
             var rankPreviewPlaceholder = ""

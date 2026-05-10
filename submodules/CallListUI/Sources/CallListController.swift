@@ -351,7 +351,7 @@ public final class CallListController: IosappBaseController {
             }
             
             for media in message.media {
-                if let action = media as? TelegramMediaAction {
+                if let action = media as? IosappMediaAction {
                     if case let .phoneCall(_, _, _, isVideo) = action.action {
                         self.call(message.id.peerId, isVideo: isVideo)
                     } else if case .conferenceCall = action.action {
@@ -369,7 +369,7 @@ public final class CallListController: IosappBaseController {
         }, openInfo: { [weak self] peerId, messages in
             if let strongSelf = self {
                 let _ = (strongSelf.context.engine.data.get(
-                    TelegramEngine.EngineData.Item.Peer.Peer(id: peerId)
+                    IosappEngine.EngineData.Item.Peer.Peer(id: peerId)
                 )
                 |> deliverOnMainQueue).startStandalone(next: { peer in
                     if let strongSelf = self, let peer = peer, let controller = strongSelf.context.sharedContext.makePeerInfoController(context: strongSelf.context, updatedPresentationData: nil, peer: peer._asPeer(), mode: .calls(messages: messages.map({ $0._asMessage() })), avatarInitiallyExpanded: false, fromChat: false, requestsContext: nil) {
@@ -729,7 +729,7 @@ public final class CallListController: IosappBaseController {
                 }
                 
                 if let cachedUserData = view.cachedData as? CachedUserData, cachedUserData.callsPrivate {
-                    strongSelf.push(strongSelf.context.sharedContext.makeSendInviteLinkScreen(context: strongSelf.context, subject: .groupCall(.create), peers: [TelegramForbiddenInvitePeer(
+                    strongSelf.push(strongSelf.context.sharedContext.makeSendInviteLinkScreen(context: strongSelf.context, subject: .groupCall(.create), peers: [IosappForbiddenInvitePeer(
                         peer: EnginePeer(peer),
                         canInviteWithPremium: false,
                         premiumRequiredToContact: false
@@ -745,9 +745,9 @@ public final class CallListController: IosappBaseController {
     }
     
     private func openGroupCall(message: EngineMessage) {
-        var action: TelegramMediaAction?
+        var action: IosappMediaAction?
         for media in message.media {
-            if let media = media as? TelegramMediaAction {
+            if let media = media as? IosappMediaAction {
                 action = media
                 break
             }

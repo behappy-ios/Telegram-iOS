@@ -6,7 +6,7 @@ import MtProtoKit
 
 public enum UpdateMessageReaction {
     case builtin(String)
-    case custom(fileId: Int64, file: TelegramMediaFile?)
+    case custom(fileId: Int64, file: IosappMediaFile?)
     case stars
     
     public var reaction: MessageReaction.Reaction {
@@ -62,7 +62,7 @@ public func updateMessageReactionsInteractively(account: Account, messageIds: [M
             }
         }
         
-        let isPremium = (transaction.getPeer(account.peerId) as? TelegramUser)?.isPremium ?? false
+        let isPremium = (transaction.getPeer(account.peerId) as? IosappUser)?.isPremium ?? false
         let appConfiguration = transaction.getPreferencesEntry(key: PreferencesKeys.appConfiguration)?.get(AppConfiguration.self) ?? .defaultValue
         let maxCount: Int
         if isPremium {
@@ -134,8 +134,8 @@ public func updateMessageReactionsInteractively(account: Account, messageIds: [M
                                 case let .builtin(value):
                                     recentReactionItem = RecentReactionItem(.builtin(value))
                                 case let .custom(fileId, file):
-                                    if let file = file ?? (transaction.getMedia(MediaId(namespace: Namespaces.Media.CloudFile, id: fileId)) as? TelegramMediaFile) {
-                                        recentReactionItem = RecentReactionItem(.custom(TelegramMediaFile.Accessor(file)))
+                                    if let file = file ?? (transaction.getMedia(MediaId(namespace: Namespaces.Media.CloudFile, id: fileId)) as? IosappMediaFile) {
+                                        recentReactionItem = RecentReactionItem(.custom(IosappMediaFile.Accessor(file)))
                                     } else {
                                         continue
                                     }
@@ -172,10 +172,10 @@ public func updateMessageReactionsInteractively(account: Account, messageIds: [M
     |> ignoreValues
 }
 
-func _internal_sendStarsReactionsInteractively(account: Account, messageId: MessageId, count: Int, privacy: TelegramPaidReactionPrivacy?) -> Signal<TelegramPaidReactionPrivacy, NoError> {
-    return account.postbox.transaction { transaction -> TelegramPaidReactionPrivacy in
+func _internal_sendStarsReactionsInteractively(account: Account, messageId: MessageId, count: Int, privacy: IosappPaidReactionPrivacy?) -> Signal<IosappPaidReactionPrivacy, NoError> {
+    return account.postbox.transaction { transaction -> IosappPaidReactionPrivacy in
         transaction.setPendingMessageAction(type: .sendStarsReaction, id: messageId, action: SendStarsReactionsAction(randomId: Int64.random(in: Int64.min ... Int64.max)))
-        var resolvedPrivacyValue: TelegramPaidReactionPrivacy = .default
+        var resolvedPrivacyValue: IosappPaidReactionPrivacy = .default
         transaction.updateMessage(messageId, update: { currentMessage in
             var storeForwardInfo: StoreMessageForwardInfo?
             if let forwardInfo = currentMessage.forwardInfo {
@@ -252,7 +252,7 @@ func _internal_forceSendPendingSendStarsReaction(account: Account, messageId: Me
     return .complete()
 }
 
-func _internal_updateStarsReactionPrivacy(account: Account, messageId: MessageId, privacy: TelegramPaidReactionPrivacy) -> Signal<Never, NoError> {
+func _internal_updateStarsReactionPrivacy(account: Account, messageId: MessageId, privacy: IosappPaidReactionPrivacy) -> Signal<Never, NoError> {
     return account.postbox.transaction { transaction -> (Api.InputPeer?, Api.InputPeer?) in
         _internal_setStarsReactionDefaultPrivacy(privacy: privacy, transaction: transaction)
         
@@ -1090,15 +1090,15 @@ struct StarsReactionDefaultToPrivateData: Codable {
         case privacy = "p"
     }
     
-    var privacy: TelegramPaidReactionPrivacy
+    var privacy: IosappPaidReactionPrivacy
     
-    init(privacy: TelegramPaidReactionPrivacy) {
+    init(privacy: IosappPaidReactionPrivacy) {
         self.privacy = privacy
     }
     
     init(from decoder: any Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        if let privacy = try container.decodeIfPresent(TelegramPaidReactionPrivacy.self, forKey: .privacy) {
+        if let privacy = try container.decodeIfPresent(IosappPaidReactionPrivacy.self, forKey: .privacy) {
             self.privacy = privacy
         } else {
             self.privacy = try container.decode(Bool.self, forKey: .isPrivate) ? .anonymous : .default
@@ -1117,14 +1117,14 @@ struct StarsReactionDefaultToPrivateData: Codable {
     }
 }
 
-func _internal_getStarsReactionDefaultPrivacy(transaction: Transaction) -> TelegramPaidReactionPrivacy {
+func _internal_getStarsReactionDefaultPrivacy(transaction: Transaction) -> IosappPaidReactionPrivacy {
     guard let value = transaction.retrieveItemCacheEntry(id: ItemCacheEntryId(collectionId: Namespaces.CachedItemCollection.starsReactionDefaultToPrivate, key: StarsReactionDefaultToPrivateData.key()))?.get(StarsReactionDefaultToPrivateData.self) else {
         return .default
     }
     return value.privacy
 }
 
-func _internal_setStarsReactionDefaultPrivacy(privacy: TelegramPaidReactionPrivacy, transaction: Transaction) {
+func _internal_setStarsReactionDefaultPrivacy(privacy: IosappPaidReactionPrivacy, transaction: Transaction) {
     guard let entry = CodableEntry(StarsReactionDefaultToPrivateData(privacy: privacy)) else {
         return
     }

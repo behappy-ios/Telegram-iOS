@@ -87,11 +87,11 @@ final class VoiceChatFullscreenParticipantItem: ListViewItem {
     let getVideo: () -> GroupVideoNode?
     let action: ((ASDisplayNode?) -> Void)?
     let contextAction: ((ASDisplayNode, ContextGesture?) -> Void)?
-    let getUpdatingAvatar: () -> Signal<(TelegramMediaImageRepresentation, Float)?, NoError>
+    let getUpdatingAvatar: () -> Signal<(IosappMediaImageRepresentation, Float)?, NoError>
     
     public let selectable: Bool = true
     
-    public init(presentationData: ItemListPresentationData, nameDisplayOrder: PresentationPersonNameOrder, context: AccountContext, peer: Peer, videoEndpointId: String?, isPaused: Bool, icon: Icon, text: VoiceChatParticipantItem.ParticipantText, textColor: Color, color: Color, isLandscape: Bool, active: Bool, showVideoWhenActive: Bool, getAudioLevel: (() -> Signal<Float, NoError>)?, getVideo: @escaping () -> GroupVideoNode?, action: ((ASDisplayNode?) -> Void)?, contextAction: ((ASDisplayNode, ContextGesture?) -> Void)? = nil, getUpdatingAvatar: @escaping () -> Signal<(TelegramMediaImageRepresentation, Float)?, NoError>) {
+    public init(presentationData: ItemListPresentationData, nameDisplayOrder: PresentationPersonNameOrder, context: AccountContext, peer: Peer, videoEndpointId: String?, isPaused: Bool, icon: Icon, text: VoiceChatParticipantItem.ParticipantText, textColor: Color, color: Color, isLandscape: Bool, active: Bool, showVideoWhenActive: Bool, getAudioLevel: (() -> Signal<Float, NoError>)?, getVideo: @escaping () -> GroupVideoNode?, action: ((ASDisplayNode?) -> Void)?, contextAction: ((ASDisplayNode, ContextGesture?) -> Void)? = nil, getUpdatingAvatar: @escaping () -> Signal<(IosappMediaImageRepresentation, Float)?, NoError>) {
         self.presentationData = presentationData
         self.nameDisplayOrder = nameDisplayOrder
         self.context = context
@@ -457,7 +457,7 @@ class VoiceChatFullscreenParticipantItemNode: ItemListRevealOptionsItemNode {
             }
             let currentBoldFont: UIFont = titleFont
             
-            if let user = item.peer as? TelegramUser {
+            if let user = item.peer as? IosappUser {
                 if let firstName = user.firstName, let lastName = user.lastName, !firstName.isEmpty, !lastName.isEmpty {
                     titleAttributedString = NSAttributedString(string: firstName, font: titleFont, textColor: titleColor)
                 } else if let firstName = user.firstName, !firstName.isEmpty {
@@ -467,9 +467,9 @@ class VoiceChatFullscreenParticipantItemNode: ItemListRevealOptionsItemNode {
                 } else {
                     titleAttributedString = NSAttributedString(string: item.presentationData.strings.User_DeletedAccount, font: currentBoldFont, textColor: titleColor)
                 }
-            } else if let group = item.peer as? TelegramGroup {
+            } else if let group = item.peer as? IosappGroup {
                 titleAttributedString = NSAttributedString(string: group.title, font: currentBoldFont, textColor: titleColor)
-            } else if let channel = item.peer as? TelegramChannel {
+            } else if let channel = item.peer as? IosappChannel {
                 titleAttributedString = NSAttributedString(string: channel.title, font: currentBoldFont, textColor: titleColor)
             }
         

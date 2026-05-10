@@ -655,9 +655,9 @@ public class CollectibleItemInfoScreen: ViewControllerComponentContainer {
     fileprivate enum ResolvedSubject {
         struct Username {
             var username: String
-            var info: TelegramCollectibleItemInfo
+            var info: IosappCollectibleItemInfo
             
-            init(username: String, info: TelegramCollectibleItemInfo) {
+            init(username: String, info: IosappCollectibleItemInfo) {
                 self.username = username
                 self.info = info
             }
@@ -665,9 +665,9 @@ public class CollectibleItemInfoScreen: ViewControllerComponentContainer {
         
         struct PhoneNumber {
             var phoneNumber: String
-            var info: TelegramCollectibleItemInfo
+            var info: IosappCollectibleItemInfo
             
-            init(phoneNumber: String, info: TelegramCollectibleItemInfo) {
+            init(phoneNumber: String, info: IosappCollectibleItemInfo) {
                 self.phoneNumber = phoneNumber
                 self.info = info
             }
@@ -686,7 +686,7 @@ public class CollectibleItemInfoScreen: ViewControllerComponentContainer {
             self.subject = subject
         }
         
-        public var collectibleItemInfo: TelegramCollectibleItemInfo {
+        public var collectibleItemInfo: IosappCollectibleItemInfo {
             switch self.subject {
             case let .username(username):
                 return username.info
@@ -716,7 +716,7 @@ public class CollectibleItemInfoScreen: ViewControllerComponentContainer {
         case let .username(username):
             return combineLatest(
                 context.engine.data.get(
-                    TelegramEngine.EngineData.Item.Peer.Peer(id: peerId)
+                    IosappEngine.EngineData.Item.Peer.Peer(id: peerId)
                 ),
                 context.engine.peers.getCollectibleUsernameInfo(username: username)
             )
@@ -732,7 +732,7 @@ public class CollectibleItemInfoScreen: ViewControllerComponentContainer {
         case let .phoneNumber(phoneNumber):
             return combineLatest(
                 context.engine.data.get(
-                    TelegramEngine.EngineData.Item.Peer.Peer(id: peerId)
+                    IosappEngine.EngineData.Item.Peer.Peer(id: peerId)
                 ),
                 context.engine.peers.getCollectiblePhoneNumberInfo(phoneNumber: phoneNumber)
             )

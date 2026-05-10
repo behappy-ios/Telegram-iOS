@@ -22,11 +22,11 @@ public func renderedTotalUnreadCount(inAppSettings: InAppNotificationSettings, t
     return (totalUnreadState.count(for: inAppSettings.totalUnreadCountDisplayStyle.category, in: inAppSettings.totalUnreadCountDisplayCategory.statsType, with: inAppSettings.totalUnreadCountIncludeTags), type)
 }
 
-public func renderedTotalUnreadCount(accountManager: AccountManager<TelegramAccountManagerTypes>, engine: TelegramEngine) -> Signal<(Int32, RenderedTotalUnreadCountType), NoError> {
+public func renderedTotalUnreadCount(accountManager: AccountManager<IosappAccountManagerTypes>, engine: IosappEngine) -> Signal<(Int32, RenderedTotalUnreadCountType), NoError> {
     return combineLatest(
         accountManager.sharedData(keys: [ApplicationSpecificSharedDataKeys.inAppNotificationSettings]),
         engine.data.subscribe(
-            TelegramEngine.EngineData.Item.Messages.TotalReadCounters()
+            IosappEngine.EngineData.Item.Messages.TotalReadCounters()
         )
     )
     |> map { sharedData, totalReadCounters -> (Int32, RenderedTotalUnreadCountType) in

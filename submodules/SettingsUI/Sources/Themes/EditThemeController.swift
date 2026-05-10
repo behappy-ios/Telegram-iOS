@@ -58,7 +58,7 @@ private enum EditThemeControllerEntry: ItemListNodeEntry {
     case slug(PresentationTheme, PresentationStrings, String, String, Bool)
     case slugInfo(PresentationTheme, String)
     case chatPreviewHeader(PresentationTheme, String)
-    case chatPreview(PresentationTheme, PresentationTheme, TelegramWallpaper, PresentationFontSize, PresentationChatBubbleCorners, PresentationStrings, PresentationDateTimeFormat, PresentationPersonNameOrder, [ChatPreviewMessageItem])
+    case chatPreview(PresentationTheme, PresentationTheme, IosappWallpaper, PresentationFontSize, PresentationChatBubbleCorners, PresentationStrings, PresentationDateTimeFormat, PresentationPersonNameOrder, [ChatPreviewMessageItem])
     case changeColors(PresentationTheme, String)
     case toggleDark(PresentationTheme, String)
     case convertToPresetTheme(PresentationTheme, String)
@@ -220,7 +220,7 @@ private enum EditThemeControllerEntry: ItemListNodeEntry {
 }
 
 public enum EditThemeControllerMode: Equatable {
-    case create(PresentationTheme?, TelegramThemeSettings?)
+    case create(PresentationTheme?, IosappThemeSettings?)
     case edit(PresentationCloudTheme)
 }
 
@@ -306,13 +306,13 @@ private func editThemeControllerEntries(presentationData: PresentationData, stat
 public func editThemeController(context: AccountContext, mode: EditThemeControllerMode, navigateToChat: ((PeerId) -> Void)? = nil, completion: ((PresentationThemeReference) -> Void)? = nil) -> ViewController {
     let initialState: EditThemeControllerState
     let previewThemePromise = Promise<PresentationTheme>()
-    let settingsPromise = Promise<TelegramThemeSettings?>(nil)
+    let settingsPromise = Promise<IosappThemeSettings?>(nil)
     let hasSettings: Bool
     let presentationData = context.sharedContext.currentPresentationData.with { $0 }
     switch mode {
         case let .create(existingTheme, settings):
             let theme: PresentationTheme
-            let wallpaper: TelegramWallpaper
+            let wallpaper: IosappWallpaper
             if let existingTheme = existingTheme {
                 theme = existingTheme
                 wallpaper = theme.chat.defaultWallpaper
@@ -406,12 +406,12 @@ public func editThemeController(context: AccountContext, mode: EditThemeControll
                 if let data = try? Data(contentsOf: url), let theme = makePresentationTheme(data: data) {
                     if case let .file(file) = theme.chat.defaultWallpaper, file.id == 0 {
                         let _ = (cachedWallpaper(account: context.account, slug: file.slug, settings: file.settings)
-                        |> mapToSignal { wallpaper -> Signal<TelegramWallpaper?, NoError> in
+                        |> mapToSignal { wallpaper -> Signal<IosappWallpaper?, NoError> in
                             if let wallpaper = wallpaper, case let .file(file) = wallpaper.wallpaper {
                                 var convertedRepresentations: [ImageRepresentationWithReference] = []
-                                convertedRepresentations.append(ImageRepresentationWithReference(representation: TelegramMediaImageRepresentation(dimensions: PixelDimensions(width: 100, height: 100), resource: file.file.resource, progressiveSizes: [], immediateThumbnailData: nil, hasVideo: false, isPersonal: false), reference: .wallpaper(wallpaper: .slug(file.slug), resource: file.file.resource)))
+                                convertedRepresentations.append(ImageRepresentationWithReference(representation: IosappMediaImageRepresentation(dimensions: PixelDimensions(width: 100, height: 100), resource: file.file.resource, progressiveSizes: [], immediateThumbnailData: nil, hasVideo: false, isPersonal: false), reference: .wallpaper(wallpaper: .slug(file.slug), resource: file.file.resource)))
                                 return wallpaperDatas(account: context.account, accountManager: context.sharedContext.accountManager, fileReference: .standalone(media: file.file), representations: convertedRepresentations, alwaysShowThumbnailFirst: false, thumbnail: false, onlyFullSize: true, autoFetchFullSize: true, synchronousLoad: false)
-                                |> mapToSignal { _, fullSizeData, complete -> Signal<TelegramWallpaper?, NoError> in
+                                |> mapToSignal { _, fullSizeData, complete -> Signal<IosappWallpaper?, NoError> in
                                     guard complete, let fullSizeData = fullSizeData else {
                                         return .complete()
                                     }
@@ -451,17 +451,17 @@ public func editThemeController(context: AccountContext, mode: EditThemeControll
         let _ = (combineLatest(queue: Queue.mainQueue(), previewThemePromise.get(), settingsPromise.get())
         |> take(1)).start(next: { theme, previousSettings in
             var updatedTheme = theme
-            var updatedSettings: TelegramThemeSettings?
+            var updatedSettings: IosappThemeSettings?
             
             if let themeSettings = previousSettings {
                 if updatedTheme.referenceTheme == .night {
                     updatedTheme = updatedTheme.withUpdated(referenceTheme: .nightAccent)
-                    updatedSettings = TelegramThemeSettings(baseTheme: .tinted, accentColor: themeSettings.accentColor, outgoingAccentColor: themeSettings.outgoingAccentColor, messageColors: themeSettings.messageColors, animateMessageColors: themeSettings.animateMessageColors, wallpaper: themeSettings.wallpaper)
+                    updatedSettings = IosappThemeSettings(baseTheme: .tinted, accentColor: themeSettings.accentColor, outgoingAccentColor: themeSettings.outgoingAccentColor, messageColors: themeSettings.messageColors, animateMessageColors: themeSettings.animateMessageColors, wallpaper: themeSettings.wallpaper)
                     if let settings = updatedSettings, let theme = makePresentationTheme(settings: settings) {
                         updatedTheme = theme
                     }
                 } else if updatedTheme.referenceTheme == .nightAccent {
-                    updatedSettings = TelegramThemeSettings(baseTheme: .night, accentColor: themeSettings.accentColor, outgoingAccentColor: themeSettings.outgoingAccentColor, messageColors: themeSettings.messageColors, animateMessageColors: themeSettings.animateMessageColors, wallpaper: themeSettings.wallpaper)
+                    updatedSettings = IosappThemeSettings(baseTheme: .night, accentColor: themeSettings.accentColor, outgoingAccentColor: themeSettings.outgoingAccentColor, messageColors: themeSettings.messageColors, animateMessageColors: themeSettings.animateMessageColors, wallpaper: themeSettings.wallpaper)
                     if let settings = updatedSettings, let theme = makePresentationTheme(settings: settings) {
                         updatedTheme = theme
                     }
@@ -485,7 +485,7 @@ public func editThemeController(context: AccountContext, mode: EditThemeControll
             if case .classic = theme.referenceTheme.baseTheme {
                 outgoingAccentColor = theme.chat.message.outgoing.accentTextColor
             }
-            let settings = TelegramThemeSettings(baseTheme: theme.referenceTheme.baseTheme, accentColor: theme.rootController.navigationBar.accentTextColor, outgoingAccentColor: outgoingAccentColor, messageColors: theme.chat.message.outgoing.bubble.withWallpaper.fill.map { $0.argb }, animateMessageColors: theme.chat.animateMessageColors, wallpaper: theme.chat.defaultWallpaper)
+            let settings = IosappThemeSettings(baseTheme: theme.referenceTheme.baseTheme, accentColor: theme.rootController.navigationBar.accentTextColor, outgoingAccentColor: outgoingAccentColor, messageColors: theme.chat.message.outgoing.bubble.withWallpaper.fill.map { $0.argb }, animateMessageColors: theme.chat.animateMessageColors, wallpaper: theme.chat.defaultWallpaper)
             settingsPromise.set(.single(settings))
             updateState { current in
                 var state = current
@@ -538,7 +538,7 @@ public func editThemeController(context: AccountContext, mode: EditThemeControll
                 let _ = (combineLatest(queue: Queue.mainQueue(), previewThemePromise.get(), settingsPromise.get())
                 |> take(1)).start(next: { previewTheme, settings in
                     let saveThemeTemplateFile: (String, LocalFileMediaResource, @escaping () -> Void) -> Void = { title, resource, completion in
-                        let file = TelegramMediaFile(fileId: MediaId(namespace: Namespaces.Media.LocalFile, id: resource.fileId), partialReference: nil, resource: resource, previewRepresentations: [], videoThumbnails: [], immediateThumbnailData: nil, mimeType: "application/x-tgtheme-ios", size: nil, attributes: [.FileName(fileName: "\(title).tgios-theme")], alternativeRepresentations: [])
+                        let file = IosappMediaFile(fileId: MediaId(namespace: Namespaces.Media.LocalFile, id: resource.fileId), partialReference: nil, resource: resource, previewRepresentations: [], videoThumbnails: [], immediateThumbnailData: nil, mimeType: "application/x-tgtheme-ios", size: nil, attributes: [.FileName(fileName: "\(title).tgios-theme")], alternativeRepresentations: [])
                         let message = EnqueueMessage.message(text: "", attributes: [], inlineStickers: [:], mediaReference: .standalone(media: file), threadId: nil, replyToMessageId: nil, replyToStoryId: nil, localGroupingKey: nil, correlationId: nil, bubbleUpEmojiOrStickersets: [])
 
                         let _ = enqueueMessages(account: context.account, peerId: context.account.peerId, messages: [message]).start()
@@ -598,7 +598,7 @@ public func editThemeController(context: AccountContext, mode: EditThemeControll
                         themeThumbnailData = nil
                     }
                     
-                    let resolvedWallpaper: TelegramWallpaper?
+                    let resolvedWallpaper: IosappWallpaper?
                     if let theme = theme, case let .file(file) = theme.chat.defaultWallpaper, file.id != 0 {
                         resolvedWallpaper = theme.chat.defaultWallpaper
                         updateCachedWallpaper(engine: context.engine, wallpaper: theme.chat.defaultWallpaper)

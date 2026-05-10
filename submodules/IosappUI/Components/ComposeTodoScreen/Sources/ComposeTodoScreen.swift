@@ -39,14 +39,14 @@ final class ComposeTodoScreenComponent: Component {
     let overNavigationContainer: UIView
     let peer: EnginePeer
     let initialData: ComposeTodoScreen.InitialData
-    let completion: (TelegramMediaTodo) -> Void
+    let completion: (IosappMediaTodo) -> Void
 
     init(
         context: AccountContext,
         overNavigationContainer: UIView,
         peer: EnginePeer,
         initialData: ComposeTodoScreen.InitialData,
-        completion: @escaping (TelegramMediaTodo) -> Void
+        completion: @escaping (IosappMediaTodo) -> Void
     ) {
         self.context = context
         self.overNavigationContainer = overNavigationContainer
@@ -319,12 +319,12 @@ final class ComposeTodoScreenComponent: Component {
             }
         }
         
-        func validatedInput() -> TelegramMediaTodo? {
+        func validatedInput() -> IosappMediaTodo? {
             if self.todoTextInputState.text.string.trimmingCharacters(in: .whitespacesAndNewlines).count == 0 {
                 return nil
             }
 
-            var mappedItems: [TelegramMediaTodo.Item] = []
+            var mappedItems: [IosappMediaTodo.Item] = []
             for todoItem in self.todoItems {
                 if todoItem.textInputState.text.string.trimmingCharacters(in: .whitespacesAndNewlines).count == 0 {
                     continue
@@ -339,7 +339,7 @@ final class ComposeTodoScreenComponent: Component {
                     }
                 }
                 mappedItems.append(
-                    TelegramMediaTodo.Item(
+                    IosappMediaTodo.Item(
                         text: todoItem.textInputState.text.string,
                         entities: entities,
                         id: todoItem.id
@@ -361,7 +361,7 @@ final class ComposeTodoScreenComponent: Component {
                 }
             }
             
-            var flags: TelegramMediaTodo.Flags = []
+            var flags: IosappMediaTodo.Flags = []
             if self.isCompletableByOthers {
                 flags.insert(.othersCanComplete)
                 if self.isAppendableByOthers {
@@ -369,7 +369,7 @@ final class ComposeTodoScreenComponent: Component {
                 }
             }
             
-            return TelegramMediaTodo(
+            return IosappMediaTodo(
                 flags: flags,
                 text: self.todoTextInputState.text.string,
                 textEntities: textEntities,
@@ -1148,15 +1148,15 @@ final class ComposeTodoScreenComponent: Component {
                             bold: MarkdownAttributeSet(font: boldTextFont, textColor: textColor),
                             link: MarkdownAttributeSet(font: textFont, textColor: theme.list.itemAccentColor),
                             linkAttribute: { contents in
-                                return (TelegramTextAttributes.URL, contents)
+                                return (IosappTextAttributes.URL, contents)
                             }
                         )
                     ),
                     maximumNumberOfLines: 0,
                     highlightColor: presentationData.theme.list.itemAccentColor.withAlphaComponent(0.2),
                     highlightAction: { attributes in
-                        if let _ = attributes[NSAttributedString.Key(rawValue: TelegramTextAttributes.URL)] {
-                            return NSAttributedString.Key(rawValue: TelegramTextAttributes.URL)
+                        if let _ = attributes[NSAttributedString.Key(rawValue: IosappTextAttributes.URL)] {
+                            return NSAttributedString.Key(rawValue: IosappTextAttributes.URL)
                         } else {
                             return nil
                         }
@@ -1351,7 +1351,7 @@ final class ComposeTodoScreenComponent: Component {
             
             for (_, suggestionTextInputState) in textInputStates {
                 var hasTrackingView = suggestionTextInputState.hasTrackingView
-                if let currentEmojiSuggestion = suggestionTextInputState.currentEmojiSuggestion, let value = currentEmojiSuggestion.value as? [TelegramMediaFile], value.isEmpty {
+                if let currentEmojiSuggestion = suggestionTextInputState.currentEmojiSuggestion, let value = currentEmojiSuggestion.value as? [IosappMediaFile], value.isEmpty {
                     hasTrackingView = false
                 }
                 if !suggestionTextInputState.isEditing {
@@ -1375,7 +1375,7 @@ final class ComposeTodoScreenComponent: Component {
                 }
             }
             
-            if let (suggestionTextInputView, suggestionTextInputState) = textInputStates.first(where: { $0.state.isEditing && $0.state.currentEmojiSuggestion != nil }), let emojiSuggestion = suggestionTextInputState.currentEmojiSuggestion, let value = emojiSuggestion.value as? [TelegramMediaFile] {
+            if let (suggestionTextInputView, suggestionTextInputState) = textInputStates.first(where: { $0.state.isEditing && $0.state.currentEmojiSuggestion != nil }), let emojiSuggestion = suggestionTextInputState.currentEmojiSuggestion, let value = emojiSuggestion.value as? [IosappMediaFile] {
                 let currentEmojiSuggestionView: ComponentHostView<Empty>
                 if let current = self.currentEmojiSuggestionView {
                     currentEmojiSuggestionView = current
@@ -1691,7 +1691,7 @@ public class ComposeTodoScreen: ViewControllerComponentContainer, AttachmentCont
         fileprivate let maxTodoTextLength: Int
         fileprivate let maxTodoItemLength: Int
         fileprivate let maxTodoItemsCount: Int
-        fileprivate let existingTodo: TelegramMediaTodo?
+        fileprivate let existingTodo: IosappMediaTodo?
         fileprivate let focusedId: Int32?
         fileprivate let append: Bool
         fileprivate let canEdit: Bool
@@ -1700,7 +1700,7 @@ public class ComposeTodoScreen: ViewControllerComponentContainer, AttachmentCont
             maxTodoTextLength: Int,
             maxTodoItemLength: Int,
             maxTodoItemsCount: Int,
-            existingTodo: TelegramMediaTodo?,
+            existingTodo: IosappMediaTodo?,
             focusedId: Int32?,
             append: Bool,
             canEdit: Bool
@@ -1716,7 +1716,7 @@ public class ComposeTodoScreen: ViewControllerComponentContainer, AttachmentCont
     }
     
     private let context: AccountContext
-    fileprivate let completion: (TelegramMediaTodo) -> Void
+    fileprivate let completion: (IosappMediaTodo) -> Void
     private var isDismissed: Bool = false
     
     private let overNavigationContainer: UIView
@@ -1759,7 +1759,7 @@ public class ComposeTodoScreen: ViewControllerComponentContainer, AttachmentCont
         context: AccountContext,
         initialData: InitialData,
         peer: EnginePeer,
-        completion: @escaping (TelegramMediaTodo) -> Void
+        completion: @escaping (IosappMediaTodo) -> Void
     ) {
         self.context = context
         self.completion = completion
@@ -1820,7 +1820,7 @@ public class ComposeTodoScreen: ViewControllerComponentContainer, AttachmentCont
     deinit {
     }
     
-    public static func initialData(context: AccountContext, existingTodo: TelegramMediaTodo? = nil, focusedId: Int32? = nil, append: Bool = false, canEdit: Bool = false) -> InitialData {
+    public static func initialData(context: AccountContext, existingTodo: IosappMediaTodo? = nil, focusedId: Int32? = nil, append: Bool = false, canEdit: Bool = false) -> InitialData {
         var maxTodoTextLength: Int = 32
         var maxTodoItemLength: Int = 64
         var maxTodoItemsCount: Int = 30

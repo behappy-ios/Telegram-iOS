@@ -2023,7 +2023,7 @@ public final class ChatSideTopicsPanel: Component {
                             var items: [ContextMenuItem] = []
                             
                             let threadInfo = await component.context.engine.data.get(
-                                TelegramEngine.EngineData.Item.Messages.ThreadInfo(peerId: peerId, threadId: topicId)
+                                IosappEngine.EngineData.Item.Messages.ThreadInfo(peerId: peerId, threadId: topicId)
                             ).get()
                             
                             if let threadInfo, threadInfo.isMessageFeeRemoved {

@@ -33,7 +33,7 @@ extension ChatControllerImpl {
         }
         
         let _ = (self.context.engine.data.get(
-            TelegramEngine.EngineData.Item.Peer.Peer(id: id.peerId)
+            IosappEngine.EngineData.Item.Peer.Peer(id: id.peerId)
         )
         |> deliverOnMainQueue).startStandalone(next: { [weak self] toPeer in
             guard let self else {
@@ -117,7 +117,7 @@ extension ChatControllerImpl {
             if forceNew, let fromMessage, let peer = fromMessage.peers[fromMessage.id.peerId] {
                 peerSignal = .single(EnginePeer(peer))
             } else {
-                peerSignal = self.context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: messageId.peerId))
+                peerSignal = self.context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: messageId.peerId))
             }
             let _ = (combineLatest(
                 peerSignal,
@@ -143,7 +143,7 @@ extension ChatControllerImpl {
                 self.dismiss()
                 
                 let navigateToLocation: NavigateToChatControllerParams.Location
-                if let message = messages.first, let threadId = message.threadId, let channel = message.peers[message.id.peerId] as? TelegramChannel, channel.isForumOrMonoForum {
+                if let message = messages.first, let threadId = message.threadId, let channel = message.peers[message.id.peerId] as? IosappChannel, channel.isForumOrMonoForum {
                     navigateToLocation = .replyThread(ChatReplyThreadMessage(peerId: peer.id, threadId: threadId, channelMessageId: nil, isChannelPost: false, isForumPost: true, isMonoforumPost: false,maxMessage: nil, maxReadIncomingMessageId: nil, maxReadOutgoingMessageId: nil, unreadCount: 0, initialFilledHoles: IndexSet(), initialAnchor: .automatic, isNotAvailable: false))
                 } else {
                     navigateToLocation = .peer(peer)
@@ -154,8 +154,8 @@ extension ChatControllerImpl {
             })
         } else if case let .peer(peerId) = self.chatLocation, let messageId = messageLocation.messageId, (messageId.peerId != peerId && !forceInCurrentChat) || (isScheduledMessages && messageId.id != 0 && !Namespaces.Message.allNonRegular.contains(messageId.namespace)) {
             let _ = (self.context.engine.data.get(
-                TelegramEngine.EngineData.Item.Peer.Peer(id: messageId.peerId),
-                TelegramEngine.EngineData.Item.Messages.Message(id: messageId)
+                IosappEngine.EngineData.Item.Peer.Peer(id: messageId.peerId),
+                IosappEngine.EngineData.Item.Messages.Message(id: messageId)
             )
             |> deliverOnMainQueue).startStandalone(next: { [weak self] peer, message in
                 guard let self, let peer = peer else {
@@ -544,7 +544,7 @@ extension ChatControllerImpl {
                             strongSelf.chatDisplayNode.historyNode.scrollToMessage(from: fromIndex, to: index, animated: animated, scrollPosition: scrollPosition)
                             completion?()
                         } else {
-                            let _ = (strongSelf.context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: messageLocation.peerId))
+                            let _ = (strongSelf.context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: messageLocation.peerId))
                             |> deliverOnMainQueue).startStandalone(next: { peer in
                                 guard let strongSelf = self, let peer = peer else {
                                     return
@@ -570,7 +570,7 @@ extension ChatControllerImpl {
                     }
                 }))
             } else {
-                let _ = (self.context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: messageLocation.peerId))
+                let _ = (self.context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: messageLocation.peerId))
                 |> deliverOnMainQueue).startStandalone(next: { [weak self] peer in
                     guard let self, let peer = peer else {
                         return

@@ -17,14 +17,14 @@ final class EmojisChatInputPanelItem: ListViewItem {
     fileprivate let theme: PresentationTheme
     fileprivate let symbol: String
     fileprivate let text: String
-    let file: TelegramMediaFile?
+    let file: IosappMediaFile?
     fileprivate let animationCache: AnimationCache
     fileprivate let animationRenderer: MultiAnimationRenderer
-    private let emojiSelected: (String, TelegramMediaFile?) -> Void
+    private let emojiSelected: (String, IosappMediaFile?) -> Void
     
     let selectable: Bool = true
     
-    public init(context: AccountContext, theme: PresentationTheme, symbol: String, text: String, file: TelegramMediaFile?, animationCache: AnimationCache, animationRenderer: MultiAnimationRenderer, emojiSelected: @escaping (String, TelegramMediaFile?) -> Void) {
+    public init(context: AccountContext, theme: PresentationTheme, symbol: String, text: String, file: IosappMediaFile?, animationCache: AnimationCache, animationRenderer: MultiAnimationRenderer, emojiSelected: @escaping (String, IosappMediaFile?) -> Void) {
         self.context = context
         self.theme = theme
         self.symbol = symbol

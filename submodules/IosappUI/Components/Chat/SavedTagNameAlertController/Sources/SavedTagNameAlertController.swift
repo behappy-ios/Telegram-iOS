@@ -204,7 +204,7 @@ private final class SavedTagNameAlertContentNode: AlertContentNode {
     private let subtext: String
     private let titleFont: PromptControllerTitleFont
     private let reaction: MessageReaction.Reaction
-    private let file: TelegramMediaFile
+    private let file: IosappMediaFile
 
     private let textView = ComponentView<Empty>()
     private let subtextView = ComponentView<Empty>()
@@ -232,7 +232,7 @@ private final class SavedTagNameAlertContentNode: AlertContentNode {
         return self.isUserInteractionEnabled
     }
     
-    init(context: AccountContext, theme: AlertControllerTheme, ptheme: PresentationTheme, strings: PresentationStrings, actions: [TextAlertAction], text: String, subtext: String, reaction: MessageReaction.Reaction, file: TelegramMediaFile, titleFont: PromptControllerTitleFont, value: String?, characterLimit: Int) {
+    init(context: AccountContext, theme: AlertControllerTheme, ptheme: PresentationTheme, strings: PresentationStrings, actions: [TextAlertAction], text: String, subtext: String, reaction: MessageReaction.Reaction, file: IosappMediaFile, titleFont: PromptControllerTitleFont, value: String?, characterLimit: Int) {
         self.context = context
         self.theme = theme
         self.strings = strings
@@ -511,7 +511,7 @@ public enum PromptControllerTitleFont {
     case bold
 }
 
-public func savedTagNameAlertController(context: AccountContext, updatedPresentationData: (initial: PresentationData, signal: Signal<PresentationData, NoError>)? = nil, text: String, subtext: String, titleFont: PromptControllerTitleFont = .regular, value: String?, reaction: MessageReaction.Reaction, file: TelegramMediaFile, characterLimit: Int = 1000, apply: @escaping (String?) -> Void) -> AlertController {
+public func savedTagNameAlertController(context: AccountContext, updatedPresentationData: (initial: PresentationData, signal: Signal<PresentationData, NoError>)? = nil, text: String, subtext: String, titleFont: PromptControllerTitleFont = .regular, value: String?, reaction: MessageReaction.Reaction, file: IosappMediaFile, characterLimit: Int = 1000, apply: @escaping (String?) -> Void) -> AlertController {
     let presentationData = updatedPresentationData?.initial ?? context.sharedContext.currentPresentationData.with { $0 }
     
     var dismissImpl: ((Bool) -> Void)?

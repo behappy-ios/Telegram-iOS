@@ -27,14 +27,14 @@ private final class DocumentPreviewItem: NSObject, QLPreviewItem {
 
 final class CompactDocumentPreviewController: QLPreviewController, QLPreviewControllerDelegate, QLPreviewControllerDataSource {
     private let postbox: Postbox
-    private let file: TelegramMediaFile
+    private let file: IosappMediaFile
     private let canShare: Bool
     
     private var item: DocumentPreviewItem?
     
     private var tempFile: TempBoxFile?
     
-    init(theme: PresentationTheme, strings: PresentationStrings, postbox: Postbox, file: TelegramMediaFile, canShare: Bool = true) {
+    init(theme: PresentationTheme, strings: PresentationStrings, postbox: Postbox, file: IosappMediaFile, canShare: Bool = true) {
         self.postbox = postbox
         self.file = file
         self.canShare = canShare
@@ -185,7 +185,7 @@ final class CompactDocumentPreviewController: QLPreviewController, QLPreviewCont
     }
 }
 
-func presentDocumentPreviewController(rootController: UIViewController, theme: PresentationTheme, strings: PresentationStrings, postbox: Postbox, file: TelegramMediaFile, canShare: Bool) {
+func presentDocumentPreviewController(rootController: UIViewController, theme: PresentationTheme, strings: PresentationStrings, postbox: Postbox, file: IosappMediaFile, canShare: Bool) {
     let navigationBar = UINavigationBar.appearance(whenContainedInInstancesOf: [QLPreviewController.self])
     navigationBar.barTintColor = theme.rootController.navigationBar.opaqueBackgroundColor
     navigationBar.setBackgroundImage(generateImage(CGSize(width: 1.0, height: 1.0), rotatedContext: { size, context in

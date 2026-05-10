@@ -25,12 +25,12 @@ func preparedChatHistoryViewTransition(from fromView: ChatHistoryView?, to toVie
                 if messageTransitionNode.isAnimatingMessage(stableId: message.stableId) {
                     var updatedMessage = message
                     mediaLoop: for media in message.media {
-                        if let webpage = media as? TelegramMediaWebpage, case .Loaded = webpage.content {
+                        if let webpage = media as? IosappMediaWebpage, case .Loaded = webpage.content {
                             var filterMedia = false
                             switch previousEntries[mergeResult.updateIndices[i].2] {
                             case let .MessageEntry(previousMessage, _, _, _, _, _):
                                 if previousMessage.media.contains(where: { value in
-                                    if let value = value as? TelegramMediaWebpage, case .Loaded = value.content {
+                                    if let value = value as? IosappMediaWebpage, case .Loaded = value.content {
                                         return true
                                     } else {
                                         return false

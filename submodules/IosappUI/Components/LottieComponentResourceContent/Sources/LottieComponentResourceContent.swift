@@ -8,7 +8,7 @@ import GZip
 public extension LottieComponent {
     final class ResourceContent: LottieComponent.Content {
         private let context: AccountContext
-        private let file: TelegramMediaFile
+        private let file: IosappMediaFile
         private let attemptSynchronously: Bool
         private let providesPlaceholder: Bool
         
@@ -18,7 +18,7 @@ public extension LottieComponent {
 
         public init(
             context: AccountContext,
-            file: TelegramMediaFile,
+            file: IosappMediaFile,
             attemptSynchronously: Bool,
             providesPlaceholder: Bool = false
         ) {

@@ -13,8 +13,8 @@ import ShimmerEffect
 
 public final class LocationInfoListItem: ListViewItem {
     let presentationData: ItemListPresentationData
-    let engine: TelegramEngine
-    let location: TelegramMediaMap
+    let engine: IosappEngine
+    let location: IosappMediaMap
     let address: String?
     let distance: String?
     let drivingTime: ExpectedTravelTime
@@ -26,7 +26,7 @@ public final class LocationInfoListItem: ListViewItem {
     let transitAction: () -> Void
     let walkingAction: () -> Void
     
-    public init(presentationData: ItemListPresentationData, engine: TelegramEngine, location: TelegramMediaMap, address: String?, distance: String?, drivingTime: ExpectedTravelTime, transitTime: ExpectedTravelTime, walkingTime: ExpectedTravelTime, hasEta: Bool, action: @escaping () -> Void, drivingAction: @escaping () -> Void, transitAction: @escaping () -> Void, walkingAction: @escaping () -> Void) {
+    public init(presentationData: ItemListPresentationData, engine: IosappEngine, location: IosappMediaMap, address: String?, distance: String?, drivingTime: ExpectedTravelTime, transitTime: ExpectedTravelTime, walkingTime: ExpectedTravelTime, hasEta: Bool, action: @escaping () -> Void, drivingAction: @escaping () -> Void, transitAction: @escaping () -> Void, walkingAction: @escaping () -> Void) {
         self.presentationData = presentationData
         self.engine = engine
         self.location = location
@@ -191,7 +191,7 @@ public final class LocationInfoListItemNode: ListViewItemNode {
                     updatedTheme = item.presentationData.theme
                 }
                 
-                var updatedLocation: TelegramMediaMap?
+                var updatedLocation: IosappMediaMap?
                 if currentItem?.location.venue?.id != item.location.venue?.id || updatedTheme != nil {
                     updatedLocation = item.location
                 }

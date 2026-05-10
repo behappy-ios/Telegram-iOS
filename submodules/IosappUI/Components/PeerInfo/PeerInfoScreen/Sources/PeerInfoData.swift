@@ -19,7 +19,7 @@ import WebUI
 
 enum PeerInfoUpdatingAvatar {
     case none
-    case image(TelegramMediaImageRepresentation)
+    case image(IosappMediaImageRepresentation)
 }
 
 enum AvatarUploadProgress {
@@ -38,8 +38,8 @@ final class PeerInfoState {
     let avatarUploadProgress: AvatarUploadProgress?
     let highlightedButton: PeerInfoHeaderButtonKey?
     let isEditingBirthDate: Bool
-    let updatingBirthDate: TelegramBirthday??
-    let personalChannels: [TelegramAdminedPublicChannel]?
+    let updatingBirthDate: IosappBirthday??
+    let personalChannels: [IosappAdminedPublicChannel]?
     
     init(
         isEditing: Bool,
@@ -52,8 +52,8 @@ final class PeerInfoState {
         avatarUploadProgress: AvatarUploadProgress?,
         highlightedButton: PeerInfoHeaderButtonKey?,
         isEditingBirthDate: Bool,
-        updatingBirthDate: TelegramBirthday??,
-        personalChannels: [TelegramAdminedPublicChannel]?
+        updatingBirthDate: IosappBirthday??,
+        personalChannels: [IosappAdminedPublicChannel]?
     ) {
         self.isEditing = isEditing
         self.selectedMessageIds = selectedMessageIds
@@ -239,7 +239,7 @@ final class PeerInfoState {
         )
     }
     
-    func withUpdatingBirthDate(_ updatingBirthDate: TelegramBirthday??) -> PeerInfoState {
+    func withUpdatingBirthDate(_ updatingBirthDate: IosappBirthday??) -> PeerInfoState {
         return PeerInfoState(
             isEditing: self.isEditing,
             selectedMessageIds: self.selectedMessageIds,
@@ -256,7 +256,7 @@ final class PeerInfoState {
         )
     }
     
-    func withPersonalChannels(_ personalChannels: [TelegramAdminedPublicChannel]?) -> PeerInfoState {
+    func withPersonalChannels(_ personalChannels: [IosappAdminedPublicChannel]?) -> PeerInfoState {
         return PeerInfoState(
             isEditing: self.isEditing,
             selectedMessageIds: self.selectedMessageIds,
@@ -274,7 +274,7 @@ final class PeerInfoState {
     }
 }
 
-final class TelegramGlobalSettings {
+final class IosappGlobalSettings {
     let suggestPhoneNumberConfirmation: Bool
     let suggestPasswordConfirmation: Bool
     let suggestPasswordSetup: Bool
@@ -388,8 +388,8 @@ final class PeerInfoScreenData {
     let savedMessagesPeer: Peer?
     let cachedData: CachedPeerData?
     let status: PeerInfoStatusData?
-    let peerNotificationSettings: TelegramPeerNotificationSettings?
-    let threadNotificationSettings: TelegramPeerNotificationSettings?
+    let peerNotificationSettings: IosappPeerNotificationSettings?
+    let threadNotificationSettings: IosappPeerNotificationSettings?
     let globalNotificationSettings: EngineGlobalNotificationSettings?
     let availablePanes: [PeerInfoPaneKey]
     let groupsInCommon: GroupsInCommonContext?
@@ -400,7 +400,7 @@ final class PeerInfoScreenData {
     let storyArchiveListContext: StoryListContext?
     let botPreviewStoryListContext: StoryListContext?
     let encryptionKeyFingerprint: SecretChatKeyFingerprint?
-    let globalSettings: TelegramGlobalSettings?
+    let globalSettings: IosappGlobalSettings?
     let invitations: PeerExportedInvitationsState?
     let requests: PeerInvitationImportersState?
     let requestsContext: PeerInvitationImportersContext?
@@ -443,8 +443,8 @@ final class PeerInfoScreenData {
         savedMessagesPeer: Peer?,
         cachedData: CachedPeerData?,
         status: PeerInfoStatusData?,
-        peerNotificationSettings: TelegramPeerNotificationSettings?,
-        threadNotificationSettings: TelegramPeerNotificationSettings?,
+        peerNotificationSettings: IosappPeerNotificationSettings?,
+        threadNotificationSettings: IosappPeerNotificationSettings?,
         globalNotificationSettings: EngineGlobalNotificationSettings?,
         isContact: Bool,
         availablePanes: [PeerInfoPaneKey],
@@ -456,7 +456,7 @@ final class PeerInfoScreenData {
         storyArchiveListContext: StoryListContext?,
         botPreviewStoryListContext: StoryListContext?,
         encryptionKeyFingerprint: SecretChatKeyFingerprint?,
-        globalSettings: TelegramGlobalSettings?,
+        globalSettings: IosappGlobalSettings?,
         invitations: PeerExportedInvitationsState?,
         requests: PeerInvitationImportersState?,
         requestsContext: PeerInvitationImportersContext?,
@@ -670,7 +670,7 @@ enum PeerInfoMembersData: Equatable {
 
 private func peerInfoScreenInputData(context: AccountContext, peerId: EnginePeer.Id, isSettings: Bool) -> Signal<PeerInfoScreenInputData, NoError> {
     return `deferred` {
-        return context.engine.data.subscribe(TelegramEngine.EngineData.Item.Peer.Peer(id: peerId))
+        return context.engine.data.subscribe(IosappEngine.EngineData.Item.Peer.Peer(id: peerId))
         |> mapToSignal { peer -> Signal<PeerInfoScreenInputData, NoError> in
             guard let peer = peer else {
                 return .single(.none)
@@ -738,19 +738,19 @@ public func keepPeerInfoScreenDataHot(context: AccountContext, peerId: PeerId, c
 }
 
 private func peerInfoPersonalOrLinkedChannel(context: AccountContext, peerId: EnginePeer.Id, isSettings: Bool) -> Signal<PeerInfoPersonalChannelData?, NoError> {
-    let personalChannel: Signal<TelegramEngine.EngineData.Item.Peer.PersonalChannel.Result, NoError> = context.engine.data.subscribe(
-        TelegramEngine.EngineData.Item.Peer.Peer(id: peerId)
+    let personalChannel: Signal<IosappEngine.EngineData.Item.Peer.PersonalChannel.Result, NoError> = context.engine.data.subscribe(
+        IosappEngine.EngineData.Item.Peer.Peer(id: peerId)
     )
-    |> mapToSignal { peer -> Signal<TelegramEngine.EngineData.Item.Peer.PersonalChannel.Result, NoError> in
+    |> mapToSignal { peer -> Signal<IosappEngine.EngineData.Item.Peer.PersonalChannel.Result, NoError> in
         guard let peer else {
             return .single(.known(nil))
         }
         if case .user = peer {
             return context.engine.data.subscribe(
-                TelegramEngine.EngineData.Item.Peer.PersonalChannel(id: peerId)
+                IosappEngine.EngineData.Item.Peer.PersonalChannel(id: peerId)
             )
         } else if case let .channel(channel) = peer, case let .broadcast(info) = channel.info, info.flags.contains(.hasMonoforum), let linkedMonoforumId = channel.linkedMonoforumId {
-            return .single(CachedTelegramPersonalChannel.known(TelegramPersonalChannel(peerId: linkedMonoforumId, subscriberCount: nil, topMessageId: nil)))
+            return .single(CachedIosappPersonalChannel.known(IosappPersonalChannel(peerId: linkedMonoforumId, subscriberCount: nil, topMessageId: nil)))
         }
         return .single(.known(nil))
     }
@@ -763,8 +763,8 @@ private func peerInfoPersonalOrLinkedChannel(context: AccountContext, peerId: En
         }
         
         return context.engine.data.subscribe(
-            TelegramEngine.EngineData.Item.Peer.RenderedPeer(id: personalChannelValue.peerId),
-            TelegramEngine.EngineData.Item.Peer.ParticipantCount(id: personalChannelValue.peerId)
+            IosappEngine.EngineData.Item.Peer.RenderedPeer(id: personalChannelValue.peerId),
+            IosappEngine.EngineData.Item.Peer.ParticipantCount(id: personalChannelValue.peerId)
         )
         |> mapToSignal { channelRenderedPeer, participantCount -> Signal<PeerInfoPersonalChannelData?, NoError> in
             guard let channelRenderedPeer, let channelPeer = channelRenderedPeer.peer else {
@@ -782,7 +782,7 @@ private func peerInfoPersonalOrLinkedChannel(context: AccountContext, peerId: En
             return combineLatest(
                 context.account.postbox.aroundMessageHistoryViewForLocation(.peer(peerId: channelPeer.id, threadId: nil), anchor: .upperBound, ignoreMessagesInTimestampRange: nil, ignoreMessageIds: Set(), count: 10, clipHoles: false, fixedCombinedReadStates: nil, topTaggedMessageIdNamespaces: Set(), tag: nil, appendMessagesFromTheSameGroup: false, namespaces: .not(Namespaces.Message.allNonRegular), orderStatistics: []),
                 context.engine.data.subscribe(
-                    TelegramEngine.EngineData.Item.Peer.StoryStats(id: channelPeer.id)
+                    IosappEngine.EngineData.Item.Peer.StoryStats(id: channelPeer.id)
                 ),
                 polledChannel
             )
@@ -886,11 +886,11 @@ func peerInfoScreenSettingsData(context: AccountContext, peerId: EnginePeer.Id, 
     let botsKey = ValueBoxKey(length: 8)
     botsKey.setInt64(0, value: 0)
     
-    let bots = context.engine.data.subscribe(TelegramEngine.EngineData.Item.ItemCache.Item(collectionId: Namespaces.CachedItemCollection.attachMenuBots, id: botsKey))
+    let bots = context.engine.data.subscribe(IosappEngine.EngineData.Item.ItemCache.Item(collectionId: Namespaces.CachedItemCollection.attachMenuBots, id: botsKey))
     |> mapToSignal { entry -> Signal<[AttachMenuBot], NoError> in
         let bots: [AttachMenuBots.Bot] = entry?.get(AttachMenuBots.self)?.bots ?? []
         return context.engine.data.subscribe(
-            EngineDataMap(bots.map(\.peerId).map(TelegramEngine.EngineData.Item.Peer.Peer.init))
+            EngineDataMap(bots.map(\.peerId).map(IosappEngine.EngineData.Item.Peer.Peer.init))
         )
         |> mapToSignal { peersMap -> Signal<[AttachMenuBot], NoError> in
             var result: [Signal<AttachMenuBot?, NoError>] = []
@@ -943,8 +943,8 @@ func peerInfoScreenSettingsData(context: AccountContext, peerId: EnginePeer.Id, 
         context.account.postbox.preferencesView(keys: [PreferencesKeys.appConfiguration]),
         context.engine.notices.getServerProvidedSuggestions(),
         context.engine.data.get(
-            TelegramEngine.EngineData.Item.Configuration.UserLimits(isPremium: false),
-            TelegramEngine.EngineData.Item.Configuration.UserLimits(isPremium: true)
+            IosappEngine.EngineData.Item.Configuration.UserLimits(isPremium: false),
+            IosappEngine.EngineData.Item.Configuration.UserLimits(isPremium: true)
         ),
         hasPassword,
         context.sharedContext.automaticMediaDownloadSettings
@@ -981,7 +981,7 @@ func peerInfoScreenSettingsData(context: AccountContext, peerId: EnginePeer.Id, 
         }
         
         let peer = peerView.peers[peerId]
-        let globalSettings = TelegramGlobalSettings(
+        let globalSettings = IosappGlobalSettings(
             suggestPhoneNumberConfirmation: suggestions.contains(.validatePhoneNumber),
             suggestPasswordConfirmation: suggestions.contains(.validatePassword),
             suggestPasswordSetup: suggestPasswordSetup,
@@ -1166,13 +1166,13 @@ func peerInfoScreenData(
             
             enum StatusInputData: Equatable {
                 case none
-                case presence(TelegramUserPresence)
+                case presence(IosappUserPresence)
                 case bot(subscriberCount: Int32?)
                 case support
             }
             let status = Signal<PeerInfoStatusData?, NoError> { subscriber in
                 class Manager {
-                    var currentValue: TelegramUserPresence? = nil
+                    var currentValue: IosappUserPresence? = nil
                     var updateManager: QueueLocalObject<PeerPresenceStatusManager>? = nil
                 }
                 let manager = Atomic<Manager>(value: Manager())
@@ -1197,7 +1197,7 @@ func peerInfoScreenData(
                 }
                 let disposable = (context.account.viewTracker.peerView(userPeerId, updateData: false)
                 |> map { view -> StatusInputData in
-                    guard let user = view.peers[userPeerId] as? TelegramUser else {
+                    guard let user = view.peers[userPeerId] as? IosappUser else {
                         return .none
                     }
                     if user.id == context.account.peerId {
@@ -1212,7 +1212,7 @@ func peerInfoScreenData(
                     if user.botInfo != nil {
                         return .bot(subscriberCount: user.subscriberCount)
                     }
-                    guard let presence = view.peerPresences[userPeerId] as? TelegramUserPresence else {
+                    guard let presence = view.peerPresences[userPeerId] as? IosappUserPresence else {
                         return .none
                     }
                     return .presence(presence)
@@ -1228,7 +1228,7 @@ func peerInfoScreenData(
                     case .support:
                         subscriber.putNext(PeerInfoStatusData(text: strings.Bot_GenericSupportStatus, isActivity: false, key: nil))
                     default:
-                        var presence: TelegramUserPresence?
+                        var presence: IosappUserPresence?
                         if case let .presence(value) = inputData {
                             presence = value
                         }
@@ -1261,7 +1261,7 @@ func peerInfoScreenData(
             
             var secretChatKeyFingerprint: Signal<EngineSecretChatKeyFingerprint?, NoError> = .single(nil)
             if let secretChatId = secretChatId {
-                secretChatKeyFingerprint = context.engine.data.subscribe(TelegramEngine.EngineData.Item.Peer.SecretChatKeyFingerprint(id: secretChatId))
+                secretChatKeyFingerprint = context.engine.data.subscribe(IosappEngine.EngineData.Item.Peer.SecretChatKeyFingerprint(id: secretChatId))
             }
             
             let storyListContext = PeerStoryListContext(account: context.account, peerId: peerId, isArchived: false, folderId: nil)
@@ -1305,7 +1305,7 @@ func peerInfoScreenData(
                 hasBotPreviewItems = .single(false)
             }
             
-            let accountIsPremium = context.engine.data.subscribe(TelegramEngine.EngineData.Item.Peer.Peer(id: context.account.peerId))
+            let accountIsPremium = context.engine.data.subscribe(IosappEngine.EngineData.Item.Peer.Peer(id: context.account.peerId))
             |> map { peer -> Bool in
                 return peer?.isPremium ?? false
             }
@@ -1313,7 +1313,7 @@ func peerInfoScreenData(
             
             let savedMessagesPeer: Signal<EnginePeer?, NoError>
             if peerId == context.account.peerId, case let .replyThread(replyThreadMessage) = chatLocation {
-                savedMessagesPeer = context.engine.data.subscribe(TelegramEngine.EngineData.Item.Peer.Peer(id: PeerId(replyThreadMessage.threadId)))
+                savedMessagesPeer = context.engine.data.subscribe(IosappEngine.EngineData.Item.Peer.Peer(id: PeerId(replyThreadMessage.threadId)))
             } else {
                 savedMessagesPeer = .single(nil)
             }
@@ -1321,7 +1321,7 @@ func peerInfoScreenData(
             let hasSavedMessages: Signal<Bool, NoError>
             let hasSavedMessagesChats: Signal<Bool, NoError>
             if case .peer = chatLocation {
-                hasSavedMessages = context.engine.data.subscribe(TelegramEngine.EngineData.Item.Messages.MessageCount(peerId: context.account.peerId, threadId: peerId.toInt64(), tag: MessageTags()))
+                hasSavedMessages = context.engine.data.subscribe(IosappEngine.EngineData.Item.Messages.MessageCount(peerId: context.account.peerId, threadId: peerId.toInt64(), tag: MessageTags()))
                 |> map { count -> Bool in
                     if let count, count != 0 {
                         return true
@@ -1335,7 +1335,7 @@ func peerInfoScreenData(
                     hasSavedMessagesChats = combineLatest(
                         context.engine.messages.savedMessagesHasPeersOtherThanSaved(),
                         context.engine.data.get(
-                            TelegramEngine.EngineData.Item.Peer.DisplaySavedChatsAsTopics()
+                            IosappEngine.EngineData.Item.Peer.DisplaySavedChatsAsTopics()
                         )
                     )
                     |> map { hasChats, displayAsTopics -> Bool in
@@ -1359,7 +1359,7 @@ func peerInfoScreenData(
                 if case .peer = chatLocation {
                     if peerId != context.account.peerId {
                         hasSavedMessageTags = context.engine.data.subscribe(
-                            TelegramEngine.EngineData.Item.Messages.SavedMessageTagStats(peerId: context.account.peerId, threadId: peerId.toInt64())
+                            IosappEngine.EngineData.Item.Messages.SavedMessageTagStats(peerId: context.account.peerId, threadId: peerId.toInt64())
                         )
                         |> map { tags -> Bool in
                             return !tags.isEmpty
@@ -1367,7 +1367,7 @@ func peerInfoScreenData(
                         |> distinctUntilChanged
                     } else {
                         hasSavedMessageTags = context.engine.data.subscribe(
-                            TelegramEngine.EngineData.Item.Messages.SavedMessageTagStats(peerId: context.account.peerId, threadId: nil)
+                            IosappEngine.EngineData.Item.Messages.SavedMessageTagStats(peerId: context.account.peerId, threadId: nil)
                         )
                         |> map { tags -> Bool in
                             return !tags.isEmpty
@@ -1376,7 +1376,7 @@ func peerInfoScreenData(
                     }
                 } else {
                     hasSavedMessageTags = context.engine.data.subscribe(
-                        TelegramEngine.EngineData.Item.Messages.SavedMessageTagStats(peerId: context.account.peerId, threadId: peerId.toInt64())
+                        IosappEngine.EngineData.Item.Messages.SavedMessageTagStats(peerId: context.account.peerId, threadId: peerId.toInt64())
                     )
                     |> map { tags -> Bool in
                         return !tags.isEmpty
@@ -1388,9 +1388,9 @@ func peerInfoScreenData(
             }
             
             let starsRevenueContextAndState = combineLatest(
-                context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: peerId))
+                context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: peerId))
                 |> distinctUntilChanged,
-                context.engine.data.subscribe(TelegramEngine.EngineData.Item.Peer.CanViewRevenue(id: peerId))
+                context.engine.data.subscribe(IosappEngine.EngineData.Item.Peer.CanViewRevenue(id: peerId))
                 |> distinctUntilChanged
             )
             |> mapToSignal { peer, canViewRevenue -> Signal<(StarsRevenueStatsContext?, StarsRevenueStats?), NoError> in
@@ -1413,9 +1413,9 @@ func peerInfoScreenData(
             }
             
             let revenueContextAndState = combineLatest(
-                context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: peerId))
+                context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: peerId))
                 |> distinctUntilChanged,
-                context.engine.data.subscribe(TelegramEngine.EngineData.Item.Peer.CanViewRevenue(id: peerId))
+                context.engine.data.subscribe(IosappEngine.EngineData.Item.Peer.CanViewRevenue(id: peerId))
                 |> distinctUntilChanged
             )
             |> mapToSignal { peer, canViewRevenue -> Signal<(StarsRevenueStatsContext?, StarsRevenueStats?), NoError> in
@@ -1436,7 +1436,7 @@ func peerInfoScreenData(
                 }
             }
             
-            let webAppPermissions: Signal<WebAppPermissionsState?, NoError> = context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: peerId))
+            let webAppPermissions: Signal<WebAppPermissionsState?, NoError> = context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: peerId))
             |> mapToSignal { peer -> Signal<WebAppPermissionsState?, NoError> in
                 if let peer, case let .user(user) = peer, let _ = user.botInfo {
                     return webAppPermissionsState(context: context, peerId: peerId)
@@ -1450,7 +1450,7 @@ func peerInfoScreenData(
             return combineLatest(
                 context.account.viewTracker.peerView(peerId, updateData: true),
                 peerInfoAvailableMediaPanes(context: context, peerId: peerId, chatLocation: chatLocation, isMyProfile: isMyProfile, chatLocationContextHolder: chatLocationContextHolder, sharedMediaFromForumTopic: sharedMediaFromForumTopic),
-                context.engine.data.subscribe(TelegramEngine.EngineData.Item.NotificationSettings.Global()),
+                context.engine.data.subscribe(IosappEngine.EngineData.Item.NotificationSettings.Global()),
                 secretChatKeyFingerprint,
                 status,
                 hasStories,
@@ -1483,7 +1483,7 @@ func peerInfoScreenData(
                         availablePanes?.append(.storyArchive)
                     }
                 } else if let hasStories {
-                    if hasStories, peerView.peers[peerView.peerId] is TelegramUser, peerView.peerId != context.account.peerId {
+                    if hasStories, peerView.peers[peerView.peerId] is IosappUser, peerView.peerId != context.account.peerId {
                         availablePanes?.insert(.stories, at: 0)
                     }
                     
@@ -1515,7 +1515,7 @@ func peerInfoScreenData(
                             }
                         }
                         
-                        if let user = peerView.peers[peerView.peerId] as? TelegramUser, let botInfo = user.botInfo, botInfo.flags.contains(.hasWebApp), botInfo.flags.contains(.canEdit) {
+                        if let user = peerView.peers[peerView.peerId] as? IosappUser, let botInfo = user.botInfo, botInfo.flags.contains(.hasWebApp), botInfo.flags.contains(.canEdit) {
                             availablePanes?.insert(.botPreview, at: 0)
                         } else if let cachedData = peerView.cachedData as? CachedUserData, let botPreview = cachedData.botPreview, !botPreview.items.isEmpty {
                             availablePanes?.insert(.botPreview, at: 0)
@@ -1547,9 +1547,9 @@ func peerInfoScreenData(
                     }
                 }
                 
-                var globalSettings: TelegramGlobalSettings?
+                var globalSettings: IosappGlobalSettings?
                 if let privacySettings {
-                    globalSettings = TelegramGlobalSettings(
+                    globalSettings = IosappGlobalSettings(
                         suggestPhoneNumberConfirmation: false,
                         suggestPasswordConfirmation: false,
                         suggestPasswordSetup: false,
@@ -1579,7 +1579,7 @@ func peerInfoScreenData(
                     savedMessagesPeer: savedMessagesPeer?._asPeer(),
                     cachedData: peerView.cachedData,
                     status: status,
-                    peerNotificationSettings: peerView.notificationSettings as? TelegramPeerNotificationSettings,
+                    peerNotificationSettings: peerView.notificationSettings as? IosappPeerNotificationSettings,
                     threadNotificationSettings: nil,
                     globalNotificationSettings: globalNotificationSettings,
                     isContact: peerView.peerIsContact,
@@ -1622,7 +1622,7 @@ func peerInfoScreenData(
         case .channel:
             let status = context.account.viewTracker.peerView(peerId, updateData: false)
             |> map { peerView -> PeerInfoStatusData? in
-                guard let _ = peerView.peers[peerId] as? TelegramChannel else {
+                guard let _ = peerView.peers[peerId] as? IosappChannel else {
                     return PeerInfoStatusData(text: strings.Channel_Status, isActivity: false, key: nil)
                 }
                 if let cachedChannelData = peerView.cachedData as? CachedChannelData, let memberCount = cachedChannelData.participantsSummary.memberCount, memberCount != 0 {
@@ -1649,7 +1649,7 @@ func peerInfoScreenData(
             }
             |> distinctUntilChanged
             
-            let accountIsPremium = context.engine.data.subscribe(TelegramEngine.EngineData.Item.Peer.Peer(id: context.account.peerId))
+            let accountIsPremium = context.engine.data.subscribe(IosappEngine.EngineData.Item.Peer.Peer(id: context.account.peerId))
             |> map { peer -> Bool in
                 return peer?.isPremium ?? false
             }
@@ -1658,7 +1658,7 @@ func peerInfoScreenData(
             let hasSavedMessages: Signal<Bool, NoError>
             let hasSavedMessagesChats: Signal<Bool, NoError>
             if case .peer = chatLocation {
-                hasSavedMessages = context.engine.data.subscribe(TelegramEngine.EngineData.Item.Messages.MessageCount(peerId: context.account.peerId, threadId: peerId.toInt64(), tag: MessageTags()))
+                hasSavedMessages = context.engine.data.subscribe(IosappEngine.EngineData.Item.Messages.MessageCount(peerId: context.account.peerId, threadId: peerId.toInt64(), tag: MessageTags()))
                 |> map { count -> Bool in
                     if let count, count != 0 {
                         return true
@@ -1680,7 +1680,7 @@ func peerInfoScreenData(
             let hasSavedMessageTags: Signal<Bool, NoError>
             if let peerId = chatLocation.peerId {
                 hasSavedMessageTags = context.engine.data.subscribe(
-                    TelegramEngine.EngineData.Item.Messages.SavedMessageTagStats(peerId: context.account.peerId, threadId: peerId.toInt64())
+                    IosappEngine.EngineData.Item.Messages.SavedMessageTagStats(peerId: context.account.peerId, threadId: peerId.toInt64())
                 )
                 |> map { tags -> Bool in
                     return !tags.isEmpty
@@ -1693,7 +1693,7 @@ func peerInfoScreenData(
             let isPremiumRequiredForStoryPosting: Signal<Bool, NoError> = isPremiumRequiredForStoryPosting(context: context)
             
             let starsRevenueContextAndState = context.engine.data.subscribe(
-                TelegramEngine.EngineData.Item.Peer.CanViewStarsRevenue(id: peerId)
+                IosappEngine.EngineData.Item.Peer.CanViewStarsRevenue(id: peerId)
             )
             |> distinctUntilChanged
             |> mapToSignal { canViewStarsRevenue -> Signal<(StarsRevenueStatsContext?, StarsRevenueStats?), NoError> in
@@ -1708,7 +1708,7 @@ func peerInfoScreenData(
             }
             
             let revenueContextAndState = context.engine.data.subscribe(
-                TelegramEngine.EngineData.Item.Peer.CanViewRevenue(id: peerId)
+                IosappEngine.EngineData.Item.Peer.CanViewRevenue(id: peerId)
             )
             |> distinctUntilChanged
             |> mapToSignal { canViewRevenue -> Signal<(StarsRevenueStatsContext?, StarsRevenueStats?), NoError> in
@@ -1730,7 +1730,7 @@ func peerInfoScreenData(
             return combineLatest(
                 context.account.viewTracker.peerView(peerId, updateData: true),
                 peerInfoAvailableMediaPanes(context: context, peerId: peerId, chatLocation: chatLocation, isMyProfile: false, chatLocationContextHolder: chatLocationContextHolder, sharedMediaFromForumTopic: sharedMediaFromForumTopic),
-                context.engine.data.subscribe(TelegramEngine.EngineData.Item.NotificationSettings.Global()),
+                context.engine.data.subscribe(IosappEngine.EngineData.Item.NotificationSettings.Global()),
                 status,
                 invitationsContextPromise.get(),
                 invitationsStatePromise.get(),
@@ -1795,12 +1795,12 @@ func peerInfoScreenData(
                 }
                 
                 var monoforumPeer: Peer?
-                if let channel = peerViewMainPeer(peerView) as? TelegramChannel, case let .broadcast(info) = channel.info, info.flags.contains(.hasMonoforum), let linkedMonoforumId = channel.linkedMonoforumId {
+                if let channel = peerViewMainPeer(peerView) as? IosappChannel, case let .broadcast(info) = channel.info, info.flags.contains(.hasMonoforum), let linkedMonoforumId = channel.linkedMonoforumId {
                     monoforumPeer = peerView.peers[linkedMonoforumId]
                 }
                 
                 var canManageInvitations = false
-                if let channel = peerViewMainPeer(peerView) as? TelegramChannel, let _ = peerView.cachedData as? CachedChannelData, channel.flags.contains(.isCreator) || (channel.adminRights?.rights.contains(.canInviteUsers) == true) {
+                if let channel = peerViewMainPeer(peerView) as? IosappChannel, let _ = peerView.cachedData as? CachedChannelData, channel.flags.contains(.isCreator) || (channel.adminRights?.rights.contains(.canInviteUsers) == true) {
                     canManageInvitations = true
                 }
                 if currentInvitationsContext == nil {
@@ -1825,7 +1825,7 @@ func peerInfoScreenData(
                     savedMessagesPeer: nil,
                     cachedData: peerView.cachedData,
                     status: status,
-                    peerNotificationSettings: peerView.notificationSettings as? TelegramPeerNotificationSettings,
+                    peerNotificationSettings: peerView.notificationSettings as? IosappPeerNotificationSettings,
                     threadNotificationSettings: nil,
                     globalNotificationSettings: globalNotificationSettings,
                     isContact: peerView.peerIsContact,
@@ -1870,7 +1870,7 @@ func peerInfoScreenData(
             if peerId.namespace == Namespaces.Peer.CloudChannel {
                 onlineMemberCount = context.account.viewTracker.peerView(groupId, updateData: false)
                 |> map { view -> Bool? in
-                    if let cachedData = view.cachedData as? CachedChannelData, let peer = peerViewMainPeer(view) as? TelegramChannel {
+                    if let cachedData = view.cachedData as? CachedChannelData, let peer = peerViewMainPeer(view) as? IosappChannel {
                         if case .broadcast = peer.info {
                             return nil
                         } else if let memberCount = cachedData.participantsSummary.memberCount, memberCount > 50 {
@@ -1919,12 +1919,12 @@ func peerInfoScreenData(
                     } else if memberCount > 0 {
                         return PeerInfoStatusData(text: strings.Conversation_StatusMembers(Int32(memberCount)), isActivity: false, key: nil)
                     }
-                } else if let group = peerView.peers[groupId] as? TelegramGroup, let cachedGroupData = peerView.cachedData as? CachedGroupData {
+                } else if let group = peerView.peers[groupId] as? IosappGroup, let cachedGroupData = peerView.cachedData as? CachedGroupData {
                     var onlineCount = 0
                     if let participants = cachedGroupData.participants {
                         let timestamp = CFAbsoluteTimeGetCurrent() + NSTimeIntervalSince1970
                         for participant in participants.participants {
-                            if let presence = peerView.peerPresences[participant.peerId] as? TelegramUserPresence {
+                            if let presence = peerView.peerPresences[participant.peerId] as? IosappUserPresence {
                                 let relativeStatus = relativeUserPresenceStatus(EnginePeer.Presence(presence), relativeTo: Int32(timestamp))
                                 switch relativeStatus {
                                 case .online:
@@ -2004,7 +2004,7 @@ func peerInfoScreenData(
                 threadData = .single(nil)
             }
             
-            let accountIsPremium = context.engine.data.subscribe(TelegramEngine.EngineData.Item.Peer.Peer(id: context.account.peerId))
+            let accountIsPremium = context.engine.data.subscribe(IosappEngine.EngineData.Item.Peer.Peer(id: context.account.peerId))
             |> map { peer -> Bool in
                 return peer?.isPremium ?? false
             }
@@ -2013,7 +2013,7 @@ func peerInfoScreenData(
             let hasSavedMessages: Signal<Bool, NoError>
             let hasSavedMessagesChats: Signal<Bool, NoError>
             if case .peer = chatLocation {
-                hasSavedMessages = context.engine.data.subscribe(TelegramEngine.EngineData.Item.Messages.MessageCount(peerId: context.account.peerId, threadId: peerId.toInt64(), tag: MessageTags()))
+                hasSavedMessages = context.engine.data.subscribe(IosappEngine.EngineData.Item.Messages.MessageCount(peerId: context.account.peerId, threadId: peerId.toInt64(), tag: MessageTags()))
                 |> map { count -> Bool in
                     if let count, count != 0 {
                         return true
@@ -2035,7 +2035,7 @@ func peerInfoScreenData(
             let hasSavedMessageTags: Signal<Bool, NoError>
             if let peerId = chatLocation.peerId {
                 hasSavedMessageTags = context.engine.data.subscribe(
-                    TelegramEngine.EngineData.Item.Messages.SavedMessageTagStats(peerId: context.account.peerId, threadId: peerId.toInt64())
+                    IosappEngine.EngineData.Item.Messages.SavedMessageTagStats(peerId: context.account.peerId, threadId: peerId.toInt64())
                 )
                 |> map { tags -> Bool in
                     return !tags.isEmpty
@@ -2046,7 +2046,7 @@ func peerInfoScreenData(
             }
             
             let starsRevenueContextAndState = context.engine.data.subscribe(
-                TelegramEngine.EngineData.Item.Peer.CanViewStarsRevenue(id: peerId)
+                IosappEngine.EngineData.Item.Peer.CanViewStarsRevenue(id: peerId)
             )
             |> distinctUntilChanged
             |> mapToSignal { canViewStarsRevenue -> Signal<(StarsRevenueStatsContext?, StarsRevenueStats?), NoError> in
@@ -2065,7 +2065,7 @@ func peerInfoScreenData(
             return combineLatest(queue: .mainQueue(),
                 context.account.viewTracker.peerView(groupId, updateData: true),
                 peerInfoAvailableMediaPanes(context: context, peerId: groupId, chatLocation: chatLocation, isMyProfile: false, chatLocationContextHolder: chatLocationContextHolder, sharedMediaFromForumTopic: sharedMediaFromForumTopic),
-                context.engine.data.subscribe(TelegramEngine.EngineData.Item.NotificationSettings.Global()),
+                context.engine.data.subscribe(IosappEngine.EngineData.Item.NotificationSettings.Global()),
                 status,
                 membersData,
                 invitationsContextPromise.get(),
@@ -2089,7 +2089,7 @@ func peerInfoScreenData(
                 }
                 
                 var monoforumPeer: Peer?
-                if let channel = peerViewMainPeer(peerView) as? TelegramChannel, case let .broadcast(info) = channel.info, info.flags.contains(.hasMonoforum), let linkedMonoforumId = channel.linkedMonoforumId {
+                if let channel = peerViewMainPeer(peerView) as? IosappChannel, case let .broadcast(info) = channel.info, info.flags.contains(.hasMonoforum), let linkedMonoforumId = channel.linkedMonoforumId {
                     monoforumPeer = peerView.peers[linkedMonoforumId]
                 }
                                 
@@ -2121,7 +2121,7 @@ func peerInfoScreenData(
                 }
                                 
                 var canManageInvitations = false
-                if let group = peerViewMainPeer(peerView) as? TelegramGroup {
+                if let group = peerViewMainPeer(peerView) as? IosappGroup {
                     let previousValue = wasUpgradedGroup.swap(group.migrationReference != nil)
                     if group.migrationReference != nil, let previousValue, !previousValue {
                         return .never()
@@ -2132,7 +2132,7 @@ func peerInfoScreenData(
                     } else if case let .admin(rights, _) = group.role, rights.rights.contains(.canInviteUsers) {
                         canManageInvitations = true
                     }
-                } else if let channel = peerViewMainPeer(peerView) as? TelegramChannel, channel.flags.contains(.isCreator) || (channel.adminRights?.rights.contains(.canInviteUsers) == true) {
+                } else if let channel = peerViewMainPeer(peerView) as? IosappChannel, channel.flags.contains(.isCreator) || (channel.adminRights?.rights.contains(.canInviteUsers) == true) {
                     canManageInvitations = true
                 }
                 if currentInvitationsContext == nil {
@@ -2151,7 +2151,7 @@ func peerInfoScreenData(
                     }
                 }
                 
-                let peerNotificationSettings = peerView.notificationSettings as? TelegramPeerNotificationSettings
+                let peerNotificationSettings = peerView.notificationSettings as? IosappPeerNotificationSettings
                 let threadNotificationSettings = threadData?.notificationSettings
                 
                 let appConfiguration: AppConfiguration = preferencesView.values[PreferencesKeys.appConfiguration]?.get(AppConfiguration.self) ?? .defaultValue
@@ -2220,9 +2220,9 @@ func canEditPeerInfo(context: AccountContext, peer: Peer?, chatLocation: ChatLoc
     if context.account.peerId == peer?.id {
         return true
     }
-    if let user = peer as? TelegramUser, let botInfo = user.botInfo {
+    if let user = peer as? IosappUser, let botInfo = user.botInfo {
         return botInfo.flags.contains(.canEdit)
-    } else if let channel = peer as? TelegramChannel {
+    } else if let channel = peer as? IosappChannel {
         if let threadData = threadData {
             if chatLocation.threadId == 1 {
                 return false
@@ -2238,7 +2238,7 @@ func canEditPeerInfo(context: AccountContext, peer: Peer?, chatLocation: ChatLoc
                 return true
             }
         }
-    } else if let group = peer as? TelegramGroup {
+    } else if let group = peer as? IosappGroup {
         switch group.role {
         case .admin, .creator:
             return true
@@ -2271,17 +2271,17 @@ func availableActionsForMemberOfPeer(accountPeerId: PeerId, peer: Peer?, member:
     if peer == nil {
         result.insert(.logout)
     } else if member.id == accountPeerId {
-        if let channel = peer as? TelegramChannel {
+        if let channel = peer as? IosappChannel {
             if channel.hasPermission(.editRank) {
                 result.insert(.editRank)
             }
-        } else if let group = peer as? TelegramGroup {
+        } else if let group = peer as? IosappGroup {
             if !group.hasBannedPermission(.banEditRank) {
                 result.insert(.editRank)
             }
         }
     } else {
-        if let channel = peer as? TelegramChannel {
+        if let channel = peer as? IosappChannel {
             if channel.flags.contains(.isCreator) {
                 if !channel.flags.contains(.isGigagroup) {
                     result.insert(.restrict)
@@ -2325,7 +2325,7 @@ func availableActionsForMemberOfPeer(accountPeerId: PeerId, peer: Peer?, member:
                     break
                 }
             }
-        } else if let group = peer as? TelegramGroup {
+        } else if let group = peer as? IosappGroup {
             switch group.role {
             case .creator:
                 result.insert(.restrict)
@@ -2385,7 +2385,7 @@ func peerInfoHeaderButtonIsHiddenWhileExpanded(buttonKey: PeerInfoHeaderButtonKe
 
 func peerInfoHeaderActionButtons(peer: Peer?, isSecretChat: Bool, isContact: Bool) -> [PeerInfoHeaderButtonKey] {
     var result: [PeerInfoHeaderButtonKey] = []
-    if !isContact && !isSecretChat, let user = peer as? TelegramUser, user.botInfo == nil {
+    if !isContact && !isSecretChat, let user = peer as? IosappUser, user.botInfo == nil {
         result = [.message, .addContact]
     }
     
@@ -2398,7 +2398,7 @@ func peerInfoHeaderActionButtons(peer: Peer?, isSecretChat: Bool, isContact: Boo
 
 func peerInfoHeaderButtons(peer: Peer?, cachedData: CachedPeerData?, isOpenedFromChat: Bool, isExpanded: Bool, videoCallsEnabled: Bool, isSecretChat: Bool, isContact: Bool, threadInfo: EngineMessageHistoryThread.Info?) -> [PeerInfoHeaderButtonKey] {
     var result: [PeerInfoHeaderButtonKey] = []
-    if let user = peer as? TelegramUser {
+    if let user = peer as? IosappUser {
         if !isOpenedFromChat {
             result.append(.message)
         }
@@ -2432,7 +2432,7 @@ func peerInfoHeaderButtons(peer: Peer?, cachedData: CachedPeerData?, isOpenedFro
         } else {
             result.append(.more)
         }
-    } else if let channel = peer as? TelegramChannel {
+    } else if let channel = peer as? IosappChannel {
         if let _ = threadInfo {
             result.append(.mute)
             result.append(.search)
@@ -2507,7 +2507,7 @@ func peerInfoHeaderButtons(peer: Peer?, cachedData: CachedPeerData?, isOpenedFro
                 }
             }
         }
-    } else if let group = peer as? TelegramGroup {
+    } else if let group = peer as? IosappGroup {
         let hasVoiceChat = group.flags.contains(.hasVoiceChat)
         let canStartVoiceChat: Bool
         
@@ -2535,7 +2535,7 @@ func peerInfoHeaderButtons(peer: Peer?, cachedData: CachedPeerData?, isOpenedFro
 }
 
 func peerInfoCanEdit(peer: Peer?, chatLocation: ChatLocation, threadData: MessageHistoryThreadData?, cachedData: CachedPeerData?, isContact: Bool?) -> Bool {
-    if let user = peer as? TelegramUser {
+    if let user = peer as? IosappUser {
         if user.isDeleted {
             return false
         }
@@ -2546,7 +2546,7 @@ func peerInfoCanEdit(peer: Peer?, chatLocation: ChatLocation, threadData: Messag
             return false
         }
         return true
-    } else if let peer = peer as? TelegramChannel {
+    } else if let peer = peer as? IosappChannel {
         if peer.isForumOrMonoForum, let threadData = threadData {
             if peer.flags.contains(.isCreator) {
                 return true
@@ -2567,7 +2567,7 @@ func peerInfoCanEdit(peer: Peer?, chatLocation: ChatLocation, threadData: Messag
             }
             return false
         }
-    } else if let peer = peer as? TelegramGroup {
+    } else if let peer = peer as? IosappGroup {
         if case .creator = peer.role {
             return true
         } else if case let .admin(rights, _) = peer.role {
@@ -2582,19 +2582,19 @@ func peerInfoCanEdit(peer: Peer?, chatLocation: ChatLocation, threadData: Messag
     return false
 }
 
-func peerInfoIsChatMuted(peer: Peer?, peerNotificationSettings: TelegramPeerNotificationSettings?, threadNotificationSettings: TelegramPeerNotificationSettings?, globalNotificationSettings: EngineGlobalNotificationSettings?) -> Bool {
-    func isPeerMuted(peer: Peer?, peerNotificationSettings: TelegramPeerNotificationSettings?, globalNotificationSettings: EngineGlobalNotificationSettings?) -> Bool {
+func peerInfoIsChatMuted(peer: Peer?, peerNotificationSettings: IosappPeerNotificationSettings?, threadNotificationSettings: IosappPeerNotificationSettings?, globalNotificationSettings: EngineGlobalNotificationSettings?) -> Bool {
+    func isPeerMuted(peer: Peer?, peerNotificationSettings: IosappPeerNotificationSettings?, globalNotificationSettings: EngineGlobalNotificationSettings?) -> Bool {
         var peerIsMuted = false
         if let peerNotificationSettings {
             if case .muted = peerNotificationSettings.muteState {
                 peerIsMuted = true
             } else if case .default = peerNotificationSettings.muteState, let globalNotificationSettings {
                 if let peer {
-                    if peer is TelegramUser {
+                    if peer is IosappUser {
                         peerIsMuted = !globalNotificationSettings.privateChats.enabled
-                    } else if peer is TelegramGroup {
+                    } else if peer is IosappGroup {
                         peerIsMuted = !globalNotificationSettings.groupChats.enabled
-                    } else if let channel = peer as? TelegramChannel {
+                    } else if let channel = peer as? IosappChannel {
                         switch channel.info {
                         case .group:
                             peerIsMuted = !globalNotificationSettings.groupChats.enabled

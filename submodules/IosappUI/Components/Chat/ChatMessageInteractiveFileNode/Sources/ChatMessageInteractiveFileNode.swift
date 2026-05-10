@@ -54,7 +54,7 @@ public final class ChatMessageInteractiveFileNode: ASDisplayNode {
         public let attributes: ChatMessageEntryAttributes
         public let isPinned: Bool
         public let forcedIsEdited: Bool
-        public let file: TelegramMediaFile
+        public let file: IosappMediaFile
         public let automaticDownload: Bool
         public let incoming: Bool
         public let isRecentActions: Bool
@@ -78,7 +78,7 @@ public final class ChatMessageInteractiveFileNode: ASDisplayNode {
             attributes: ChatMessageEntryAttributes,
             isPinned: Bool,
             forcedIsEdited: Bool,
-            file: TelegramMediaFile,
+            file: IosappMediaFile,
             automaticDownload: Bool,
             incoming: Bool,
             isRecentActions: Bool,
@@ -195,7 +195,7 @@ public final class ChatMessageInteractiveFileNode: ASDisplayNode {
     private var message: Message?
     private var arguments: Arguments?
     private var presentationData: ChatPresentationData?
-    private var file: TelegramMediaFile?
+    private var file: IosappMediaFile?
     private var progressFrame: CGRect?
     private var streamingCacheStatusFrame: CGRect?
     private var fileIconImage: UIImage?
@@ -423,12 +423,12 @@ public final class ChatMessageInteractiveFileNode: ASDisplayNode {
                 if context.sharedContext.immediateExperimentalUISettings.localTranscription {
                     let appLocale = presentationData.strings.baseLanguageCode
                     
-                    let signal: Signal<LocallyTranscribedAudio?, NoError> = context.engine.data.get(TelegramEngine.EngineData.Item.Messages.Message(id: message.id))
+                    let signal: Signal<LocallyTranscribedAudio?, NoError> = context.engine.data.get(IosappEngine.EngineData.Item.Messages.Message(id: message.id))
                     |> mapToSignal { message -> Signal<String?, NoError> in
                         guard let message = message else {
                             return .single(nil)
                         }
-                        guard let file = message.media.first(where: { $0 is TelegramMediaFile }) as? TelegramMediaFile else {
+                        guard let file = message.media.first(where: { $0 is IosappMediaFile }) as? IosappMediaFile else {
                             return .single(nil)
                         }
                         return context.account.postbox.mediaBox.resourceData(id: file.resource.id)
@@ -600,7 +600,7 @@ public final class ChatMessageInteractiveFileNode: ASDisplayNode {
                 
                 var hasThumbnail = (!arguments.file.previewRepresentations.isEmpty || arguments.file.immediateThumbnailData != nil) && !arguments.file.isMusic && !arguments.file.isVoice && !arguments.file.isInstantVideo
                 var hasThumbnailImage = !arguments.file.previewRepresentations.isEmpty || arguments.file.immediateThumbnailData != nil
-                if case let .update(media) = arguments.attributes.updatingMedia?.media, let file = media.media as? TelegramMediaFile {
+                if case let .update(media) = arguments.attributes.updatingMedia?.media, let file = media.media as? IosappMediaFile {
                     hasThumbnail = largestImageRepresentation(file.previewRepresentations) != nil || file.immediateThumbnailData != nil || file.mimeType.hasPrefix("image/")
                     hasThumbnailImage = hasThumbnail
                 }
@@ -916,7 +916,7 @@ public final class ChatMessageInteractiveFileNode: ASDisplayNode {
                         } else if let attribute = attribute as? ViewCountMessageAttribute {
                             viewCount = attribute.count
                         } else if let attribute = attribute as? ReplyThreadMessageAttribute, case .peer = arguments.chatLocation {
-                            if let channel = arguments.message.peers[arguments.message.id.peerId] as? TelegramChannel, case .group = channel.info {
+                            if let channel = arguments.message.peers[arguments.message.id.peerId] as? IosappChannel, case .group = channel.info {
                                 dateReplies = Int(attribute.count)
                             }
                         } else if let attribute = attribute as? PaidStarsMessageAttribute, arguments.message.id.peerId.namespace == Namespaces.Peer.CloudChannel {

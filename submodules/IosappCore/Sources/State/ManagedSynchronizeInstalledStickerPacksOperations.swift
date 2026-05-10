@@ -413,9 +413,9 @@ private func synchronizeInstalledStickerPacks(transaction: Transaction, postbox:
 func debugFetchAllStickers(account: Account) -> Signal<Never, NoError> {
     let orderedItemListCollectionIds: [Int32] = [Namespaces.OrderedItemList.CloudSavedStickers]
     let namespaces: [ItemCollectionId.Namespace] = [Namespaces.ItemCollection.CloudStickerPacks]
-    let stickerItems: Signal<[TelegramMediaFile], NoError> = account.postbox.itemCollectionsView(orderedItemListCollectionIds: orderedItemListCollectionIds, namespaces: namespaces, aroundIndex: nil, count: 10000000)
-    |> map { view -> [TelegramMediaFile] in
-        var files: [TelegramMediaFile] = []
+    let stickerItems: Signal<[IosappMediaFile], NoError> = account.postbox.itemCollectionsView(orderedItemListCollectionIds: orderedItemListCollectionIds, namespaces: namespaces, aroundIndex: nil, count: 10000000)
+    |> map { view -> [IosappMediaFile] in
+        var files: [IosappMediaFile] = []
         for entry in view.entries {
             guard let item = entry.item as? StickerPackItem else {
                 continue

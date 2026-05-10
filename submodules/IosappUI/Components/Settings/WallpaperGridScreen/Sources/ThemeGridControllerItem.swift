@@ -51,10 +51,10 @@ private func generateBorderImage(theme: PresentationTheme, bordered: Bool, selec
 final class ThemeGridControllerItem: GridItem {
     let context: AccountContext
     let theme: PresentationTheme?
-    let wallpaper: TelegramWallpaper
+    let wallpaper: IosappWallpaper
     let wallpaperId: ThemeGridControllerEntry.StableId
     let isEmpty: Bool
-    let emojiFile: TelegramMediaFile?
+    let emojiFile: IosappMediaFile?
     let channelMode: Bool
     let index: Int
     let editable: Bool
@@ -63,7 +63,7 @@ final class ThemeGridControllerItem: GridItem {
     
     let section: GridSection? = nil
     
-    init(context: AccountContext, theme: PresentationTheme? = nil, wallpaper: TelegramWallpaper, wallpaperId: ThemeGridControllerEntry.StableId, isEmpty: Bool = false, emojiFile: TelegramMediaFile? = nil, channelMode: Bool = false, index: Int, editable: Bool, selected: Bool, interaction: ThemeGridControllerInteraction) {
+    init(context: AccountContext, theme: PresentationTheme? = nil, wallpaper: IosappWallpaper, wallpaperId: ThemeGridControllerEntry.StableId, isEmpty: Bool = false, emojiFile: IosappMediaFile? = nil, channelMode: Bool = false, index: Int, editable: Bool, selected: Bool, interaction: ThemeGridControllerInteraction) {
         self.context = context
         self.theme = theme
         self.wallpaper = wallpaper

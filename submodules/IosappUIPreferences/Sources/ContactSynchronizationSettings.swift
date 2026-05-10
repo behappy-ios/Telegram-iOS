@@ -45,7 +45,7 @@ public struct ContactSynchronizationSettings: Equatable, Codable {
     }
 }
 
-public func updateContactSettingsInteractively(accountManager: AccountManager<TelegramAccountManagerTypes>, _ f: @escaping (ContactSynchronizationSettings) -> ContactSynchronizationSettings) -> Signal<Void, NoError> {
+public func updateContactSettingsInteractively(accountManager: AccountManager<IosappAccountManagerTypes>, _ f: @escaping (ContactSynchronizationSettings) -> ContactSynchronizationSettings) -> Signal<Void, NoError> {
     return accountManager.transaction { transaction -> Void in
         transaction.updateSharedData(ApplicationSpecificSharedDataKeys.contactSynchronizationSettings, { entry in
             let currentSettings: ContactSynchronizationSettings

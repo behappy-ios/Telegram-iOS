@@ -28,9 +28,9 @@ import GenerateStickerPlaceholderImage
 
 public struct EmojiComponentReactionItem: Equatable {
     public var reaction: MessageReaction.Reaction
-    public var file: TelegramMediaFile.Accessor
+    public var file: IosappMediaFile.Accessor
     
-    public init(reaction: MessageReaction.Reaction, file: TelegramMediaFile.Accessor) {
+    public init(reaction: MessageReaction.Reaction, file: IosappMediaFile.Accessor) {
         self.reaction = reaction
         self.file = file
     }
@@ -63,7 +63,7 @@ public final class EntityKeyboardAnimationData: Equatable {
     public enum Resource: Equatable {
         case resource(MediaResourceReference)
         case stickerPackThumbnail(id: Int64, accessHash: Int64, info: StickerPackCollectionInfo.Accessor)
-        case file(PartialMediaReference?, TelegramMediaFile.Accessor)
+        case file(PartialMediaReference?, IosappMediaFile.Accessor)
         
         func _parse() -> MediaResourceReference? {
             switch self {
@@ -105,7 +105,7 @@ public final class EntityKeyboardAnimationData: Equatable {
         self.particleColor = particleColor
     }
     
-    public convenience init(file: TelegramMediaFile.Accessor, isReaction: Bool = false, partialReference: PartialMediaReference? = nil) {
+    public convenience init(file: IosappMediaFile.Accessor, isReaction: Bool = false, partialReference: PartialMediaReference? = nil) {
         let type: ItemType
         if file.isVideoSticker || file.isVideoEmoji {
             type = .video(isVP9: true)
@@ -123,7 +123,7 @@ public final class EntityKeyboardAnimationData: Equatable {
     }
     
     public convenience init?(gift: StarGift.UniqueGift) {
-        var file: TelegramMediaFile?
+        var file: IosappMediaFile?
         var color: UIColor?
         for attribute in gift.attributes {
             if case let .model(_, fileValue, _, _) = attribute {
@@ -167,7 +167,7 @@ public final class EntityKeyboardAnimationData: Equatable {
 }
 
 public protocol EmojiContentPeekBehavior: AnyObject {
-    func setGestureRecognizerEnabled(view: UIView, isEnabled: Bool, itemAtPoint: @escaping (CGPoint) -> (AnyHashable, CALayer, TelegramMediaFile)?)
+    func setGestureRecognizerEnabled(view: UIView, isEnabled: Bool, itemAtPoint: @escaping (CGPoint) -> (AnyHashable, CALayer, IosappMediaFile)?)
 }
 
 public protocol EmojiCustomContentView: UIView {
@@ -390,7 +390,7 @@ public final class EmojiPagerContentComponent: Component {
             case locked
             case premium
             case text(String)
-            case customFile(TelegramMediaFile.Accessor)
+            case customFile(IosappMediaFile.Accessor)
         }
         
         public enum TintMode: Equatable {
@@ -402,7 +402,7 @@ public final class EmojiPagerContentComponent: Component {
         
         public let animationData: EntityKeyboardAnimationData?
         public let content: ItemContent
-        public let itemFile: TelegramMediaFile.Accessor?
+        public let itemFile: IosappMediaFile.Accessor?
         public let itemGift: StarGift.UniqueGift?
         public let subgroupId: Int32?
         public let icon: Icon
@@ -411,7 +411,7 @@ public final class EmojiPagerContentComponent: Component {
         public init(
             animationData: EntityKeyboardAnimationData?,
             content: ItemContent,
-            itemFile: TelegramMediaFile.Accessor?,
+            itemFile: IosappMediaFile.Accessor?,
             itemGift: StarGift.UniqueGift? = nil,
             subgroupId: Int32?,
             icon: Icon,
@@ -582,9 +582,9 @@ public final class EmojiPagerContentComponent: Component {
     
     public final class EmptySearchResults: Equatable {
         public let text: String
-        public let iconFile: TelegramMediaFile?
+        public let iconFile: IosappMediaFile?
         
-        public init(text: String, iconFile: TelegramMediaFile?) {
+        public init(text: String, iconFile: IosappMediaFile?) {
             self.text = text
             self.iconFile = iconFile
         }

@@ -31,12 +31,12 @@ public final class EmojiSuggestionsComponent: Component {
         }
     }
     
-    public static func suggestionData(context: AccountContext, isSavedMessages: Bool, query: String) -> Signal<[TelegramMediaFile], NoError> {
+    public static func suggestionData(context: AccountContext, isSavedMessages: Bool, query: String) -> Signal<[IosappMediaFile], NoError> {
         let hasPremium: Signal<Bool, NoError>
         if isSavedMessages {
             hasPremium = .single(true)
         } else {
-            hasPremium = context.engine.data.subscribe(TelegramEngine.EngineData.Item.Peer.Peer(id: context.account.peerId))
+            hasPremium = context.engine.data.subscribe(IosappEngine.EngineData.Item.Peer.Peer(id: context.account.peerId))
             |> map { peer -> Bool in
                 guard case let .user(user) = peer else {
                     return false
@@ -53,7 +53,7 @@ public final class EmojiSuggestionsComponent: Component {
             context.sharedContext.accountManager.sharedData(keys: [ApplicationSpecificSharedDataKeys.stickerSettings])
         )
         |> take(1)
-        |> map { view, featuredEmojiPacks, hasPremium, sharedData -> [TelegramMediaFile] in
+        |> map { view, featuredEmojiPacks, hasPremium, sharedData -> [IosappMediaFile] in
             var stickerSettings = StickerSettings.defaultSettings
             if let value = sharedData.entries[ApplicationSpecificSharedDataKeys.stickerSettings]?.get(StickerSettings.self) {
                stickerSettings = value
@@ -63,7 +63,7 @@ public final class EmojiSuggestionsComponent: Component {
                 return []
             }
             
-            var result: [TelegramMediaFile] = []
+            var result: [IosappMediaFile] = []
             
             let normalizedQuery = query.basicEmoji.0
             
@@ -103,12 +103,12 @@ public final class EmojiSuggestionsComponent: Component {
         }
     }
     
-    public static func searchData(context: AccountContext, isSavedMessages: Bool, query: String) -> Signal<[TelegramMediaFile], NoError> {
+    public static func searchData(context: AccountContext, isSavedMessages: Bool, query: String) -> Signal<[IosappMediaFile], NoError> {
         let hasPremium: Signal<Bool, NoError>
         if isSavedMessages {
             hasPremium = .single(true)
         } else {
-            hasPremium = context.engine.data.subscribe(TelegramEngine.EngineData.Item.Peer.Peer(id: context.account.peerId))
+            hasPremium = context.engine.data.subscribe(IosappEngine.EngineData.Item.Peer.Peer(id: context.account.peerId))
             |> map { peer -> Bool in
                 guard case let .user(user) = peer else {
                     return false
@@ -123,8 +123,8 @@ public final class EmojiSuggestionsComponent: Component {
                 context.account.postbox.itemCollectionsView(orderedItemListCollectionIds: [], namespaces: [Namespaces.ItemCollection.CloudEmojiPacks], aroundIndex: nil, count: 10000000),
                 hasPremium
             )
-            |> map { view, hasPremium -> [TelegramMediaFile] in
-                var result: [TelegramMediaFile] = []
+            |> map { view, hasPremium -> [IosappMediaFile] in
+                var result: [IosappMediaFile] = []
                 
                 for entry in view.entries {
                     guard let item = entry.item as? StickerPackItem, !item.file.isPremiumEmoji || hasPremium else {
@@ -157,13 +157,13 @@ public final class EmojiSuggestionsComponent: Component {
             }
             
             return signal
-            |> mapToSignal { keywords -> Signal<[TelegramMediaFile], NoError> in
+            |> mapToSignal { keywords -> Signal<[IosappMediaFile], NoError> in
                 return combineLatest(
                     context.account.postbox.itemCollectionsView(orderedItemListCollectionIds: [], namespaces: [Namespaces.ItemCollection.CloudEmojiPacks], aroundIndex: nil, count: 10000000),
                     hasPremium
                 )
-                |> map { view, hasPremium -> [TelegramMediaFile] in
-                    var result: [TelegramMediaFile] = []
+                |> map { view, hasPremium -> [IosappMediaFile] in
+                    var result: [IosappMediaFile] = []
                     
                     var allEmoticons: [String: String] = [:]
                     for keyword in keywords {
@@ -195,8 +195,8 @@ public final class EmojiSuggestionsComponent: Component {
     public let theme: Theme
     public let animationCache: AnimationCache
     public let animationRenderer: MultiAnimationRenderer
-    public let files: [TelegramMediaFile]
-    public let action: (TelegramMediaFile) -> Void
+    public let files: [IosappMediaFile]
+    public let action: (IosappMediaFile) -> Void
     
     public init(
         context: AccountContext,
@@ -204,8 +204,8 @@ public final class EmojiSuggestionsComponent: Component {
         theme: Theme,
         animationCache: AnimationCache,
         animationRenderer: MultiAnimationRenderer,
-        files: [TelegramMediaFile],
-        action: @escaping (TelegramMediaFile) -> Void
+        files: [IosappMediaFile],
+        action: @escaping (IosappMediaFile) -> Void
     ) {
         self.context = context
         self.theme = theme
@@ -326,10 +326,10 @@ public final class EmojiSuggestionsComponent: Component {
             fatalError("init(coder:) has not been implemented")
         }
         
-        public func item(at point: CGPoint) -> (CALayer, TelegramMediaFile)? {
+        public func item(at point: CGPoint) -> (CALayer, IosappMediaFile)? {
             let location = self.convert(point, to: self.scrollView)
             if self.scrollView.bounds.contains(location) {
-                var closestFile: (file: TelegramMediaFile, layer: CALayer, distance: CGFloat)?
+                var closestFile: (file: IosappMediaFile, layer: CALayer, distance: CGFloat)?
                 for (_, itemLayer) in self.visibleLayers {
                     guard let file = itemLayer.file else {
                         continue
@@ -355,7 +355,7 @@ public final class EmojiSuggestionsComponent: Component {
             if case .ended = recognizer.state {
                 let location = recognizer.location(in: self.scrollView)
                 if self.scrollView.bounds.contains(location) {
-                    var closestFile: (file: TelegramMediaFile, distance: CGFloat)?
+                    var closestFile: (file: IosappMediaFile, distance: CGFloat)?
                     for (_, itemLayer) in self.visibleLayers {
                         guard let file = itemLayer.file else {
                             continue

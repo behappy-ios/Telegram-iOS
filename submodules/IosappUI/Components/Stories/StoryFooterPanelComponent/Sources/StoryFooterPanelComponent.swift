@@ -25,10 +25,10 @@ public final class StoryFooterPanelComponent: Component {
     
     public struct MyReaction: Equatable {
         public let reaction: MessageReaction.Reaction
-        public let file: TelegramMediaFile?
+        public let file: IosappMediaFile?
         public let animationFileId: Int64?
         
-        public init(reaction: MessageReaction.Reaction, file: TelegramMediaFile?, animationFileId: Int64?) {
+        public init(reaction: MessageReaction.Reaction, file: IosappMediaFile?, animationFileId: Int64?) {
             self.reaction = reaction
             self.file = file
             self.animationFileId = animationFileId

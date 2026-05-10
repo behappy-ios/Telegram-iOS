@@ -15,7 +15,7 @@ public final class PeerMediaUploadingItem: Equatable {
     }
     
     public enum Content: Equatable  {
-        case wallpaper(wallpaper: TelegramWallpaper, forBoth: Bool)
+        case wallpaper(wallpaper: IosappWallpaper, forBoth: Bool)
     }
 
     public let content: Content
@@ -125,7 +125,7 @@ private func generatePeerMediaMessage(network: Network, accountPeerId: EnginePee
     var media: [Media] = []
     switch content {
     case let .wallpaper(wallpaper, forBoth):
-        media.append(TelegramMediaAction(action: .setChatWallpaper(wallpaper: wallpaper, forBoth: forBoth)))
+        media.append(IosappMediaAction(action: .setChatWallpaper(wallpaper: wallpaper, forBoth: forBoth)))
     }
     
     return StoreMessage(peerId: peerId, namespace: Namespaces.Message.Local, customStableId: nil, globallyUniqueId: randomId, groupingKey: nil, threadId: nil, timestamp: timestamp, flags: [], tags: [], globalTags: [], localTags: [], forwardInfo: nil, authorId: accountPeerId, text: "", attributes: attributes, media: media)

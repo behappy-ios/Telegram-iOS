@@ -24,7 +24,7 @@ private final class VerifyAlertContentNode: AlertContentNode {
     private let text: String
     private let peer: EnginePeer
     private let verifierSettings: BotVerifierSettings
-    private let verifierIcon: TelegramMediaFile?
+    private let verifierIcon: IosappMediaFile?
     private let hasInput: Bool
     
     private let titleView = ComponentView<Empty>()
@@ -60,7 +60,7 @@ private final class VerifyAlertContentNode: AlertContentNode {
         return self.isUserInteractionEnabled
     }
     
-    init(context: AccountContext, theme: AlertControllerTheme, presentationTheme: PresentationTheme, strings: PresentationStrings, actions: [TextAlertAction], title: String, text: String, peer: EnginePeer, verifierSettings: BotVerifierSettings, verifierIcon: TelegramMediaFile?, hasInput: Bool) {
+    init(context: AccountContext, theme: AlertControllerTheme, presentationTheme: PresentationTheme, strings: PresentationStrings, actions: [TextAlertAction], title: String, text: String, peer: EnginePeer, verifierSettings: BotVerifierSettings, verifierIcon: IosappMediaFile?, hasInput: Bool) {
         self.context = context
         self.theme = theme
         self.presentationTheme = presentationTheme
@@ -397,7 +397,7 @@ private final class VerifyAlertContentNode: AlertContentNode {
     }
 }
 
-public func verifyAlertController(context: AccountContext, updatedPresentationData: (initial: PresentationData, signal: Signal<PresentationData, NoError>)? = nil, peer: EnginePeer, verifierSettings: BotVerifierSettings, verifierIcon: TelegramMediaFile?, apply: @escaping (String) -> Void) -> AlertController {
+public func verifyAlertController(context: AccountContext, updatedPresentationData: (initial: PresentationData, signal: Signal<PresentationData, NoError>)? = nil, peer: EnginePeer, verifierSettings: BotVerifierSettings, verifierIcon: IosappMediaFile?, apply: @escaping (String) -> Void) -> AlertController {
     let presentationData = updatedPresentationData?.initial ?? context.sharedContext.currentPresentationData.with { $0 }
     
     var dismissImpl: ((Bool) -> Void)?
@@ -463,7 +463,7 @@ public func verifyAlertController(context: AccountContext, updatedPresentationDa
     return controller
 }
 
-public func removeVerificationAlertController(context: AccountContext, updatedPresentationData: (initial: PresentationData, signal: Signal<PresentationData, NoError>)? = nil, peer: EnginePeer, verifierSettings: BotVerifierSettings, verifierIcon: TelegramMediaFile?, completion: @escaping () -> Void) -> AlertController {
+public func removeVerificationAlertController(context: AccountContext, updatedPresentationData: (initial: PresentationData, signal: Signal<PresentationData, NoError>)? = nil, peer: EnginePeer, verifierSettings: BotVerifierSettings, verifierIcon: IosappMediaFile?, completion: @escaping () -> Void) -> AlertController {
     let presentationData = updatedPresentationData?.initial ?? context.sharedContext.currentPresentationData.with { $0 }
     
     var dismissImpl: ((Bool) -> Void)?

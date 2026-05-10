@@ -34,7 +34,7 @@ public struct ChatSettings: Codable, Equatable {
     }
 }
 
-public func updateChatSettingsInteractively(accountManager: AccountManager<TelegramAccountManagerTypes>, _ f: @escaping (ChatSettings) -> ChatSettings) -> Signal<Void, NoError> {
+public func updateChatSettingsInteractively(accountManager: AccountManager<IosappAccountManagerTypes>, _ f: @escaping (ChatSettings) -> ChatSettings) -> Signal<Void, NoError> {
     return accountManager.transaction { transaction -> Void in
         transaction.updateSharedData(ApplicationSpecificSharedDataKeys.chatSettings, { entry in
             let currentSettings: ChatSettings

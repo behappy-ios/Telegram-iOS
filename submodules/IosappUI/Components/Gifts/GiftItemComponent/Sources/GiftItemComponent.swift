@@ -346,7 +346,7 @@ public final class GiftItemComponent: Component {
         private var checkLayer: CheckLayer?
         private var outlineLayer: SimpleLayer?
         
-        private var animationFile: TelegramMediaFile?
+        private var animationFile: IosappMediaFile?
         
         private var disposables = DisposableSet()
         private var fetchedFiles = Set<Int64>()
@@ -520,12 +520,12 @@ public final class GiftItemComponent: Component {
                 self.loadingBackground = nil
             }
             
-            var animationFile: TelegramMediaFile?
+            var animationFile: IosappMediaFile?
             var backgroundColor: UIColor?
             var secondBackgroundColor: UIColor?
             var patternColor: UIColor?
-            var patternFile: TelegramMediaFile?
-            var files: [Int64: TelegramMediaFile] = [:]
+            var patternFile: IosappMediaFile?
+            var files: [Int64: IosappMediaFile] = [:]
             
             var animatedBadgeItems: [AnimatedTextComponent.Item] = []
             
@@ -1050,7 +1050,7 @@ public final class GiftItemComponent: Component {
                         bold: MarkdownAttributeSet(font: Font.semibold(11.0), textColor: labelColor),
                         link: MarkdownAttributeSet(font: Font.regular(11.0), textColor: labelColor),
                         linkAttribute: { contents in
-                            return (TelegramTextAttributes.URL, contents)
+                            return (IosappTextAttributes.URL, contents)
                         }
                     )
                     let labelText = NSMutableAttributedString(attributedString: parseMarkdownIntoAttributedString(label, attributes: attributes))
@@ -1387,7 +1387,7 @@ public final class GiftItemComponent: Component {
                     bold: MarkdownAttributeSet(font: Font.semibold(11.0), textColor: labelColor),
                     link: MarkdownAttributeSet(font: Font.regular(11.0), textColor: labelColor),
                     linkAttribute: { contents in
-                        return (TelegramTextAttributes.URL, contents)
+                        return (IosappTextAttributes.URL, contents)
                     }
                 )
                 let dateTimeFormat = component.context.sharedContext.currentPresentationData.with { $0 }.dateTimeFormat

@@ -104,8 +104,8 @@ private final class GiftAuctionWearPreviewSheetContent: CombinedComponent {
             let peerIds: [EnginePeer.Id] = [context.account.peerId]
             self.peerDisposable = (
                 context.engine.data.get(EngineDataMap(
-                    peerIds.map { peerId -> TelegramEngine.EngineData.Item.Peer.Peer in
-                        return TelegramEngine.EngineData.Item.Peer.Peer(id: peerId)
+                    peerIds.map { peerId -> IosappEngine.EngineData.Item.Peer.Peer in
+                        return IosappEngine.EngineData.Item.Peer.Peer(id: peerId)
                     }
                 ))
                 |> deliverOnMainQueue
@@ -327,7 +327,7 @@ private final class GiftAuctionWearPreviewSheetContent: CombinedComponent {
             let textColor = UIColor.white
             let linkColor = UIColor.white
             let markdownAttributes = MarkdownAttributes(body: MarkdownAttributeSet(font: textFont, textColor: textColor), bold: MarkdownAttributeSet(font: boldTextFont, textColor: textColor), link: MarkdownAttributeSet(font: textFont, textColor: linkColor), linkAttribute: { contents in
-                return (TelegramTextAttributes.URL, contents)
+                return (IosappTextAttributes.URL, contents)
             })
             if state.cachedSmallChevronImage == nil || state.cachedSmallChevronImage?.1 !== environment.theme {
                 state.cachedSmallChevronImage = (generateTintedImage(image: UIImage(bundleImageName: "Item List/InlineTextRightArrow"), color: linkColor)!, theme)
@@ -468,7 +468,7 @@ private final class GiftAuctionWearPreviewSheetContent: CombinedComponent {
                         bold: MarkdownAttributeSet(font: Font.semibold(13.0), textColor: theme.list.freeTextColor),
                         link: MarkdownAttributeSet(font: Font.regular(13.0), textColor: theme.list.itemAccentColor),
                         linkAttribute: { contents in
-                            return (TelegramTextAttributes.URL, contents)
+                            return (IosappTextAttributes.URL, contents)
                         }
                     )
                     let parsedString = parseMarkdownIntoAttributedString(strings.Gift_Setup_AuctionInfo(environment.strings.Gift_Setup_AuctionInfo_Gifts(giftsPerRound), strings.Gift_Setup_AuctionInfo_Bidders(giftsPerRound)).string, attributes: footerAttributes)
@@ -488,8 +488,8 @@ private final class GiftAuctionWearPreviewSheetContent: CombinedComponent {
                             highlightColor: theme.list.itemAccentColor.withAlphaComponent(0.1),
                             highlightInset: UIEdgeInsets(top: 0.0, left: 0.0, bottom: 0.0, right: -8.0),
                             highlightAction: { attributes in
-                                if let _ = attributes[NSAttributedString.Key(rawValue: TelegramTextAttributes.URL)] {
-                                    return NSAttributedString.Key(rawValue: TelegramTextAttributes.URL)
+                                if let _ = attributes[NSAttributedString.Key(rawValue: IosappTextAttributes.URL)] {
+                                    return NSAttributedString.Key(rawValue: IosappTextAttributes.URL)
                                 } else {
                                     return nil
                                 }

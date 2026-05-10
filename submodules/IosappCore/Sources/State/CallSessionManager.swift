@@ -475,9 +475,9 @@ private final class IncomingConferenceInvitationContext {
             }
             let state: State
             if let message = message {
-                var foundAction: TelegramMediaAction? 
+                var foundAction: IosappMediaAction? 
                 for media in message.media {
-                    if let action = media as? TelegramMediaAction {
+                    if let action = media as? IosappMediaAction {
                         foundAction = action
                         break
                     }

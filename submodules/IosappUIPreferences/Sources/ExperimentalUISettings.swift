@@ -328,7 +328,7 @@ public struct ExperimentalUISettings: Codable, Equatable {
     }
 }
 
-public func updateExperimentalUISettingsInteractively(accountManager: AccountManager<TelegramAccountManagerTypes>, _ f: @escaping (ExperimentalUISettings) -> ExperimentalUISettings) -> Signal<Void, NoError> {
+public func updateExperimentalUISettingsInteractively(accountManager: AccountManager<IosappAccountManagerTypes>, _ f: @escaping (ExperimentalUISettings) -> ExperimentalUISettings) -> Signal<Void, NoError> {
     return accountManager.transaction { transaction -> Void in
         transaction.updateSharedData(ApplicationSpecificSharedDataKeys.experimentalUISettings, { entry in
             let currentSettings: ExperimentalUISettings

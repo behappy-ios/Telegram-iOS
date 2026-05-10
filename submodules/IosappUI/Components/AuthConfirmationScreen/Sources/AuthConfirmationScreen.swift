@@ -87,7 +87,7 @@ private final class AuthConfirmationSheetContent: CombinedComponent {
                         
             super.init()
             
-            let _ = (context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: context.account.peerId))
+            let _ = (context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: context.account.peerId))
             |> deliverOnMainQueue).start(next: { [weak self] peer in
                 guard let self, let peer else {
                     return
@@ -102,7 +102,7 @@ private final class AuthConfirmationSheetContent: CombinedComponent {
                     self.matchCodes = matchCodes.shuffled()
                 } else {
                     for code in matchCodes {
-                        var file: TelegramMediaFile?
+                        var file: IosappMediaFile?
                         if let item = context.animatedEmojiStickersValue[code] {
                             file = item.first?.file._parse()
                         } else if let item = context.animatedEmojiStickersValue[code.strippedEmoji] {
@@ -236,7 +236,7 @@ private final class AuthConfirmationSheetContent: CombinedComponent {
                 sourceTitle = domain
             }
             
-            let _ = (self.context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: self.context.account.peerId))
+            let _ = (self.context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: self.context.account.peerId))
             |> deliverOnMainQueue).start(next: { [weak self] peer in
                 guard let self, case let .user(user) = peer, let phone = user.phone else {
                     return
@@ -485,7 +485,7 @@ private final class AuthConfirmationSheetContent: CombinedComponent {
                         )
                     }
                     
-                    var file: TelegramMediaFile?
+                    var file: IosappMediaFile?
                     if let item = component.context.animatedEmojiStickersValue[code] {
                         file = item.first?.file._parse()
                     } else if let item = component.context.animatedEmojiStickersValue[code.strippedEmoji] {

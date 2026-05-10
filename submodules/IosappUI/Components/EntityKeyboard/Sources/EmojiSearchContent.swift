@@ -216,7 +216,7 @@ public final class EmojiSearchContent: ASDisplayNode, EntitySearchContainerNode 
                             }
                         }
                     
-                        let hasPremium = context.engine.data.subscribe(TelegramEngine.EngineData.Item.Peer.Peer(id: context.account.peerId))
+                        let hasPremium = context.engine.data.subscribe(IosappEngine.EngineData.Item.Peer.Peer(id: context.account.peerId))
                         |> map { peer -> Bool in
                             guard case let .user(user) = peer else {
                                 return false
@@ -234,7 +234,7 @@ public final class EmojiSearchContent: ASDisplayNode, EntitySearchContainerNode 
                             )
                             |> take(1)
                             |> map { view, availableReactions, hasPremium -> [EmojiPagerContentComponent.ItemGroup] in
-                                var result: [(String, TelegramMediaFile.Accessor?, String)] = []
+                                var result: [(String, IosappMediaFile.Accessor?, String)] = []
                                 
                                 var allEmoticons: [String: String] = [:]
                                 for keyword in keywords {
@@ -327,11 +327,11 @@ public final class EmojiSearchContent: ASDisplayNode, EntitySearchContainerNode 
                                 continue
                             }
                             existingIds.insert(itemFile.fileId)
-                            let animationData = EntityKeyboardAnimationData(file: TelegramMediaFile.Accessor(itemFile))
+                            let animationData = EntityKeyboardAnimationData(file: IosappMediaFile.Accessor(itemFile))
                             let item = EmojiPagerContentComponent.Item(
                                 animationData: animationData,
                                 content: .animation(animationData),
-                                itemFile: TelegramMediaFile.Accessor(itemFile),
+                                itemFile: IosappMediaFile.Accessor(itemFile),
                                 subgroupId: nil,
                                 icon: .none,
                                 tintMode: animationData.isTemplate ? .primary : .none

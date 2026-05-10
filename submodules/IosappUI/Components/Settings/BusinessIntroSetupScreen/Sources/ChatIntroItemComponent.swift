@@ -17,7 +17,7 @@ final class ChatIntroItemComponent: Component {
     let context: AccountContext
     let theme: PresentationTheme
     let strings: PresentationStrings
-    let stickerFile: TelegramMediaFile?
+    let stickerFile: IosappMediaFile?
     let title: String
     let text: String
     
@@ -25,7 +25,7 @@ final class ChatIntroItemComponent: Component {
         context: AccountContext,
         theme: PresentationTheme,
         strings: PresentationStrings,
-        stickerFile: TelegramMediaFile?,
+        stickerFile: IosappMediaFile?,
         title: String,
         text: String
     ) {

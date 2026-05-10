@@ -37,7 +37,7 @@ public final class DrawingWeatherEntity: DrawingEntity, Codable {
     
     
     public var style: Style
-    public var icon: TelegramMediaFile?
+    public var icon: IosappMediaFile?
     public var emoji: String
     public var temperature: Double
     
@@ -76,7 +76,7 @@ public final class DrawingWeatherEntity: DrawingEntity, Codable {
         return false
     }
     
-    public init(emoji: String, emojiFile: TelegramMediaFile?, temperature: Double, style: Style) {
+    public init(emoji: String, emojiFile: IosappMediaFile?, temperature: Double, style: Style) {
         self.uuid = UUID()
         
         self.emoji = emoji
@@ -101,7 +101,7 @@ public final class DrawingWeatherEntity: DrawingEntity, Codable {
         self.hasCustomColor = try container.decodeIfPresent(Bool.self, forKey: .hasCustomColor) ?? false
         
         if let iconData = try container.decodeIfPresent(Data.self, forKey: .icon) {
-            self.icon = PostboxDecoder(buffer: MemoryBuffer(data: iconData)).decodeRootObject() as? TelegramMediaFile
+            self.icon = PostboxDecoder(buffer: MemoryBuffer(data: iconData)).decodeRootObject() as? IosappMediaFile
         }
 
         self.referenceDrawingSize = try container.decode(CGSize.self, forKey: .referenceDrawingSize)

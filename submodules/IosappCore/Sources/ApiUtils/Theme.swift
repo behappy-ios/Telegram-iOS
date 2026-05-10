@@ -4,17 +4,17 @@ import SwiftSignalKit
 import IosappApi
 
 
-extension TelegramTheme {
+extension IosappTheme {
     convenience init(apiTheme: Api.Theme) {
         switch apiTheme {
             case let .theme(themeData):
                 let (flags, id, accessHash, slug, title, document, settings, emoticon, installCount) = (themeData.flags, themeData.id, themeData.accessHash, themeData.slug, themeData.title, themeData.document, themeData.settings, themeData.emoticon, themeData.installsCount)
-                self.init(id: id, accessHash: accessHash, slug: slug, emoticon: emoticon, title: title, file: document.flatMap { telegramMediaFileFromApiDocument($0, altDocuments: []) }, settings: settings?.compactMap(TelegramThemeSettings.init(apiThemeSettings:)), isCreator: (flags & 1 << 0) != 0, isDefault: (flags & 1 << 1) != 0, installCount: installCount)
+                self.init(id: id, accessHash: accessHash, slug: slug, emoticon: emoticon, title: title, file: document.flatMap { telegramMediaFileFromApiDocument($0, altDocuments: []) }, settings: settings?.compactMap(IosappThemeSettings.init(apiThemeSettings:)), isCreator: (flags & 1 << 0) != 0, isDefault: (flags & 1 << 1) != 0, installCount: installCount)
         }
     }
 }
 
-extension TelegramBaseTheme {
+extension IosappBaseTheme {
     init(apiBaseTheme: Api.BaseTheme) {
         switch apiBaseTheme {
             case .baseThemeClassic:
@@ -44,12 +44,12 @@ extension TelegramBaseTheme {
     }
 }
 
-extension TelegramThemeSettings {
+extension IosappThemeSettings {
     convenience init?(apiThemeSettings: Api.ThemeSettings) {
         switch apiThemeSettings {
             case let .themeSettings(themeSettingsData):
                 let (flags, baseTheme, accentColor, outboxAccentColor, messageColors, wallpaper) = (themeSettingsData.flags, themeSettingsData.baseTheme, themeSettingsData.accentColor, themeSettingsData.outboxAccentColor, themeSettingsData.messageColors, themeSettingsData.wallpaper)
-                self.init(baseTheme: TelegramBaseTheme(apiBaseTheme: baseTheme), accentColor: UInt32(bitPattern: accentColor), outgoingAccentColor: outboxAccentColor.flatMap { UInt32(bitPattern: $0) }, messageColors: messageColors?.map(UInt32.init(bitPattern:)) ?? [], animateMessageColors: (flags & 1 << 2) != 0, wallpaper: wallpaper.flatMap(TelegramWallpaper.init(apiWallpaper:)))
+                self.init(baseTheme: IosappBaseTheme(apiBaseTheme: baseTheme), accentColor: UInt32(bitPattern: accentColor), outgoingAccentColor: outboxAccentColor.flatMap { UInt32(bitPattern: $0) }, messageColors: messageColors?.map(UInt32.init(bitPattern:)) ?? [], animateMessageColors: (flags & 1 << 2) != 0, wallpaper: wallpaper.flatMap(IosappWallpaper.init(apiWallpaper:)))
         }
     }
     

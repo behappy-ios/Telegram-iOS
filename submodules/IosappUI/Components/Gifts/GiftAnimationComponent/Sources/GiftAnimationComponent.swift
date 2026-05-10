@@ -12,14 +12,14 @@ import TextFormat
 public final class GiftAnimationComponent: Component {
     let context: AccountContext
     let theme: PresentationTheme
-    let file: TelegramMediaFile?
+    let file: IosappMediaFile?
     let still: Bool
     let size: CGSize?
     
     public init(
         context: AccountContext,
         theme: PresentationTheme,
-        file: TelegramMediaFile?,
+        file: IosappMediaFile?,
         still: Bool = false,
         size: CGSize? = nil
     ) {

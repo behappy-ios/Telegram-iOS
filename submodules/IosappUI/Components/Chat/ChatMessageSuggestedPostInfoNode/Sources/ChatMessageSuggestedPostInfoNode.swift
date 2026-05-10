@@ -93,14 +93,14 @@ public final class ChatMessageSuggestedPostInfoNode: ASDisplayNode {
                         changedText = true
                     }
                     let filteredMediaIds = item.message.media.compactMap { media -> EngineMedia.Id? in
-                        if media is TelegramMediaImage || media is TelegramMediaFile {
+                        if media is IosappMediaImage || media is IosappMediaFile {
                             return media.id
                         } else {
                             return nil
                         }
                     }
                     let filteredPreviousMediaIds = previousMessage.media.compactMap { media -> EngineMedia.Id? in
-                        if media is TelegramMediaImage || media is TelegramMediaFile {
+                        if media is IosappMediaImage || media is IosappMediaFile {
                             return media.id
                         } else {
                             return nil

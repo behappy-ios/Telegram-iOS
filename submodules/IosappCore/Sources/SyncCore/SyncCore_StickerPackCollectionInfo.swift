@@ -47,13 +47,13 @@ public final class StickerPackCollectionInfo: ItemCollectionInfo, Equatable {
     public let accessHash: Int64
     public let title: String
     public let shortName: String
-    public let thumbnail: TelegramMediaImageRepresentation?
+    public let thumbnail: IosappMediaImageRepresentation?
     public let thumbnailFileId: Int64?
     public let immediateThumbnailData: Data?
     public let hash: Int32
     public let count: Int32
     
-    public init(id: ItemCollectionId, flags: StickerPackCollectionInfoFlags, accessHash: Int64, title: String, shortName: String, thumbnail: TelegramMediaImageRepresentation?, thumbnailFileId: Int64?, immediateThumbnailData: Data?, hash: Int32, count: Int32) {
+    public init(id: ItemCollectionId, flags: StickerPackCollectionInfoFlags, accessHash: Int64, title: String, shortName: String, thumbnail: IosappMediaImageRepresentation?, thumbnailFileId: Int64?, immediateThumbnailData: Data?, hash: Int32, count: Int32) {
         self.id = id
         self.flags = flags
         self.accessHash = accessHash
@@ -71,7 +71,7 @@ public final class StickerPackCollectionInfo: ItemCollectionInfo, Equatable {
         self.accessHash = decoder.decodeInt64ForKey("a", orElse: 0)
         self.title = decoder.decodeStringForKey("t", orElse: "")
         self.shortName = decoder.decodeStringForKey("s", orElse: "")
-        self.thumbnail = decoder.decodeObjectForKey("th", decoder: { TelegramMediaImageRepresentation(decoder: $0) }) as? TelegramMediaImageRepresentation
+        self.thumbnail = decoder.decodeObjectForKey("th", decoder: { IosappMediaImageRepresentation(decoder: $0) }) as? IosappMediaImageRepresentation
         self.thumbnailFileId = decoder.decodeOptionalInt64ForKey("tfi")
         self.immediateThumbnailData = decoder.decodeDataForKey("itd")
         self.hash = decoder.decodeInt32ForKey("h", orElse: 0)
@@ -110,19 +110,19 @@ public final class StickerPackCollectionInfo: ItemCollectionInfo, Equatable {
         builder.finish(offset: offset)
         let serializedData = builder.data
         var byteBuffer = ByteBuffer(data: serializedData)
-        let deserializedValue = FlatBuffers_getRoot(byteBuffer: &byteBuffer) as TelegramCore_StickerPackCollectionInfo
+        let deserializedValue = FlatBuffers_getRoot(byteBuffer: &byteBuffer) as IosappCore_StickerPackCollectionInfo
         let parsedValue = try! StickerPackCollectionInfo(flatBuffersObject: deserializedValue)
         assert(self == parsedValue)
         #endif
     }
     
-    public init(flatBuffersObject: TelegramCore_StickerPackCollectionInfo) throws {
+    public init(flatBuffersObject: IosappCore_StickerPackCollectionInfo) throws {
         self.id = ItemCollectionId(flatBuffersObject.id)
         self.flags = StickerPackCollectionInfoFlags(rawValue: flatBuffersObject.flags)
         self.accessHash = flatBuffersObject.accessHash
         self.title = flatBuffersObject.title
         self.shortName = flatBuffersObject.shortName
-        self.thumbnail = try flatBuffersObject.thumbnail.flatMap(TelegramMediaImageRepresentation.init(flatBuffersObject:))
+        self.thumbnail = try flatBuffersObject.thumbnail.flatMap(IosappMediaImageRepresentation.init(flatBuffersObject:))
         self.thumbnailFileId = flatBuffersObject.thumbnailFileId == Int64.min ? nil : flatBuffersObject.thumbnailFileId
         self.immediateThumbnailData = flatBuffersObject.immediateThumbnailData.isEmpty ? nil : Data(flatBuffersObject.immediateThumbnailData)
         self.hash = flatBuffersObject.hash
@@ -135,24 +135,24 @@ public final class StickerPackCollectionInfo: ItemCollectionInfo, Equatable {
         let thumbnailOffset = self.thumbnail.flatMap { $0.encodeToFlatBuffers(builder: &builder) }
         let immediateThumbnailDataOffset = self.immediateThumbnailData.flatMap { builder.createVector(bytes: $0) }
         
-        let start = TelegramCore_StickerPackCollectionInfo.startStickerPackCollectionInfo(&builder)
+        let start = IosappCore_StickerPackCollectionInfo.startStickerPackCollectionInfo(&builder)
         
-        TelegramCore_StickerPackCollectionInfo.add(id: self.id.asFlatBuffersObject(), &builder)
-        TelegramCore_StickerPackCollectionInfo.add(flags: self.flags.rawValue, &builder)
-        TelegramCore_StickerPackCollectionInfo.add(accessHash: self.accessHash, &builder)
-        TelegramCore_StickerPackCollectionInfo.add(title: titleOffset, &builder)
-        TelegramCore_StickerPackCollectionInfo.add(shortName: shortNameOffset, &builder)
+        IosappCore_StickerPackCollectionInfo.add(id: self.id.asFlatBuffersObject(), &builder)
+        IosappCore_StickerPackCollectionInfo.add(flags: self.flags.rawValue, &builder)
+        IosappCore_StickerPackCollectionInfo.add(accessHash: self.accessHash, &builder)
+        IosappCore_StickerPackCollectionInfo.add(title: titleOffset, &builder)
+        IosappCore_StickerPackCollectionInfo.add(shortName: shortNameOffset, &builder)
         if let thumbnailOffset {
-            TelegramCore_StickerPackCollectionInfo.add(thumbnail: thumbnailOffset, &builder)
+            IosappCore_StickerPackCollectionInfo.add(thumbnail: thumbnailOffset, &builder)
         }
-        TelegramCore_StickerPackCollectionInfo.add(thumbnailFileId: self.thumbnailFileId ?? Int64.min, &builder)
+        IosappCore_StickerPackCollectionInfo.add(thumbnailFileId: self.thumbnailFileId ?? Int64.min, &builder)
         if let immediateThumbnailDataOffset {
-            TelegramCore_StickerPackCollectionInfo.addVectorOf(immediateThumbnailData: immediateThumbnailDataOffset, &builder)
+            IosappCore_StickerPackCollectionInfo.addVectorOf(immediateThumbnailData: immediateThumbnailDataOffset, &builder)
         }
-        TelegramCore_StickerPackCollectionInfo.add(hash: self.hash, &builder)
-        TelegramCore_StickerPackCollectionInfo.add(count: self.count, &builder)
+        IosappCore_StickerPackCollectionInfo.add(hash: self.hash, &builder)
+        IosappCore_StickerPackCollectionInfo.add(count: self.count, &builder)
         
-        return TelegramCore_StickerPackCollectionInfo.endStickerPackCollectionInfo(&builder, start: start)
+        return IosappCore_StickerPackCollectionInfo.endStickerPackCollectionInfo(&builder, start: start)
     }
     
     public static func ==(lhs: StickerPackCollectionInfo, rhs: StickerPackCollectionInfo) -> Bool {
@@ -190,10 +190,10 @@ public final class StickerPackCollectionInfo: ItemCollectionInfo, Equatable {
 public extension StickerPackCollectionInfo {
     struct Accessor: Equatable {
         let _wrappedObject: StickerPackCollectionInfo?
-        let _wrapped: TelegramCore_StickerPackCollectionInfo?
+        let _wrapped: IosappCore_StickerPackCollectionInfo?
         let _wrappedData: Data?
         
-        public init(_ wrapped: TelegramCore_StickerPackCollectionInfo, _ _wrappedData: Data) {
+        public init(_ wrapped: IosappCore_StickerPackCollectionInfo, _ _wrappedData: Data) {
             self._wrapped = wrapped
             self._wrappedData = _wrappedData
             self._wrappedObject = nil

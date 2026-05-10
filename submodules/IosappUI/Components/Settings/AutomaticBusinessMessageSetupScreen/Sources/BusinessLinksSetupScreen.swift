@@ -65,7 +65,7 @@ final class BusinessLinksSetupScreenComponent: Component {
         private var environment: EnvironmentType?
         
         private var refreshLinksDisposable: Disposable?
-        private var links: [TelegramBusinessChatLinks.Link] = []
+        private var links: [IosappBusinessChatLinks.Link] = []
         private var linksDisposable: Disposable?
         
         private var isCreatingLink: Bool = false
@@ -198,7 +198,7 @@ final class BusinessLinksSetupScreenComponent: Component {
             }
         }
         
-        private func openLink(link: TelegramBusinessChatLinks.Link, openKeyboard: Bool) {
+        private func openLink(link: IosappBusinessChatLinks.Link, openKeyboard: Bool) {
             guard let component = self.component else {
                 return
             }
@@ -269,7 +269,7 @@ final class BusinessLinksSetupScreenComponent: Component {
             if self.component == nil {
                 self.links = component.initialData.businessLinks?.links ?? []
                 self.linksDisposable = (component.context.engine.data.subscribe(
-                    TelegramEngine.EngineData.Item.Peer.BusinessChatLinks(id: component.context.account.peerId)
+                    IosappEngine.EngineData.Item.Peer.BusinessChatLinks(id: component.context.account.peerId)
                 )
                 |> deliverOnMainQueue).start(next: { [weak self] links in
                     guard let self else {
@@ -664,11 +664,11 @@ final class BusinessLinksSetupScreenComponent: Component {
 
 public final class BusinessLinksSetupScreen: ViewControllerComponentContainer {
     public final class InitialData: BusinessLinksSetupScreenInitialData {
-        fileprivate let accountPeer: TelegramUser?
-        fileprivate let businessLinks: TelegramBusinessChatLinks?
+        fileprivate let accountPeer: IosappUser?
+        fileprivate let businessLinks: IosappBusinessChatLinks?
         fileprivate let displayPhone: Bool
         
-        fileprivate init(accountPeer: TelegramUser?, businessLinks: TelegramBusinessChatLinks?, displayPhone: Bool) {
+        fileprivate init(accountPeer: IosappUser?, businessLinks: IosappBusinessChatLinks?, displayPhone: Bool) {
             self.accountPeer = accountPeer
             self.businessLinks = businessLinks
             self.displayPhone = displayPhone
@@ -717,7 +717,7 @@ public final class BusinessLinksSetupScreen: ViewControllerComponentContainer {
     
     public static func makeInitialData(context: AccountContext) -> Signal<BusinessLinksSetupScreenInitialData, NoError> {
         let settingsPromise: Promise<AccountPrivacySettings?>
-        if let rootController = context.sharedContext.mainWindow?.viewController as? TelegramRootControllerInterface, let current = rootController.getPrivacySettings() {
+        if let rootController = context.sharedContext.mainWindow?.viewController as? IosappRootControllerInterface, let current = rootController.getPrivacySettings() {
             settingsPromise = current
         } else {
             settingsPromise = Promise()
@@ -726,8 +726,8 @@ public final class BusinessLinksSetupScreen: ViewControllerComponentContainer {
         
         return combineLatest(
             context.engine.data.get(
-                TelegramEngine.EngineData.Item.Peer.Peer(id: context.account.peerId),
-                TelegramEngine.EngineData.Item.Peer.BusinessChatLinks(id: context.account.peerId)
+                IosappEngine.EngineData.Item.Peer.Peer(id: context.account.peerId),
+                IosappEngine.EngineData.Item.Peer.BusinessChatLinks(id: context.account.peerId)
             ),
             settingsPromise.get()
             |> take(1)
@@ -735,7 +735,7 @@ public final class BusinessLinksSetupScreen: ViewControllerComponentContainer {
         |> map { data, settings in
             let (peer, businessLinks) = data
             
-            var accountPeer: TelegramUser?
+            var accountPeer: IosappUser?
             if case let .user(user) = peer {
                 accountPeer = user
             }

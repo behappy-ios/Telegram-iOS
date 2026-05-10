@@ -1344,7 +1344,7 @@ private final class ChatFolderLinkPreviewScreenComponent: Component {
                 
                 let peerIds = data.includePeers.peers
                 let _ = (component.context.engine.data.get(
-                    EngineDataList(peerIds.map(TelegramEngine.EngineData.Item.Peer.Peer.init(id:)))
+                    EngineDataList(peerIds.map(IosappEngine.EngineData.Item.Peer.Peer.init(id:)))
                 )
                 |> deliverOnMainQueue).start(next: { [weak self] peers in
                     guard let self, let component = self.component, let controller = self.environment?.controller() else {
@@ -1392,7 +1392,7 @@ private final class ChatFolderLinkPreviewScreenComponent: Component {
                 
                 let peerIds = data.includePeers.peers
                 let _ = (component.context.engine.data.get(
-                    EngineDataList(peerIds.map(TelegramEngine.EngineData.Item.Peer.Peer.init(id:)))
+                    EngineDataList(peerIds.map(IosappEngine.EngineData.Item.Peer.Peer.init(id:)))
                 )
                 |> deliverOnMainQueue).start(next: { [weak self] peers in
                     guard let self, let component = self.component, let controller = self.environment?.controller() else {

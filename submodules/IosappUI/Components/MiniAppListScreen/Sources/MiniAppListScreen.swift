@@ -723,7 +723,7 @@ public final class MiniAppListScreen: ViewControllerComponentContainer {
                 return .single([])
             }
             return context.engine.data.get(
-                EngineDataList(peerIds.map(TelegramEngine.EngineData.Item.Peer.Peer.init(id:)))
+                EngineDataList(peerIds.map(IosappEngine.EngineData.Item.Peer.Peer.init(id:)))
             )
             |> map { peers -> [EnginePeer] in
                 return peers.compactMap { $0 }

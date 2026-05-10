@@ -44,12 +44,12 @@ struct ThemeColorState {
     
     var accentColor: HSBColor
     var outgoingAccentColor: HSBColor?
-    var initialWallpaper: TelegramWallpaper?
+    var initialWallpaper: IosappWallpaper?
     var backgroundColors: [HSBColor]
     
     fileprivate var preview: Bool
-    fileprivate var previousPatternWallpaper: TelegramWallpaper?
-    var patternWallpaper: TelegramWallpaper?
+    fileprivate var previousPatternWallpaper: IosappWallpaper?
+    var patternWallpaper: IosappWallpaper?
     var patternIntensity: Int32
     
     var animateMessageColors: Bool
@@ -79,7 +79,7 @@ struct ThemeColorState {
         self.rotation = 0
     }
     
-    init(section: ThemeColorSection, accentColor: HSBColor, outgoingAccentColor: HSBColor?, initialWallpaper: TelegramWallpaper?, backgroundColors: [HSBColor], patternWallpaper: TelegramWallpaper?, patternIntensity: Int32, animateMessageColors: Bool, defaultMessagesColor: HSBColor?, messagesColors: [HSBColor], selectedColor: Int = 0, rotation: Int32 = 0) {
+    init(section: ThemeColorSection, accentColor: HSBColor, outgoingAccentColor: HSBColor?, initialWallpaper: IosappWallpaper?, backgroundColors: [HSBColor], patternWallpaper: IosappWallpaper?, patternIntensity: Int32, animateMessageColors: Bool, defaultMessagesColor: HSBColor?, messagesColors: [HSBColor], selectedColor: Int = 0, rotation: Int32 = 0) {
         self.section = section
         self.colorPanelCollapsed = false
         self.displayPatternPanel = false
@@ -195,7 +195,7 @@ final class ThemeAccentColorControllerNode: ASDisplayNode, ASScrollViewDelegate 
     private var stateDisposable: Disposable?
     private let statePromise = Promise<ThemeColorState>()
     private let themePromise = Promise<PresentationTheme>()
-    private var wallpaper: TelegramWallpaper
+    private var wallpaper: IosappWallpaper
     private var serviceBackgroundColor: UIColor?
     private let serviceBackgroundColorPromise = Promise<UIColor>()
     private var wallpaperDisposable = MetaDisposable()
@@ -203,7 +203,7 @@ final class ThemeAccentColorControllerNode: ASDisplayNode, ASScrollViewDelegate 
     private var currentBackgroundColors: ([HSBColor], Int32?, Int32?)?
     private var currentBackgroundPromise = Promise<(UIColor, UIColor?)?>()
     
-    private var patternWallpaper: TelegramWallpaper?
+    private var patternWallpaper: IosappWallpaper?
     private var patternArguments: PatternWallpaperArguments?
     private var patternArgumentsPromise = Promise<TransformImageArguments>()
     private var patternArgumentsDisposable: Disposable?
@@ -226,7 +226,7 @@ final class ThemeAccentColorControllerNode: ASDisplayNode, ASScrollViewDelegate 
         }
     }
     
-    init(context: AccountContext, mode: ThemeAccentColorControllerMode, resultMode: ThemeAccentColorController.ResultMode, theme: PresentationTheme, wallpaper: TelegramWallpaper, dismiss: @escaping () -> Void, apply: @escaping (ThemeColorState, UIColor?, Bool) -> Void, ready: Promise<Bool>) {
+    init(context: AccountContext, mode: ThemeAccentColorControllerMode, resultMode: ThemeAccentColorController.ResultMode, theme: PresentationTheme, wallpaper: IosappWallpaper, dismiss: @escaping () -> Void, apply: @escaping (ThemeColorState, UIColor?, Bool) -> Void, ready: Promise<Bool>) {
         self.context = context
         self.mode = mode
         self.resultMode = resultMode
@@ -467,13 +467,13 @@ final class ThemeAccentColorControllerNode: ASDisplayNode, ASScrollViewDelegate 
         |> mapToThrottled { next -> Signal<ThemeColorState, NoError> in
             return .single(next) |> then(.complete() |> delay(0.0166667, queue: self.queue))
         }
-        |> map { state -> (PresentationTheme?, TelegramWallpaper, UIColor, [HSBColor], Int32, PatternWallpaperArguments, Bool) in
+        |> map { state -> (PresentationTheme?, IosappWallpaper, UIColor, [HSBColor], Int32, PatternWallpaperArguments, Bool) in
             let accentColor = state.accentColor
             let outgoingAccentColor = state.outgoingAccentColor
             var backgroundColors = state.backgroundColors
             let messagesColors = state.messagesColors
 
-            var wallpaper: TelegramWallpaper
+            var wallpaper: IosappWallpaper
 
             var updateOnlyWallpaper = false
             if state.section == .background && state.preview {
@@ -491,17 +491,17 @@ final class ThemeAccentColorControllerNode: ASDisplayNode, ASScrollViewDelegate 
                     }
                     convertedRepresentations.append(ImageRepresentationWithReference(representation: .init(dimensions: dimensions, resource: file.file.resource, progressiveSizes: [], immediateThumbnailData: nil, hasVideo: false, isPersonal: false), reference: .wallpaper(wallpaper: .slug(file.slug), resource: file.file.resource)))
                 } else if backgroundColors.count >= 2 {
-                    wallpaper = .gradient(TelegramWallpaper.Gradient(id: nil, colors: backgroundColors.map { $0.rgb }, settings: WallpaperSettings(rotation: state.rotation)))
+                    wallpaper = .gradient(IosappWallpaper.Gradient(id: nil, colors: backgroundColors.map { $0.rgb }, settings: WallpaperSettings(rotation: state.rotation)))
                 } else {
                     wallpaper = .color(backgroundColors.first?.rgb ?? 0xffffff)
                 }
             } else if let themeReference = mode.themeReference, case let .builtin(theme) = themeReference, state.initialWallpaper == nil {
-                var suggestedWallpaper: TelegramWallpaper
+                var suggestedWallpaper: IosappWallpaper
                 switch theme {
                     case .dayClassic:
                         let topColor = HSBColor(color: accentColor.color.withMultiplied(hue: 1.010, saturation: 0.414, brightness: 0.957))
                         let bottomColor = HSBColor(color: accentColor.color.withMultiplied(hue: 1.019, saturation: 0.867, brightness: 0.965))
-                        suggestedWallpaper = .gradient(TelegramWallpaper.Gradient(id: nil, colors: [topColor.rgb, bottomColor.rgb], settings: WallpaperSettings()))
+                        suggestedWallpaper = .gradient(IosappWallpaper.Gradient(id: nil, colors: [topColor.rgb, bottomColor.rgb], settings: WallpaperSettings()))
                         backgroundColors = [topColor, bottomColor]
                     case .nightAccent:
                         let color = HSBColor(color: accentColor.color.withMultiplied(hue: 1.024, saturation: 0.573, brightness: 0.18))
@@ -960,12 +960,12 @@ final class ThemeAccentColorControllerNode: ASDisplayNode, ASScrollViewDelegate 
             )
         }
 
-        let selfPeer: EnginePeer = .user(TelegramUser(id: self.context.account.peerId, accessHash: nil, firstName: nil, lastName: nil, username: nil, phone: nil, photo: [], botInfo: nil, restrictionInfo: nil, flags: [], emojiStatus: nil, usernames: [], storiesHidden: nil, nameColor: nil, backgroundEmojiId: nil, profileColor: nil, profileBackgroundEmojiId: nil, subscriberCount: nil, verificationIconFileId: nil))
-        let peer1: EnginePeer = .user(TelegramUser(id: PeerId(namespace: Namespaces.Peer.CloudUser, id: PeerId.Id._internalFromInt64Value(1)), accessHash: nil, firstName: self.presentationData.strings.Appearance_ThemePreview_ChatList_1_Name, lastName: nil, username: nil, phone: nil, photo: [], botInfo: nil, restrictionInfo: nil, flags: [], emojiStatus: nil, usernames: [], storiesHidden: nil, nameColor: nil, backgroundEmojiId: nil, profileColor: nil, profileBackgroundEmojiId: nil, subscriberCount: nil, verificationIconFileId: nil))
-        let peer2: EnginePeer = .user(TelegramUser(id: PeerId(namespace: Namespaces.Peer.CloudUser, id: PeerId.Id._internalFromInt64Value(2)), accessHash: nil, firstName: self.presentationData.strings.Appearance_ThemePreview_ChatList_2_Name, lastName: nil, username: nil, phone: nil, photo: [], botInfo: nil, restrictionInfo: nil, flags: [], emojiStatus: nil, usernames: [], storiesHidden: nil, nameColor: nil, backgroundEmojiId: nil, profileColor: nil, profileBackgroundEmojiId: nil, subscriberCount: nil, verificationIconFileId: nil))
-        let peer3: EnginePeer = .channel(TelegramChannel(id: PeerId(namespace: Namespaces.Peer.CloudChannel, id: PeerId.Id._internalFromInt64Value(3)), accessHash: nil, title: self.presentationData.strings.Appearance_ThemePreview_ChatList_3_Name, username: nil, photo: [], creationDate: 0, version: 0, participationStatus: .member, info: .group(.init(flags: [])), flags: [], restrictionInfo: nil, adminRights: nil, bannedRights: nil, defaultBannedRights: nil, usernames: [], storiesHidden: nil, nameColor: nil, backgroundEmojiId: nil, profileColor: nil, profileBackgroundEmojiId: nil, emojiStatus: nil, approximateBoostLevel: nil, subscriptionUntilDate: nil, verificationIconFileId: nil, sendPaidMessageStars: nil, linkedMonoforumId: nil))
-        let peer3Author: EnginePeer = .user(TelegramUser(id: PeerId(namespace: Namespaces.Peer.CloudUser, id: PeerId.Id._internalFromInt64Value(4)), accessHash: nil, firstName: self.presentationData.strings.Appearance_ThemePreview_ChatList_3_AuthorName, lastName: nil, username: nil, phone: nil, photo: [], botInfo: nil, restrictionInfo: nil, flags: [], emojiStatus: nil, usernames: [], storiesHidden: nil, nameColor: nil, backgroundEmojiId: nil, profileColor: nil, profileBackgroundEmojiId: nil, subscriberCount: nil, verificationIconFileId: nil))
-        let peer4: EnginePeer = .user(TelegramUser(id: PeerId(namespace: Namespaces.Peer.CloudUser, id: PeerId.Id._internalFromInt64Value(4)), accessHash: nil, firstName: self.presentationData.strings.Appearance_ThemePreview_ChatList_4_Name, lastName: nil, username: nil, phone: nil, photo: [], botInfo: nil, restrictionInfo: nil, flags: [], emojiStatus: nil, usernames: [], storiesHidden: nil, nameColor: nil, backgroundEmojiId: nil, profileColor: nil, profileBackgroundEmojiId: nil, subscriberCount: nil, verificationIconFileId: nil))
+        let selfPeer: EnginePeer = .user(IosappUser(id: self.context.account.peerId, accessHash: nil, firstName: nil, lastName: nil, username: nil, phone: nil, photo: [], botInfo: nil, restrictionInfo: nil, flags: [], emojiStatus: nil, usernames: [], storiesHidden: nil, nameColor: nil, backgroundEmojiId: nil, profileColor: nil, profileBackgroundEmojiId: nil, subscriberCount: nil, verificationIconFileId: nil))
+        let peer1: EnginePeer = .user(IosappUser(id: PeerId(namespace: Namespaces.Peer.CloudUser, id: PeerId.Id._internalFromInt64Value(1)), accessHash: nil, firstName: self.presentationData.strings.Appearance_ThemePreview_ChatList_1_Name, lastName: nil, username: nil, phone: nil, photo: [], botInfo: nil, restrictionInfo: nil, flags: [], emojiStatus: nil, usernames: [], storiesHidden: nil, nameColor: nil, backgroundEmojiId: nil, profileColor: nil, profileBackgroundEmojiId: nil, subscriberCount: nil, verificationIconFileId: nil))
+        let peer2: EnginePeer = .user(IosappUser(id: PeerId(namespace: Namespaces.Peer.CloudUser, id: PeerId.Id._internalFromInt64Value(2)), accessHash: nil, firstName: self.presentationData.strings.Appearance_ThemePreview_ChatList_2_Name, lastName: nil, username: nil, phone: nil, photo: [], botInfo: nil, restrictionInfo: nil, flags: [], emojiStatus: nil, usernames: [], storiesHidden: nil, nameColor: nil, backgroundEmojiId: nil, profileColor: nil, profileBackgroundEmojiId: nil, subscriberCount: nil, verificationIconFileId: nil))
+        let peer3: EnginePeer = .channel(IosappChannel(id: PeerId(namespace: Namespaces.Peer.CloudChannel, id: PeerId.Id._internalFromInt64Value(3)), accessHash: nil, title: self.presentationData.strings.Appearance_ThemePreview_ChatList_3_Name, username: nil, photo: [], creationDate: 0, version: 0, participationStatus: .member, info: .group(.init(flags: [])), flags: [], restrictionInfo: nil, adminRights: nil, bannedRights: nil, defaultBannedRights: nil, usernames: [], storiesHidden: nil, nameColor: nil, backgroundEmojiId: nil, profileColor: nil, profileBackgroundEmojiId: nil, emojiStatus: nil, approximateBoostLevel: nil, subscriptionUntilDate: nil, verificationIconFileId: nil, sendPaidMessageStars: nil, linkedMonoforumId: nil))
+        let peer3Author: EnginePeer = .user(IosappUser(id: PeerId(namespace: Namespaces.Peer.CloudUser, id: PeerId.Id._internalFromInt64Value(4)), accessHash: nil, firstName: self.presentationData.strings.Appearance_ThemePreview_ChatList_3_AuthorName, lastName: nil, username: nil, phone: nil, photo: [], botInfo: nil, restrictionInfo: nil, flags: [], emojiStatus: nil, usernames: [], storiesHidden: nil, nameColor: nil, backgroundEmojiId: nil, profileColor: nil, profileBackgroundEmojiId: nil, subscriberCount: nil, verificationIconFileId: nil))
+        let peer4: EnginePeer = .user(IosappUser(id: PeerId(namespace: Namespaces.Peer.CloudUser, id: PeerId.Id._internalFromInt64Value(4)), accessHash: nil, firstName: self.presentationData.strings.Appearance_ThemePreview_ChatList_4_Name, lastName: nil, username: nil, phone: nil, photo: [], botInfo: nil, restrictionInfo: nil, flags: [], emojiStatus: nil, usernames: [], storiesHidden: nil, nameColor: nil, backgroundEmojiId: nil, profileColor: nil, profileBackgroundEmojiId: nil, subscriberCount: nil, verificationIconFileId: nil))
 
         let timestamp = self.referenceTimestamp
 
@@ -1053,8 +1053,8 @@ final class ThemeAccentColorControllerNode: ASDisplayNode, ASScrollViewDelegate 
         let otherPeerId = self.context.account.peerId
         var peers = SimpleDictionary<PeerId, Peer>()
         var messages = SimpleDictionary<MessageId, Message>()
-        peers[peerId] = TelegramUser(id: peerId, accessHash: nil, firstName: self.presentationData.strings.Appearance_ThemePreview_Chat_2_ReplyName, lastName: "", username: nil, phone: nil, photo: [], botInfo: nil, restrictionInfo: nil, flags: [], emojiStatus: nil, usernames: [], storiesHidden: nil, nameColor: .preset(.blue), backgroundEmojiId: nil, profileColor: nil, profileBackgroundEmojiId: nil, subscriberCount: nil, verificationIconFileId: nil)
-        peers[otherPeerId] = TelegramUser(id: otherPeerId, accessHash: nil, firstName: self.presentationData.strings.Appearance_ThemePreview_Chat_2_ReplyName, lastName: "", username: nil, phone: nil, photo: [], botInfo: nil, restrictionInfo: nil, flags: [], emojiStatus: nil, usernames: [], storiesHidden: nil, nameColor: .preset(.blue), backgroundEmojiId: nil, profileColor: nil, profileBackgroundEmojiId: nil, subscriberCount: nil, verificationIconFileId: nil)
+        peers[peerId] = IosappUser(id: peerId, accessHash: nil, firstName: self.presentationData.strings.Appearance_ThemePreview_Chat_2_ReplyName, lastName: "", username: nil, phone: nil, photo: [], botInfo: nil, restrictionInfo: nil, flags: [], emojiStatus: nil, usernames: [], storiesHidden: nil, nameColor: .preset(.blue), backgroundEmojiId: nil, profileColor: nil, profileBackgroundEmojiId: nil, subscriberCount: nil, verificationIconFileId: nil)
+        peers[otherPeerId] = IosappUser(id: otherPeerId, accessHash: nil, firstName: self.presentationData.strings.Appearance_ThemePreview_Chat_2_ReplyName, lastName: "", username: nil, phone: nil, photo: [], botInfo: nil, restrictionInfo: nil, flags: [], emojiStatus: nil, usernames: [], storiesHidden: nil, nameColor: .preset(.blue), backgroundEmojiId: nil, profileColor: nil, profileBackgroundEmojiId: nil, subscriberCount: nil, verificationIconFileId: nil)
         
         var sampleMessages: [Message] = []
         
@@ -1076,8 +1076,8 @@ final class ThemeAccentColorControllerNode: ASDisplayNode, ASScrollViewDelegate 
         sampleMessages.append(message5)
         
         let waveformBase64 = "DAAOAAkACQAGAAwADwAMABAADQAPABsAGAALAA0AGAAfABoAHgATABgAGQAYABQADAAVABEAHwANAA0ACQAWABkACQAOAAwACQAfAAAAGQAVAAAAEwATAAAACAAfAAAAHAAAABwAHwAAABcAGQAAABQADgAAABQAHwAAAB8AHwAAAAwADwAAAB8AEwAAABoAFwAAAB8AFAAAAAAAHwAAAAAAHgAAAAAAHwAAAAAAHwAAAAAAHwAAAAAAHwAAAAAAHwAAAAAAAAA="
-        let voiceAttributes: [TelegramMediaFileAttribute] = [.Audio(isVoice: true, duration: 23, title: nil, performer: nil, waveform: Data(base64Encoded: waveformBase64)!)]
-        let voiceMedia = TelegramMediaFile(fileId: MediaId(namespace: 0, id: 0), partialReference: nil, resource: LocalFileMediaResource(fileId: 0), previewRepresentations: [], videoThumbnails: [], immediateThumbnailData: nil, mimeType: "audio/ogg", size: 0, attributes: voiceAttributes, alternativeRepresentations: [])
+        let voiceAttributes: [IosappMediaFileAttribute] = [.Audio(isVoice: true, duration: 23, title: nil, performer: nil, waveform: Data(base64Encoded: waveformBase64)!)]
+        let voiceMedia = IosappMediaFile(fileId: MediaId(namespace: 0, id: 0), partialReference: nil, resource: LocalFileMediaResource(fileId: 0), previewRepresentations: [], videoThumbnails: [], immediateThumbnailData: nil, mimeType: "audio/ogg", size: 0, attributes: voiceAttributes, alternativeRepresentations: [])
         
         let message6 = Message(stableId: 6, stableVersion: 0, id: MessageId(peerId: peerId, namespace: 0, id: 6), globallyUniqueId: nil, groupingKey: nil, groupInfo: nil, threadId: nil, timestamp: 66005, flags: [.Incoming], tags: [], globalTags: [], localTags: [], customTags: [], forwardInfo: nil, author: peers[peerId], text: "", attributes: [], media: [voiceMedia], peers: peers, associatedMessages: messages, associatedMessageIds: [], associatedMedia: [:], associatedThreadInfo: nil, associatedStories: [:])
         sampleMessages.append(message6)
@@ -1349,7 +1349,7 @@ final class ThemeAccentColorControllerNode: ASDisplayNode, ASScrollViewDelegate 
         } else {
             self.view.endEditing(true)
             
-            let wallpaper: TelegramWallpaper?
+            let wallpaper: IosappWallpaper?
             if let currentPatternWallpaper = self.state.patternWallpaper {
                 wallpaper = currentPatternWallpaper
             } else {

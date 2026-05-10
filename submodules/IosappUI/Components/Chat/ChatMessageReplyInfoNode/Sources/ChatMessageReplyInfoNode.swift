@@ -222,7 +222,7 @@ public class ChatMessageReplyInfoNode: ASDisplayNode {
                 if let peer = forwardInfo.author {
                     author = peer
                 } else if let authorSignature = forwardInfo.authorSignature {
-                    author = TelegramUser(id: PeerId(namespace: Namespaces.Peer.Empty, id: PeerId.Id._internalFromInt64Value(Int64(authorSignature.persistentHashValue % 32))), accessHash: nil, firstName: authorSignature, lastName: nil, username: nil, phone: nil, photo: [], botInfo: nil, restrictionInfo: nil, flags: [], emojiStatus: nil, usernames: [], storiesHidden: nil, nameColor: nil, backgroundEmojiId: nil, profileColor: nil, profileBackgroundEmojiId: nil, subscriberCount: nil, verificationIconFileId: nil)
+                    author = IosappUser(id: PeerId(namespace: Namespaces.Peer.Empty, id: PeerId.Id._internalFromInt64Value(Int64(authorSignature.persistentHashValue % 32))), accessHash: nil, firstName: authorSignature, lastName: nil, username: nil, phone: nil, photo: [], botInfo: nil, restrictionInfo: nil, flags: [], emojiStatus: nil, usernames: [], storiesHidden: nil, nameColor: nil, backgroundEmojiId: nil, profileColor: nil, profileBackgroundEmojiId: nil, subscriberCount: nil, verificationIconFileId: nil)
                 }
             }
             
@@ -299,7 +299,7 @@ public class ChatMessageReplyInfoNode: ASDisplayNode {
                     }
                 }
                 
-                if message.id.peerId != arguments.parentMessage.id.peerId, let peer = message.peers[message.id.peerId], (peer is TelegramChannel || peer is TelegramGroup) {
+                if message.id.peerId != arguments.parentMessage.id.peerId, let peer = message.peers[message.id.peerId], (peer is IosappChannel || peer is IosappGroup) {
                     final class RunDelegateData {
                         let ascent: CGFloat
                         let descent: CGFloat
@@ -337,7 +337,7 @@ public class ChatMessageReplyInfoNode: ASDisplayNode {
                     )
                     
                     if let runDelegate = CTRunDelegateCreate(&callbacks, Unmanaged.passRetained(runDelegateData).toOpaque()) {
-                        if let peer = peer as? TelegramChannel, case .broadcast = peer.info {
+                        if let peer = peer as? IosappChannel, case .broadcast = peer.info {
                             let rawTitleString = NSMutableAttributedString(attributedString: titleString)
                             rawTitleString.insert(NSAttributedString(string: ">", attributes: [
                                 .attachment: channelIcon,
@@ -400,7 +400,7 @@ public class ChatMessageReplyInfoNode: ASDisplayNode {
                 isText = false
                 
                 var hideStory = false
-                if let peer = arguments.parentMessage.peers[story.peerId] as? TelegramChannel, peer.username == nil, peer.usernames.isEmpty {
+                if let peer = arguments.parentMessage.peers[story.peerId] as? IosappChannel, peer.username == nil, peer.usernames.isEmpty {
                     switch peer.participationStatus {
                     case .member:
                         break
@@ -452,13 +452,13 @@ public class ChatMessageReplyInfoNode: ASDisplayNode {
             var todoItemCompleted: Bool?
             var checkIsRectangle = false
             
-            if case let .pollOption(optionId) = arguments.innerSubject, let poll = arguments.message?.media.first(where: { $0 is TelegramMediaPoll }) as? TelegramMediaPoll, let pollOption = poll.options.first(where: { $0.opaqueIdentifier == optionId }) {
+            if case let .pollOption(optionId) = arguments.innerSubject, let poll = arguments.message?.media.first(where: { $0 is IosappMediaPoll }) as? IosappMediaPoll, let pollOption = poll.options.first(where: { $0.opaqueIdentifier == optionId }) {
                 messageText = stringWithAppliedEntities(pollOption.text, entities: pollOption.entities, baseColor: textColor, linkColor: textColor, baseFont: textFont, linkFont: textFont, boldFont: textFont, italicFont: textFont, boldItalicFont: textFont, fixedFont: textFont, blockQuoteFont: textFont, underlineLinks: false, message: nil)
                 textLeftInset += 16.0
                 
                 todoItemCompleted = true
                 checkIsRectangle = poll.kind.multipleAnswers
-            } else if case let .todoItem(todoItemId) = arguments.innerSubject, let todo = arguments.message?.media.first(where: { $0 is TelegramMediaTodo }) as? TelegramMediaTodo, let todoItem = todo.items.first(where: { $0.id == todoItemId }) {
+            } else if case let .todoItem(todoItemId) = arguments.innerSubject, let todo = arguments.message?.media.first(where: { $0 is IosappMediaTodo }) as? IosappMediaTodo, let todoItem = todo.items.first(where: { $0.id == todoItemId }) {
                 messageText = stringWithAppliedEntities(todoItem.text, entities: todoItem.entities, baseColor: textColor, linkColor: textColor, baseFont: textFont, linkFont: textFont, boldFont: textFont, italicFont: textFont, boldItalicFont: textFont, fixedFont: textFont, blockQuoteFont: textFont, underlineLinks: false, message: nil)
                 textLeftInset += 16.0
                 
@@ -521,7 +521,7 @@ public class ChatMessageReplyInfoNode: ASDisplayNode {
             } else {
                 messageText = NSAttributedString(string: textString.string, font: textFont, textColor: textColor)
                 
-                if let _ = arguments.message?.media.first(where: { $0 is TelegramMediaPoll }) as? TelegramMediaPoll {
+                if let _ = arguments.message?.media.first(where: { $0 is IosappMediaPoll }) as? IosappMediaPoll {
                     isPoll = true
                 }
             }
@@ -532,13 +532,13 @@ public class ChatMessageReplyInfoNode: ASDisplayNode {
             var updatedMediaReference: AnyMediaReference?
             var imageDimensions: CGSize?
             var hasRoundImage = false
-            if case let .pollOption(optionId) = arguments.innerSubject, let poll = arguments.message?.media.first(where: { $0 is TelegramMediaPoll }) as? TelegramMediaPoll, let pollOption = poll.options.first(where: { $0.opaqueIdentifier == optionId }), let media = pollOption.media {
-                if let image = media as? TelegramMediaImage {
+            if case let .pollOption(optionId) = arguments.innerSubject, let poll = arguments.message?.media.first(where: { $0 is IosappMediaPoll }) as? IosappMediaPoll, let pollOption = poll.options.first(where: { $0.opaqueIdentifier == optionId }), let media = pollOption.media {
+                if let image = media as? IosappMediaImage {
                     updatedMediaReference = .message(message: MessageReference(arguments.parentMessage), media: image)
                     if let representation = largestRepresentationForPhoto(image) {
                         imageDimensions = representation.dimensions.cgSize
                     }
-                } else if let file = media as? TelegramMediaFile, file.isVideo && !file.isVideoSticker {
+                } else if let file = media as? IosappMediaFile, file.isVideo && !file.isVideoSticker {
                     updatedMediaReference = .message(message: MessageReference(arguments.parentMessage), media: file)
                     
                     if let dimensions = file.dimensions {
@@ -552,13 +552,13 @@ public class ChatMessageReplyInfoNode: ASDisplayNode {
                 }
             } else if let message = arguments.message, !message.containsSecretMedia {
                 for media in message.media {
-                    if let image = media as? TelegramMediaImage {
+                    if let image = media as? IosappMediaImage {
                         updatedMediaReference = .message(message: MessageReference(message), media: image)
                         if let representation = largestRepresentationForPhoto(image) {
                             imageDimensions = representation.dimensions.cgSize
                         }
                         break
-                    } else if let file = media as? TelegramMediaFile, !file.isVideoSticker {
+                    } else if let file = media as? IosappMediaFile, !file.isVideoSticker {
                         updatedMediaReference = .message(message: MessageReference(message), media: file)
                         
                         if let dimensions = file.dimensions {
@@ -570,14 +570,14 @@ public class ChatMessageReplyInfoNode: ASDisplayNode {
                             hasRoundImage = true
                         }
                         break
-                    } else if let poll = media as? TelegramMediaPoll, let media = poll.attachedMedia {
-                        if let image = media as? TelegramMediaImage {
+                    } else if let poll = media as? IosappMediaPoll, let media = poll.attachedMedia {
+                        if let image = media as? IosappMediaImage {
                             updatedMediaReference = .message(message: MessageReference(message), media: image)
                             if let representation = largestRepresentationForPhoto(image) {
                                 imageDimensions = representation.dimensions.cgSize
                             }
                             break
-                        } else if let file = media as? TelegramMediaFile, !file.isVideoSticker {
+                        } else if let file = media as? IosappMediaFile, !file.isVideoSticker {
                             updatedMediaReference = .message(message: MessageReference(message), media: file)
                             
                             if let dimensions = file.dimensions {
@@ -594,12 +594,12 @@ public class ChatMessageReplyInfoNode: ASDisplayNode {
                 }
             } else if let story = arguments.story, let storyPeer = arguments.parentMessage.peers[story.peerId], let storyItem = arguments.parentMessage.associatedStories[story] {
                 if let itemValue = storyItem.get(Stories.StoredItem.self), case let .item(item) = itemValue, let peerReference = PeerReference(storyPeer) {
-                    if let image = item.media as? TelegramMediaImage {
+                    if let image = item.media as? IosappMediaImage {
                         updatedMediaReference = .story(peer: peerReference, id: story.id, media: image)
                         if let representation = largestRepresentationForPhoto(image) {
                             imageDimensions = representation.dimensions.cgSize
                         }
-                    } else if let file = item.media as? TelegramMediaFile, file.isVideo && !file.isVideoSticker {
+                    } else if let file = item.media as? IosappMediaFile, file.isVideo && !file.isVideoSticker {
                         updatedMediaReference = .story(peer: peerReference, id: story.id, media: file)
                         
                         if let dimensions = file.dimensions {
@@ -610,12 +610,12 @@ public class ChatMessageReplyInfoNode: ASDisplayNode {
                     }
                 }
             } else if let replyForward = arguments.replyForward, let media = replyForward.quote?.media {
-                if let image = media as? TelegramMediaImage {
+                if let image = media as? IosappMediaImage {
                     updatedMediaReference = .message(message: MessageReference(arguments.parentMessage), media: image)
                     if let representation = largestRepresentationForPhoto(image) {
                         imageDimensions = representation.dimensions.cgSize
                     }
-                } else if let file = media as? TelegramMediaFile, file.isVideo && !file.isVideoSticker {
+                } else if let file = media as? IosappMediaFile, file.isVideo && !file.isVideoSticker {
                     updatedMediaReference = .message(message: MessageReference(arguments.parentMessage), media: file)
                     
                     if let dimensions = file.dimensions {
@@ -726,9 +726,9 @@ public class ChatMessageReplyInfoNode: ASDisplayNode {
             }
             
             if let updatedMediaReference = updatedMediaReference, mediaUpdated && imageDimensions != nil {
-                if let imageReference = updatedMediaReference.concrete(TelegramMediaImage.self) {
+                if let imageReference = updatedMediaReference.concrete(IosappMediaImage.self) {
                     updateImageSignal = chatMessagePhotoThumbnail(account: arguments.context.account, userLocation: mediaUserLocation, photoReference: imageReference, blurred: hasSpoiler)
-                } else if let fileReference = updatedMediaReference.concrete(TelegramMediaFile.self) {
+                } else if let fileReference = updatedMediaReference.concrete(IosappMediaFile.self) {
                     if fileReference.media.isVideo {
                         updateImageSignal = chatMessageVideoThumbnail(account: arguments.context.account, userLocation: mediaUserLocation, fileReference: fileReference, blurred: hasSpoiler)
                     } else if let iconImageRepresentation = smallestImageRepresentation(fileReference.media.previewRepresentations) {
@@ -909,7 +909,7 @@ public class ChatMessageReplyInfoNode: ASDisplayNode {
                         file: arguments.parentMessage.associatedMedia[MediaId(
                             namespace: Namespaces.Media.CloudFile,
                             id: backgroundEmojiId
-                        )] as? TelegramMediaFile,
+                        )] as? IosappMediaFile,
                         emptyCorner: giftEmojiFileId != nil
                     )
                 }

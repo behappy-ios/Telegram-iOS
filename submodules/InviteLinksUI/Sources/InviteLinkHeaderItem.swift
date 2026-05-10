@@ -213,7 +213,7 @@ class InviteLinkHeaderItemNode: ListViewItemNode {
                         let textFrame = self.textNode.textNode.frame
                             if let item = self.item, textFrame.contains(location) {
                                 if let (_, attributes) = self.textNode.textNode.attributesAtPoint(CGPoint(x: location.x - textFrame.minX, y: location.y - textFrame.minY)) {
-                                    if let url = attributes[NSAttributedString.Key(rawValue: TelegramTextAttributes.URL)] as? String {
+                                    if let url = attributes[NSAttributedString.Key(rawValue: IosappTextAttributes.URL)] as? String {
                                         item.linkAction?(.tap(url))
                                     }
                                 }

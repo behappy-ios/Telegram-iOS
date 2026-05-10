@@ -99,7 +99,7 @@ extension ChatControllerImpl: MFMessageComposeViewControllerDelegate {
                         }))
                     )
                     items.append(
-                        .action(ContextMenuActionItem(text: self.presentationData.strings.Chat_Context_Phone_TelegramVoiceCall, icon: { theme in return generateTintedImage(image: UIImage(bundleImageName: "Chat/Context Menu/Call"), color: theme.contextMenu.primaryColor) }, action: { [weak self]  _, f in
+                        .action(ContextMenuActionItem(text: self.presentationData.strings.Chat_Context_Phone_IosappVoiceCall, icon: { theme in return generateTintedImage(image: UIImage(bundleImageName: "Chat/Context Menu/Call"), color: theme.contextMenu.primaryColor) }, action: { [weak self]  _, f in
                             f(.default)
                             
                             guard let self else {
@@ -109,7 +109,7 @@ extension ChatControllerImpl: MFMessageComposeViewControllerDelegate {
                         }))
                     )
                     items.append(
-                        .action(ContextMenuActionItem(text: self.presentationData.strings.Chat_Context_Phone_TelegramVideoCall, icon: { theme in return generateTintedImage(image: UIImage(bundleImageName: "Chat/Context Menu/VideoCall"), color: theme.contextMenu.primaryColor) }, action: { [weak self]  _, f in
+                        .action(ContextMenuActionItem(text: self.presentationData.strings.Chat_Context_Phone_IosappVideoCall, icon: { theme in return generateTintedImage(image: UIImage(bundleImageName: "Chat/Context Menu/VideoCall"), color: theme.contextMenu.primaryColor) }, action: { [weak self]  _, f in
                             f(.default)
                             
                             guard let self else {

@@ -139,7 +139,7 @@ final class ChatListEmptyNode: ASDisplayNode {
             let _ = self.context.engine.privacy.updateGlobalPrivacySettings().startStandalone()
             
             self.archiveSettingsDisposable = (context.engine.data.subscribe(
-                TelegramEngine.EngineData.Item.Configuration.GlobalPrivacy()
+                IosappEngine.EngineData.Item.Configuration.GlobalPrivacy()
             )
             |> deliverOnMainQueue).startStrict(next: { [weak self] settings in
                 guard let self else {

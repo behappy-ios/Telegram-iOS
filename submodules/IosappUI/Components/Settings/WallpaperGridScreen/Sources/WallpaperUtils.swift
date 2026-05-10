@@ -49,7 +49,7 @@ public func uploadCustomWallpaper(context: AccountContext, wallpaper: WallpaperG
                 }
             }
         case let .contextResult(result):
-            var imageResource: TelegramMediaResource?
+            var imageResource: IosappMediaResource?
             switch result {
                 case let .externalReference(externalReference):
                     if let content = externalReference.content {
@@ -110,7 +110,7 @@ public func uploadCustomWallpaper(context: AccountContext, wallpaper: WallpaperG
             let autoNightModeTriggered = context.sharedContext.currentPresentationData.with {$0 }.autoNightModeTriggered
             let accountManager = context.sharedContext.accountManager
             let account = context.account
-            let updateWallpaper: (TelegramWallpaper) -> Void = { wallpaper in
+            let updateWallpaper: (IosappWallpaper) -> Void = { wallpaper in
                 var resource: MediaResource?
                 if case let .image(representations, _) = wallpaper, let representation = largestImageRepresentation(representations) {
                     resource = representation.resource
@@ -144,7 +144,7 @@ public func uploadCustomWallpaper(context: AccountContext, wallpaper: WallpaperG
             
             let apply: () -> Void = {
                 let settings = WallpaperSettings(blur: mode.contains(.blur), motion: mode.contains(.motion), colors: [], intensity: nil)
-                let wallpaper: TelegramWallpaper = .image([TelegramMediaImageRepresentation(dimensions: PixelDimensions(thumbnailDimensions), resource: thumbnailResource, progressiveSizes: [], immediateThumbnailData: nil, hasVideo: false, isPersonal: false), TelegramMediaImageRepresentation(dimensions: PixelDimensions(croppedImage.size), resource: resource, progressiveSizes: [], immediateThumbnailData: nil, hasVideo: false, isPersonal: false)], settings)
+                let wallpaper: IosappWallpaper = .image([IosappMediaImageRepresentation(dimensions: PixelDimensions(thumbnailDimensions), resource: thumbnailResource, progressiveSizes: [], immediateThumbnailData: nil, hasVideo: false, isPersonal: false), IosappMediaImageRepresentation(dimensions: PixelDimensions(croppedImage.size), resource: resource, progressiveSizes: [], immediateThumbnailData: nil, hasVideo: false, isPersonal: false)], settings)
                 updateWallpaper(wallpaper)
                 DispatchQueue.main.async {
                     completion()
@@ -165,7 +165,7 @@ public func uploadCustomWallpaper(context: AccountContext, wallpaper: WallpaperG
     }).start()
 }
 
-public func getTemporaryCustomPeerWallpaper(context: AccountContext, wallpaper: WallpaperGalleryEntry, mode: WallpaperPresentationOptions, editedImage: UIImage?, cropRect: CGRect?, brightness: CGFloat?) -> Signal<TelegramWallpaper?, NoError> {
+public func getTemporaryCustomPeerWallpaper(context: AccountContext, wallpaper: WallpaperGalleryEntry, mode: WallpaperPresentationOptions, editedImage: UIImage?, cropRect: CGRect?, brightness: CGFloat?) -> Signal<IosappWallpaper?, NoError> {
     var imageSignal: Signal<UIImage, NoError>
     switch wallpaper {
         case .wallpaper:
@@ -183,7 +183,7 @@ public func getTemporaryCustomPeerWallpaper(context: AccountContext, wallpaper: 
                 }
             }
         case let .contextResult(result):
-            var imageResource: TelegramMediaResource?
+            var imageResource: IosappMediaResource?
             switch result {
                 case let .externalReference(externalReference):
                     if let content = externalReference.content {
@@ -216,7 +216,7 @@ public func getTemporaryCustomPeerWallpaper(context: AccountContext, wallpaper: 
     }
     
     return imageSignal
-    |> map { image -> TelegramWallpaper? in
+    |> map { image -> IosappWallpaper? in
         var croppedImage = UIImage()
         
         let finalCropRect: CGRect
@@ -249,7 +249,7 @@ public func getTemporaryCustomPeerWallpaper(context: AccountContext, wallpaper: 
             }
             
             let settings = WallpaperSettings(blur: mode.contains(.blur), motion: mode.contains(.motion), colors: [], intensity: intensity)
-            let temporaryWallpaper: TelegramWallpaper = .image([TelegramMediaImageRepresentation(dimensions: PixelDimensions(thumbnailDimensions), resource: thumbnailResource, progressiveSizes: [], immediateThumbnailData: nil, hasVideo: false, isPersonal: false), TelegramMediaImageRepresentation(dimensions: PixelDimensions(croppedImage.size), resource: resource, progressiveSizes: [], immediateThumbnailData: nil, hasVideo: false, isPersonal: false)], settings)
+            let temporaryWallpaper: IosappWallpaper = .image([IosappMediaImageRepresentation(dimensions: PixelDimensions(thumbnailDimensions), resource: thumbnailResource, progressiveSizes: [], immediateThumbnailData: nil, hasVideo: false, isPersonal: false), IosappMediaImageRepresentation(dimensions: PixelDimensions(croppedImage.size), resource: resource, progressiveSizes: [], immediateThumbnailData: nil, hasVideo: false, isPersonal: false)], settings)
                 
             return temporaryWallpaper
         }
@@ -296,7 +296,7 @@ public func uploadCustomPeerWallpaper(context: AccountContext, wallpaper: Wallpa
                 }
             }
         case let .contextResult(result):
-            var imageResource: TelegramMediaResource?
+            var imageResource: IosappMediaResource?
             switch result {
                 case let .externalReference(externalReference):
                     if let content = externalReference.content {
@@ -363,7 +363,7 @@ public func uploadCustomPeerWallpaper(context: AccountContext, wallpaper: Wallpa
             
             Queue.mainQueue().after(0.05) {
                 let settings = WallpaperSettings(blur: mode.contains(.blur), motion: mode.contains(.motion), colors: [], intensity: intensity)
-                let temporaryWallpaper: TelegramWallpaper = .image([TelegramMediaImageRepresentation(dimensions: PixelDimensions(thumbnailDimensions), resource: thumbnailResource, progressiveSizes: [], immediateThumbnailData: nil, hasVideo: false, isPersonal: false), TelegramMediaImageRepresentation(dimensions: PixelDimensions(croppedImage.size), resource: resource, progressiveSizes: [], immediateThumbnailData: nil, hasVideo: false, isPersonal: false)], settings)
+                let temporaryWallpaper: IosappWallpaper = .image([IosappMediaImageRepresentation(dimensions: PixelDimensions(thumbnailDimensions), resource: thumbnailResource, progressiveSizes: [], immediateThumbnailData: nil, hasVideo: false, isPersonal: false), IosappMediaImageRepresentation(dimensions: PixelDimensions(croppedImage.size), resource: resource, progressiveSizes: [], immediateThumbnailData: nil, hasVideo: false, isPersonal: false)], settings)
                 
                 context.account.pendingPeerMediaUploadManager.add(peerId: peerId, content: .wallpaper(wallpaper: temporaryWallpaper, forBoth: forBoth))
                 

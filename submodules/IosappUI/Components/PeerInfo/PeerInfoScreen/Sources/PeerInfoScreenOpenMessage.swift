@@ -98,7 +98,7 @@ extension PeerInfoScreenNode {
                 return
             }
             
-            let _ = (strongSelf.context.engine.data.get(TelegramEngine.EngineData.Item.Messages.Message(id: messageId))
+            let _ = (strongSelf.context.engine.data.get(IosappEngine.EngineData.Item.Messages.Message(id: messageId))
             |> deliverOnMainQueue).startStandalone(next: { [weak self] message in
                 guard let strongSelf = self, let message = message else {
                     return
@@ -106,9 +106,9 @@ extension PeerInfoScreenNode {
                 
                 var mediaReference: AnyMediaReference?
                 for media in message.media {
-                    if let image = media as? TelegramMediaImage {
+                    if let image = media as? IosappMediaImage {
                         mediaReference = AnyMediaReference.standalone(media: image)
-                    } else if let file = media as? TelegramMediaFile {
+                    } else if let file = media as? IosappMediaFile {
                         mediaReference = AnyMediaReference.standalone(media: file)
                     }
                 }

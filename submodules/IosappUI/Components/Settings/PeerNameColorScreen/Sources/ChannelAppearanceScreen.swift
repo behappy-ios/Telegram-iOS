@@ -71,14 +71,14 @@ final class ChannelAppearanceScreenComponent: Component {
     
     private final class ContentsData {
         let peer: EnginePeer?
-        let peerWallpaper: TelegramWallpaper?
+        let peerWallpaper: IosappWallpaper?
         let peerEmojiPack: StickerPackCollectionInfo?
         let canSetStickerPack: Bool
         let peerStickerPack: StickerPackCollectionInfo?
         let subscriberCount: Int?
-        let availableThemes: [TelegramTheme]
+        let availableThemes: [IosappTheme]
         
-        init(peer: EnginePeer?, peerWallpaper: TelegramWallpaper?, peerEmojiPack: StickerPackCollectionInfo?, canSetStickerPack: Bool, peerStickerPack: StickerPackCollectionInfo?, subscriberCount: Int?, availableThemes: [TelegramTheme]) {
+        init(peer: EnginePeer?, peerWallpaper: IosappWallpaper?, peerEmojiPack: StickerPackCollectionInfo?, canSetStickerPack: Bool, peerStickerPack: StickerPackCollectionInfo?, subscriberCount: Int?, availableThemes: [IosappTheme]) {
             self.peer = peer
             self.peerWallpaper = peerWallpaper
             self.peerEmojiPack = peerEmojiPack
@@ -91,12 +91,12 @@ final class ChannelAppearanceScreenComponent: Component {
         static func get(context: AccountContext, peerId: EnginePeer.Id) -> Signal<ContentsData, NoError> {
             return combineLatest(
                 context.engine.data.subscribe(
-                    TelegramEngine.EngineData.Item.Peer.Peer(id: peerId),
-                    TelegramEngine.EngineData.Item.Peer.ParticipantCount(id: peerId),
-                    TelegramEngine.EngineData.Item.Peer.EmojiPack(id: peerId),
-                    TelegramEngine.EngineData.Item.Peer.CanSetStickerPack(id: peerId),
-                    TelegramEngine.EngineData.Item.Peer.StickerPack(id: peerId),
-                    TelegramEngine.EngineData.Item.Peer.Wallpaper(id: peerId)
+                    IosappEngine.EngineData.Item.Peer.Peer(id: peerId),
+                    IosappEngine.EngineData.Item.Peer.ParticipantCount(id: peerId),
+                    IosappEngine.EngineData.Item.Peer.EmojiPack(id: peerId),
+                    IosappEngine.EngineData.Item.Peer.CanSetStickerPack(id: peerId),
+                    IosappEngine.EngineData.Item.Peer.StickerPack(id: peerId),
+                    IosappEngine.EngineData.Item.Peer.Wallpaper(id: peerId)
                 ),
                 telegramThemes(postbox: context.account.postbox, network: context.account.network, accountManager: context.sharedContext.accountManager)
             )
@@ -143,7 +143,7 @@ final class ChannelAppearanceScreenComponent: Component {
         var replyFileId: Int64?
         var backgroundFileId: Int64?
         var emojiStatus: PeerEmojiStatus?
-        var wallpaper: TelegramWallpaper?
+        var wallpaper: IosappWallpaper?
         var emojiPack: StickerPackCollectionInfo?
         
         var changes: Changes
@@ -154,7 +154,7 @@ final class ChannelAppearanceScreenComponent: Component {
             replyFileId: Int64?,
             backgroundFileId: Int64?,
             emojiStatus: PeerEmojiStatus?,
-            wallpaper: TelegramWallpaper?,
+            wallpaper: IosappWallpaper?,
             emojiPack: StickerPackCollectionInfo?,
             changes: Changes
         ) {
@@ -197,7 +197,7 @@ final class ChannelAppearanceScreenComponent: Component {
         private var contentsData: ContentsData?
         private var contentsDataDisposable: Disposable?
         
-        private var cachedIconFiles: [Int64: TelegramMediaFile] = [:]
+        private var cachedIconFiles: [Int64: IosappMediaFile] = [:]
         
         private var updatedPeerNameColor: PeerNameColor?
         private var updatedPeerNameEmoji: Int64??
@@ -206,12 +206,12 @@ final class ChannelAppearanceScreenComponent: Component {
         private var updatedPeerStatus: PeerEmojiStatus??
         private var updatedPeerWallpaper: WallpaperSelectionResult?
         private var updatedPeerEmojiPack: StickerPackCollectionInfo??
-        private var temporaryPeerWallpaper: TelegramWallpaper?
+        private var temporaryPeerWallpaper: IosappWallpaper?
         
         private var requiredBoostSubject: BoostSubject?
         
         private var currentTheme: PresentationThemeReference?
-        private var resolvedCurrentTheme: (reference: PresentationThemeReference, isDark: Bool, theme: PresentationTheme, wallpaper: TelegramWallpaper?)?
+        private var resolvedCurrentTheme: (reference: PresentationThemeReference, isDark: Bool, theme: PresentationTheme, wallpaper: IosappWallpaper?)?
         private var resolvingCurrentTheme: (reference: PresentationThemeReference, isDark: Bool, disposable: Disposable)?
         
         private var premiumConfiguration: PremiumConfiguration?
@@ -414,7 +414,7 @@ final class ChannelAppearanceScreenComponent: Component {
                 changes.insert(.emojiPack)
             }
             
-            let wallpaper: TelegramWallpaper?
+            let wallpaper: IosappWallpaper?
             if let updatedPeerWallpaper = self.updatedPeerWallpaper {
                 switch updatedPeerWallpaper {
                 case .remove:
@@ -925,12 +925,12 @@ final class ChannelAppearanceScreenComponent: Component {
                     presentationTheme = makePresentationTheme(mediaBox: component.context.sharedContext.accountManager.mediaBox, themeReference: currentTheme)
                 }
                 if let presentationTheme {
-                    let resolvedWallpaper: Signal<TelegramWallpaper?, NoError>
+                    let resolvedWallpaper: Signal<IosappWallpaper?, NoError>
                     if let temporaryPeerWallpaper = self.temporaryPeerWallpaper {
                         resolvedWallpaper = .single(temporaryPeerWallpaper)
                     } else if case let .file(file) = presentationTheme.chat.defaultWallpaper, file.id == 0 {
                         resolvedWallpaper = cachedWallpaper(account: component.context.account, slug: file.slug, settings: file.settings)
-                        |> map { wallpaper -> TelegramWallpaper? in
+                        |> map { wallpaper -> IosappWallpaper? in
                             return wallpaper?.wallpaper
                         }
                     } else {
@@ -1301,9 +1301,9 @@ final class ChannelAppearanceScreenComponent: Component {
                     ))))
                 }
                 
-                var emojiPackFile: TelegramMediaFile?
+                var emojiPackFile: IosappMediaFile?
                 if let thumbnail = emojiPack?.thumbnail {
-                    emojiPackFile = TelegramMediaFile(fileId: MediaId(namespace: 0, id: 0), partialReference: nil, resource: thumbnail.resource, previewRepresentations: [], videoThumbnails: [], immediateThumbnailData: thumbnail.immediateThumbnailData, mimeType: "", size: nil, attributes: [], alternativeRepresentations: [])
+                    emojiPackFile = IosappMediaFile(fileId: MediaId(namespace: 0, id: 0), partialReference: nil, resource: thumbnail.resource, previewRepresentations: [], videoThumbnails: [], immediateThumbnailData: thumbnail.immediateThumbnailData, mimeType: "", size: nil, attributes: [], alternativeRepresentations: [])
                 }
                 
                 let emojiPackSectionSize = self.emojiPackSection.update(
@@ -1433,9 +1433,9 @@ final class ChannelAppearanceScreenComponent: Component {
                     maximumNumberOfLines: 0
                 ))))
                 
-                var stickerPackFile: TelegramMediaFile?
+                var stickerPackFile: IosappMediaFile?
                 if let peerStickerPack = contentsData.peerStickerPack, let thumbnail = peerStickerPack.thumbnail {
-                    stickerPackFile = TelegramMediaFile(fileId: MediaId(namespace: 0, id: peerStickerPack.id.id), partialReference: nil, resource: thumbnail.resource, previewRepresentations: [], videoThumbnails: [], immediateThumbnailData: thumbnail.immediateThumbnailData, mimeType: "", size: nil, attributes: [], alternativeRepresentations: [])
+                    stickerPackFile = IosappMediaFile(fileId: MediaId(namespace: 0, id: peerStickerPack.id.id), partialReference: nil, resource: thumbnail.resource, previewRepresentations: [], videoThumbnails: [], immediateThumbnailData: thumbnail.immediateThumbnailData, mimeType: "", size: nil, attributes: [], alternativeRepresentations: [])
                 }
                 
                 let stickerPackSectionSize = self.stickerPackSection.update(
@@ -1489,7 +1489,7 @@ final class ChannelAppearanceScreenComponent: Component {
             }
             
             var chatPreviewTheme: PresentationTheme = environment.theme
-            var chatPreviewWallpaper: TelegramWallpaper = presentationData.chatWallpaper
+            var chatPreviewWallpaper: IosappWallpaper = presentationData.chatWallpaper
             if let updatedWallpaper = self.updatedPeerWallpaper, case .remove = updatedWallpaper {
             } else if let temporaryPeerWallpaper = self.temporaryPeerWallpaper {
                 chatPreviewWallpaper = temporaryPeerWallpaper
@@ -1633,7 +1633,7 @@ final class ChannelAppearanceScreenComponent: Component {
                 }
                 
                 var currentTheme = self.currentTheme
-                var selectedWallpaper: TelegramWallpaper?
+                var selectedWallpaper: IosappWallpaper?
                 if currentTheme == nil, let wallpaper = resolvedState.wallpaper, !wallpaper.isEmoticon {
                     let theme: PresentationThemeReference = .builtin(.day)
                     currentTheme = theme

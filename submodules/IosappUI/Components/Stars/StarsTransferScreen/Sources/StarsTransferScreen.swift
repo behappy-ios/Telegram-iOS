@@ -30,9 +30,9 @@ private final class SheetContent: CombinedComponent {
     
     let context: AccountContext
     let starsContext: StarsContext
-    let invoice: TelegramMediaInvoice
+    let invoice: IosappMediaInvoice
     let source: BotPaymentInvoiceSource
-    let extendedMedia: [TelegramExtendedMedia]
+    let extendedMedia: [IosappExtendedMedia]
     let inputData: Signal<(StarsContext.State, BotPaymentForm, EnginePeer?, EnginePeer?)?, NoError>
     let navigateToPeer: ((EnginePeer) -> Void)?
     let dismiss: () -> Void
@@ -40,9 +40,9 @@ private final class SheetContent: CombinedComponent {
     init(
         context: AccountContext,
         starsContext: StarsContext,
-        invoice: TelegramMediaInvoice,
+        invoice: IosappMediaInvoice,
         source: BotPaymentInvoiceSource,
-        extendedMedia: [TelegramExtendedMedia],
+        extendedMedia: [IosappExtendedMedia],
         inputData: Signal<(StarsContext.State, BotPaymentForm, EnginePeer?, EnginePeer?)?, NoError>,
         navigateToPeer: ((EnginePeer) -> Void)?,
         dismiss: @escaping () -> Void
@@ -76,8 +76,8 @@ private final class SheetContent: CombinedComponent {
         private let context: AccountContext
         private let starsContext: StarsContext
         private let source: BotPaymentInvoiceSource
-        private let extendedMedia: [TelegramExtendedMedia]
-        private let invoice: TelegramMediaInvoice
+        private let extendedMedia: [IosappExtendedMedia]
+        private let invoice: IosappMediaInvoice
         
         private(set) var botPeer: EnginePeer?
         private(set) var chatPeer: EnginePeer?
@@ -103,8 +103,8 @@ private final class SheetContent: CombinedComponent {
             context: AccountContext,
             starsContext: StarsContext,
             source: BotPaymentInvoiceSource,
-            extendedMedia: [TelegramExtendedMedia],
-            invoice: TelegramMediaInvoice,
+            extendedMedia: [IosappExtendedMedia],
+            invoice: IosappMediaInvoice,
             inputData: Signal<(StarsContext.State, BotPaymentForm, EnginePeer?, EnginePeer?)?, NoError>,
             navigateToPeer: ((EnginePeer) -> Void)?
         ) {
@@ -119,7 +119,7 @@ private final class SheetContent: CombinedComponent {
             
             let chatPeer: Signal<EnginePeer?, NoError>
             if case let .message(messageId) = source {
-                chatPeer = context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: messageId.peerId))
+                chatPeer = context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: messageId.peerId))
             } else {
                 chatPeer = .single(nil)
             }
@@ -422,7 +422,7 @@ private final class SheetContent: CombinedComponent {
             let textColor = theme.actionSheet.primaryTextColor
             let linkColor = theme.actionSheet.controlAccentColor
             let markdownAttributes = MarkdownAttributes(body: MarkdownAttributeSet(font: textFont, textColor: textColor), bold: MarkdownAttributeSet(font: boldTextFont, textColor: textColor), link: MarkdownAttributeSet(font: textFont, textColor: linkColor), linkAttribute: { contents in
-                return (TelegramTextAttributes.URL, contents)
+                return (IosappTextAttributes.URL, contents)
             })
             
             let amount = component.invoice.totalAmount
@@ -688,7 +688,7 @@ private final class SheetContent: CombinedComponent {
             let termsTextColor = theme.actionSheet.secondaryTextColor
             let termsLinkColor = theme.actionSheet.controlAccentColor
             let termsMarkdownAttributes = MarkdownAttributes(body: MarkdownAttributeSet(font: termsTextFont, textColor: termsTextColor), bold: MarkdownAttributeSet(font: termsTextFont, textColor: termsTextColor), link: MarkdownAttributeSet(font: termsTextFont, textColor: termsLinkColor), linkAttribute: { contents in
-                return (TelegramTextAttributes.URL, contents)
+                return (IosappTextAttributes.URL, contents)
             })
             let info = info.update(
                 component: BalancedTextComponent(
@@ -701,8 +701,8 @@ private final class SheetContent: CombinedComponent {
                     lineSpacing: 0.2,
                     highlightColor: linkColor.withAlphaComponent(0.2),
                     highlightAction: { attributes in
-                        if let _ = attributes[NSAttributedString.Key(rawValue: TelegramTextAttributes.URL)] {
-                            return NSAttributedString.Key(rawValue: TelegramTextAttributes.URL)
+                        if let _ = attributes[NSAttributedString.Key(rawValue: IosappTextAttributes.URL)] {
+                            return NSAttributedString.Key(rawValue: IosappTextAttributes.URL)
                         } else {
                             return nil
                         }
@@ -738,18 +738,18 @@ private final class StarsTransferSheetComponent: CombinedComponent {
     
     private let context: AccountContext
     private let starsContext: StarsContext
-    private let invoice: TelegramMediaInvoice
+    private let invoice: IosappMediaInvoice
     private let source: BotPaymentInvoiceSource
-    private let extendedMedia: [TelegramExtendedMedia]
+    private let extendedMedia: [IosappExtendedMedia]
     private let inputData: Signal<(StarsContext.State, BotPaymentForm, EnginePeer?, EnginePeer?)?, NoError>
     private let navigateToPeer: ((EnginePeer) -> Void)?
     
     init(
         context: AccountContext,
         starsContext: StarsContext,
-        invoice: TelegramMediaInvoice,
+        invoice: IosappMediaInvoice,
         source: BotPaymentInvoiceSource,
-        extendedMedia: [TelegramExtendedMedia],
+        extendedMedia: [IosappExtendedMedia],
         inputData: Signal<(StarsContext.State, BotPaymentForm, EnginePeer?, EnginePeer?)?, NoError>,
         navigateToPeer: ((EnginePeer) -> Void)?
     ) {
@@ -848,15 +848,15 @@ private final class StarsTransferSheetComponent: CombinedComponent {
 
 public final class StarsTransferScreen: ViewControllerComponentContainer {
     private let context: AccountContext
-    private let extendedMedia: [TelegramExtendedMedia]
+    private let extendedMedia: [IosappExtendedMedia]
     private let completion: (Bool) -> Void
         
     public init(
         context: AccountContext,
         starsContext: StarsContext,
-        invoice: TelegramMediaInvoice,
+        invoice: IosappMediaInvoice,
         source: BotPaymentInvoiceSource,
-        extendedMedia: [TelegramExtendedMedia] = [],
+        extendedMedia: [IosappExtendedMedia] = [],
         inputData: Signal<(StarsContext.State, BotPaymentForm, EnginePeer?, EnginePeer?)?, NoError>,
         navigateToPeer: ((EnginePeer) -> Void)? = nil,
         completion: @escaping (Bool) -> Void

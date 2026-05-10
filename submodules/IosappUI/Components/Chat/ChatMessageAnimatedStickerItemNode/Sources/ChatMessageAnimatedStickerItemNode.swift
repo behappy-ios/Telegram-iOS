@@ -109,9 +109,9 @@ public class ChatMessageAnimatedStickerItemNode: ChatMessageItemView {
     private var deliveryFailedNode: ChatMessageDeliveryFailedNode?
     private var shareButtonNode: ChatMessageShareButton?
     
-    public var telegramFile: TelegramMediaFile?
-    public var emojiFile: TelegramMediaFile?
-    public var telegramDice: TelegramMediaDice?
+    public var telegramFile: IosappMediaFile?
+    public var emojiFile: IosappMediaFile?
+    public var telegramDice: IosappMediaDice?
     public var emojiString: String?
     private let disposable = MetaDisposable()
     private let disposables = DisposableSet()
@@ -451,7 +451,7 @@ public class ChatMessageAnimatedStickerItemNode: ChatMessageItemView {
         }
                 
         for media in item.message.media {
-            if let telegramFile = media as? TelegramMediaFile {
+            if let telegramFile = media as? IosappMediaFile {
                 if self.telegramFile?.id != telegramFile.id {
                     self.telegramFile = telegramFile
                     let dimensions = telegramFile.dimensions ?? PixelDimensions(width: 512, height: 512)
@@ -466,7 +466,7 @@ public class ChatMessageAnimatedStickerItemNode: ChatMessageItemView {
                     }
                 }
                 break
-            } else if let telegramDice = media as? TelegramMediaDice {
+            } else if let telegramDice = media as? IosappMediaDice {
                 self.telegramDice = telegramDice
             }
         }
@@ -503,7 +503,7 @@ public class ChatMessageAnimatedStickerItemNode: ChatMessageItemView {
         } else if self.telegramFile == nil && self.telegramDice == nil {
             let (emoji, fitz) = item.message.text.basicEmoji
             
-            var emojiFile: TelegramMediaFile?
+            var emojiFile: IosappMediaFile?
             var emojiString: String?
             if messageIsEligibleForLargeCustomEmoji(item.message) || messageIsEligibleForLargeEmoji(item.message) {
                 emojiString = item.message.text
@@ -588,7 +588,7 @@ public class ChatMessageAnimatedStickerItemNode: ChatMessageItemView {
             return
         }
         
-        var file: TelegramMediaFile?
+        var file: IosappMediaFile?
         var playbackMode: AnimatedStickerPlaybackMode = .loop
         var isEmoji = false
         var fitzModifier: EmojiFitzModifier?
@@ -922,7 +922,7 @@ public class ChatMessageAnimatedStickerItemNode: ChatMessageItemView {
             case let .peer(peerId):
                 if peerId != item.context.account.peerId {
                     if peerId.isGroupOrChannel && item.message.author != nil {
-                        if let peer = item.message.peers[item.message.id.peerId] as? TelegramChannel, case let .broadcast(info) = peer.info {
+                        if let peer = item.message.peers[item.message.id.peerId] as? IosappChannel, case let .broadcast(info) = peer.info {
                             if info.flags.contains(.messagesShouldHaveProfiles) {
                                 hasAvatar = incoming
                             }
@@ -938,7 +938,7 @@ public class ChatMessageAnimatedStickerItemNode: ChatMessageItemView {
                     if replyThreadMessage.peerId.isGroupOrChannel && item.message.author != nil {
                         var isBroadcastChannel = false
                         var isMonoforum = false
-                        if let peer = item.message.peers[item.message.id.peerId] as? TelegramChannel {
+                        if let peer = item.message.peers[item.message.id.peerId] as? IosappChannel {
                             if case .broadcast = peer.info {
                                 isBroadcastChannel = true
                             }
@@ -982,28 +982,28 @@ public class ChatMessageAnimatedStickerItemNode: ChatMessageItemView {
                 }
             } else if item.message.effectivelyIncoming(item.context.account.peerId) {
                 if let peer = item.message.peers[item.message.id.peerId] {
-                    if let channel = peer as? TelegramChannel {
+                    if let channel = peer as? IosappChannel {
                         if case .broadcast = channel.info {
                             needsShareButton = true
                         }
                     }
                 }
-                if !needsShareButton, let author = item.message.author as? TelegramUser, let _ = author.botInfo, !item.message.media.isEmpty {
+                if !needsShareButton, let author = item.message.author as? IosappUser, let _ = author.botInfo, !item.message.media.isEmpty {
                     needsShareButton = true
                 }
                 if !needsShareButton {
                     loop: for media in item.message.media {
-                        if media is TelegramMediaGame || media is TelegramMediaInvoice {
+                        if media is IosappMediaGame || media is IosappMediaInvoice {
                             needsShareButton = true
                             break loop
-                        } else if let media = media as? TelegramMediaWebpage, case .Loaded = media.content {
+                        } else if let media = media as? IosappMediaWebpage, case .Loaded = media.content {
                             needsShareButton = true
                             break loop
                         }
                     }
                 } else {
                     loop: for media in item.message.media {
-                        if media is TelegramMediaAction {
+                        if media is IosappMediaAction {
                             needsShareButton = false
                             break loop
                         }
@@ -1140,7 +1140,7 @@ public class ChatMessageAnimatedStickerItemNode: ChatMessageItemView {
                 } else if let attribute = attribute as? ViewCountMessageAttribute {
                     viewCount = attribute.count
                 } else if let attribute = attribute as? ReplyThreadMessageAttribute, case .peer = item.chatLocation {
-                    if let channel = item.message.peers[item.message.id.peerId] as? TelegramChannel, case .group = channel.info {
+                    if let channel = item.message.peers[item.message.id.peerId] as? IosappChannel, case .group = channel.info {
                         dateReplies = Int(attribute.count)
                     }
                 } else if let attribute = attribute as? PaidStarsMessageAttribute, item.message.id.peerId.namespace == Namespaces.Peer.CloudChannel {
@@ -1220,7 +1220,7 @@ public class ChatMessageAnimatedStickerItemNode: ChatMessageItemView {
             for attribute in item.message.attributes {
                 if let attribute = attribute as? InlineBotMessageAttribute {
                     var inlineBotNameString: String?
-                    if let peerId = attribute.peerId, let bot = item.message.peers[peerId] as? TelegramUser {
+                    if let peerId = attribute.peerId, let bot = item.message.peers[peerId] as? IosappUser {
                         inlineBotNameString = bot.addressName
                     } else {
                         inlineBotNameString = attribute.title
@@ -1375,7 +1375,7 @@ public class ChatMessageAnimatedStickerItemNode: ChatMessageItemView {
                 actionButtonsFinalize = buttonsLayout
             } else if incoming, let attribute = item.message.attributes.first(where: { $0 is SuggestedPostMessageAttribute }) as? SuggestedPostMessageAttribute, attribute.state == nil {
                 var canApprove = true
-                if let peer = item.message.peers[item.message.id.peerId] as? TelegramChannel, peer.isMonoForum, let linkedMonoforumId = peer.linkedMonoforumId, let mainChannel = item.message.peers[linkedMonoforumId] as? TelegramChannel, mainChannel.hasPermission(.manageDirect), !mainChannel.hasPermission(.sendSomething) {
+                if let peer = item.message.peers[item.message.id.peerId] as? IosappChannel, peer.isMonoForum, let linkedMonoforumId = peer.linkedMonoforumId, let mainChannel = item.message.peers[linkedMonoforumId] as? IosappChannel, mainChannel.hasPermission(.manageDirect), !mainChannel.hasPermission(.sendSomething) {
                     canApprove = false
                 }
                 
@@ -1653,7 +1653,7 @@ public class ChatMessageAnimatedStickerItemNode: ChatMessageItemView {
                         animationNodeFrame = animationNodeFrame.offsetBy(dx: 0.0, dy: 20.0)
                     }
                     
-                    var file: TelegramMediaFile?
+                    var file: IosappMediaFile?
                     if let emojiFile = emojiFile {
                         file = emojiFile
                     } else if let telegramFile = telegramFile {
@@ -2115,7 +2115,7 @@ public class ChatMessageAnimatedStickerItemNode: ChatMessageItemView {
                 
         var emojiFile = self.emojiFile
         if emojiFile == nil {
-            emojiFile = item.message.associatedMedia.first?.value as? TelegramMediaFile
+            emojiFile = item.message.associatedMedia.first?.value as? IosappMediaFile
         }
         
         guard let file = emojiFile else {
@@ -2363,7 +2363,7 @@ public class ChatMessageAnimatedStickerItemNode: ChatMessageItemView {
                 if let item = self.item, let forwardInfo = item.message.forwardInfo {
                     let performAction: () -> Void = {
                         if let sourceMessageId = forwardInfo.sourceMessageId {
-                            if !item.message.id.peerId.isReplies, let channel = forwardInfo.author as? TelegramChannel, channel.addressName == nil {
+                            if !item.message.id.peerId.isReplies, let channel = forwardInfo.author as? IosappChannel, channel.addressName == nil {
                                 if case let .broadcast(info) = channel.info, info.flags.contains(.hasDiscussionGroup) {
                                 } else if case .member = channel.participationStatus {
                                 } else {
@@ -2373,7 +2373,7 @@ public class ChatMessageAnimatedStickerItemNode: ChatMessageItemView {
                             }
                             item.controllerInteraction.navigateToMessage(item.message.id, sourceMessageId, NavigateToMessageParams(timestamp: nil, quote: nil))
                         } else if let peer = forwardInfo.source ?? forwardInfo.author {
-                            item.controllerInteraction.openPeer(EnginePeer(peer), peer is TelegramUser ? .info(nil) : .chat(textInputState: nil, subject: nil, peekData: nil), nil, .default)
+                            item.controllerInteraction.openPeer(EnginePeer(peer), peer is IosappUser ? .info(nil) : .chat(textInputState: nil, subject: nil, peekData: nil), nil, .default)
                         } else if let _ = forwardInfo.authorSignature {
                             item.controllerInteraction.displayMessageTooltip(item.message.id, item.presentationData.strings.Conversation_ForwardAuthorHiddenTooltip, false, forwardInfoNode, nil)
                         }
@@ -2636,7 +2636,7 @@ public class ChatMessageAnimatedStickerItemNode: ChatMessageItemView {
                 return
             }
             
-            if let channel = item.message.peers[item.message.id.peerId] as? TelegramChannel, case .broadcast = channel.info {
+            if let channel = item.message.peers[item.message.id.peerId] as? IosappChannel, case .broadcast = channel.info {
                 for attribute in item.message.attributes {
                     if let _ = attribute as? ReplyThreadMessageAttribute {
                         item.controllerInteraction.openMessageReplies(item.message.id, true, false)
@@ -3291,15 +3291,15 @@ public struct AnimatedEmojiSoundsConfiguration {
         return AnimatedEmojiSoundsConfiguration(sounds: [:])
     }
     
-    public let sounds: [String: TelegramMediaFile]
+    public let sounds: [String: IosappMediaFile]
     
-    fileprivate init(sounds: [String: TelegramMediaFile]) {
+    fileprivate init(sounds: [String: IosappMediaFile]) {
         self.sounds = sounds
     }
     
     public static func with(appConfiguration: AppConfiguration, account: Account) -> AnimatedEmojiSoundsConfiguration {
         if let data = appConfiguration.data, let values = data["emojies_sounds"] as? [String: Any] {
-            var sounds: [String: TelegramMediaFile] = [:]
+            var sounds: [String: IosappMediaFile] = [:]
             for (key, value) in values {
                 if let dict = value as? [String: String], var fileReferenceString = dict["file_reference_base64"] {
                     fileReferenceString = fileReferenceString.replacingOccurrences(of: "-", with: "+")
@@ -3310,7 +3310,7 @@ public struct AnimatedEmojiSoundsConfiguration {
                     
                     if let idString = dict["id"], let id = Int64(idString), let accessHashString = dict["access_hash"], let accessHash = Int64(accessHashString), let fileReference = Data(base64Encoded: fileReferenceString) {
                         let resource = CloudDocumentMediaResource(datacenterId: 1, fileId: id, accessHash: accessHash, size: nil, fileReference: fileReference, fileName: nil)
-                        let file = TelegramMediaFile(fileId: MediaId(namespace: Namespaces.Media.LocalFile, id: 0), partialReference: nil, resource: resource, previewRepresentations: [], videoThumbnails: [], immediateThumbnailData: nil, mimeType: "audio/ogg", size: nil, attributes: [], alternativeRepresentations: [])
+                        let file = IosappMediaFile(fileId: MediaId(namespace: Namespaces.Media.LocalFile, id: 0), partialReference: nil, resource: resource, previewRepresentations: [], videoThumbnails: [], immediateThumbnailData: nil, mimeType: "audio/ogg", size: nil, attributes: [], alternativeRepresentations: [])
                         sounds[key] = file
                     }
                 }

@@ -91,7 +91,7 @@ public class UnauthorizedAccount {
     
     public let shouldBeServiceTaskMaster = Promise<AccountServiceTaskMasterMode>()
     
-    init(accountManager: AccountManager<TelegramAccountManagerTypes>, networkArguments: NetworkInitializationArguments, id: AccountRecordId, rootPath: String, basePath: String, testingEnvironment: Bool, postbox: Postbox, network: Network, shouldKeepAutoConnection: Bool = true) {
+    init(accountManager: AccountManager<IosappAccountManagerTypes>, networkArguments: NetworkInitializationArguments, id: AccountRecordId, rootPath: String, basePath: String, testingEnvironment: Bool, postbox: Postbox, network: Network, shouldKeepAutoConnection: Bool = true) {
         self.networkArguments = networkArguments
         self.id = id
         self.rootPath = rootPath
@@ -147,7 +147,7 @@ public class UnauthorizedAccount {
                             storeFutureLoginToken(accountManager: accountManager, token: futureAuthToken.makeData())
                         }
 
-                        let user = TelegramUser(user: apiUser)
+                        let user = IosappUser(user: apiUser)
                         var isSupportUser = false
                         if let phone = user.phone, phone.hasPrefix("42"), phone.count <= 5 {
                             isSupportUser = true
@@ -212,7 +212,7 @@ public class UnauthorizedAccount {
         self.stateManager.reset()
     }
     
-    public func changedMasterDatacenterId(accountManager: AccountManager<TelegramAccountManagerTypes>, masterDatacenterId: Int32) -> Signal<UnauthorizedAccount, NoError> {
+    public func changedMasterDatacenterId(accountManager: AccountManager<IosappAccountManagerTypes>, masterDatacenterId: Int32) -> Signal<UnauthorizedAccount, NoError> {
         if masterDatacenterId == Int32(self.network.mtProto.datacenterId) {
             return .single(self)
         } else {
@@ -252,7 +252,7 @@ public enum AccountResult {
     case authorized(Account)
 }
 
-public func accountWithId(accountManager: AccountManager<TelegramAccountManagerTypes>, networkArguments: NetworkInitializationArguments, id: AccountRecordId, encryptionParameters: ValueBoxEncryptionParameters, supplementary: Bool, isSupportUser: Bool, rootPath: String, beginWithTestingEnvironment: Bool, backupData: AccountBackupData?, auxiliaryMethods: AccountAuxiliaryMethods, shouldKeepAutoConnection: Bool = true) -> Signal<AccountResult, NoError> {
+public func accountWithId(accountManager: AccountManager<IosappAccountManagerTypes>, networkArguments: NetworkInitializationArguments, id: AccountRecordId, encryptionParameters: ValueBoxEncryptionParameters, supplementary: Bool, isSupportUser: Bool, rootPath: String, beginWithTestingEnvironment: Bool, backupData: AccountBackupData?, auxiliaryMethods: AccountAuxiliaryMethods, shouldKeepAutoConnection: Bool = true) -> Signal<AccountResult, NoError> {
     let path = "\(rootPath)/\(accountRecordIdPathName(id))"
     
     let postbox = openPostbox(
@@ -331,7 +331,7 @@ public func accountWithId(accountManager: AccountManager<TelegramAccountManagerT
                                         }
                                 case let authorizedState as AuthorizedAccountState:
                                     return postbox.transaction { transaction -> String? in
-                                        return (transaction.getPeer(authorizedState.peerId) as? TelegramUser)?.phone
+                                        return (transaction.getPeer(authorizedState.peerId) as? IosappUser)?.phone
                                     }
                                     |> mapToSignal { phoneNumber in
                                         return initializedNetwork(accountId: id, arguments: networkArguments, supplementary: supplementary, datacenterId: Int(authorizedState.masterDatacenterId), keychain: keychain, basePath: path, testingEnvironment: authorizedState.isTestingEnvironment, languageCode: localizationSettings?.primaryComponent.languageCode, proxySettings: proxySettings, networkSettings: networkSettings, phoneNumber: phoneNumber, useRequestTimeoutTimers: useRequestTimeoutTimers, appConfiguration: appConfig)
@@ -467,7 +467,7 @@ func _internal_twoStepAuthData(_ network: Network) -> Signal<TwoStepAuthData, MT
     }
 }
 
-public final class TelegramPasskey: Equatable {
+public final class IosappPasskey: Equatable {
     public let id: String
     public let name: String
     public let date: Int32
@@ -482,7 +482,7 @@ public final class TelegramPasskey: Equatable {
         self.lastUsageDate = lastUsageDate
     }
     
-    public static func ==(lhs: TelegramPasskey, rhs: TelegramPasskey) -> Bool {
+    public static func ==(lhs: IosappPasskey, rhs: IosappPasskey) -> Bool {
         if lhs.id != rhs.id {
             return false
         }
@@ -502,7 +502,7 @@ public final class TelegramPasskey: Equatable {
     }
 }
 
-extension TelegramPasskey {
+extension IosappPasskey {
     convenience init(apiPasskey: Api.Passkey) {
         switch apiPasskey {
         case let .passkey(passkeyData):
@@ -512,13 +512,13 @@ extension TelegramPasskey {
     }
 }
 
-func _internal_passkeysData(network: Network) -> Signal<[TelegramPasskey], NoError> {
+func _internal_passkeysData(network: Network) -> Signal<[IosappPasskey], NoError> {
     return network.request(Api.functions.account.getPasskeys())
     |> map(Optional.init)
     |> `catch` { _ -> Signal<Api.account.Passkeys?, NoError> in
         return .single(nil)
     }
-    |> map { passkeys -> [TelegramPasskey] in
+    |> map { passkeys -> [IosappPasskey] in
         guard let passkeys else {
             return []
         }
@@ -526,7 +526,7 @@ func _internal_passkeysData(network: Network) -> Signal<[TelegramPasskey], NoErr
         case let .passkeys(passkeysData):
             let passkeys = passkeysData.passkeys
             return passkeys.map { passkey in
-                return TelegramPasskey(apiPasskey: passkey)
+                return IosappPasskey(apiPasskey: passkey)
             }
         }
     }
@@ -554,17 +554,17 @@ func _internal_requestPasskeyRegistration(network: Network) -> Signal<String?, N
     }
 }
 
-func _internal_requestCreatePasskey(network: Network, id: String, clientData: String, attestationObject: Data) -> Signal<TelegramPasskey?, NoError> {
+func _internal_requestCreatePasskey(network: Network, id: String, clientData: String, attestationObject: Data) -> Signal<IosappPasskey?, NoError> {
     return network.request(Api.functions.account.registerPasskey(credential: .inputPasskeyCredentialPublicKey(.init(id: id, rawId: id, response: .inputPasskeyResponseRegister(.init(clientData: .dataJSON(.init(data: clientData)), attestationData: Buffer(data: attestationObject)))))))
     |> map(Optional.init)
     |> `catch` { _ -> Signal<Api.Passkey?, NoError> in
         return .single(nil)
     }
-    |> map { result -> TelegramPasskey? in
+    |> map { result -> IosappPasskey? in
         guard let result else {
             return nil
         }
-        return TelegramPasskey(apiPasskey: result)
+        return IosappPasskey(apiPasskey: result)
     }
 }
 
@@ -1164,7 +1164,7 @@ public class Account {
     
     private let serviceQueue = Queue()
     
-    private let accountManager: AccountManager<TelegramAccountManagerTypes>
+    private let accountManager: AccountManager<IosappAccountManagerTypes>
     public private(set) var stateManager: AccountStateManager!
     private(set) var contactSyncManager: ContactSyncManager!
     public private(set) var callSessionManager: CallSessionManager!
@@ -1238,7 +1238,7 @@ public class Account {
     public let filteredStorySubscriptionsContext: StorySubscriptionsContext?
     public let hiddenStorySubscriptionsContext: StorySubscriptionsContext?
     
-    public init(accountManager: AccountManager<TelegramAccountManagerTypes>, id: AccountRecordId, basePath: String, testingEnvironment: Bool, postbox: Postbox, network: Network, networkArguments: NetworkInitializationArguments, peerId: PeerId, auxiliaryMethods: AccountAuxiliaryMethods, supplementary: Bool, isSupportUser: Bool) {
+    public init(accountManager: AccountManager<IosappAccountManagerTypes>, id: AccountRecordId, basePath: String, testingEnvironment: Bool, postbox: Postbox, network: Network, networkArguments: NetworkInitializationArguments, peerId: PeerId, auxiliaryMethods: AccountAuxiliaryMethods, supplementary: Bool, isSupportUser: Bool) {
         self.accountManager = accountManager
         self.id = id
         self.basePath = basePath
@@ -1293,7 +1293,7 @@ public class Account {
         self.localInputActivityManager = PeerInputActivityManager()
         self.accountPresenceManager = AccountPresenceManager(shouldKeepOnlinePresence: self.shouldKeepOnlinePresence.get(), network: network)
         let _ = (postbox.transaction { transaction -> Void in
-            transaction.updatePeerPresencesInternal(presences: [peerId: TelegramUserPresence(status: .present(until: Int32.max - 1), lastActivity: 0)], merge: { _, updated in return updated })
+            transaction.updatePeerPresencesInternal(presences: [peerId: IosappUserPresence(status: .present(until: Int32.max - 1), lastActivity: 0)], merge: { _, updated in return updated })
             transaction.setNeedsPeerGroupMessageStatsSynchronization(groupId: Namespaces.PeerGroup.archive, namespace: Namespaces.Message.Cloud)
         }).start()
         self.notificationAutolockReportManager = NotificationAutolockReportManager(deadline: self.autolockReportDeadline.get(), network: network)
@@ -1697,7 +1697,7 @@ public func setupAccount(_ account: Account, fetchCachedResourceRepresentation: 
 }
 
 public func standaloneStateManager(
-    accountManager: AccountManager<TelegramAccountManagerTypes>,
+    accountManager: AccountManager<IosappAccountManagerTypes>,
     networkArguments: NetworkInitializationArguments,
     id: AccountRecordId,
     encryptionParameters: ValueBoxEncryptionParameters,
@@ -1764,7 +1764,7 @@ public func standaloneStateManager(
                             Logger.shared.log("StandaloneStateManager", "state is valid")
                             
                             return postbox.transaction { transaction -> String? in
-                                return (transaction.getPeer(authorizedState.peerId) as? TelegramUser)?.phone
+                                return (transaction.getPeer(authorizedState.peerId) as? IosappUser)?.phone
                             }
                             |> mapToSignal { phoneNumber in
                                 Logger.shared.log("StandaloneStateManager", "received phone number")

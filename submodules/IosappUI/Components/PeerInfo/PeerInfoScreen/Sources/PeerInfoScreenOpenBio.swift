@@ -54,7 +54,7 @@ extension PeerInfoScreenNode {
                 UIPasteboard.general.string = bioText
                 
                 let toastText: String
-                if let _ = self.data?.peer as? TelegramUser {
+                if let _ = self.data?.peer as? IosappUser {
                     toastText = self.presentationData.strings.MyProfile_ToastBioCopied
                 } else {
                     toastText = self.presentationData.strings.ChannelProfile_ToastAboutCopied
@@ -88,7 +88,7 @@ extension PeerInfoScreenNode {
             }
             
             let copyText: String
-            if let _ = self.data?.peer as? TelegramUser {
+            if let _ = self.data?.peer as? IosappUser {
                 copyText = self.presentationData.strings.MyProfile_BioActionCopy
             } else {
                 copyText = self.presentationData.strings.ChannelProfile_AboutActionCopy

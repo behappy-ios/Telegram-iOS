@@ -27,14 +27,14 @@ import AlertComponent
 private struct ThemeSettingsThemeEntry: Comparable, Identifiable {
     let index: Int
     let chatTheme: ChatTheme?
-    let emojiFile: TelegramMediaFile?
+    let emojiFile: IosappMediaFile?
     let themeReference: PresentationThemeReference?
     let peer: EnginePeer?
     let nightMode: Bool
     var selected: Bool
     let theme: PresentationTheme
     let strings: PresentationStrings
-    let wallpaper: TelegramWallpaper?
+    let wallpaper: IosappWallpaper?
     
     var stableId: String {
         return self.chatTheme?.id ?? "\(self.index)"
@@ -83,27 +83,27 @@ private struct ThemeSettingsThemeEntry: Comparable, Identifiable {
 private class ThemeSettingsThemeIconItem: ListViewItem {
     let context: AccountContext
     let chatTheme: ChatTheme?
-    let emojiFile: TelegramMediaFile?
+    let emojiFile: IosappMediaFile?
     let themeReference: PresentationThemeReference?
     let peer: EnginePeer?
     let nightMode: Bool
     let selected: Bool
     let theme: PresentationTheme
     let strings: PresentationStrings
-    let wallpaper: TelegramWallpaper?
+    let wallpaper: IosappWallpaper?
     let action: (ChatTheme?) -> Void
     
     public init(
         context: AccountContext,
         chatTheme: ChatTheme?,
-        emojiFile: TelegramMediaFile?,
+        emojiFile: IosappMediaFile?,
         themeReference: PresentationThemeReference?,
         peer: EnginePeer?,
         nightMode: Bool,
         selected: Bool,
         theme: PresentationTheme,
         strings: PresentationStrings,
-        wallpaper: TelegramWallpaper?,
+        wallpaper: IosappWallpaper?,
         action: @escaping (ChatTheme?) -> Void
     ) {
         self.context = context
@@ -990,7 +990,7 @@ private class ChatThemeScreenNode: ViewControllerTracingNode, ASScrollViewDelega
                 return combineLatest(
                     .single(state),
                     context.engine.data.get(
-                        EngineDataMap(peerIds.map(TelegramEngine.EngineData.Item.Peer.Peer.init))
+                        EngineDataMap(peerIds.map(IosappEngine.EngineData.Item.Peer.Peer.init))
                     ) |> map { peers in
                         var result: [EnginePeer.Id: EnginePeer] = [:]
                         for peerId in peerIds {
@@ -1041,7 +1041,7 @@ private class ChatThemeScreenNode: ViewControllerTracingNode, ASScrollViewDelega
                 guard case let .gift(gift, themeSettings) = theme, !existingIds.contains(theme.id) else {
                     continue
                 }
-                var emojiFile: TelegramMediaFile?
+                var emojiFile: IosappMediaFile?
                 var peer: EnginePeer?
                 if case let .unique(uniqueGift) = gift {
                     for attribute in uniqueGift.attributes {
@@ -1054,7 +1054,7 @@ private class ChatThemeScreenNode: ViewControllerTracingNode, ASScrollViewDelega
                     }
                 }
                 let themeReference: PresentationThemeReference
-                let wallpaper: TelegramWallpaper?
+                let wallpaper: IosappWallpaper?
                 if isDarkAppearance {
                     wallpaper = themeSettings.first(where: { $0.baseTheme == .night || $0.baseTheme == .tinted })?.wallpaper
                     themeReference = .builtin(.night)
@@ -1355,7 +1355,7 @@ private class ChatThemeScreenNode: ViewControllerTracingNode, ASScrollViewDelega
             self.completion?(self.selectedTheme)
         }
         if case let .gift(gift, _) = self.selectedTheme, case let .unique(uniqueGift) = gift, let themePeerId = uniqueGift.themePeerId {
-            let _ = (self.context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: themePeerId))
+            let _ = (self.context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: themePeerId))
             |> deliverOnMainQueue).start(next: { [weak self] peer in
                 guard let self, let peer else {
                     return

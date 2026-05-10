@@ -221,7 +221,7 @@ final class MentionChatInputPanelItemNode: ListViewItemNode {
                     strongSelf.activateAreaNode.accessibilityValue = username
                     strongSelf.activateAreaNode.frame = CGRect(origin: .zero, size: nodeLayout.size)
                     
-                    if let peer = item.peer as? TelegramUser, let _ = peer.botInfo {
+                    if let peer = item.peer as? IosappUser, let _ = peer.botInfo {
                         strongSelf.setRevealOptions([ItemListRevealOption(key: 0, title: item.presentationData.strings.Common_Delete, icon: .none, color: item.presentationData.theme.list.itemDisclosureActions.destructive.fillColor, textColor: item.presentationData.theme.list.itemDisclosureActions.destructive.foregroundColor)])
                         strongSelf.setRevealOptionsOpened(item.revealed, animated: animation.isAnimated)
                     } else {

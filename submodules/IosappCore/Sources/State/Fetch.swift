@@ -28,7 +28,7 @@ func fetchCloudMediaLocation(
     network: Network,
     mediaReferenceRevalidationContext: MediaReferenceRevalidationContext,
     networkStatsContext: NetworkStatsContext,
-    resource: TelegramMediaResource,
+    resource: IosappMediaResource,
     datacenterId: Int,
     size: Int64?,
     intervals: Signal<[(Range<Int64>, MediaBoxFetchPriority)], NoError>,
@@ -101,7 +101,7 @@ func fetchResource(
             intervals: intervals,
             parameters: parameters
         ))
-    } else if let cloudResource = resource as? TelegramMultipartFetchableResource {
+    } else if let cloudResource = resource as? IosappMultipartFetchableResource {
         return .single(.dataPart(resourceOffset: 0, data: Data(), range: 0 ..< 0, complete: false))
         |> then(fetchCloudMediaLocation(
             accountPeerId: accountPeerId,
@@ -148,7 +148,7 @@ func fetchResource(
             guard case let .file(file) = wallpaper else {
                 return .fail(.generic)
             }
-            guard let cloudResource = file.file.resource as? TelegramMultipartFetchableResource else {
+            guard let cloudResource = file.file.resource as? IosappMultipartFetchableResource else {
                 return .fail(.generic)
             }
             return .single(.dataPart(resourceOffset: 0, data: Data(), range: 0 ..< 0, complete: false))
@@ -164,7 +164,7 @@ func fetchResource(
                 intervals: intervals,
                 parameters: MediaResourceFetchParameters(
                     tag: nil,
-                    info: TelegramCloudMediaResourceFetchInfo(reference: .standalone(resource: file.file.resource), preferBackgroundReferenceRevalidation: false, continueInBackground: false),
+                    info: IosappCloudMediaResourceFetchInfo(reference: .standalone(resource: file.file.resource), preferBackgroundReferenceRevalidation: false, continueInBackground: false),
                     location: nil,
                     contentType: .other,
                     isRandomAccessAllowed: true

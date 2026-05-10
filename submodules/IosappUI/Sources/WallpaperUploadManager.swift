@@ -8,7 +8,7 @@ import IosappUIPreferences
 import MediaResources
 import AccountContext
 
-private extension TelegramWallpaper {
+private extension IosappWallpaper {
     var mainResource: MediaResource? {
         switch self {
             case let .image(representations, _):
@@ -22,10 +22,10 @@ private extension TelegramWallpaper {
 }
 
 private final class WallpaperUploadContext {
-    let wallpaper: TelegramWallpaper
+    let wallpaper: IosappWallpaper
     private let disposable: Disposable
     
-    init(wallpaper: TelegramWallpaper, disposable: Disposable) {
+    init(wallpaper: IosappWallpaper, disposable: Disposable) {
         self.wallpaper = wallpaper
         self.disposable = disposable
     }
@@ -107,14 +107,14 @@ final class WallpaperUploadManagerImpl: WallpaperUploadManager {
                     let autoNightModeTriggered = presentationData.autoNightModeTriggered
                     disposable.set(uploadSignal.start(next: { status in
                         if case let .complete(wallpaper) = status {
-                            let updateWallpaper: (TelegramWallpaper) -> Void = { wallpaper in
+                            let updateWallpaper: (IosappWallpaper) -> Void = { wallpaper in
                                 if let resource = wallpaper.mainResource {
                                     let _ = account.postbox.mediaBox.cachedResourceRepresentation(resource, representation: CachedScaledImageRepresentation(size: CGSize(width: 720.0, height: 720.0), mode: .aspectFit), complete: true, fetch: true).start(completed: {})
                                     let _ = sharedContext.accountManager.mediaBox.cachedResourceRepresentation(resource, representation: CachedScaledImageRepresentation(size: CGSize(width: 720.0, height: 720.0), mode: .aspectFit), complete: true, fetch: true).start(completed: {})
                                 }
                                 
                                 let _ = (updatePresentationThemeSettingsInteractively(accountManager: sharedContext.accountManager, { current in
-                                    let updatedWallpaper: TelegramWallpaper
+                                    let updatedWallpaper: IosappWallpaper
                                     if let currentSettings = currentWallpaper.settings {
                                         updatedWallpaper = wallpaper.withUpdatedSettings(currentSettings)
                                     } else {

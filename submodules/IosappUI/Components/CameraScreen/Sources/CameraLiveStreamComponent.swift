@@ -398,7 +398,7 @@ public final class StreamAsComponent: Component {
             self.state = state
             
             if self.peer?.id != component.peerId {
-                let _ = (component.context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: component.peerId))
+                let _ = (component.context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: component.peerId))
                 |> deliverOnMainQueue).start(next: { [weak self] peer in
                     guard let self, let peer else {
                         return

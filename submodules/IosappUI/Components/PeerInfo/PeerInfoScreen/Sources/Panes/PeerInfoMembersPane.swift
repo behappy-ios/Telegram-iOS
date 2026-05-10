@@ -110,9 +110,9 @@ private enum PeerMembersListEntry: Comparable, Identifiable {
                     case .member:
                         var canEditRank = false
                         if member.id == context.account.peerId {
-                            if let channel = enclosingPeer as? TelegramChannel, channel.hasPermission(.editRank) {
+                            if let channel = enclosingPeer as? IosappChannel, channel.hasPermission(.editRank) {
                                 canEditRank = true
-                            } else if let group = enclosingPeer as? TelegramGroup, !group.hasBannedPermission(.banEditRank) {
+                            } else if let group = enclosingPeer as? IosappGroup, !group.hasBannedPermission(.banEditRank) {
                                 canEditRank = true
                             }
                         }
@@ -139,13 +139,13 @@ private enum PeerMembersListEntry: Comparable, Identifiable {
                 let actions = availableActionsForMemberOfPeer(accountPeerId: context.account.peerId, peer: enclosingPeer, member: member)
                 
                 var options: [ItemListPeerItemRevealOption] = []
-                if actions.contains(.promote) && enclosingPeer is TelegramChannel {
+                if actions.contains(.promote) && enclosingPeer is IosappChannel {
                     options.append(ItemListPeerItemRevealOption(type: .neutral, title: presentationData.strings.GroupInfo_ActionPromote, action: {
                         action(member, .promote)
                     }))
                 }
                 if actions.contains(.restrict) {
-                    if enclosingPeer is TelegramChannel {
+                    if enclosingPeer is IosappChannel {
                         options.append(ItemListPeerItemRevealOption(type: .warning, title: presentationData.strings.GroupInfo_ActionRestrict, action: {
                             action(member, .restrict)
                         }))
@@ -165,7 +165,7 @@ private enum PeerMembersListEntry: Comparable, Identifiable {
                 }
             
                 var status: ContactsPeerItemStatus = .presence(presence, presentationData.dateTimeFormat)
-                if let user = member.peer as? TelegramUser, let botInfo = user.botInfo {
+                if let user = member.peer as? IosappUser, let botInfo = user.botInfo {
                     let botStatus: String
                     if botInfo.flags.contains(.hasAccessToChatHistory) {
                         botStatus = presentationData.strings.Bot_GroupStatusReadsHistory
@@ -351,7 +351,7 @@ final class PeerInfoMembersPaneNode: ASDisplayNode, PeerInfoPaneNode {
         self.disposable = (combineLatest(queue: .mainQueue(),
             membersContext.state,
             self.presentationDataPromise.get(),
-            context.engine.data.subscribe(TelegramEngine.EngineData.Item.Peer.Peer(id: peerId))
+            context.engine.data.subscribe(IosappEngine.EngineData.Item.Peer.Peer(id: peerId))
         )
         |> deliverOnMainQueue).startStrict(next: { [weak self] state, presentationData, enclosingPeer in
             guard let strongSelf = self, let enclosingPeer = enclosingPeer else {

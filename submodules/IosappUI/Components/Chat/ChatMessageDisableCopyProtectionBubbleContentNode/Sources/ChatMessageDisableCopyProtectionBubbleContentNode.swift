@@ -119,7 +119,7 @@ public class ChatMessageDisableCopyProtectionBubbleContentNode: ChatMessageBubbl
                 
                 var text: String = ""
                 var hasActionButtons = false
-                if let action = item.message.media.first(where: { $0 is TelegramMediaAction }) as? TelegramMediaAction, case let .copyProtectionRequest(hasExpired, _, _) = action.action {
+                if let action = item.message.media.first(where: { $0 is IosappMediaAction }) as? IosappMediaAction, case let .copyProtectionRequest(hasExpired, _, _) = action.action {
                     let currentTimestamp = Int32(CFAbsoluteTimeGetCurrent() + NSTimeIntervalSince1970)
                     
                     let appConfiguration = item.context.currentAppConfiguration.with { $0 }

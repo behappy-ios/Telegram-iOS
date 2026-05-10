@@ -553,7 +553,7 @@ public final class StoryItemSetViewListComponent: Component {
                             presence: nil,
                             reaction: item.reaction.flatMap { reaction -> PeerListItemComponent.Reaction in
                                 var animationFileId: Int64?
-                                var animationFile: TelegramMediaFile?
+                                var animationFile: IosappMediaFile?
                                 switch reaction {
                                 case .builtin:
                                     if let availableReactions = component.availableReactions {

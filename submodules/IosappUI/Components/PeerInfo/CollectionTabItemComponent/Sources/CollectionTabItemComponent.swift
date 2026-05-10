@@ -15,7 +15,7 @@ public final class CollectionTabItemComponent: Component {
     public typealias EnvironmentType = TabSelectorComponent.ItemEnvironment
     
     public enum Icon: Equatable {
-        case collection(TelegramMediaFile)
+        case collection(IosappMediaFile)
         case add
     }
     

@@ -327,7 +327,7 @@ func presentLegacyMediaPickerGallery(
                             return false
                         }
                         var sendWhenOnlineAvailable = false
-                        if let presence = peerView.peerPresences[peer.id] as? TelegramUserPresence, case let .present(until) = presence.status {
+                        if let presence = peerView.peerPresences[peer.id] as? IosappUserPresence, case let .present(until) = presence.status {
                             let currentTime = Int32(CFAbsoluteTimeGetCurrent() + kCFAbsoluteTimeIntervalSince1970)
                             if currentTime > until {
                                 sendWhenOnlineAvailable = true

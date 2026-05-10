@@ -236,7 +236,7 @@ public final class ChatMessageAttachedContentNode: ASDisplayNode {
                 if let peer = forwardInfo.author {
                     author = peer
                 } else if let authorSignature = forwardInfo.authorSignature {
-                    author = TelegramUser(id: PeerId(namespace: Namespaces.Peer.Empty, id: PeerId.Id._internalFromInt64Value(Int64(authorSignature.persistentHashValue % 32))), accessHash: nil, firstName: authorSignature, lastName: nil, username: nil, phone: nil, photo: [], botInfo: nil, restrictionInfo: nil, flags: [], emojiStatus: nil, usernames: [], storiesHidden: nil, nameColor: nil, backgroundEmojiId: nil, profileColor: nil, profileBackgroundEmojiId: nil, subscriberCount: nil, verificationIconFileId: nil)
+                    author = IosappUser(id: PeerId(namespace: Namespaces.Peer.Empty, id: PeerId.Id._internalFromInt64Value(Int64(authorSignature.persistentHashValue % 32))), accessHash: nil, firstName: authorSignature, lastName: nil, username: nil, phone: nil, photo: [], botInfo: nil, restrictionInfo: nil, flags: [], emojiStatus: nil, usernames: [], storiesHidden: nil, nameColor: nil, backgroundEmojiId: nil, profileColor: nil, profileBackgroundEmojiId: nil, subscriberCount: nil, verificationIconFileId: nil)
                 }
             }
             
@@ -315,15 +315,15 @@ public final class ChatMessageAttachedContentNode: ASDisplayNode {
             }
             
             var contentMediaValue: Media?
-            var contentFileValue: TelegramMediaFile?
-            var contentAnimatedFilesValue: [TelegramMediaFile] = []
+            var contentFileValue: IosappMediaFile?
+            var contentAnimatedFilesValue: [IosappMediaFile] = []
             
             var contentMediaAutomaticPlayback: Bool = false
             var contentMediaAutomaticDownload: InteractiveMediaNodeAutodownloadMode = .none
             
             var mediaAndFlags = mediaAndFlags
             if let mediaAndFlagsValue = mediaAndFlags {
-                if mediaAndFlagsValue.0.first is TelegramMediaStory || mediaAndFlagsValue.0.first is WallpaperPreviewMedia || mediaAndFlagsValue.0.first is UniqueGiftPreviewMedia || mediaAndFlagsValue.0.first is GiftAuctionPreviewMedia {
+                if mediaAndFlagsValue.0.first is IosappMediaStory || mediaAndFlagsValue.0.first is WallpaperPreviewMedia || mediaAndFlagsValue.0.first is UniqueGiftPreviewMedia || mediaAndFlagsValue.0.first is GiftAuctionPreviewMedia {
                     var flags = mediaAndFlagsValue.1
                     flags.remove(.preferMediaInline)
                     mediaAndFlags = (mediaAndFlagsValue.0, flags)
@@ -345,11 +345,11 @@ public final class ChatMessageAttachedContentNode: ASDisplayNode {
             if let (mediaArray, flags) = mediaAndFlags {
                 contentMediaInline = flags.contains(.preferMediaInline)
 
-                if flags.contains(.stickerPack), let files = mediaArray as? [TelegramMediaFile], let file = files.first {
+                if flags.contains(.stickerPack), let files = mediaArray as? [IosappMediaFile], let file = files.first {
                     contentMediaValue = file
                     contentAnimatedFilesValue = files
                 } else if let media = mediaArray.first {
-                    if let file = media as? TelegramMediaFile {
+                    if let file = media as? IosappMediaFile {
                         if file.mimeType == "application/x-tgtheme-ios", let size = file.size, size < 16 * 1024 {
                             contentMediaValue = file
                         } else if file.isInstantVideo {
@@ -384,13 +384,13 @@ public final class ChatMessageAttachedContentNode: ASDisplayNode {
                                 contentMediaAspectFilled = true
                             }
                         }
-                    } else if media is TelegramMediaImage {
+                    } else if media is IosappMediaImage {
                         contentMediaValue = media
-                    } else if media is TelegramMediaWebFile {
+                    } else if media is IosappMediaWebFile {
                         contentMediaValue = media
                     } else if media is WallpaperPreviewMedia {
                         contentMediaValue = media
-                    } else if media is TelegramMediaStory {
+                    } else if media is IosappMediaStory {
                         contentMediaValue = media
                     } else if media is UniqueGiftPreviewMedia {
                         contentMediaValue = media
@@ -410,9 +410,9 @@ public final class ChatMessageAttachedContentNode: ASDisplayNode {
                 if contentMediaInline {
                     contentMediaContinueLayout = nil
                     
-                    if let image = contentMediaValue as? TelegramMediaImage {
+                    if let image = contentMediaValue as? IosappMediaImage {
                         inlineMediaAndSize = (.media(image), CGSize(width: 54.0, height: 54.0))
-                    } else if let file = contentMediaValue as? TelegramMediaFile, !file.previewRepresentations.isEmpty {
+                    } else if let file = contentMediaValue as? IosappMediaFile, !file.previewRepresentations.isEmpty {
                         inlineMediaAndSize = (.media(file), CGSize(width: 54.0, height: 54.0))
                     } else {
                         inlineMediaAndSize = nil
@@ -700,7 +700,7 @@ public final class ChatMessageAttachedContentNode: ASDisplayNode {
                     } else if let attribute = attribute as? ViewCountMessageAttribute {
                         viewCount = attribute.count
                     } else if let attribute = attribute as? ReplyThreadMessageAttribute, case .peer = chatLocation {
-                        if let channel = message.peers[message.id.peerId] as? TelegramChannel, case .group = channel.info {
+                        if let channel = message.peers[message.id.peerId] as? IosappChannel, case .group = channel.info {
                             dateReplies = Int(attribute.count)
                         }
                     } else if let attribute = attribute as? PaidStarsMessageAttribute, message.id.peerId.namespace == Namespaces.Peer.CloudChannel {
@@ -1089,11 +1089,11 @@ public final class ChatMessageAttachedContentNode: ASDisplayNode {
                             var fittedImageSize = inlineMediaSize
                             switch inlineMediaValue {
                             case let .media(inlineMediaValue):
-                                if let image = inlineMediaValue as? TelegramMediaImage {
+                                if let image = inlineMediaValue as? IosappMediaImage {
                                     if let dimensions = image.representations.last?.dimensions.cgSize {
                                         fittedImageSize = dimensions.aspectFilled(inlineMediaSize)
                                     }
-                                } else if let file = inlineMediaValue as? TelegramMediaFile {
+                                } else if let file = inlineMediaValue as? IosappMediaFile {
                                     if let dimensions = file.dimensions?.cgSize {
                                         fittedImageSize = dimensions.aspectFilled(inlineMediaSize)
                                     }
@@ -1107,10 +1107,10 @@ public final class ChatMessageAttachedContentNode: ASDisplayNode {
                                 
                                 switch resolvedInlineMediaValue {
                                 case let .media(resolvedInlineMediaValue):
-                                    if let image = resolvedInlineMediaValue as? TelegramMediaImage {
+                                    if let image = resolvedInlineMediaValue as? IosappMediaImage {
                                         let updateInlineImageSignal = chatWebpageSnippetPhoto(account: context.account, userLocation: .peer(message.id.peerId), photoReference: .message(message: MessageReference(message), media: image), placeholderColor: mainColor.withMultipliedAlpha(0.1))
                                         inlineMedia.setSignal(updateInlineImageSignal)
-                                    } else if let file = resolvedInlineMediaValue as? TelegramMediaFile, let representation = file.previewRepresentations.last {
+                                    } else if let file = resolvedInlineMediaValue as? IosappMediaFile, let representation = file.previewRepresentations.last {
                                         let updateInlineImageSignal = chatWebpageSnippetFile(account: context.account, userLocation: .peer(message.id.peerId), mediaReference: .message(message: MessageReference(message), media: file), representation: representation)
                                         inlineMedia.setSignal(updateInlineImageSignal)
                                     }
@@ -1240,7 +1240,7 @@ public final class ChatMessageAttachedContentNode: ASDisplayNode {
                                 }
                             }
                             
-                            if let _ = message.media.first(where: { $0 is TelegramMediaPoll }) {
+                            if let _ = message.media.first(where: { $0 is IosappMediaPoll }) {
                                 let closeButton: ComponentView<Empty>
                                 if let current = self.closeButton {
                                     closeButton = current
@@ -1557,7 +1557,7 @@ public final class ChatMessageAttachedContentNode: ASDisplayNode {
                         
                         if displayLine {
                             var pattern: MessageInlineBlockBackgroundView.Pattern?
-                            if let _ = message.media.first(where: { $0 is TelegramMediaPoll }) {
+                            if let _ = message.media.first(where: { $0 is IosappMediaPoll }) {
                                 
                             } else if let backgroundEmojiId = author?.backgroundEmojiId {
                                 pattern = MessageInlineBlockBackgroundView.Pattern(
@@ -1566,7 +1566,7 @@ public final class ChatMessageAttachedContentNode: ASDisplayNode {
                                     file: message.associatedMedia[MediaId(
                                         namespace: Namespaces.Media.CloudFile,
                                         id: backgroundEmojiId
-                                    )] as? TelegramMediaFile
+                                    )] as? IosappMediaFile
                                 )
                             }
                             
@@ -1629,15 +1629,15 @@ public final class ChatMessageAttachedContentNode: ASDisplayNode {
     }
     
     public func transitionNode(media: Media) -> (ASDisplayNode, CGRect, () -> (UIView?, UIView?))? {
-        if let contentImageNode = self.contentMedia, let image = self.media as? TelegramMediaImage, image.isEqual(to: media) {
+        if let contentImageNode = self.contentMedia, let image = self.media as? IosappMediaImage, image.isEqual(to: media) {
             return (contentImageNode, contentImageNode.bounds, { [weak contentImageNode] in
                 return (contentImageNode?.view.snapshotContentTree(unhide: true), nil)
             })
-        } else if let contentImageNode = self.contentMedia, let file = self.media as? TelegramMediaFile, file.isEqual(to: media) {
+        } else if let contentImageNode = self.contentMedia, let file = self.media as? IosappMediaFile, file.isEqual(to: media) {
             return (contentImageNode, contentImageNode.bounds, { [weak contentImageNode] in
                 return (contentImageNode?.view.snapshotContentTree(unhide: true), nil)
             })
-        } else if let contentImageNode = self.contentMedia, let story = self.media as? TelegramMediaStory, story.isEqual(to: media) {
+        } else if let contentImageNode = self.contentMedia, let story = self.media as? IosappMediaStory, story.isEqual(to: media) {
             return (contentImageNode, contentImageNode.bounds, { [weak contentImageNode] in
                 return (contentImageNode?.view.snapshotContentTree(unhide: true), nil)
             })
@@ -1656,19 +1656,19 @@ public final class ChatMessageAttachedContentNode: ASDisplayNode {
         if let text = self.text {
             let textNodeFrame = text.textNode.frame
             if let (index, attributes) = text.textNode.attributesAtPoint(CGPoint(x: point.x - textNodeFrame.minX, y: point.y - textNodeFrame.minY)) {
-                if let url = attributes[NSAttributedString.Key(rawValue: TelegramTextAttributes.URL)] as? String {
+                if let url = attributes[NSAttributedString.Key(rawValue: IosappTextAttributes.URL)] as? String {
                     var concealed = true
-                    if let (attributeText, fullText) = text.textNode.attributeSubstring(name: TelegramTextAttributes.URL, index: index) {
+                    if let (attributeText, fullText) = text.textNode.attributeSubstring(name: IosappTextAttributes.URL, index: index) {
                         concealed = !doesUrlMatchText(url: url, text: attributeText, fullText: fullText)
                     }
                     return ChatMessageBubbleContentTapAction(content: .url(ChatMessageBubbleContentTapAction.Url(url: url, concealed: concealed)))
-                } else if let peerMention = attributes[NSAttributedString.Key(rawValue: TelegramTextAttributes.PeerMention)] as? TelegramPeerMention {
+                } else if let peerMention = attributes[NSAttributedString.Key(rawValue: IosappTextAttributes.PeerMention)] as? IosappPeerMention {
                     return ChatMessageBubbleContentTapAction(content: .peerMention(peerId: peerMention.peerId, mention: peerMention.mention, openProfile: false))
-                } else if let peerName = attributes[NSAttributedString.Key(rawValue: TelegramTextAttributes.PeerTextMention)] as? String {
+                } else if let peerName = attributes[NSAttributedString.Key(rawValue: IosappTextAttributes.PeerTextMention)] as? String {
                     return ChatMessageBubbleContentTapAction(content: .textMention(peerName))
-                } else if let botCommand = attributes[NSAttributedString.Key(rawValue: TelegramTextAttributes.BotCommand)] as? String {
+                } else if let botCommand = attributes[NSAttributedString.Key(rawValue: IosappTextAttributes.BotCommand)] as? String {
                     return ChatMessageBubbleContentTapAction(content: .botCommand(botCommand))
-                } else if let hashtag = attributes[NSAttributedString.Key(rawValue: TelegramTextAttributes.Hashtag)] as? TelegramHashtag {
+                } else if let hashtag = attributes[NSAttributedString.Key(rawValue: IosappTextAttributes.Hashtag)] as? IosappHashtag {
                     return ChatMessageBubbleContentTapAction(content: .hashtag(hashtag.peerName, hashtag.hashtag))
                 }
             }
@@ -1703,13 +1703,13 @@ public final class ChatMessageAttachedContentNode: ASDisplayNode {
                 let textNodeFrame = text.textNode.frame
                 if let (index, attributes) = text.textNode.attributesAtPoint(CGPoint(x: point.x - textNodeFrame.minX, y: point.y - textNodeFrame.minY)) {
                     let possibleNames: [String] = [
-                        TelegramTextAttributes.URL,
-                        TelegramTextAttributes.PeerMention,
-                        TelegramTextAttributes.PeerTextMention,
-                        TelegramTextAttributes.BotCommand,
-                        TelegramTextAttributes.Hashtag,
-                        TelegramTextAttributes.BankCard,
-                        TelegramTextAttributes.Date
+                        IosappTextAttributes.URL,
+                        IosappTextAttributes.PeerMention,
+                        IosappTextAttributes.PeerTextMention,
+                        IosappTextAttributes.BotCommand,
+                        IosappTextAttributes.Hashtag,
+                        IosappTextAttributes.BankCard,
+                        IosappTextAttributes.Date
                     ]
                     for name in possibleNames {
                         if let _ = attributes[NSAttributedString.Key(rawValue: name)] {

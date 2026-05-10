@@ -72,9 +72,9 @@ extension ChatControllerImpl {
             let peer: EnginePeer
             let threadData: ThreadData?
             let unreadCount: Int
-            let location: TelegramEngine.NextUnreadChannelLocation
+            let location: IosappEngine.NextUnreadChannelLocation
             
-            init(peer: EnginePeer, threadData: ThreadData?, unreadCount: Int, location: TelegramEngine.NextUnreadChannelLocation) {
+            init(peer: EnginePeer, threadData: ThreadData?, unreadCount: Int, location: IosappEngine.NextUnreadChannelLocation) {
                 self.peer = peer
                 self.threadData = threadData
                 self.unreadCount = unreadCount
@@ -115,11 +115,11 @@ extension ChatControllerImpl {
             var myCopyProtectionEnabled: Bool = false
             var sendPaidMessageStars: StarsAmount?
             var alwaysShowGiftButton: Bool = false
-            var disallowedGifts: TelegramDisallowedGifts?
+            var disallowedGifts: IosappDisallowedGifts?
             var appliedBoosts: Int32?
             var boostsToUnrestrict: Int32?
             var hasBirthdayToday: Bool = false
-            var businessIntro: TelegramBusinessIntro?
+            var businessIntro: IosappBusinessIntro?
             var peerVerification: PeerVerification?
             var starGiftsAvailable: Bool = false
             var performDismissAction: PerformDismissAction?
@@ -205,7 +205,7 @@ extension ChatControllerImpl {
         var historyNavigationStack = ChatHistoryNavigationStack()
         
         let chatThemePromise = Promise<ChatTheme?>()
-        let chatWallpaperPromise = Promise<TelegramWallpaper?>()
+        let chatWallpaperPromise = Promise<IosappWallpaper?>()
         
         private(set) var inviteRequestsContext: PeerInvitationImportersContext?
         private var inviteRequestsDisposable: Disposable?
@@ -240,7 +240,7 @@ extension ChatControllerImpl {
             case let .replyThread(replyThreadMessage):
                 let promise = Promise<Message?>()
                 if let effectiveMessageId = replyThreadMessage.effectiveMessageId {
-                    promise.set(context.engine.data.subscribe(TelegramEngine.EngineData.Item.Messages.Message(id: effectiveMessageId))
+                    promise.set(context.engine.data.subscribe(IosappEngine.EngineData.Item.Messages.Message(id: effectiveMessageId))
                     |> map { message -> Message? in
                         guard let message = message else {
                             return nil
@@ -267,14 +267,14 @@ extension ChatControllerImpl {
             let managingBot: Signal<ChatManagingBot?, NoError>
             if let peerId = chatLocation.peerId, peerId.namespace == Namespaces.Peer.CloudUser {
                 managingBot = context.engine.data.subscribe(
-                    TelegramEngine.EngineData.Item.Peer.ChatManagingBot(id: peerId)
+                    IosappEngine.EngineData.Item.Peer.ChatManagingBot(id: peerId)
                 )
                 |> mapToSignal { result -> Signal<ChatManagingBot?, NoError> in
                     guard let result else {
                         return .single(nil)
                     }
                     return context.engine.data.subscribe(
-                        TelegramEngine.EngineData.Item.Peer.Peer(id: result.id)
+                        IosappEngine.EngineData.Item.Peer.Peer(id: result.id)
                     )
                     |> map { botPeer -> ChatManagingBot? in
                         guard let botPeer else {
@@ -298,7 +298,7 @@ extension ChatControllerImpl {
                 if peerId.namespace == Namespaces.Peer.CloudChannel {
                     let recentOnlineSignal: Signal<(total: Int32?, recent: Int32?), NoError> = peerView.get()
                     |> map { view -> Bool? in
-                        if let cachedData = view.cachedData as? CachedChannelData, let peer = peerViewMainPeer(view) as? TelegramChannel {
+                        if let cachedData = view.cachedData as? CachedChannelData, let peer = peerViewMainPeer(view) as? IosappChannel {
                             if case .broadcast = peer.info {
                                 return nil
                             } else if let memberCount = cachedData.participantsSummary.memberCount, memberCount > 50 {
@@ -343,7 +343,7 @@ extension ChatControllerImpl {
                     hasScheduledMessages = peerView.get()
                     |> take(1)
                     |> mapToSignal { view -> Signal<Bool, NoError> in
-                        if let peer = peerViewMainPeer(view) as? TelegramChannel, !peer.hasPermission(.sendSomething) {
+                        if let peer = peerViewMainPeer(view) as? IosappChannel, !peer.hasPermission(.sendSomething) {
                             return .single(false)
                         } else {
                             return context.account.viewTracker.scheduledMessagesViewForLocation(context.chatLocationInput(for: chatLocation, contextHolder: chatLocationContextHolder))
@@ -392,7 +392,7 @@ extension ChatControllerImpl {
                             let peers = peersView.peers.values
                             if !peers.isEmpty {
                                 if peers.count == 1, let peer = peers.first {
-                                    if let peer = peer as? TelegramUser {
+                                    if let peer = peer as? IosappUser {
                                         let displayName = EnginePeer(peer).compactDisplayTitle
                                         if count == 1 {
                                             if options.hideNames {
@@ -407,7 +407,7 @@ extension ChatControllerImpl {
                                                 return strings.Conversation_ForwardOptions_UserMessagesForwardVisible(displayName).string
                                             }
                                         }
-                                    } else if let peer = peer as? TelegramChannel, case .broadcast = peer.info {
+                                    } else if let peer = peer as? IosappChannel, case .broadcast = peer.info {
                                         if count == 1 {
                                             if options.hideNames {
                                                 return strings.Conversation_ForwardOptions_ChannelMessageForwardHidden
@@ -592,7 +592,7 @@ extension ChatControllerImpl {
                     } else if let peer = peerViewMainPeer(peerView) {
                         if case .pinnedMessages = configuration.subject {
                             strongSelf.state.chatTitleContent = .custom(title: [ChatTitleContent.TitleTextItem(id: AnyHashable(0), content: .text(strings.Chat_TitlePinnedMessages(Int32(displayedCount ?? 1))))], subtitle: nil, isEnabled: false)
-                        } else if let channel = peer as? TelegramChannel, channel.isMonoForum {
+                        } else if let channel = peer as? IosappChannel, channel.isMonoForum {
                             if let linkedMonoforumId = channel.linkedMonoforumId, let mainPeer = peerView.peers[linkedMonoforumId] {
                                 strongSelf.state.chatTitleContent = .peer(peerView: ChatTitleContent.PeerData(
                                     peerId: mainPeer.id,
@@ -671,7 +671,7 @@ extension ChatControllerImpl {
                 let hasSearchTags: Signal<Bool, NoError>
                 if let peerId = chatLocation.peerId, peerId == context.account.peerId {
                     hasSearchTags = context.engine.data.subscribe(
-                        TelegramEngine.EngineData.Item.Messages.SavedMessageTagStats(peerId: context.account.peerId, threadId: chatLocation.threadId)
+                        IosappEngine.EngineData.Item.Messages.SavedMessageTagStats(peerId: context.account.peerId, threadId: chatLocation.threadId)
                     )
                     |> map { tags -> Bool in
                         return !tags.isEmpty
@@ -711,12 +711,12 @@ extension ChatControllerImpl {
                     displayedPeerVerification = .single(false)
                 }
                 
-                let globalPrivacySettings = context.engine.data.get(TelegramEngine.EngineData.Item.Configuration.GlobalPrivacy())
+                let globalPrivacySettings = context.engine.data.get(IosappEngine.EngineData.Item.Configuration.GlobalPrivacy())
 
                 self.peerDisposable = combineLatest(
                     queue: Queue.mainQueue(),
                     peerView.get(),
-                    context.engine.data.subscribe(TelegramEngine.EngineData.Item.NotificationSettings.Global()),
+                    context.engine.data.subscribe(IosappEngine.EngineData.Item.NotificationSettings.Global()),
                     onlineMemberCount,
                     hasScheduledMessages,
                     hasTopics,
@@ -753,10 +753,10 @@ extension ChatControllerImpl {
                     
                     var upgradedToPeerId: PeerId?
                     var movedToForumTopics = false
-                    if let previous = strongSelf.state.peerView, let group = previous.peers[previous.peerId] as? TelegramGroup, group.migrationReference == nil, let updatedGroup = peerView.peers[peerView.peerId] as? TelegramGroup, let migrationReference = updatedGroup.migrationReference {
+                    if let previous = strongSelf.state.peerView, let group = previous.peers[previous.peerId] as? IosappGroup, group.migrationReference == nil, let updatedGroup = peerView.peers[peerView.peerId] as? IosappGroup, let migrationReference = updatedGroup.migrationReference {
                         upgradedToPeerId = migrationReference.peerId
                     }
-                    if let previous = strongSelf.state.peerView, let channel = previous.peers[previous.peerId] as? TelegramChannel, !channel.isForumOrMonoForum, let updatedChannel = peerView.peers[peerView.peerId] as? TelegramChannel, updatedChannel.isForumOrMonoForum {
+                    if let previous = strongSelf.state.peerView, let channel = previous.peers[previous.peerId] as? IosappChannel, !channel.isForumOrMonoForum, let updatedChannel = peerView.peers[peerView.peerId] as? IosappChannel, updatedChannel.isForumOrMonoForum {
                         if updatedChannel.isForum && updatedChannel.flags.contains(.displayForumAsTabs) {
                         } else {
                             movedToForumTopics = true
@@ -764,16 +764,16 @@ extension ChatControllerImpl {
                     }
                     
                     var shouldDismiss = false
-                    if let previous = strongSelf.state.peerView, let group = previous.peers[previous.peerId] as? TelegramGroup, group.membership != .Removed, let updatedGroup = peerView.peers[peerView.peerId] as? TelegramGroup, updatedGroup.membership == .Removed {
+                    if let previous = strongSelf.state.peerView, let group = previous.peers[previous.peerId] as? IosappGroup, group.membership != .Removed, let updatedGroup = peerView.peers[peerView.peerId] as? IosappGroup, updatedGroup.membership == .Removed {
                         shouldDismiss = true
-                    } else if let previous = strongSelf.state.peerView, let channel = previous.peers[previous.peerId] as? TelegramChannel, channel.participationStatus != .kicked, let updatedChannel = peerView.peers[peerView.peerId] as? TelegramChannel, updatedChannel.participationStatus == .kicked {
+                    } else if let previous = strongSelf.state.peerView, let channel = previous.peers[previous.peerId] as? IosappChannel, channel.participationStatus != .kicked, let updatedChannel = peerView.peers[peerView.peerId] as? IosappChannel, updatedChannel.participationStatus == .kicked {
                         shouldDismiss = true
-                    } else if let previous = strongSelf.state.peerView, let secretChat = previous.peers[previous.peerId] as? TelegramSecretChat, case .active = secretChat.embeddedState, let updatedSecretChat = peerView.peers[peerView.peerId] as? TelegramSecretChat, case .terminated = updatedSecretChat.embeddedState {
+                    } else if let previous = strongSelf.state.peerView, let secretChat = previous.peers[previous.peerId] as? IosappSecretChat, case .active = secretChat.embeddedState, let updatedSecretChat = peerView.peers[peerView.peerId] as? IosappSecretChat, case .terminated = updatedSecretChat.embeddedState {
                         shouldDismiss = true
                     }
                     
                     var wasGroupChannel: Bool?
-                    if let previousPeerView = strongSelf.state.peerView, let info = (previousPeerView.peers[previousPeerView.peerId] as? TelegramChannel)?.info {
+                    if let previousPeerView = strongSelf.state.peerView, let info = (previousPeerView.peers[previousPeerView.peerId] as? IosappChannel)?.info {
                         if case .group = info {
                             wasGroupChannel = true
                         } else {
@@ -781,7 +781,7 @@ extension ChatControllerImpl {
                         }
                     }
                     var isGroupChannel: Bool?
-                    if let info = (peerView.peers[peerView.peerId] as? TelegramChannel)?.info {
+                    if let info = (peerView.peers[peerView.peerId] as? IosappChannel)?.info {
                         if case .group = info {
                             isGroupChannel = true
                         } else {
@@ -805,16 +805,16 @@ extension ChatControllerImpl {
                     }
                     
                     var peerIsMuted = false
-                    if let notificationSettings = peerView.notificationSettings as? TelegramPeerNotificationSettings {
+                    if let notificationSettings = peerView.notificationSettings as? IosappPeerNotificationSettings {
                         if case let .muted(until) = notificationSettings.muteState, until >= Int32(CFAbsoluteTimeGetCurrent() + NSTimeIntervalSince1970) {
                             peerIsMuted = true
                         } else if case .default = notificationSettings.muteState {
                             if let peer = peerView.peers[peerView.peerId] {
-                                if peer is TelegramUser {
+                                if peer is IosappUser {
                                     peerIsMuted = !globalNotificationSettings.privateChats.enabled
-                                } else if peer is TelegramGroup {
+                                } else if peer is IosappGroup {
                                     peerIsMuted = !globalNotificationSettings.groupChats.enabled
-                                } else if let channel = peer as? TelegramChannel {
+                                } else if let channel = peer as? IosappChannel {
                                     switch channel.info {
                                     case .group:
                                         peerIsMuted = !globalNotificationSettings.groupChats.enabled
@@ -829,7 +829,7 @@ extension ChatControllerImpl {
                     var peerDiscussionId: PeerId?
                     var peerMonoforumId: PeerId?
                     var peerGeoLocation: PeerGeoLocation?
-                    if let peer = peerView.peers[peerView.peerId] as? TelegramChannel, let cachedData = peerView.cachedData as? CachedChannelData {
+                    if let peer = peerView.peers[peerView.peerId] as? IosappChannel, let cachedData = peerView.cachedData as? CachedChannelData {
                         if case .broadcast = peer.info {
                             starGiftsAvailable = cachedData.flags.contains(.starGiftsAvailable)
                         } else {
@@ -844,10 +844,10 @@ extension ChatControllerImpl {
                     }
                     var renderedPeer: RenderedPeer?
                     var contactStatus: ChatContactStatus?
-                    var businessIntro: TelegramBusinessIntro?
+                    var businessIntro: IosappBusinessIntro?
                     var sendPaidMessageStars: StarsAmount?
                     var alwaysShowGiftButton = false
-                    var disallowedGifts: TelegramDisallowedGifts?
+                    var disallowedGifts: IosappDisallowedGifts?
                     var isManagedBot = false
                     if let peer = peerView.peers[peerView.peerId] {
                         if let cachedData = peerView.cachedData as? CachedUserData {
@@ -881,9 +881,9 @@ extension ChatControllerImpl {
                             }
                             contactStatus = ChatContactStatus(canAddContact: false, peerStatusSettings: cachedData.peerStatusSettings, invitedBy: invitedBy, managingBot: managingBot)
                             
-                            if let channel = peerView.peers[peerView.peerId] as? TelegramChannel {
+                            if let channel = peerView.peers[peerView.peerId] as? IosappChannel {
                                 if channel.isMonoForum {
-                                    if let linkedMonoforumId = channel.linkedMonoforumId, let mainChannel = peerView.peers[linkedMonoforumId] as? TelegramChannel, mainChannel.hasPermission(.manageDirect) {
+                                    if let linkedMonoforumId = channel.linkedMonoforumId, let mainChannel = peerView.peers[linkedMonoforumId] as? IosappChannel, mainChannel.hasPermission(.manageDirect) {
                                     } else if let sendPaidMessageStarsValue = cachedData.sendPaidMessageStars, sendPaidMessageStarsValue == .zero {
                                         sendPaidMessageStars = nil
                                     } else {
@@ -960,15 +960,15 @@ extension ChatControllerImpl {
                                 autoremoveTimeout = value?.effectiveValue
                             }
                         } else if let cachedChannelData = peerView.cachedData as? CachedChannelData {
-                            if let channel = peer as? TelegramChannel, channel.isMonoForum {
-                                if let linkedMonoforumId = channel.linkedMonoforumId, let mainChannel = peerView.peers[linkedMonoforumId] as? TelegramChannel, mainChannel.hasPermission(.manageDirect) {
+                            if let channel = peer as? IosappChannel, channel.isMonoForum {
+                                if let linkedMonoforumId = channel.linkedMonoforumId, let mainChannel = peerView.peers[linkedMonoforumId] as? IosappChannel, mainChannel.hasPermission(.manageDirect) {
                                     currentSendAsPeerId = channel.linkedMonoforumId
                                 } else {
                                     currentSendAsPeerId = nil
                                 }
                             } else {
                                 currentSendAsPeerId = cachedChannelData.sendAsPeerId
-                                if let channel = peer as? TelegramChannel, case .group = channel.info {
+                                if let channel = peer as? IosappChannel, case .group = channel.info {
                                     if !cachedChannelData.botInfos.isEmpty {
                                         hasBots = true
                                     }
@@ -1000,7 +1000,7 @@ extension ChatControllerImpl {
                         }
                     }
                     
-                    if let channel = peerView.peers[peerView.peerId] as? TelegramChannel, channel.flags.contains(.displayForumAsTabs) {
+                    if let channel = peerView.peers[peerView.peerId] as? IosappChannel, channel.flags.contains(.displayForumAsTabs) {
                         strongSelf.state.viewForumAsMessages = true
                     } else if let cachedData = peerView.cachedData as? CachedChannelData {
                         strongSelf.state.viewForumAsMessages = cachedData.viewForumAsMessages.knownValue ?? false
@@ -1018,7 +1018,7 @@ extension ChatControllerImpl {
                     let preloadHistoryPeerId = peerMonoforumId// ?? peerDiscussionId
                     if strongSelf.preloadHistoryPeerId != preloadHistoryPeerId {
                         strongSelf.preloadHistoryPeerId = preloadHistoryPeerId
-                        if let preloadHistoryPeerId, let channel = peerView.peers[peerView.peerId] as? TelegramChannel, case .broadcast = channel.info {
+                        if let preloadHistoryPeerId, let channel = peerView.peers[peerView.peerId] as? IosappChannel, case .broadcast = channel.info {
                             let combinedDisposable = DisposableSet()
                             strongSelf.preloadHistoryPeerIdDisposable.set(combinedDisposable)
                             combinedDisposable.add(context.account.viewTracker.polledChannel(peerId: preloadHistoryPeerId).startStrict())
@@ -1040,7 +1040,7 @@ extension ChatControllerImpl {
                     }
                     
                     var adMessage = adMessage
-                    if let peer = peerView.peers[peerView.peerId] as? TelegramUser, peer.botInfo != nil {
+                    if let peer = peerView.peers[peerView.peerId] as? IosappUser, peer.botInfo != nil {
                     } else {
                         adMessage = nil
                     }
@@ -1079,7 +1079,7 @@ extension ChatControllerImpl {
                     strongSelf.state.renderedPeer = renderedPeer
                     strongSelf.state.adMessage = adMessage
 
-                    if case .standard(.default) = mode, let channel = renderedPeer?.chatMainPeer as? TelegramChannel, case .broadcast = channel.info {
+                    if case .standard(.default) = mode, let channel = renderedPeer?.chatMainPeer as? IosappChannel, case .broadcast = channel.info {
                         var isRegularChat = false
                         if let subject = initialSubject {
                             if case .message = subject {
@@ -1093,7 +1093,7 @@ extension ChatControllerImpl {
                                 let nextPeerId = customChatNavigationStack[index + 1]
                                 strongSelf.nextChannelToReadDisposable = (combineLatest(queue: .mainQueue(),
                                     context.engine.data.subscribe(
-                                        TelegramEngine.EngineData.Item.Peer.Peer(id: nextPeerId)
+                                        IosappEngine.EngineData.Item.Peer.Peer(id: nextPeerId)
                                     ),
                                     ApplicationSpecificNotice.getNextChatSuggestionTip(accountManager: context.sharedContext.accountManager)
                                 )
@@ -1316,7 +1316,7 @@ extension ChatControllerImpl {
                     hasScheduledMessages = peerView
                     |> take(1)
                     |> mapToSignal { view -> Signal<Bool, NoError> in
-                        if let peer = peerViewMainPeer(view) as? TelegramChannel, !peer.hasPermission(.sendSomething) {
+                        if let peer = peerViewMainPeer(view) as? IosappChannel, !peer.hasPermission(.sendSomething) {
                             return .single(false)
                         } else {
                             if case let .replyThread(message) = chatLocation, message.peerId == context.account.peerId {
@@ -1340,7 +1340,7 @@ extension ChatControllerImpl {
                 if peerId.namespace == Namespaces.Peer.CloudChannel {
                     let recentOnlineSignal: Signal<(total: Int32?, recent: Int32?), NoError> = peerView
                     |> map { view -> Bool? in
-                        if let cachedData = view.cachedData as? CachedChannelData, let peer = peerViewMainPeer(view) as? TelegramChannel {
+                        if let cachedData = view.cachedData as? CachedChannelData, let peer = peerViewMainPeer(view) as? IosappChannel {
                             if case .broadcast = peer.info {
                                 return nil
                             } else if let memberCount = cachedData.participantsSummary.memberCount, memberCount > 50 {
@@ -1376,7 +1376,7 @@ extension ChatControllerImpl {
                 let hasSearchTags: Signal<Bool, NoError>
                 if let peerId = chatLocation.peerId, peerId == context.account.peerId {
                     hasSearchTags = context.engine.data.subscribe(
-                        TelegramEngine.EngineData.Item.Messages.SavedMessageTagStats(peerId: context.account.peerId, threadId: chatLocation.threadId)
+                        IosappEngine.EngineData.Item.Messages.SavedMessageTagStats(peerId: context.account.peerId, threadId: chatLocation.threadId)
                     )
                     |> map { tags -> Bool in
                         return !tags.isEmpty
@@ -1401,7 +1401,7 @@ extension ChatControllerImpl {
                     isPremiumRequiredForMessaging = .single(false)
                 }
                 
-                let globalPrivacySettings = context.engine.data.get(TelegramEngine.EngineData.Item.Configuration.GlobalPrivacy())
+                let globalPrivacySettings = context.engine.data.get(IosappEngine.EngineData.Item.Configuration.GlobalPrivacy())
                 
                 self.peerDisposable = (combineLatest(queue: Queue.mainQueue(),
                     peerView,
@@ -1424,7 +1424,7 @@ extension ChatControllerImpl {
                         
                     strongSelf.state.hasScheduledMessages = hasScheduledMessages
                     
-                    if let channel = peerView.peers[peerView.peerId] as? TelegramChannel, channel.flags.contains(.displayForumAsTabs) {
+                    if let channel = peerView.peers[peerView.peerId] as? IosappChannel, channel.flags.contains(.displayForumAsTabs) {
                         strongSelf.state.viewForumAsMessages = true
                     } else if let cachedData = peerView.cachedData as? CachedChannelData {
                         strongSelf.state.viewForumAsMessages = cachedData.viewForumAsMessages.knownValue ?? false
@@ -1433,10 +1433,10 @@ extension ChatControllerImpl {
                     var renderedPeer: RenderedPeer?
                     var contactStatus: ChatContactStatus?
                     var copyProtectionEnabled = false
-                    var businessIntro: TelegramBusinessIntro?
+                    var businessIntro: IosappBusinessIntro?
                     var sendPaidMessageStars: StarsAmount?
                     var alwaysShowGiftButton = false
-                    var disallowedGifts: TelegramDisallowedGifts?
+                    var disallowedGifts: IosappDisallowedGifts?
                     var isManagedBot = false
                     if let peer = peerView.peers[peerView.peerId] {
                         copyProtectionEnabled = peer.isCopyProtectionEnabled
@@ -1467,9 +1467,9 @@ extension ChatControllerImpl {
                             }
                             contactStatus = ChatContactStatus(canAddContact: false, peerStatusSettings: cachedData.peerStatusSettings, invitedBy: invitedBy, managingBot: managingBot)
                            
-                            if let channel = peerView.peers[peerView.peerId] as? TelegramChannel {
+                            if let channel = peerView.peers[peerView.peerId] as? IosappChannel {
                                 if channel.isMonoForum {
-                                    if let linkedMonoforumId = channel.linkedMonoforumId, let mainChannel = peerView.peers[linkedMonoforumId] as? TelegramChannel, mainChannel.hasPermission(.manageDirect) {
+                                    if let linkedMonoforumId = channel.linkedMonoforumId, let mainChannel = peerView.peers[linkedMonoforumId] as? IosappChannel, mainChannel.hasPermission(.manageDirect) {
                                     } else {
                                         sendPaidMessageStars = channel.sendPaidMessageStars
                                     }
@@ -1510,7 +1510,7 @@ extension ChatControllerImpl {
                         var customMessageCount: Int?
                         var customSubtitle: String?
                         customSubtitle = nil
-                        if let peer = peerView.peers[peerView.peerId] as? TelegramChannel {
+                        if let peer = peerView.peers[peerView.peerId] as? IosappChannel {
                             if peer.isMonoForum {
                             } else {
                                 customMessageCount = savedMessagesPeer?.messageCount ?? 0
@@ -1552,9 +1552,9 @@ extension ChatControllerImpl {
                         }
                         
                         var currentSendAsPeerId: PeerId?
-                        if let peer = peerView.peers[peerView.peerId] as? TelegramChannel, let cachedData = peerView.cachedData as? CachedChannelData {
+                        if let peer = peerView.peers[peerView.peerId] as? IosappChannel, let cachedData = peerView.cachedData as? CachedChannelData {
                             if peer.isMonoForum {
-                                if let linkedMonoforumId = peer.linkedMonoforumId, let mainChannel = peerView.peers[linkedMonoforumId] as? TelegramChannel, mainChannel.hasPermission(.manageDirect) {
+                                if let linkedMonoforumId = peer.linkedMonoforumId, let mainChannel = peerView.peers[linkedMonoforumId] as? IosappChannel, mainChannel.hasPermission(.manageDirect) {
                                     currentSendAsPeerId = peer.linkedMonoforumId
                                 } else {
                                     currentSendAsPeerId = nil
@@ -1565,8 +1565,8 @@ extension ChatControllerImpl {
                         }
                         
                         var removePaidMessageFeeData: ChatPresentationInterfaceState.RemovePaidMessageFeeData?
-                        if let savedMessagesPeer, !savedMessagesPeer.isMonoforumFeeRemoved, let peer = savedMessagesPeer.peer, let channel = peerView.peers[peerView.peerId] as? TelegramChannel, let sendPaidMessageStars = channel.sendPaidMessageStars, channel.isMonoForum {
-                            if let linkedMonoforumId = channel.linkedMonoforumId, let mainChannel = peerView.peers[linkedMonoforumId] as? TelegramChannel, mainChannel.hasPermission(.manageDirect) {
+                        if let savedMessagesPeer, !savedMessagesPeer.isMonoforumFeeRemoved, let peer = savedMessagesPeer.peer, let channel = peerView.peers[peerView.peerId] as? IosappChannel, let sendPaidMessageStars = channel.sendPaidMessageStars, channel.isMonoForum {
+                            if let linkedMonoforumId = channel.linkedMonoforumId, let mainChannel = peerView.peers[linkedMonoforumId] as? IosappChannel, mainChannel.hasPermission(.manageDirect) {
                                 removePaidMessageFeeData = ChatPresentationInterfaceState.RemovePaidMessageFeeData(
                                     peer: peer,
                                     amount: sendPaidMessageStars
@@ -1599,7 +1599,7 @@ extension ChatControllerImpl {
                             if case let .muted(until) = threadData.notificationSettings.muteState, until >= Int32(CFAbsoluteTimeGetCurrent() + NSTimeIntervalSince1970) {
                                 peerIsMuted = true
                             }
-                        } else if let notificationSettings = peerView.notificationSettings as? TelegramPeerNotificationSettings {
+                        } else if let notificationSettings = peerView.notificationSettings as? IosappPeerNotificationSettings {
                             if case let .muted(until) = notificationSettings.muteState, until >= Int32(CFAbsoluteTimeGetCurrent() + NSTimeIntervalSince1970) {
                                 peerIsMuted = true
                             }
@@ -1607,7 +1607,7 @@ extension ChatControllerImpl {
                         
                         if let threadInfo = messageAndTopic.threadData?.info {
                             var customSubtitle: String?
-                            if messageAndTopic.messageCount == 0, let peer = peerView.peers[peerView.peerId] as? TelegramUser {
+                            if messageAndTopic.messageCount == 0, let peer = peerView.peers[peerView.peerId] as? IosappUser {
                                 if peer.isForum {
                                     customSubtitle = strongSelf.presentationData.strings.Chat_GenericForuThreadStatus
                                 }
@@ -1639,7 +1639,7 @@ extension ChatControllerImpl {
                         }
                         
                         var wasGroupChannel: Bool?
-                        if let previousPeerView = strongSelf.state.peerView, let info = (previousPeerView.peers[previousPeerView.peerId] as? TelegramChannel)?.info {
+                        if let previousPeerView = strongSelf.state.peerView, let info = (previousPeerView.peers[previousPeerView.peerId] as? IosappChannel)?.info {
                             if case .group = info {
                                 wasGroupChannel = true
                             } else {
@@ -1647,7 +1647,7 @@ extension ChatControllerImpl {
                             }
                         }
                         var isGroupChannel: Bool?
-                        if let info = (peerView.peers[peerView.peerId] as? TelegramChannel)?.info {
+                        if let info = (peerView.peers[peerView.peerId] as? IosappChannel)?.info {
                             if case .group = info {
                                 isGroupChannel = true
                             } else {
@@ -1676,9 +1676,9 @@ extension ChatControllerImpl {
                         var peerMonoforumId: PeerId?
                         var peerGeoLocation: PeerGeoLocation?
                         var currentSendAsPeerId: PeerId?
-                        if let peer = peerView.peers[peerView.peerId] as? TelegramChannel, let cachedData = peerView.cachedData as? CachedChannelData {
+                        if let peer = peerView.peers[peerView.peerId] as? IosappChannel, let cachedData = peerView.cachedData as? CachedChannelData {
                             if peer.isMonoForum {
-                                if let linkedMonoforumId = peer.linkedMonoforumId, let mainChannel = peerView.peers[linkedMonoforumId] as? TelegramChannel, mainChannel.hasPermission(.manageDirect) {
+                                if let linkedMonoforumId = peer.linkedMonoforumId, let mainChannel = peerView.peers[linkedMonoforumId] as? IosappChannel, mainChannel.hasPermission(.manageDirect) {
                                     currentSendAsPeerId = peer.linkedMonoforumId
                                 } else {
                                     currentSendAsPeerId = nil
@@ -1711,7 +1711,7 @@ extension ChatControllerImpl {
                                 if !cachedGroupData.botInfos.isEmpty {
                                     hasBots = true
                                 }
-                            } else if let cachedChannelData = peerView.cachedData as? CachedChannelData, let channel = peer as? TelegramChannel, case .group = channel.info {
+                            } else if let cachedChannelData = peerView.cachedData as? CachedChannelData, let channel = peer as? IosappChannel, case .group = channel.info {
                                 if !cachedChannelData.botInfos.isEmpty {
                                     hasBots = true
                                 }
@@ -1771,7 +1771,7 @@ extension ChatControllerImpl {
                         strongSelf.state.alwaysShowGiftButton = alwaysShowGiftButton
                         strongSelf.state.disallowedGifts = disallowedGifts
                         
-                        if let replyThreadId, let channel = renderedPeer?.peer as? TelegramChannel, channel.isForumOrMonoForum, strongSelf.nextChannelToReadDisposable == nil {
+                        if let replyThreadId, let channel = renderedPeer?.peer as? IosappChannel, channel.isForumOrMonoForum, strongSelf.nextChannelToReadDisposable == nil {
                             strongSelf.nextChannelToReadDisposable = (combineLatest(queue: .mainQueue(),
                             context.engine.peers.getNextUnreadForumTopic(peerId: channel.id, topicId: Int32(clamping: replyThreadId)),
                                 ApplicationSpecificNotice.getNextChatSuggestionTip(accountManager: context.sharedContext.accountManager)
@@ -1907,7 +1907,7 @@ extension ChatControllerImpl {
                         if let boostsToUnrestrict = cachedData.boostsToUnrestrict, let appliedBoosts = cachedData.appliedBoosts, appliedBoosts >= boostsToUnrestrict {
                             canBypassRestrictions = true
                         }
-                        if !canBypassRestrictions, let channel = combinedInitialData.initialData?.peer as? TelegramChannel, channel.isRestrictedBySlowmode, let timeout = cachedData.slowModeTimeout {
+                        if !canBypassRestrictions, let channel = combinedInitialData.initialData?.peer as? IosappChannel, channel.isRestrictedBySlowmode, let timeout = cachedData.slowModeTimeout {
                             if let slowmodeUntilTimestamp = calculateSlowmodeActiveUntilTimestamp(account: context.account, untilTimestamp: cachedData.slowModeValidUntilTimestamp) {
                                 slowmodeState = ChatSlowmodeState(timeout: timeout, variant: .timestamp(slowmodeUntilTimestamp))
                             }
@@ -1928,7 +1928,7 @@ extension ChatControllerImpl {
                     } else if let _ = combinedInitialData.cachedData as? CachedSecretChatData {
                     }
                     
-                    if let channel = combinedInitialData.initialData?.peer as? TelegramChannel {
+                    if let channel = combinedInitialData.initialData?.peer as? IosappChannel {
                         if channel.hasBannedPermission(.banSendVoice) != nil && channel.hasBannedPermission(.banSendInstantVideos) != nil {
                             interfaceState = interfaceState.withUpdatedMediaRecordingMode(.audio)
                         } else if channel.hasBannedPermission(.banSendVoice) != nil {
@@ -1940,7 +1940,7 @@ extension ChatControllerImpl {
                                 interfaceState = interfaceState.withUpdatedMediaRecordingMode(.audio)
                             }
                         }
-                    } else if let group = combinedInitialData.initialData?.peer as? TelegramGroup {
+                    } else if let group = combinedInitialData.initialData?.peer as? IosappGroup {
                         if group.hasBannedPermission(.banSendVoice) && group.hasBannedPermission(.banSendInstantVideos) {
                             interfaceState = interfaceState.withUpdatedMediaRecordingMode(.audio)
                         } else if group.hasBannedPermission(.banSendVoice) {
@@ -1955,7 +1955,7 @@ extension ChatControllerImpl {
                     }
                     
                     if case let .replyThread(replyThreadMessageId) = chatLocation {
-                        if let channel = combinedInitialData.initialData?.peer as? TelegramChannel, channel.isForumOrMonoForum {
+                        if let channel = combinedInitialData.initialData?.peer as? IosappChannel, channel.isForumOrMonoForum {
                             pinnedMessageId = nil
                         } else {
                             pinnedMessageId = replyThreadMessageId.effectiveTopId
@@ -2074,7 +2074,7 @@ extension ChatControllerImpl {
             
             if let peerId = chatLocation.peerId {
                 let customEmojiAvailable: Signal<Bool, NoError> = context.engine.data.subscribe(
-                    TelegramEngine.EngineData.Item.Peer.SecretChatLayer(id: peerId)
+                    IosappEngine.EngineData.Item.Peer.SecretChatLayer(id: peerId)
                 )
                 |> map { layer -> Bool in
                     guard let layer = layer else {
@@ -2085,7 +2085,7 @@ extension ChatControllerImpl {
                 }
                 |> distinctUntilChanged
                 
-                let isForum = context.engine.data.subscribe(TelegramEngine.EngineData.Item.Peer.Peer(id: peerId))
+                let isForum = context.engine.data.subscribe(IosappEngine.EngineData.Item.Peer.Peer(id: peerId))
                 |> map { peer -> Bool in
                     if case let .channel(channel) = peer {
                         return channel.isForumOrMonoForum
@@ -2159,15 +2159,15 @@ extension ChatControllerImpl {
                     if baseLanguageCode.contains("-") {
                         baseLanguageCode = baseLanguageCode.components(separatedBy: "-").first ?? baseLanguageCode
                     }
-                    let isPremium = context.engine.data.subscribe(TelegramEngine.EngineData.Item.Peer.Peer(id: context.account.peerId))
+                    let isPremium = context.engine.data.subscribe(IosappEngine.EngineData.Item.Peer.Peer(id: context.account.peerId))
                     |> map { peer -> Bool in
                         return peer?.isPremium ?? false
                     } |> distinctUntilChanged
                     
-                    let isHidden = context.engine.data.subscribe(TelegramEngine.EngineData.Item.Peer.TranslationHidden(id: peerId))
+                    let isHidden = context.engine.data.subscribe(IosappEngine.EngineData.Item.Peer.TranslationHidden(id: peerId))
                     |> distinctUntilChanged
                     
-                    let hasAutoTranslate = context.engine.data.subscribe(TelegramEngine.EngineData.Item.Peer.AutoTranslateEnabled(id: peerId))
+                    let hasAutoTranslate = context.engine.data.subscribe(IosappEngine.EngineData.Item.Peer.AutoTranslateEnabled(id: peerId))
                     |> distinctUntilChanged
                     
                     self.translationStateDisposable?.dispose()
@@ -2285,7 +2285,7 @@ extension ChatControllerImpl {
                     
                     if cachedData != nil {
                         var chatTheme: ChatTheme? = nil
-                        var chatWallpaper: TelegramWallpaper?
+                        var chatWallpaper: IosappWallpaper?
                         if let cachedData = cachedData as? CachedUserData {
                             chatTheme = cachedData.chatTheme
                             chatWallpaper = cachedData.wallpaper
@@ -2311,7 +2311,7 @@ extension ChatControllerImpl {
                     if let cachedData = cachedData as? CachedChannelData {
                         pinnedMessageId = cachedData.pinnedMessageId
                         if !canBypassRestrictions(boostsToUnrestrict: strongSelf.state.boostsToUnrestrict, appliedBoosts: strongSelf.state.appliedBoosts) {
-                            if let channel = strongSelf.state.renderedPeer?.peer as? TelegramChannel, channel.isRestrictedBySlowmode, let timeout = cachedData.slowModeTimeout {
+                            if let channel = strongSelf.state.renderedPeer?.peer as? IosappChannel, channel.isRestrictedBySlowmode, let timeout = cachedData.slowModeTimeout {
                                 if hasPendingMessages {
                                     slowmodeState = ChatSlowmodeState(timeout: timeout, variant: .pendingMessages)
                                 } else if let slowmodeUntilTimestamp = calculateSlowmodeActiveUntilTimestamp(account: context.account, untilTimestamp: cachedData.slowModeValidUntilTimestamp) {
@@ -2378,9 +2378,9 @@ extension ChatControllerImpl {
                     let voiceMessagesAvailableUpdated = strongSelf.state.voiceMessagesAvailable != voiceMessagesAvailable
                     
                     var canManageInvitations = false
-                    if let channel = strongSelf.state.renderedPeer?.peer as? TelegramChannel, channel.flags.contains(.isCreator) || (channel.adminRights?.rights.contains(.canInviteUsers) == true) {
+                    if let channel = strongSelf.state.renderedPeer?.peer as? IosappChannel, channel.flags.contains(.isCreator) || (channel.adminRights?.rights.contains(.canInviteUsers) == true) {
                         canManageInvitations = true
-                    } else if let group = strongSelf.state.renderedPeer?.peer as? TelegramGroup {
+                    } else if let group = strongSelf.state.renderedPeer?.peer as? IosappGroup {
                         if case .creator = group.role {
                             canManageInvitations = true
                         } else if case let .admin(rights, _) = group.role, rights.rights.contains(.canInviteUsers) {

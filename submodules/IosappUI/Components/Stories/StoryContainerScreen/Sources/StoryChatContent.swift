@@ -60,7 +60,7 @@ public final class StoryContentContextImpl: StoryContentContext {
                 }
                 |> distinctUntilChanged,
                 context.engine.data.subscribe(
-                    TelegramEngine.EngineData.Item.Peer.Peer(id: context.account.peerId)
+                    IosappEngine.EngineData.Item.Peer.Peer(id: context.account.peerId)
                 )
             )
             |> map { setting, peer -> Bool in
@@ -83,16 +83,16 @@ public final class StoryContentContextImpl: StoryContentContext {
                     keys: inputKeys
                 ),
                 context.engine.data.subscribe(
-                    TelegramEngine.EngineData.Item.NotificationSettings.Global(),
-                    TelegramEngine.EngineData.Item.Peer.IsPremiumRequiredForMessaging(id: peerId)
+                    IosappEngine.EngineData.Item.NotificationSettings.Global(),
+                    IosappEngine.EngineData.Item.Peer.IsPremiumRequiredForMessaging(id: peerId)
                 ),
                 preferHighQualityStories
             )
-            |> mapToSignal { _, views, data, preferHighQualityStories -> Signal<(CombinedView, [PeerId: Peer], (EngineGlobalNotificationSettings, Bool), [MediaId: TelegramMediaFile], [Int64: EngineStoryItem.ForwardInfo], [StoryId: EngineStoryItem?], Bool), NoError> in
-                return context.account.postbox.transaction { transaction -> (CombinedView, [PeerId: Peer], (EngineGlobalNotificationSettings, Bool), [MediaId: TelegramMediaFile], [Int64: EngineStoryItem.ForwardInfo], [StoryId: EngineStoryItem?], Bool) in
+            |> mapToSignal { _, views, data, preferHighQualityStories -> Signal<(CombinedView, [PeerId: Peer], (EngineGlobalNotificationSettings, Bool), [MediaId: IosappMediaFile], [Int64: EngineStoryItem.ForwardInfo], [StoryId: EngineStoryItem?], Bool), NoError> in
+                return context.account.postbox.transaction { transaction -> (CombinedView, [PeerId: Peer], (EngineGlobalNotificationSettings, Bool), [MediaId: IosappMediaFile], [Int64: EngineStoryItem.ForwardInfo], [StoryId: EngineStoryItem?], Bool) in
                     var peers: [PeerId: Peer] = [:]
                     var forwardInfoStories: [StoryId: EngineStoryItem?] = [:]
-                    var allEntityFiles: [MediaId: TelegramMediaFile] = [:]
+                    var allEntityFiles: [MediaId: IosappMediaFile] = [:]
                     
                     if let itemsView = views.views[PostboxViewKey.storyItems(peerId: peerId)] as? StoryItemsView {
                         for item in itemsView.items {
@@ -124,7 +124,7 @@ public final class StoryContentContextImpl: StoryContentContext {
                                     if case let .CustomEmoji(_, fileId) = entity.type {
                                         let mediaId = MediaId(namespace: Namespaces.Media.CloudFile, id: fileId)
                                         if allEntityFiles[mediaId] == nil {
-                                            if let file = transaction.getMedia(mediaId) as? TelegramMediaFile {
+                                            if let file = transaction.getMedia(mediaId) as? IosappMediaFile {
                                                 allEntityFiles[file.fileId] = file
                                             }
                                         }
@@ -135,7 +135,7 @@ public final class StoryContentContextImpl: StoryContentContext {
                                         if case let .custom(fileId) = reaction {
                                             let mediaId = MediaId(namespace: Namespaces.Media.CloudFile, id: fileId)
                                             if allEntityFiles[mediaId] == nil {
-                                                if let file = transaction.getMedia(mediaId) as? TelegramMediaFile {
+                                                if let file = transaction.getMedia(mediaId) as? IosappMediaFile {
                                                     allEntityFiles[file.fileId] = file
                                                 }
                                             }
@@ -206,7 +206,7 @@ public final class StoryContentContextImpl: StoryContentContext {
                 if let cachedPeerDataView = views.views[PostboxViewKey.cachedPeerData(peerId: peerId)] as? CachedPeerDataView {
                     if let cachedUserData = cachedPeerDataView.cachedPeerData as? CachedUserData {
                         var isMuted = false
-                        if let notificationSettings = peerView.notificationSettings as? TelegramPeerNotificationSettings {
+                        if let notificationSettings = peerView.notificationSettings as? IosappPeerNotificationSettings {
                             isMuted = resolvedAreStoriesMuted(globalSettings: globalNotificationSettings._asGlobalNotificationSettings(), peer: peer._asPeer(), peerSettings: notificationSettings, topSearchPeers: [])
                         } else {
                             isMuted = resolvedAreStoriesMuted(globalSettings: globalNotificationSettings._asGlobalNotificationSettings(), peer: peer._asPeer(), peerSettings: nil, topSearchPeers: [])
@@ -634,7 +634,7 @@ public final class StoryContentContextImpl: StoryContentContext {
             self.singlePeerListContext = singlePeerListContext
             
             self.storySubscriptionsDisposable = (combineLatest(
-                context.engine.data.subscribe(TelegramEngine.EngineData.Item.Peer.Peer(id: focusedPeerId)),
+                context.engine.data.subscribe(IosappEngine.EngineData.Item.Peer.Peer(id: focusedPeerId)),
                 singlePeerListContext.state
             )
             |> deliverOnMainQueue).startStrict(next: { [weak self] peer, state in
@@ -1186,7 +1186,7 @@ public final class SingleStoryContentContextImpl: StoryContentContext {
             }
             |> distinctUntilChanged,
             context.engine.data.subscribe(
-                TelegramEngine.EngineData.Item.Peer.Peer(id: context.account.peerId)
+                IosappEngine.EngineData.Item.Peer.Peer(id: context.account.peerId)
             )
         )
         |> map { setting, peer -> Bool in
@@ -1197,25 +1197,25 @@ public final class SingleStoryContentContextImpl: StoryContentContext {
         
         self.storyDisposable = (combineLatest(queue: .mainQueue(),
             context.engine.data.subscribe(
-                TelegramEngine.EngineData.Item.Peer.Peer(id: storyId.peerId),
-                TelegramEngine.EngineData.Item.Peer.Presence(id: storyId.peerId),
-                TelegramEngine.EngineData.Item.Peer.AreVoiceMessagesAvailable(id: storyId.peerId),
-                TelegramEngine.EngineData.Item.Peer.CanViewStats(id: storyId.peerId),
-                TelegramEngine.EngineData.Item.Peer.NotificationSettings(id: storyId.peerId),
-                TelegramEngine.EngineData.Item.NotificationSettings.Global(),
-                TelegramEngine.EngineData.Item.Peer.IsPremiumRequiredForMessaging(id: storyId.peerId),
-                TelegramEngine.EngineData.Item.Peer.BoostsToUnrestrict(id: storyId.peerId),
-                TelegramEngine.EngineData.Item.Peer.AppliedBoosts(id: storyId.peerId),
-                TelegramEngine.EngineData.Item.Peer.SendPaidMessageStars(id: storyId.peerId)
+                IosappEngine.EngineData.Item.Peer.Peer(id: storyId.peerId),
+                IosappEngine.EngineData.Item.Peer.Presence(id: storyId.peerId),
+                IosappEngine.EngineData.Item.Peer.AreVoiceMessagesAvailable(id: storyId.peerId),
+                IosappEngine.EngineData.Item.Peer.CanViewStats(id: storyId.peerId),
+                IosappEngine.EngineData.Item.Peer.NotificationSettings(id: storyId.peerId),
+                IosappEngine.EngineData.Item.NotificationSettings.Global(),
+                IosappEngine.EngineData.Item.Peer.IsPremiumRequiredForMessaging(id: storyId.peerId),
+                IosappEngine.EngineData.Item.Peer.BoostsToUnrestrict(id: storyId.peerId),
+                IosappEngine.EngineData.Item.Peer.AppliedBoosts(id: storyId.peerId),
+                IosappEngine.EngineData.Item.Peer.SendPaidMessageStars(id: storyId.peerId)
             ),
-            item |> mapToSignal { item -> Signal<(Stories.StoredItem?, [PeerId: Peer], [MediaId: TelegramMediaFile], [StoryId: EngineStoryItem?]), NoError> in
-                return context.account.postbox.transaction { transaction -> (Stories.StoredItem?, [PeerId: Peer], [MediaId: TelegramMediaFile], [StoryId: EngineStoryItem?]) in
+            item |> mapToSignal { item -> Signal<(Stories.StoredItem?, [PeerId: Peer], [MediaId: IosappMediaFile], [StoryId: EngineStoryItem?]), NoError> in
+                return context.account.postbox.transaction { transaction -> (Stories.StoredItem?, [PeerId: Peer], [MediaId: IosappMediaFile], [StoryId: EngineStoryItem?]) in
                     guard let item else {
                         return (nil, [:], [:], [:])
                     }
                     var peers: [PeerId: Peer] = [:]
                     var stories: [StoryId: EngineStoryItem?] = [:]
-                    var allEntityFiles: [MediaId: TelegramMediaFile] = [:]
+                    var allEntityFiles: [MediaId: IosappMediaFile] = [:]
                     if case let .item(item) = item {
                         if let views = item.views {
                             for id in views.seenPeerIds {
@@ -1244,7 +1244,7 @@ public final class SingleStoryContentContextImpl: StoryContentContext {
                             if case let .CustomEmoji(_, fileId) = entity.type {
                                 let mediaId = MediaId(namespace: Namespaces.Media.CloudFile, id: fileId)
                                 if allEntityFiles[mediaId] == nil {
-                                    if let file = transaction.getMedia(mediaId) as? TelegramMediaFile {
+                                    if let file = transaction.getMedia(mediaId) as? IosappMediaFile {
                                         allEntityFiles[file.fileId] = file
                                     }
                                 }
@@ -1255,7 +1255,7 @@ public final class SingleStoryContentContextImpl: StoryContentContext {
                                 if case let .custom(fileId) = reaction {
                                     let mediaId = MediaId(namespace: Namespaces.Media.CloudFile, id: fileId)
                                     if allEntityFiles[mediaId] == nil {
-                                        if let file = transaction.getMedia(mediaId) as? TelegramMediaFile {
+                                        if let file = transaction.getMedia(mediaId) as? IosappMediaFile {
                                             allEntityFiles[file.fileId] = file
                                         }
                                     }
@@ -1455,19 +1455,19 @@ public final class PeerStoryListContentContextImpl: StoryContentContext {
     }
     
     private struct PeerData {
-        let data: (TelegramEngine.EngineData.Item.Peer.Peer.Result,
-            TelegramEngine.EngineData.Item.Peer.Presence.Result,
-            TelegramEngine.EngineData.Item.Peer.AreVoiceMessagesAvailable.Result,
-            TelegramEngine.EngineData.Item.Peer.CanViewStats.Result,
-            TelegramEngine.EngineData.Item.Peer.NotificationSettings.Result,
-            TelegramEngine.EngineData.Item.NotificationSettings.Global.Result,
-            TelegramEngine.EngineData.Item.Peer.IsPremiumRequiredForMessaging.Result,
-            TelegramEngine.EngineData.Item.Peer.BoostsToUnrestrict.Result,
-            TelegramEngine.EngineData.Item.Peer.AppliedBoosts.Result,
-            TelegramEngine.EngineData.Item.Peer.SendPaidMessageStars.Result
+        let data: (IosappEngine.EngineData.Item.Peer.Peer.Result,
+            IosappEngine.EngineData.Item.Peer.Presence.Result,
+            IosappEngine.EngineData.Item.Peer.AreVoiceMessagesAvailable.Result,
+            IosappEngine.EngineData.Item.Peer.CanViewStats.Result,
+            IosappEngine.EngineData.Item.Peer.NotificationSettings.Result,
+            IosappEngine.EngineData.Item.NotificationSettings.Global.Result,
+            IosappEngine.EngineData.Item.Peer.IsPremiumRequiredForMessaging.Result,
+            IosappEngine.EngineData.Item.Peer.BoostsToUnrestrict.Result,
+            IosappEngine.EngineData.Item.Peer.AppliedBoosts.Result,
+            IosappEngine.EngineData.Item.Peer.SendPaidMessageStars.Result
         )
         
-        init(data: (TelegramEngine.EngineData.Item.Peer.Peer.Result, TelegramEngine.EngineData.Item.Peer.Presence.Result, TelegramEngine.EngineData.Item.Peer.AreVoiceMessagesAvailable.Result, TelegramEngine.EngineData.Item.Peer.CanViewStats.Result, TelegramEngine.EngineData.Item.Peer.NotificationSettings.Result, TelegramEngine.EngineData.Item.NotificationSettings.Global.Result, TelegramEngine.EngineData.Item.Peer.IsPremiumRequiredForMessaging.Result, TelegramEngine.EngineData.Item.Peer.BoostsToUnrestrict.Result, TelegramEngine.EngineData.Item.Peer.AppliedBoosts.Result, TelegramEngine.EngineData.Item.Peer.SendPaidMessageStars.Result)) {
+        init(data: (IosappEngine.EngineData.Item.Peer.Peer.Result, IosappEngine.EngineData.Item.Peer.Presence.Result, IosappEngine.EngineData.Item.Peer.AreVoiceMessagesAvailable.Result, IosappEngine.EngineData.Item.Peer.CanViewStats.Result, IosappEngine.EngineData.Item.Peer.NotificationSettings.Result, IosappEngine.EngineData.Item.NotificationSettings.Global.Result, IosappEngine.EngineData.Item.Peer.IsPremiumRequiredForMessaging.Result, IosappEngine.EngineData.Item.Peer.BoostsToUnrestrict.Result, IosappEngine.EngineData.Item.Peer.AppliedBoosts.Result, IosappEngine.EngineData.Item.Peer.SendPaidMessageStars.Result)) {
             self.data = data
         }
     }
@@ -1513,7 +1513,7 @@ public final class PeerStoryListContentContextImpl: StoryContentContext {
             }
             |> distinctUntilChanged,
             context.engine.data.subscribe(
-                TelegramEngine.EngineData.Item.Peer.Peer(id: context.account.peerId)
+                IosappEngine.EngineData.Item.Peer.Peer(id: context.account.peerId)
             )
         )
         |> map { setting, peer -> Bool in
@@ -1567,16 +1567,16 @@ public final class PeerStoryListContentContextImpl: StoryContentContext {
                     
                     let currentPeerData: (EnginePeer.Id, Promise<PeerData>) = (peerId, Promise())
                     currentPeerData.1.set(context.engine.data.subscribe(
-                        TelegramEngine.EngineData.Item.Peer.Peer(id: peerId),
-                        TelegramEngine.EngineData.Item.Peer.Presence(id: peerId),
-                        TelegramEngine.EngineData.Item.Peer.AreVoiceMessagesAvailable(id: peerId),
-                        TelegramEngine.EngineData.Item.Peer.CanViewStats(id: peerId),
-                        TelegramEngine.EngineData.Item.Peer.NotificationSettings(id: peerId),
-                        TelegramEngine.EngineData.Item.NotificationSettings.Global(),
-                        TelegramEngine.EngineData.Item.Peer.IsPremiumRequiredForMessaging(id: peerId),
-                        TelegramEngine.EngineData.Item.Peer.BoostsToUnrestrict(id: peerId),
-                        TelegramEngine.EngineData.Item.Peer.AppliedBoosts(id: peerId),
-                        TelegramEngine.EngineData.Item.Peer.SendPaidMessageStars(id: peerId)
+                        IosappEngine.EngineData.Item.Peer.Peer(id: peerId),
+                        IosappEngine.EngineData.Item.Peer.Presence(id: peerId),
+                        IosappEngine.EngineData.Item.Peer.AreVoiceMessagesAvailable(id: peerId),
+                        IosappEngine.EngineData.Item.Peer.CanViewStats(id: peerId),
+                        IosappEngine.EngineData.Item.Peer.NotificationSettings(id: peerId),
+                        IosappEngine.EngineData.Item.NotificationSettings.Global(),
+                        IosappEngine.EngineData.Item.Peer.IsPremiumRequiredForMessaging(id: peerId),
+                        IosappEngine.EngineData.Item.Peer.BoostsToUnrestrict(id: peerId),
+                        IosappEngine.EngineData.Item.Peer.AppliedBoosts(id: peerId),
+                        IosappEngine.EngineData.Item.Peer.SendPaidMessageStars(id: peerId)
                     ) |> map { PeerData(data: $0) })
                     self.currentPeerData = currentPeerData
                     
@@ -1904,7 +1904,7 @@ public func preloadStoryMedia(context: AccountContext, info: StoryPreloadInfo) -
                 return .complete()
             }
             
-            var files: [TelegramMediaFile] = []
+            var files: [IosappMediaFile] = []
             
             for reaction in availableReactions.reactions {
                 for value in builtinReactions {
@@ -1953,7 +1953,7 @@ public func preloadStoryMedia(context: AccountContext, info: StoryPreloadInfo) -
         signals.append(context.engine.stickers.resolveInlineStickers(fileIds: customReactions)
         |> take(1)
         |> mapToSignal { resolvedFiles -> Signal<Never, NoError> in
-            var files: [TelegramMediaFile] = []
+            var files: [IosappMediaFile] = []
             
             for (_, file) in resolvedFiles {
                 if customReactions.contains(file.fileId.id) {
@@ -2008,7 +2008,7 @@ public func waitUntilStoryMediaPreloaded(context: AccountContext, peerId: Engine
         }
         |> distinctUntilChanged,
         context.engine.data.subscribe(
-            TelegramEngine.EngineData.Item.Peer.Peer(id: context.account.peerId)
+            IosappEngine.EngineData.Item.Peer.Peer(id: context.account.peerId)
         )
     )
     |> map { setting, peer -> Bool in
@@ -2019,7 +2019,7 @@ public func waitUntilStoryMediaPreloaded(context: AccountContext, peerId: Engine
     
     return combineLatest(
         context.engine.data.get(
-            TelegramEngine.EngineData.Item.Peer.Peer(id: peerId)
+            IosappEngine.EngineData.Item.Peer.Peer(id: peerId)
         ),
         preferHighQualityStories
         |> take(1)
@@ -2140,7 +2140,7 @@ public func waitUntilStoryMediaPreloaded(context: AccountContext, peerId: Engine
                     return .complete()
                 }
                 
-                var files: [TelegramMediaFile] = []
+                var files: [IosappMediaFile] = []
                 
                 for reaction in availableReactions.reactions {
                     for value in builtinReactions {
@@ -2191,7 +2191,7 @@ public func waitUntilStoryMediaPreloaded(context: AccountContext, peerId: Engine
             statusSignals.append(context.engine.stickers.resolveInlineStickers(fileIds: customReactions)
             |> take(1)
             |> mapToSignal { resolvedFiles -> Signal<Never, NoError> in
-                var files: [TelegramMediaFile] = []
+                var files: [IosappMediaFile] = []
                 
                 for (_, file) in resolvedFiles {
                     if customReactions.contains(file.fileId.id) {
@@ -2252,8 +2252,8 @@ public func waitUntilStoryMediaPreloaded(context: AccountContext, peerId: Engine
     }
 }
 
-func extractItemEntityFiles(item: EngineStoryItem, allEntityFiles: [MediaId: TelegramMediaFile]) -> [MediaId: TelegramMediaFile] {
-    var result: [MediaId: TelegramMediaFile] = [:]
+func extractItemEntityFiles(item: EngineStoryItem, allEntityFiles: [MediaId: IosappMediaFile]) -> [MediaId: IosappMediaFile] {
+    var result: [MediaId: IosappMediaFile] = [:]
     for entity in item.entities {
         if case let .CustomEmoji(_, fileId) = entity.type {
             let mediaId = MediaId(namespace: Namespaces.Media.CloudFile, id: fileId)
@@ -2373,7 +2373,7 @@ public final class RepostStoriesContentContextImpl: StoryContentContext {
                 }
                 |> distinctUntilChanged,
                 context.engine.data.subscribe(
-                    TelegramEngine.EngineData.Item.Peer.Peer(id: context.account.peerId)
+                    IosappEngine.EngineData.Item.Peer.Peer(id: context.account.peerId)
                 )
             )
             |> map { setting, peer -> Bool in
@@ -2395,16 +2395,16 @@ public final class RepostStoriesContentContextImpl: StoryContentContext {
                     keys: inputKeys
                 ),
                 context.engine.data.subscribe(
-                    TelegramEngine.EngineData.Item.NotificationSettings.Global(),
-                    TelegramEngine.EngineData.Item.Peer.IsPremiumRequiredForMessaging(id: peerId)
+                    IosappEngine.EngineData.Item.NotificationSettings.Global(),
+                    IosappEngine.EngineData.Item.Peer.IsPremiumRequiredForMessaging(id: peerId)
                 ),
                 preferHighQualityStories
             )
-            |> mapToSignal { _, views, data, preferHighQualityStories -> Signal<(CombinedView, [PeerId: Peer], (EngineGlobalNotificationSettings, Bool), [MediaId: TelegramMediaFile], [StoryId: EngineStoryItem?], Bool), NoError> in
-                return context.account.postbox.transaction { transaction -> (CombinedView, [PeerId: Peer], (EngineGlobalNotificationSettings, Bool), [MediaId: TelegramMediaFile], [StoryId: EngineStoryItem?], Bool) in
+            |> mapToSignal { _, views, data, preferHighQualityStories -> Signal<(CombinedView, [PeerId: Peer], (EngineGlobalNotificationSettings, Bool), [MediaId: IosappMediaFile], [StoryId: EngineStoryItem?], Bool), NoError> in
+                return context.account.postbox.transaction { transaction -> (CombinedView, [PeerId: Peer], (EngineGlobalNotificationSettings, Bool), [MediaId: IosappMediaFile], [StoryId: EngineStoryItem?], Bool) in
                     var peers: [PeerId: Peer] = [:]
                     var forwardInfoStories: [StoryId: EngineStoryItem?] = [:]
-                    var allEntityFiles: [MediaId: TelegramMediaFile] = [:]
+                    var allEntityFiles: [MediaId: IosappMediaFile] = [:]
                     
                     for item in items {
                         if let forwardInfo = item.forwardInfo, case let .known(peer, id, _) = forwardInfo {
@@ -2419,7 +2419,7 @@ public final class RepostStoriesContentContextImpl: StoryContentContext {
                             if case let .CustomEmoji(_, fileId) = entity.type {
                                 let mediaId = MediaId(namespace: Namespaces.Media.CloudFile, id: fileId)
                                 if allEntityFiles[mediaId] == nil {
-                                    if let file = transaction.getMedia(mediaId) as? TelegramMediaFile {
+                                    if let file = transaction.getMedia(mediaId) as? IosappMediaFile {
                                         allEntityFiles[file.fileId] = file
                                     }
                                 }
@@ -2430,7 +2430,7 @@ public final class RepostStoriesContentContextImpl: StoryContentContext {
                                 if case let .custom(fileId) = reaction {
                                     let mediaId = MediaId(namespace: Namespaces.Media.CloudFile, id: fileId)
                                     if allEntityFiles[mediaId] == nil {
-                                        if let file = transaction.getMedia(mediaId) as? TelegramMediaFile {
+                                        if let file = transaction.getMedia(mediaId) as? IosappMediaFile {
                                             allEntityFiles[file.fileId] = file
                                         }
                                     }
@@ -2486,7 +2486,7 @@ public final class RepostStoriesContentContextImpl: StoryContentContext {
                 if let cachedPeerDataView = views.views[PostboxViewKey.cachedPeerData(peerId: peerId)] as? CachedPeerDataView {
                     if let cachedUserData = cachedPeerDataView.cachedPeerData as? CachedUserData {
                         var isMuted = false
-                        if let notificationSettings = peerView.notificationSettings as? TelegramPeerNotificationSettings {
+                        if let notificationSettings = peerView.notificationSettings as? IosappPeerNotificationSettings {
                             isMuted = resolvedAreStoriesMuted(globalSettings: globalNotificationSettings._asGlobalNotificationSettings(), peer: peer._asPeer(), peerSettings: notificationSettings, topSearchPeers: [])
                         } else {
                             isMuted = resolvedAreStoriesMuted(globalSettings: globalNotificationSettings._asGlobalNotificationSettings(), peer: peer._asPeer(), peerSettings: nil, topSearchPeers: [])

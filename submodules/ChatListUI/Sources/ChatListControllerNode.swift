@@ -438,7 +438,7 @@ public final class ChatListContainerNode: ASDisplayNode, ASGestureRecognizerDele
     var openPremiumManagement: (() -> Void)?
     var openStories: ((ChatListNode.OpenStoriesSubject, ASDisplayNode?) -> Void)?
     var openStarsTopup: ((Int64?) -> Void)?
-    var openWebApp: ((TelegramUser) -> Void)?
+    var openWebApp: ((IosappUser) -> Void)?
     var openPhotoSetup: (() -> Void)?
     var openAccountFreezeInfo: (() -> Void)?
     var addedVisibleChatsWithPeerIds: (([EnginePeer.Id]) -> Void)?

@@ -65,7 +65,7 @@ private extension PremiumPromoConfiguration {
                 self.status = statusText
                 self.statusEntities = messageTextEntitiesFromApiEntities(statusEntities)
 
-                var videos: [String: TelegramMediaFile] = [:]
+                var videos: [String: IosappMediaFile] = [:]
                 for (key, document) in zip(videoSections, videoFiles) {
                     if let file = telegramMediaFileFromApiDocument(document, altDocuments: []) {
                         videos[key] = file

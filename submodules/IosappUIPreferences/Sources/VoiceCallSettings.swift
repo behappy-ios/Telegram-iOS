@@ -66,7 +66,7 @@ public struct VoiceCallSettings: Codable, Equatable {
     }
 }
 
-public func updateVoiceCallSettingsSettingsInteractively(accountManager: AccountManager<TelegramAccountManagerTypes>, _ f: @escaping (VoiceCallSettings) -> VoiceCallSettings) -> Signal<Void, NoError> {
+public func updateVoiceCallSettingsSettingsInteractively(accountManager: AccountManager<IosappAccountManagerTypes>, _ f: @escaping (VoiceCallSettings) -> VoiceCallSettings) -> Signal<Void, NoError> {
     return accountManager.transaction { transaction -> Void in
         transaction.updateSharedData(ApplicationSpecificSharedDataKeys.voiceCallSettings, { entry in
             let currentSettings: VoiceCallSettings

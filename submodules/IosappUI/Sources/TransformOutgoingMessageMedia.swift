@@ -8,7 +8,7 @@ import PhotoResources
 import ImageCompression
 
 public func transformOutgoingMessageMedia(postbox: Postbox, network: Network, media: AnyMediaReference, opportunistic: Bool) -> Signal<AnyMediaReference?, NoError> {
-    if let paidContent = media.media as? TelegramMediaPaidContent {
+    if let paidContent = media.media as? IosappMediaPaidContent {
         var signals: [Signal<AnyMediaReference?, NoError>] = []
         for case let .full(fullMedia) in paidContent.extendedMedia {
             signals.append(transformOutgoingMessageMedia(postbox: postbox, network: network, media: media.withUpdatedMedia(fullMedia), opportunistic: opportunistic))
@@ -17,7 +17,7 @@ public func transformOutgoingMessageMedia(postbox: Postbox, network: Network, me
         |> mapToSignal { results -> Signal<AnyMediaReference?, NoError> in
             let mediaResults = results.compactMap { $0?.media }
             if mediaResults.count == signals.count {
-                return .single(media.withUpdatedMedia(TelegramMediaPaidContent(amount: paidContent.amount, extendedMedia: mediaResults.map { .full(media: $0) })))
+                return .single(media.withUpdatedMedia(IosappMediaPaidContent(amount: paidContent.amount, extendedMedia: mediaResults.map { .full(media: $0) })))
             } else if opportunistic {
                 return .single(nil)
             } else {
@@ -27,7 +27,7 @@ public func transformOutgoingMessageMedia(postbox: Postbox, network: Network, me
     }
     
     switch media.media {
-        case let file as TelegramMediaFile:
+        case let file as IosappMediaFile:
             let signal = Signal<MediaResourceData, NoError> { subscriber in
                 let fetch = fetchedMediaResource(mediaBox: postbox.mediaBox, userLocation: .other, userContentType: MediaResourceUserContentType(file: file), reference: media.resourceReference(file.resource)).start()
                 let data = postbox.mediaBox.resourceData(file.resource, option: .complete(waitUntilFetchStatus: true)).start(next: { next in
@@ -85,7 +85,7 @@ public func transformOutgoingMessageMedia(postbox: Postbox, network: Network, me
                                             }
                                         }
                                         attributes.append(.ImageSize(size: PixelDimensions(imageDimensions)))
-                                        let updatedFile = file.withUpdatedSize(data.size).withUpdatedPreviewRepresentations([TelegramMediaImageRepresentation(dimensions: PixelDimensions(scaledImageSize), resource: thumbnailResource, progressiveSizes: [], immediateThumbnailData: nil, hasVideo: false, isPersonal: false)]).withUpdatedAttributes(attributes)
+                                        let updatedFile = file.withUpdatedSize(data.size).withUpdatedPreviewRepresentations([IosappMediaImageRepresentation(dimensions: PixelDimensions(scaledImageSize), resource: thumbnailResource, progressiveSizes: [], immediateThumbnailData: nil, hasVideo: false, isPersonal: false)]).withUpdatedAttributes(attributes)
                                         subscriber.putNext(media.withUpdatedMedia(updatedFile))
                                         subscriber.putCompletion()
                                     } else {
@@ -114,7 +114,7 @@ public func transformOutgoingMessageMedia(postbox: Postbox, network: Network, me
                             
                                 let scaledImageSize = CGSize(width: scaledImage.size.width * scaledImage.scale, height: scaledImage.size.height * scaledImage.scale)
                             
-                                let updatedFile = file.withUpdatedSize(data.size).withUpdatedPreviewRepresentations([TelegramMediaImageRepresentation(dimensions: PixelDimensions(scaledImageSize), resource: thumbnailResource, progressiveSizes: [], immediateThumbnailData: nil, hasVideo: false, isPersonal: false)])
+                                let updatedFile = file.withUpdatedSize(data.size).withUpdatedPreviewRepresentations([IosappMediaImageRepresentation(dimensions: PixelDimensions(scaledImageSize), resource: thumbnailResource, progressiveSizes: [], immediateThumbnailData: nil, hasVideo: false, isPersonal: false)])
                                 subscriber.putNext(media.withUpdatedMedia(updatedFile))
                                 subscriber.putCompletion()
                             } else {
@@ -135,7 +135,7 @@ public func transformOutgoingMessageMedia(postbox: Postbox, network: Network, me
                     return .complete()
                 }
             }
-        case let image as TelegramMediaImage:
+        case let image as IosappMediaImage:
             if let representation = largestImageRepresentation(image.representations) {
                 let signal = Signal<MediaResourceData, NoError> { subscriber in
                     let fetch = fetchedMediaResource(mediaBox: postbox.mediaBox, userLocation: .other, userContentType: .image, reference: media.resourceReference(representation.resource)).start()
@@ -174,8 +174,8 @@ public func transformOutgoingMessageMedia(postbox: Postbox, network: Network, me
                                 
                                 let thumbnailResource = LocalFileMediaResource(fileId: Int64.random(in: Int64.min ... Int64.max))
                                 postbox.mediaBox.storeResourceData(thumbnailResource.id, data: smallestData)
-                                representations.append(TelegramMediaImageRepresentation(dimensions: PixelDimensions(smallestSize), resource: thumbnailResource, progressiveSizes: [], immediateThumbnailData: nil, hasVideo: false, isPersonal: false))
-                                let updatedImage = TelegramMediaImage(imageId: image.imageId, representations: representations, immediateThumbnailData: image.immediateThumbnailData, reference: image.reference, partialReference: image.partialReference, flags: [], video: image.video)
+                                representations.append(IosappMediaImageRepresentation(dimensions: PixelDimensions(smallestSize), resource: thumbnailResource, progressiveSizes: [], immediateThumbnailData: nil, hasVideo: false, isPersonal: false))
+                                let updatedImage = IosappMediaImage(imageId: image.imageId, representations: representations, immediateThumbnailData: image.immediateThumbnailData, reference: image.reference, partialReference: image.partialReference, flags: [], video: image.video)
                                 return .single(media.withUpdatedMedia(updatedImage))
                             }
                         }

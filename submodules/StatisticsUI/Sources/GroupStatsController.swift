@@ -763,7 +763,7 @@ public func groupStatsController(context: AccountContext, updatedPresentationDat
     |> mapToSignal { peerIds -> Signal<[EnginePeer.Id: EnginePeer]?, NoError> in
         if let peerIds = peerIds {
             return context.engine.data.get(EngineDataMap(
-                peerIds.map(TelegramEngine.EngineData.Item.Peer.Peer.init)
+                peerIds.map(IosappEngine.EngineData.Item.Peer.Peer.init)
             ))
             |> map { peerMap -> [EnginePeer.Id: EnginePeer]? in
                 return peerMap.compactMapValues { $0 }
@@ -874,8 +874,8 @@ public func groupStatsController(context: AccountContext, updatedPresentationDat
     openPeerHistoryImpl = { [weak controller] participantPeerId in
         if let navigationController = controller?.navigationController as? NavigationController {
             let _ = (context.engine.data.get(
-                TelegramEngine.EngineData.Item.Peer.Peer(id: peerId),
-                TelegramEngine.EngineData.Item.Peer.Peer(id: participantPeerId)
+                IosappEngine.EngineData.Item.Peer.Peer(id: peerId),
+                IosappEngine.EngineData.Item.Peer.Peer(id: participantPeerId)
             )
             |> deliverOnMainQueue).start(next: { chatPeer, peer in
                 guard let chatPeer, let peer else {

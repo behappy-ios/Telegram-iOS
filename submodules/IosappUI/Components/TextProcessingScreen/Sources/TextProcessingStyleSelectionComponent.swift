@@ -13,16 +13,16 @@ final class TextProcessingStyleSelectionComponent: Component {
     let theme: PresentationTheme
     let strings: PresentationStrings
     let styles: [TextProcessingScreen.Style]
-    let selectedStyle: TelegramComposeAIMessageMode.StyleId
-    let updateStyle: (TelegramComposeAIMessageMode.StyleId) -> Void
+    let selectedStyle: IosappComposeAIMessageMode.StyleId
+    let updateStyle: (IosappComposeAIMessageMode.StyleId) -> Void
 
     init(
         context: AccountContext,
         theme: PresentationTheme,
         strings: PresentationStrings,
         styles: [TextProcessingScreen.Style],
-        selectedStyle: TelegramComposeAIMessageMode.StyleId,
-        updateStyle: @escaping (TelegramComposeAIMessageMode.StyleId) -> Void
+        selectedStyle: IosappComposeAIMessageMode.StyleId,
+        updateStyle: @escaping (IosappComposeAIMessageMode.StyleId) -> Void
     ) {
         self.context = context
         self.theme = theme
@@ -60,7 +60,7 @@ final class TextProcessingStyleSelectionComponent: Component {
         private var isUpdating: Bool = false
 
         private let scrollView: ScrollView
-        private var itemViews: [TelegramComposeAIMessageMode.StyleId: ComponentView<Empty>] = [:]
+        private var itemViews: [IosappComposeAIMessageMode.StyleId: ComponentView<Empty>] = [:]
         private let selectedBackgroundView: UIImageView
 
         override init(frame: CGRect) {
@@ -130,7 +130,7 @@ final class TextProcessingStyleSelectionComponent: Component {
             let maxSlotWidth: CGFloat = 80.0
 
             // First pass: measure all items to find intrinsic sizes
-            var itemSizes: [TelegramComposeAIMessageMode.StyleId: CGSize] = [:]
+            var itemSizes: [IosappComposeAIMessageMode.StyleId: CGSize] = [:]
             for i in 0 ..< component.styles.count {
                 let style = component.styles[i]
                 let itemView: ComponentView<Empty>
@@ -207,7 +207,7 @@ final class TextProcessingStyleSelectionComponent: Component {
                 }
             }
 
-            var removedIds: [TelegramComposeAIMessageMode.StyleId] = []
+            var removedIds: [IosappComposeAIMessageMode.StyleId] = []
             for (id, itemView) in self.itemViews {
                 if !component.styles.contains(where: { $0.id == id }) {
                     removedIds.append(id)
@@ -259,14 +259,14 @@ private final class ItemComponent: Component {
     let context: AccountContext
     let theme: PresentationTheme
     let iconFileId: Int64?
-    let iconFile: TelegramMediaFile?
+    let iconFile: IosappMediaFile?
     let title: String
     
     init(
         context: AccountContext,
         theme: PresentationTheme,
         iconFileId: Int64?,
-        iconFile: TelegramMediaFile?,
+        iconFile: IosappMediaFile?,
         title: String
     ) {
         self.context = context

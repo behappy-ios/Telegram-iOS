@@ -47,7 +47,7 @@ public extension MediaEditorScreenImpl {
                         )
                     } else {
                         var duration: Double?
-                        if let file = media as? TelegramMediaFile {
+                        if let file = media as? IosappMediaFile {
                             duration = file.duration
                         }
                         let symlinkPath = data.path + ".mp4"
@@ -142,7 +142,7 @@ public extension MediaEditorScreenImpl {
                     
                     completed()
                     
-                    let _ = (context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: targetPeerId))
+                    let _ = (context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: targetPeerId))
                     |> deliverOnMainQueue).startStandalone(next: { peer in
                         guard let peer else {
                             return
@@ -157,7 +157,7 @@ public extension MediaEditorScreenImpl {
                         
                         let forwardInfo = Stories.PendingForwardInfo(peerId: peerReference.id, storyId: storyItem.id, isModified: result.media != nil)
                         
-                        if let rootController = context.sharedContext.mainWindow?.viewController as? TelegramRootControllerInterface {
+                        if let rootController = context.sharedContext.mainWindow?.viewController as? IosappRootControllerInterface {
                             var existingMedia: EngineMedia?
                             if let _ = result.media {
                             } else {
@@ -212,7 +212,7 @@ public extension MediaEditorScreenImpl {
                                 let digest = MemoryBuffer(data: data.md5Digest())
                                 let adjustments = VideoMediaResourceAdjustments(data: data, digest: digest, isStory: true)
                                 
-                                let resource: TelegramMediaResource
+                                let resource: IosappMediaResource
                                 switch content {
                                 case let .imageFile(path):
                                     resource = LocalFileVideoMediaResource(randomId: Int64.random(in: .min ... .max), path: path, adjustments: adjustments)
@@ -259,7 +259,7 @@ public extension MediaEditorScreenImpl {
                         var media: EngineStoryInputMedia?
                         if let updatedCoverTimestamp {
                             if case let .file(file) = storyItem.media {
-                                var updatedAttributes: [TelegramMediaFileAttribute] = []
+                                var updatedAttributes: [IosappMediaFileAttribute] = []
                                 for attribute in file.attributes {
                                     if case let .Video(duration, size, flags, preloadSize, _, videoCodec) = attribute {
                                         updatedAttributes.append(.Video(duration: duration, size: size, flags: flags, preloadSize: preloadSize, coverTime: min(duration, updatedCoverTimestamp), videoCodec: videoCodec))

@@ -167,7 +167,7 @@ extension InstantPageBlock {
                 self = .slideshow(items: items.map({ InstantPageBlock(apiBlock: $0) }), caption: InstantPageCaption(apiCaption: caption))
             case let .pageBlockChannel(pageBlockChannelData):
                 let apiChat = pageBlockChannelData.channel
-                self = .channelBanner(parseTelegramGroupOrChannel(chat: apiChat) as? TelegramChannel)
+                self = .channelBanner(parseIosappGroupOrChannel(chat: apiChat) as? IosappChannel)
             case let .pageBlockAudio(pageBlockAudioData):
                 let (audioId, caption) = (pageBlockAudioData.audioId, pageBlockAudioData.caption)
                 self = .audio(id: MediaId(namespace: Namespaces.Media.CloudFile, id: audioId), caption: InstantPageCaption(apiCaption: caption))

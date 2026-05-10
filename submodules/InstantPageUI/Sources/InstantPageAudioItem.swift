@@ -14,9 +14,9 @@ public final class InstantPageAudioItem: InstantPageItem {
     public let medias: [InstantPageMedia]
     
     let media: InstantPageMedia
-    let webpage: TelegramMediaWebpage
+    let webpage: IosappMediaWebpage
     
-    public init(frame: CGRect, media: InstantPageMedia, webpage: TelegramMediaWebpage) {
+    public init(frame: CGRect, media: InstantPageMedia, webpage: IosappMediaWebpage) {
         self.frame = frame
         self.media = media
         self.webpage = webpage

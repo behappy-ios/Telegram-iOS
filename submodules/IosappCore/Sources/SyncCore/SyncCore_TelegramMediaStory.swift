@@ -1,6 +1,6 @@
 import Postbox
 
-public final class TelegramMediaStory: Media, Equatable {
+public final class IosappMediaStory: Media, Equatable {
     public var id: MediaId? {
         return nil
     }
@@ -38,7 +38,7 @@ public final class TelegramMediaStory: Media, Equatable {
     }
     
     public func isEqual(to other: Media) -> Bool {
-        if let other = other as? TelegramMediaStory, self.storyId == other.storyId {
+        if let other = other as? IosappMediaStory, self.storyId == other.storyId {
             return self == other
         }
         return false
@@ -48,7 +48,7 @@ public final class TelegramMediaStory: Media, Equatable {
         return self.isEqual(to: other)
     }
     
-    public static func ==(lhs: TelegramMediaStory, rhs: TelegramMediaStory) -> Bool {
+    public static func ==(lhs: IosappMediaStory, rhs: IosappMediaStory) -> Bool {
         if lhs.storyId != rhs.storyId {
             return false
         }

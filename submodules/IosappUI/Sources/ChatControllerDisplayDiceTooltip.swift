@@ -13,7 +13,7 @@ import IosappStringFormatting
 
 extension ChatControllerImpl {
     func presentEmojiGameStake() {
-        let _ = (self.context.engine.data.get(TelegramEngine.EngineData.Item.Configuration.EmojiGame())
+        let _ = (self.context.engine.data.get(IosappEngine.EngineData.Item.Configuration.EmojiGame())
         |> deliverOnMainQueue).start(next: { [weak self] gameInfo in
             guard let self, case let .available(info) = gameInfo else {
                 return
@@ -29,7 +29,7 @@ extension ChatControllerImpl {
                         guard let self else {
                             return
                         }
-                        self.sendMessages([.message(text: "", attributes: [], inlineStickers: [:], mediaReference: AnyMediaReference.standalone(media: TelegramMediaDice(emoji: "🎲", tonAmount: stake.value > 0 ? stake.value : nil)), threadId: self.chatLocation.threadId, replyToMessageId: nil, replyToStoryId: nil, localGroupingKey: nil, correlationId: nil, bubbleUpEmojiOrStickersets: [])], postpone: postpone)
+                        self.sendMessages([.message(text: "", attributes: [], inlineStickers: [:], mediaReference: AnyMediaReference.standalone(media: IosappMediaDice(emoji: "🎲", tonAmount: stake.value > 0 ? stake.value : nil)), threadId: self.chatLocation.threadId, replyToMessageId: nil, replyToStoryId: nil, localGroupingKey: nil, correlationId: nil, bubbleUpEmojiOrStickersets: [])], postpone: postpone)
                     })
                 }
             )
@@ -37,7 +37,7 @@ extension ChatControllerImpl {
         })
     }
     
-    func displayDiceTooltip(dice: TelegramMediaDice) {
+    func displayDiceTooltip(dice: IosappMediaDice) {
         guard let _ = dice.value else {
             return
         }
@@ -56,7 +56,7 @@ extension ChatControllerImpl {
         let emoji = dice.emoji.strippedEmoji
         
         
-        let _ = (self.context.engine.data.get(TelegramEngine.EngineData.Item.Configuration.EmojiGame())
+        let _ = (self.context.engine.data.get(IosappEngine.EngineData.Item.Configuration.EmojiGame())
         |> deliverOnMainQueue).start(next: { [weak self] gameInfo in
             guard let self else {
                 return
@@ -106,7 +106,7 @@ extension ChatControllerImpl {
                                 guard let self else {
                                     return
                                 }
-                                self.sendMessages([.message(text: "", attributes: [], inlineStickers: [:], mediaReference: AnyMediaReference.standalone(media: TelegramMediaDice(emoji: dice.emoji, tonAmount: tonAmount)), threadId: self.chatLocation.threadId, replyToMessageId: nil, replyToStoryId: nil, localGroupingKey: nil, correlationId: nil, bubbleUpEmojiOrStickersets: [])], postpone: postpone)
+                                self.sendMessages([.message(text: "", attributes: [], inlineStickers: [:], mediaReference: AnyMediaReference.standalone(media: IosappMediaDice(emoji: dice.emoji, tonAmount: tonAmount)), threadId: self.chatLocation.threadId, replyToMessageId: nil, replyToStoryId: nil, localGroupingKey: nil, correlationId: nil, bubbleUpEmojiOrStickersets: [])], postpone: postpone)
                             })
                         case .info:
                             if let _ = changeAction {

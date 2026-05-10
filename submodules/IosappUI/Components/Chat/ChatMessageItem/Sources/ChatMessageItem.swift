@@ -149,7 +149,7 @@ public func hasCommentButton(item: ChatMessageItem) -> Bool {
     let firstMessage = item.content.firstMessage
     
     var hasDiscussion = false
-    if let channel = firstMessage.peers[firstMessage.id.peerId] as? TelegramChannel, case let .broadcast(info) = channel.info, info.flags.contains(.hasDiscussionGroup) {
+    if let channel = firstMessage.peers[firstMessage.id.peerId] as? IosappChannel, case let .broadcast(info) = channel.info, info.flags.contains(.hasDiscussionGroup) {
         hasDiscussion = true
     }
     if case let .replyThread(replyThreadMessage) = item.chatLocation, replyThreadMessage.effectiveTopId == firstMessage.id {

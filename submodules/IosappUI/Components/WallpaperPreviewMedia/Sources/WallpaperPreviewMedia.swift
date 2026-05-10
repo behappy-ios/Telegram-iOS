@@ -4,11 +4,11 @@ import Postbox
 import IosappCore
 
 public enum WallpaperPreviewMediaContent: Equatable {
-    case file(file: TelegramMediaFile, colors: [UInt32], rotation: Int32?, intensity: Int32?, Bool, Bool)
-    case image(representations: [TelegramMediaImageRepresentation])
+    case file(file: IosappMediaFile, colors: [UInt32], rotation: Int32?, intensity: Int32?, Bool, Bool)
+    case image(representations: [IosappMediaImageRepresentation])
     case color(UIColor)
     case gradient([UInt32], Int32?)
-    case themeSettings(TelegramThemeSettings)
+    case themeSettings(IosappThemeSettings)
     case emoticon(String)
 }
 
@@ -55,7 +55,7 @@ private extension UIColor {
 }
 
 public extension WallpaperPreviewMedia {
-    convenience init?(wallpaper: TelegramWallpaper) {
+    convenience init?(wallpaper: IosappWallpaper) {
         switch wallpaper {
         case let .color(color):
             self.init(content: .color(UIColor(rgb: color)))

@@ -171,7 +171,7 @@ private func makeTextInputTheme(context: AccountContext, interfaceState: ChatPre
     let lineStyle: ChatInputTextView.Theme.Quote.LineStyle
     let authorNameColor: UIColor
     
-    if let peer = interfaceState.renderedPeer?.peer as? TelegramChannel, case .broadcast = peer.info, let nameColor = peer.nameColor {
+    if let peer = interfaceState.renderedPeer?.peer as? IosappChannel, case .broadcast = peer.info, let nameColor = peer.nameColor {
         let colors = context.peerNameColors.get(nameColor)
         authorNameColor = colors.main
         
@@ -1570,9 +1570,9 @@ public class ChatTextInputPanelNode: ChatInputPanelNode, ASEditableTextNodeDeleg
         var sendingTextDisabled = false
         if interfaceState.interfaceState.editMessage == nil {
             if let peer = interfaceState.renderedPeer?.peer {
-                if let channel = peer as? TelegramChannel, channel.hasBannedPermission(.banSendText, ignoreDefault: canBypassRestrictions) != nil {
+                if let channel = peer as? IosappChannel, channel.hasBannedPermission(.banSendText, ignoreDefault: canBypassRestrictions) != nil {
                     sendingTextDisabled = true
-                } else if let group = peer as? TelegramGroup, group.hasBannedPermission(.banSendText) {
+                } else if let group = peer as? IosappGroup, group.hasBannedPermission(.banSendText) {
                     sendingTextDisabled = true
                 }
             }
@@ -1587,7 +1587,7 @@ public class ChatTextInputPanelNode: ChatInputPanelNode, ASEditableTextNodeDeleg
         var displayBotStartButton = false
         if case .scheduledMessages = interfaceState.subject {
         } else {
-            if let user = interfaceState.renderedPeer?.peer as? TelegramUser, user.botInfo != nil {
+            if let user = interfaceState.renderedPeer?.peer as? IosappUser, user.botInfo != nil {
                 if let chatHistoryState = interfaceState.chatHistoryState, case .loaded(true, _) = chatHistoryState, interfaceState.chatLocation.threadId == nil {
                     displayBotStartButton = true
                 } else if interfaceState.peerIsBlocked {
@@ -1624,7 +1624,7 @@ public class ChatTextInputPanelNode: ChatInputPanelNode, ASEditableTextNodeDeleg
             if let context = self.context, let peer = currentPeer {
                 self.sendAsAvatarNode.setPeer(context: context, theme: interfaceState.theme, peer: EnginePeer(peer), emptyColor: interfaceState.theme.list.mediaPlaceholderColor)
             }
-        } else if let peer = interfaceState.renderedPeer?.peer as? TelegramUser, let _ = peer.botInfo, shouldDisplayMenuButton && interfaceState.editMessageState == nil {
+        } else if let peer = interfaceState.renderedPeer?.peer as? IosappUser, let _ = peer.botInfo, shouldDisplayMenuButton && interfaceState.editMessageState == nil {
             hasMenuButton = true
             
             if !inputHasText {
@@ -1908,7 +1908,7 @@ public class ChatTextInputPanelNode: ChatInputPanelNode, ASEditableTextNodeDeleg
                 var placeholder: String = ""
                 
                 if let peer = interfaceState.renderedPeer?.peer {
-                    if let channel = peer as? TelegramChannel, case .broadcast = channel.info {
+                    if let channel = peer as? IosappChannel, case .broadcast = channel.info {
                         if interfaceState.interfaceState.silentPosting {
                             placeholder = interfaceState.strings.Conversation_InputTextSilentBroadcastPlaceholder
                         } else {
@@ -1918,7 +1918,7 @@ public class ChatTextInputPanelNode: ChatInputPanelNode, ASEditableTextNodeDeleg
                         if sendingTextDisabled {
                             placeholder = interfaceState.strings.Chat_PlaceholderTextNotAllowed
                         } else {
-                            if let channel = peer as? TelegramChannel, case .group = channel.info, channel.hasPermission(.canBeAnonymous) {
+                            if let channel = peer as? IosappChannel, case .group = channel.info, channel.hasPermission(.canBeAnonymous) {
                                 placeholder = interfaceState.strings.Conversation_InputTextAnonymousPlaceholder
                             } else if case let .replyThread(replyThreadMessage) = interfaceState.chatLocation, !replyThreadMessage.isForumPost, replyThreadMessage.peerId != self.context?.account.peerId {
                                 if replyThreadMessage.isChannelPost {
@@ -1931,7 +1931,7 @@ public class ChatTextInputPanelNode: ChatInputPanelNode, ASEditableTextNodeDeleg
                                 } else {
                                     placeholder = interfaceState.strings.Conversation_InputTextPlaceholderReply
                                 }
-                            } else if let channel = peer as? TelegramChannel, channel.isForumOrMonoForum, let forumTopicData = interfaceState.forumTopicData {
+                            } else if let channel = peer as? IosappChannel, channel.isForumOrMonoForum, let forumTopicData = interfaceState.forumTopicData {
                                 if let replyMessage = interfaceState.replyMessage, let threadInfo = replyMessage.associatedThreadInfo {
                                     placeholder = interfaceState.strings.Chat_InputPlaceholderReplyInTopic(threadInfo.title).string
                                 } else {
@@ -3348,10 +3348,10 @@ public class ChatTextInputPanelNode: ChatInputPanelNode, ASEditableTextNodeDeleg
             
             var updateImageSignal: Signal<(TransformImageArguments) -> DrawingContext?, NoError>?
             var imageDimensions: CGSize?
-            if let imageReference = updatedMediaReference.concrete(TelegramMediaImage.self) {
+            if let imageReference = updatedMediaReference.concrete(IosappMediaImage.self) {
                 imageDimensions = imageReference.media.representations.last?.dimensions.cgSize
                 updateImageSignal = chatMessagePhotoThumbnail(account: context.account, userLocation: .other, photoReference: imageReference, blurred: hasSpoiler)
-            } else if let fileReference = updatedMediaReference.concrete(TelegramMediaFile.self) {
+            } else if let fileReference = updatedMediaReference.concrete(IosappMediaFile.self) {
                 imageDimensions = fileReference.media.dimensions?.cgSize
                 if fileReference.media.isVideo {
                     updateImageSignal = chatMessageVideoThumbnail(account: context.account, userLocation: .other, fileReference: fileReference, blurred: hasSpoiler)
@@ -3404,9 +3404,9 @@ public class ChatTextInputPanelNode: ChatInputPanelNode, ASEditableTextNodeDeleg
             mediaInputDisabled = true
         } else if interfaceState.hasActiveGroupCall {
             mediaInputDisabled = true
-        } else if let channel = interfaceState.renderedPeer?.peer as? TelegramChannel, channel.hasBannedPermission(.banSendVoice, ignoreDefault: canBypassRestrictions) != nil, channel.hasBannedPermission(.banSendInstantVideos, ignoreDefault: canBypassRestrictions) != nil {
+        } else if let channel = interfaceState.renderedPeer?.peer as? IosappChannel, channel.hasBannedPermission(.banSendVoice, ignoreDefault: canBypassRestrictions) != nil, channel.hasBannedPermission(.banSendInstantVideos, ignoreDefault: canBypassRestrictions) != nil {
             mediaInputDisabled = true
-        } else if let group = interfaceState.renderedPeer?.peer as? TelegramGroup, group.hasBannedPermission(.banSendVoice), group.hasBannedPermission(.banSendInstantVideos) {
+        } else if let group = interfaceState.renderedPeer?.peer as? IosappGroup, group.hasBannedPermission(.banSendVoice), group.hasBannedPermission(.banSendInstantVideos) {
             mediaInputDisabled = true
         } else {
             mediaInputDisabled = false
@@ -3455,7 +3455,7 @@ public class ChatTextInputPanelNode: ChatInputPanelNode, ASEditableTextNodeDeleg
         
         transition.updateAlpha(node: self.viewOnceButton, alpha: viewOnceIsVisible ? 1.0 : 0.0)
         transition.updateTransformScale(node: self.viewOnceButton, scale: viewOnceIsVisible ? 1.0 : 0.01)
-        if let user = interfaceState.renderedPeer?.peer as? TelegramUser, user.id != interfaceState.accountPeerId && user.botInfo == nil && interfaceState.sendPaidMessageStars == nil {
+        if let user = interfaceState.renderedPeer?.peer as? IosappUser, user.id != interfaceState.accountPeerId && user.botInfo == nil && interfaceState.sendPaidMessageStars == nil {
             self.viewOnceButton.isHidden = false
         } else {
             self.viewOnceButton.isHidden = true
@@ -3942,9 +3942,9 @@ public class ChatTextInputPanelNode: ChatInputPanelNode, ASEditableTextNodeDeleg
         var localPosition: CGPoint
         var position: EmojiSuggestionPosition
         let disposable: MetaDisposable
-        var value: [TelegramMediaFile]?
+        var value: [IosappMediaFile]?
         
-        init(localPosition: CGPoint, position: EmojiSuggestionPosition, disposable: MetaDisposable, value: [TelegramMediaFile]?) {
+        init(localPosition: CGPoint, position: EmojiSuggestionPosition, disposable: MetaDisposable, value: [IosappMediaFile]?) {
             self.localPosition = localPosition
             self.position = position
             self.disposable = disposable
@@ -4221,7 +4221,7 @@ public class ChatTextInputPanelNode: ChatInputPanelNode, ASEditableTextNodeDeleg
             return nil
         }
         
-        var maybeFile: TelegramMediaFile?
+        var maybeFile: IosappMediaFile?
         var maybeItemLayer: CALayer?
         
         if let currentEmojiSuggestionView = self.currentEmojiSuggestionView?.componentView as? EmojiSuggestionsComponent.View {
@@ -4265,7 +4265,7 @@ public class ChatTextInputPanelNode: ChatInputPanelNode, ASEditableTextNodeDeleg
         let _ = context
         let _ = accountPeerId
         
-        return context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: accountPeerId))
+        return context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: accountPeerId))
         |> map { peer -> Bool in
             var hasPremium = false
             if case let .user(user) = peer, user.isPremium {
@@ -4299,7 +4299,7 @@ public class ChatTextInputPanelNode: ChatInputPanelNode, ASEditableTextNodeDeleg
             if let interaction = strongSelf.interfaceInteraction {
                 let _ = interaction
                 
-                let sendEmoji: (TelegramMediaFile) -> Void = { file in
+                let sendEmoji: (IosappMediaFile) -> Void = { file in
                     guard let self else {
                         return
                     }
@@ -4326,7 +4326,7 @@ public class ChatTextInputPanelNode: ChatInputPanelNode, ASEditableTextNodeDeleg
                         self.interfaceInteraction?.sendEmoji(text, emojiAttribute, true)
                     }
                 }
-                let setStatus: (TelegramMediaFile) -> Void = { file in
+                let setStatus: (IosappMediaFile) -> Void = { file in
                     guard let self, let context = self.context else {
                         return
                     }
@@ -4340,7 +4340,7 @@ public class ChatTextInputPanelNode: ChatInputPanelNode, ASEditableTextNodeDeleg
                     let undoController = UndoOverlayController(presentationData: presentationData, content: .sticker(context: context, file: file, loop: true, title: nil, text: presentationData.strings.EmojiStatus_AppliedText, undoText: nil, customAction: nil), elevatedLayout: false, animateInAsReplacement: animateInAsReplacement, action: { _ in return false })
                     self.interfaceInteraction?.presentController(undoController, nil)
                 }
-                let copyEmoji: (TelegramMediaFile) -> Void = { file in
+                let copyEmoji: (IosappMediaFile) -> Void = { file in
                     var text = "."
                     var emojiAttribute: ChatTextInputTextCustomEmojiAttribute?
                     loop: for attribute in file.attributes {
@@ -4814,7 +4814,7 @@ public class ChatTextInputPanelNode: ChatInputPanelNode, ASEditableTextNodeDeleg
         self.dismissedEmojiSuggestionPosition = nil
         
         if let presentationInterfaceState = self.presentationInterfaceState, !self.skipPresentationInterfaceStateUpdate {
-            if let peer = presentationInterfaceState.renderedPeer?.peer as? TelegramUser, peer.botInfo != nil, let keyboardButtonsMessage = presentationInterfaceState.keyboardButtonsMessage, let keyboardMarkup = keyboardButtonsMessage.visibleButtonKeyboardMarkup, keyboardMarkup.flags.contains(.persistent) {
+            if let peer = presentationInterfaceState.renderedPeer?.peer as? IosappUser, peer.botInfo != nil, let keyboardButtonsMessage = presentationInterfaceState.keyboardButtonsMessage, let keyboardMarkup = keyboardButtonsMessage.visibleButtonKeyboardMarkup, keyboardMarkup.flags.contains(.persistent) {
                 self.interfaceInteraction?.updateInputModeAndDismissedButtonKeyboardMessageId { _ in
                     return (.inputButtons(persistent: true), nil)
                 }

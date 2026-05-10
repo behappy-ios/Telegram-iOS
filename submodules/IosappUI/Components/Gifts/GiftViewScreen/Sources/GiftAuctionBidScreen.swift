@@ -1738,7 +1738,7 @@ private final class GiftAuctionBidScreenComponent: Component {
                         }
                         let _ = (context.engine.data.get(
                             EngineDataList(
-                                peerIds.map(TelegramEngine.EngineData.Item.Peer.Peer.init)
+                                peerIds.map(IosappEngine.EngineData.Item.Peer.Peer.init)
                             )
                         )
                         |> deliverOnMainQueue).startStandalone(next: { [weak self, weak controller] peerList in
@@ -1774,7 +1774,7 @@ private final class GiftAuctionBidScreenComponent: Component {
 
                             controller?.present(UndoOverlayController(presentationData: presentationData, content: .forward(savedMessages: savedMessages, text: text), elevatedLayout: false, animateInAsReplacement: false, action: { [weak self, weak controller] action in
                                 if let self, savedMessages, action == .info {
-                                    let _ = (context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: context.account.peerId))
+                                    let _ = (context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: context.account.peerId))
                                     |> deliverOnMainQueue).start(next: { [weak self, weak controller] peer in
                                         guard let peer else {
                                             return
@@ -2023,8 +2023,8 @@ private final class GiftAuctionBidScreenComponent: Component {
                     
                     if !peerIds.isEmpty {
                         let _ = (context.engine.data.get(EngineDataMap(
-                            peerIds.map { peerId -> TelegramEngine.EngineData.Item.Peer.Peer in
-                                return TelegramEngine.EngineData.Item.Peer.Peer(id: peerId)
+                            peerIds.map { peerId -> IosappEngine.EngineData.Item.Peer.Peer in
+                                return IosappEngine.EngineData.Item.Peer.Peer(id: peerId)
                             }
                         ))
                         |> deliverOnMainQueue).startStandalone(next: { [weak self] peers in

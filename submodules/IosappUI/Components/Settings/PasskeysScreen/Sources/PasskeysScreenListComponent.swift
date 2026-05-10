@@ -19,7 +19,7 @@ final class PasskeysScreenListComponent: Component {
     let theme: PresentationTheme
     let strings: PresentationStrings
     let insets: UIEdgeInsets
-    let passkeys: [TelegramPasskey]
+    let passkeys: [IosappPasskey]
     let addPasskeyAction: () -> Void
     let deletePasskeyAction: (String) -> Void
     
@@ -28,7 +28,7 @@ final class PasskeysScreenListComponent: Component {
         theme: PresentationTheme,
         strings: PresentationStrings,
         insets: UIEdgeInsets,
-        passkeys: [TelegramPasskey],
+        passkeys: [IosappPasskey],
         addPasskeyAction: @escaping () -> Void,
         deletePasskeyAction: @escaping (String) -> Void
     ) {

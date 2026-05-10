@@ -1356,7 +1356,7 @@ private final class ChatSendStarsScreenComponent: Component {
                         if reactData.myTopPeer != nil {
                             switch reactData.reactSubject {
                             case let .message(messageId):
-                                let mappedPrivacy: TelegramPaidReactionPrivacy
+                                let mappedPrivacy: IosappPaidReactionPrivacy
                                 switch self.privacyPeer {
                                 case .account:
                                     mappedPrivacy = .default
@@ -2430,7 +2430,7 @@ private final class ChatSendStarsScreenComponent: Component {
                                 
                                 if reactData.myTopPeer != nil {
                                     switch reactData.reactSubject {
-                                    case let .message(messageId):let mappedPrivacy: TelegramPaidReactionPrivacy
+                                    case let .message(messageId):let mappedPrivacy: IosappPaidReactionPrivacy
                                         switch self.privacyPeer {
                                         case .account:
                                             mappedPrivacy = .default
@@ -2597,7 +2597,7 @@ private final class ChatSendStarsScreenComponent: Component {
                             isBecomingTop = true
                         }
                         
-                        let mappedPrivacy: TelegramPaidReactionPrivacy
+                        let mappedPrivacy: IosappPaidReactionPrivacy
                         switch self.privacyPeer {
                         case .account:
                             mappedPrivacy = .default
@@ -2642,21 +2642,21 @@ private final class ChatSendStarsScreenComponent: Component {
                             bold: MarkdownAttributeSet(font: Font.semibold(13.0), textColor: environment.theme.list.itemSecondaryTextColor),
                             link: MarkdownAttributeSet(font: Font.regular(13.0), textColor: environment.theme.list.itemAccentColor),
                             linkAttribute: { contents in
-                                return (TelegramTextAttributes.URL, contents)
+                                return (IosappTextAttributes.URL, contents)
                             }
                         )),
                         horizontalAlignment: .center,
                         maximumNumberOfLines: 0,
                         highlightColor: environment.theme.list.itemAccentColor.withAlphaComponent(0.2),
                         highlightAction: { attributes in
-                            if let _ = attributes[NSAttributedString.Key(rawValue: TelegramTextAttributes.URL)] {
-                                return NSAttributedString.Key(rawValue: TelegramTextAttributes.URL)
+                            if let _ = attributes[NSAttributedString.Key(rawValue: IosappTextAttributes.URL)] {
+                                return NSAttributedString.Key(rawValue: IosappTextAttributes.URL)
                             } else {
                                 return nil
                             }
                         },
                         tapAction: { [weak self] attributes, _ in
-                            if let controller = self?.environment?.controller(), let navigationController = controller.navigationController as? NavigationController, let url = attributes[NSAttributedString.Key(rawValue: TelegramTextAttributes.URL)] as? String {
+                            if let controller = self?.environment?.controller(), let navigationController = controller.navigationController as? NavigationController, let url = attributes[NSAttributedString.Key(rawValue: IosappTextAttributes.URL)] as? String {
                                 let presentationData = component.context.sharedContext.currentPresentationData.with { $0 }
                                 component.context.sharedContext.openExternalUrl(context: component.context, urlContext: .generic, url: url, forceExternal: false, presentationData: presentationData, navigationController: navigationController, dismissInput: {})
                             }
@@ -2761,9 +2761,9 @@ public class ChatSendStarsScreen: ViewControllerComponentContainer {
             let myTopPeer: ChatSendStarsScreen.TopPeer?
             let minAmount: Int
             let maxAmount: Int
-            let completion: (Int64, TelegramPaidReactionPrivacy, Bool, ChatSendStarsScreen.TransitionOut) -> Void
+            let completion: (Int64, IosappPaidReactionPrivacy, Bool, ChatSendStarsScreen.TransitionOut) -> Void
             
-            init(peer: EnginePeer, myPeer: EnginePeer, defaultPrivacyPeer: ChatSendStarsScreenComponent.PrivacyPeer, channelsForPublicReaction: [EnginePeer], reactSubject: ReactSubject, currentSentAmount: Int?, topPeers: [ChatSendStarsScreen.TopPeer], myTopPeer: ChatSendStarsScreen.TopPeer?, minAmount: Int, maxAmount: Int, completion: @escaping (Int64, TelegramPaidReactionPrivacy, Bool, ChatSendStarsScreen.TransitionOut) -> Void) {
+            init(peer: EnginePeer, myPeer: EnginePeer, defaultPrivacyPeer: ChatSendStarsScreenComponent.PrivacyPeer, channelsForPublicReaction: [EnginePeer], reactSubject: ReactSubject, currentSentAmount: Int?, topPeers: [ChatSendStarsScreen.TopPeer], myTopPeer: ChatSendStarsScreen.TopPeer?, minAmount: Int, maxAmount: Int, completion: @escaping (Int64, IosappPaidReactionPrivacy, Bool, ChatSendStarsScreen.TransitionOut) -> Void) {
                 self.peer = peer
                 self.myPeer = myPeer
                 self.defaultPrivacyPeer = defaultPrivacyPeer
@@ -2925,7 +2925,7 @@ public class ChatSendStarsScreen: ViewControllerComponentContainer {
         }
     }
     
-    public static func initialData(context: AccountContext, peerId: EnginePeer.Id, myPeer: EnginePeer? = nil, reactSubject: ReactSubject, topPeers: [ReactionsMessageAttribute.TopPeer], completion: @escaping (Int64, TelegramPaidReactionPrivacy, Bool, TransitionOut) -> Void) -> Signal<InitialData?, NoError> {
+    public static func initialData(context: AccountContext, peerId: EnginePeer.Id, myPeer: EnginePeer? = nil, reactSubject: ReactSubject, topPeers: [ReactionsMessageAttribute.TopPeer], completion: @escaping (Int64, IosappPaidReactionPrivacy, Bool, TransitionOut) -> Void) -> Signal<InitialData?, NoError> {
         let balance: Signal<StarsAmount?, NoError>
         if let starsContext = context.starsContext {
             balance = starsContext.state
@@ -2960,7 +2960,7 @@ public class ChatSendStarsScreen: ViewControllerComponentContainer {
         }
         
         let defaultPrivacyPeer: Signal<ChatSendStarsScreenComponent.PrivacyPeer, NoError> = context.engine.data.get(
-            TelegramEngine.EngineData.Item.Peer.StarsReactionDefaultPrivacy()
+            IosappEngine.EngineData.Item.Peer.StarsReactionDefaultPrivacy()
         )
         |> mapToSignal { defaultPrivacy -> Signal<ChatSendStarsScreenComponent.PrivacyPeer, NoError> in
             switch defaultPrivacy {
@@ -2970,7 +2970,7 @@ public class ChatSendStarsScreen: ViewControllerComponentContainer {
                 return .single(.account)
             case let .peer(peerId):
                 return context.engine.data.get(
-                    TelegramEngine.EngineData.Item.Peer.Peer(id: peerId)
+                    IosappEngine.EngineData.Item.Peer.Peer(id: peerId)
                 )
                 |> map { peer -> ChatSendStarsScreenComponent.PrivacyPeer in
                     if let peer {
@@ -2994,9 +2994,9 @@ public class ChatSendStarsScreen: ViewControllerComponentContainer {
         
         return combineLatest(
             context.engine.data.get(
-                TelegramEngine.EngineData.Item.Peer.Peer(id: peerId),
-                TelegramEngine.EngineData.Item.Peer.Peer(id: context.account.peerId),
-                EngineDataMap(allPeerIds.map(TelegramEngine.EngineData.Item.Peer.Peer.init(id:)))
+                IosappEngine.EngineData.Item.Peer.Peer(id: peerId),
+                IosappEngine.EngineData.Item.Peer.Peer(id: context.account.peerId),
+                EngineDataMap(allPeerIds.map(IosappEngine.EngineData.Item.Peer.Peer.init(id:)))
             ),
             balance,
             channelsForPublicReaction,
@@ -3101,8 +3101,8 @@ public class ChatSendStarsScreen: ViewControllerComponentContainer {
         
         return combineLatest(
             context.engine.data.get(
-                TelegramEngine.EngineData.Item.Peer.Peer(id: peerId),
-                TelegramEngine.EngineData.Item.Peer.Peer(id: context.account.peerId),
+                IosappEngine.EngineData.Item.Peer.Peer(id: peerId),
+                IosappEngine.EngineData.Item.Peer.Peer(id: context.account.peerId),
             ),
             balance
         )

@@ -33,16 +33,16 @@ struct MessageMediaPlaylistItemStableId: Hashable {
     let stableId: UInt32
 }
 
-private func extractFileMedia(_ message: Message) -> TelegramMediaFile? {
-    var file: TelegramMediaFile?
+private func extractFileMedia(_ message: Message) -> IosappMediaFile? {
+    var file: IosappMediaFile?
     for media in message.media {
-        if let media = media as? TelegramMediaFile {
+        if let media = media as? IosappMediaFile {
             file = media
             break
-        } else if let media = media as? TelegramMediaWebpage, case let .Loaded(content) = media.content, let f = content.file {
+        } else if let media = media as? IosappMediaWebpage, case let .Loaded(content) = media.content, let f = content.file {
             file = f
             break
-        } else if let media = media as? TelegramMediaPoll, let f = media.attachedMedia as? TelegramMediaFile {
+        } else if let media = media as? IosappMediaPoll, let f = media.attachedMedia as? IosappMediaFile {
             file = f
             break
         }
@@ -542,7 +542,7 @@ public final class PeerMessagesMediaPlaylist: SharedMediaPlaylist {
         } else if item?.message.id != self.currentlyObservedMessageId {
             self.currentlyObservedMessageId = item?.message.id
             if let id = item?.message.id {
-                self.currentlyObservedMessageDisposable.set((self.context.engine.data.subscribe(TelegramEngine.EngineData.Item.Messages.Message(id: id))
+                self.currentlyObservedMessageDisposable.set((self.context.engine.data.subscribe(IosappEngine.EngineData.Item.Messages.Message(id: id))
                 |> filter { message in
                     if let _ = message {
                         return false
@@ -670,7 +670,7 @@ public final class PeerMessagesMediaPlaylist: SharedMediaPlaylist {
                                     let _ = playbackStack.pop()
                                     inner: while true {
                                         if let id = playbackStack.pop() {
-                                            inputIndex = self.context.engine.data.get(TelegramEngine.EngineData.Item.Messages.Message(id: id))
+                                            inputIndex = self.context.engine.data.get(IosappEngine.EngineData.Item.Messages.Message(id: id))
                                             |> map { message in
                                                 return message?.index
                                             }

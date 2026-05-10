@@ -37,7 +37,7 @@ private enum CustomOperationEvent<T, E> {
 }
 
 private final class UpdatedWebpageSubscriberContext {
-    let subscribers = Bag<(TelegramMediaWebpage) -> Void>()
+    let subscribers = Bag<(IosappMediaWebpage) -> Void>()
 }
 
 private final class UpdatedPeersNearbySubscriberContext {
@@ -194,7 +194,7 @@ public final class AccountStateManager {
         
         private let queue: Queue
         public let accountPeerId: PeerId
-        private let accountManager: AccountManager<TelegramAccountManagerTypes>
+        private let accountManager: AccountManager<IosappAccountManagerTypes>
         public let postbox: Postbox
         public let network: Network
         private let callSessionManager: CallSessionManager?
@@ -282,9 +282,9 @@ public final class AccountStateManager {
             return self.appUpdateInfoPromise.get()
         }
         
-        private let contactBirthdaysValue = Atomic<[EnginePeer.Id: TelegramBirthday]>(value: [:])
-        private let contactBirthdaysPromise = Promise<[EnginePeer.Id: TelegramBirthday]>([:])
-        public var contactBirthdays: Signal<[EnginePeer.Id: TelegramBirthday], NoError> {
+        private let contactBirthdaysValue = Atomic<[EnginePeer.Id: IosappBirthday]>(value: [:])
+        private let contactBirthdaysPromise = Promise<[EnginePeer.Id: IosappBirthday]>([:])
+        public var contactBirthdays: Signal<[EnginePeer.Id: IosappBirthday], NoError> {
             return self.contactBirthdaysPromise.get()
         }
         
@@ -382,7 +382,7 @@ public final class AccountStateManager {
         init(
             queue: Queue,
             accountPeerId: PeerId,
-            accountManager: AccountManager<TelegramAccountManagerTypes>,
+            accountManager: AccountManager<IosappAccountManagerTypes>,
             postbox: Postbox,
             network: Network,
             callSessionManager: CallSessionManager?,
@@ -1620,7 +1620,7 @@ public final class AccountStateManager {
             }
         }
         
-        public func updatedWebpage(_ webpageId: MediaId) -> Signal<TelegramMediaWebpage, NoError> {
+        public func updatedWebpage(_ webpageId: MediaId) -> Signal<IosappMediaWebpage, NoError> {
             let queue = self.queue
             return Signal { [weak self] subscriber in
                 let disposable = MetaDisposable()
@@ -1654,7 +1654,7 @@ public final class AccountStateManager {
             }
         }
         
-        private func notifyUpdatedWebpages(_ updatedWebpages: [MediaId: TelegramMediaWebpage]) {
+        private func notifyUpdatedWebpages(_ updatedWebpages: [MediaId: IosappMediaWebpage]) {
             for (id, context) in self.updatedWebpageContexts {
                 if let media = updatedWebpages[id] {
                     for subscriber in context.subscribers.copyItems() {
@@ -1694,7 +1694,7 @@ public final class AccountStateManager {
             }
         }
         
-        func modifyContactBirthdays(_ f: @escaping ([EnginePeer.Id: TelegramBirthday]) -> ([EnginePeer.Id: TelegramBirthday])) {
+        func modifyContactBirthdays(_ f: @escaping ([EnginePeer.Id: IosappBirthday]) -> ([EnginePeer.Id: IosappBirthday])) {
             self.queue.async {
                 let current = self.contactBirthdaysValue.with { $0 }
                 let updated = f(current)
@@ -1976,7 +1976,7 @@ public final class AccountStateManager {
         }
     }
     
-    public var contactBirthdays: Signal<[EnginePeer.Id: TelegramBirthday], NoError> {
+    public var contactBirthdays: Signal<[EnginePeer.Id: IosappBirthday], NoError> {
         return self.impl.signalWith { impl, subscriber in
             return impl.contactBirthdays.start(next: subscriber.putNext, error: subscriber.putError, completed: subscriber.putCompletion)
         }
@@ -2101,7 +2101,7 @@ public final class AccountStateManager {
     
     init(
         accountPeerId: PeerId,
-        accountManager: AccountManager<TelegramAccountManagerTypes>,
+        accountManager: AccountManager<IosappAccountManagerTypes>,
         postbox: Postbox,
         network: Network,
         callSessionManager: CallSessionManager?,
@@ -2194,7 +2194,7 @@ public final class AccountStateManager {
         }
     }
     
-    func modifyContactBirthdays(_ f: @escaping ([EnginePeer.Id: TelegramBirthday]) -> ([EnginePeer.Id: TelegramBirthday])) {
+    func modifyContactBirthdays(_ f: @escaping ([EnginePeer.Id: IosappBirthday]) -> ([EnginePeer.Id: IosappBirthday])) {
         self.impl.with { impl in
             impl.modifyContactBirthdays(f)
         }
@@ -2267,7 +2267,7 @@ public final class AccountStateManager {
         }
     }
     
-    public func updatedWebpage(_ webpageId: MediaId) -> Signal<TelegramMediaWebpage, NoError> {
+    public func updatedWebpage(_ webpageId: MediaId) -> Signal<IosappMediaWebpage, NoError> {
         return self.impl.signalWith { impl, subscriber in
             return impl.updatedWebpage(webpageId).start(next: subscriber.putNext, error: subscriber.putError, completed: subscriber.putCompletion)
         }
@@ -2304,7 +2304,7 @@ public final class AccountStateManager {
             let (updates, users) = (updatesData.updates, updatesData.users)
             var peers: [Peer] = []
             for user in users {
-                peers.append(TelegramUser(user: user))
+                peers.append(IosappUser(user: user))
             }
 
             for update in updates {
@@ -2360,7 +2360,7 @@ public final class AccountStateManager {
     }
 }
 
-func resolveNotificationSettings(list: [TelegramPeerNotificationSettings], defaultSettings: MessageNotificationSettings) -> (sound: PeerMessageSound, notify: Bool, displayContents: Bool) {
+func resolveNotificationSettings(list: [IosappPeerNotificationSettings], defaultSettings: MessageNotificationSettings) -> (sound: PeerMessageSound, notify: Bool, displayContents: Bool) {
     var sound: PeerMessageSound = defaultSettings.sound
     
     var notify = defaultSettings.enabled
@@ -2431,7 +2431,7 @@ public func messagesForNotification(transaction: Transaction, id: MessageId, alw
     }
     
     for media in message.media {
-        if let action = media as? TelegramMediaAction {
+        if let action = media as? IosappMediaAction {
             switch action.action {
                 case .groupMigratedToChannel, .channelMigratedFromGroup:
                     notify = false
@@ -2443,21 +2443,21 @@ public func messagesForNotification(transaction: Transaction, id: MessageId, alw
     
     var notificationPeerId = id.peerId
     let peer = transaction.getPeer(id.peerId)
-    if let peer, peer is TelegramSecretChat, let associatedPeerId = peer.associatedPeerId {
+    if let peer, peer is IosappSecretChat, let associatedPeerId = peer.associatedPeerId {
         notificationPeerId = associatedPeerId
     }
     if message.personal, let author = message.author {
         notificationPeerId = author.id
     }
     
-    var notificationSettingsStack: [TelegramPeerNotificationSettings] = []
+    var notificationSettingsStack: [IosappPeerNotificationSettings] = []
     
-    if let peer = peer as? TelegramChannel, peer.isMonoForum {
+    if let peer = peer as? IosappChannel, peer.isMonoForum {
     } else if let threadId = message.threadId, let threadData = transaction.getMessageHistoryThreadInfo(peerId: message.id.peerId, threadId: threadId)?.data.get(MessageHistoryThreadData.self) {
         notificationSettingsStack.append(threadData.notificationSettings)
     }
     
-    if let notificationSettings = transaction.getPeerNotificationSettings(id: notificationPeerId) as? TelegramPeerNotificationSettings {
+    if let notificationSettings = transaction.getPeerNotificationSettings(id: notificationPeerId) as? IosappPeerNotificationSettings {
         notificationSettingsStack.append(notificationSettings)
     }
     
@@ -2469,7 +2469,7 @@ public func messagesForNotification(transaction: Transaction, id: MessageId, alw
     } else if id.peerId.namespace == Namespaces.Peer.SecretChat {
         defaultNotificationSettings = globalNotificationSettings.effective.privateChats
         displayContents = false
-    } else if id.peerId.namespace == Namespaces.Peer.CloudChannel, let peer = peer as? TelegramChannel, case .broadcast = peer.info {
+    } else if id.peerId.namespace == Namespaces.Peer.CloudChannel, let peer = peer as? IosappChannel, case .broadcast = peer.info {
         defaultNotificationSettings = globalNotificationSettings.effective.channels
     } else {
         defaultNotificationSettings = globalNotificationSettings.effective.groupChats
@@ -2489,7 +2489,7 @@ public func messagesForNotification(transaction: Transaction, id: MessageId, alw
         sound = .none
     }
     
-    if let channel = message.peers[message.id.peerId] as? TelegramChannel {
+    if let channel = message.peers[message.id.peerId] as? IosappChannel {
         if !channel.flags.contains(.isForum) {
             threadData = nil
         }

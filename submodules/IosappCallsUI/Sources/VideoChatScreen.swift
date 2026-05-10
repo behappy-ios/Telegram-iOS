@@ -333,7 +333,7 @@ final class VideoChatScreenComponent: Component {
         let inviteDisposable = MetaDisposable()
         let currentAvatarMixin = Atomic<TGMediaAvatarMenuMixin?>(value: nil)
         let updateAvatarDisposable = MetaDisposable()
-        var currentUpdatingAvatar: (TelegramMediaImageRepresentation, Float)?
+        var currentUpdatingAvatar: (IosappMediaImageRepresentation, Float)?
         
         var maxVideoQuality: Int = Int.max
         
@@ -837,7 +837,7 @@ final class VideoChatScreenComponent: Component {
                         }
                         let _ = (groupCall.accountContext.engine.data.get(
                             EngineDataList(
-                                peerIds.map(TelegramEngine.EngineData.Item.Peer.Peer.init)
+                                peerIds.map(IosappEngine.EngineData.Item.Peer.Peer.init)
                             )
                         )
                         |> deliverOnMainQueue).start(next: { [weak self] peerList in
@@ -886,7 +886,7 @@ final class VideoChatScreenComponent: Component {
                     }
                     let _ = (groupCall.accountContext.engine.data.get(
                         EngineDataList(
-                            peerIds.map(TelegramEngine.EngineData.Item.Peer.Peer.init)
+                            peerIds.map(IosappEngine.EngineData.Item.Peer.Peer.init)
                         )
                     )
                     |> deliverOnMainQueue).start(next: { [weak self] peerList in
@@ -1185,7 +1185,7 @@ final class VideoChatScreenComponent: Component {
         
         static func groupCallStateForConferenceSource(conferenceSource: PresentationCall) -> Signal<(state: PresentationGroupCallState, invitedPeers: [InvitedPeer]), NoError> {
             let invitedPeers = conferenceSource.context.engine.data.subscribe(
-                EngineDataList((conferenceSource as! PresentationCallImpl).pendingInviteToConferencePeerIds.map { TelegramEngine.EngineData.Item.Peer.Peer(id: $0.id) })
+                EngineDataList((conferenceSource as! PresentationCallImpl).pendingInviteToConferencePeerIds.map { IosappEngine.EngineData.Item.Peer.Peer(id: $0.id) })
             )
             
             let accountPeerId = conferenceSource.context.account.peerId
@@ -1240,8 +1240,8 @@ final class VideoChatScreenComponent: Component {
         static func groupCallMembersForConferenceSource(conferenceSource: PresentationCall) -> Signal<PresentationGroupCallMembers, NoError> {
             return combineLatest(queue: .mainQueue(),
                 conferenceSource.context.engine.data.subscribe(
-                    TelegramEngine.EngineData.Item.Peer.Peer(id: conferenceSource.context.account.peerId),
-                    TelegramEngine.EngineData.Item.Peer.Peer(id: conferenceSource.peerId)
+                    IosappEngine.EngineData.Item.Peer.Peer(id: conferenceSource.context.account.peerId),
+                    IosappEngine.EngineData.Item.Peer.Peer(id: conferenceSource.peerId)
                 ),
                 conferenceSource.state
             )
@@ -1696,7 +1696,7 @@ final class VideoChatScreenComponent: Component {
                     self.invitedPeersDisposable = (groupCall.invitedPeers
                     |> mapToSignal { invitedPeers in
                         return accountContext.engine.data.get(
-                            EngineDataMap(invitedPeers.map({ TelegramEngine.EngineData.Item.Peer.Peer(id: $0.id) }))
+                            EngineDataMap(invitedPeers.map({ IosappEngine.EngineData.Item.Peer.Peer(id: $0.id) }))
                         )
                         |> map { peers -> [InvitedPeer] in
                             var result: [InvitedPeer] = []
@@ -4190,7 +4190,7 @@ final class VideoChatScreenV2Impl: ViewControllerComponentContainer, VoiceChatCo
             let callPeer: Signal<EnginePeer?, NoError>
             if let peerId = groupCall.peerId {
                 callPeer = groupCall.accountContext.engine.data.get(
-                    TelegramEngine.EngineData.Item.Peer.Peer(id: peerId)
+                    IosappEngine.EngineData.Item.Peer.Peer(id: peerId)
                 )
             } else {
                 callPeer = .single(nil)
@@ -4198,7 +4198,7 @@ final class VideoChatScreenV2Impl: ViewControllerComponentContainer, VoiceChatCo
             let accountContext = groupCall.accountContext
             let invitedPeers = groupCall.invitedPeers |> take(1) |> mapToSignal { invitedPeers in
                 return accountContext.engine.data.get(
-                    EngineDataList(invitedPeers.map(\.id).map({ TelegramEngine.EngineData.Item.Peer.Peer(id: $0) }))
+                    EngineDataList(invitedPeers.map(\.id).map({ IosappEngine.EngineData.Item.Peer.Peer(id: $0) }))
                 )
             }
             return combineLatest(
@@ -4263,7 +4263,7 @@ func allowedStoryReactions(account: Account) -> Signal<[ReactionItem], NoError> 
     }
 
     return combineLatest(
-        TelegramEngine(account: account).stickers.availableReactions(),
+        IosappEngine(account: account).stickers.availableReactions(),
         topReactions
     )
     |> take(1)

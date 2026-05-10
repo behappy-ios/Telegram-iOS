@@ -2,9 +2,9 @@ import Foundation
 import Postbox
 
 public class EmbeddedMediaStickersMessageAttribute: MessageAttribute {
-    public let files: [TelegramMediaFile]
+    public let files: [IosappMediaFile]
     
-    public init(files: [TelegramMediaFile]) {
+    public init(files: [IosappMediaFile]) {
         self.files = files
     }
     

@@ -140,7 +140,7 @@ public func botListSettingsScreen(context: AccountContext) -> ViewController {
     |> distinctUntilChanged
     |> mapToSignal { peerIds -> Signal<[EnginePeer], NoError> in
         return context.engine.data.subscribe(
-            EngineDataList(peerIds.map(TelegramEngine.EngineData.Item.Peer.Peer.init(id:)))
+            EngineDataList(peerIds.map(IosappEngine.EngineData.Item.Peer.Peer.init(id:)))
         )
         |> map { peers -> [EnginePeer] in
             return peers.compactMap { $0 }

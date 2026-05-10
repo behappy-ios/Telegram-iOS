@@ -63,10 +63,10 @@ private func encodeColorList<Key>(_ values: inout KeyedEncodingContainer<Key>, _
     try values.encode(stringList, forKey: key)
 }
 
-struct TelegramWallpaperStandardizedCodable: Codable {
-    let value: TelegramWallpaper
+struct IosappWallpaperStandardizedCodable: Codable {
+    let value: IosappWallpaper
 
-    init(_ value: TelegramWallpaper) {
+    init(_ value: IosappWallpaper) {
         self.value = value
     }
 
@@ -122,9 +122,9 @@ struct TelegramWallpaperStandardizedCodable: Codable {
                         }
                         
                         if let slug = slug {
-                            self.value = .file(TelegramWallpaper.File(id: 0, accessHash: 0, isCreator: false, isDefault: false, isPattern: !colors.isEmpty, isDark: false, slug: slug, file: TelegramMediaFile(fileId: EngineMedia.Id(namespace: 0, id: 0), partialReference: nil, resource: WallpaperDataResource(slug: slug), previewRepresentations: [], videoThumbnails: [], immediateThumbnailData: nil, mimeType: "", size: nil, attributes: [], alternativeRepresentations: []), settings: WallpaperSettings(blur: blur, motion: motion, colors: colors.map { $0.argb }, intensity: intensity, rotation: rotation)))
+                            self.value = .file(IosappWallpaper.File(id: 0, accessHash: 0, isCreator: false, isDefault: false, isPattern: !colors.isEmpty, isDark: false, slug: slug, file: IosappMediaFile(fileId: EngineMedia.Id(namespace: 0, id: 0), partialReference: nil, resource: WallpaperDataResource(slug: slug), previewRepresentations: [], videoThumbnails: [], immediateThumbnailData: nil, mimeType: "", size: nil, attributes: [], alternativeRepresentations: []), settings: WallpaperSettings(blur: blur, motion: motion, colors: colors.map { $0.argb }, intensity: intensity, rotation: rotation)))
                         } else if colors.count > 1 {
-                            self.value = .gradient(TelegramWallpaper.Gradient(id: nil, colors: colors.map { $0.argb }, settings: WallpaperSettings(blur: blur, motion: motion, rotation: rotation)))
+                            self.value = .gradient(IosappWallpaper.Gradient(id: nil, colors: colors.map { $0.argb }, settings: WallpaperSettings(blur: blur, motion: motion, rotation: rotation)))
                         } else {
                             throw PresentationThemeDecodingError.generic
                         }
@@ -1823,7 +1823,7 @@ extension PresentationThemeChat: Codable {
     public convenience init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
         
-        var wallpaper = (try values.decode(TelegramWallpaperStandardizedCodable.self, forKey: .defaultWallpaper)).value
+        var wallpaper = (try values.decode(IosappWallpaperStandardizedCodable.self, forKey: .defaultWallpaper)).value
         if let decoder = decoder as? PresentationThemeDecoding {
             if case .file = wallpaper, let resolvedWallpaper = decoder.resolvedWallpaper {
                 wallpaper = resolvedWallpaper
@@ -1842,7 +1842,7 @@ extension PresentationThemeChat: Codable {
     
     public func encode(to encoder: Encoder) throws {
         var values = encoder.container(keyedBy: CodingKeys.self)
-        try values.encode(TelegramWallpaperStandardizedCodable(self.defaultWallpaper), forKey: .defaultWallpaper)
+        try values.encode(IosappWallpaperStandardizedCodable(self.defaultWallpaper), forKey: .defaultWallpaper)
         try values.encode(self.animateMessageColors, forKey: .animateMessageColors)
         try values.encode(self.message, forKey: .message)
         try values.encode(self.serviceMessage, forKey: .serviceMessage)

@@ -8,7 +8,7 @@ import UrlEscaping
 
 public enum OpenInItem {
     case url(url: String)
-    case location(location: TelegramMediaMap, directions: OpenInLocationDirections?)
+    case location(location: IosappMediaMap, directions: OpenInLocationDirections?)
 }
 
 public enum OpenInLocationDirections: Equatable {

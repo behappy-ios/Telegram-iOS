@@ -58,10 +58,10 @@ private final class DownloadedMediaStoreContext {
     }
     
     func start(postbox: Postbox, collection: Signal<PHAssetCollection, NoError>, peerId: EnginePeer.Id, timestamp: Int32, media: AnyMediaReference, completed: @escaping () -> Void) {
-        var resource: TelegramMediaResource?
-        if let image = media.media as? TelegramMediaImage {
+        var resource: IosappMediaResource?
+        if let image = media.media as? IosappMediaImage {
             resource = largestImageRepresentation(image.representations)?.resource
-        } else if let file = media.media as? TelegramMediaFile {
+        } else if let file = media.media as? IosappMediaFile {
             resource = file.resource
         }
         if let resource = resource {
@@ -107,13 +107,13 @@ private final class DownloadedMediaStoreContext {
                     configuration = storeSettings.configurations[peerTypeValue] ?? .default
                 }
                 
-                if let _ = media.media as? TelegramMediaImage {
+                if let _ = media.media as? IosappMediaImage {
                     if configuration.photo {
                         return true
                     } else {
                         return false
                     }
-                } else if let file = media.media as? TelegramMediaFile {
+                } else if let file = media.media as? IosappMediaFile {
                     if configuration.video, let fileSize = file.size, fileSize <= configuration.maximumVideoSize {
                         return true
                     } else {
@@ -137,15 +137,15 @@ private final class DownloadedMediaStoreContext {
                 }
                 
                 var filename: String?
-                if let image = media.media as? TelegramMediaImage {
+                if let image = media.media as? IosappMediaImage {
                     filename = "telegram-photo-\(image.imageId.namespace)-\(image.imageId.id).jpg"
-                } else if let file = media.media as? TelegramMediaFile {
+                } else if let file = media.media as? IosappMediaFile {
                     filename = "telegram-video-\(file.fileId.namespace)-\(file.fileId.id).mov"
                 }
                 let creationDate = Date(timeIntervalSince1970: TimeInterval(timestamp))
                 
                 let storeAsset: () -> Void = {
-                    if let _ = media.media as? TelegramMediaImage {
+                    if let _ = media.media as? IosappMediaImage {
                         PHPhotoLibrary.shared().performChanges({
                             if let fileData = try? Data(contentsOf: URL(fileURLWithPath: data.path)) {
                                 let creationRequest = PHAssetCreationRequest.forAsset()
@@ -161,7 +161,7 @@ private final class DownloadedMediaStoreContext {
                                 }
                             }
                         })
-                    } else if let file = media.media as? TelegramMediaFile, file.isVideo {
+                    } else if let file = media.media as? IosappMediaFile, file.isVideo {
                         let tempFile = TempBox.shared.tempFile(fileName: filename ?? "file.mov")
                         
                         PHPhotoLibrary.shared().performChanges({
@@ -228,7 +228,7 @@ private final class DownloadedMediaStoreManagerPrivateImpl {
     private let appSpecificAssetCollectionValue: Promise<PHAssetCollection>
     private let storeSettings = Promise<MediaAutoDownloadSettings>()
     
-    init(queue: Queue, postbox: Postbox, accountManager: AccountManager<TelegramAccountManagerTypes>) {
+    init(queue: Queue, postbox: Postbox, accountManager: AccountManager<IosappAccountManagerTypes>) {
         self.queue = queue
         self.postbox = postbox
         
@@ -279,7 +279,7 @@ final class DownloadedMediaStoreManagerImpl: DownloadedMediaStoreManager {
     private let postbox: Postbox
     private let impl: QueueLocalObject<DownloadedMediaStoreManagerPrivateImpl>
     
-    init(postbox: Postbox, accountManager: AccountManager<TelegramAccountManagerTypes>) {
+    init(postbox: Postbox, accountManager: AccountManager<IosappAccountManagerTypes>) {
         let queue = self.queue
         self.postbox = postbox
         self.impl = QueueLocalObject(queue: queue, generate: {

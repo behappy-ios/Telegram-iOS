@@ -136,7 +136,7 @@ func textInputAccessoryPanel(
                             return
                         }
                         guard let message = await context.engine.data.get(
-                            TelegramEngine.EngineData.Item.Messages.Message(id: messageId)
+                            IosappEngine.EngineData.Item.Messages.Message(id: messageId)
                         ).get() else {
                             return
                         }

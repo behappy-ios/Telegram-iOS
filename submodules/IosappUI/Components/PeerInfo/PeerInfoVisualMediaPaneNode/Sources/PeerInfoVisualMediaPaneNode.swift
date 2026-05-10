@@ -721,7 +721,7 @@ private final class SparseItemGridBindingImpl: SparseItemGridBinding, ListShimme
         if let image = self.shimmerImages[height] {
             return image
         } else {
-            let fakeFile = TelegramMediaFile(
+            let fakeFile = IosappMediaFile(
                 fileId: MediaId(namespace: 0, id: 1),
                 partialReference: nil,
                 resource: EmptyMediaResource(),
@@ -900,10 +900,10 @@ private final class SparseItemGridBindingImpl: SparseItemGridBinding, ListShimme
                 
                 var selectedMedia: Media?
                 for media in message.media {
-                    if let image = media as? TelegramMediaImage {
+                    if let image = media as? IosappMediaImage {
                         selectedMedia = image
                         break
-                    } else if let file = media as? TelegramMediaFile {
+                    } else if let file = media as? IosappMediaFile {
                         if let cover = file.videoCover {
                             selectedMedia = cover
                         } else {
@@ -992,9 +992,9 @@ private final class SparseItemGridBindingImpl: SparseItemGridBinding, ListShimme
                     var duration: Int32?
                     var isLivePhoto = false
                     var isMin: Bool = false
-                    if let image = selectedMedia as? TelegramMediaImage, let _ = image.video {
+                    if let image = selectedMedia as? IosappMediaImage, let _ = image.video {
                         isLivePhoto = true
-                    } else if let file = selectedMedia as? TelegramMediaFile, !file.isAnimated {
+                    } else if let file = selectedMedia as? IosappMediaFile, !file.isAnimated {
                         duration = file.duration.flatMap { Int32(floor($0)) }
                         isMin = layer.bounds.width < 80.0
                     }
@@ -1598,7 +1598,7 @@ public final class PeerInfoVisualMediaPaneNode: ASDisplayNode, PeerInfoPaneNode,
             }
             
             return context.engine.data.subscribe(EngineDataMap(
-                summaries.map { TelegramEngine.EngineData.Item.Messages.MessageCount(peerId: peerId, threadId: chatLocation.threadId, tag: $0) }
+                summaries.map { IosappEngine.EngineData.Item.Messages.MessageCount(peerId: peerId, threadId: chatLocation.threadId, tag: $0) }
             ))
             |> map { summaries -> (ContentType, [MessageTags: Int32]) in
                 var result: [MessageTags: Int32] = [:]
@@ -2220,7 +2220,7 @@ public final class PeerInfoVisualMediaPaneNode: ASDisplayNode, PeerInfoPaneNode,
             var isList = false
             switch self.contentType {
             case .files, .music, .voiceAndVideoMessages:
-                let fakeFile = TelegramMediaFile(
+                let fakeFile = IosappMediaFile(
                     fileId: MediaId(namespace: 0, id: 1),
                     partialReference: nil,
                     resource: EmptyMediaResource(),
@@ -2430,18 +2430,18 @@ public final class VisualMediaStoredState: Codable {
     }
 }
 
-public func visualMediaStoredState(engine: TelegramEngine, peerId: PeerId, messageTag: MessageTags) -> Signal<VisualMediaStoredState?, NoError> {
+public func visualMediaStoredState(engine: IosappEngine, peerId: PeerId, messageTag: MessageTags) -> Signal<VisualMediaStoredState?, NoError> {
     let key = ValueBoxKey(length: 8 + 4)
     key.setInt64(0, value: peerId.toInt64())
     key.setUInt32(8, value: messageTag.rawValue)
     
-    return engine.data.get(TelegramEngine.EngineData.Item.ItemCache.Item(collectionId: ApplicationSpecificItemCacheCollectionId.visualMediaStoredState, id: key))
+    return engine.data.get(IosappEngine.EngineData.Item.ItemCache.Item(collectionId: ApplicationSpecificItemCacheCollectionId.visualMediaStoredState, id: key))
     |> map { entry -> VisualMediaStoredState? in
         return entry?.get(VisualMediaStoredState.self)
     }
 }
 
-public func updateVisualMediaStoredState(engine: TelegramEngine, peerId: PeerId, messageTag: MessageTags, state: VisualMediaStoredState?) -> Signal<Never, NoError> {
+public func updateVisualMediaStoredState(engine: IosappEngine, peerId: PeerId, messageTag: MessageTags, state: VisualMediaStoredState?) -> Signal<Never, NoError> {
     let key = ValueBoxKey(length: 8 + 4)
     key.setInt64(0, value: peerId.toInt64())
     key.setUInt32(8, value: messageTag.rawValue)

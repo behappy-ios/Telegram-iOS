@@ -1,11 +1,11 @@
 import Postbox
 
 public final class CachedStickerQueryResult: Codable {
-    public let items: [TelegramMediaFile]
+    public let items: [IosappMediaFile]
     public let hash: Int64
     public let timestamp: Int32
     
-    public init(items: [TelegramMediaFile], hash: Int64, timestamp: Int32) {
+    public init(items: [IosappMediaFile], hash: Int64, timestamp: Int32) {
         self.items = items
         self.hash = hash
         self.timestamp = timestamp
@@ -15,7 +15,7 @@ public final class CachedStickerQueryResult: Codable {
         let container = try decoder.container(keyedBy: StringCodingKey.self)
 
         self.items = (try container.decode([AdaptedPostboxDecoder.RawObjectData].self, forKey: "it")).map { itemData in
-            return TelegramMediaFile(decoder: PostboxDecoder(buffer: MemoryBuffer(data: itemData.data)))
+            return IosappMediaFile(decoder: PostboxDecoder(buffer: MemoryBuffer(data: itemData.data)))
         }
 
         self.hash = try container.decode(Int64.self, forKey: "h6")

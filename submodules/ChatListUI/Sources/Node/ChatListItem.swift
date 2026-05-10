@@ -665,7 +665,7 @@ private enum RevealOptionKey: Int32 {
 }
 
 private func canArchivePeer(id: EnginePeer.Id, accountPeerId: EnginePeer.Id) -> Bool {
-    if id.isTelegramNotifications {
+    if id.isIosappNotifications {
         return false
     }
     if id == accountPeerId {
@@ -1956,8 +1956,8 @@ public class ChatListItemNode: ItemListRevealOptionsItemNode {
                         return
                     }
                     let cachedPeerData = peerView.cachedData as? CachedUserData
-                    var personalPhoto: TelegramMediaImage?
-                    var profilePhoto: TelegramMediaImage?
+                    var personalPhoto: IosappMediaImage?
+                    var profilePhoto: IosappMediaImage?
                     var isKnown = false
                     
                     if let cachedPeerData = cachedPeerData {
@@ -2338,7 +2338,7 @@ public class ChatListItemNode: ItemListRevealOptionsItemNode {
             
             if let messageValue = messages.last {
                 for media in messageValue.media {
-                    if let media = media as? TelegramMediaAction, case .historyCleared = media.action {
+                    if let media = media as? IosappMediaAction, case .historyCleared = media.action {
                         messages = []
                     }
                 }
@@ -2608,14 +2608,14 @@ public class ChatListItemNode: ItemListRevealOptionsItemNode {
                         if let forwardInfo = message.forwardInfo {
                             effectiveAuthor = forwardInfo.author
                             if effectiveAuthor == nil, let authorSignature = forwardInfo.authorSignature  {
-                                effectiveAuthor = TelegramUser(id: PeerId(namespace: Namespaces.Peer.Empty, id: PeerId.Id._internalFromInt64Value(Int64(authorSignature.persistentHashValue % 32))), accessHash: nil, firstName: authorSignature, lastName: nil, username: nil, phone: nil, photo: [], botInfo: nil, restrictionInfo: nil, flags: [], emojiStatus: nil, usernames: [], storiesHidden: nil, nameColor: nil, backgroundEmojiId: nil, profileColor: nil, profileBackgroundEmojiId: nil, subscriberCount: nil, verificationIconFileId: nil)
+                                effectiveAuthor = IosappUser(id: PeerId(namespace: Namespaces.Peer.Empty, id: PeerId.Id._internalFromInt64Value(Int64(authorSignature.persistentHashValue % 32))), accessHash: nil, firstName: authorSignature, lastName: nil, username: nil, phone: nil, photo: [], botInfo: nil, restrictionInfo: nil, flags: [], emojiStatus: nil, usernames: [], storiesHidden: nil, nameColor: nil, backgroundEmojiId: nil, profileColor: nil, profileBackgroundEmojiId: nil, subscriberCount: nil, verificationIconFileId: nil)
                             }
                         }
                         if let sourceAuthorInfo = message._asMessage().sourceAuthorInfo {
                             if let originalAuthor = sourceAuthorInfo.originalAuthor, let peer = message.peers[originalAuthor] {
                                 effectiveAuthor = peer
                             } else if let authorSignature = sourceAuthorInfo.originalAuthorName {
-                                effectiveAuthor = TelegramUser(id: PeerId(namespace: Namespaces.Peer.Empty, id: PeerId.Id._internalFromInt64Value(Int64(authorSignature.persistentHashValue % 32))), accessHash: nil, firstName: authorSignature, lastName: nil, username: nil, phone: nil, photo: [], botInfo: nil, restrictionInfo: nil, flags: [], emojiStatus: nil, usernames: [], storiesHidden: nil, nameColor: nil, backgroundEmojiId: nil, profileColor: nil, profileBackgroundEmojiId: nil, subscriberCount: nil, verificationIconFileId: nil)
+                                effectiveAuthor = IosappUser(id: PeerId(namespace: Namespaces.Peer.Empty, id: PeerId.Id._internalFromInt64Value(Int64(authorSignature.persistentHashValue % 32))), accessHash: nil, firstName: authorSignature, lastName: nil, username: nil, phone: nil, photo: [], botInfo: nil, restrictionInfo: nil, flags: [], emojiStatus: nil, usernames: [], storiesHidden: nil, nameColor: nil, backgroundEmojiId: nil, profileColor: nil, profileBackgroundEmojiId: nil, subscriberCount: nil, verificationIconFileId: nil)
                             }
                         }
                         
@@ -2694,13 +2694,13 @@ public class ChatListItemNode: ItemListRevealOptionsItemNode {
                                 return false
                             }
                         }
-                        if let _ = message.media.first(where: { $0 is TelegramMediaPoll }) {
+                        if let _ = message.media.first(where: { $0 is IosappMediaPoll }) {
                             entities = []
                         }
                         
-                        if message.id.peerId.isTelegramNotifications || message.id.peerId.isVerificationCodes {
+                        if message.id.peerId.isIosappNotifications || message.id.peerId.isVerificationCodes {
                             let regex: NSRegularExpression?
-                            if message.id.peerId.isTelegramNotifications {
+                            if message.id.peerId.isIosappNotifications {
                                 regex = telegramCodeRegex
                             } else {
                                 regex = loginCodeRegex
@@ -2734,7 +2734,7 @@ public class ChatListItemNode: ItemListRevealOptionsItemNode {
                                     } else if range.location + range.length > mutableString.length {
                                         range.length = mutableString.length - range.location
                                     }
-                                    mutableString.addAttribute(NSAttributedString.Key(rawValue: TelegramTextAttributes.Spoiler), value: true, range: range)
+                                    mutableString.addAttribute(NSAttributedString.Key(rawValue: IosappTextAttributes.Spoiler), value: true, range: range)
                                 }
                             }
                             if let customEmojiRanges = customEmojiRanges {
@@ -2881,11 +2881,11 @@ public class ChatListItemNode: ItemListRevealOptionsItemNode {
                                 displayStoryReplyIcon = true
                             } else {
                                 for media in message.media {
-                                    if let _ = media as? TelegramMediaPoll {
+                                    if let _ = media as? IosappMediaPoll {
                                         displayPollIcon = true
-                                    } else if let _ = media as? TelegramMediaMap {
+                                    } else if let _ = media as? IosappMediaMap {
                                         displayLocationIcon = true
-                                    } else if let action = media as? TelegramMediaAction {
+                                    } else if let action = media as? IosappMediaAction {
                                         switch action.action {
                                         case .giftPremium, .giftStars, .starGift, .starGiftUnique:
                                             displayGiftIcon = true
@@ -2905,7 +2905,7 @@ public class ChatListItemNode: ItemListRevealOptionsItemNode {
                         var displayMediaPreviews = true
                         if message._asMessage().containsSecretMedia {
                             displayMediaPreviews = false
-                        } else if let _ = message.peers[message.id.peerId] as? TelegramSecretChat {
+                        } else if let _ = message.peers[message.id.peerId] as? IosappSecretChat {
                             displayMediaPreviews = false
                         }
                         if displayMediaPreviews {
@@ -2923,7 +2923,7 @@ public class ChatListItemNode: ItemListRevealOptionsItemNode {
                                 }
                                 
                                 inner: for media in message.media {
-                                    if let paidContent = media as? TelegramMediaPaidContent {
+                                    if let paidContent = media as? IosappMediaPaidContent {
                                         let fitSize = contentImageSize
                                         var index: Int64 = 0
                                         for media in paidContent.extendedMedia.prefix(3) {
@@ -2931,20 +2931,20 @@ public class ChatListItemNode: ItemListRevealOptionsItemNode {
                                             case let .preview(dimensions, immediateThumbnailData, videoDuration):
                                                 if let immediateThumbnailData {
                                                     if let videoDuration {
-                                                        let thumbnailMedia = TelegramMediaFile(fileId: MediaId(namespace: 0, id: index), partialReference: nil, resource: EmptyMediaResource(), previewRepresentations: [], videoThumbnails: [], immediateThumbnailData: immediateThumbnailData, mimeType: "video/mp4", size: nil, attributes: [.Video(duration: Double(videoDuration), size: dimensions ?? PixelDimensions(width: 1, height: 1), flags: [], preloadSize: nil, coverTime: nil, videoCodec: nil)], alternativeRepresentations: [])
+                                                        let thumbnailMedia = IosappMediaFile(fileId: MediaId(namespace: 0, id: index), partialReference: nil, resource: EmptyMediaResource(), previewRepresentations: [], videoThumbnails: [], immediateThumbnailData: immediateThumbnailData, mimeType: "video/mp4", size: nil, attributes: [.Video(duration: Double(videoDuration), size: dimensions ?? PixelDimensions(width: 1, height: 1), flags: [], preloadSize: nil, coverTime: nil, videoCodec: nil)], alternativeRepresentations: [])
                                                         contentImageSpecs.append(ContentImageSpec(message: message, media:  .file(thumbnailMedia), size: fitSize))
                                                     } else {
-                                                        let thumbnailMedia = TelegramMediaImage(imageId: MediaId(namespace: 0, id: index), representations: [], immediateThumbnailData: immediateThumbnailData, reference: nil, partialReference: nil, flags: [])
+                                                        let thumbnailMedia = IosappMediaImage(imageId: MediaId(namespace: 0, id: index), representations: [], immediateThumbnailData: immediateThumbnailData, reference: nil, partialReference: nil, flags: [])
                                                         contentImageSpecs.append(ContentImageSpec(message: message, media:  .image(thumbnailMedia), size: fitSize))
                                                     }
                                                     index += 1
                                                 }
                                             case let .full(fullMedia):
-                                                if let image = fullMedia as? TelegramMediaImage {
+                                                if let image = fullMedia as? IosappMediaImage {
                                                     if let _ = largestImageRepresentation(image.representations) {
                                                         contentImageSpecs.append(ContentImageSpec(message: message, media:  .image(image), size: fitSize))
                                                     }
-                                                } else if let file = fullMedia as? TelegramMediaFile {
+                                                } else if let file = fullMedia as? IosappMediaFile {
                                                     if file.isVideo, !file.isVideoSticker, let _ = file.dimensions {
                                                         contentImageSpecs.append(ContentImageSpec(message: message,  media: .file(file), size: fitSize))
                                                     }
@@ -2952,13 +2952,13 @@ public class ChatListItemNode: ItemListRevealOptionsItemNode {
                                             }
                                         }
                                         break inner
-                                    } else if let image = media as? TelegramMediaImage {
+                                    } else if let image = media as? IosappMediaImage {
                                         if let _ = largestImageRepresentation(image.representations) {
                                             let fitSize = contentImageSize
                                             contentImageSpecs.append(ContentImageSpec(message: message, media: .image(image), size: fitSize))
                                         }
                                         break inner
-                                    } else if let file = media as? TelegramMediaFile {
+                                    } else if let file = media as? IosappMediaFile {
                                         if file.isVideo, !file.isVideoSticker, let _ = file.dimensions {
                                             let fitSize = contentImageSize
                                             contentImageSpecs.append(ContentImageSpec(message: message,  media: .file(file), size: fitSize))
@@ -2970,7 +2970,7 @@ public class ChatListItemNode: ItemListRevealOptionsItemNode {
                                             contentImageSpecs.append(ContentImageSpec(message: message,  media: .file(file), size: fitSize))
                                         }
                                         break inner
-                                    } else if let webpage = media as? TelegramMediaWebpage, case let .Loaded(content) = webpage.content {
+                                    } else if let webpage = media as? IosappMediaWebpage, case let .Loaded(content) = webpage.content {
                                         let imageTypes = ["photo", "video", "embed", "gif", "document", "telegram_album"]
                                         if let image = content.image, let type = content.type, imageTypes.contains(type) {
                                             if let _ = largestImageRepresentation(image.representations) {
@@ -2985,17 +2985,17 @@ public class ChatListItemNode: ItemListRevealOptionsItemNode {
                                             }
                                             break inner
                                         }
-                                    } else if let action = media as? TelegramMediaAction, case let .suggestedProfilePhoto(image) = action.action, let _ = image {
+                                    } else if let action = media as? IosappMediaAction, case let .suggestedProfilePhoto(image) = action.action, let _ = image {
                                         let fitSize = contentImageSize
                                         contentImageSpecs.append(ContentImageSpec(message: message, media: .action(action), size: fitSize))
-                                    } else if let storyMedia = media as? TelegramMediaStory, let story = message.associatedStories[storyMedia.storyId], !story.data.isEmpty, case let .item(storyItem) = story.get(Stories.StoredItem.self) {
-                                        if let image = storyItem.media as? TelegramMediaImage {
+                                    } else if let storyMedia = media as? IosappMediaStory, let story = message.associatedStories[storyMedia.storyId], !story.data.isEmpty, case let .item(storyItem) = story.get(Stories.StoredItem.self) {
+                                        if let image = storyItem.media as? IosappMediaImage {
                                             if let _ = largestImageRepresentation(image.representations) {
                                                 let fitSize = contentImageSize
                                                 contentImageSpecs.append(ContentImageSpec(message: message, media: .image(image), size: fitSize))
                                             }
                                             break inner
-                                        } else if let file = storyItem.media as? TelegramMediaFile {
+                                        } else if let file = storyItem.media as? IosappMediaFile {
                                             if file.isVideo, !file.isInstantVideo, let _ = file.dimensions {
                                                 let fitSize = contentImageSize
                                                 contentImageSpecs.append(ContentImageSpec(message: message, media: .file(file), size: fitSize))
@@ -5338,7 +5338,7 @@ public class ChatListItemNode: ItemListRevealOptionsItemNode {
                 var joined = false
                 if case let .peer(peerData) = item.content, let message = peerData.messages.first {
                     for media in message.media {
-                        if let action = media as? TelegramMediaAction, action.action == .peerJoined {
+                        if let action = media as? IosappMediaAction, action.action == .peerJoined {
                             joined = true
                         }
                     }

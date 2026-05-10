@@ -51,7 +51,7 @@ extension ChatControllerImpl {
                     return
                 }
                 
-                if message.id.namespace == Namespaces.Message.Cloud, let channel = message.peers[message.id.peerId] as? TelegramChannel, let addressName = channel.addressName {
+                if message.id.namespace == Namespaces.Message.Cloud, let channel = message.peers[message.id.peerId] as? IosappChannel, let addressName = channel.addressName {
                     var timestampSuffix = ""
                     let startAtTimestamp = parseTimeString(timecode)
                     

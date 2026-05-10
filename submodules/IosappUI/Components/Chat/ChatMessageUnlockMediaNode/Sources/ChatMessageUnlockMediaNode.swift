@@ -25,7 +25,7 @@ public class ChatMessageUnlockMediaNode: ASDisplayNode {
         public let context: AccountContext
         public let controllerInteraction: ChatControllerInteraction
         public let message: Message
-        public let media: TelegramMediaPaidContent
+        public let media: IosappMediaPaidContent
         public let constrainedSize: CGSize
         public let animationCache: AnimationCache?
         public let animationRenderer: MultiAnimationRenderer?
@@ -36,7 +36,7 @@ public class ChatMessageUnlockMediaNode: ASDisplayNode {
             context: AccountContext,
             controllerInteraction: ChatControllerInteraction,
             message: Message,
-            media: TelegramMediaPaidContent,
+            media: IosappMediaPaidContent,
             constrainedSize: CGSize,
             animationCache: AnimationCache?,
             animationRenderer: MultiAnimationRenderer?

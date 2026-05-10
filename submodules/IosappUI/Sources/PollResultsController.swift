@@ -184,9 +184,9 @@ private enum PollResultsEntry: ItemListNodeEntry {
         switch self {
         case let .text(text, entities):
             let font = Font.semibold(presentationData.fontSize.itemListBaseFontSize)
-            var entityFiles: [EngineMedia.Id: TelegramMediaFile] = [:]
+            var entityFiles: [EngineMedia.Id: IosappMediaFile] = [:]
             for (id, media) in arguments.message.associatedMedia {
-                if let file = media as? TelegramMediaFile {
+                if let file = media as? IosappMediaFile {
                     entityFiles[id] = file
                 }
             }
@@ -230,9 +230,9 @@ private enum PollResultsEntry: ItemListNodeEntry {
             return ItemListMultilineTextItem(presentationData: presentationData, text: text, enabledEntityTypes: [], sectionId: self.section, style: .blocks)
         case let .optionPeer(optionId, _, peer, timestamp, optionText, optionTextEntities, optionAdditionalText, optionCount, optionExpanded, opaqueIdentifier, shimmeringAlternation, isFirstInOption):
             let font = Font.regular(13.0)
-            var entityFiles: [EngineMedia.Id: TelegramMediaFile] = [:]
+            var entityFiles: [EngineMedia.Id: IosappMediaFile] = [:]
             for (id, media) in arguments.message.associatedMedia {
-                if let file = media as? TelegramMediaFile {
+                if let file = media as? IosappMediaFile {
                     entityFiles[id] = file
                 }
             }
@@ -304,7 +304,7 @@ private struct PollResultsControllerState: Equatable {
     var isSolutionExpanded: Bool = false
 }
 
-private func pollResultsControllerEntries(presentationData: PresentationData, message: EngineMessage, poll: TelegramMediaPoll, state: PollResultsControllerState, resultsState: PollResultsState) -> [PollResultsEntry] {
+private func pollResultsControllerEntries(presentationData: PresentationData, message: EngineMessage, poll: IosappMediaPoll, state: PollResultsControllerState, resultsState: PollResultsState) -> [PollResultsEntry] {
     var entries: [PollResultsEntry] = []
     
     var isEmpty = false
@@ -351,7 +351,7 @@ private func pollResultsControllerEntries(presentationData: PresentationData, me
                     displayCount = Int(voterCount)
                 }
                 for peerIndex in 0 ..< displayCount {
-                    let fakeUser = TelegramUser(id: EnginePeer.Id(namespace: .max, id: EnginePeer.Id.Id._internalFromInt64Value(0)), accessHash: nil, firstName: "", lastName: "", username: nil, phone: nil, photo: [], botInfo: nil, restrictionInfo: nil, flags: [], emojiStatus: nil, usernames: [], storiesHidden: nil, nameColor: nil, backgroundEmojiId: nil, profileColor: nil, profileBackgroundEmojiId: nil, subscriberCount: nil, verificationIconFileId: nil)
+                    let fakeUser = IosappUser(id: EnginePeer.Id(namespace: .max, id: EnginePeer.Id.Id._internalFromInt64Value(0)), accessHash: nil, firstName: "", lastName: "", username: nil, phone: nil, photo: [], botInfo: nil, restrictionInfo: nil, flags: [], emojiStatus: nil, usernames: [], storiesHidden: nil, nameColor: nil, backgroundEmojiId: nil, profileColor: nil, profileBackgroundEmojiId: nil, subscriberCount: nil, verificationIconFileId: nil)
                     let peer = EngineRenderedPeer(peer: EnginePeer(fakeUser))
                     entries.append(.optionPeer(optionId: i, index: peerIndex, peer: peer, timestamp: nil, optionText: optionTextHeader, optionTextEntities: optionTextHeaderEntities, optionAdditionalText: optionAdditionalTextHeader, optionCount: voterCount, optionExpanded: false, opaqueIdentifier: option.opaqueIdentifier, shimmeringAlternation: peerIndex % 2, isFirstInOption: peerIndex == 0))
                 }
@@ -410,7 +410,7 @@ private func pollResultsControllerEntries(presentationData: PresentationData, me
     return entries
 }
 
-public func pollResultsController(context: AccountContext, messageId: EngineMessage.Id, message: EngineMessage, poll: TelegramMediaPoll, focusOnOptionWithOpaqueIdentifier: Data? = nil) -> ViewController {
+public func pollResultsController(context: AccountContext, messageId: EngineMessage.Id, message: EngineMessage, poll: IosappMediaPoll, focusOnOptionWithOpaqueIdentifier: Data? = nil) -> ViewController {
     let statePromise = ValuePromise(PollResultsControllerState(), ignoreRepeated: true)
     let stateValue = Atomic(value: PollResultsControllerState())
     let updateState: ((PollResultsControllerState) -> PollResultsControllerState) -> Void = { f in

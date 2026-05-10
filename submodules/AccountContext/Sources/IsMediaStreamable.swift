@@ -4,7 +4,7 @@ import IosappCore
 
 private let minimalStreamableSize: Int = 384 * 1024
 
-public func isMediaStreamable(message: Message, media: TelegramMediaFile) -> Bool {
+public func isMediaStreamable(message: Message, media: IosappMediaFile) -> Bool {
     if message.containsSecretMedia {
         return false
     }
@@ -33,7 +33,7 @@ public func isMediaStreamable(message: Message, media: TelegramMediaFile) -> Boo
     return false
 }
 
-public func isMediaStreamable(media: TelegramMediaFile) -> Bool {
+public func isMediaStreamable(media: IosappMediaFile) -> Bool {
     guard let size = media.size else {
         return false
     }

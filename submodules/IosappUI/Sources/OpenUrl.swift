@@ -361,7 +361,7 @@ private func appendQueryItems(to base: String, items: [URLQueryItem]) -> String 
     return base + separator + query
 }
 
-private func makeTelegramUrl(_ path: String, queryItems: [URLQueryItem] = []) -> String {
+private func makeIosappUrl(_ path: String, queryItems: [URLQueryItem] = []) -> String {
     return appendQueryItems(to: "https://t.me\(path)", items: queryItems)
 }
 
@@ -442,23 +442,23 @@ func openExternalUrlImpl(context: AccountContext, urlContext: OpenURLContext, ur
                     }
                 case "join":
                     if let invite = params["invite"] {
-                        convertedUrl = makeTelegramUrl("/joinchat/\(invite)")
+                        convertedUrl = makeIosappUrl("/joinchat/\(invite)")
                     }
                 case "addstickers":
                     if let set = params["set"] {
-                        convertedUrl = makeTelegramUrl("/addstickers/\(set)")
+                        convertedUrl = makeIosappUrl("/addstickers/\(set)")
                     }
                 case "addemoji":
                     if let set = params["set"] {
-                        convertedUrl = makeTelegramUrl("/addemoji/\(set)")
+                        convertedUrl = makeIosappUrl("/addemoji/\(set)")
                     }
                 case "invoice":
                     if let slug = params["slug"] {
-                        convertedUrl = makeTelegramUrl("/invoice/\(slug)")
+                        convertedUrl = makeIosappUrl("/invoice/\(slug)")
                     }
                 case "setlanguage":
                     if let lang = params["lang"] {
-                        convertedUrl = makeTelegramUrl("/setlanguage/\(lang)")
+                        convertedUrl = makeIosappUrl("/setlanguage/\(lang)")
                     }
                 case "msg":
                     let sharePhoneNumber = params["to"]
@@ -473,7 +473,7 @@ func openExternalUrlImpl(context: AccountContext, urlContext: OpenURLContext, ur
                         if let shareText = params["text"] {
                             queryItems.append(URLQueryItem(name: "text", value: shareText))
                         }
-                        convertedUrl = makeTelegramUrl("/share/url", queryItems: queryItems)
+                        convertedUrl = makeIosappUrl("/share/url", queryItems: queryItems)
                     }
                 case "socks", "proxy":
                     let server = params["server"] ?? params["proxy"]
@@ -500,7 +500,7 @@ func openExternalUrlImpl(context: AccountContext, urlContext: OpenURLContext, ur
                         if let secretHost {
                             queryItems.append(URLQueryItem(name: "host", value: secretHost))
                         }
-                        convertedUrl = makeTelegramUrl("/proxy", queryItems: queryItems)
+                        convertedUrl = makeIosappUrl("/proxy", queryItems: queryItems)
                     }
                 case "passport", "oauth", "resolve":
                     if isOAuthUrl(parsedUrl) {
@@ -527,7 +527,7 @@ func openExternalUrlImpl(context: AccountContext, urlContext: OpenURLContext, ur
                     }
                 case "user":
                     if let idValue = params["id"].flatMap(Int64.init), idValue > 0 {
-                        let _ = (context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: PeerId(namespace: Namespaces.Peer.CloudUser, id: PeerId.Id._internalFromInt64Value(idValue))))
+                        let _ = (context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: PeerId(namespace: Namespaces.Peer.CloudUser, id: PeerId.Id._internalFromInt64Value(idValue))))
                         |> deliverOnMainQueue).startStandalone(next: { peer in
                             if let peer = peer, let controller = context.sharedContext.makePeerInfoController(
                                 context: context,
@@ -556,11 +556,11 @@ func openExternalUrlImpl(context: AccountContext, urlContext: OpenURLContext, ur
                         return
                     }
                     if let code = params["code"] {
-                        convertedUrl = makeTelegramUrl("/login/\(code)")
+                        convertedUrl = makeIosappUrl("/login/\(code)")
                     }
                 case "contact":
                     if let token = params["token"] {
-                        convertedUrl = makeTelegramUrl("/contact/\(token)")
+                        convertedUrl = makeIosappUrl("/contact/\(token)")
                     }
                 case "confirmphone":
                     if let phone = params["phone"], let hash = params["hash"] {
@@ -568,7 +568,7 @@ func openExternalUrlImpl(context: AccountContext, urlContext: OpenURLContext, ur
                             URLQueryItem(name: "phone", value: phone),
                             URLQueryItem(name: "hash", value: hash)
                         ]
-                        convertedUrl = makeTelegramUrl("/confirmphone", queryItems: queryItems)
+                        convertedUrl = makeIosappUrl("/confirmphone", queryItems: queryItems)
                     }
                 case "bg":
                     var parameter: String?
@@ -587,19 +587,19 @@ func openExternalUrlImpl(context: AccountContext, urlContext: OpenURLContext, ur
                         }
                     }
                     if let parameter = parameter {
-                        convertedUrl = makeTelegramUrl("/bg/\(parameter)", queryItems: queryItems)
+                        convertedUrl = makeIosappUrl("/bg/\(parameter)", queryItems: queryItems)
                     }
                 case "addtheme":
                     if let parameter = params["slug"] {
-                        convertedUrl = makeTelegramUrl("/addtheme/\(parameter)")
+                        convertedUrl = makeIosappUrl("/addtheme/\(parameter)")
                     }
                 case "nft":
                     if let slug = params["slug"] {
-                        convertedUrl = makeTelegramUrl("/nft/\(slug)")
+                        convertedUrl = makeIosappUrl("/nft/\(slug)")
                     }
                 case "stargift_auction":
                     if let slug = params["slug"] {
-                        convertedUrl = makeTelegramUrl("/auction/\(slug)")
+                        convertedUrl = makeIosappUrl("/auction/\(slug)")
                     }
                 case "privatepost":
                     let channelId = params["channel"].flatMap(Int64.init)
@@ -609,21 +609,21 @@ func openExternalUrlImpl(context: AccountContext, urlContext: OpenURLContext, ur
                     if let channelId {
                         if let postId {
                             if let threadId {
-                                convertedUrl = makeTelegramUrl("/c/\(channelId)/\(threadId)/\(postId)")
+                                convertedUrl = makeIosappUrl("/c/\(channelId)/\(threadId)/\(postId)")
                             } else {
-                                convertedUrl = makeTelegramUrl("/c/\(channelId)/\(postId)")
+                                convertedUrl = makeIosappUrl("/c/\(channelId)/\(postId)")
                             }
                         } else if let threadId {
-                            convertedUrl = makeTelegramUrl("/c/\(channelId)/\(threadId)")
+                            convertedUrl = makeIosappUrl("/c/\(channelId)/\(threadId)")
                         }
                     }
                 case "giftcode":
                     if let slug = params["slug"] {
-                        convertedUrl = makeTelegramUrl("/giftcode/\(slug)")
+                        convertedUrl = makeIosappUrl("/giftcode/\(slug)")
                     }
                 case "message":
                     if let parameter = params["slug"] {
-                        convertedUrl = makeTelegramUrl("/m/\(parameter)")
+                        convertedUrl = makeIosappUrl("/m/\(parameter)")
                     }
                 case "hostoverride":
                     if let override = params["host"] {
@@ -650,17 +650,17 @@ func openExternalUrlImpl(context: AccountContext, urlContext: OpenURLContext, ur
                     }
                 case "addlist":
                     if let slug = params["slug"] {
-                        convertedUrl = makeTelegramUrl("/addlist/\(slug)")
+                        convertedUrl = makeIosappUrl("/addlist/\(slug)")
                     }
                 case "boost":
                     if let domain = params["domain"] {
-                        convertedUrl = makeTelegramUrl("/\(domain)", queryItems: [URLQueryItem(name: "boost", value: nil)])
+                        convertedUrl = makeIosappUrl("/\(domain)", queryItems: [URLQueryItem(name: "boost", value: nil)])
                     } else if let channel = params["channel"].flatMap(Int64.init) {
-                        convertedUrl = makeTelegramUrl("/c/\(channel)", queryItems: [URLQueryItem(name: "boost", value: nil)])
+                        convertedUrl = makeIosappUrl("/c/\(channel)", queryItems: [URLQueryItem(name: "boost", value: nil)])
                     }
                 case "call":
                     if let slug = params["slug"] {
-                        convertedUrl = makeTelegramUrl("/call/\(slug)")
+                        convertedUrl = makeIosappUrl("/call/\(slug)")
                     }
                 case "sharestory":
                     if let session = params["session"].flatMap(Int64.init) {
@@ -798,7 +798,7 @@ func openExternalUrlImpl(context: AccountContext, urlContext: OpenURLContext, ur
                         if direct {
                             queryItems.append(URLQueryItem(name: "direct", value: nil))
                         }
-                        convertedUrl = makeTelegramUrl("/+\(phone)", queryItems: queryItems)
+                        convertedUrl = makeIosappUrl("/+\(phone)", queryItems: queryItems)
                     } else if let domain = domain {
                         var path = "/\(domain)"
                         if let appName {
@@ -861,7 +861,7 @@ func openExternalUrlImpl(context: AccountContext, urlContext: OpenURLContext, ur
                             queryItems.append(URLQueryItem(name: "direct", value: nil))
                         }
                         
-                        convertedUrl = makeTelegramUrl(path, queryItems: queryItems)
+                        convertedUrl = makeIosappUrl(path, queryItems: queryItems)
                     }
                 }
             } else {
@@ -1017,7 +1017,7 @@ func openExternalUrlImpl(context: AccountContext, urlContext: OpenURLContext, ur
             if isTelegraPhLink(parsedUrl.absoluteString) {
                 continueHandling()
             } else {
-                context.sharedContext.applicationBindings.openUniversalUrl(url, TelegramApplicationOpenUrlCompletion(completion: { success in
+                context.sharedContext.applicationBindings.openUniversalUrl(url, IosappApplicationOpenUrlCompletion(completion: { success in
                     if !success {
                         continueHandling()
                     }

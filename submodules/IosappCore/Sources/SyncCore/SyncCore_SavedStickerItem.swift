@@ -4,11 +4,11 @@ import FlatBuffers
 import FlatSerialization
 
 public final class SavedStickerItem: Codable, Equatable {
-    public let file: TelegramMediaFile.Accessor
+    public let file: IosappMediaFile.Accessor
     public let stringRepresentations: [String]
     
-    public init(file: TelegramMediaFile, stringRepresentations: [String]) {
-        self.file = TelegramMediaFile.Accessor(file)
+    public init(file: IosappMediaFile, stringRepresentations: [String]) {
+        self.file = IosappMediaFile.Accessor(file)
         self.stringRepresentations = stringRepresentations
     }
     
@@ -17,10 +17,10 @@ public final class SavedStickerItem: Codable, Equatable {
 
         if let serializedFileData = try container.decodeIfPresent(Data.self, forKey: "fd") {
             var byteBuffer = ByteBuffer(data: serializedFileData)
-            self.file = TelegramMediaFile.Accessor(FlatBuffers_getRoot(byteBuffer: &byteBuffer) as TelegramCore_TelegramMediaFile, serializedFileData)
+            self.file = IosappMediaFile.Accessor(FlatBuffers_getRoot(byteBuffer: &byteBuffer) as IosappCore_IosappMediaFile, serializedFileData)
         } else {
-            let file = TelegramMediaFile(decoder: PostboxDecoder(buffer: MemoryBuffer(data: (try container.decode(AdaptedPostboxDecoder.RawObjectData.self, forKey: "f")).data)))
-            self.file = TelegramMediaFile.Accessor(file)
+            let file = IosappMediaFile(decoder: PostboxDecoder(buffer: MemoryBuffer(data: (try container.decode(AdaptedPostboxDecoder.RawObjectData.self, forKey: "f")).data)))
+            self.file = IosappMediaFile.Accessor(file)
         }
         
         self.stringRepresentations = try container.decode([String].self, forKey: "sr")

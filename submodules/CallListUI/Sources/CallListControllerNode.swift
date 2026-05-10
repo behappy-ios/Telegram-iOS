@@ -355,7 +355,7 @@ final class CallListControllerNode: ASDisplayNode {
                 return
             }
             let _ = (context.engine.data.get(
-                TelegramEngine.EngineData.Item.Peer.Peer(id: peerId)
+                IosappEngine.EngineData.Item.Peer.Peer(id: peerId)
             )
             |> deliverOnMainQueue).startStandalone(next: { peer in
                 guard let strongSelf = self, let peer = peer else {
@@ -414,7 +414,7 @@ final class CallListControllerNode: ASDisplayNode {
 
             let engine = strongSelf.context.engine
             var signal: Signal<EngineGroupCallDescription?, NoError> = context.engine.data.get(
-                TelegramEngine.EngineData.Item.Peer.GroupCallDescription(id: peerId)
+                IosappEngine.EngineData.Item.Peer.GroupCallDescription(id: peerId)
             )
             |> mapToSignal { activeCall -> Signal<EngineGroupCallDescription?, NoError> in
                 if let activeCall = activeCall {

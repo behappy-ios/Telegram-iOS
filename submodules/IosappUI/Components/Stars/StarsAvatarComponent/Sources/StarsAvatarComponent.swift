@@ -22,7 +22,7 @@ public final class StarsAvatarComponent: Component {
     let context: AccountContext
     let theme: PresentationTheme
     let peer: StarsAvatarComponent.Peer?
-    let photo: TelegramMediaWebFile?
+    let photo: IosappMediaWebFile?
     let media: [Media]
     let gift: StarGift?
     let backgroundColor: UIColor
@@ -32,7 +32,7 @@ public final class StarsAvatarComponent: Component {
         context: AccountContext,
         theme: PresentationTheme,
         peer: StarsAvatarComponent.Peer?,
-        photo: TelegramMediaWebFile?,
+        photo: IosappMediaWebFile?,
         media: [Media],
         gift: StarGift?,
         backgroundColor: UIColor,
@@ -166,7 +166,7 @@ public final class StarsAvatarComponent: Component {
                     self.imageNode = imageNode
                 }
                 
-                if let image = component.media.first as? TelegramMediaImage {
+                if let image = component.media.first as? IosappMediaImage {
                     if let imageDimensions = largestImageRepresentation(image.representations)?.dimensions {
                         dimensions = imageDimensions.cgSize.aspectFilled(size)
                     }
@@ -174,7 +174,7 @@ public final class StarsAvatarComponent: Component {
                         imageNode.setSignal(chatMessagePhotoThumbnail(account: component.context.account, userLocation: .other, photoReference: .standalone(media: image), onlyFullSize: false, blurred: false))
                         self.fetchDisposable.add(chatMessagePhotoInteractiveFetched(context: component.context, userLocation: .other, photoReference: .standalone(media: image), displayAtSize: nil, storeToDownloadsPeerId: nil).startStrict())
                     }
-                } else if let file = component.media.first as? TelegramMediaFile {
+                } else if let file = component.media.first as? IosappMediaFile {
                     if let videoDimensions = file.dimensions {
                         dimensions = videoDimensions.cgSize.aspectFilled(size)
                     }
@@ -211,7 +211,7 @@ public final class StarsAvatarComponent: Component {
                         self.imageFrameNode = imageFrameNode
                     }
                     
-                    if let image = component.media[1] as? TelegramMediaImage {
+                    if let image = component.media[1] as? IosappMediaImage {
                         if let imageDimensions = largestImageRepresentation(image.representations)?.dimensions {
                             secondDimensions = imageDimensions.cgSize.aspectFilled(size)
                         }
@@ -219,7 +219,7 @@ public final class StarsAvatarComponent: Component {
                             secondImageNode.setSignal(chatMessagePhotoThumbnail(account: component.context.account, userLocation: .other, photoReference: .standalone(media: image), onlyFullSize: false, blurred: false))
                             self.fetchDisposable.add(chatMessagePhotoInteractiveFetched(context: component.context, userLocation: .other, photoReference: .standalone(media: image), displayAtSize: nil, storeToDownloadsPeerId: nil).startStrict())
                         }
-                    } else if let file = component.media[1] as? TelegramMediaFile {
+                    } else if let file = component.media[1] as? IosappMediaFile {
                         if let videoDimensions = file.dimensions {
                             secondDimensions = videoDimensions.cgSize.aspectFilled(size)
                         }

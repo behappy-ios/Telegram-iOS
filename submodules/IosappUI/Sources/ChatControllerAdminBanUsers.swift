@@ -17,7 +17,7 @@ import DeleteChatPeerActionSheetItem
 import OverlayStatusController
 
 fileprivate struct InitialBannedRights {
-    var value: TelegramChatBannedRights?
+    var value: IosappChatBannedRights?
 }
 
 extension ChatControllerImpl {
@@ -179,7 +179,7 @@ extension ChatControllerImpl {
                 return
             }
             let _ = (self.context.engine.data.get(
-                TelegramEngine.EngineData.Item.Peer.Peer(id: peerId)
+                IosappEngine.EngineData.Item.Peer.Peer(id: peerId)
             )
             |> deliverOnMainQueue).startStandalone(next: { [weak self] chatPeer in
                 guard let self, let chatPeer else {
@@ -193,7 +193,7 @@ extension ChatControllerImpl {
                         participant = maybeParticipant
                     } else {
                         participant = .member(id: author.id, invitedAt: 0, adminInfo: nil, banInfo: ChannelParticipantBannedInfo(
-                            rights: TelegramChatBannedRights(
+                            rights: IosappChatBannedRights(
                                 flags: [.banReadMessages],
                                 untilDate: Int32.max
                             ),
@@ -293,7 +293,7 @@ extension ChatControllerImpl {
                 participant = maybeParticipant
             } else {
                 participant = .member(id: author.id, invitedAt: 0, adminInfo: nil, banInfo: ChannelParticipantBannedInfo(
-                    rights: TelegramChatBannedRights(
+                    rights: IosappChatBannedRights(
                         flags: [.banReadMessages],
                         untilDate: Int32.max
                     ),
@@ -304,8 +304,8 @@ extension ChatControllerImpl {
             }
             
             let _ = (self.context.engine.data.get(
-                TelegramEngine.EngineData.Item.Peer.Peer(id: peerId),
-                TelegramEngine.EngineData.Item.Peer.Peer(id: author.id)
+                IosappEngine.EngineData.Item.Peer.Peer(id: peerId),
+                IosappEngine.EngineData.Item.Peer.Peer(id: author.id)
             )
             |> deliverOnMainQueue).startStandalone(next: { [weak self] chatPeer, authorPeer in
                 guard let self, let chatPeer else {
@@ -382,7 +382,7 @@ extension ChatControllerImpl {
     
     func presentDeleteMessageOptions(messageIds: Set<MessageId>, options: ChatAvailableMessageActionOptions, contextController: ContextControllerProtocol?, completion: @escaping (ContextMenuActionResult) -> Void) {
         let _ = (self.context.engine.data.get(
-            EngineDataMap(messageIds.map(TelegramEngine.EngineData.Item.Messages.Message.init(id:)))
+            EngineDataMap(messageIds.map(IosappEngine.EngineData.Item.Messages.Message.init(id:)))
         )
         |> deliverOnMainQueue).start(next: { [weak self] messages in
             guard let self else {
@@ -495,11 +495,11 @@ extension ChatControllerImpl {
             var items: [ActionSheetItem] = []
             var personalPeerName: String?
             var isChannel = false
-            if let user = self.presentationInterfaceState.renderedPeer?.peer as? TelegramUser {
+            if let user = self.presentationInterfaceState.renderedPeer?.peer as? IosappUser {
                 personalPeerName = EnginePeer(user).compactDisplayTitle
-            } else if let peer = self.presentationInterfaceState.renderedPeer?.peer as? TelegramSecretChat, let associatedPeerId = peer.associatedPeerId, let user = self.presentationInterfaceState.renderedPeer?.peers[associatedPeerId] as? TelegramUser {
+            } else if let peer = self.presentationInterfaceState.renderedPeer?.peer as? IosappSecretChat, let associatedPeerId = peer.associatedPeerId, let user = self.presentationInterfaceState.renderedPeer?.peers[associatedPeerId] as? IosappUser {
                 personalPeerName = EnginePeer(user).compactDisplayTitle
-            } else if let channel = self.presentationInterfaceState.renderedPeer?.peer as? TelegramChannel, case .broadcast = channel.info {
+            } else if let channel = self.presentationInterfaceState.renderedPeer?.peer as? IosappChannel, case .broadcast = channel.info {
                 isChannel = true
             }
             
@@ -534,10 +534,10 @@ extension ChatControllerImpl {
                 }
                 contextItems.append(.action(ContextMenuActionItem(text: globalTitle, textColor: .destructive, icon: { _ in nil }, action: { [weak self] c, f in
                     if let strongSelf = self {
-                        var giveaway: TelegramMediaGiveaway?
+                        var giveaway: IosappMediaGiveaway?
                         for messageId in messageIds {
                             if let message = strongSelf.chatDisplayNode.historyNode.messageInCurrentHistoryView(messageId) {
-                                if let media = message.media.first(where: { $0 is TelegramMediaGiveaway }) as? TelegramMediaGiveaway {
+                                if let media = message.media.first(where: { $0 is IosappMediaGiveaway }) as? IosappMediaGiveaway {
                                     giveaway = media
                                     break
                                 }
@@ -700,12 +700,12 @@ extension ChatControllerImpl {
         guard let chatPeerId = self.chatLocation.peerId else {
             return
         }
-        guard let mainChannel = self.presentationInterfaceState.renderedPeer?.chatOrMonoforumMainPeer as? TelegramChannel else {
+        guard let mainChannel = self.presentationInterfaceState.renderedPeer?.chatOrMonoforumMainPeer as? IosappChannel else {
             return
         }
         let _ = (self.context.engine.data.get(
-            TelegramEngine.EngineData.Item.Peer.Peer(id: chatPeerId),
-            TelegramEngine.EngineData.Item.Peer.Peer(id: peerId)
+            IosappEngine.EngineData.Item.Peer.Peer(id: chatPeerId),
+            IosappEngine.EngineData.Item.Peer.Peer(id: peerId)
         )
         |> deliverOnMainQueue).startStandalone(next: { [weak self] chatPeer, authorPeer in
             guard let self, let chatPeer, let authorPeer else {
@@ -714,7 +714,7 @@ extension ChatControllerImpl {
             var initialUserBannedRights: [EnginePeer.Id: InitialBannedRights] = [:]
                 initialUserBannedRights[authorPeer.id] = InitialBannedRights(value: nil)
             let participant: ChannelParticipant = .member(id: authorPeer.id, invitedAt: 0, adminInfo: nil, banInfo: ChannelParticipantBannedInfo(
-                rights: TelegramChatBannedRights(flags: [], untilDate: 0),
+                rights: IosappChatBannedRights(flags: [], untilDate: 0),
                 restrictedBy: self.context.account.peerId,
                 timestamp: 0,
                 isMember: false
@@ -740,7 +740,7 @@ extension ChatControllerImpl {
                     if result.ban {
                         let _ = self.context.engine.peers.updateChannelMemberBannedRights(peerId: mainChannel.id,
                             memberId: peerId,
-                            rights: TelegramChatBannedRights(flags: [.banReadMessages], untilDate: Int32.max)
+                            rights: IosappChatBannedRights(flags: [.banReadMessages], untilDate: Int32.max)
                         ).startStandalone()
                     }
                     if result.reportSpam {

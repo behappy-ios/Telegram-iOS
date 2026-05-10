@@ -258,15 +258,15 @@ public func storageUsageExceptionsScreen(
                 }
                 let peerCategory: CacheStorageSettings.PeerStorageCategory
                 var subscriberCount: Int32?
-                if peer is TelegramUser {
+                if peer is IosappUser {
                     peerCategory = .privateChats
-                } else if peer is TelegramGroup {
+                } else if peer is IosappGroup {
                     peerCategory = .groups
                     
                     if let cachedData = transaction.getPeerCachedData(peerId: peerId) as? CachedGroupData {
                         subscriberCount = (cachedData.participants?.participants.count).flatMap(Int32.init)
                     }
-                } else if let channel = peer as? TelegramChannel {
+                } else if let channel = peer as? IosappChannel {
                     if case .group = channel.info {
                         peerCategory = .groups
                     } else {

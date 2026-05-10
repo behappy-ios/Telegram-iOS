@@ -62,7 +62,7 @@ public func registerLoggingFunctions() {
             }
         }
     })
-    setTelegramApiLogger({ what in
+    setIosappApiLogger({ what in
         Logger.shared.log("Api", what as String)
         Logger.shared.shortLog("Api", what as String)
     })

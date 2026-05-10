@@ -20,7 +20,7 @@ private final class BirthdayPickerSheetContentComponent: Component {
     let canHideYear: Bool
     let openSettings: () -> Void
     let dismiss: () -> Void
-    let action: (TelegramBirthday) -> Void
+    let action: (IosappBirthday) -> Void
     let requestHideYear: (ComponentTransition) -> Void
     
     init(
@@ -30,7 +30,7 @@ private final class BirthdayPickerSheetContentComponent: Component {
         canHideYear: Bool,
         openSettings: @escaping () -> Void,
         dismiss: @escaping () -> Void,
-        action: @escaping (TelegramBirthday) -> Void,
+        action: @escaping (IosappBirthday) -> Void,
         requestHideYear: @escaping (ComponentTransition) -> Void
     ) {
         self.context = context
@@ -55,7 +55,7 @@ private final class BirthdayPickerSheetContentComponent: Component {
         private let content = ComponentView<Empty>()
         private let button = ComponentView<Empty>()
         
-        private var birthday = TelegramBirthday(day: 1, month: 1, year: nil)
+        private var birthday = IosappBirthday(day: 1, month: 1, year: nil)
         
         private var component: BirthdayPickerSheetContentComponent?
         private var state: EmptyComponentState?
@@ -213,14 +213,14 @@ private final class BirthdayPickerScreenComponent: Component {
     let mode: BirthdayPickerScreen.Mode
     let settings: Signal<AccountPrivacySettings?, NoError>
     let openSettings: (() -> Void)?
-    let completion: ((TelegramBirthday) -> Void)?
+    let completion: ((IosappBirthday) -> Void)?
     
     init(
         context: AccountContext,
         mode: BirthdayPickerScreen.Mode,
         settings: Signal<AccountPrivacySettings?, NoError>,
         openSettings: (() -> Void)?,
-        completion: ((TelegramBirthday) -> Void)?
+        completion: ((IosappBirthday) -> Void)?
     ) {
         self.context = context
         self.mode = mode
@@ -369,9 +369,9 @@ public class BirthdayPickerScreen: ViewControllerComponentContainer {
     public enum Mode: Equatable {
         case generic
         case suggest(EnginePeer.Id)
-        case acceptSuggestion(TelegramBirthday)
+        case acceptSuggestion(IosappBirthday)
     }
-    public init(context: AccountContext, mode: Mode = .generic, settings: Signal<AccountPrivacySettings?, NoError>, openSettings: (() -> Void)?, completion: ((TelegramBirthday) -> Void)? = nil) {
+    public init(context: AccountContext, mode: Mode = .generic, settings: Signal<AccountPrivacySettings?, NoError>, openSettings: (() -> Void)?, completion: ((IosappBirthday) -> Void)? = nil) {
         super.init(context: context, component: BirthdayPickerScreenComponent(
             context: context,
             mode: mode,

@@ -255,7 +255,7 @@ public final class CachedChannelData: CachedPeerData {
     public let statsDatacenterId: Int32
     public let invitedBy: PeerId?
     public let invitedOn: Int32?
-    public let photo: TelegramMediaImage?
+    public let photo: IosappMediaImage?
     public let activeCall: ActiveCall?
     public let callJoinPeerId: PeerId?
     public let pendingSuggestions: [String]
@@ -265,14 +265,14 @@ public final class CachedChannelData: CachedPeerData {
     public let reactionSettings: EnginePeerCachedInfoItem<PeerReactionSettings>
     public let membersHidden: EnginePeerCachedInfoItem<PeerMembersHidden>
     public let viewForumAsMessages: EnginePeerCachedInfoItem<Bool>
-    public let wallpaper: TelegramWallpaper?
+    public let wallpaper: IosappWallpaper?
     public let boostsToUnrestrict: Int32?
     public let appliedBoosts: Int32?
     public let emojiPack: StickerPackCollectionInfo?
     public let verification: PeerVerification?
     public let starGiftsCount: Int32?
     public let sendPaidMessageStars: StarsAmount?
-    public let mainProfileTab: TelegramProfileTab?
+    public let mainProfileTab: IosappProfileTab?
     
     public let peerIds: Set<PeerId>
     public let messageIds: Set<MessageId>
@@ -343,7 +343,7 @@ public final class CachedChannelData: CachedPeerData {
         statsDatacenterId: Int32,
         invitedBy: PeerId?,
         invitedOn: Int32?,
-        photo: TelegramMediaImage?,
+        photo: IosappMediaImage?,
         activeCall: ActiveCall?,
         callJoinPeerId: PeerId?,
         autoremoveTimeout: CachedPeerAutoremoveTimeout,
@@ -354,14 +354,14 @@ public final class CachedChannelData: CachedPeerData {
         reactionSettings: EnginePeerCachedInfoItem<PeerReactionSettings>,
         membersHidden: EnginePeerCachedInfoItem<PeerMembersHidden>,
         viewForumAsMessages: EnginePeerCachedInfoItem<Bool>,
-        wallpaper: TelegramWallpaper?,
+        wallpaper: IosappWallpaper?,
         boostsToUnrestrict: Int32?,
         appliedBoosts: Int32?,
         emojiPack: StickerPackCollectionInfo?,
         verification: PeerVerification?,
         starGiftsCount: Int32?,
         sendPaidMessageStars: StarsAmount?,
-        mainProfileTab: TelegramProfileTab?
+        mainProfileTab: IosappProfileTab?
     ) {
         self.isNotAccessible = isNotAccessible
         self.flags = flags
@@ -503,7 +503,7 @@ public final class CachedChannelData: CachedPeerData {
         return CachedChannelData(isNotAccessible: self.isNotAccessible, flags: self.flags, about: self.about, participantsSummary: self.participantsSummary, exportedInvitation: self.exportedInvitation, botInfos: self.botInfos, peerStatusSettings: self.peerStatusSettings, pinnedMessageId: self.pinnedMessageId, stickerPack: self.stickerPack, minAvailableMessageId: self.minAvailableMessageId, migrationReference: self.migrationReference, linkedDiscussionPeerId: self.linkedDiscussionPeerId, peerGeoLocation: self.peerGeoLocation, slowModeTimeout: self.slowModeTimeout, slowModeValidUntilTimestamp: self.slowModeValidUntilTimestamp, hasScheduledMessages: self.hasScheduledMessages, statsDatacenterId: self.statsDatacenterId, invitedBy: self.invitedBy, invitedOn: invitedOn, photo: self.photo, activeCall: self.activeCall, callJoinPeerId: self.callJoinPeerId, autoremoveTimeout: self.autoremoveTimeout, pendingSuggestions: self.pendingSuggestions, chatTheme: self.chatTheme, inviteRequestsPending: self.inviteRequestsPending, sendAsPeerId: self.sendAsPeerId, reactionSettings: self.reactionSettings, membersHidden: self.membersHidden, viewForumAsMessages: self.viewForumAsMessages, wallpaper: self.wallpaper, boostsToUnrestrict: self.boostsToUnrestrict, appliedBoosts: self.appliedBoosts, emojiPack: self.emojiPack, verification: self.verification, starGiftsCount: self.starGiftsCount, sendPaidMessageStars: self.sendPaidMessageStars, mainProfileTab: self.mainProfileTab)
     }
     
-    public func withUpdatedPhoto(_ photo: TelegramMediaImage?) -> CachedChannelData {
+    public func withUpdatedPhoto(_ photo: IosappMediaImage?) -> CachedChannelData {
         return CachedChannelData(isNotAccessible: self.isNotAccessible, flags: self.flags, about: self.about, participantsSummary: self.participantsSummary, exportedInvitation: self.exportedInvitation, botInfos: self.botInfos, peerStatusSettings: self.peerStatusSettings, pinnedMessageId: self.pinnedMessageId, stickerPack: self.stickerPack, minAvailableMessageId: self.minAvailableMessageId, migrationReference: self.migrationReference, linkedDiscussionPeerId: self.linkedDiscussionPeerId, peerGeoLocation: self.peerGeoLocation, slowModeTimeout: self.slowModeTimeout, slowModeValidUntilTimestamp: self.slowModeValidUntilTimestamp, hasScheduledMessages: self.hasScheduledMessages, statsDatacenterId: self.statsDatacenterId, invitedBy: self.invitedBy, invitedOn: self.invitedOn, photo: photo, activeCall: self.activeCall, callJoinPeerId: self.callJoinPeerId, autoremoveTimeout: self.autoremoveTimeout, pendingSuggestions: self.pendingSuggestions, chatTheme: self.chatTheme, inviteRequestsPending: self.inviteRequestsPending, sendAsPeerId: self.sendAsPeerId, reactionSettings: self.reactionSettings, membersHidden: self.membersHidden, viewForumAsMessages: self.viewForumAsMessages, wallpaper: self.wallpaper, boostsToUnrestrict: self.boostsToUnrestrict, appliedBoosts: self.appliedBoosts, emojiPack: self.emojiPack, verification: self.verification, starGiftsCount: self.starGiftsCount, sendPaidMessageStars: self.sendPaidMessageStars, mainProfileTab: self.mainProfileTab)
     }
     
@@ -547,7 +547,7 @@ public final class CachedChannelData: CachedPeerData {
         return CachedChannelData(isNotAccessible: self.isNotAccessible, flags: self.flags, about: self.about, participantsSummary: self.participantsSummary, exportedInvitation: self.exportedInvitation, botInfos: self.botInfos, peerStatusSettings: self.peerStatusSettings, pinnedMessageId: self.pinnedMessageId, stickerPack: self.stickerPack, minAvailableMessageId: self.minAvailableMessageId, migrationReference: self.migrationReference, linkedDiscussionPeerId: self.linkedDiscussionPeerId, peerGeoLocation: self.peerGeoLocation, slowModeTimeout: self.slowModeTimeout, slowModeValidUntilTimestamp: self.slowModeValidUntilTimestamp, hasScheduledMessages: self.hasScheduledMessages, statsDatacenterId: self.statsDatacenterId, invitedBy: self.invitedBy, invitedOn: self.invitedOn, photo: self.photo, activeCall: self.activeCall, callJoinPeerId: self.callJoinPeerId, autoremoveTimeout: self.autoremoveTimeout, pendingSuggestions: pendingSuggestions, chatTheme: self.chatTheme, inviteRequestsPending: self.inviteRequestsPending, sendAsPeerId: self.sendAsPeerId, reactionSettings: self.reactionSettings, membersHidden: self.membersHidden, viewForumAsMessages: viewForumAsMessages, wallpaper: self.wallpaper, boostsToUnrestrict: self.boostsToUnrestrict, appliedBoosts: self.appliedBoosts, emojiPack: self.emojiPack, verification: self.verification, starGiftsCount: self.starGiftsCount, sendPaidMessageStars: self.sendPaidMessageStars, mainProfileTab: self.mainProfileTab)
     }
     
-    public func withUpdatedWallpaper(_ wallpaper: TelegramWallpaper?) -> CachedChannelData {
+    public func withUpdatedWallpaper(_ wallpaper: IosappWallpaper?) -> CachedChannelData {
         return CachedChannelData(isNotAccessible: self.isNotAccessible, flags: self.flags, about: self.about, participantsSummary: self.participantsSummary, exportedInvitation: self.exportedInvitation, botInfos: self.botInfos, peerStatusSettings: self.peerStatusSettings, pinnedMessageId: self.pinnedMessageId, stickerPack: self.stickerPack, minAvailableMessageId: self.minAvailableMessageId, migrationReference: self.migrationReference, linkedDiscussionPeerId: self.linkedDiscussionPeerId, peerGeoLocation: self.peerGeoLocation, slowModeTimeout: self.slowModeTimeout, slowModeValidUntilTimestamp: self.slowModeValidUntilTimestamp, hasScheduledMessages: self.hasScheduledMessages, statsDatacenterId: self.statsDatacenterId, invitedBy: self.invitedBy, invitedOn: self.invitedOn, photo: self.photo, activeCall: self.activeCall, callJoinPeerId: self.callJoinPeerId, autoremoveTimeout: self.autoremoveTimeout, pendingSuggestions: pendingSuggestions, chatTheme: self.chatTheme, inviteRequestsPending: self.inviteRequestsPending, sendAsPeerId: self.sendAsPeerId, reactionSettings: self.reactionSettings, membersHidden: self.membersHidden, viewForumAsMessages: self.viewForumAsMessages, wallpaper: wallpaper, boostsToUnrestrict: self.boostsToUnrestrict, appliedBoosts: self.appliedBoosts, emojiPack: self.emojiPack, verification: self.verification, starGiftsCount: self.starGiftsCount, sendPaidMessageStars: self.sendPaidMessageStars, mainProfileTab: self.mainProfileTab)
     }
     
@@ -575,7 +575,7 @@ public final class CachedChannelData: CachedPeerData {
         return CachedChannelData(isNotAccessible: self.isNotAccessible, flags: self.flags, about: self.about, participantsSummary: self.participantsSummary, exportedInvitation: self.exportedInvitation, botInfos: self.botInfos, peerStatusSettings: self.peerStatusSettings, pinnedMessageId: self.pinnedMessageId, stickerPack: self.stickerPack, minAvailableMessageId: self.minAvailableMessageId, migrationReference: self.migrationReference, linkedDiscussionPeerId: self.linkedDiscussionPeerId, peerGeoLocation: self.peerGeoLocation, slowModeTimeout: self.slowModeTimeout, slowModeValidUntilTimestamp: self.slowModeValidUntilTimestamp, hasScheduledMessages: self.hasScheduledMessages, statsDatacenterId: self.statsDatacenterId, invitedBy: self.invitedBy, invitedOn: self.invitedOn, photo: self.photo, activeCall: self.activeCall, callJoinPeerId: self.callJoinPeerId, autoremoveTimeout: self.autoremoveTimeout, pendingSuggestions: pendingSuggestions, chatTheme: self.chatTheme, inviteRequestsPending: self.inviteRequestsPending, sendAsPeerId: self.sendAsPeerId, reactionSettings: self.reactionSettings, membersHidden: self.membersHidden, viewForumAsMessages: self.viewForumAsMessages, wallpaper: self.wallpaper, boostsToUnrestrict: self.boostsToUnrestrict, appliedBoosts: self.appliedBoosts, emojiPack: self.emojiPack, verification: self.verification, starGiftsCount: self.starGiftsCount, sendPaidMessageStars: sendPaidMessageStars, mainProfileTab: self.mainProfileTab)
     }
 
-    public func withUpdatedMainProfileTab(_ mainProfileTab: TelegramProfileTab?) -> CachedChannelData {
+    public func withUpdatedMainProfileTab(_ mainProfileTab: IosappProfileTab?) -> CachedChannelData {
         return CachedChannelData(isNotAccessible: self.isNotAccessible, flags: self.flags, about: self.about, participantsSummary: self.participantsSummary, exportedInvitation: self.exportedInvitation, botInfos: self.botInfos, peerStatusSettings: self.peerStatusSettings, pinnedMessageId: self.pinnedMessageId, stickerPack: self.stickerPack, minAvailableMessageId: self.minAvailableMessageId, migrationReference: self.migrationReference, linkedDiscussionPeerId: self.linkedDiscussionPeerId, peerGeoLocation: self.peerGeoLocation, slowModeTimeout: self.slowModeTimeout, slowModeValidUntilTimestamp: self.slowModeValidUntilTimestamp, hasScheduledMessages: self.hasScheduledMessages, statsDatacenterId: self.statsDatacenterId, invitedBy: self.invitedBy, invitedOn: self.invitedOn, photo: self.photo, activeCall: self.activeCall, callJoinPeerId: self.callJoinPeerId, autoremoveTimeout: self.autoremoveTimeout, pendingSuggestions: pendingSuggestions, chatTheme: self.chatTheme, inviteRequestsPending: self.inviteRequestsPending, sendAsPeerId: self.sendAsPeerId, reactionSettings: self.reactionSettings, membersHidden: self.membersHidden, viewForumAsMessages: self.viewForumAsMessages, wallpaper: self.wallpaper, boostsToUnrestrict: self.boostsToUnrestrict, appliedBoosts: self.appliedBoosts, emojiPack: self.emojiPack, verification: self.verification, starGiftsCount: self.starGiftsCount, sendPaidMessageStars: self.sendPaidMessageStars, mainProfileTab: mainProfileTab)
     }
     
@@ -662,7 +662,7 @@ public final class CachedChannelData: CachedPeerData {
             self.chatTheme = nil
         }
         
-        if let photo = decoder.decodeObjectForKey("ph", decoder: { TelegramMediaImage(decoder: $0) }) as? TelegramMediaImage {
+        if let photo = decoder.decodeObjectForKey("ph", decoder: { IosappMediaImage(decoder: $0) }) as? IosappMediaImage {
             self.photo = photo
         } else {
             self.photo = nil
@@ -696,7 +696,7 @@ public final class CachedChannelData: CachedPeerData {
             self.viewForumAsMessages = .unknown
         }
         
-        self.wallpaper = decoder.decode(TelegramWallpaperNativeCodable.self, forKey: "wp")?.value
+        self.wallpaper = decoder.decode(IosappWallpaperNativeCodable.self, forKey: "wp")?.value
         
         if case let .known(linkedDiscussionPeerIdValue) = self.linkedDiscussionPeerId {
             if let linkedDiscussionPeerIdValue = linkedDiscussionPeerIdValue {
@@ -720,7 +720,7 @@ public final class CachedChannelData: CachedPeerData {
         
         self.verification = decoder.decodeCodable(PeerVerification.self, forKey: "vf")
         
-        self.mainProfileTab = decoder.decodeCodable(TelegramProfileTab.self, forKey: "mainProfileTab")
+        self.mainProfileTab = decoder.decodeCodable(IosappProfileTab.self, forKey: "mainProfileTab")
                 
         self.peerIds = peerIds
         
@@ -883,7 +883,7 @@ public final class CachedChannelData: CachedPeerData {
         }
         
         if let wallpaper = self.wallpaper {
-            encoder.encode(TelegramWallpaperNativeCodable(wallpaper), forKey: "wp")
+            encoder.encode(IosappWallpaperNativeCodable(wallpaper), forKey: "wp")
         } else {
             encoder.encodeNil(forKey: "wp")
         }

@@ -19,10 +19,10 @@ import ChatMessageAnimatedStickerItemNode
 import ChatMessageBubbleItemNode
 
 private func mediaMergeableStyle(_ media: Media) -> ChatMessageMerge {
-    if let story = media as? TelegramMediaStory, story.isMention {
+    if let story = media as? IosappMediaStory, story.isMention {
         return .none
     }
-    if let file = media as? TelegramMediaFile {
+    if let file = media as? IosappMediaFile {
         for attribute in file.attributes {
             switch attribute {
                 case .Sticker:
@@ -37,10 +37,10 @@ private func mediaMergeableStyle(_ media: Media) -> ChatMessageMerge {
         }
         return .fullyMerged
     }
-    if let _ = media as? TelegramMediaAction {
+    if let _ = media as? IosappMediaAction {
         return .none
     }
-    if let _ = media as? TelegramMediaExpiredContent {
+    if let _ = media as? IosappMediaExpiredContent {
         return .none
     }
     
@@ -75,7 +75,7 @@ private func messagesShouldBeMerged(accountPeerId: PeerId, _ lhs: Message, _ rhs
         }
     }
     
-    if let channel = lhs.peers[lhs.id.peerId] as? TelegramChannel, case let .broadcast(info) = channel.info {
+    if let channel = lhs.peers[lhs.id.peerId] as? IosappChannel, case let .broadcast(info) = channel.info {
         if info.flags.contains(.messagesShouldHaveProfiles) {
             lhsEffectiveAuthor = lhs.author
             rhsEffectiveAuthor = rhs.author
@@ -93,7 +93,7 @@ private func messagesShouldBeMerged(accountPeerId: PeerId, _ lhs: Message, _ rhs
     }
     
     let sameThread = true
-    /*if let lhsPeer = lhs.peers[lhs.id.peerId], let rhsPeer = rhs.peers[rhs.id.peerId], arePeersEqual(lhsPeer, rhsPeer), let channel = lhsPeer as? TelegramChannel, channel.isForumOrMonoForum, lhs.threadId != rhs.threadId {
+    /*if let lhsPeer = lhs.peers[lhs.id.peerId], let rhsPeer = rhs.peers[rhs.id.peerId], arePeersEqual(lhsPeer, rhsPeer), let channel = lhsPeer as? IosappChannel, channel.isForumOrMonoForum, lhs.threadId != rhs.threadId {
         sameThread = false
     }*/
         
@@ -143,13 +143,13 @@ private func messagesShouldBeMerged(accountPeerId: PeerId, _ lhs: Message, _ rhs
     
     var isNonMergeablePaid = isPaid
     if isNonMergeablePaid {
-        if let channel = lhs.peers[lhs.id.peerId] as? TelegramChannel, channel.flags.contains(.isMonoforum) {
+        if let channel = lhs.peers[lhs.id.peerId] as? IosappChannel, channel.flags.contains(.isMonoforum) {
             isNonMergeablePaid = false
         }
     }
     
     if abs(lhsEffectiveTimestamp - rhsEffectiveTimestamp) < Int32(10 * 60) && sameChat && sameAuthor && sameThread && !isNonMergeablePaid {
-        if let channel = lhs.peers[lhs.id.peerId] as? TelegramChannel, case .group = channel.info, lhsEffectiveAuthor?.id == channel.id, !lhs.effectivelyIncoming(accountPeerId) {
+        if let channel = lhs.peers[lhs.id.peerId] as? IosappChannel, case .group = channel.info, lhsEffectiveAuthor?.id == channel.id, !lhs.effectivelyIncoming(accountPeerId) {
             return .none
         }
         
@@ -303,14 +303,14 @@ public final class ChatMessageItemImpl: ChatMessageItem, CustomStringConvertible
                 if let forwardInfo = content.firstMessage.forwardInfo {
                     effectiveAuthor = forwardInfo.author
                     if effectiveAuthor == nil, let authorSignature = forwardInfo.authorSignature  {
-                        effectiveAuthor = TelegramUser(id: PeerId(namespace: Namespaces.Peer.Empty, id: PeerId.Id._internalFromInt64Value(Int64(authorSignature.persistentHashValue % 32))), accessHash: nil, firstName: authorSignature, lastName: nil, username: nil, phone: nil, photo: [], botInfo: nil, restrictionInfo: nil, flags: [], emojiStatus: nil, usernames: [], storiesHidden: nil, nameColor: nil, backgroundEmojiId: nil, profileColor: nil, profileBackgroundEmojiId: nil, subscriberCount: nil, verificationIconFileId: nil)
+                        effectiveAuthor = IosappUser(id: PeerId(namespace: Namespaces.Peer.Empty, id: PeerId.Id._internalFromInt64Value(Int64(authorSignature.persistentHashValue % 32))), accessHash: nil, firstName: authorSignature, lastName: nil, username: nil, phone: nil, photo: [], botInfo: nil, restrictionInfo: nil, flags: [], emojiStatus: nil, usernames: [], storiesHidden: nil, nameColor: nil, backgroundEmojiId: nil, profileColor: nil, profileBackgroundEmojiId: nil, subscriberCount: nil, verificationIconFileId: nil)
                     }
                 }
                 if let sourceAuthorInfo = content.firstMessage.sourceAuthorInfo {
                     if let originalAuthor = sourceAuthorInfo.originalAuthor, let peer = content.firstMessage.peers[originalAuthor] {
                         effectiveAuthor = peer
                     } else if let authorSignature = sourceAuthorInfo.originalAuthorName {
-                        effectiveAuthor = TelegramUser(id: PeerId(namespace: Namespaces.Peer.Empty, id: PeerId.Id._internalFromInt64Value(Int64(authorSignature.persistentHashValue % 32))), accessHash: nil, firstName: authorSignature, lastName: nil, username: nil, phone: nil, photo: [], botInfo: nil, restrictionInfo: nil, flags: [], emojiStatus: nil, usernames: [], storiesHidden: nil, nameColor: nil, backgroundEmojiId: nil, profileColor: nil, profileBackgroundEmojiId: nil, subscriberCount: nil, verificationIconFileId: nil)
+                        effectiveAuthor = IosappUser(id: PeerId(namespace: Namespaces.Peer.Empty, id: PeerId.Id._internalFromInt64Value(Int64(authorSignature.persistentHashValue % 32))), accessHash: nil, firstName: authorSignature, lastName: nil, username: nil, phone: nil, photo: [], botInfo: nil, restrictionInfo: nil, flags: [], emojiStatus: nil, usernames: [], storiesHidden: nil, nameColor: nil, backgroundEmojiId: nil, profileColor: nil, profileBackgroundEmojiId: nil, subscriberCount: nil, verificationIconFileId: nil)
                     }
                 }
                 if peerId.isVerificationCodes && effectiveAuthor == nil {
@@ -334,7 +334,7 @@ public final class ChatMessageItemImpl: ChatMessageItem, CustomStringConvertible
                         }
                     } else {
                         if chatPeer.isMonoForum {
-                            if let chatPeer = chatPeer as? TelegramChannel, let linkedMonoforumId = chatPeer.linkedMonoforumId, let mainChannel = content.firstMessage.peers[linkedMonoforumId] as? TelegramChannel, mainChannel.hasPermission(.manageDirect) {
+                            if let chatPeer = chatPeer as? IosappChannel, let linkedMonoforumId = chatPeer.linkedMonoforumId, let mainChannel = content.firstMessage.peers[linkedMonoforumId] as? IosappChannel, mainChannel.hasPermission(.manageDirect) {
                                 headerSeparableThreadId = content.firstMessage.threadId
                                 
                                 if let threadId = content.firstMessage.threadId, let peer = content.firstMessage.peers[EnginePeer.Id(threadId)] {
@@ -390,14 +390,14 @@ public final class ChatMessageItemImpl: ChatMessageItem, CustomStringConvertible
             let message = content.firstMessage
             var hasActionMedia = false
             for media in message.media {
-                if media is TelegramMediaAction {
+                if media is IosappMediaAction {
                     hasActionMedia = true
                     break
                 }
             }
             var isBroadcastChannel = false
             if case .peer = chatLocation {
-                if let peer = message.peers[message.id.peerId] as? TelegramChannel, case .broadcast = peer.info {
+                if let peer = message.peers[message.id.peerId] as? IosappChannel, case .broadcast = peer.info {
                     isBroadcastChannel = true
                 }
             } else if case let .replyThread(replyThreadMessage) = chatLocation, replyThreadMessage.isChannelPost, replyThreadMessage.effectiveTopId == message.id {
@@ -407,11 +407,11 @@ public final class ChatMessageItemImpl: ChatMessageItem, CustomStringConvertible
             var hasAvatar = false
             if !hasActionMedia {
                 if !isBroadcastChannel {
-                    if let channel = message.peers[message.id.peerId] as? TelegramChannel, channel.isMonoForum, chatLocation.threadId != nil {
+                    if let channel = message.peers[message.id.peerId] as? IosappChannel, channel.isMonoForum, chatLocation.threadId != nil {
                     } else {
                         hasAvatar = true
                     }
-                } else if let channel = message.peers[message.id.peerId] as? TelegramChannel, case let .broadcast(info) = channel.info {
+                } else if let channel = message.peers[message.id.peerId] as? IosappChannel, case let .broadcast(info) = channel.info {
                     if info.flags.contains(.messagesShouldHaveProfiles) {
                         hasAvatar = true
                         effectiveAuthor = message.author
@@ -461,7 +461,7 @@ public final class ChatMessageItemImpl: ChatMessageItem, CustomStringConvertible
         var viewClassName: AnyClass = ChatMessageBubbleItemNode.self
         
         loop: for media in self.message.media {
-            if let telegramFile = media as? TelegramMediaFile {
+            if let telegramFile = media as? IosappMediaFile {
                 if telegramFile.isVideoSticker {
                     viewClassName = ChatMessageAnimatedStickerItemNode.self
                     break loop
@@ -509,11 +509,11 @@ public final class ChatMessageItemImpl: ChatMessageItem, CustomStringConvertible
                             break
                     }
                 }
-            } else if media is TelegramMediaAction {
+            } else if media is IosappMediaAction {
                 viewClassName = ChatMessageBubbleItemNode.self
-            } else if media is TelegramMediaExpiredContent {
+            } else if media is IosappMediaExpiredContent {
                 viewClassName = ChatMessageBubbleItemNode.self
-            } else if media is TelegramMediaDice {
+            } else if media is IosappMediaDice {
                 viewClassName = ChatMessageAnimatedStickerItemNode.self
             }
         }

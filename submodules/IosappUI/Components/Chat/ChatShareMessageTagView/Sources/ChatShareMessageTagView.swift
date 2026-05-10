@@ -24,7 +24,7 @@ public final class ChatShareMessageTagView: UIView, UndoOverlayControllerAdditio
     private var reactionContextNode: ReactionContextNode?
     private var params: Params?
     
-    public init(context: AccountContext, presentationData: PresentationData, isSingleMessage: Bool, reactionItems: [ReactionItem], completion: @escaping (TelegramMediaFile, UpdateMessageReaction) -> Void) {
+    public init(context: AccountContext, presentationData: PresentationData, isSingleMessage: Bool, reactionItems: [ReactionItem], completion: @escaping (IosappMediaFile, UpdateMessageReaction) -> Void) {
         super.init(frame: CGRect())
         
         let reactionContextNode = ReactionContextNode(
@@ -89,7 +89,7 @@ public final class ChatShareMessageTagView: UIView, UndoOverlayControllerAdditio
                     return
                 }
                 
-                var file: TelegramMediaFile?
+                var file: IosappMediaFile?
                 switch updateReaction {
                 case .builtin:
                     for reaction in availableReactions.reactions {

@@ -1372,7 +1372,7 @@ public final class QuickReplySetupScreen: ViewControllerComponentContainer, Atta
     public static func initialData(context: AccountContext) -> Signal<QuickReplySetupScreenInitialData, NoError> {
         return combineLatest(
             context.engine.data.get(
-                TelegramEngine.EngineData.Item.Peer.Peer(id: context.account.peerId)
+                IosappEngine.EngineData.Item.Peer.Peer(id: context.account.peerId)
             ),
             context.engine.accountData.shortcutMessageList(onlyRemote: false)
             |> take(1)

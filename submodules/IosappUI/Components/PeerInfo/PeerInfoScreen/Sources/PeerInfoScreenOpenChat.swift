@@ -40,7 +40,7 @@ extension PeerInfoScreenNode {
     
     func openChatForReporting(title: String, option: Data, message: String?) {
         if let peer = self.data?.peer, let navigationController = (self.controller?.navigationController as? NavigationController) {
-            if let channel = peer as? TelegramChannel, channel.isForumOrMonoForum {
+            if let channel = peer as? IosappChannel, channel.isForumOrMonoForum {
                 //let _ = self.context.engine.peers.reportPeer(peerId: peer.id, reason: reason, message: "").startStandalone()
                 //self.controller?.present(UndoOverlayController(presentationData: self.presentationData, content: .emoji(name: "PoliceCar", text: self.presentationData.strings.Report_Succeed), elevatedLayout: false, action: { _ in return false }), in: .current)
             } else {
@@ -76,7 +76,7 @@ extension PeerInfoScreenNode {
     func openChat(peerId: EnginePeer.Id?) {
         if let peerId {
             let _ = (self.context.engine.data.get(
-                TelegramEngine.EngineData.Item.Peer.Peer(id: peerId)
+                IosappEngine.EngineData.Item.Peer.Peer(id: peerId)
             )
             |> deliverOnMainQueue).startStandalone(next: { [weak self] peer in
                 guard let self, let peer else {
@@ -130,11 +130,11 @@ extension PeerInfoScreenNode {
     }
 
     func openChannelMessages() {
-        guard let channel = self.data?.peer as? TelegramChannel, let linkedMonoforumId = channel.linkedMonoforumId else {
+        guard let channel = self.data?.peer as? IosappChannel, let linkedMonoforumId = channel.linkedMonoforumId else {
             return
         }
         let _ = (self.context.engine.data.get(
-            TelegramEngine.EngineData.Item.Peer.Peer(id: linkedMonoforumId)
+            IosappEngine.EngineData.Item.Peer.Peer(id: linkedMonoforumId)
         )
         |> deliverOnMainQueue).startStandalone(next: { [weak self] peer in
             guard let self, let peer else {

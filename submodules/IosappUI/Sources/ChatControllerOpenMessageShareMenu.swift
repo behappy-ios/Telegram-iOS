@@ -68,7 +68,7 @@ func chatShareToSavedMessagesAdditionalView(_ chatController: ChatControllerImpl
                     let presentationData = chatController.context.sharedContext.currentPresentationData.with { $0 }
                     chatController.present(UndoOverlayController(presentationData: presentationData, content: .messageTagged(context: chatController.context, isSingleMessage: messageIds.count == 1, customEmoji: file, isBuiltinReaction: isBuiltinReaction, customUndoText: presentationData.strings.Chat_ToastMessageTagged_Action), elevatedLayout: false, position: .top, animateInAsReplacement: false, action: { [weak chatController] action in
                         if (action == .info || action == .undo), let chatController {
-                            let _ = (chatController.context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: chatController.context.account.peerId))
+                            let _ = (chatController.context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: chatController.context.account.peerId))
                             |> deliverOnMainQueue).start(next: { [weak chatController] peer in
                                 guard let chatController else {
                                     return
@@ -100,7 +100,7 @@ extension ChatControllerImpl {
         let chatPresentationInterfaceState = self.presentationInterfaceState
         var warnAboutPrivate = false
         var canShareToStory = false
-        if case .peer = chatPresentationInterfaceState.chatLocation, let channel = message.peers[message.id.peerId] as? TelegramChannel {
+        if case .peer = chatPresentationInterfaceState.chatLocation, let channel = message.peers[message.id.peerId] as? IosappChannel {
             if case .broadcast = channel.info {
                 canShareToStory = true
             }
@@ -109,9 +109,9 @@ extension ChatControllerImpl {
             }
         }
         if let message = messages.first, message.media.contains(where: { media in
-            if media is TelegramMediaContact || media is TelegramMediaPoll || media is TelegramMediaTodo {
+            if media is IosappMediaContact || media is IosappMediaPoll || media is IosappMediaTodo {
                 return true
-            } else if let file = media as? TelegramMediaFile, file.isSticker || file.isAnimatedSticker || file.isVideoSticker {
+            } else if let file = media as? IosappMediaFile, file.isSticker || file.isAnimatedSticker || file.isVideoSticker {
                 return true
             } else {
                 return false
@@ -155,7 +155,7 @@ extension ChatControllerImpl {
 
             let _ = (self.context.engine.data.get(
                 EngineDataList(
-                    peerIds.map(TelegramEngine.EngineData.Item.Peer.RenderedPeer.init)
+                    peerIds.map(IosappEngine.EngineData.Item.Peer.RenderedPeer.init)
                 )
             )
             |> deliverOnMainQueue).startStandalone(next: { [weak self] peerList in
@@ -204,7 +204,7 @@ extension ChatControllerImpl {
 
                     self.present(UndoOverlayController(presentationData: presentationData, content: .forward(savedMessages: savedMessages, text: text), elevatedLayout: false, position: savedMessages ? .top : .bottom, animateInAsReplacement: !savedMessages, action: { [weak self] action in
                         if savedMessages, let self, action == .info {
-                            let _ = (self.context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: self.context.account.peerId))
+                            let _ = (self.context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: self.context.account.peerId))
                             |> deliverOnMainQueue).start(next: { [weak self] peer in
                                 guard let self, let peer else {
                                     return

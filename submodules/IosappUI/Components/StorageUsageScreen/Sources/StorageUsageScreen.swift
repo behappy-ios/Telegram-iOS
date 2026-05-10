@@ -405,7 +405,7 @@ final class StorageUsageScreenComponent: Component {
                 for item in imageItems.items {
                     var isImage = false
                     for media in item.message.media {
-                        if media is TelegramMediaImage {
+                        if media is IosappMediaImage {
                             isImage = true
                             break
                         }
@@ -1059,7 +1059,7 @@ final class StorageUsageScreenComponent: Component {
                 |> distinctUntilChanged
                 |> mapToSignal { accountSpecificSettings -> Signal<[CacheStorageSettings.PeerStorageCategory: Int32], NoError> in
                     return context.engine.data.get(
-                        EngineDataMap(accountSpecificSettings.peerStorageTimeoutExceptions.map(\.key).map(TelegramEngine.EngineData.Item.Peer.Peer.init(id:)))
+                        EngineDataMap(accountSpecificSettings.peerStorageTimeoutExceptions.map(\.key).map(IosappEngine.EngineData.Item.Peer.Peer.init(id:)))
                     )
                     |> map { peers -> [CacheStorageSettings.PeerStorageCategory: Int32] in
                         var result: [CacheStorageSettings.PeerStorageCategory: Int32] = [:]
@@ -2416,10 +2416,10 @@ final class StorageUsageScreenComponent: Component {
                             if let message = messages[id] {
                                 var matches = false
                                 for media in message.media {
-                                    if media is TelegramMediaImage {
+                                    if media is IosappMediaImage {
                                         matches = true
                                         break
-                                    } else if let file = media as? TelegramMediaFile {
+                                    } else if let file = media as? IosappMediaFile {
                                         if file.isVideo {
                                             matches = true
                                             break
@@ -2442,7 +2442,7 @@ final class StorageUsageScreenComponent: Component {
                             if let message = messages[id] {
                                 var matches = false
                                 for media in message.media {
-                                    if let file = media as? TelegramMediaFile {
+                                    if let file = media as? IosappMediaFile {
                                         if file.isSticker || file.isCustomEmoji {
                                         } else {
                                             matches = true
@@ -2465,7 +2465,7 @@ final class StorageUsageScreenComponent: Component {
                             if let message = messages[id] {
                                 var matches = false
                                 for media in message.media {
-                                    if media is TelegramMediaFile {
+                                    if media is IosappMediaFile {
                                         matches = true
                                     }
                                 }
@@ -2584,9 +2584,9 @@ final class StorageUsageScreenComponent: Component {
                 
                 var openTitle: String = presentationData.strings.StorageManagement_OpenPhoto
                 for media in message.media {
-                    if let _ = media as? TelegramMediaImage {
+                    if let _ = media as? IosappMediaImage {
                         openTitle = presentationData.strings.StorageManagement_OpenPhoto
-                    } else if let file = media as? TelegramMediaFile {
+                    } else if let file = media as? IosappMediaFile {
                         if file.isVideo {
                             openTitle = presentationData.strings.StorageManagement_OpenVideo
                         } else {
@@ -2678,9 +2678,9 @@ final class StorageUsageScreenComponent: Component {
             var openTitle: String = presentationData.strings.Conversation_LinkDialogOpen
             var isAudio: Bool = false
             for media in message.media {
-                if let _ = media as? TelegramMediaImage {
+                if let _ = media as? IosappMediaImage {
                     openTitle = presentationData.strings.StorageManagement_OpenPhoto
-                } else if let file = media as? TelegramMediaFile {
+                } else if let file = media as? IosappMediaFile {
                     if file.isVideo {
                         openTitle = presentationData.strings.StorageManagement_OpenVideo
                     } else {
@@ -3160,15 +3160,15 @@ final class StorageUsageScreenComponent: Component {
                         }
                         let peerCategory: CacheStorageSettings.PeerStorageCategory
                         var subscriberCount: Int32?
-                        if peer is TelegramUser {
+                        if peer is IosappUser {
                             peerCategory = .privateChats
-                        } else if peer is TelegramGroup {
+                        } else if peer is IosappGroup {
                             peerCategory = .groups
                             
                             if let cachedData = transaction.getPeerCachedData(peerId: peerId) as? CachedGroupData {
                                 subscriberCount = (cachedData.participants?.participants.count).flatMap(Int32.init)
                             }
-                        } else if let channel = peer as? TelegramChannel {
+                        } else if let channel = peer as? IosappChannel {
                             if case .group = channel.info {
                                 peerCategory = .groups
                             } else {

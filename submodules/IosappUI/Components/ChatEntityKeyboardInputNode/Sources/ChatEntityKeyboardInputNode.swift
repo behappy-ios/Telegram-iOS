@@ -153,7 +153,7 @@ public final class ChatEntityKeyboardInputNode: ChatInputNode {
         if premiumIfSavedMessages, let chatPeerId = chatPeerId, chatPeerId == context.account.peerId {
             hasPremium = .single(true)
         } else {
-            hasPremium = context.engine.data.subscribe(TelegramEngine.EngineData.Item.Peer.Peer(id: context.account.peerId))
+            hasPremium = context.engine.data.subscribe(IosappEngine.EngineData.Item.Peer.Peer(id: context.account.peerId))
             |> map { peer -> Bool in
                 guard case let .user(user) = peer else {
                     return false
@@ -227,7 +227,7 @@ public final class ChatEntityKeyboardInputNode: ChatInputNode {
             stickerItems = .single(nil)
         }
         
-        let reactions: Signal<[String], NoError> = context.engine.data.subscribe(TelegramEngine.EngineData.Item.Configuration.App())
+        let reactions: Signal<[String], NoError> = context.engine.data.subscribe(IosappEngine.EngineData.Item.Configuration.App())
         |> map { appConfiguration -> [String] in
             let defaultReactions: [String] = ["👍", "👎", "😍", "😂", "😯", "😕", "😢", "😡", "💪", "👏", "🙈", "😒"]
             
@@ -756,7 +756,7 @@ public final class ChatEntityKeyboardInputNode: ChatInputNode {
                                 }
                                 
                                 if suggestSavedMessages {
-                                    let _ = (context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: context.account.peerId))
+                                    let _ = (context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: context.account.peerId))
                                     |> deliverOnMainQueue).start(next: { peer in
                                         guard let peer = peer, let navigationController = interaction.getNavigationController() else {
                                             return
@@ -951,7 +951,7 @@ public final class ChatEntityKeyboardInputNode: ChatInputNode {
                             }
                         }
                     
-                        let hasPremium = context.engine.data.subscribe(TelegramEngine.EngineData.Item.Peer.Peer(id: context.account.peerId))
+                        let hasPremium = context.engine.data.subscribe(IosappEngine.EngineData.Item.Peer.Peer(id: context.account.peerId))
                         |> map { peer -> Bool in
                             guard case let .user(user) = peer else {
                                 return false
@@ -971,7 +971,7 @@ public final class ChatEntityKeyboardInputNode: ChatInputNode {
                                     allEmoticons[emoticon] = keyword.keyword
                                 }
                             }
-                            let remoteSignal: Signal<(items: [TelegramMediaFile], isFinalResult: Bool), NoError>
+                            let remoteSignal: Signal<(items: [IosappMediaFile], isFinalResult: Bool), NoError>
                             let remotePacksSignal: Signal<(sets: FoundStickerSets, isFinalResult: Bool), NoError>
                             if hasPremium {
                                 remoteSignal = context.engine.stickers.searchEmoji(query: query, emoticon: Array(allEmoticons.keys), inputLanguageCode: languageCode)
@@ -1027,11 +1027,11 @@ public final class ChatEntityKeyboardInputNode: ChatInputNode {
                                     if itemFile.isPremiumEmoji && !hasPremium {
                                         continue
                                     }
-                                    let animationData = EntityKeyboardAnimationData(file: TelegramMediaFile.Accessor(itemFile))
+                                    let animationData = EntityKeyboardAnimationData(file: IosappMediaFile.Accessor(itemFile))
                                     let item = EmojiPagerContentComponent.Item(
                                         animationData: animationData,
                                         content: .animation(animationData),
-                                        itemFile: TelegramMediaFile.Accessor(itemFile),
+                                        itemFile: IosappMediaFile.Accessor(itemFile),
                                         subgroupId: nil,
                                         icon: .none,
                                         tintMode: animationData.isTemplate ? .primary : .none
@@ -1143,11 +1143,11 @@ public final class ChatEntityKeyboardInputNode: ChatInputNode {
                                 continue
                             }
                             existingIds.insert(itemFile.fileId)
-                            let animationData = EntityKeyboardAnimationData(file: TelegramMediaFile.Accessor(itemFile))
+                            let animationData = EntityKeyboardAnimationData(file: IosappMediaFile.Accessor(itemFile))
                             let item = EmojiPagerContentComponent.Item(
                                 animationData: animationData,
                                 content: .animation(animationData),
-                                itemFile: TelegramMediaFile.Accessor(itemFile),
+                                itemFile: IosappMediaFile.Accessor(itemFile),
                                 subgroupId: nil,
                                 icon: .none,
                                 tintMode: animationData.isTemplate ? .primary : .none
@@ -1490,11 +1490,11 @@ public final class ChatEntityKeyboardInputNode: ChatInputNode {
                                 continue
                             }
                             existingIds.insert(itemFile.fileId)
-                            let animationData = EntityKeyboardAnimationData(file: TelegramMediaFile.Accessor(itemFile))
+                            let animationData = EntityKeyboardAnimationData(file: IosappMediaFile.Accessor(itemFile))
                             let item = EmojiPagerContentComponent.Item(
                                 animationData: animationData,
                                 content: .animation(animationData),
-                                itemFile: TelegramMediaFile.Accessor(itemFile),
+                                itemFile: IosappMediaFile.Accessor(itemFile),
                                 subgroupId: nil,
                                 icon: itemFile.isPremiumSticker ? .premium : .none,
                                 tintMode: animationData.isTemplate ? .primary : .none
@@ -1734,7 +1734,7 @@ public final class ChatEntityKeyboardInputNode: ChatInputNode {
         }
         
         if self.currentInputData.gifs != nil {
-            let hasRecentGifs = context.engine.data.subscribe(TelegramEngine.EngineData.Item.OrderedLists.ListItems(collectionId: Namespaces.OrderedItemList.CloudRecentGifs))
+            let hasRecentGifs = context.engine.data.subscribe(IosappEngine.EngineData.Item.OrderedLists.ListItems(collectionId: Namespaces.OrderedItemList.CloudRecentGifs))
             |> map { savedGifs -> Bool in
                 return !savedGifs.isEmpty
             }
@@ -1858,7 +1858,7 @@ public final class ChatEntityKeyboardInputNode: ChatInputNode {
         
         var stickersEnabled = true
         var emojiEnabled = true
-        if let peer = interfaceState.renderedPeer?.peer as? TelegramChannel {
+        if let peer = interfaceState.renderedPeer?.peer as? IosappChannel {
             if let boostsToUnrestrict = interfaceState.boostsToUnrestrict, boostsToUnrestrict > 0 {
                 
             } else {
@@ -1869,7 +1869,7 @@ public final class ChatEntityKeyboardInputNode: ChatInputNode {
                     emojiEnabled = false
                 }
             }
-        } else if let peer = interfaceState.renderedPeer?.peer as? TelegramGroup {
+        } else if let peer = interfaceState.renderedPeer?.peer as? IosappGroup {
             if peer.hasBannedPermission(.banSendStickers) {
                 stickersEnabled = false
             }
@@ -2732,15 +2732,15 @@ public final class EntityInputView: UIInputView, AttachmentTextInputPanelInputVi
 public final class EmojiContentPeekBehaviorImpl: EmojiContentPeekBehavior {
     public class Interaction {
         public let sendSticker: (FileMediaReference, Bool, Bool, String?, Bool, UIView?, CGRect?, CALayer?, [ItemCollectionId]) -> Bool
-        public let sendEmoji: (TelegramMediaFile) -> Void
-        public let setStatus: (TelegramMediaFile) -> Void
-        public let copyEmoji: (TelegramMediaFile) -> Void
+        public let sendEmoji: (IosappMediaFile) -> Void
+        public let setStatus: (IosappMediaFile) -> Void
+        public let copyEmoji: (IosappMediaFile) -> Void
         public let presentController: (ViewController, Any?) -> Void
         public let presentGlobalOverlayController: (ViewController, Any?) -> Void
         public let navigationController: () -> NavigationController?
         public let updateIsPreviewing: (Bool) -> Void
         
-        public init(sendSticker: @escaping (FileMediaReference, Bool, Bool, String?, Bool, UIView?, CGRect?, CALayer?, [ItemCollectionId]) -> Bool, sendEmoji: @escaping (TelegramMediaFile) -> Void, setStatus: @escaping (TelegramMediaFile) -> Void, copyEmoji: @escaping (TelegramMediaFile) -> Void, presentController: @escaping (ViewController, Any?) -> Void, presentGlobalOverlayController: @escaping (ViewController, Any?) -> Void, navigationController: @escaping () -> NavigationController?, updateIsPreviewing: @escaping (Bool) -> Void) {
+        public init(sendSticker: @escaping (FileMediaReference, Bool, Bool, String?, Bool, UIView?, CGRect?, CALayer?, [ItemCollectionId]) -> Bool, sendEmoji: @escaping (IosappMediaFile) -> Void, setStatus: @escaping (IosappMediaFile) -> Void, copyEmoji: @escaping (IosappMediaFile) -> Void, presentController: @escaping (ViewController, Any?) -> Void, presentGlobalOverlayController: @escaping (ViewController, Any?) -> Void, navigationController: @escaping () -> NavigationController?, updateIsPreviewing: @escaping (Bool) -> Void) {
             self.sendSticker = sendSticker
             self.sendEmoji = sendEmoji
             self.setStatus = setStatus
@@ -2779,7 +2779,7 @@ public final class EmojiContentPeekBehaviorImpl: EmojiContentPeekBehavior {
         self.present = present
     }
     
-    public func setGestureRecognizerEnabled(view: UIView, isEnabled: Bool, itemAtPoint: @escaping (CGPoint) -> (AnyHashable, CALayer, TelegramMediaFile)?) {
+    public func setGestureRecognizerEnabled(view: UIView, isEnabled: Bool, itemAtPoint: @escaping (CGPoint) -> (AnyHashable, CALayer, IosappMediaFile)?) {
         self.viewRecords = self.viewRecords.filter({ $0.view != nil })
         
         let viewRecord = self.viewRecords.first(where: { $0.view === view })
@@ -2808,7 +2808,7 @@ public final class EmojiContentPeekBehaviorImpl: EmojiContentPeekBehavior {
                 let chatPeerId = strongSelf.chatPeerId
                 
                 if file.isCustomEmoji {
-                    return context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: accountPeerId)) |> map { peer -> Bool in
+                    return context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: accountPeerId)) |> map { peer -> Bool in
                         var hasPremium = false
                         if case let .user(user) = peer, user.isPremium {
                             hasPremium = true
@@ -2833,13 +2833,13 @@ public final class EmojiContentPeekBehaviorImpl: EmojiContentPeekBehavior {
                         }
                         
                         if let interaction = strongSelf.interaction {
-                            let sendEmoji: (TelegramMediaFile) -> Void = { file in
+                            let sendEmoji: (IosappMediaFile) -> Void = { file in
                                 interaction.sendEmoji(file)
                             }
-                            let setStatus: (TelegramMediaFile) -> Void = { file in
+                            let setStatus: (IosappMediaFile) -> Void = { file in
                                 interaction.setStatus(file)
                             }
-                            let copyEmoji: (TelegramMediaFile) -> Void = { file in
+                            let copyEmoji: (IosappMediaFile) -> Void = { file in
                                 interaction.copyEmoji(file)
                             }
                             
@@ -2912,14 +2912,14 @@ public final class EmojiContentPeekBehaviorImpl: EmojiContentPeekBehavior {
                 } else {
                     let sendPaidMessageStars: Signal<StarsAmount?, NoError>
                     if let chatPeerId = strongSelf.chatPeerId {
-                        sendPaidMessageStars = context.engine.data.get(TelegramEngine.EngineData.Item.Peer.SendPaidMessageStars(id: chatPeerId))
+                        sendPaidMessageStars = context.engine.data.get(IosappEngine.EngineData.Item.Peer.SendPaidMessageStars(id: chatPeerId))
                     } else {
                         sendPaidMessageStars = .single(nil)
                     }
                     
                     return combineLatest(
                         context.engine.stickers.isStickerSaved(id: file.fileId),
-                        context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: accountPeerId)) |> map { peer -> Bool in
+                        context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: accountPeerId)) |> map { peer -> Bool in
                             var hasPremium = false
                             if case let .user(user) = peer, user.isPremium {
                                 hasPremium = true

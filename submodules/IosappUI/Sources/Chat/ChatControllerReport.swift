@@ -130,7 +130,7 @@ extension ChatControllerImpl {
         unblockingPeer.set(true)
         
         var restartBot = false
-        if let user = self.presentationInterfaceState.renderedPeer?.peer as? TelegramUser, user.botInfo != nil {
+        if let user = self.presentationInterfaceState.renderedPeer?.peer as? IosappUser, user.botInfo != nil {
             restartBot = true
         }
         self.editMessageDisposable.set((self.context.engine.privacy.requestUpdatePeerIsBlocked(peerId: peerId, isBlocked: false)
@@ -150,7 +150,7 @@ extension ChatControllerImpl {
         }
         self.chatDisplayNode.dismissInput()
         
-        if let peer = peer as? TelegramChannel, let username = peer.addressName, !username.isEmpty {
+        if let peer = peer as? IosappChannel, let username = peer.addressName, !username.isEmpty {
             let actionSheet = ActionSheetController(presentationData: self.presentationData)
             
             var items: [ActionSheetItem] = []
@@ -167,7 +167,7 @@ extension ChatControllerImpl {
             ])])
             
             self.present(actionSheet, in: .window(.root))
-        } else if let _ = peer as? TelegramUser {
+        } else if let _ = peer as? IosappUser {
             let presentationData = self.presentationData
             let controller = ActionSheetController(presentationData: presentationData)
             let dismissAction: () -> Void = { [weak controller] in
@@ -204,7 +204,7 @@ extension ChatControllerImpl {
                         return
                     }
                     let _ = strongSelf.context.engine.privacy.requestUpdatePeerIsBlocked(peerId: peer.id, isBlocked: true).startStandalone()
-                    if let _ = chatPeer as? TelegramSecretChat {
+                    if let _ = chatPeer as? IosappSecretChat {
                         let _ = strongSelf.context.engine.peers.terminateSecretChat(peerId: chatPeer.id, requestRemoteHistoryRemoval: true).startStandalone()
                     }
                     if deleteChat {
@@ -224,10 +224,10 @@ extension ChatControllerImpl {
         } else {
             let title: String
             var infoString: String?
-            if let _ = peer as? TelegramGroup {
+            if let _ = peer as? IosappGroup {
                 title = self.presentationData.strings.Conversation_ReportSpamAndLeave
                 infoString = self.presentationData.strings.Conversation_ReportSpamGroupConfirmation
-            } else if let channel = peer as? TelegramChannel {
+            } else if let channel = peer as? IosappChannel {
                 title = self.presentationData.strings.Conversation_ReportSpamAndLeave
                 if case .group = channel.info {
                     infoString = self.presentationData.strings.Conversation_ReportSpamGroupConfirmation

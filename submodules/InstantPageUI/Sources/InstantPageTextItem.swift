@@ -252,8 +252,8 @@ public final class InstantPageTextItem: InstantPageItem {
     
     public func linkSelectionRects(at point: CGPoint) -> [CGRect] {
         if let (index, dict) = self.attributesAtPoint(point) {
-            if let _ = dict[NSAttributedString.Key(rawValue: TelegramTextAttributes.URL)] {
-                if let rects = self.attributeRects(name: NSAttributedString.Key(rawValue: TelegramTextAttributes.URL), at: index) {
+            if let _ = dict[NSAttributedString.Key(rawValue: IosappTextAttributes.URL)] {
+                if let rects = self.attributeRects(name: NSAttributedString.Key(rawValue: IosappTextAttributes.URL), at: index) {
                     return rects.compactMap { rect in
                         if rect.width > 5.0 {
                             return rect.insetBy(dx: 0.0, dy: -3.0)
@@ -269,7 +269,7 @@ public final class InstantPageTextItem: InstantPageItem {
     
     public func urlAttribute(at point: CGPoint) -> InstantPageUrlItem? {
         if let (_, dict) = self.attributesAtPoint(point) {
-            if let url = dict[NSAttributedString.Key(rawValue: TelegramTextAttributes.URL)] as? InstantPageUrlItem {
+            if let url = dict[NSAttributedString.Key(rawValue: IosappTextAttributes.URL)] as? InstantPageUrlItem {
                 return url
             }
         }
@@ -536,7 +536,7 @@ func attributedStringForRichText(_ text: RichText, styleStack: InstantPageTextSt
         case let .plain(string):
             var attributes = styleStack.textAttributes()
             if let url = url {
-                attributes[NSAttributedString.Key(rawValue: TelegramTextAttributes.URL)] = url
+                attributes[NSAttributedString.Key(rawValue: IosappTextAttributes.URL)] = url
             }
             return NSAttributedString(string: string, attributes: attributes)
         case let .bold(text):
@@ -648,7 +648,7 @@ func attributedStringForRichText(_ text: RichText, styleStack: InstantPageTextSt
     }
 }
 
-func layoutTextItemWithString(_ string: NSAttributedString, boundingWidth: CGFloat, horizontalInset: CGFloat = 0.0, alignment: NSTextAlignment = .natural, offset: CGPoint, media: [EngineMedia.Id: EngineMedia] = [:], webpage: TelegramMediaWebpage? = nil, minimizeWidth: Bool = false, maxNumberOfLines: Int = 0, opaqueBackground: Bool = false) -> (InstantPageTextItem?, [InstantPageItem], CGSize) {
+func layoutTextItemWithString(_ string: NSAttributedString, boundingWidth: CGFloat, horizontalInset: CGFloat = 0.0, alignment: NSTextAlignment = .natural, offset: CGPoint, media: [EngineMedia.Id: EngineMedia] = [:], webpage: IosappMediaWebpage? = nil, minimizeWidth: Bool = false, maxNumberOfLines: Int = 0, opaqueBackground: Bool = false) -> (InstantPageTextItem?, [InstantPageItem], CGSize) {
     if string.length == 0 {
         return (nil, [], CGSize())
     }

@@ -5,7 +5,7 @@ import IosappApi
 
 extension MediaResourceReference {
     var apiFileReference: Data? {
-        if let resource = self.resource as? TelegramCloudMediaResourceWithFileReference {
+        if let resource = self.resource as? IosappCloudMediaResourceWithFileReference {
             return resource.fileReference
         } else {
             return nil
@@ -13,7 +13,7 @@ extension MediaResourceReference {
     }
 }
 
-public final class TelegramCloudMediaResourceFetchInfo: MediaResourceFetchInfo {
+public final class IosappCloudMediaResourceFetchInfo: MediaResourceFetchInfo {
     public let reference: MediaResourceReference
     public let preferBackgroundReferenceRevalidation: Bool
     public let continueInBackground: Bool
@@ -84,7 +84,7 @@ public func fetchedMediaResource(
     var isRandomAccessAllowed = true
     switch reference {
     case let .media(media, _):
-        if let file = media.media as? TelegramMediaFile {
+        if let file = media.media as? IosappMediaFile {
             if file.fileId.namespace == Namespaces.Media.CloudSecretFile {
                 isRandomAccessAllowed = false
             }
@@ -104,8 +104,8 @@ public func fetchedMediaResource(
     if let ranges = ranges {
         let signals = ranges.map { (range, priority) -> Signal<Void, FetchResourceError> in
             return mediaBox.fetchedResourceData(reference.resource, in: range, priority: priority, parameters: MediaResourceFetchParameters(
-                tag: TelegramMediaResourceFetchTag(statsCategory: statsCategory, userContentType: userContentType),
-                info: TelegramCloudMediaResourceFetchInfo(reference: reference, preferBackgroundReferenceRevalidation: preferBackgroundReferenceRevalidation, continueInBackground: continueInBackground),
+                tag: IosappMediaResourceFetchTag(statsCategory: statsCategory, userContentType: userContentType),
+                info: IosappCloudMediaResourceFetchInfo(reference: reference, preferBackgroundReferenceRevalidation: preferBackgroundReferenceRevalidation, continueInBackground: continueInBackground),
                 location: location,
                 contentType: userContentType,
                 isRandomAccessAllowed: isRandomAccessAllowed
@@ -117,8 +117,8 @@ public func fetchedMediaResource(
         |> then(.single(.local))
     } else {
         return mediaBox.fetchedResource(reference.resource, parameters: MediaResourceFetchParameters(
-            tag: TelegramMediaResourceFetchTag(statsCategory: statsCategory, userContentType: userContentType),
-            info: TelegramCloudMediaResourceFetchInfo(reference: reference, preferBackgroundReferenceRevalidation: preferBackgroundReferenceRevalidation, continueInBackground: continueInBackground),
+            tag: IosappMediaResourceFetchTag(statsCategory: statsCategory, userContentType: userContentType),
+            info: IosappCloudMediaResourceFetchInfo(reference: reference, preferBackgroundReferenceRevalidation: preferBackgroundReferenceRevalidation, continueInBackground: continueInBackground),
             location: location,
             contentType: userContentType,
             isRandomAccessAllowed: isRandomAccessAllowed
@@ -130,7 +130,7 @@ enum RevalidateMediaReferenceError {
     case generic
 }
 
-public func stickerPackFileReference(_ file: TelegramMediaFile) -> FileMediaReference {
+public func stickerPackFileReference(_ file: IosappMediaFile) -> FileMediaReference {
     for attribute in file.attributes {
         if case let .Sticker(_, packReferenceValue, _) = attribute, let stickerPack = packReferenceValue {
             return .stickerPack(stickerPack: stickerPack, media: file)
@@ -152,14 +152,14 @@ private func areResourcesEqual(_ lhs: MediaResource, _ rhs: MediaResource) -> Bo
     return lhs.id == rhs.id
 }
 
-private func findMediaResource(media: Media, previousMedia: Media?, resource: MediaResource) -> TelegramMediaResource? {
-    if let paidContent = media as? TelegramMediaPaidContent {
+private func findMediaResource(media: Media, previousMedia: Media?, resource: MediaResource) -> IosappMediaResource? {
+    if let paidContent = media as? IosappMediaPaidContent {
         for case let .full(fullMedia) in paidContent.extendedMedia {
             if let resource = findMediaResource(media: fullMedia, previousMedia: previousMedia, resource: resource) {
                 return resource
             }
         }
-    } else if let image = media as? TelegramMediaImage {
+    } else if let image = media as? IosappMediaImage {
         for representation in image.representations {
             if let updatedResource = representation.resource as? CloudPhotoSizeMediaResource, let previousResource = resource as? CloudPhotoSizeMediaResource {
                 if updatedResource.photoId == previousResource.photoId && updatedResource.sizeSpec == previousResource.sizeSpec {
@@ -180,7 +180,7 @@ private func findMediaResource(media: Media, previousMedia: Media?, resource: Me
                 return resource
             }
         }
-    } else if let file = media as? TelegramMediaFile {
+    } else if let file = media as? IosappMediaFile {
         if areResourcesEqual(file.resource, resource) {
             return file.resource
         } else {
@@ -201,7 +201,7 @@ private func findMediaResource(media: Media, previousMedia: Media?, resource: Me
                 }
             }
         }
-    } else if let webPage = media as? TelegramMediaWebpage, case let .Loaded(content) = webPage.content {
+    } else if let webPage = media as? IosappMediaWebpage, case let .Loaded(content) = webPage.content {
         if let image = content.image, let result = findMediaResource(media: image, previousMedia: previousMedia, resource: resource) {
             return result
         }
@@ -215,14 +215,14 @@ private func findMediaResource(media: Media, previousMedia: Media?, resource: Me
                 }
             }
         }
-    } else if let game = media as? TelegramMediaGame {
+    } else if let game = media as? IosappMediaGame {
         if let image = game.image, let result = findMediaResource(media: image, previousMedia: previousMedia, resource: resource) {
             return result
         }
         if let file = game.file, let result = findMediaResource(media: file, previousMedia: previousMedia, resource: resource) {
             return result
         }
-    } else if let action = media as? TelegramMediaAction {
+    } else if let action = media as? IosappMediaAction {
         switch action.action {
             case let .photoUpdated(image):
                 if let image = image, let result = findMediaResource(media: image, previousMedia: previousMedia, resource: resource) {
@@ -239,7 +239,7 @@ private func findMediaResource(media: Media, previousMedia: Media?, resource: Me
     return nil
 }
 
-public func findMediaResourceById(message: EngineMessage, resourceId: MediaResourceId) -> TelegramMediaResource? {
+public func findMediaResourceById(message: EngineMessage, resourceId: MediaResourceId) -> IosappMediaResource? {
     for media in message.media {
         if let result = findMediaResourceById(media: media, resourceId: resourceId) {
             return result
@@ -248,8 +248,8 @@ public func findMediaResourceById(message: EngineMessage, resourceId: MediaResou
     return nil
 }
 
-func findMediaResourceById(media: Media, resourceId: MediaResourceId) -> TelegramMediaResource? {
-    if let image = media as? TelegramMediaImage {
+func findMediaResourceById(media: Media, resourceId: MediaResourceId) -> IosappMediaResource? {
+    if let image = media as? IosappMediaImage {
         for representation in image.representations {
             if representation.resource.id == resourceId {
                 return representation.resource
@@ -260,7 +260,7 @@ func findMediaResourceById(media: Media, resourceId: MediaResourceId) -> Telegra
                 return representation.resource
             }
         }
-    } else if let file = media as? TelegramMediaFile {
+    } else if let file = media as? IosappMediaFile {
         if file.resource.id == resourceId {
             return file.resource
         }
@@ -276,7 +276,7 @@ func findMediaResourceById(media: Media, resourceId: MediaResourceId) -> Telegra
                 return result
             }
         }
-    } else if let webPage = media as? TelegramMediaWebpage, case let .Loaded(content) = webPage.content {
+    } else if let webPage = media as? IosappMediaWebpage, case let .Loaded(content) = webPage.content {
         if let image = content.image, let result = findMediaResourceById(media: image, resourceId: resourceId) {
             return result
         }
@@ -290,14 +290,14 @@ func findMediaResourceById(media: Media, resourceId: MediaResourceId) -> Telegra
                 }
             }
         }
-    } else if let game = media as? TelegramMediaGame {
+    } else if let game = media as? IosappMediaGame {
         if let image = game.image, let result = findMediaResourceById(media: image, resourceId: resourceId) {
             return result
         }
         if let file = game.file, let result = findMediaResourceById(media: file, resourceId: resourceId) {
             return result
         }
-    } else if let action = media as? TelegramMediaAction {
+    } else if let action = media as? IosappMediaAction {
         switch action.action {
         case let .photoUpdated(image):
             if let image = image, let result = findMediaResourceById(media: image, resourceId: resourceId) {
@@ -314,7 +314,7 @@ func findMediaResourceById(media: Media, resourceId: MediaResourceId) -> Telegra
     return nil
 }
 
-private func findUpdatedMediaResource(media: Media, previousMedia: Media?, resource: MediaResource) -> TelegramMediaResource? {
+private func findUpdatedMediaResource(media: Media, previousMedia: Media?, resource: MediaResource) -> IosappMediaResource? {
     if let foundResource = findMediaResource(media: media, previousMedia: previousMedia, resource: resource) {
         return foundResource
     } else {
@@ -504,14 +504,14 @@ final class MediaReferenceRevalidationContext {
         }
     }
     
-    func customEmoji(postbox: Postbox, network: Network, background: Bool, fileId: Int64) -> Signal<TelegramMediaFile, RevalidateMediaReferenceError> {
+    func customEmoji(postbox: Postbox, network: Network, background: Bool, fileId: Int64) -> Signal<IosappMediaFile, RevalidateMediaReferenceError> {
         return network.request(Api.functions.messages.getCustomEmojiDocuments(documentId: [fileId]))
         |> map(Optional.init)
         |> `catch` { _ -> Signal<[Api.Document]?, NoError> in
             return .single(nil)
         }
         |> castError(RevalidateMediaReferenceError.self)
-        |> mapToSignal { result -> Signal<TelegramMediaFile, RevalidateMediaReferenceError> in
+        |> mapToSignal { result -> Signal<IosappMediaFile, RevalidateMediaReferenceError> in
             guard let result = result else {
                 return .fail(.generic)
             }
@@ -524,7 +524,7 @@ final class MediaReferenceRevalidationContext {
         }
     }
     
-    func webPage(accountPeerId: EnginePeer.Id, postbox: Postbox, network: Network, background: Bool, webPage: WebpageReference) -> Signal<TelegramMediaWebpage, RevalidateMediaReferenceError> {
+    func webPage(accountPeerId: EnginePeer.Id, postbox: Postbox, network: Network, background: Bool, webPage: WebpageReference) -> Signal<IosappMediaWebpage, RevalidateMediaReferenceError> {
         return self.genericItem(key: .webPage(webPage: webPage), background: background, request: { next, error in
             return (updatedRemoteWebpage(postbox: postbox, network: network, accountPeerId: accountPeerId, webPage: webPage)
             |> mapError { _ -> RevalidateMediaReferenceError in
@@ -537,8 +537,8 @@ final class MediaReferenceRevalidationContext {
             }, error: { _ in
                 error(.generic)
             })
-        }) |> mapToSignal { next -> Signal<TelegramMediaWebpage, RevalidateMediaReferenceError> in
-            if let next = next as? TelegramMediaWebpage {
+        }) |> mapToSignal { next -> Signal<IosappMediaWebpage, RevalidateMediaReferenceError> in
+            if let next = next as? IosappMediaWebpage {
                 return .single(next)
             } else {
                 return .fail(.generic)
@@ -546,10 +546,10 @@ final class MediaReferenceRevalidationContext {
         }
     }
     
-    func savedGifs(postbox: Postbox, network: Network, background: Bool) -> Signal<[TelegramMediaFile.Accessor], RevalidateMediaReferenceError> {
+    func savedGifs(postbox: Postbox, network: Network, background: Bool) -> Signal<[IosappMediaFile.Accessor], RevalidateMediaReferenceError> {
         return self.genericItem(key: .savedGifs, background: background, request: { next, error in
-            let loadRecentGifs: Signal<[TelegramMediaFile.Accessor], NoError> = postbox.transaction { transaction -> [TelegramMediaFile.Accessor] in
-                return transaction.getOrderedListItems(collectionId: Namespaces.OrderedItemList.CloudRecentGifs).compactMap({ item -> TelegramMediaFile.Accessor? in
+            let loadRecentGifs: Signal<[IosappMediaFile.Accessor], NoError> = postbox.transaction { transaction -> [IosappMediaFile.Accessor] in
+                return transaction.getOrderedListItems(collectionId: Namespaces.OrderedItemList.CloudRecentGifs).compactMap({ item -> IosappMediaFile.Accessor? in
                     if let contents = item.contents.get(RecentMediaItem.self) {
                         let file = contents.media
                         return file
@@ -558,7 +558,7 @@ final class MediaReferenceRevalidationContext {
                 })
             }
             return (managedRecentGifs(postbox: postbox, network: network, forceFetch: true)
-            |> mapToSignal { _ -> Signal<[TelegramMediaFile.Accessor], NoError> in
+            |> mapToSignal { _ -> Signal<[IosappMediaFile.Accessor], NoError> in
                 return .complete()
             }
             |> then(loadRecentGifs)
@@ -567,8 +567,8 @@ final class MediaReferenceRevalidationContext {
             }, error: { _ in
                 error(.generic)
             })
-        }) |> mapToSignal { next -> Signal<[TelegramMediaFile.Accessor], RevalidateMediaReferenceError> in
-            if let next = next as? [TelegramMediaFile.Accessor] {
+        }) |> mapToSignal { next -> Signal<[IosappMediaFile.Accessor], RevalidateMediaReferenceError> in
+            if let next = next as? [IosappMediaFile.Accessor] {
                 return .single(next)
             } else {
                 return .fail(.generic)
@@ -576,10 +576,10 @@ final class MediaReferenceRevalidationContext {
         }
     }
     
-    func savedStickers(postbox: Postbox, network: Network, background: Bool) -> Signal<[TelegramMediaFile.Accessor], RevalidateMediaReferenceError> {
+    func savedStickers(postbox: Postbox, network: Network, background: Bool) -> Signal<[IosappMediaFile.Accessor], RevalidateMediaReferenceError> {
         return self.genericItem(key: .savedStickers, background: background, request: { next, error in
-            let loadSavedStickers: Signal<[TelegramMediaFile.Accessor], NoError> = postbox.transaction { transaction -> [TelegramMediaFile.Accessor] in
-                return transaction.getOrderedListItems(collectionId: Namespaces.OrderedItemList.CloudSavedStickers).compactMap({ item -> TelegramMediaFile.Accessor? in
+            let loadSavedStickers: Signal<[IosappMediaFile.Accessor], NoError> = postbox.transaction { transaction -> [IosappMediaFile.Accessor] in
+                return transaction.getOrderedListItems(collectionId: Namespaces.OrderedItemList.CloudSavedStickers).compactMap({ item -> IosappMediaFile.Accessor? in
                     if let contents = item.contents.get(SavedStickerItem.self) {
                         let file = contents.file
                         return file
@@ -588,7 +588,7 @@ final class MediaReferenceRevalidationContext {
                 })
             }
             return (managedSavedStickers(postbox: postbox, network: network, forceFetch: true)
-            |> mapToSignal { _ -> Signal<[TelegramMediaFile.Accessor], NoError> in
+            |> mapToSignal { _ -> Signal<[IosappMediaFile.Accessor], NoError> in
                 return .complete()
             }
             |> then(loadSavedStickers)
@@ -597,8 +597,8 @@ final class MediaReferenceRevalidationContext {
             }, error: { _ in
                 error(.generic)
             })
-        }) |> mapToSignal { next -> Signal<[TelegramMediaFile.Accessor], RevalidateMediaReferenceError> in
-            if let next = next as? [TelegramMediaFile.Accessor] {
+        }) |> mapToSignal { next -> Signal<[IosappMediaFile.Accessor], RevalidateMediaReferenceError> in
+            if let next = next as? [IosappMediaFile.Accessor] {
                 return .single(next)
             } else {
                 return .fail(.generic)
@@ -606,10 +606,10 @@ final class MediaReferenceRevalidationContext {
         }
     }
     
-    func recentStickers(postbox: Postbox, network: Network, background: Bool) -> Signal<[TelegramMediaFile.Accessor], RevalidateMediaReferenceError> {
+    func recentStickers(postbox: Postbox, network: Network, background: Bool) -> Signal<[IosappMediaFile.Accessor], RevalidateMediaReferenceError> {
         return self.genericItem(key: .recentStickers, background: background, request: { next, error in
-            let loadRecentStickers: Signal<[TelegramMediaFile.Accessor], NoError> = postbox.transaction { transaction -> [TelegramMediaFile.Accessor] in
-                return transaction.getOrderedListItems(collectionId: Namespaces.OrderedItemList.CloudRecentStickers).compactMap({ item -> TelegramMediaFile.Accessor? in
+            let loadRecentStickers: Signal<[IosappMediaFile.Accessor], NoError> = postbox.transaction { transaction -> [IosappMediaFile.Accessor] in
+                return transaction.getOrderedListItems(collectionId: Namespaces.OrderedItemList.CloudRecentStickers).compactMap({ item -> IosappMediaFile.Accessor? in
                     if let contents = item.contents.get(RecentMediaItem.self) {
                         let file = contents.media
                         return file
@@ -618,7 +618,7 @@ final class MediaReferenceRevalidationContext {
                 })
             }
             return (managedRecentStickers(postbox: postbox, network: network, forceFetch: true)
-            |> mapToSignal { _ -> Signal<[TelegramMediaFile.Accessor], NoError> in
+            |> mapToSignal { _ -> Signal<[IosappMediaFile.Accessor], NoError> in
                 return .complete()
             }
             |> then(loadRecentStickers)
@@ -627,8 +627,8 @@ final class MediaReferenceRevalidationContext {
             }, error: { _ in
                 error(.generic)
             })
-        }) |> mapToSignal { next -> Signal<[TelegramMediaFile.Accessor], RevalidateMediaReferenceError> in
-            if let next = next as? [TelegramMediaFile.Accessor] {
+        }) |> mapToSignal { next -> Signal<[IosappMediaFile.Accessor], RevalidateMediaReferenceError> in
+            if let next = next as? [IosappMediaFile.Accessor] {
                 return .single(next)
             } else {
                 return .fail(.generic)
@@ -655,7 +655,7 @@ final class MediaReferenceRevalidationContext {
         }
     }
     
-    func wallpapers(postbox: Postbox, network: Network, background: Bool, wallpaper: WallpaperReference?) -> Signal<[TelegramWallpaper], RevalidateMediaReferenceError> {
+    func wallpapers(postbox: Postbox, network: Network, background: Bool, wallpaper: WallpaperReference?) -> Signal<[IosappWallpaper], RevalidateMediaReferenceError> {
         let key: MediaReferenceRevalidationKey
         if let wallpaper = wallpaper {
             key = .wallpaper(wallpaper: wallpaper)
@@ -663,7 +663,7 @@ final class MediaReferenceRevalidationContext {
             key = .wallpapers
         }
         return self.genericItem(key: key, background: background, request: { next, error in
-            let signal: Signal<[TelegramWallpaper]?, RevalidateMediaReferenceError>
+            let signal: Signal<[IosappWallpaper]?, RevalidateMediaReferenceError>
             if let wallpaper = wallpaper, case let .slug(slug) = wallpaper {
                 signal = getWallpaper(network: network, slug: slug)
                 |> mapError { _ -> RevalidateMediaReferenceError in
@@ -686,8 +686,8 @@ final class MediaReferenceRevalidationContext {
             }, error: { _ in
                 error(.generic)
             })
-        }) |> mapToSignal { next -> Signal<[TelegramWallpaper], RevalidateMediaReferenceError> in
-            if let next = next as? [TelegramWallpaper] {
+        }) |> mapToSignal { next -> Signal<[IosappWallpaper], RevalidateMediaReferenceError> in
+            if let next = next as? [IosappWallpaper] {
                 return .single(next)
             } else {
                 return .fail(.generic)
@@ -695,7 +695,7 @@ final class MediaReferenceRevalidationContext {
         }
     }
     
-    func themes(postbox: Postbox, network: Network, background: Bool) -> Signal<[TelegramTheme], RevalidateMediaReferenceError> {
+    func themes(postbox: Postbox, network: Network, background: Bool) -> Signal<[IosappTheme], RevalidateMediaReferenceError> {
         return self.genericItem(key: .themes, background: background, request: { next, error in
             return (telegramThemes(postbox: postbox, network: network, accountManager: nil, forceUpdate: true)
             |> take(1)
@@ -705,8 +705,8 @@ final class MediaReferenceRevalidationContext {
             }, error: { _ in
                 error(.generic)
             })
-        }) |> mapToSignal { next -> Signal<[TelegramTheme], RevalidateMediaReferenceError> in
-            if let next = next as? [TelegramTheme] {
+        }) |> mapToSignal { next -> Signal<[IosappTheme], RevalidateMediaReferenceError> in
+            if let next = next as? [IosappTheme] {
                 return .single(next)
             } else {
                 return .fail(.generic)
@@ -714,7 +714,7 @@ final class MediaReferenceRevalidationContext {
         }
     }
     
-    func peerAvatars(accountPeerId: PeerId, postbox: Postbox, network: Network, background: Bool, peer: PeerReference) -> Signal<[TelegramPeerPhoto], RevalidateMediaReferenceError> {
+    func peerAvatars(accountPeerId: PeerId, postbox: Postbox, network: Network, background: Bool, peer: PeerReference) -> Signal<[IosappPeerPhoto], RevalidateMediaReferenceError> {
         return self.genericItem(key: .peerAvatars(peer: peer), background: background, request: { next, error in
             return (_internal_requestPeerPhotos(accountPeerId: accountPeerId, postbox: postbox, network: network, peerId: peer.id)
             |> mapError { _ -> RevalidateMediaReferenceError in
@@ -723,8 +723,8 @@ final class MediaReferenceRevalidationContext {
             }, error: { _ in
                 error(.generic)
             })
-        }) |> mapToSignal { next -> Signal<[TelegramPeerPhoto], RevalidateMediaReferenceError> in
-            if let next = next as? [TelegramPeerPhoto] {
+        }) |> mapToSignal { next -> Signal<[IosappPeerPhoto], RevalidateMediaReferenceError> in
+            if let next = next as? [IosappPeerPhoto] {
                 return .single(next)
             } else {
                 return .fail(.generic)
@@ -800,14 +800,14 @@ final class MediaReferenceRevalidationContext {
         }
     }
     
-    func savedMusic(accountPeerId: PeerId, postbox: Postbox, network: Network, background: Bool, peer: PeerReference, media: Media) -> Signal<TelegramMediaFile, RevalidateMediaReferenceError> {
-        guard let file = media as? TelegramMediaFile else {
+    func savedMusic(accountPeerId: PeerId, postbox: Postbox, network: Network, background: Bool, peer: PeerReference, media: Media) -> Signal<IosappMediaFile, RevalidateMediaReferenceError> {
+        guard let file = media as? IosappMediaFile else {
             return .fail(.generic)
         }
         return self.genericItem(key: .savedMusic(peer: peer, fileId: file.fileId.id), background: background, request: { next, error in
             return (_internal_getSavedMusicById(postbox: postbox, network: network, peer: peer, file: file)
             |> castError(RevalidateMediaReferenceError.self)
-            |> mapToSignal { result -> Signal<TelegramMediaFile, RevalidateMediaReferenceError> in
+            |> mapToSignal { result -> Signal<IosappMediaFile, RevalidateMediaReferenceError> in
                 if let result {
                     return .single(result)
                 } else {
@@ -818,8 +818,8 @@ final class MediaReferenceRevalidationContext {
             }, error: { _ in
                 error(.generic)
             })
-        }) |> mapToSignal { next -> Signal<TelegramMediaFile, RevalidateMediaReferenceError> in
-            if let next = next as? TelegramMediaFile {
+        }) |> mapToSignal { next -> Signal<IosappMediaFile, RevalidateMediaReferenceError> in
+            if let next = next as? IosappMediaFile {
                 return .single(next)
             } else {
                 return .fail(.generic)
@@ -827,17 +827,17 @@ final class MediaReferenceRevalidationContext {
         }
     }
     
-    func notificationSoundList(postbox: Postbox, network: Network, background: Bool) -> Signal<[TelegramMediaFile], RevalidateMediaReferenceError> {
+    func notificationSoundList(postbox: Postbox, network: Network, background: Bool) -> Signal<[IosappMediaFile], RevalidateMediaReferenceError> {
         return self.genericItem(key: .notificationSoundList, background: background, request: { next, error in
             return (requestNotificationSoundList(network: network, hash: 0)
-            |> map { result -> [TelegramMediaFile] in
+            |> map { result -> [IosappMediaFile] in
                 guard let result = result else {
                     return []
                 }
                 return result.sounds.map(\.file)
             }).start(next: next)
-        }) |> mapToSignal { next -> Signal<[TelegramMediaFile], RevalidateMediaReferenceError> in
-            if let next = next as? [TelegramMediaFile] {
+        }) |> mapToSignal { next -> Signal<[IosappMediaFile], RevalidateMediaReferenceError> in
+            if let next = next as? [IosappMediaFile] {
                 return .single(next)
             } else {
                 return .fail(.generic)
@@ -847,15 +847,15 @@ final class MediaReferenceRevalidationContext {
 }
 
 struct RevalidatedMediaResource {
-    let updatedResource: TelegramMediaResource
+    let updatedResource: IosappMediaResource
     let updatedReference: MediaResourceReference?
 }
 
-func revalidateMediaResourceReference(accountPeerId: PeerId, postbox: Postbox, network: Network, revalidationContext: MediaReferenceRevalidationContext, info: TelegramCloudMediaResourceFetchInfo, resource: MediaResource) -> Signal<RevalidatedMediaResource, RevalidateMediaReferenceError> {
+func revalidateMediaResourceReference(accountPeerId: PeerId, postbox: Postbox, network: Network, revalidationContext: MediaReferenceRevalidationContext, info: IosappCloudMediaResourceFetchInfo, resource: MediaResource) -> Signal<RevalidatedMediaResource, RevalidateMediaReferenceError> {
     var updatedReference = info.reference
     if case let .media(media, resource) = updatedReference {
         if case let .message(messageReference, mediaValue) = media {
-            if let file = mediaValue as? TelegramMediaFile {
+            if let file = mediaValue as? IosappMediaFile {
                 if let partialReference = file.partialReference {
                     updatedReference = partialReference.mediaReference(media.media).resourceReference(resource)
                 }
@@ -882,7 +882,7 @@ func revalidateMediaResourceReference(accountPeerId: PeerId, postbox: Postbox, n
                         updatedReference = .media(media: .stickerPack(stickerPack: stickerPackReference, media: mediaValue), resource: resource)
                     }
                 }
-            } else if let image = mediaValue as? TelegramMediaImage {
+            } else if let image = mediaValue as? IosappMediaImage {
                 if let partialReference = image.partialReference {
                     updatedReference = partialReference.mediaReference(media.media).resourceReference(resource)
                 }
@@ -1035,7 +1035,7 @@ func revalidateMediaResourceReference(accountPeerId: PeerId, postbox: Postbox, n
                         return .fail(.generic)
                     }
                 case let .standalone(media):
-                    if let file = media as? TelegramMediaFile {
+                    if let file = media as? IosappMediaFile {
                         for attribute in file.attributes {
                             if case let .Sticker(_, packReferenceValue, _) = attribute, let stickerPack = packReferenceValue {
                                 return revalidationContext.stickerPack(postbox: postbox, network: network, background: info.preferBackgroundReferenceRevalidation, stickerPack: stickerPack)
@@ -1056,7 +1056,7 @@ func revalidateMediaResourceReference(accountPeerId: PeerId, postbox: Postbox, n
                     }
                     return .fail(.generic)
                 case let .customEmoji(media):
-                    if let file = media as? TelegramMediaFile {
+                    if let file = media as? IosappMediaFile {
                         return revalidationContext.customEmoji(postbox: postbox, network: network, background: info.preferBackgroundReferenceRevalidation, fileId: file.fileId.id)
                         |> mapToSignal { result -> Signal<RevalidatedMediaResource, RevalidateMediaReferenceError> in
                             if let updatedResource = findUpdatedMediaResource(media: result, previousMedia: media, resource: resource) {

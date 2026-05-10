@@ -143,9 +143,9 @@ private func uploadActivityTypeForMessage(_ message: Message) -> PeerInputActivi
         return nil
     }
     for media in message.media {
-        if let _ = media as? TelegramMediaImage {
+        if let _ = media as? IosappMediaImage {
             return .uploadingPhoto(progress: 0)
-        } else if let file = media as? TelegramMediaFile {
+        } else if let file = media as? IosappMediaFile {
             if file.isInstantVideo {
                 return .uploadingInstantVideo(progress: 0)
             } else if file.isVideo && !file.isAnimated && !file.isVideoEmoji && !file.isVideoSticker {
@@ -160,7 +160,7 @@ private func uploadActivityTypeForMessage(_ message: Message) -> PeerInputActivi
 
 private func shouldPassFetchProgressForMessage(_ message: Message) -> Bool {
     for media in message.media {
-        if let file = media as? TelegramMediaFile, file.isVideo {
+        if let file = media as? IosappMediaFile, file.isVideo {
             return true
         }
     }
@@ -1137,8 +1137,8 @@ public final class PendingMessageManager {
                     var topMsgId: Int32?
                     var monoforumPeerId: Api.InputPeer?
                     if let threadId = messages[0].0.threadId {
-                        if let channel = peer as? TelegramChannel, channel.flags.contains(.isMonoforum) {
-                            if let linkedMonoforumId = channel.linkedMonoforumId, let mainChannel = transaction.getPeer(linkedMonoforumId) as? TelegramChannel, mainChannel.hasPermission(.manageDirect) {
+                        if let channel = peer as? IosappChannel, channel.flags.contains(.isMonoforum) {
+                            if let linkedMonoforumId = channel.linkedMonoforumId, let mainChannel = transaction.getPeer(linkedMonoforumId) as? IosappChannel, mainChannel.hasPermission(.manageDirect) {
                                 monoforumPeerId = transaction.getPeer(PeerId(threadId)).flatMap(apiInputPeer)
                             }
                         } else {
@@ -1237,8 +1237,8 @@ public final class PendingMessageManager {
                     var topMsgId: Int32?
                     var monoforumPeerId: Api.InputPeer?
                     if let threadId = messages[0].0.threadId {
-                        if let channel = peer as? TelegramChannel, channel.flags.contains(.isMonoforum) {
-                            if let linkedMonoforumId = channel.linkedMonoforumId, let mainChannel = transaction.getPeer(linkedMonoforumId) as? TelegramChannel, mainChannel.hasPermission(.manageDirect) {
+                        if let channel = peer as? IosappChannel, channel.flags.contains(.isMonoforum) {
+                            if let linkedMonoforumId = channel.linkedMonoforumId, let mainChannel = transaction.getPeer(linkedMonoforumId) as? IosappChannel, mainChannel.hasPermission(.manageDirect) {
                                 monoforumPeerId = transaction.getPeer(PeerId(threadId)).flatMap(apiInputPeer)
                             }
                         } else {
@@ -1466,7 +1466,7 @@ public final class PendingMessageManager {
         if let state = state, let layer = layer {
             var sentAsAction = false
             for media in message.media {
-                if let media = media as? TelegramMediaAction {
+                if let media = media as? IosappMediaAction {
                     if case let .messageAutoremoveTimeoutUpdated(value, _) = media.action {
                         sentAsAction = true
                         let updatedState = addSecretChatOutgoingOperation(transaction: transaction, peerId: message.id.peerId, operation: .setMessageAutoremoveTimeout(layer: layer, actionGloballyUniqueId: message.globallyUniqueId!, timeout: value, messageId: message.id), state: state)
@@ -1559,8 +1559,8 @@ public final class PendingMessageManager {
                 var topMsgId: Int32?
                 var monoforumPeerId: Api.InputPeer?
                 if let threadId = message.threadId {
-                    if let channel = peer as? TelegramChannel, channel.flags.contains(.isMonoforum) {
-                        if let linkedMonoforumId = channel.linkedMonoforumId, let mainChannel = transaction.getPeer(linkedMonoforumId) as? TelegramChannel, mainChannel.hasPermission(.manageDirect) {
+                    if let channel = peer as? IosappChannel, channel.flags.contains(.isMonoforum) {
+                        if let linkedMonoforumId = channel.linkedMonoforumId, let mainChannel = transaction.getPeer(linkedMonoforumId) as? IosappChannel, mainChannel.hasPermission(.manageDirect) {
                             monoforumPeerId = transaction.getPeer(PeerId(threadId)).flatMap(apiInputPeer)
                         }
                     } else {
@@ -1854,8 +1854,8 @@ public final class PendingMessageManager {
                         var topMsgId: Int32?
                         var monoforumPeerId: Api.InputPeer?
                         if let threadId = message.threadId {
-                            if let channel = peer as? TelegramChannel, channel.flags.contains(.isMonoforum) {
-                                if let linkedMonoforumId = channel.linkedMonoforumId, let mainChannel = transaction.getPeer(linkedMonoforumId) as? TelegramChannel, mainChannel.hasPermission(.manageDirect) {
+                            if let channel = peer as? IosappChannel, channel.flags.contains(.isMonoforum) {
+                                if let linkedMonoforumId = channel.linkedMonoforumId, let mainChannel = transaction.getPeer(linkedMonoforumId) as? IosappChannel, mainChannel.hasPermission(.manageDirect) {
                                     monoforumPeerId = transaction.getPeer(PeerId(threadId)).flatMap(apiInputPeer)
                                 }
                             } else {
@@ -2107,7 +2107,7 @@ public final class PendingMessageManager {
     }
     
     private func applySentMessage(postbox: Postbox, stateManager: AccountStateManager, message: Message, content: PendingMessageUploadedContentAndReuploadInfo, result: Api.Updates) -> Signal<Void, NoError> {
-        if let _ = message.peers[message.id.peerId] as? TelegramChannel {
+        if let _ = message.peers[message.id.peerId] as? IosappChannel {
             for attribute in message.attributes {
                 if let attribute = attribute as? PaidStarsMessageAttribute {
                     stateManager.starsContext?.add(balance: StarsAmount(value: -attribute.stars.value, nanos: (attribute.stars.value == 0 && attribute.stars.nanos != 0 ? -1 : 1) * attribute.stars.nanos))
@@ -2173,7 +2173,7 @@ public final class PendingMessageManager {
     private func applySentGroupMessages(postbox: Postbox, stateManager: AccountStateManager, messages: [Message], result: Api.Updates) -> Signal<Void, NoError> {
         var namespace = Namespaces.Message.Cloud
         if let message = messages.first {
-            if let channel = message.peers[message.id.peerId] as? TelegramChannel, channel.isMonoForum {
+            if let channel = message.peers[message.id.peerId] as? IosappChannel, channel.isMonoForum {
                 for attribute in message.attributes {
                     if let attribute = attribute as? PaidStarsMessageAttribute {
                         stateManager.starsContext?.add(balance: StarsAmount(value: -attribute.stars.value, nanos: (attribute.stars.value == 0 && attribute.stars.nanos != 0 ? -1 : 1) * attribute.stars.nanos))

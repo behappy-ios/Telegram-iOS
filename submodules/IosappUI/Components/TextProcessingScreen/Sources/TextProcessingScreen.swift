@@ -47,7 +47,7 @@ final class TextProcessingContentComponent: Component {
     let shouldDisplayStyleNotice: Bool
     let copyCurrentResult: (() -> Void)?
     let translateChat: ((String) -> Void)?
-    let displayLanguageSelectionMenu: (UIView, String, TelegramComposeAIMessageMode.StyleId, Bool,  @escaping (String, TelegramComposeAIMessageMode.StyleId) -> Void) -> Void
+    let displayLanguageSelectionMenu: (UIView, String, IosappComposeAIMessageMode.StyleId, Bool,  @escaping (String, IosappComposeAIMessageMode.StyleId) -> Void) -> Void
 
     init(
         externalState: ExternalState,
@@ -60,7 +60,7 @@ final class TextProcessingContentComponent: Component {
         shouldDisplayStyleNotice: Bool,
         copyCurrentResult: (() -> Void)?,
         translateChat: ((String) -> Void)?,
-        displayLanguageSelectionMenu: @escaping (UIView, String, TelegramComposeAIMessageMode.StyleId, Bool, @escaping (String, TelegramComposeAIMessageMode.StyleId) -> Void) -> Void
+        displayLanguageSelectionMenu: @escaping (UIView, String, IosappComposeAIMessageMode.StyleId, Bool, @escaping (String, IosappComposeAIMessageMode.StyleId) -> Void) -> Void
     ) {
         self.externalState = externalState
         self.styles = styles
@@ -574,11 +574,11 @@ private final class TextProcessingSheetComponent: Component {
         private final class LanguageSelectionMenuData {
             let sourceView: UIView
             let currentLanguage: String
-            let currentStyle: TelegramComposeAIMessageMode.StyleId
+            let currentStyle: IosappComposeAIMessageMode.StyleId
             let displayStyle: Bool
-            let completion: (String, TelegramComposeAIMessageMode.StyleId) -> Void
+            let completion: (String, IosappComposeAIMessageMode.StyleId) -> Void
 
-            init(sourceView: UIView, currentLanguage: String, currentStyle: TelegramComposeAIMessageMode.StyleId, displayStyle: Bool, completion: @escaping (String, TelegramComposeAIMessageMode.StyleId) -> Void) {
+            init(sourceView: UIView, currentLanguage: String, currentStyle: IosappComposeAIMessageMode.StyleId, displayStyle: Bool, completion: @escaping (String, IosappComposeAIMessageMode.StyleId) -> Void) {
                 self.sourceView = sourceView
                 self.currentLanguage = currentLanguage
                 self.currentStyle = currentStyle
@@ -612,7 +612,7 @@ private final class TextProcessingSheetComponent: Component {
                 let previousSupportedOrientations = controller.supportedOrientations
                 
                 let availableMessageEffects = await (component.context.availableMessageEffects |> take(1)).get()
-                let hasPremium = await (component.context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: component.context.account.peerId))
+                let hasPremium = await (component.context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: component.context.account.peerId))
                 |> map { peer -> Bool in
                     guard case let .user(user) = peer else {
                         return false
@@ -621,10 +621,10 @@ private final class TextProcessingSheetComponent: Component {
                 }).get()
                 
                 let peerStatus = await (component.context.engine.data.get(
-                    TelegramEngine.EngineData.Item.Peer.Presence(id: peerId)
+                    IosappEngine.EngineData.Item.Peer.Presence(id: peerId)
                 )).get()
                 guard let peer = await (component.context.engine.data.get(
-                    TelegramEngine.EngineData.Item.Peer.Peer(id: peerId)
+                    IosappEngine.EngineData.Item.Peer.Peer(id: peerId)
                 )).get() else {
                     return
                 }
@@ -1071,13 +1071,13 @@ public class TextProcessingScreen: ViewControllerComponentContainer {
         public let type: String
         public let title: String
         public let emojiFileId: Int64?
-        public let emojiFile: TelegramMediaFile?
+        public let emojiFile: IosappMediaFile?
         
-        public var id: TelegramComposeAIMessageMode.StyleId {
+        public var id: IosappComposeAIMessageMode.StyleId {
             return .style(self.type)
         }
         
-        public init(type: String, title: String, emojiFileId: Int64?, emojiFile: TelegramMediaFile?) {
+        public init(type: String, title: String, emojiFileId: Int64?, emojiFile: IosappMediaFile?) {
             self.type = type
             self.title = title
             self.emojiFileId = emojiFileId
@@ -1099,7 +1099,7 @@ public class TextProcessingScreen: ViewControllerComponentContainer {
         
         let rawStyles = await context.engine.messages.composeAIMessageStyles().get()
         var styles: [Style] = []
-        let resolvedEmojiFiles: [Int64: TelegramMediaFile] = await context.engine.stickers.resolveInlineStickersLocal(fileIds: Array(Set(rawStyles.compactMap({ $0.emojiFileId })))).get()
+        let resolvedEmojiFiles: [Int64: IosappMediaFile] = await context.engine.stickers.resolveInlineStickersLocal(fileIds: Array(Set(rawStyles.compactMap({ $0.emojiFileId })))).get()
         for value in rawStyles {
             styles.append(Style(
                 type: value.type,
@@ -1114,7 +1114,7 @@ public class TextProcessingScreen: ViewControllerComponentContainer {
         var initialEditState: EditState?
         if case let .edit(saveRestoreStateId, _, _, _) = mode, let saveRestoreStateId {
             initialEditState = await context.engine.data.get(
-                TelegramEngine.EngineData.Item.Configuration.ApplicationSpecificPreference(key: ApplicationSpecificPreferencesKeys.textProcessingEditingState(peerId: saveRestoreStateId))
+                IosappEngine.EngineData.Item.Configuration.ApplicationSpecificPreference(key: ApplicationSpecificPreferencesKeys.textProcessingEditingState(peerId: saveRestoreStateId))
             ).get()?.get(EditState.self)
         }
         

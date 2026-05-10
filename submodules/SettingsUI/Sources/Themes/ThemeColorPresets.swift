@@ -3,7 +3,7 @@ import IosappUIPreferences
 import IosappPresentationData
 import IosappCore
 
-private func patternWallpaper(data: BuiltinWallpaperData, colors: [UInt32], intensity: Int32?, rotation: Int32?) -> TelegramWallpaper {
+private func patternWallpaper(data: BuiltinWallpaperData, colors: [UInt32], intensity: Int32?, rotation: Int32?) -> IosappWallpaper {
     return defaultBuiltinWallpaper(data: data, colors: colors, intensity: intensity ?? 50, rotation: rotation)
 }
 

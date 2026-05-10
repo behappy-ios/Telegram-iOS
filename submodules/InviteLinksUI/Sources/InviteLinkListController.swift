@@ -331,7 +331,7 @@ private func inviteLinkListControllerEntries(presentationData: PresentationData,
     }
     
     var canEditLinks = true
-    if let peer = admin?.peer.peer as? TelegramUser, peer.botInfo != nil {
+    if let peer = admin?.peer.peer as? IosappUser, peer.botInfo != nil {
         canEditLinks = false
     }
     
@@ -438,7 +438,7 @@ public func inviteLinkListController(context: AccountContext, updatedPresentatio
         }, completed: { peerIds in
             let _ = (context.engine.data.get(
                 EngineDataList(
-                    peerIds.map(TelegramEngine.EngineData.Item.Peer.Peer.init)
+                    peerIds.map(IosappEngine.EngineData.Item.Peer.Peer.init)
                 )
             )
             |> deliverOnMainQueue).start(next: { peerList in
@@ -468,7 +468,7 @@ public func inviteLinkListController(context: AccountContext, updatedPresentatio
 
                 presentControllerImpl?(UndoOverlayController(presentationData: presentationData, content: .forward(savedMessages: savedMessages, text: text), elevatedLayout: false, animateInAsReplacement: true, action: { action in
                     if savedMessages, action == .info {
-                        let _ = (context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: context.account.peerId))
+                        let _ = (context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: context.account.peerId))
                         |> deliverOnMainQueue).start(next: { peer in
                             guard let peer else {
                                 return
@@ -522,7 +522,7 @@ public func inviteLinkListController(context: AccountContext, updatedPresentatio
             let _ = (context.account.postbox.loadedPeerWithId(peerId)
             |> deliverOnMainQueue).start(next: { peer in
                 let isGroup: Bool
-                if let peer = peer as? TelegramChannel, case .broadcast = peer.info {
+                if let peer = peer as? IosappChannel, case .broadcast = peer.info {
                     isGroup = false
                 } else {
                     isGroup = true
@@ -540,7 +540,7 @@ public func inviteLinkListController(context: AccountContext, updatedPresentatio
                 let _ = (context.account.postbox.loadedPeerWithId(peerId)
                 |> deliverOnMainQueue).start(next: { peer in
                     let isGroup: Bool
-                    if let peer = peer as? TelegramChannel, case .broadcast = peer.info {
+                    if let peer = peer as? IosappChannel, case .broadcast = peer.info {
                         isGroup = false
                     } else {
                         isGroup = true
@@ -652,7 +652,7 @@ public func inviteLinkListController(context: AccountContext, updatedPresentatio
                     }, completed: { peerIds in
                         let _ = (context.engine.data.get(
                             EngineDataList(
-                                peerIds.map(TelegramEngine.EngineData.Item.Peer.Peer.init)
+                                peerIds.map(IosappEngine.EngineData.Item.Peer.Peer.init)
                             )
                         )
                         |> deliverOnMainQueue).start(next: { peerList in
@@ -682,7 +682,7 @@ public func inviteLinkListController(context: AccountContext, updatedPresentatio
 
                             presentControllerImpl?(UndoOverlayController(presentationData: presentationData, content: .forward(savedMessages: savedMessages, text: text), elevatedLayout: false, animateInAsReplacement: true, action: { action in
                                 if savedMessages, action == .info {
-                                    let _ = (context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: context.account.peerId))
+                                    let _ = (context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: context.account.peerId))
                                     |> deliverOnMainQueue).start(next: { peer in
                                         guard let peer else {
                                             return
@@ -708,7 +708,7 @@ public func inviteLinkListController(context: AccountContext, updatedPresentatio
                     let _ = (context.account.postbox.loadedPeerWithId(peerId)
                     |> deliverOnMainQueue).start(next: { peer in
                         let isGroup: Bool
-                        if let peer = peer as? TelegramChannel, case .broadcast = peer.info {
+                        if let peer = peer as? IosappChannel, case .broadcast = peer.info {
                             isGroup = false
                         } else {
                             isGroup = true
@@ -778,7 +778,7 @@ public func inviteLinkListController(context: AccountContext, updatedPresentatio
                 let _ = (context.account.postbox.loadedPeerWithId(peerId)
                 |> deliverOnMainQueue).start(next: { peer in
                     let isGroup: Bool
-                    if let peer = peer as? TelegramChannel, case .broadcast = peer.info {
+                    if let peer = peer as? IosappChannel, case .broadcast = peer.info {
                         isGroup = false
                     } else {
                         isGroup = true
@@ -851,7 +851,7 @@ public func inviteLinkListController(context: AccountContext, updatedPresentatio
         }
     } else {
         mainLink = context.engine.data.subscribe(
-            TelegramEngine.EngineData.Item.Peer.ExportedInvitation(id: peerId)
+            IosappEngine.EngineData.Item.Peer.ExportedInvitation(id: peerId)
         )
     }
     
@@ -883,10 +883,10 @@ public func inviteLinkListController(context: AccountContext, updatedPresentatio
     let signal = combineLatest(queue: .mainQueue(),
         presentationData,
         context.engine.data.subscribe(
-            TelegramEngine.EngineData.Item.Peer.ExportedInvitation(id: peerId)
+            IosappEngine.EngineData.Item.Peer.ExportedInvitation(id: peerId)
         ),
         context.engine.data.subscribe(
-            TelegramEngine.EngineData.Item.Peer.Peer(id: peerId)
+            IosappEngine.EngineData.Item.Peer.Peer(id: peerId)
         ),
         importersContext,
         importersState.get(),

@@ -142,7 +142,7 @@ extension PeerInfoScreenNode {
                 if let peer = peer {
                     var navigation = navigation
                     if case .default = navigation {
-                        if let peer = peer as? TelegramUser, peer.botInfo != nil {
+                        if let peer = peer as? IosappUser, peer.botInfo != nil {
                             navigation = .chat(textInputState: nil, subject: nil, peekData: nil)
                         }
                     }
@@ -217,7 +217,7 @@ extension PeerInfoScreenNode {
             url = "https://t.me/\(value)"
         }
         
-        let openShare: (TelegramCollectibleItemInfo?) -> Void = { [weak self] collectibleItemInfo in
+        let openShare: (IosappCollectibleItemInfo?) -> Void = { [weak self] collectibleItemInfo in
             guard let self else {
                 return
             }
@@ -232,7 +232,7 @@ extension PeerInfoScreenNode {
                 }
                 let _ = (strongSelf.context.engine.data.get(
                     EngineDataList(
-                        peerIds.map(TelegramEngine.EngineData.Item.Peer.Peer.init)
+                        peerIds.map(IosappEngine.EngineData.Item.Peer.Peer.init)
                     )
                 )
                 |> deliverOnMainQueue).startStandalone(next: { [weak self] peerList in
@@ -266,7 +266,7 @@ extension PeerInfoScreenNode {
 
                     strongSelf.controller?.present(UndoOverlayController(presentationData: presentationData, content: .forward(savedMessages: savedMessages, text: text), elevatedLayout: false, animateInAsReplacement: true, action: { action in
                         if savedMessages, let self, action == .info {
-                            let _ = (self.context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: self.context.account.peerId))
+                            let _ = (self.context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: self.context.account.peerId))
                             |> deliverOnMainQueue).start(next: { [weak self] peer in
                                 guard let self, let peer else {
                                     return

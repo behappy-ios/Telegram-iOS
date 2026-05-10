@@ -1299,7 +1299,7 @@ public final class OngoingCallContext {
                 
                 if !statsLogPath.isEmpty, let data = try? Data(contentsOf: URL(fileURLWithPath: statsLogPath)), let dataString = String(data: data, encoding: .utf8) {
                     debugLogValue.set(.single(dataString))
-                    let engine = TelegramEngine(account: self.account)
+                    let engine = IosappEngine(account: self.account)
                     let _ = engine.calls.saveCallDebugLog(callId: callId, log: dataString).start(next: { result in
                         switch result {
                         case .sendFullLog:

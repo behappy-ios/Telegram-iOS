@@ -12,16 +12,16 @@ import AccountContext
 import WallpaperGalleryScreen
 
 final class ThemeColorsGridControllerInteraction {
-    let openWallpaper: (TelegramWallpaper) -> Void
+    let openWallpaper: (IosappWallpaper) -> Void
     
-    init(openWallpaper: @escaping (TelegramWallpaper) -> Void) {
+    init(openWallpaper: @escaping (IosappWallpaper) -> Void) {
         self.openWallpaper = openWallpaper
     }
 }
 
 private struct ThemeColorsGridControllerEntry: Comparable, Identifiable {
     let index: Int
-    let wallpaper: TelegramWallpaper
+    let wallpaper: IosappWallpaper
     let selected: Bool
     
     static func ==(lhs: ThemeColorsGridControllerEntry, rhs: ThemeColorsGridControllerEntry) -> Bool {
@@ -174,9 +174,9 @@ final class ThemeColorsGridControllerNode: ASDisplayNode {
         })
         self.controllerInteraction = interaction
         
-        var wallpapers: [TelegramWallpaper] = []
-        wallpapers.append(contentsOf: gradients.map { TelegramWallpaper.gradient(TelegramWallpaper.Gradient(id: nil, colors: $0, settings: WallpaperSettings())) })
-        wallpapers.append(contentsOf: colors.map { TelegramWallpaper.color($0) })
+        var wallpapers: [IosappWallpaper] = []
+        wallpapers.append(contentsOf: gradients.map { IosappWallpaper.gradient(IosappWallpaper.Gradient(id: nil, colors: $0, settings: WallpaperSettings())) })
+        wallpapers.append(contentsOf: colors.map { IosappWallpaper.color($0) })
         let transition = context.sharedContext.presentationData
         |> map { presentationData -> (ThemeColorsGridEntryTransition, Bool) in
             var entries: [ThemeColorsGridControllerEntry] = []

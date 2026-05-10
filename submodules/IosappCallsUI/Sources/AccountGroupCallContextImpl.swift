@@ -69,7 +69,7 @@ public final class AccountGroupCallContextImpl: AccountGroupCallContext {
         return self.panelDataPromise.get()
     }
     
-    public init(account: Account, engine: TelegramEngine, peerId: EnginePeer.Id?, isChannel: Bool, call: EngineGroupCallDescription) {
+    public init(account: Account, engine: IosappEngine, peerId: EnginePeer.Id?, isChannel: Bool, call: EngineGroupCallDescription) {
         self.panelDataPromise.set(.single(nil))
         let state = engine.calls.getGroupCallParticipants(reference: .id(id: call.id, accessHash: call.accessHash), offset: "", ssrcs: [], limit: 100, sortAscending: nil)
         |> map(Optional.init)
@@ -79,7 +79,7 @@ public final class AccountGroupCallContextImpl: AccountGroupCallContext {
         
         let peer: Signal<EnginePeer?, NoError>
         if let peerId {
-            peer = engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: peerId))
+            peer = engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: peerId))
         } else {
             peer = .single(nil)
         }
@@ -179,7 +179,7 @@ public final class AccountGroupCallContextCacheImpl: AccountGroupCallContextCach
             self.queue = queue
         }
         
-        public func get(account: Account, engine: TelegramEngine, peerId: EnginePeer.Id, isChannel: Bool, call: EngineGroupCallDescription) -> AccountGroupCallContextImpl.Proxy {
+        public func get(account: Account, engine: IosappEngine, peerId: EnginePeer.Id, isChannel: Bool, call: EngineGroupCallDescription) -> AccountGroupCallContextImpl.Proxy {
             let result: Record
             if let current = self.contexts[call.id] {
                 result = current
@@ -210,7 +210,7 @@ public final class AccountGroupCallContextCacheImpl: AccountGroupCallContextCach
             })
         }
 
-        public func leaveInBackground(engine: TelegramEngine, id: Int64, accessHash: Int64, source: UInt32) {
+        public func leaveInBackground(engine: IosappEngine, id: Int64, accessHash: Int64, source: UInt32) {
             let disposable = engine.calls.leaveGroupCall(callId: id, accessHash: accessHash, source: source).start(completed: { [weak self] in
                 guard let self else {
                     return

@@ -92,15 +92,15 @@ func managedAutoremoveMessageOperations(network: Network, postbox: Postbox, isRe
                                 }
                                 var updatedMedia = currentMessage.media
                                 for i in 0 ..< updatedMedia.count {
-                                    if let _ = updatedMedia[i] as? TelegramMediaImage {
-                                        updatedMedia[i] = TelegramMediaExpiredContent(data: .image)
-                                    } else if let file = updatedMedia[i] as? TelegramMediaFile {
+                                    if let _ = updatedMedia[i] as? IosappMediaImage {
+                                        updatedMedia[i] = IosappMediaExpiredContent(data: .image)
+                                    } else if let file = updatedMedia[i] as? IosappMediaFile {
                                         if file.isInstantVideo {
-                                            updatedMedia[i] = TelegramMediaExpiredContent(data: .videoMessage)
+                                            updatedMedia[i] = IosappMediaExpiredContent(data: .videoMessage)
                                         } else if file.isVoice {
-                                            updatedMedia[i] = TelegramMediaExpiredContent(data: .voiceMessage)
+                                            updatedMedia[i] = IosappMediaExpiredContent(data: .voiceMessage)
                                         } else {
-                                            updatedMedia[i] = TelegramMediaExpiredContent(data: .file)
+                                            updatedMedia[i] = IosappMediaExpiredContent(data: .file)
                                         }
                                     }
                                 }

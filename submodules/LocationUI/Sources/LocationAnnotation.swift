@@ -37,7 +37,7 @@ public class LocationPinAnnotation: NSObject, MKAnnotation {
             self.didChangeValue(forKey: "coordinate")
         }
     }
-    let location: TelegramMediaMap?
+    let location: IosappMediaMap?
     let queryId: Int64?
     let resultId: String?
     
@@ -71,7 +71,7 @@ public class LocationPinAnnotation: NSObject, MKAnnotation {
         super.init()
     }
     
-    public init(context: AccountContext, theme: PresentationTheme, location: TelegramMediaMap, queryId: Int64?, resultId: String?, forcedSelection: Bool = false) {
+    public init(context: AccountContext, theme: PresentationTheme, location: IosappMediaMap, queryId: Int64?, resultId: String?, forcedSelection: Bool = false) {
         self.context = context
         self.theme = theme
         self.location = location

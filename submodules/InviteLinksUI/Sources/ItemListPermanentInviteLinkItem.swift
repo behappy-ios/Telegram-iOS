@@ -371,7 +371,7 @@ public class ItemListPermanentInviteLinkItemNode: ListViewItemNode, ItemListItem
                     bold: MarkdownAttributeSet(font: boldTextFont, textColor: textColor),
                     link: MarkdownAttributeSet(font: textFont, textColor: accentColor),
                     linkAttribute: { contents in
-                        return (TelegramTextAttributes.URL, contents)
+                        return (IosappTextAttributes.URL, contents)
                     }
                 )
                 let justCreatedCallTextAttributedString = parseMarkdownIntoAttributedString(item.presentationData.strings.InviteLink_CreatedGroupCallFooter, attributes: markdownAttributes).mutableCopy() as! NSMutableAttributedString

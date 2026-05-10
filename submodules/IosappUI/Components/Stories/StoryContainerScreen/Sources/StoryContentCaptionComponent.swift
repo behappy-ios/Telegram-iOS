@@ -23,7 +23,7 @@ final class StoryContentCaptionComponent: Component {
         case peerMention(peerId: EnginePeer.Id, mention: String)
         case hashtag(String?, String)
         case bankCard(String)
-        case customEmoji(TelegramMediaFile)
+        case customEmoji(IosappMediaFile)
     }
     
     final class ExternalState {
@@ -64,13 +64,13 @@ final class StoryContentCaptionComponent: Component {
     let forwardInfoStory: Signal<EngineStoryItem?, NoError>?
     let music: EngineMedia?
     let entities: [MessageTextEntity]
-    let entityFiles: [EngineMedia.Id: TelegramMediaFile]
+    let entityFiles: [EngineMedia.Id: IosappMediaFile]
     let action: (Action) -> Void
     let longTapAction: (Action) -> Void
     let textSelectionAction: (NSAttributedString, TextSelectionAction) -> Void
     let controller: () -> ViewController?
     let openStory: (EnginePeer, EngineStoryItem?) -> Void
-    let openMusic: (TelegramMediaFile, UIView) -> Void
+    let openMusic: (IosappMediaFile, UIView) -> Void
     
     init(
         externalState: ExternalState,
@@ -83,13 +83,13 @@ final class StoryContentCaptionComponent: Component {
         forwardInfoStory: Signal<EngineStoryItem?, NoError>?,
         music: EngineMedia?,
         entities: [MessageTextEntity],
-        entityFiles: [EngineMedia.Id: TelegramMediaFile],
+        entityFiles: [EngineMedia.Id: IosappMediaFile],
         action: @escaping (Action) -> Void,
         longTapAction: @escaping (Action) -> Void,
         textSelectionAction: @escaping (NSAttributedString, TextSelectionAction) -> Void,
         controller: @escaping () -> ViewController?,
         openStory: @escaping (EnginePeer, EngineStoryItem?) -> Void,
-        openMusic: @escaping (TelegramMediaFile, UIView) -> Void
+        openMusic: @escaping (IosappMediaFile, UIView) -> Void
     ) {
         self.externalState = externalState
         self.context = context
@@ -476,22 +476,22 @@ final class StoryContentCaptionComponent: Component {
                         let textLocalPoint = CGPoint(x: location.x - titleFrame.minX, y: location.y - titleFrame.minY)
                         if let (index, attributes) = textNode.textNode.attributesAtPoint(textLocalPoint) {
                             let action: Action?
-                            if case .tap = gesture, let _ = attributes[NSAttributedString.Key(rawValue: TelegramTextAttributes.Spoiler)], !self.displayContentsUnderSpoilers.value {
+                            if case .tap = gesture, let _ = attributes[NSAttributedString.Key(rawValue: IosappTextAttributes.Spoiler)], !self.displayContentsUnderSpoilers.value {
                                 self.updateDisplayContentsUnderSpoilers(value: true, at: recognizer.view?.convert(location, to: textNode.textNode.view) ?? location)
                                 return
-                            } else if let url = attributes[NSAttributedString.Key(rawValue: TelegramTextAttributes.URL)] as? String {
+                            } else if let url = attributes[NSAttributedString.Key(rawValue: IosappTextAttributes.URL)] as? String {
                                 var concealed = true
-                                if let (attributeText, fullText) = textNode.textNode.attributeSubstring(name: TelegramTextAttributes.URL, index: index) {
+                                if let (attributeText, fullText) = textNode.textNode.attributeSubstring(name: IosappTextAttributes.URL, index: index) {
                                     concealed = !doesUrlMatchText(url: url, text: attributeText, fullText: fullText)
                                 }
                                 action = .url(url: url, concealed: concealed)
-                            } else if let peerMention = attributes[NSAttributedString.Key(rawValue: TelegramTextAttributes.PeerMention)] as? TelegramPeerMention {
+                            } else if let peerMention = attributes[NSAttributedString.Key(rawValue: IosappTextAttributes.PeerMention)] as? IosappPeerMention {
                                 action = .peerMention(peerId: peerMention.peerId, mention: peerMention.mention)
-                            } else if let peerName = attributes[NSAttributedString.Key(rawValue: TelegramTextAttributes.PeerTextMention)] as? String {
+                            } else if let peerName = attributes[NSAttributedString.Key(rawValue: IosappTextAttributes.PeerTextMention)] as? String {
                                 action = .textMention(peerName)
-                            } else if let hashtag = attributes[NSAttributedString.Key(rawValue: TelegramTextAttributes.Hashtag)] as? TelegramHashtag {
+                            } else if let hashtag = attributes[NSAttributedString.Key(rawValue: IosappTextAttributes.Hashtag)] as? IosappHashtag {
                                 action = .hashtag(hashtag.peerName, hashtag.hashtag)
-                            } else if let bankCard = attributes[NSAttributedString.Key(rawValue: TelegramTextAttributes.BankCard)] as? String {
+                            } else if let bankCard = attributes[NSAttributedString.Key(rawValue: IosappTextAttributes.BankCard)] as? String {
                                 action = .bankCard(bankCard)
                             } else if let emoji = attributes[NSAttributedString.Key(rawValue: ChatTextInputAttributes.customEmoji.rawValue)] as? ChatTextInputTextCustomEmojiAttribute, let file = emoji.file {
                                 action = .customEmoji(file)
@@ -576,14 +576,14 @@ final class StoryContentCaptionComponent: Component {
                 let textNodeFrame = textNode.textNode.bounds
                 if let (index, attributes) = textNode.textNode.attributesAtPoint(CGPoint(x: point.x - textNodeFrame.minX, y: point.y - textNodeFrame.minY)) {
                     let possibleNames: [String] = [
-                        TelegramTextAttributes.URL,
-                        TelegramTextAttributes.PeerMention,
-                        TelegramTextAttributes.PeerTextMention,
-                        TelegramTextAttributes.BotCommand,
-                        TelegramTextAttributes.Hashtag,
-                        TelegramTextAttributes.Timecode,
-                        TelegramTextAttributes.BankCard,
-                        TelegramTextAttributes.Date
+                        IosappTextAttributes.URL,
+                        IosappTextAttributes.PeerMention,
+                        IosappTextAttributes.PeerTextMention,
+                        IosappTextAttributes.BotCommand,
+                        IosappTextAttributes.Hashtag,
+                        IosappTextAttributes.Timecode,
+                        IosappTextAttributes.BankCard,
+                        IosappTextAttributes.Date
                     ]
                     for name in possibleNames {
                         if let _ = attributes[NSAttributedString.Key(rawValue: name)] {
@@ -591,8 +591,8 @@ final class StoryContentCaptionComponent: Component {
                             break
                         }
                     }
-                    if let _ = attributes[NSAttributedString.Key(rawValue: TelegramTextAttributes.Spoiler)] {
-                        spoilerRects = textNode.textNode.attributeRects(name: TelegramTextAttributes.Spoiler, at: index)
+                    if let _ = attributes[NSAttributedString.Key(rawValue: IosappTextAttributes.Spoiler)] {
+                        spoilerRects = textNode.textNode.attributeRects(name: IosappTextAttributes.Spoiler, at: index)
                     }
                 }
             }
@@ -732,7 +732,7 @@ final class StoryContentCaptionComponent: Component {
             let hasBottomStackContent = !component.text.isEmpty || component.forwardInfo != nil
             var bottomContentOffset: CGFloat = 0.0
             
-            if let music = component.music?._asMedia() as? TelegramMediaFile {
+            if let music = component.music?._asMedia() as? IosappMediaFile {
                 let musicPanel: ComponentView<Empty>
                 if let current = self.musicPanel {
                     musicPanel = current
@@ -1008,21 +1008,21 @@ final class StoryContentCaptionComponent: Component {
                     
                     if let (index, attributes) = textNode.textNode.attributesAtPoint(CGPoint(x: location.x - titleFrame.minX, y: location.y - titleFrame.minY)) {
                         let action: Action?
-                        if let _ = attributes[NSAttributedString.Key(rawValue: TelegramTextAttributes.Spoiler)], !self.displayContentsUnderSpoilers.value {
+                        if let _ = attributes[NSAttributedString.Key(rawValue: IosappTextAttributes.Spoiler)], !self.displayContentsUnderSpoilers.value {
                             return false
-                        } else if let url = attributes[NSAttributedString.Key(rawValue: TelegramTextAttributes.URL)] as? String {
+                        } else if let url = attributes[NSAttributedString.Key(rawValue: IosappTextAttributes.URL)] as? String {
                             var concealed = true
-                            if let (attributeText, fullText) = textNode.textNode.attributeSubstring(name: TelegramTextAttributes.URL, index: index) {
+                            if let (attributeText, fullText) = textNode.textNode.attributeSubstring(name: IosappTextAttributes.URL, index: index) {
                                 concealed = !doesUrlMatchText(url: url, text: attributeText, fullText: fullText)
                             }
                             action = .url(url: url, concealed: concealed)
-                        } else if let peerMention = attributes[NSAttributedString.Key(rawValue: TelegramTextAttributes.PeerMention)] as? TelegramPeerMention {
+                        } else if let peerMention = attributes[NSAttributedString.Key(rawValue: IosappTextAttributes.PeerMention)] as? IosappPeerMention {
                             action = .peerMention(peerId: peerMention.peerId, mention: peerMention.mention)
-                        } else if let peerName = attributes[NSAttributedString.Key(rawValue: TelegramTextAttributes.PeerTextMention)] as? String {
+                        } else if let peerName = attributes[NSAttributedString.Key(rawValue: IosappTextAttributes.PeerTextMention)] as? String {
                             action = .textMention(peerName)
-                        } else if let hashtag = attributes[NSAttributedString.Key(rawValue: TelegramTextAttributes.Hashtag)] as? TelegramHashtag {
+                        } else if let hashtag = attributes[NSAttributedString.Key(rawValue: IosappTextAttributes.Hashtag)] as? IosappHashtag {
                             action = .hashtag(hashtag.peerName, hashtag.hashtag)
-                        } else if let bankCard = attributes[NSAttributedString.Key(rawValue: TelegramTextAttributes.BankCard)] as? String {
+                        } else if let bankCard = attributes[NSAttributedString.Key(rawValue: IosappTextAttributes.BankCard)] as? String {
                             action = .bankCard(bankCard)
                         } else if let emoji = attributes[NSAttributedString.Key(rawValue: ChatTextInputAttributes.customEmoji.rawValue)] as? ChatTextInputTextCustomEmojiAttribute, let file = emoji.file {
                             action = .customEmoji(file)

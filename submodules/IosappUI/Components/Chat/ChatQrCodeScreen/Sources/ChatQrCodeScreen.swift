@@ -65,13 +65,13 @@ private func closeButtonImage(theme: PresentationTheme) -> UIImage? {
 private struct ThemeSettingsThemeEntry: Comparable, Identifiable {
     let index: Int
     let emoticon: String?
-    let emojiFile: TelegramMediaFile?
+    let emojiFile: IosappMediaFile?
     let themeReference: PresentationThemeReference?
     let nightMode: Bool
     var selected: Bool
     let theme: PresentationTheme
     let strings: PresentationStrings
-    let wallpaper: TelegramWallpaper?
+    let wallpaper: IosappWallpaper?
     let message: Bool
     
     var stableId: Int {
@@ -123,17 +123,17 @@ private struct ThemeSettingsThemeEntry: Comparable, Identifiable {
 private class ThemeSettingsThemeIconItem: ListViewItem {
     let context: AccountContext
     let emoticon: String?
-    let emojiFile: TelegramMediaFile?
+    let emojiFile: IosappMediaFile?
     let themeReference: PresentationThemeReference?
     let nightMode: Bool
     let selected: Bool
     let theme: PresentationTheme
     let strings: PresentationStrings
-    let wallpaper: TelegramWallpaper?
+    let wallpaper: IosappWallpaper?
     let message: Bool
     let action: (String?) -> Void
     
-    public init(context: AccountContext, emoticon: String?, emojiFile: TelegramMediaFile?, themeReference: PresentationThemeReference?, nightMode: Bool, selected: Bool, theme: PresentationTheme, strings: PresentationStrings, wallpaper: TelegramWallpaper?, message: Bool, action: @escaping (String?) -> Void) {
+    public init(context: AccountContext, emoticon: String?, emojiFile: IosappMediaFile?, themeReference: PresentationThemeReference?, nightMode: Bool, selected: Bool, theme: PresentationTheme, strings: PresentationStrings, wallpaper: IosappWallpaper?, message: Bool, action: @escaping (String?) -> Void) {
         self.context = context
         self.emoticon = emoticon
         self.emojiFile = emojiFile
@@ -580,7 +580,7 @@ public final class ChatQrCodeScreenImpl: ViewController, ChatQrCodeScreen {
                 var result: String
                 if let addressName = peer.addressName, !addressName.isEmpty {
                     result = "t_me-\(peer.addressName ?? "")"
-                } else if let peer = peer as? TelegramUser {
+                } else if let peer = peer as? IosappUser {
                     result = "t_me-\(peer.phone ?? "")"
                 } else {
                     result = "t_me-\(Int32.random(in: 0 ..< Int32.max))"
@@ -590,7 +590,7 @@ public final class ChatQrCodeScreenImpl: ViewController, ChatQrCodeScreen {
                 }
                 return result
             case let .messages(messages):
-                if let message = messages.first, let chatPeer = message.peers[message.id.peerId] as? TelegramChannel, message.id.namespace == Namespaces.Message.Cloud, let addressName = chatPeer.addressName, !addressName.isEmpty {
+                if let message = messages.first, let chatPeer = message.peers[message.id.peerId] as? IosappChannel, message.id.namespace == Namespaces.Message.Cloud, let addressName = chatPeer.addressName, !addressName.isEmpty {
                     return "t_me-\(addressName)-\(message.id.id)"
                 } else if let message = messages.first {
                     return "t_me-\(message.id.id)"
@@ -777,7 +777,7 @@ private class ChatQrCodeScreenNode: ViewControllerTracingNode, ASScrollViewDeleg
     private var entries: [ThemeSettingsThemeEntry]?
     private var enqueuedTransitions: [ThemeSettingsThemeItemNodeTransition] = []
     private var initialized = false
-    private var themes: [TelegramTheme] = []
+    private var themes: [IosappTheme] = []
     
     let ready = Promise<Bool>()
     
@@ -1019,7 +1019,7 @@ private class ChatQrCodeScreenNode: ViewControllerTracingNode, ASScrollViewDeleg
         let sharedData = self.context.sharedContext.accountManager.sharedData(keys: [ApplicationSpecificSharedDataKeys.presentationThemeSettings])
         |> take(1)
         if case let .peer(peer, _, _) = controller.subject, peer.id != self.context.account.peerId {
-            let themeEmoticon = self.context.engine.data.get(TelegramEngine.EngineData.Item.Peer.ChatTheme(id: peer.id))
+            let themeEmoticon = self.context.engine.data.get(IosappEngine.EngineData.Item.Peer.ChatTheme(id: peer.id))
             initiallySelectedEmoticon = combineLatest(themeEmoticon, sharedData)
             |> map { themeEmoticon, sharedData -> String in
                 let themeSettings: PresentationThemeSettings
@@ -1065,7 +1065,7 @@ private class ChatQrCodeScreenNode: ViewControllerTracingNode, ASScrollViewDeleg
                 
             var entries: [ThemeSettingsThemeEntry] = []
             
-            let defaultWallpaper: TelegramWallpaper?
+            let defaultWallpaper: IosappWallpaper?
             if isDarkAppearance {
                 let dayTheme = makeDefaultPresentationTheme(reference: .dayClassic, serviceBackgroundColor: nil)
                 defaultWallpaper = dayTheme.chat.defaultWallpaper.withUpdatedSettings(WallpaperSettings(blur: false, motion: false, colors: [0x00b3dd, 0x3b59f2, 0x358be2, 0xa434cf], intensity: -55, rotation: nil))
@@ -1080,7 +1080,7 @@ private class ChatQrCodeScreenNode: ViewControllerTracingNode, ASScrollViewDeleg
                 entries.append(ThemeSettingsThemeEntry(index: entries.count, emoticon: emoticon, emojiFile: animatedEmojiStickers[emoticon]?.first?.file._parse(), themeReference: .cloud(PresentationCloudTheme(theme: theme, resolvedWallpaper: nil, creatorAccountId: nil)), nightMode: isDarkAppearance, selected: selectedEmoticon == theme.emoticon, theme: presentationData.theme, strings: presentationData.strings, wallpaper: nil, message: isMessage))
             }
             
-            let wallpaper: TelegramWallpaper
+            let wallpaper: IosappWallpaper
             let previewTheme: PresentationTheme
             if selectedEmoticon == defaultEmoticon {
                 let presentationTheme = makeDefaultPresentationTheme(reference: isDarkAppearance ? .night : .dayClassic, serviceBackgroundColor: nil)
@@ -1570,7 +1570,7 @@ private protocol ContentNode: ASDisplayNode {
     
     func generateImage(completion: @escaping (UIImage?) -> Void)
     func generateVideo(completion: @escaping (URL) -> Void)
-    func update(theme: PresentationTheme, wallpaper: TelegramWallpaper, isDarkAppearance: Bool, selectedEmoticon: String?)
+    func update(theme: PresentationTheme, wallpaper: IosappWallpaper, isDarkAppearance: Bool, selectedEmoticon: String?)
     func updateLayout(size: CGSize, topInset: CGFloat, bottomInset: CGFloat, transition: ContainedViewLayoutTransition)
 }
 
@@ -1600,7 +1600,7 @@ private class QrContentNode: ASDisplayNode, ContentNode {
     private let avatarNode: ImageNode
     private var qrCodeSize: Int?
         
-    private var currentParams: (PresentationTheme, TelegramWallpaper, Bool, String?)?
+    private var currentParams: (PresentationTheme, IosappWallpaper, Bool, String?)?
     private var validLayout: (CGSize, CGFloat, CGFloat)?
     
     private let _ready = Promise<Bool>()
@@ -1739,9 +1739,9 @@ private class QrContentNode: ASDisplayNode, ContentNode {
         var codeLink: String
         if let addressName = peer.addressName, !addressName.isEmpty {
             codeLink = "https://t.me/\(peer.addressName ?? "")"
-        } else if let peer = peer as? TelegramUser {
+        } else if let peer = peer as? IosappUser {
             codeLink = "https://t.me/+\(peer.phone ?? "")"
-        } else if let _ = peer as? TelegramChannel {
+        } else if let _ = peer as? IosappChannel {
             codeLink = "https://t.me/c/\(peer.id.id._internalGetInt64Value())"
         } else {
             codeLink = ""
@@ -1928,7 +1928,7 @@ private class QrContentNode: ASDisplayNode, ContentNode {
     func generateVideo(completion: @escaping(URL) -> Void) {
     }
         
-    func update(theme: PresentationTheme, wallpaper: TelegramWallpaper, isDarkAppearance: Bool, selectedEmoticon: String?) {
+    func update(theme: PresentationTheme, wallpaper: IosappWallpaper, isDarkAppearance: Bool, selectedEmoticon: String?) {
         self.currentParams = (theme, wallpaper, isDarkAppearance, selectedEmoticon)
         
         self.wallpaperBackgroundNode.update(wallpaper: wallpaper, animated: false)
@@ -2088,7 +2088,7 @@ private class MessageContentNode: ASDisplayNode, ContentNode {
     private let linkIconNode: ASImageNode
     private let linkTextNode: ImmediateTextNode
     
-    private var currentParams: (PresentationTheme, TelegramWallpaper, Bool, String?)?
+    private var currentParams: (PresentationTheme, IosappWallpaper, Bool, String?)?
     private var validLayout: (CGSize, CGFloat, CGFloat)?
     
     private let videoStatusDisposable = MetaDisposable()
@@ -2101,7 +2101,7 @@ private class MessageContentNode: ASDisplayNode, ContentNode {
     
     var hasVideo: Bool {
         if let message = self.messages.first, message.media.contains(where: { media in
-            if let file = media as? TelegramMediaFile, file.isVideo {
+            if let file = media as? IosappMediaFile, file.isVideo {
                 return true
             } else {
                 return false
@@ -2248,7 +2248,7 @@ private class MessageContentNode: ASDisplayNode, ContentNode {
     }
         
     func generateVideo(completion: @escaping(URL) -> Void) {
-        guard let message = self.messages.first, let media = message.media.first(where: { $0 is TelegramMediaFile }) as? TelegramMediaFile else {
+        guard let message = self.messages.first, let media = message.media.first(where: { $0 is IosappMediaFile }) as? IosappMediaFile else {
            return
         }
         
@@ -2265,7 +2265,7 @@ private class MessageContentNode: ASDisplayNode, ContentNode {
         })
     }
     
-    func update(theme: PresentationTheme, wallpaper: TelegramWallpaper, isDarkAppearance: Bool, selectedEmoticon: String?) {
+    func update(theme: PresentationTheme, wallpaper: IosappWallpaper, isDarkAppearance: Bool, selectedEmoticon: String?) {
         self.currentParams = (theme, wallpaper, isDarkAppearance, selectedEmoticon)
         
         self.wallpaperBackgroundNode.update(wallpaper: wallpaper, animated: false)
@@ -2310,7 +2310,7 @@ private class MessageContentNode: ASDisplayNode, ContentNode {
         let messageTheme = theme.chat.message.incoming
         
         let title: String
-        if let message = self.messages.first, let chatPeer = message.peers[message.id.peerId] as? TelegramChannel {
+        if let message = self.messages.first, let chatPeer = message.peers[message.id.peerId] as? IosappChannel {
             title = EnginePeer(chatPeer).displayTitle(strings: presentationData.strings, displayOrder: presentationData.nameDisplayOrder)
         } else {
             title = ""
@@ -2340,7 +2340,7 @@ private class MessageContentNode: ASDisplayNode, ContentNode {
         if let message = self.messages.first {
             let mediaFitSize = CGSize(width: size.width - inset * 2.0 - 5.0, height: size.width - inset * 2.0)
             for media in message.media {
-                if let image = media as? TelegramMediaImage, let representation = largestRepresentationForPhoto(image) {
+                if let image = media as? IosappMediaImage, let representation = largestRepresentationForPhoto(image) {
                     mediaSize = representation.dimensions.cgSize.aspectFitted(mediaFitSize)
                     mediaFrame = CGRect(origin: CGPoint(x: 3.0, y: 63.0), size: mediaSize)
                     
@@ -2355,7 +2355,7 @@ private class MessageContentNode: ASDisplayNode, ContentNode {
                     
                     self.imageNode.frame = mediaFrame
                     mediaSize.height += 16.0
-                } else if let video = media as? TelegramMediaFile, video.isVideo, let dimensions = video.dimensions?.cgSize {
+                } else if let video = media as? IosappMediaFile, video.isVideo, let dimensions = video.dimensions?.cgSize {
                     mediaSize = dimensions.aspectFitted(mediaFitSize)
                     mediaFrame = CGRect(origin: CGPoint(x: 3.0, y: 63.0), size: mediaSize)
                     
@@ -2472,7 +2472,7 @@ private class MessageContentNode: ASDisplayNode, ContentNode {
         self.mediaFrame = mediaFrame.offsetBy(dx: 0.0, dy: backgroundFrame.minY)
         
         let link: String
-        if let message = self.messages.first, let chatPeer = message.peers[message.id.peerId] as? TelegramChannel, message.id.namespace == Namespaces.Message.Cloud, let addressName = chatPeer.addressName, !addressName.isEmpty {
+        if let message = self.messages.first, let chatPeer = message.peers[message.id.peerId] as? IosappChannel, message.id.namespace == Namespaces.Message.Cloud, let addressName = chatPeer.addressName, !addressName.isEmpty {
             link = "t.me/\(addressName)/\(message.id.id)"
         } else {
             link = ""
@@ -2501,7 +2501,7 @@ private enum RenderVideoResult {
     case error
 }
 
-private func renderVideo(context: AccountContext, backgroundImage: UIImage, userLocation: MediaResourceUserLocation, media: TelegramMediaFile, videoFrame: CGRect, completion: @escaping (URL?) -> Void) {
+private func renderVideo(context: AccountContext, backgroundImage: UIImage, userLocation: MediaResourceUserLocation, media: IosappMediaFile, videoFrame: CGRect, completion: @escaping (URL?) -> Void) {
     let _ = (fetchMediaData(context: context, postbox: context.account.postbox, userLocation: userLocation, mediaReference: AnyMediaReference.standalone(media: media))
     |> deliverOnMainQueue).startStandalone(next: { value, isImage in
         guard case let .data(data) = value, data.complete else {

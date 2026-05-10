@@ -113,7 +113,7 @@ public final class StoryContentItem: Equatable {
     public let dayCounters: DayCounters?
     public let peerId: EnginePeer.Id?
     public let storyItem: EngineStoryItem
-    public let entityFiles: [EngineMedia.Id: TelegramMediaFile]
+    public let entityFiles: [EngineMedia.Id: IosappMediaFile]
     public let itemPeer: EnginePeer?
 
     public init(
@@ -122,7 +122,7 @@ public final class StoryContentItem: Equatable {
         dayCounters: DayCounters?,
         peerId: EnginePeer.Id?,
         storyItem: EngineStoryItem,
-        entityFiles: [EngineMedia.Id: TelegramMediaFile],
+        entityFiles: [EngineMedia.Id: IosappMediaFile],
         itemPeer: EnginePeer?
     ) {
         self.id = id

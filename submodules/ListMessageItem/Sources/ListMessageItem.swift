@@ -147,13 +147,13 @@ public final class ListMessageItem: ListViewItem, ItemListItem {
         if !self.hintIsLink {
             if let message = self.message {
                 for media in message.media {
-                    if let _ = media as? TelegramMediaFile {
+                    if let _ = media as? IosappMediaFile {
                         viewClassName = ListMessageFileItemNode.self
                         break
-                    } else if let _ = media as? TelegramMediaImage {
+                    } else if let _ = media as? IosappMediaImage {
                         viewClassName = ListMessageFileItemNode.self
                         break
-                    } else if let _ = media as? TelegramMediaStory {
+                    } else if let _ = media as? IosappMediaStory {
                         viewClassName = ListMessageFileItemNode.self
                         break
                     }

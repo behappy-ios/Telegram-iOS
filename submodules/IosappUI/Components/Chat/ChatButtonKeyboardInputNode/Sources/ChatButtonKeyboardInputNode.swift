@@ -149,7 +149,7 @@ private final class ChatButtonKeyboardInputButtonNode: HighlightTrackingButtonNo
             maxTextWidth -= iconSize.width + iconSpacing
             
             var animationContent: EmojiStatusComponent.AnimationContent = .customEmoji(fileId: iconFileId)
-            if let file = message.associatedMedia[MediaId(namespace: Namespaces.Media.CloudFile, id: iconFileId)] as? TelegramMediaFile {
+            if let file = message.associatedMedia[MediaId(namespace: Namespaces.Media.CloudFile, id: iconFileId)] as? IosappMediaFile {
                 animationContent = .file(file: file)
             }
             
@@ -431,7 +431,7 @@ public final class ChatButtonKeyboardInputNode: ChatInputNode, UIScrollViewDeleg
                 case let .setupPoll(isQuiz):
                     self.controllerInteraction.openPollCreation(isQuiz)
                 case let .openUserProfile(peerId):
-                    let _ = (self.context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: peerId))
+                    let _ = (self.context.engine.data.get(IosappEngine.EngineData.Item.Peer.Peer(id: peerId))
                     |> deliverOnMainQueue).startStandalone(next: { [weak self] peer in
                         guard let self, let peer else {
                             return

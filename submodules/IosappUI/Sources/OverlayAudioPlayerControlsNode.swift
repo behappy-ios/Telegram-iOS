@@ -139,9 +139,9 @@ private func stringsForDisplayData(_ data: SharedMediaPlaybackDisplayData?, pres
 }
 
 final class OverlayAudioPlayerControlsNode: ASDisplayNode {
-    private let accountManager: AccountManager<TelegramAccountManagerTypes>
+    private let accountManager: AccountManager<IosappAccountManagerTypes>
     private let account: Account
-    private let engine: TelegramEngine
+    private let engine: IosappEngine
     private var presentationData: PresentationData
     private let chatLocation: ChatLocation
     private let source: ChatHistoryListSource
@@ -231,7 +231,7 @@ final class OverlayAudioPlayerControlsNode: ASDisplayNode {
     
     private var validLayout: (width: CGFloat, leftInset: CGFloat, rightInset: CGFloat, bottomInset: CGFloat, maxHeight: CGFloat, savedMusic: Bool?)?
     
-    init(account: Account, engine: TelegramEngine, accountManager: AccountManager<TelegramAccountManagerTypes>, presentationData: PresentationData, status: Signal<(Account, SharedMediaPlayerItemPlaybackStateOrLoading, MediaManagerPlayerType)?, NoError>, chatLocation: ChatLocation, source: ChatHistoryListSource) {
+    init(account: Account, engine: IosappEngine, accountManager: AccountManager<IosappAccountManagerTypes>, presentationData: PresentationData, status: Signal<(Account, SharedMediaPlayerItemPlaybackStateOrLoading, MediaManagerPlayerType)?, NoError>, chatLocation: ChatLocation, source: ChatHistoryListSource) {
         self.accountManager = accountManager
         self.account = account
         self.engine = engine
@@ -977,7 +977,7 @@ final class OverlayAudioPlayerControlsNode: ASDisplayNode {
     @objc func sharePressed() {
         if let itemId = self.currentItemId as? PeerMessagesMediaPlaylistItemId {
             if itemId.messageId.namespace == Namespaces.Message.Cloud {
-                let _ = (self.engine.data.get(TelegramEngine.EngineData.Item.Messages.Message(id: itemId.messageId))
+                let _ = (self.engine.data.get(IosappEngine.EngineData.Item.Messages.Message(id: itemId.messageId))
                 |> deliverOnMainQueue).startStandalone(next: { [weak self] message in
                     guard let message else {
                         return

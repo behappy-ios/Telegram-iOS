@@ -68,7 +68,31 @@ def generate_xcodeproj(build_environment: BuildEnvironment, disable_extensions, 
     if os.path.isfile(bazel_build_sh):
         _patch_bazel_build_sh(bazel_build_sh)
 
+    copy_outputs_sh = os.path.join(xcodeproj_path, 'rules_xcodeproj', 'bazel', 'copy_outputs.sh')
+    if os.path.isfile(copy_outputs_sh):
+        _patch_copy_outputs_sh(copy_outputs_sh)
+
     return xcodeproj_path
+
+
+def _patch_copy_outputs_sh(path):
+    sentinel = 'macOS 26 / openrsync sometimes ignores --chmod=u+w'
+    os.chmod(path, 0o755)
+    with open(path, 'r') as f:
+        content = f.read()
+    if sentinel in content:
+        return
+    needle = '"$TARGET_BUILD_DIR"\n'
+    inject = (
+        '"$TARGET_BUILD_DIR"\n\n'
+        '      # macOS 26 / openrsync sometimes ignores --chmod=u+w when --perms is set,\n'
+        '      # leaving the .app dir read-only. simctl install then fails with EACCES.\n'
+        '      chmod -R u+w "$TARGET_BUILD_DIR/$BAZEL_OUTPUTS_PRODUCT_BASENAME" 2>/dev/null || true\n'
+    )
+    # Only replace the first occurrence (the rsync target_build_dir for product)
+    content = content.replace(needle, inject, 1)
+    with open(path, 'w') as f:
+        f.write(content)
 
 
 def _patch_bazel_build_sh(path):

@@ -54,7 +54,94 @@ def generate_xcodeproj(build_environment: BuildEnvironment, disable_extensions, 
     call_executable(bazel_generate_arguments)
 
     xcodeproj_path = '{}.xcodeproj'.format(app_target_spec.replace(':', '/'))
+
+    # Inject a Pre-action into the scheme that chmods bazel outputs writable and
+    # pre-creates framework Modules/<Module>.swiftmodule/ dirs. Without this,
+    # Xcode's builtin ProcessInfoPlistFile / Swift copy steps fail because
+    # bazel installs framework directories read-only (dr-xr-xr-x), and the copy
+    # destinations don't have parent dirs created.
+    scheme_path = os.path.join(xcodeproj_path, 'xcshareddata', 'xcschemes', '{}.xcscheme'.format(target_name))
+    if os.path.isfile(scheme_path):
+        _inject_chmod_preaction(scheme_path, target_name)
+
+    bazel_build_sh = os.path.join(xcodeproj_path, 'rules_xcodeproj', 'bazel', 'bazel_build.sh')
+    if os.path.isfile(bazel_build_sh):
+        _patch_bazel_build_sh(bazel_build_sh)
+
     return xcodeproj_path
+
+
+def _patch_bazel_build_sh(path):
+    sentinel = '# Workaround: bazel writes framework outputs as read-only'
+    os.chmod(path, 0o644)
+    with open(path, 'r') as f:
+        content = f.read()
+    if sentinel in content:
+        return
+    suffix = '''
+
+# Workaround: bazel writes framework outputs as read-only (dr-xr-xr-x).
+# Xcode's builtin copy / ProcessInfoPlistFile phases then fail with
+# "Permission denied" and "No such file or directory (2)" (because they
+# can't mkdir Modules/ inside the read-only framework). Chmod everything
+# writable after bazel finishes, and pre-create the swiftmodule dir tree.
+if [ -n "${BUILD_DIR:-}" ]; then
+  chmod -R u+w "${BUILD_DIR%/Products}" 2>/dev/null || true
+  find "${BUILD_DIR%/Products}" -type d -name "*.framework" 2>/dev/null | while read fw; do
+    bn=$(basename "$fw" .framework)
+    sm=${bn%Framework}
+    mkdir -p "$fw/Modules/${sm}.swiftmodule/Project" 2>/dev/null || true
+    chmod -R u+w "$fw" 2>/dev/null || true
+  done
+fi
+'''
+    with open(path, 'w') as f:
+        f.write(content + suffix)
+
+
+def _inject_chmod_preaction(scheme_path, target_name):
+    sentinel = 'chmod +w + mkdir framework Modules'
+    # rules_xcodeproj installs the scheme file as read-only, make it writable first.
+    os.chmod(scheme_path, 0o644)
+    with open(scheme_path, 'r') as f:
+        content = f.read()
+    if sentinel in content:
+        return
+    script_text = (
+        'if [ -n &quot;${BUILD_DIR:-}&quot; ]; then '
+        'chmod -R u+w &quot;${BUILD_DIR%/Products}&quot; 2&gt;/dev/null; '
+        'find &quot;${BUILD_DIR%/Products}&quot; -type d -name &quot;*.framework&quot; 2&gt;/dev/null | while read fw; do '
+        'bn=$(basename &quot;$fw&quot; .framework); sm=${bn%Framework}; '
+        'mkdir -p &quot;$fw/Modules/${sm}.swiftmodule/Project&quot; 2&gt;/dev/null; '
+        'chmod -R u+w &quot;$fw&quot; 2&gt;/dev/null; '
+        'done; fi&#10;true&#10;'
+    )
+    block = (
+        '         <ExecutionAction\n'
+        '            ActionType = "Xcode.IDEStandardExecutionActionsCore.ExecutionActionType.ShellScriptAction">\n'
+        '            <ActionContent\n'
+        '               title = "{}"\n'
+        '               scriptText = "{}">\n'
+        '               <EnvironmentBuildable>\n'
+        '                  <BuildableReference\n'
+        '                     BuildableIdentifier = "primary"\n'
+        '                     BlueprintIdentifier = "0500AAC8C4EF000000000001"\n'
+        '                     BuildableName = "{}.app"\n'
+        '                     BlueprintName = "{}"\n'
+        '                     ReferencedContainer = "container:{}">\n'
+        '                  </BuildableReference>\n'
+        '               </EnvironmentBuildable>\n'
+        '            </ActionContent>\n'
+        '         </ExecutionAction>\n'
+    ).format(sentinel, script_text, target_name, target_name, os.path.abspath(scheme_path.split('/xcshareddata')[0]))
+
+    # Insert into the FIRST <PreActions> block of BuildAction
+    needle = '      </PreActions>\n      <BuildActionEntries>'
+    if needle not in content:
+        return
+    content = content.replace(needle, block + '      </PreActions>\n      <BuildActionEntries>', 1)
+    with open(scheme_path, 'w') as f:
+        f.write(content)
 
 
 def generate(build_environment: BuildEnvironment, disable_extensions, disable_provisioning_profiles, include_release, generate_dsym, bazel_app_arguments, target_name) -> str:
